@@ -1,0 +1,17 @@
+//
+//  UIView+FormScroll.h
+//  PartyHost
+//
+//  Created by Tony Suriyathep on 7/29/15.
+//  Copyright (c) 2015 Sunny Clark. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+
+@interface UIView (FormScroll)
+
+-(void)scrollToY:(float)y;
+-(void)scrollToView:(UIView *)view;
+-(void)scrollElement:(UIView *)view toPoint:(float)y;
+
+@end

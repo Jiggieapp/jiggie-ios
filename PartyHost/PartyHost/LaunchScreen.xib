@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="8191" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8154"/>
+        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view userInteractionEnabled="NO" contentMode="scaleToFill" id="Bj0-c0-1kA">
+            <rect key="frame" x="0.0" y="0.0" width="480" height="480"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Cfm-Mm-bkX">
+                    <rect key="frame" x="0.0" y="0.0" width="480" height="480"/>
+                    <subviews>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="SplashLogo" translatesAutoresizingMaskIntoConstraints="NO" id="0Ry-K0-DNe">
+                            <rect key="frame" x="180" y="0.0" width="120" height="480"/>
+                        </imageView>
+                    </subviews>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstItem="0Ry-K0-DNe" firstAttribute="width" secondItem="Cfm-Mm-bkX" secondAttribute="width" multiplier="0.25" id="6ln-ia-vjq"/>
+                        <constraint firstAttribute="centerY" secondItem="0Ry-K0-DNe" secondAttribute="centerY" id="BIe-7e-zDU"/>
+                        <constraint firstItem="0Ry-K0-DNe" firstAttribute="height" secondItem="Cfm-Mm-bkX" secondAttribute="height" id="Cyj-qO-E4C"/>
+                        <constraint firstAttribute="centerX" secondItem="0Ry-K0-DNe" secondAttribute="centerX" id="kVe-Jw-6Te"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+            <accessibility key="accessibilityConfiguration">
+                <accessibilityTraits key="traits" notEnabled="YES"/>
+            </accessibility>
+            <constraints>
+                <constraint firstAttribute="bottom" secondItem="Cfm-Mm-bkX" secondAttribute="bottom" id="9ZO-GI-yag"/>
+                <constraint firstItem="Cfm-Mm-bkX" firstAttribute="leading" secondItem="Bj0-c0-1kA" secondAttribute="leading" id="Z8w-41-d3b"/>
+                <constraint firstAttribute="trailing" secondItem="Cfm-Mm-bkX" secondAttribute="trailing" id="hgn-mp-vmd"/>
+                <constraint firstItem="Cfm-Mm-bkX" firstAttribute="top" secondItem="Bj0-c0-1kA" secondAttribute="top" id="urG-tJ-OUP"/>
+            </constraints>
+            <nil key="simulatedStatusBarMetrics"/>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <point key="canvasLocation" x="548" y="455"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="SplashLogo" width="256" height="256"/>
+    </resources>
+</document>

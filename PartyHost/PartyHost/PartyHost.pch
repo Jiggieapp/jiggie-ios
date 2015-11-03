@@ -1,0 +1,37 @@
+//
+//  PrefixHeader.pch
+//  PartyHost
+//
+//  Created by Sunny Clark on 12/26/14.
+//  Copyright (c) 2014 Sunny Clark. All rights reserved.
+//
+
+#ifndef PartyHost_PrefixHeader_pch
+#define PartyHost_PrefixHeader_pch
+
+// Include any system framework and library headers here that should be included in all compilation units.
+// You will also need to set the Prefix Header build setting of one or more of your targets to reference this file.
+
+
+#ifdef __OBJC__
+    #import "SharedData.h"
+    #import "UIColor+PH.h"
+    #import "UIFont+PH.h"
+    #import "PopupView.h"
+    #import "OverlayView.h"
+    #import "TrendButton.h"
+    #import "SelectionButton.h"
+    #import "SelectionCheckmark.h"
+    #import "PHImage.h"
+    #import "UserBubble.h"
+    #import "EmptyView.h"
+    #import "PerkButton.h"
+    #import "FlatUIKit.h"
+    #import "GAI.h"
+    #import "GAIFields.h"
+    #import "GAITracker.h"
+    #import "GAIDictionaryBuilder.h"
+    #import "Constants.h"
+#endif
+
+#endif

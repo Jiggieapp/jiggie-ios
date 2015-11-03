@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <mutableArray key="FaktPro-SemiBold.ttf">
+            <string>FaktPro-SemiBold</string>
+        </mutableArray>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB" userLabel="SetupView" customClass="SetupView">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="PickBg" translatesAutoresizingMaskIntoConstraints="NO" id="oe5-ye-uro">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                </imageView>
+                <scrollView autoresizesSubviews="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" pagingEnabled="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GE9-ho-wR8">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                </scrollView>
+                <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="3" translatesAutoresizingMaskIntoConstraints="NO" id="8zU-0c-wGZ">
+                    <rect key="frame" x="141" y="468" width="39" height="44"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="44" id="s6c-Hw-tdm"/>
+                    </constraints>
+                    <connections>
+                        <action selector="pageControlChanged:" destination="iN0-l3-epB" eventType="valueChanged" id="cOf-Fc-49X"/>
+                    </connections>
+                </pageControl>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="e70-UH-ZN0">
+                    <rect key="frame" x="0.0" y="510" width="320" height="58"/>
+                    <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.5" colorSpace="calibratedRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="58" id="u5A-bb-xuR"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" name="FaktPro-SemiBold" family="Fakt Pro" pointSize="18"/>
+                    <inset key="contentEdgeInsets" minX="0.0" minY="4" maxX="0.0" maxY="0.0"/>
+                    <state key="normal" title="DONE">
+                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <connections>
+                        <action selector="buttonClicked:" destination="iN0-l3-epB" eventType="touchUpInside" id="3SQ-B9-R0b"/>
+                    </connections>
+                </button>
+            </subviews>
+            <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="GE9-ho-wR8" secondAttribute="trailing" id="65i-Oi-Obh"/>
+                <constraint firstItem="8zU-0c-wGZ" firstAttribute="centerX" secondItem="e70-UH-ZN0" secondAttribute="centerX" id="CiG-sw-ZMW"/>
+                <constraint firstAttribute="bottom" secondItem="GE9-ho-wR8" secondAttribute="bottom" id="Di0-Iq-dVh"/>
+                <constraint firstItem="oe5-ye-uro" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="DjB-9o-mgm"/>
+                <constraint firstItem="oe5-ye-uro" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="Mlx-1D-uRg"/>
+                <constraint firstItem="GE9-ho-wR8" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="ZWu-yx-Uzf"/>
+                <constraint firstItem="e70-UH-ZN0" firstAttribute="top" secondItem="8zU-0c-wGZ" secondAttribute="bottom" constant="-2" id="Zz0-K0-gSA"/>
+                <constraint firstAttribute="trailing" secondItem="oe5-ye-uro" secondAttribute="trailing" id="gfD-Am-sBD"/>
+                <constraint firstItem="e70-UH-ZN0" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="lqh-sP-Sed"/>
+                <constraint firstAttribute="trailing" secondItem="e70-UH-ZN0" secondAttribute="trailing" id="nxN-t8-vVU"/>
+                <constraint firstAttribute="bottom" secondItem="e70-UH-ZN0" secondAttribute="bottom" id="p8T-9a-XHW"/>
+                <constraint firstItem="GE9-ho-wR8" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="qbV-pZ-41l"/>
+                <constraint firstAttribute="bottom" secondItem="oe5-ye-uro" secondAttribute="bottom" id="v1s-hL-rOU"/>
+            </constraints>
+            <connections>
+                <outlet property="backgroundImage" destination="oe5-ye-uro" id="pwX-ZU-X8g"/>
+                <outlet property="button" destination="e70-UH-ZN0" id="YQZ-bJ-PtD"/>
+                <outlet property="pageControl" destination="8zU-0c-wGZ" id="tjm-g1-Sdh"/>
+                <outlet property="scrollView" destination="GE9-ho-wR8" id="nTx-Zn-XAc"/>
+            </connections>
+            <point key="canvasLocation" x="409" y="297"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="PickBg" width="750" height="1334"/>
+    </resources>
+    <simulatedMetricsContainer key="defaultSimulatedMetrics">
+        <simulatedStatusBarMetrics key="statusBar"/>
+        <simulatedOrientationMetrics key="orientation"/>
+        <simulatedScreenMetrics key="destination" type="retina4"/>
+    </simulatedMetricsContainer>
+</document>

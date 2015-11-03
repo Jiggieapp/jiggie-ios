@@ -1,0 +1,370 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="8191" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8154"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <mutableArray key="FaktPro-Blond.ttf">
+            <string>FaktPro-Blond</string>
+            <string>FaktPro-Blond</string>
+            <string>FaktPro-Blond</string>
+            <string>FaktPro-Blond</string>
+            <string>FaktPro-Blond</string>
+            <string>FaktPro-Blond</string>
+            <string>FaktPro-Blond</string>
+        </mutableArray>
+        <mutableArray key="FaktPro-SemiBold.ttf">
+            <string>FaktPro-SemiBold</string>
+            <string>FaktPro-SemiBold</string>
+            <string>FaktPro-SemiBold</string>
+            <string>FaktPro-SemiBold</string>
+            <string>FaktPro-SemiBold</string>
+            <string>FaktPro-SemiBold</string>
+            <string>FaktPro-SemiBold</string>
+        </mutableArray>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <view userInteractionEnabled="NO" contentMode="scaleToFill" id="aFC-R2-ees" userLabel="Page1">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Jiggie" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4Q7-sX-pSX">
+                    <rect key="frame" x="40" y="328" width="240" height="20"/>
+                    <fontDescription key="fontDescription" name="FaktPro-SemiBold" family="Fakt Pro" pointSize="20"/>
+                    <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="See whats going on..." lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mDc-JH-4zH">
+                    <rect key="frame" x="40" y="352" width="240" height="18"/>
+                    <fontDescription key="fontDescription" name="FaktPro-Blond" family="Fakt Pro" pointSize="18"/>
+                    <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="We don't post anything to Facebook" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7iG-No-Xkr">
+                    <rect key="frame" x="45" y="466" width="240" height="14"/>
+                    <fontDescription key="fontDescription" name="FaktPro-Blond" family="Fakt Pro" pointSize="14"/>
+                    <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Owr-Ob-CMO">
+                    <rect key="frame" x="0.0" y="504" width="320" height="64"/>
+                    <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.5" colorSpace="calibratedRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="64" id="U2s-On-Y2F"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" name="FaktPro-SemiBold" family="Fakt Pro" pointSize="18"/>
+                    <state key="normal" title="SIGN IN WITH FACEBOOK">
+                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                </button>
+            </subviews>
+            <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="7iG-No-Xkr" secondAttribute="trailing" constant="35" id="6eQ-Ao-NC3"/>
+                <constraint firstItem="mDc-JH-4zH" firstAttribute="width" secondItem="4Q7-sX-pSX" secondAttribute="width" id="DiY-Wo-WIf"/>
+                <constraint firstAttribute="trailing" secondItem="4Q7-sX-pSX" secondAttribute="trailing" constant="40" id="HS1-ZC-cRU"/>
+                <constraint firstAttribute="bottom" secondItem="Owr-Ob-CMO" secondAttribute="bottom" id="HWt-We-Cpb"/>
+                <constraint firstItem="4Q7-sX-pSX" firstAttribute="leading" secondItem="aFC-R2-ees" secondAttribute="leading" constant="40" id="I3H-iE-7aj"/>
+                <constraint firstItem="7iG-No-Xkr" firstAttribute="leading" secondItem="aFC-R2-ees" secondAttribute="leading" constant="45" id="Xyh-Yi-op3"/>
+                <constraint firstItem="mDc-JH-4zH" firstAttribute="leading" secondItem="4Q7-sX-pSX" secondAttribute="leading" id="efi-qf-1Tu"/>
+                <constraint firstAttribute="trailing" secondItem="Owr-Ob-CMO" secondAttribute="trailing" id="gBc-9v-xMl"/>
+                <constraint firstItem="Owr-Ob-CMO" firstAttribute="top" secondItem="7iG-No-Xkr" secondAttribute="bottom" constant="24" id="h9s-Fh-3za"/>
+                <constraint firstItem="mDc-JH-4zH" firstAttribute="top" secondItem="4Q7-sX-pSX" secondAttribute="bottom" constant="4" id="qbh-S8-M6a"/>
+                <constraint firstItem="Owr-Ob-CMO" firstAttribute="leading" secondItem="aFC-R2-ees" secondAttribute="leading" id="tCe-Ad-Dbo"/>
+                <constraint firstItem="7iG-No-Xkr" firstAttribute="top" secondItem="mDc-JH-4zH" secondAttribute="bottom" constant="96" id="xnU-ZL-MZE"/>
+            </constraints>
+            <point key="canvasLocation" x="869" y="297"/>
+        </view>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view userInteractionEnabled="NO" contentMode="scaleToFill" id="hku-nV-cEA" userLabel="Page2">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gje-ou-dKG">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="504"/>
+                    <subviews>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="signup_1" translatesAutoresizingMaskIntoConstraints="NO" id="w46-ar-tPO">
+                            <rect key="frame" x="0.0" y="96" width="320" height="326"/>
+                        </imageView>
+                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" editable="NO" text="Browse through exclusive parties and hot events in NYC" textAlignment="center" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qbZ-FQ-bL3">
+                            <rect key="frame" x="40" y="44" width="240" height="81"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="52" id="dLS-Bm-rHv"/>
+                            </constraints>
+                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                            <fontDescription key="fontDescription" name="FaktPro-Blond" family="Fakt Pro" pointSize="18"/>
+                            <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                        </textView>
+                    </subviews>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstItem="w46-ar-tPO" firstAttribute="top" secondItem="qbZ-FQ-bL3" secondAttribute="bottom" id="B4B-Zg-Gg4"/>
+                        <constraint firstItem="w46-ar-tPO" firstAttribute="leading" secondItem="gje-ou-dKG" secondAttribute="leading" id="PUe-Gb-U7X"/>
+                        <constraint firstItem="qbZ-FQ-bL3" firstAttribute="leading" secondItem="gje-ou-dKG" secondAttribute="leading" constant="20" id="hKw-p5-8vn"/>
+                        <constraint firstAttribute="trailing" secondItem="w46-ar-tPO" secondAttribute="trailing" id="hvJ-bt-eyG"/>
+                        <constraint firstItem="qbZ-FQ-bL3" firstAttribute="top" secondItem="gje-ou-dKG" secondAttribute="top" constant="44" id="ijD-6R-Dsy"/>
+                        <constraint firstAttribute="bottom" secondItem="w46-ar-tPO" secondAttribute="bottom" constant="82" id="wdo-pk-szl"/>
+                        <constraint firstAttribute="trailing" secondItem="qbZ-FQ-bL3" secondAttribute="trailing" constant="40" id="xLr-3D-CHf"/>
+                    </constraints>
+                </view>
+                <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="O7q-d6-Xvj">
+                    <rect key="frame" x="0.0" y="504" width="320" height="64"/>
+                    <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.5" colorSpace="calibratedRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="64" id="MRL-0c-TxT"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" name="FaktPro-SemiBold" family="Fakt Pro" pointSize="18"/>
+                    <state key="normal" title="SIGN IN WITH FACEBOOK">
+                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                </button>
+            </subviews>
+            <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstItem="gje-ou-dKG" firstAttribute="top" secondItem="hku-nV-cEA" secondAttribute="top" id="CmC-yJ-9r5"/>
+                <constraint firstItem="O7q-d6-Xvj" firstAttribute="leading" secondItem="hku-nV-cEA" secondAttribute="leading" id="IuG-9p-FMn"/>
+                <constraint firstAttribute="trailing" secondItem="gje-ou-dKG" secondAttribute="trailing" id="W6O-kR-Jcv"/>
+                <constraint firstAttribute="bottom" secondItem="O7q-d6-Xvj" secondAttribute="bottom" id="aGp-Oy-DVh"/>
+                <constraint firstItem="gje-ou-dKG" firstAttribute="leading" secondItem="hku-nV-cEA" secondAttribute="leading" id="ecv-5a-gRB"/>
+                <constraint firstAttribute="bottom" secondItem="gje-ou-dKG" secondAttribute="bottom" constant="64" id="euN-Yu-Ueb"/>
+                <constraint firstAttribute="trailing" secondItem="O7q-d6-Xvj" secondAttribute="trailing" id="zpe-zE-a2q"/>
+            </constraints>
+            <point key="canvasLocation" x="1319" y="297"/>
+        </view>
+        <view userInteractionEnabled="NO" contentMode="scaleToFill" id="Q1A-t5-WJj" userLabel="Page3">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zF5-Mr-b4T">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="504"/>
+                    <subviews>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="signup_2" translatesAutoresizingMaskIntoConstraints="NO" id="QPq-1K-opG">
+                            <rect key="frame" x="0.0" y="96" width="320" height="325.5"/>
+                        </imageView>
+                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" editable="NO" text="Check out other guests who like the same events you do " textAlignment="center" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tfn-6c-zAf">
+                            <rect key="frame" x="16" y="44" width="288" height="59.5"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="52" id="bF0-jc-hIa"/>
+                            </constraints>
+                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                            <fontDescription key="fontDescription" name="FaktPro-Blond" family="Fakt Pro" pointSize="18"/>
+                            <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                        </textView>
+                    </subviews>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstItem="tfn-6c-zAf" firstAttribute="top" secondItem="zF5-Mr-b4T" secondAttribute="top" constant="44" id="LQs-Gi-PPW"/>
+                        <constraint firstItem="QPq-1K-opG" firstAttribute="leading" secondItem="zF5-Mr-b4T" secondAttribute="leading" id="Lm9-yh-xKb"/>
+                        <constraint firstAttribute="trailing" secondItem="tfn-6c-zAf" secondAttribute="trailing" constant="16" id="UwO-gX-X5a"/>
+                        <constraint firstItem="tfn-6c-zAf" firstAttribute="leading" secondItem="zF5-Mr-b4T" secondAttribute="leading" constant="16" id="bx0-sR-otD"/>
+                        <constraint firstItem="QPq-1K-opG" firstAttribute="top" secondItem="tfn-6c-zAf" secondAttribute="bottom" id="cIq-aU-Gmq"/>
+                        <constraint firstAttribute="bottom" secondItem="QPq-1K-opG" secondAttribute="bottom" constant="82" id="hYt-9b-Ngb"/>
+                        <constraint firstAttribute="trailing" secondItem="QPq-1K-opG" secondAttribute="trailing" id="tCI-7h-6uM"/>
+                    </constraints>
+                </view>
+                <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0dW-29-htU">
+                    <rect key="frame" x="0.0" y="504" width="320" height="64"/>
+                    <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.5" colorSpace="calibratedRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="64" id="nFb-W5-6MH"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" name="FaktPro-SemiBold" family="Fakt Pro" pointSize="18"/>
+                    <state key="normal" title="SIGN IN WITH FACEBOOK">
+                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                </button>
+            </subviews>
+            <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstAttribute="bottom" secondItem="0dW-29-htU" secondAttribute="bottom" id="0Di-ba-z3r"/>
+                <constraint firstItem="zF5-Mr-b4T" firstAttribute="top" secondItem="Q1A-t5-WJj" secondAttribute="top" id="9R8-ve-nG6"/>
+                <constraint firstAttribute="trailing" secondItem="zF5-Mr-b4T" secondAttribute="trailing" id="9oj-Z3-NCo"/>
+                <constraint firstItem="0dW-29-htU" firstAttribute="leading" secondItem="Q1A-t5-WJj" secondAttribute="leading" id="K1c-gE-d7C"/>
+                <constraint firstItem="zF5-Mr-b4T" firstAttribute="leading" secondItem="Q1A-t5-WJj" secondAttribute="leading" id="K9N-k3-t9n"/>
+                <constraint firstAttribute="trailing" secondItem="0dW-29-htU" secondAttribute="trailing" id="d2K-fE-AQ6"/>
+                <constraint firstAttribute="bottom" secondItem="zF5-Mr-b4T" secondAttribute="bottom" constant="64" id="pUe-Of-nXQ"/>
+            </constraints>
+            <point key="canvasLocation" x="1703" y="297"/>
+        </view>
+        <view userInteractionEnabled="NO" contentMode="scaleToFill" id="pxX-w4-B8m" userLabel="Page4">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mYI-DO-DmE">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="504"/>
+                    <subviews>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="signup_4" translatesAutoresizingMaskIntoConstraints="NO" id="Ead-wv-khY">
+                            <rect key="frame" x="0.0" y="96" width="320" height="326"/>
+                        </imageView>
+                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" editable="NO" text="Chat with your new friends and make plans to meet up" textAlignment="center" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="n2k-TQ-bfm">
+                            <rect key="frame" x="40" y="44" width="240" height="59.5"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="52" id="Euu-fR-Sc1"/>
+                            </constraints>
+                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                            <fontDescription key="fontDescription" name="FaktPro-Blond" family="Fakt Pro" pointSize="18"/>
+                            <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                        </textView>
+                    </subviews>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="bottom" secondItem="Ead-wv-khY" secondAttribute="bottom" constant="82" id="0zH-xt-F3l"/>
+                        <constraint firstItem="Ead-wv-khY" firstAttribute="leading" secondItem="mYI-DO-DmE" secondAttribute="leading" id="6UD-Qh-qcB"/>
+                        <constraint firstAttribute="trailing" secondItem="Ead-wv-khY" secondAttribute="trailing" id="BpM-UD-Hoe"/>
+                        <constraint firstItem="n2k-TQ-bfm" firstAttribute="top" secondItem="mYI-DO-DmE" secondAttribute="top" constant="44" id="Omv-BO-NR6"/>
+                        <constraint firstAttribute="trailing" secondItem="n2k-TQ-bfm" secondAttribute="trailing" constant="40" id="SQb-uB-qPY"/>
+                        <constraint firstItem="n2k-TQ-bfm" firstAttribute="leading" secondItem="mYI-DO-DmE" secondAttribute="leading" constant="40" id="SbH-ZB-2z7"/>
+                        <constraint firstItem="Ead-wv-khY" firstAttribute="top" secondItem="n2k-TQ-bfm" secondAttribute="bottom" id="Vxx-nH-KfK"/>
+                    </constraints>
+                </view>
+                <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ie9-XD-Zn8">
+                    <rect key="frame" x="0.0" y="504" width="320" height="64"/>
+                    <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.5" colorSpace="calibratedRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="64" id="d6r-2H-Sur"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" name="FaktPro-SemiBold" family="Fakt Pro" pointSize="18"/>
+                    <state key="normal" title="SIGN IN WITH FACEBOOK">
+                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                </button>
+            </subviews>
+            <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstAttribute="bottom" secondItem="mYI-DO-DmE" secondAttribute="bottom" constant="64" id="0L1-AH-QCd"/>
+                <constraint firstItem="mYI-DO-DmE" firstAttribute="top" secondItem="pxX-w4-B8m" secondAttribute="top" id="4lE-fC-LgF"/>
+                <constraint firstAttribute="trailing" secondItem="mYI-DO-DmE" secondAttribute="trailing" id="IKm-uu-2Do"/>
+                <constraint firstItem="ie9-XD-Zn8" firstAttribute="leading" secondItem="pxX-w4-B8m" secondAttribute="leading" id="KeB-mV-h3U"/>
+                <constraint firstItem="mYI-DO-DmE" firstAttribute="leading" secondItem="pxX-w4-B8m" secondAttribute="leading" id="WNp-Pt-kUI"/>
+                <constraint firstAttribute="bottom" secondItem="ie9-XD-Zn8" secondAttribute="bottom" id="aZP-je-gMo"/>
+                <constraint firstAttribute="trailing" secondItem="ie9-XD-Zn8" secondAttribute="trailing" id="jaV-F9-e93"/>
+            </constraints>
+            <point key="canvasLocation" x="2077" y="297"/>
+        </view>
+        <view userInteractionEnabled="NO" contentMode="scaleToFill" id="l94-pu-0Cc" userLabel="Page6">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yfE-Ye-srB">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="504"/>
+                    <subviews>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="signup_3" translatesAutoresizingMaskIntoConstraints="NO" id="tfP-lD-DML">
+                            <rect key="frame" x="0.0" y="103" width="320" height="318.5"/>
+                        </imageView>
+                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" editable="NO" text="Connect with other fun-loving people and make new party friends" textAlignment="center" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="beD-uf-qqV">
+                            <rect key="frame" x="16" y="44" width="288" height="59.5"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="52" id="KGN-pL-jLq"/>
+                            </constraints>
+                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                            <fontDescription key="fontDescription" name="FaktPro-Blond" family="Fakt Pro" pointSize="18"/>
+                            <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                        </textView>
+                    </subviews>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstItem="tfP-lD-DML" firstAttribute="top" secondItem="beD-uf-qqV" secondAttribute="bottom" id="EPO-jO-yAd"/>
+                        <constraint firstItem="beD-uf-qqV" firstAttribute="top" secondItem="yfE-Ye-srB" secondAttribute="top" constant="44" id="HAA-dw-fSJ"/>
+                        <constraint firstItem="tfP-lD-DML" firstAttribute="leading" secondItem="yfE-Ye-srB" secondAttribute="leading" id="Jmb-4j-iTD"/>
+                        <constraint firstAttribute="bottom" secondItem="tfP-lD-DML" secondAttribute="bottom" constant="82" id="b7C-b0-ACw"/>
+                        <constraint firstItem="beD-uf-qqV" firstAttribute="leading" secondItem="yfE-Ye-srB" secondAttribute="leading" constant="16" id="d18-HL-Efg"/>
+                        <constraint firstAttribute="trailing" secondItem="tfP-lD-DML" secondAttribute="trailing" id="qKh-qe-QQR"/>
+                        <constraint firstAttribute="trailing" secondItem="beD-uf-qqV" secondAttribute="trailing" constant="16" id="yM2-xP-P6E"/>
+                    </constraints>
+                </view>
+                <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="65F-PG-fZp">
+                    <rect key="frame" x="0.0" y="504" width="320" height="64"/>
+                    <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.5" colorSpace="calibratedRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="64" id="Zed-gB-lA1"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" name="FaktPro-SemiBold" family="Fakt Pro" pointSize="18"/>
+                    <state key="normal" title="SIGN IN WITH FACEBOOK">
+                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                </button>
+            </subviews>
+            <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstItem="yfE-Ye-srB" firstAttribute="top" secondItem="l94-pu-0Cc" secondAttribute="top" id="6r3-PO-8dj"/>
+                <constraint firstAttribute="trailing" secondItem="yfE-Ye-srB" secondAttribute="trailing" id="7gr-SC-1zx"/>
+                <constraint firstItem="65F-PG-fZp" firstAttribute="leading" secondItem="l94-pu-0Cc" secondAttribute="leading" id="AQN-Th-lzv"/>
+                <constraint firstAttribute="bottom" secondItem="yfE-Ye-srB" secondAttribute="bottom" constant="64" id="JMo-sK-x6y"/>
+                <constraint firstItem="yfE-Ye-srB" firstAttribute="leading" secondItem="l94-pu-0Cc" secondAttribute="leading" id="Q2c-A5-ASP"/>
+                <constraint firstAttribute="bottom" secondItem="65F-PG-fZp" secondAttribute="bottom" id="sML-o0-cJi"/>
+                <constraint firstAttribute="trailing" secondItem="65F-PG-fZp" secondAttribute="trailing" id="uCZ-hc-oUC"/>
+            </constraints>
+            <point key="canvasLocation" x="2882" y="297"/>
+        </view>
+        <view userInteractionEnabled="NO" contentMode="scaleToFill" id="wqa-Rd-x6g" userLabel="Page5">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6m5-CB-SWS">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="504"/>
+                    <subviews>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="signup_5" translatesAutoresizingMaskIntoConstraints="NO" id="7th-ev-Ffa">
+                            <rect key="frame" x="0.0" y="96" width="320" height="325.5"/>
+                        </imageView>
+                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" editable="NO" text="Reserve a table directly from the app and roll in like a VIP" textAlignment="center" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Faj-MP-Nmv">
+                            <rect key="frame" x="16" y="44" width="288" height="59.5"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="52" id="KdV-6s-BYk"/>
+                            </constraints>
+                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                            <fontDescription key="fontDescription" name="FaktPro-Blond" family="Fakt Pro" pointSize="18"/>
+                            <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                        </textView>
+                    </subviews>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="trailing" secondItem="7th-ev-Ffa" secondAttribute="trailing" id="3Ja-zO-dSQ"/>
+                        <constraint firstAttribute="bottom" secondItem="7th-ev-Ffa" secondAttribute="bottom" constant="82" id="Fvz-PH-8Ye"/>
+                        <constraint firstAttribute="trailing" secondItem="Faj-MP-Nmv" secondAttribute="trailing" constant="16" id="g6M-Ru-oje"/>
+                        <constraint firstItem="7th-ev-Ffa" firstAttribute="leading" secondItem="6m5-CB-SWS" secondAttribute="leading" id="hZu-3Y-aRw"/>
+                        <constraint firstItem="7th-ev-Ffa" firstAttribute="top" secondItem="Faj-MP-Nmv" secondAttribute="bottom" id="iES-V5-0b2"/>
+                        <constraint firstItem="Faj-MP-Nmv" firstAttribute="leading" secondItem="6m5-CB-SWS" secondAttribute="leading" constant="16" id="r13-SI-y1d"/>
+                        <constraint firstItem="Faj-MP-Nmv" firstAttribute="top" secondItem="6m5-CB-SWS" secondAttribute="top" constant="44" id="wwq-LP-VKd"/>
+                    </constraints>
+                </view>
+                <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Kgb-58-iMN">
+                    <rect key="frame" x="0.0" y="504" width="320" height="64"/>
+                    <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.5" colorSpace="calibratedRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="64" id="tHh-o7-gqJ"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" name="FaktPro-SemiBold" family="Fakt Pro" pointSize="18"/>
+                    <state key="normal" title="SIGN IN WITH FACEBOOK">
+                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                </button>
+            </subviews>
+            <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstItem="Kgb-58-iMN" firstAttribute="leading" secondItem="wqa-Rd-x6g" secondAttribute="leading" id="7Ih-9F-FHb"/>
+                <constraint firstItem="6m5-CB-SWS" firstAttribute="leading" secondItem="wqa-Rd-x6g" secondAttribute="leading" id="AE4-Oq-dhW"/>
+                <constraint firstAttribute="trailing" secondItem="6m5-CB-SWS" secondAttribute="trailing" id="EHO-Ku-BQR"/>
+                <constraint firstAttribute="bottom" secondItem="Kgb-58-iMN" secondAttribute="bottom" id="Kzr-67-RLt"/>
+                <constraint firstItem="6m5-CB-SWS" firstAttribute="top" secondItem="wqa-Rd-x6g" secondAttribute="top" id="TSO-bq-OLz"/>
+                <constraint firstAttribute="bottom" secondItem="6m5-CB-SWS" secondAttribute="bottom" constant="64" id="TUz-uo-6XN"/>
+                <constraint firstAttribute="trailing" secondItem="Kgb-58-iMN" secondAttribute="trailing" id="aT2-Zd-Td4"/>
+            </constraints>
+            <point key="canvasLocation" x="2486" y="297"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="signup_1" width="750" height="1334"/>
+        <image name="signup_2" width="750" height="1334"/>
+        <image name="signup_3" width="750" height="1334"/>
+        <image name="signup_4" width="750" height="1334"/>
+        <image name="signup_5" width="750" height="1334"/>
+    </resources>
+</document>

@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
+        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <mutableArray key="FaktPro-SemiBold.ttf">
+            <string>FaktPro-SemiBold</string>
+            <string>FaktPro-SemiBold</string>
+        </mutableArray>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="VKg-Uj-OGd" customClass="FeedPopupView">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gvF-dU-jhM">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="516"/>
+                    <subviews>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7nD-SO-er2">
+                            <rect key="frame" x="0.0" y="110" width="320" height="322.5"/>
+                            <subviews>
+                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="250" misplaced="YES" image="icon_feed_popup" translatesAutoresizingMaskIntoConstraints="NO" id="2Iq-rH-uhf">
+                                    <rect key="frame" x="92" y="0.0" width="136" height="214"/>
+                                    <constraints>
+                                        <constraint firstAttribute="width" constant="136" id="kPt-Wb-q2d"/>
+                                    </constraints>
+                                </imageView>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="THE PARTY FEED" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YSJ-mJ-RgC">
+                                    <rect key="frame" x="8" y="246" width="304" height="18"/>
+                                    <fontDescription key="fontDescription" name="FaktPro-SemiBold" family="Fakt Pro" pointSize="18"/>
+                                    <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="hsh-1U-XN1">
+                                    <rect key="frame" x="16" y="272" width="288" height="50"/>
+                                    <attributedString key="attributedText">
+                                        <fragment content="Clear out your feed by choosing an option button on the left or right side of the card.  Party on! ">
+                                            <attributes>
+                                                <color key="NSColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                                <font key="NSFont" size="14" name="FaktPro-Blond"/>
+                                                <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="truncatingTail" baseWritingDirection="natural" lineSpacing="4"/>
+                                            </attributes>
+                                        </fragment>
+                                    </attributedString>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                            </subviews>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            <constraints>
+                                <constraint firstItem="hsh-1U-XN1" firstAttribute="top" secondItem="YSJ-mJ-RgC" secondAttribute="bottom" constant="16" id="1Ue-uA-bwK"/>
+                                <constraint firstItem="YSJ-mJ-RgC" firstAttribute="top" secondItem="2Iq-rH-uhf" secondAttribute="bottom" constant="32" id="5aS-81-WFq"/>
+                                <constraint firstAttribute="trailing" secondItem="hsh-1U-XN1" secondAttribute="trailing" constant="16" id="9EL-wr-3Iq"/>
+                                <constraint firstItem="hsh-1U-XN1" firstAttribute="leading" secondItem="7nD-SO-er2" secondAttribute="leading" constant="16" id="BJ3-MR-OcB"/>
+                                <constraint firstItem="2Iq-rH-uhf" firstAttribute="top" secondItem="7nD-SO-er2" secondAttribute="top" id="NU3-Sf-U6M"/>
+                                <constraint firstAttribute="centerX" secondItem="2Iq-rH-uhf" secondAttribute="centerX" id="OwA-NL-hLj"/>
+                                <constraint firstItem="YSJ-mJ-RgC" firstAttribute="leading" secondItem="7nD-SO-er2" secondAttribute="leading" constant="8" id="Zxa-4A-8JR"/>
+                                <constraint firstAttribute="trailing" secondItem="YSJ-mJ-RgC" secondAttribute="trailing" constant="8" id="lI3-lD-qbr"/>
+                                <constraint firstAttribute="bottom" secondItem="hsh-1U-XN1" secondAttribute="bottom" id="yYd-X4-TSy"/>
+                            </constraints>
+                        </view>
+                    </subviews>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="centerX" secondItem="7nD-SO-er2" secondAttribute="centerX" id="KJs-Ad-vFd"/>
+                        <constraint firstAttribute="height" secondItem="7nD-SO-er2" secondAttribute="height" multiplier="1.6" id="eFN-Ht-PxH"/>
+                        <constraint firstAttribute="width" secondItem="7nD-SO-er2" secondAttribute="width" id="eih-Uz-Zms"/>
+                        <constraint firstAttribute="centerY" secondItem="7nD-SO-er2" secondAttribute="centerY" multiplier="0.95" id="v3i-sO-MHu"/>
+                    </constraints>
+                </view>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5aA-wg-fBE">
+                    <rect key="frame" x="0.0" y="516" width="320" height="44"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="44" id="CcA-pb-I74"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" name="FaktPro-SemiBold" family="Fakt Pro" pointSize="17"/>
+                    <state key="normal" title="OK">
+                        <color key="titleColor" red="0.57647058819999997" green="0.043137254899999998" blue="0.68627450980000004" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <connections>
+                        <action selector="buttonClicked:" destination="VKg-Uj-OGd" eventType="touchUpInside" id="ZWd-z2-4M8"/>
+                    </connections>
+                </button>
+            </subviews>
+            <color key="backgroundColor" red="0.74117647060000003" green="0.062745098040000002" blue="0.87843137250000003" alpha="1" colorSpace="calibratedRGB"/>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="5aA-wg-fBE" secondAttribute="trailing" id="52q-C7-Ly0"/>
+                <constraint firstItem="5aA-wg-fBE" firstAttribute="leading" secondItem="VKg-Uj-OGd" secondAttribute="leading" id="C0M-8B-LQJ"/>
+                <constraint firstItem="gvF-dU-jhM" firstAttribute="leading" secondItem="VKg-Uj-OGd" secondAttribute="leading" id="I8K-5X-rOL"/>
+                <constraint firstItem="gvF-dU-jhM" firstAttribute="top" secondItem="VKg-Uj-OGd" secondAttribute="top" id="MhT-bz-VWf"/>
+                <constraint firstItem="5aA-wg-fBE" firstAttribute="top" secondItem="gvF-dU-jhM" secondAttribute="bottom" id="X5W-TI-Fuu"/>
+                <constraint firstAttribute="trailing" secondItem="gvF-dU-jhM" secondAttribute="trailing" id="apx-LR-0pg"/>
+                <constraint firstAttribute="bottom" secondItem="5aA-wg-fBE" secondAttribute="bottom" constant="8" id="kj8-UP-uzE"/>
+            </constraints>
+            <userDefinedRuntimeAttributes>
+                <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                    <integer key="value" value="8"/>
+                </userDefinedRuntimeAttribute>
+                <userDefinedRuntimeAttribute type="boolean" keyPath="layer.maskToBounds" value="YES"/>
+            </userDefinedRuntimeAttributes>
+            <connections>
+                <outlet property="button" destination="5aA-wg-fBE" id="lAv-R3-1an"/>
+            </connections>
+            <point key="canvasLocation" x="259" y="238"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="icon_feed_popup" width="274" height="360"/>
+    </resources>
+    <simulatedMetricsContainer key="defaultSimulatedMetrics">
+        <simulatedStatusBarMetrics key="statusBar"/>
+        <simulatedOrientationMetrics key="orientation"/>
+        <simulatedScreenMetrics key="destination" type="retina4"/>
+    </simulatedMetricsContainer>
+</document>

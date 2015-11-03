@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <mutableArray key="FaktPro-Blond.ttf">
+            <string>FaktPro-Blond</string>
+        </mutableArray>
+        <mutableArray key="FaktPro-SemiBold.ttf">
+            <string>FaktPro-SemiBold</string>
+            <string>FaktPro-SemiBold</string>
+            <string>FaktPro-SemiBold</string>
+            <string>FaktPro-SemiBold</string>
+            <string>FaktPro-SemiBold</string>
+            <string>FaktPro-SemiBold</string>
+        </mutableArray>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="jIb-hw-5n5" customClass="EventsHostMessage">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Q0I-bn-ydi">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="524"/>
+                    <subviews>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="I'M INTERESTED" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="Tr2-dC-GnL">
+                            <rect key="frame" x="16" y="27" width="288" height="8"/>
+                            <fontDescription key="fontDescription" name="FaktPro-SemiBold" family="Fakt Pro" pointSize="8"/>
+                            <color key="textColor" red="0.74117647058823533" green="0.74117647058823533" blue="0.74117647058823533" alpha="1" colorSpace="calibratedRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="KARINA, 21" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Gfo-El-c0x">
+                            <rect key="frame" x="0.0" y="45" width="320" height="18"/>
+                            <fontDescription key="fontDescription" name="FaktPro-SemiBold" family="Fakt Pro" pointSize="18"/>
+                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="MARQUEE" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="f5d-mh-YAJ">
+                            <rect key="frame" x="16" y="71" width="288" height="10"/>
+                            <fontDescription key="fontDescription" name="FaktPro-SemiBold" family="Fakt Pro" pointSize="10"/>
+                            <color key="textColor" red="0.74117647060000003" green="0.74117647060000003" blue="0.74117647060000003" alpha="1" colorSpace="calibratedRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <view alpha="0.25" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="AbP-0f-ru6">
+                            <rect key="frame" x="0.0" y="100" width="320" height="1"/>
+                            <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="1" id="Eg4-YS-SY6"/>
+                            </constraints>
+                        </view>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="FRIDAY AUGUST 20, 9PM TO 4AM" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="re0-yf-yJi">
+                            <rect key="frame" x="19" y="118" width="288" height="10"/>
+                            <fontDescription key="fontDescription" name="FaktPro-SemiBold" family="Fakt Pro" pointSize="10"/>
+                            <color key="textColor" red="0.32941176470588235" green="0.32941176470588235" blue="0.32941176470588235" alpha="1" colorSpace="calibratedRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <view alpha="0.25" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="M9V-W6-7w3">
+                            <rect key="frame" x="-3" y="142" width="326" height="1"/>
+                            <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="1" id="MZI-69-g6j"/>
+                            </constraints>
+                        </view>
+                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hCI-jL-YdL">
+                            <rect key="frame" x="0.0" y="143" width="320" height="381"/>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            <inset key="scrollIndicatorInsets" minX="0.0" minY="0.0" maxX="8" maxY="0.0"/>
+                            <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.  Nam liber te conscient to factor tum poen legum odioque civiuda.  Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
+                            <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                            <fontDescription key="fontDescription" name="FaktPro-Blond" family="Fakt Pro" pointSize="16"/>
+                            <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                        </textView>
+                    </subviews>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="trailing" secondItem="f5d-mh-YAJ" secondAttribute="trailing" constant="16" id="3jD-QE-bhL"/>
+                        <constraint firstAttribute="trailing" secondItem="Gfo-El-c0x" secondAttribute="trailing" id="54M-EZ-Lpw"/>
+                        <constraint firstItem="Tr2-dC-GnL" firstAttribute="top" secondItem="Q0I-bn-ydi" secondAttribute="top" constant="27" id="5b2-Pr-anV"/>
+                        <constraint firstAttribute="trailing" secondItem="re0-yf-yJi" secondAttribute="trailing" constant="13" id="5hj-1S-DK0"/>
+                        <constraint firstItem="Gfo-El-c0x" firstAttribute="leading" secondItem="Q0I-bn-ydi" secondAttribute="leading" id="8bC-qU-iN7"/>
+                        <constraint firstAttribute="trailing" secondItem="hCI-jL-YdL" secondAttribute="trailing" id="9Xt-wp-7RB"/>
+                        <constraint firstItem="hCI-jL-YdL" firstAttribute="leading" secondItem="Q0I-bn-ydi" secondAttribute="leading" id="CgQ-kV-7Wr"/>
+                        <constraint firstItem="AbP-0f-ru6" firstAttribute="top" secondItem="f5d-mh-YAJ" secondAttribute="bottom" constant="19" id="GgH-Eo-WxF"/>
+                        <constraint firstAttribute="trailing" secondItem="AbP-0f-ru6" secondAttribute="trailing" id="HAl-lq-wHl"/>
+                        <constraint firstItem="AbP-0f-ru6" firstAttribute="leading" secondItem="Q0I-bn-ydi" secondAttribute="leading" id="LPl-UA-cMO"/>
+                        <constraint firstItem="Tr2-dC-GnL" firstAttribute="leading" secondItem="Q0I-bn-ydi" secondAttribute="leading" constant="16" id="Lf9-rJ-u65"/>
+                        <constraint firstItem="f5d-mh-YAJ" firstAttribute="leading" secondItem="Q0I-bn-ydi" secondAttribute="leading" constant="16" id="VZY-gc-Vq0"/>
+                        <constraint firstItem="hCI-jL-YdL" firstAttribute="top" secondItem="M9V-W6-7w3" secondAttribute="bottom" id="Vu1-4M-uNK"/>
+                        <constraint firstItem="re0-yf-yJi" firstAttribute="top" secondItem="AbP-0f-ru6" secondAttribute="bottom" constant="17" id="Ycm-HE-c7H"/>
+                        <constraint firstItem="re0-yf-yJi" firstAttribute="leading" secondItem="Q0I-bn-ydi" secondAttribute="leading" constant="19" id="Yin-6D-gST"/>
+                        <constraint firstItem="M9V-W6-7w3" firstAttribute="leading" secondItem="Q0I-bn-ydi" secondAttribute="leading" constant="-3" id="atU-6v-RrQ"/>
+                        <constraint firstAttribute="trailing" secondItem="M9V-W6-7w3" secondAttribute="trailing" constant="-3" id="b4K-Jm-bJk"/>
+                        <constraint firstItem="M9V-W6-7w3" firstAttribute="top" secondItem="re0-yf-yJi" secondAttribute="bottom" constant="14" id="ngC-TT-YGq"/>
+                        <constraint firstAttribute="trailing" secondItem="Tr2-dC-GnL" secondAttribute="trailing" constant="16" id="qk6-IY-K2h"/>
+                        <constraint firstAttribute="bottom" secondItem="hCI-jL-YdL" secondAttribute="bottom" id="qyQ-7w-0RG"/>
+                        <constraint firstItem="f5d-mh-YAJ" firstAttribute="top" secondItem="Gfo-El-c0x" secondAttribute="bottom" constant="8" id="rwf-Tm-goq"/>
+                        <constraint firstItem="Gfo-El-c0x" firstAttribute="top" secondItem="Tr2-dC-GnL" secondAttribute="bottom" constant="10" id="xKw-bw-9Oc"/>
+                    </constraints>
+                </view>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="o4A-2o-vQN">
+                    <rect key="frame" x="0.0" y="524" width="160" height="44"/>
+                    <color key="backgroundColor" red="0.74117647058823533" green="0.062745098039215685" blue="0.8784313725490196" alpha="1" colorSpace="calibratedRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="44" id="ueE-Vw-08U"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" name="FaktPro-SemiBold" family="Fakt Pro" pointSize="18"/>
+                    <state key="normal" title="CANCEL">
+                        <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <connections>
+                        <action selector="cancelClicked:" destination="jIb-hw-5n5" eventType="touchUpInside" id="wbc-BP-iwh"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Keq-rn-RtD">
+                    <rect key="frame" x="160" y="524" width="160" height="44"/>
+                    <color key="backgroundColor" red="0.74117647060000003" green="0.062745098040000002" blue="0.87843137250000003" alpha="1" colorSpace="calibratedRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="44" id="3Yw-4p-pmx"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" name="FaktPro-SemiBold" family="Fakt Pro" pointSize="18"/>
+                    <state key="normal" title="SEND">
+                        <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <connections>
+                        <action selector="sendClicked:" destination="jIb-hw-5n5" eventType="touchUpInside" id="i5g-De-FIk"/>
+                    </connections>
+                </button>
+                <view alpha="0.5" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="t2j-wK-MvI">
+                    <rect key="frame" x="160" y="534" width="1" height="24"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="1" id="Oub-WQ-kiK"/>
+                        <constraint firstAttribute="height" constant="24" id="cQe-yb-eOa"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+            <constraints>
+                <constraint firstItem="Q0I-bn-ydi" firstAttribute="top" secondItem="jIb-hw-5n5" secondAttribute="top" id="5Fq-Dm-GJo"/>
+                <constraint firstItem="o4A-2o-vQN" firstAttribute="leading" secondItem="jIb-hw-5n5" secondAttribute="leading" id="6gB-Fk-5CM"/>
+                <constraint firstAttribute="centerX" secondItem="t2j-wK-MvI" secondAttribute="centerX" constant="-0.5" id="7ti-hf-pQP"/>
+                <constraint firstAttribute="bottom" secondItem="Keq-rn-RtD" secondAttribute="bottom" id="L1f-gy-WWA"/>
+                <constraint firstAttribute="trailing" secondItem="Q0I-bn-ydi" secondAttribute="trailing" id="OWS-pk-nu1"/>
+                <constraint firstAttribute="trailing" secondItem="Keq-rn-RtD" secondAttribute="trailing" id="XPn-fY-L2c"/>
+                <constraint firstItem="Keq-rn-RtD" firstAttribute="leading" secondItem="t2j-wK-MvI" secondAttribute="trailing" constant="-1" id="hcz-Hl-d4i"/>
+                <constraint firstAttribute="bottom" secondItem="o4A-2o-vQN" secondAttribute="bottom" id="jWR-FL-pTC"/>
+                <constraint firstItem="Q0I-bn-ydi" firstAttribute="leading" secondItem="jIb-hw-5n5" secondAttribute="leading" id="pdM-MY-3CR"/>
+                <constraint firstAttribute="bottom" secondItem="Q0I-bn-ydi" secondAttribute="bottom" constant="44" id="rpK-wo-4g1"/>
+                <constraint firstAttribute="bottom" secondItem="t2j-wK-MvI" secondAttribute="bottom" constant="10" id="v8W-rg-V8N"/>
+                <constraint firstItem="t2j-wK-MvI" firstAttribute="leading" secondItem="o4A-2o-vQN" secondAttribute="trailing" id="zbo-EQ-Cwr"/>
+            </constraints>
+            <connections>
+                <outlet property="cancelButton" destination="o4A-2o-vQN" id="rFE-La-wth"/>
+                <outlet property="eventDate" destination="re0-yf-yJi" id="8Rp-dt-Edo"/>
+                <outlet property="messageText" destination="hCI-jL-YdL" id="HUE-Pg-Jpl"/>
+                <outlet property="sendButton" destination="Keq-rn-RtD" id="YXW-5T-Z8h"/>
+                <outlet property="userName" destination="Gfo-El-c0x" id="REe-MW-Amb"/>
+                <outlet property="venueName" destination="f5d-mh-YAJ" id="fCY-CD-SFz"/>
+            </connections>
+            <point key="canvasLocation" x="389" y="238"/>
+        </view>
+    </objects>
+    <simulatedMetricsContainer key="defaultSimulatedMetrics">
+        <simulatedStatusBarMetrics key="statusBar"/>
+        <simulatedOrientationMetrics key="orientation"/>
+        <simulatedScreenMetrics key="destination" type="retina4"/>
+    </simulatedMetricsContainer>
+</document>

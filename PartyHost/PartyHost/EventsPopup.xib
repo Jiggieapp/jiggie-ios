@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
+        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <mutableArray key="FaktPro-SemiBold.ttf">
+            <string>FaktPro-SemiBold</string>
+            <string>FaktPro-SemiBold</string>
+        </mutableArray>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="D6Z-xv-hxs" customClass="EventsPopupView">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3TS-xd-L1E">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="516"/>
+                    <subviews>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4Np-Yp-Mad">
+                            <rect key="frame" x="0.0" y="100" width="320" height="343.5"/>
+                            <subviews>
+                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="250" image="icon_events_popup" translatesAutoresizingMaskIntoConstraints="NO" id="hZd-wI-hhS">
+                                    <rect key="frame" x="92" y="0.0" width="136" height="227"/>
+                                    <constraints>
+                                        <constraint firstAttribute="width" constant="136" id="Z20-94-Y3e"/>
+                                    </constraints>
+                                </imageView>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="EVENTS AND GUESTS" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="M6T-pZ-2fp">
+                                    <rect key="frame" x="0.0" y="259" width="320" height="18"/>
+                                    <fontDescription key="fontDescription" name="FaktPro-SemiBold" family="Fakt Pro" pointSize="18"/>
+                                    <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="igN-mj-rE7">
+                                    <rect key="frame" x="16" y="293" width="288" height="50"/>
+                                    <attributedString key="attributedText">
+                                        <fragment content="Find everything you need to know about what’s happening tonight — reach out to the best hosts and make things happen!">
+                                            <attributes>
+                                                <color key="NSColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                                <font key="NSFont" size="14" name="FaktPro-Blond"/>
+                                                <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="truncatingTail" baseWritingDirection="natural" lineSpacing="4"/>
+                                            </attributes>
+                                        </fragment>
+                                    </attributedString>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                            </subviews>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            <constraints>
+                                <constraint firstItem="hZd-wI-hhS" firstAttribute="top" secondItem="4Np-Yp-Mad" secondAttribute="top" id="3zD-xc-N8I"/>
+                                <constraint firstItem="M6T-pZ-2fp" firstAttribute="leading" secondItem="4Np-Yp-Mad" secondAttribute="leading" id="CXb-Or-Nm5"/>
+                                <constraint firstItem="M6T-pZ-2fp" firstAttribute="top" secondItem="hZd-wI-hhS" secondAttribute="bottom" constant="32" id="O0X-1d-u7T"/>
+                                <constraint firstItem="igN-mj-rE7" firstAttribute="leading" secondItem="4Np-Yp-Mad" secondAttribute="leading" constant="16" id="Xdk-iK-pA9"/>
+                                <constraint firstAttribute="bottom" secondItem="igN-mj-rE7" secondAttribute="bottom" id="bW3-1u-33H"/>
+                                <constraint firstAttribute="trailing" secondItem="M6T-pZ-2fp" secondAttribute="trailing" id="cXu-KN-hRX"/>
+                                <constraint firstAttribute="trailing" secondItem="igN-mj-rE7" secondAttribute="trailing" constant="16" id="n8k-uC-dVc"/>
+                                <constraint firstAttribute="centerX" secondItem="hZd-wI-hhS" secondAttribute="centerX" id="wXt-Ak-q6k"/>
+                                <constraint firstItem="igN-mj-rE7" firstAttribute="top" secondItem="M6T-pZ-2fp" secondAttribute="bottom" constant="16" id="xht-ci-BXn"/>
+                            </constraints>
+                        </view>
+                    </subviews>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="width" secondItem="4Np-Yp-Mad" secondAttribute="width" id="0Ye-4h-zTW"/>
+                        <constraint firstAttribute="centerY" secondItem="4Np-Yp-Mad" secondAttribute="centerY" multiplier="0.95" id="ND2-6n-ZaV"/>
+                        <constraint firstAttribute="centerX" secondItem="4Np-Yp-Mad" secondAttribute="centerX" id="NRu-oh-9xS"/>
+                        <constraint firstAttribute="height" secondItem="4Np-Yp-Mad" secondAttribute="height" multiplier="1.5" id="dIq-B7-EvH"/>
+                    </constraints>
+                </view>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="F3V-gF-j5e">
+                    <rect key="frame" x="0.0" y="516" width="320" height="44"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="44" id="ZRM-Hd-Ozb"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" name="FaktPro-SemiBold" family="Fakt Pro" pointSize="17"/>
+                    <state key="normal" title="OK">
+                        <color key="titleColor" red="0.57647058823529407" green="0.043137254901960784" blue="0.68627450980392157" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <connections>
+                        <action selector="buttonClicked:" destination="D6Z-xv-hxs" eventType="touchUpInside" id="rZo-XY-sDd"/>
+                    </connections>
+                </button>
+            </subviews>
+            <color key="backgroundColor" red="0.74117647060000003" green="0.062745098040000002" blue="0.87843137250000003" alpha="1" colorSpace="calibratedRGB"/>
+            <constraints>
+                <constraint firstItem="F3V-gF-j5e" firstAttribute="leading" secondItem="D6Z-xv-hxs" secondAttribute="leading" id="2mn-DP-bem"/>
+                <constraint firstAttribute="bottom" secondItem="F3V-gF-j5e" secondAttribute="bottom" constant="8" id="3QH-sy-rJh"/>
+                <constraint firstAttribute="trailing" secondItem="3TS-xd-L1E" secondAttribute="trailing" id="NSk-Wn-3vL"/>
+                <constraint firstItem="F3V-gF-j5e" firstAttribute="top" secondItem="3TS-xd-L1E" secondAttribute="bottom" id="Nzh-Ef-rFn"/>
+                <constraint firstItem="3TS-xd-L1E" firstAttribute="top" secondItem="D6Z-xv-hxs" secondAttribute="top" id="aqE-z9-HdO"/>
+                <constraint firstItem="3TS-xd-L1E" firstAttribute="leading" secondItem="D6Z-xv-hxs" secondAttribute="leading" id="e43-jE-csn"/>
+                <constraint firstAttribute="trailing" secondItem="F3V-gF-j5e" secondAttribute="trailing" id="haB-jq-gll"/>
+            </constraints>
+            <userDefinedRuntimeAttributes>
+                <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                    <integer key="value" value="8"/>
+                </userDefinedRuntimeAttribute>
+                <userDefinedRuntimeAttribute type="boolean" keyPath="layer.maskToBounds" value="YES"/>
+            </userDefinedRuntimeAttributes>
+            <connections>
+                <outlet property="button" destination="F3V-gF-j5e" id="eca-Vn-6dy"/>
+            </connections>
+            <point key="canvasLocation" x="389" y="238"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="icon_events_popup" width="272" height="360"/>
+    </resources>
+    <simulatedMetricsContainer key="defaultSimulatedMetrics">
+        <simulatedStatusBarMetrics key="statusBar"/>
+        <simulatedOrientationMetrics key="orientation"/>
+        <simulatedScreenMetrics key="destination" type="retina4"/>
+    </simulatedMetricsContainer>
+</document>

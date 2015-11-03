@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
+        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <mutableArray key="FaktPro-SemiBold.ttf">
+            <string>FaktPro-SemiBold</string>
+            <string>FaktPro-SemiBold</string>
+        </mutableArray>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="6YM-Ka-x4O" customClass="ChatPopupView">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Q2v-yj-fx2">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="516"/>
+                    <subviews>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nhi-ew-Lz9">
+                            <rect key="frame" x="0.0" y="99" width="320" height="344"/>
+                            <subviews>
+                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="250" image="icon_chat_popup" translatesAutoresizingMaskIntoConstraints="NO" id="YGK-CD-z85">
+                                    <rect key="frame" x="92" y="0.0" width="136" height="228"/>
+                                    <constraints>
+                                        <constraint firstAttribute="width" constant="136" id="eBR-Lj-jJI"/>
+                                    </constraints>
+                                </imageView>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="GET THE NIGHT STARTED" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6VT-a8-wxg">
+                                    <rect key="frame" x="8" y="260" width="304" height="18"/>
+                                    <fontDescription key="fontDescription" name="FaktPro-SemiBold" family="Fakt Pro" pointSize="18"/>
+                                    <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="qJ4-3l-mcw">
+                                    <rect key="frame" x="16" y="294" width="288" height="50"/>
+                                    <attributedString key="attributedText">
+                                        <fragment content="Chat with guests here to get things going, you can work out the details and start confirming official guests.">
+                                            <attributes>
+                                                <color key="NSColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                                <font key="NSFont" size="14" name="FaktPro-Blond"/>
+                                                <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="truncatingTail" baseWritingDirection="natural" lineSpacing="4"/>
+                                            </attributes>
+                                        </fragment>
+                                    </attributedString>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                            </subviews>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            <constraints>
+                                <constraint firstAttribute="bottom" secondItem="qJ4-3l-mcw" secondAttribute="bottom" id="84H-j5-m0a"/>
+                                <constraint firstItem="qJ4-3l-mcw" firstAttribute="leading" secondItem="nhi-ew-Lz9" secondAttribute="leading" constant="16" id="8Hq-9M-Z1n"/>
+                                <constraint firstItem="6VT-a8-wxg" firstAttribute="top" secondItem="YGK-CD-z85" secondAttribute="bottom" constant="32" id="Itf-Vz-NDI"/>
+                                <constraint firstAttribute="trailing" secondItem="6VT-a8-wxg" secondAttribute="trailing" constant="8" id="KvT-AF-nnO"/>
+                                <constraint firstItem="YGK-CD-z85" firstAttribute="top" secondItem="nhi-ew-Lz9" secondAttribute="top" id="XcY-ip-wzk"/>
+                                <constraint firstAttribute="trailing" secondItem="qJ4-3l-mcw" secondAttribute="trailing" constant="16" id="dNs-mF-Bsv"/>
+                                <constraint firstAttribute="centerX" secondItem="YGK-CD-z85" secondAttribute="centerX" id="g5c-kN-NIW"/>
+                                <constraint firstItem="6VT-a8-wxg" firstAttribute="leading" secondItem="nhi-ew-Lz9" secondAttribute="leading" constant="8" id="oMB-ZP-uyw"/>
+                                <constraint firstItem="qJ4-3l-mcw" firstAttribute="top" secondItem="6VT-a8-wxg" secondAttribute="bottom" constant="16" id="y1L-1U-RgU"/>
+                            </constraints>
+                        </view>
+                    </subviews>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="width" secondItem="nhi-ew-Lz9" secondAttribute="width" id="0P8-8m-hsV"/>
+                        <constraint firstAttribute="centerX" secondItem="nhi-ew-Lz9" secondAttribute="centerX" id="939-Pf-y7B"/>
+                        <constraint firstAttribute="height" secondItem="nhi-ew-Lz9" secondAttribute="height" multiplier="1.5" id="Nye-IN-F2O"/>
+                        <constraint firstAttribute="centerY" secondItem="nhi-ew-Lz9" secondAttribute="centerY" multiplier="0.95" id="oCa-Zc-dpX"/>
+                    </constraints>
+                </view>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="F3q-fJ-vBj">
+                    <rect key="frame" x="0.0" y="516" width="320" height="44"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="44" id="N3H-rA-qYN"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" name="FaktPro-SemiBold" family="Fakt Pro" pointSize="17"/>
+                    <state key="normal" title="OK">
+                        <color key="titleColor" red="0.1529411765" green="0.52156862749999999" blue="0.035294117649999998" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <connections>
+                        <action selector="buttonClicked:" destination="6YM-Ka-x4O" eventType="touchUpInside" id="XLV-lH-obD"/>
+                    </connections>
+                </button>
+            </subviews>
+            <color key="backgroundColor" red="0.49411764705882355" green="0.82745098039215681" blue="0.12941176470588234" alpha="1" colorSpace="calibratedRGB"/>
+            <constraints>
+                <constraint firstItem="F3q-fJ-vBj" firstAttribute="top" secondItem="Q2v-yj-fx2" secondAttribute="bottom" id="1FH-98-Bwb"/>
+                <constraint firstItem="Q2v-yj-fx2" firstAttribute="leading" secondItem="6YM-Ka-x4O" secondAttribute="leading" id="Gwp-BS-zhw"/>
+                <constraint firstAttribute="bottom" secondItem="F3q-fJ-vBj" secondAttribute="bottom" constant="8" id="P5k-hE-S9j"/>
+                <constraint firstAttribute="trailing" secondItem="F3q-fJ-vBj" secondAttribute="trailing" id="gk9-Xv-OFB"/>
+                <constraint firstItem="Q2v-yj-fx2" firstAttribute="top" secondItem="6YM-Ka-x4O" secondAttribute="top" id="iSG-wQ-aLW"/>
+                <constraint firstAttribute="trailing" secondItem="Q2v-yj-fx2" secondAttribute="trailing" id="r1p-3B-kCJ"/>
+                <constraint firstItem="F3q-fJ-vBj" firstAttribute="leading" secondItem="6YM-Ka-x4O" secondAttribute="leading" id="znM-zi-f0Q"/>
+            </constraints>
+            <userDefinedRuntimeAttributes>
+                <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                    <integer key="value" value="8"/>
+                </userDefinedRuntimeAttribute>
+                <userDefinedRuntimeAttribute type="boolean" keyPath="layer.maskToBounds" value="YES"/>
+            </userDefinedRuntimeAttributes>
+            <connections>
+                <outlet property="button" destination="F3q-fJ-vBj" id="xbI-KI-fTi"/>
+            </connections>
+            <point key="canvasLocation" x="259" y="238"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="icon_chat_popup" width="286" height="372"/>
+    </resources>
+    <simulatedMetricsContainer key="defaultSimulatedMetrics">
+        <simulatedStatusBarMetrics key="statusBar"/>
+        <simulatedOrientationMetrics key="orientation"/>
+        <simulatedScreenMetrics key="destination" type="retina4"/>
+    </simulatedMetricsContainer>
+</document>
