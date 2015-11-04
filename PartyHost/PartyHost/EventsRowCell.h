@@ -16,6 +16,7 @@
 
 @property(nonatomic,strong) UILabel         *title;
 @property(nonatomic,strong) UILabel         *subtitle;
+@property(nonatomic,strong) UILabel         *date;
 @property(nonatomic,strong) UILabel         *hostNum;
 
 @property(nonatomic,strong) PHImage         *mainImg;

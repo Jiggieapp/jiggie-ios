@@ -32,7 +32,7 @@
     if (self)
     {
         self.sharedData = [SharedData sharedInstance];
-        self.backgroundColor = [UIColor phDarkBodyColor];
+        self.backgroundColor = [UIColor whiteColor];
         self.selectionStyle = UITableViewCellSelectionStyleNone;
         
         self.visiblePopTipViews = [[NSMutableArray alloc] init];
@@ -42,7 +42,7 @@
         self.cancelImagesA = [[NSMutableArray alloc] init];
         self.cPicIndex = -1;
         
-        self.mainImg = [[PHImage alloc] initWithFrame:CGRectMake(0, 0, self.sharedData.screenWidth, 220-8)];
+        self.mainImg = [[PHImage alloc] initWithFrame:CGRectMake(0, 0, self.sharedData.screenWidth, 240)];
         self.mainImg.contentMode = UIViewContentModeScaleAspectFill;
         self.mainImg.layer.masksToBounds = YES;
         [self addSubview:self.mainImg];
@@ -56,27 +56,32 @@
         [gradientView.layer insertSublayer:gradientMask atIndex:0];
         //[self addSubview:gradientView];
         
-        self.title = [[UILabel alloc] initWithFrame:CGRectMake(10, 42, self.sharedData.screenWidth - 20, 25)];
-        self.title.textColor = [UIColor whiteColor];
-        self.title.textAlignment = NSTextAlignmentCenter;
+        self.date = [[UILabel alloc] initWithFrame:CGRectMake(10, 254, self.sharedData.screenWidth - 20, 18)];
+        self.date.textColor = [UIColor blackColor];
+        self.date.adjustsFontSizeToFitWidth = YES;
+        self.date.textAlignment = NSTextAlignmentLeft;
+        self.date.font = [UIFont phThin:18];
+        [self addSubview:self.date];
+        
+        self.title = [[UILabel alloc] initWithFrame:CGRectMake(10, self.date.frame.origin.y + self.date.frame.size.height + 4, self.sharedData.screenWidth - 20, 25)];
+        self.title.textColor = [UIColor blackColor];
+        self.title.textAlignment = NSTextAlignmentLeft;
         self.title.adjustsFontSizeToFitWidth = YES;
-        self.title.font = [UIFont phBold:24];
+        self.title.font = [UIFont phBold:18];
         //self.title.shadowColor = [UIColor blackColor];
         //self.title.shadowOffset = CGSizeMake(0.5,0.5);
         [self addSubview:self.title];
         
-        self.subtitle = [[UILabel alloc] initWithFrame:CGRectMake(10, self.title.frame.origin.y + self.title.frame.size.height + 8, self.sharedData.screenWidth - 20, 11)];
-        self.subtitle.textColor = [UIColor whiteColor];
+        self.subtitle = [[UILabel alloc] initWithFrame:CGRectMake(10, self.title.frame.origin.y + self.title.frame.size.height + 2, self.sharedData.screenWidth - 20, 14)];
+        self.subtitle.textColor = [UIColor blackColor];
         self.subtitle.adjustsFontSizeToFitWidth = YES;
-        self.subtitle.textAlignment = NSTextAlignmentCenter;
-        self.subtitle.font = [UIFont phBold:10];
-        //self.subtitle.shadowColor = [UIColor blackColor];
-        //self.subtitle.shadowOffset = CGSizeMake(0.5,0.5);
+        self.subtitle.textAlignment = NSTextAlignmentLeft;
+        self.subtitle.font = [UIFont phThin:12];
         [self addSubview:self.subtitle];
         
         self.trendingButton = [[TrendButton alloc] initWithFrame:CGRectMake(10, self.subtitle.frame.origin.y + self.subtitle.frame.size.height + 6, self.sharedData.screenWidth - 20, 10)];
         self.trendingButton.userInteractionEnabled = NO;
-        [self addSubview:self.trendingButton];
+//        [self addSubview:self.trendingButton];
         
         self.experienceLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, self.trendingButton.frame.origin.y + self.trendingButton.frame.size.height + 16, self.sharedData.screenWidth - 20, 11)];
         self.experienceLabel.textColor = [UIColor colorWithWhite:1 alpha:1];
@@ -97,7 +102,7 @@
         //self.hostNum.layer.masksToBounds = YES;
         self.hostNum.shadowColor = [UIColor blackColor];
         self.hostNum.shadowOffset = CGSizeMake(0.5,0.5);
-        [self addSubview:self.hostNum];
+//        [self addSubview:self.hostNum];
         
         /*
         self.infoBody = [[UITextView alloc] initWithFrame:CGRectMake(5, 75, self.sharedData.screenWidth - 10, 60)];
@@ -155,7 +160,7 @@
         int hostingWidth = (PROFILE_PICS * (PROFILE_SIZE+PROFILE_PADDING)) - PROFILE_PADDING;
         self.hostingsCon = [[UIView alloc] initWithFrame:CGRectMake(self.sharedData.screenWidth-hostingWidth-24, 220 - PROFILE_SIZE - 16, hostingWidth,PROFILE_SIZE)];
         self.hostingsCon.backgroundColor = [UIColor clearColor];
-        [self addSubview:self.hostingsCon];
+//        [self addSubview:self.hostingsCon];
         
         self.spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
         [self.spinner setColor:[UIColor whiteColor]];

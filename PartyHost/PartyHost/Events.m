@@ -568,26 +568,26 @@
     
 }
 
-- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-{
-    return 20;
-}
+//- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+//{
+//    return 20;
+//}
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    if(self.isEventsLoaded == YES) return [self.eventsA count];
+    if(self.isEventsLoaded == YES) return 1;
     return 0;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if(self.isEventsLoaded == YES) return [[self.eventsA objectAtIndex:section][@"events"] count];
+    if(self.isEventsLoaded == YES) return [self.eventsA count];
     return 0;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 220;
+    return 330;
 }
 
 /*
@@ -611,13 +611,23 @@
         cell = [[EventsRowCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:simpleTableIdentifier];
     }
     
-    NSMutableArray *dictSection = [self.eventsA objectAtIndex:indexPath.section][@"events"];
-    NSDictionary *dict = [dictSection objectAtIndex:indexPath.row];
+    NSMutableArray *dictSection = [self.eventsA objectAtIndex:indexPath.row][@"events"];
+    NSDictionary *dict = [dictSection objectAtIndex:0];
     
     [cell clearData];
     
     cell.title.text = [dict[@"title"] uppercaseString];
-    cell.subtitle.text = [dict[@"venue_name"] uppercaseString];
+    cell.subtitle.text = [dict[@"venue_name"] capitalizedString];
+    
+    // Format date layout
+    NSDateFormatter *serverFormatter = [[NSDateFormatter alloc] init];
+    [serverFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US"]];
+    [serverFormatter setDateFormat: @"yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ"];
+    NSDate *startDateTime = [serverFormatter dateFromString:dict[@"start_datetime"]];
+    
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"EEE, MMM dd, hh:mm a"];
+    cell.date.text = [[dateFormatter stringFromDate:startDateTime] uppercaseString];
     
     [cell updateTrendingButton:[dict[@"special_type"] uppercaseString]];
     
@@ -646,42 +656,42 @@
 }
 
 
-- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-        //    NSDate *day = [NSDate dateFromIsoDate:self.events[section][@"date"]];
-    //NSString *relativeDate = [self.eventsA[section][@"date"] phFormattedNoTime];
-    
-    
-    EventsHeader *seperator = [self.eventsList dequeueReusableCellWithIdentifier:[[EventsHeader class] description]];
-    
-    if(!seperator)
-    {
-        seperator = [[EventsHeader alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:[[EventsHeader class] description]];
-    }
-    
-    //2015-02-12T00:00:00-05:00
-    
-    
-    //2015-02-12T00:00:00-05:00
-    if(self.isEventsLoaded)
-    {
-       // NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-        //[dateFormatter setDateFormat:@"YYYY-MM-dd'T'HH:mm:ss'"];
-        //NSDate *date = [dateFormatter dateFromString:[self.eventsA[section][@"date"] substringToIndex:19]];
-        
-        //seperator.dateStrg = [self.eventsA[section][@"date"] substringToIndex:19];
-        //NSLog(@"DATE_ :: %@",self.eventsA[section][@"date"]);
-        //[dateFormatter setDateFormat:@"EEEE"];
-        //NSString *dateWithNewFormat = [dateFormatter stringFromDate:date];
-        seperator.sectionHeaderLabel.text = [[self.eventsA objectAtIndex:section][@"date_day"] uppercaseString];//dateWithNewFormat;
-        
-        seperator.btnDown.hidden = (section == [self.eventsA count] - 1);
-        seperator.btnUp.hidden = (section == 0);
-    }else{
-        seperator.btnDown.hidden = YES;
-        seperator.btnUp.hidden = YES;
-    }
-    return seperator;
-}
+//- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+//        //    NSDate *day = [NSDate dateFromIsoDate:self.events[section][@"date"]];
+//    //NSString *relativeDate = [self.eventsA[section][@"date"] phFormattedNoTime];
+//    
+//    
+//    EventsHeader *seperator = [self.eventsList dequeueReusableCellWithIdentifier:[[EventsHeader class] description]];
+//    
+//    if(!seperator)
+//    {
+//        seperator = [[EventsHeader alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:[[EventsHeader class] description]];
+//    }
+//    
+//    //2015-02-12T00:00:00-05:00
+//    
+//    
+//    //2015-02-12T00:00:00-05:00
+//    if(self.isEventsLoaded)
+//    {
+//       // NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+//        //[dateFormatter setDateFormat:@"YYYY-MM-dd'T'HH:mm:ss'"];
+//        //NSDate *date = [dateFormatter dateFromString:[self.eventsA[section][@"date"] substringToIndex:19]];
+//        
+//        //seperator.dateStrg = [self.eventsA[section][@"date"] substringToIndex:19];
+//        //NSLog(@"DATE_ :: %@",self.eventsA[section][@"date"]);
+//        //[dateFormatter setDateFormat:@"EEEE"];
+//        //NSString *dateWithNewFormat = [dateFormatter stringFromDate:date];
+//        seperator.sectionHeaderLabel.text = [[self.eventsA objectAtIndex:section][@"date_day"] uppercaseString];//dateWithNewFormat;
+//        
+//        seperator.btnDown.hidden = (section == [self.eventsA count] - 1);
+//        seperator.btnUp.hidden = (section == 0);
+//    }else{
+//        seperator.btnDown.hidden = YES;
+//        seperator.btnUp.hidden = YES;
+//    }
+//    return seperator;
+//}
 
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -695,8 +705,8 @@
     
     self.cGuestListingIndexPath = indexPath;
     
-    NSMutableArray *dictSection = [self.eventsA objectAtIndex:indexPath.section][@"events"];
-    NSDictionary *dict = [dictSection objectAtIndex:indexPath.row];
+    NSMutableArray *dictSection = [self.eventsA objectAtIndex:indexPath.row][@"events"];
+    NSDictionary *dict = [dictSection objectAtIndex:0];
     
     [self.sharedData.selectedEvent removeAllObjects];
     [self.sharedData.selectedEvent addEntriesFromDictionary:dict];
