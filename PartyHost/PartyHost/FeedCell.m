@@ -196,11 +196,6 @@
         [self.btnUserImage addTarget:self action:@selector(profileHandler) forControlEvents:UIControlEventTouchUpInside];
         [self.cardOne addSubview:self.btnUserImage];
         
-        self.userImage = [[PHImage alloc] initWithFrame:CGRectMake(0, 0, self.sharedData.screenWidth, 225)];
-        self.userImage.contentMode = UIViewContentModeScaleAspectFit;
-        self.userImage.layer.masksToBounds = YES;
-        //[self.btnUserImage addSubview:self.userImage];
-        
         
         self.greenCircle = [[UIView alloc] initWithFrame:CGRectMake((self.sharedData.screenWidth/2) - 30, 225 - 35  - OffSet + OffSetLargeDevice/2, 60, 60)];
         self.greenCircle.backgroundColor = [UIColor phBlueColor];
@@ -241,54 +236,44 @@
         
         
         
-        self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 230 - OffSet/2, self.sharedData.screenWidth, 30)];
+        self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 270 - OffSet/2 + OffSetLargeDevice * 0.7, self.sharedData.screenWidth, 30)];
         self.titleLabel.textColor = [self.sharedData colorWithHexString:@"5c5c5c"];
-        self.titleLabel.font = [UIFont phBold:15];
+        self.titleLabel.font = [UIFont phBold:17 + OffsetFontLargeDevice];
         self.titleLabel.textAlignment = NSTextAlignmentCenter;
         self.titleLabel.text = @"Party Tonight?";
         [self.cardTwo addSubview:self.titleLabel];
         
         
-        self.nameLabelTwo = [[UILabel alloc] initWithFrame:CGRectMake(0, 60, self.sharedData.screenWidth, 30)];
+        self.nameLabelTwo = [[UILabel alloc] initWithFrame:CGRectMake(0, 60 - OffSet/3 + OffSetLargeDevice * 0.3, self.sharedData.screenWidth, 30)];
         self.nameLabelTwo.textColor = [self.sharedData colorWithHexString:@"5c5c5c"];
-        self.nameLabelTwo.font = [UIFont phBlond:13];
+        self.nameLabelTwo.font = [UIFont phBlond:15 + OffsetFontLargeDevice];
         self.nameLabelTwo.textAlignment = NSTextAlignmentCenter;
         [self.cardTwo addSubview:self.nameLabelTwo];
         
-        
         self.eventLabelTwo = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-        self.eventLabelTwo.frame = CGRectMake(0, 80, self.sharedData.screenWidth, 30);
+        self.eventLabelTwo.frame = CGRectMake(0, 80 - OffSet/3 + OffSetLargeDevice * 0.3, self.sharedData.screenWidth, 30);
         [self.eventLabelTwo setTitleColor:[self.sharedData colorWithHexString:@"5c5c5c"] forState:UIControlStateNormal];
         
         [self.eventLabelTwo addTarget:self action:@selector(eventInfoHandler) forControlEvents:UIControlEventTouchUpInside];
-        //self.eventLabelTwo.textColor = [self.sharedData colorWithHexString:@"000000"];
-        self.eventLabelTwo.titleLabel.font = [UIFont phBlond:13];
-        //self.eventLabelTwo.textAlignment = NSTextAlignmentCenter;
+        self.eventLabelTwo.titleLabel.font = [UIFont phBlond:15 + OffsetFontLargeDevice];
         [self.cardTwo addSubview:self.eventLabelTwo];
         
-        self.userImageTwo = [[PHImage alloc] initWithFrame:CGRectMake(((self.sharedData.screenWidth- 10)/2) - 70, 140, 60, 60)];
-        self.userImageTwo.layer.cornerRadius = 30;
-        self.userImageTwo.layer.masksToBounds = YES;
-        //[self.cardTwo addSubview:self.userImageTwo];
         
-        
-        self.greenCircleTwo = [[UIView alloc] initWithFrame:CGRectMake(((self.sharedData.screenWidth- 10)/2) + 10, 140, 60, 60)];
+        self.greenCircleTwo = [[UIView alloc] initWithFrame:CGRectMake(((self.sharedData.screenWidth- 10)/2) + 10, 140 - OffSet/3 + OffSetLargeDevice/2, 90, 90)];
         self.greenCircleTwo.backgroundColor = [UIColor phBlueColor];
-        self.greenCircleTwo.layer.cornerRadius = 30;
+        self.greenCircleTwo.layer.cornerRadius = 45;
         self.greenCircleTwo.layer.masksToBounds = YES;
         [self.cardTwo addSubview:self.greenCircleTwo];
         
-        UIImageView *textIconTwo = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 60, 60)];
+        UIImageView *textIconTwo = [[UIImageView alloc] initWithFrame:CGRectMake(15, 15, 60, 60)];
         textIconTwo.image = [UIImage imageNamed:@"text-icon"];
         [self.greenCircleTwo addSubview:textIconTwo];
         
-        
-        
         self.btnUserImageTwo = [UIButton buttonWithType:UIButtonTypeCustom];
-        self.btnUserImageTwo.frame = CGRectMake(((self.sharedData.screenWidth- 10)/2) - 70, 140, 60, 60);
+        self.btnUserImageTwo.frame = CGRectMake(((self.sharedData.screenWidth- 10)/2) - 100, 140 - OffSet/3 + OffSetLargeDevice/2, 90, 90);
         self.btnUserImageTwo.contentMode = UIViewContentModeScaleAspectFill;
         self.btnUserImageTwo.layer.masksToBounds = YES;
-        self.btnUserImageTwo.layer.cornerRadius = 30;
+        self.btnUserImageTwo.layer.cornerRadius = 45;
         self.btnUserImageTwo.layer.masksToBounds = YES;
         [self.btnUserImageTwo addTarget:self action:@selector(profileHandler) forControlEvents:UIControlEventTouchUpInside];
         [self.cardTwo addSubview:self.btnUserImageTwo];
@@ -304,7 +289,7 @@
         self.btnDeny.backgroundColor = [self.sharedData colorWithHexString:@"c2c2c2"];
         [self.btnDeny setTitle:@"NO" forState:UIControlStateNormal];
         [self.btnDeny setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        self.btnDeny.titleLabel.font = [UIFont phBold:16];
+        self.btnDeny.titleLabel.font = [UIFont phBold:17];
         self.btnDeny.layer.cornerRadius = 12;
         self.btnDeny.layer.masksToBounds = YES;
         [self.btnDeny addTarget:self action:@selector(denyHandler) forControlEvents:UIControlEventTouchUpInside];
@@ -316,16 +301,11 @@
         self.btnApprove.backgroundColor = [UIColor phBlueColor];
         [self.btnApprove setTitle:@"YES" forState:UIControlStateNormal];
         [self.btnApprove setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        self.btnApprove.titleLabel.font = [UIFont phBold:16];
+        self.btnApprove.titleLabel.font = [UIFont phBold:17];
         self.btnApprove.layer.cornerRadius = 12;
         self.btnApprove.layer.masksToBounds = YES;
         [self.btnApprove addTarget:self action:@selector(approveHandler) forControlEvents:UIControlEventTouchUpInside];
         [self.mainCon addSubview:self.btnApprove];
-        
-        
-        
-        
-        
     }
     
     return self;
@@ -367,11 +347,9 @@
         self.btnUserImageTwo.contentMode = UIViewContentModeScaleAspectFill;
         self.btnUserImageTwo.imageView.contentMode = UIViewContentModeScaleAspectFill;
     }];
-    //[self.userImage l]
-    //[self.userImage loadImage:usrImgURL defaultImageNamed:nil];
+
     NSString *first_name = [self.sharedData capitalizeFirstLetter:self.mainData[@"from_first_name"]];
     self.nameLabel.text = [NSString stringWithFormat:@"%@ is also interested in",first_name];
-    //self.eventLabel.titleLabel.text = [NSString stringWithFormat:@"%@",self.mainData[@"event_name"]];
     [self.eventLabel setTitle:[NSString stringWithFormat:@"%@",self.mainData[@"event_name"]] forState:UIControlStateNormal];
     
     
@@ -386,16 +364,7 @@
         self.titleLabel.text = [NSString stringWithFormat:@"Chat with %@?",first_name];
     }
     
-    
-    
-    
-    
-    
-    
-    
     [self.eventLabelTwo setTitle:[NSString stringWithFormat:@"%@",self.mainData[@"event_name"]] forState:UIControlStateNormal];
-    //self.eventLabelTwo.text = [NSString stringWithFormat:@"%@",self.mainData[@"event_name"]];
-    [self.userImageTwo loadImage:usrImgURL defaultImageNamed:@"fbperson_blank_square"];
     
     /*
      //from_first_name

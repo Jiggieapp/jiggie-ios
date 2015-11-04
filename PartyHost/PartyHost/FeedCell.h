@@ -44,7 +44,6 @@
 
 @property (strong, nonatomic) UIView                *cardOne;
 @property (strong, nonatomic) UIView                *bgWhite;
-@property (strong, nonatomic) PHImage               *userImage;
 @property (strong, nonatomic) UIView                *greenCircle;
 @property (strong, nonatomic) UILabel               *nameLabel;
 @property (strong, nonatomic) UIButton              *eventLabel;
@@ -59,7 +58,6 @@
 @property (strong, nonatomic) UILabel               *titleLabel;
 @property (strong, nonatomic) UILabel               *nameLabelTwo;
 @property (strong, nonatomic) UIButton               *eventLabelTwo;
-@property (strong, nonatomic) PHImage               *userImageTwo;
 @property (strong, nonatomic) UIView                *greenCircleTwo;
 @property (strong, nonatomic) UIButton              *btnUserImageTwo;
 
