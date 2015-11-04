@@ -511,6 +511,7 @@
         [self showChat];
     }else{
         [self showEvents];
+//        [self showFeed];
     }
     
     

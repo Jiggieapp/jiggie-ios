@@ -63,7 +63,6 @@
 		CB946A361B60A8FB00D412C0 /* KTCenterFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = CB946A351B60A8FB00D412C0 /* KTCenterFlowLayout.m */; };
 		CB9497EF1B8BA8A800AB5A22 /* BookTableConfirmCreditCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CB9497EE1B8BA8A800AB5A22 /* BookTableConfirmCreditCell.m */; };
 		CB9B4EAD1B4AFB5D00BFE99C /* UIFont+PH.m in Sources */ = {isa = PBXBuildFile; fileRef = CB9B4EAC1B4AFB5D00BFE99C /* UIFont+PH.m */; };
-		CBAAF31D1ADDD5BF0079DCF6 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA4D2F1F1A4DC2C2006828E7 /* FacebookSDK.framework */; };
 		CBAAF3641ADE3A580079DCF6 /* Settings.m in Sources */ = {isa = PBXBuildFile; fileRef = CBAAF3631ADE3A580079DCF6 /* Settings.m */; };
 		CBB353C51B68BD0300056332 /* EventsVenueDetail.m in Sources */ = {isa = PBXBuildFile; fileRef = FA3702B21A8F7D4900B2BD6A /* EventsVenueDetail.m */; };
 		CBB353C81B68BE7F00056332 /* CreditCard.m in Sources */ = {isa = PBXBuildFile; fileRef = CBB353C71B68BE7F00056332 /* CreditCard.m */; };
@@ -88,6 +87,7 @@
 		CBE57F451B4BB98300FD0E48 /* PopupView.m in Sources */ = {isa = PBXBuildFile; fileRef = CBE57F441B4BB98300FD0E48 /* PopupView.m */; };
 		CBEC92E21B634EF5001AF0F8 /* PhoneVerifyValidate.m in Sources */ = {isa = PBXBuildFile; fileRef = CBEC92E11B634EF5001AF0F8 /* PhoneVerifyValidate.m */; };
 		CBFC2C1A1B66B0D6007D63B7 /* BookTableHostingComplete.m in Sources */ = {isa = PBXBuildFile; fileRef = CBFC2C191B66B0D6007D63B7 /* BookTableHostingComplete.m */; };
+		DA728DC31BE8A4FA002D436E /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA728DC21BE8A4FA002D436E /* FacebookSDK.framework */; settings = {ASSET_TAGS = (); }; };
 		FA1126E01ABC3AB70075568E /* MGSwipeButton.m in Sources */ = {isa = PBXBuildFile; fileRef = FA1126DD1ABC3AB70075568E /* MGSwipeButton.m */; };
 		FA1126E11ABC3AB70075568E /* MGSwipeTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FA1126DF1ABC3AB70075568E /* MGSwipeTableCell.m */; };
 		FA1126E51ABC547A0075568E /* CMPopTipView.m in Sources */ = {isa = PBXBuildFile; fileRef = FA1126E41ABC547A0075568E /* CMPopTipView.m */; };
@@ -411,6 +411,7 @@
 		CBEC92E11B634EF5001AF0F8 /* PhoneVerifyValidate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhoneVerifyValidate.m; sourceTree = "<group>"; };
 		CBFC2C181B66B0D6007D63B7 /* BookTableHostingComplete.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BookTableHostingComplete.h; sourceTree = "<group>"; };
 		CBFC2C191B66B0D6007D63B7 /* BookTableHostingComplete.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BookTableHostingComplete.m; sourceTree = "<group>"; };
+		DA728DC21BE8A4FA002D436E /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FacebookSDK.framework; sourceTree = "<group>"; };
 		FA1126DC1ABC3AB70075568E /* MGSwipeButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MGSwipeButton.h; sourceTree = "<group>"; };
 		FA1126DD1ABC3AB70075568E /* MGSwipeButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MGSwipeButton.m; sourceTree = "<group>"; };
 		FA1126DE1ABC3AB70075568E /* MGSwipeTableCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MGSwipeTableCell.h; sourceTree = "<group>"; };
@@ -500,7 +501,6 @@
 		FA4D2F0B1A4D9A77006828E7 /* PartyHostTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PartyHostTests.m; sourceTree = "<group>"; };
 		FA4D2F171A4DBDF1006828E7 /* SharedData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SharedData.h; sourceTree = "<group>"; };
 		FA4D2F181A4DBDF1006828E7 /* SharedData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SharedData.m; sourceTree = "<group>"; };
-		FA4D2F1F1A4DC2C2006828E7 /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FacebookSDK.framework; path = ../../FacebookSDK.framework; sourceTree = "<group>"; };
 		FA4D2F211A4DD578006828E7 /* Dashboard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Dashboard.h; sourceTree = "<group>"; };
 		FA4D2F221A4DD578006828E7 /* Dashboard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Dashboard.m; sourceTree = "<group>"; };
 		FA4D2F241A4DD6D2006828E7 /* Events.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Events.h; sourceTree = "<group>"; };
@@ -757,7 +757,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				FA2A64E61BB0132400F691CF /* libAppsFlyerLib.a in Frameworks */,
-				CBAAF31D1ADDD5BF0079DCF6 /* FacebookSDK.framework in Frameworks */,
+				DA728DC31BE8A4FA002D436E /* FacebookSDK.framework in Frameworks */,
 				FAEFCC131AB7FF210070097D /* QuartzCore.framework in Frameworks */,
 				FAEFCC111AB7FF0C0070097D /* CoreVideo.framework in Frameworks */,
 				FAEFCC0F1AB7FF050070097D /* CoreMedia.framework in Frameworks */,
@@ -1339,6 +1339,7 @@
 		FA4D2F1E1A4DC2B2006828E7 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				DA728DC21BE8A4FA002D436E /* FacebookSDK.framework */,
 				FA2A64E31BB0132400F691CF /* AF-iOS-SDK-v3.3.0 */,
 				CBCBDABB1B7DD0A300571C52 /* UIImageViewAligned */,
 				CB6CBC5C1B7C3FC800981F66 /* GSTouchesShowingWindow */,
@@ -1351,7 +1352,6 @@
 				FAEFCC101AB7FF0C0070097D /* CoreVideo.framework */,
 				FAB1B0951A8468AB004097F2 /* Crashlytics.framework */,
 				FAB1B0961A8468AB004097F2 /* Fabric.framework */,
-				FA4D2F1F1A4DC2C2006828E7 /* FacebookSDK.framework */,
 				FA3702B71A8F9E9000B2BD6A /* MapKit.framework */,
 				FAEE1C091A92E1AA0007737F /* MessageUI.framework */,
 				FAEFCC121AB7FF210070097D /* QuartzCore.framework */,

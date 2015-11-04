@@ -77,9 +77,37 @@
          selector:@selector(resetApp)
          name:@"APP_UNLOADED"
          object:nil];
+        
+        
+//        [self performSelector:@selector(skipLogin) withObject:nil afterDelay:0.1];
     }
     return self;
 }
+
+
+-(void)skipLogin
+{
+    [self.sharedData.userDict setObject:@"Setiady" forKey:@"first_name"];
+    [self.sharedData.userDict setObject:@"Wiguna" forKey:@"last_name"];
+    [self.sharedData.userDict setObject:@"" forKey:@"birthday"];
+    [self.sharedData.userDict setObject:@"" forKey:@"email"];
+    [self.sharedData.userDict setObject:@"" forKey:@"location"];
+    [self.sharedData.userDict setObject:@"" forKey:@"about"];
+    [self.sharedData.userDict setObject:@"male" forKey:@"gender"];
+    
+    
+    self.sharedData.gender = @"male";
+    self.sharedData.gender_interest = @"both";
+    self.sharedData.isLoggedIn = YES;
+    
+    
+    self.sharedData.fb_id = @"10153278717718981";
+    
+    [[NSNotificationCenter defaultCenter]
+     postNotificationName:@"HIDE_LOGIN"
+     object:self];
+}
+
 
 -(void)resetApp
 {
@@ -124,6 +152,7 @@
 
 - (void)loginViewFetchedUserInfo:(FBLoginView *)loginView user:(id<FBGraphUser>)user
 {
+//    return;
     if(self.didFBInitInfo)
     {
         return;

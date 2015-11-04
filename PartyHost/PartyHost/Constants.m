@@ -10,7 +10,7 @@
 #import "Constants.h"
 
 NSString *const PHVersion = @"1.0.0";
-BOOL const PHMixPanelOn = NO;
+BOOL const PHMixPanelOn = YES;
 
 //DEBUG, should be NO when released!
 BOOL const PHDebugOn = NO;

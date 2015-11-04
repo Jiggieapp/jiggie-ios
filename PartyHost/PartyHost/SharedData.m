@@ -166,9 +166,14 @@ static SharedData *sharedInstance = nil;
         self.feedCellHeightLong = 405;
         if(self.isIphone4)
         {
-            self.feedCellHeightLong = 405 - 80;
+            self.feedCellHeightLong = 405 - 86;
+        } else if (self.isIphone6)
+        {
+            self.feedCellHeightLong = 504;
+        } else if (self.isIphone6plus)
+        {
+            self.feedCellHeightLong = 574;
         }
-        
         
         //Member reviews side padding
         self.memberReviewSidePadding = 30;

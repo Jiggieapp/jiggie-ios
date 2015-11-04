@@ -70,7 +70,7 @@ static NSString *const kAllowTracking = @"allowTracking";
     [[AppsFlyerTracker sharedTracker] trackAppLaunch];
     
     
-    //[Mixpanel sharedInstanceWithToken:@"6b13c7ba93e9716515a35d5ba25b3ca4"];
+    [Mixpanel sharedInstanceWithToken:@"39ae6be779ffea77ea2b2a898305f560"];
     
     
     

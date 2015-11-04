@@ -170,7 +170,6 @@
         self.bgWhite.backgroundColor = [UIColor whiteColor];
         //[self.mainCon addSubview:self.bgWhite];
         
-        
         self.cardOne = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.sharedData.screenWidth, self.sharedData.feedCellHeightLong)];
         [self.mainCon addSubview:self.cardOne];
         
@@ -179,22 +178,31 @@
         [self.mainCon addSubview:self.cardTwo];
         
         
-        int OffSet = (self.sharedData.isIphone4)?80:0;
+        int OffSet = (self.sharedData.isIphone4)?86:0;
+        int OffSetLargeDevice = 0;
+        int OffsetFontLargeDevice = 0;
+        if (self.sharedData.isIphone6) {
+            OffSetLargeDevice = 86;
+            OffsetFontLargeDevice = 3;
+        } else if (self.sharedData.isIphone6plus) {
+            OffSetLargeDevice = 146;
+            OffsetFontLargeDevice = 6;
+        }
         
         self.btnUserImage = [UIButton buttonWithType:UIButtonTypeCustom];
-        self.btnUserImage.frame = CGRectMake(0, 0, self.sharedData.screenWidth, 225 - OffSet);
+        self.btnUserImage.frame = CGRectMake(0, 0, self.sharedData.screenWidth, 225 - OffSet + OffSetLargeDevice/2);
         self.btnUserImage.contentMode = UIViewContentModeScaleAspectFill;
         self.btnUserImage.layer.masksToBounds = YES;
         [self.btnUserImage addTarget:self action:@selector(profileHandler) forControlEvents:UIControlEventTouchUpInside];
         [self.cardOne addSubview:self.btnUserImage];
         
         self.userImage = [[PHImage alloc] initWithFrame:CGRectMake(0, 0, self.sharedData.screenWidth, 225)];
-        self.userImage.contentMode = UIViewContentModeScaleAspectFill;
+        self.userImage.contentMode = UIViewContentModeScaleAspectFit;
         self.userImage.layer.masksToBounds = YES;
         //[self.btnUserImage addSubview:self.userImage];
         
         
-        self.greenCircle = [[UIView alloc] initWithFrame:CGRectMake((self.sharedData.screenWidth/2) - 30, 225 - 35  - OffSet, 60, 60)];
+        self.greenCircle = [[UIView alloc] initWithFrame:CGRectMake((self.sharedData.screenWidth/2) - 30, 225 - 35  - OffSet + OffSetLargeDevice/2, 60, 60)];
         self.greenCircle.backgroundColor = [UIColor phBlueColor];
         self.greenCircle.layer.cornerRadius = 30;
         self.greenCircle.layer.masksToBounds = YES;
@@ -208,26 +216,26 @@
         
         
         
-        self.nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 255 - OffSet, self.sharedData.screenWidth, 30)];
+        self.nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 255 - OffSet + OffSetLargeDevice * 0.7, self.sharedData.screenWidth, 30)];
         self.nameLabel.textColor = [self.sharedData colorWithHexString:@"5c5c5c"];
-        self.nameLabel.font = [UIFont phBlond:13];
+        self.nameLabel.font = [UIFont phBlond:13 + OffsetFontLargeDevice];
         self.nameLabel.textAlignment = NSTextAlignmentCenter;
         [self.cardOne addSubview:self.nameLabel];
         
         self.eventLabel = [UIButton buttonWithType:UIButtonTypeRoundedRect];//[[UILabel alloc] initWithFrame:CGRectMake(0, 280, self.sharedData.screenWidth, 30)];
-        self.eventLabel.frame = CGRectMake(0, 272 - OffSet, self.sharedData.screenWidth, 30);
+        self.eventLabel.frame = CGRectMake(0, 272 - OffSet + OffSetLargeDevice * 0.7, self.sharedData.screenWidth, 30);
         self.eventLabel.titleLabel.textColor = [self.sharedData colorWithHexString:@"5c5c5c"];
         [self.eventLabel setTitleColor:[self.sharedData colorWithHexString:@"5c5c5c"] forState:UIControlStateNormal];
         //self.eventLabel.titleLabel.font = [UIFont phBlond:14];
-        self.eventLabel.titleLabel.font = [UIFont phBlond:13];
+        self.eventLabel.titleLabel.font = [UIFont phBlond:13 + OffsetFontLargeDevice];
         self.eventLabel.titleLabel.textAlignment = NSTextAlignmentCenter;
         [self.eventLabel addTarget:self action:@selector(eventInfoHandler) forControlEvents:UIControlEventTouchUpInside];
         [self.cardOne addSubview:self.eventLabel];
         
         
-        self.recLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 290 - OffSet, self.sharedData.screenWidth, 30)];
+        self.recLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 290 - OffSet + OffSetLargeDevice * 0.7, self.sharedData.screenWidth, 30)];
         self.recLabel.textColor = [self.sharedData colorWithHexString:@"5c5c5c"];
-        self.recLabel.font = [UIFont phBold:14];
+        self.recLabel.font = [UIFont phBold:14 + OffsetFontLargeDevice];
         self.recLabel.textAlignment = NSTextAlignmentCenter;
         [self.cardOne addSubview:self.recLabel];
         
@@ -285,18 +293,18 @@
         [self.btnUserImageTwo addTarget:self action:@selector(profileHandler) forControlEvents:UIControlEventTouchUpInside];
         [self.cardTwo addSubview:self.btnUserImageTwo];
         
-        self.grayLine = [[UIView alloc] initWithFrame:CGRectMake(10, 345, (self.sharedData.screenWidth- 10) - 20, 1)];
+        self.grayLine = [[UIView alloc] initWithFrame:CGRectMake(10, 345 - OffSet + OffSetLargeDevice * 0.8, (self.sharedData.screenWidth- 10) - 20, 1)];
         self.grayLine.backgroundColor = [self.sharedData colorWithHexString:@"c2c2c2"];
         [self.mainCon addSubview:self.grayLine];
         
         int btnWidth = ((self.sharedData.screenWidth- 10)- 30)/2;
         
         self.btnDeny = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-        self.btnDeny.frame = CGRectMake(10, 355 - OffSet, btnWidth, 45);
+        self.btnDeny.frame = CGRectMake(10, 355 - OffSet + OffSetLargeDevice, btnWidth, 45);
         self.btnDeny.backgroundColor = [self.sharedData colorWithHexString:@"c2c2c2"];
         [self.btnDeny setTitle:@"NO" forState:UIControlStateNormal];
         [self.btnDeny setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        self.btnDeny.titleLabel.font = [UIFont phBold:15];
+        self.btnDeny.titleLabel.font = [UIFont phBold:16];
         self.btnDeny.layer.cornerRadius = 12;
         self.btnDeny.layer.masksToBounds = YES;
         [self.btnDeny addTarget:self action:@selector(denyHandler) forControlEvents:UIControlEventTouchUpInside];
@@ -304,11 +312,11 @@
         
         
         self.btnApprove = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-        self.btnApprove.frame = CGRectMake(20 + btnWidth, 355 - OffSet, btnWidth, 45);
+        self.btnApprove.frame = CGRectMake(20 + btnWidth, 355 - OffSet + OffSetLargeDevice, btnWidth, 45);
         self.btnApprove.backgroundColor = [UIColor phBlueColor];
         [self.btnApprove setTitle:@"YES" forState:UIControlStateNormal];
         [self.btnApprove setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        self.btnApprove.titleLabel.font = [UIFont phBold:15];
+        self.btnApprove.titleLabel.font = [UIFont phBold:16];
         self.btnApprove.layer.cornerRadius = 12;
         self.btnApprove.layer.masksToBounds = YES;
         [self.btnApprove addTarget:self action:@selector(approveHandler) forControlEvents:UIControlEventTouchUpInside];
@@ -342,6 +350,10 @@
     NSString *usrImgURL = [self.sharedData profileImgLarge:self.mainData[@"from_fb_id"]];
     
     [self.btnUserImage setImage:[UIImage imageNamed:@"fbperson_blank_square"] forState:UIControlStateNormal];
+    self.btnUserImage.contentMode = UIViewContentModeScaleToFill;
+    self.btnUserImage.imageView.contentMode = UIViewContentModeScaleToFill;
+    
+    
     [self.btnUserImageTwo setImage:[UIImage imageNamed:@"fbperson_blank_square"] forState:UIControlStateNormal];
     
     

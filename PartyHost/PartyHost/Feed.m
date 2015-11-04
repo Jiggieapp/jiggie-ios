@@ -55,7 +55,7 @@
     self.btnHide.layer.cornerRadius = 5;
     self.btnHide.alpha = 0.8;
     self.btnHide.backgroundColor = [UIColor whiteColor];
-    [self.mainCon addSubview:self.btnHide];
+    [self addSubview:self.btnHide];
     //phBlond
     
     //Create table
@@ -68,6 +68,8 @@
     self.feedTable.hidden = YES;
     self.feedTable.scrollEnabled = NO;
     [self.mainCon addSubview:self.feedTable];
+    
+    NSLog(@"screen : %i FEED TABLE : %@",self.sharedData.screenHeight, NSStringFromCGRect(self.feedTable.frame));
     
     [tabBar addSubview:self.title];
     [self.mainCon addSubview:tabBar];
@@ -100,6 +102,8 @@
 
 -(void)btnHideHandler
 {
+    NSLog(@"TOUCHED!!!");
+    
     if(self.sharedData.matchMe)
     {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Go Invisible?"
@@ -244,9 +248,12 @@
     
     NSString *url = [NSString stringWithFormat:@"%@/feed/%@/%@",PHBaseURL,self.sharedData.account_type,self.sharedData.fb_id];
     
-    //NSLog(@"FEED START LOAD :: %@",url);
+    
     
     url = [NSString stringWithFormat:@"%@/partyfeed/list/%@/%@",PHBaseURL,self.sharedData.fb_id,self.sharedData.gender_interest];
+    
+    
+    NSLog(@"FEED START LOAD :: %@",url);
     
     [manager GET:url parameters:@{} success:^(AFHTTPRequestOperation *operation, id responseObject)
      {
@@ -313,6 +320,8 @@
              self.feedTable.hidden = !(self.sharedData.matchMe);;
              [self.emptyView setMode:@"hide"];
          }
+         
+         self.btnHide.hidden = self.feedTable.hidden;
          
          /*
          //If we are on the page then clear out badge
@@ -398,6 +407,7 @@
     NSString* typeCell = data[@"type"];
     
     if([typeCell isEqualToString:@"login"] || [typeCell isEqualToString:@"signedup"]) {return self.sharedData.feedCellHeightShort;}
+    
     return self.sharedData.feedCellHeightLong;
 }
 
