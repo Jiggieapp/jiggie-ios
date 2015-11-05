@@ -68,7 +68,7 @@
     [self.tabBar addSubview:self.btnCity];
     
     self.eventsA = [[NSMutableArray alloc] init];
-    self.eventsList = [[UITableView alloc] initWithFrame:CGRectMake(0, 40, frame.size.width, frame.size.height - 20)];
+    self.eventsList = [[UITableView alloc] initWithFrame:CGRectMake(0, 40, frame.size.width, frame.size.height - self.tabBar.bounds.size.height - 20)];
     self.eventsList.backgroundColor = [UIColor clearColor];
     self.eventsList.delegate = self;
     self.eventsList.dataSource = self;
