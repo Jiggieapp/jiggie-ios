@@ -93,25 +93,25 @@
     self.pControl.userInteractionEnabled = NO;
     [self.mainScroll addSubview:self.pControl];
     
-    self.eventTitle = [[UILabel alloc] initWithFrame:CGRectMake(40, self.picScroll.frame.origin.y + self.picScroll.frame.size.height + 16 + 8, self.sharedData.screenWidth-80, 24)];
-    self.eventTitle.textAlignment = NSTextAlignmentCenter;
-    self.eventTitle.textColor = [UIColor blackColor];
-    self.eventTitle.font = [UIFont phBold:19];
-    self.eventTitle.userInteractionEnabled = NO;
-    self.eventTitle.adjustsFontSizeToFitWidth = YES;
-    [self.mainScroll addSubview:self.eventTitle];
+    self.eventDate = [[UILabel alloc] initWithFrame:CGRectMake(40, self.picScroll.frame.origin.y + self.picScroll.frame.size.height + 16 + 8, self.sharedData.screenWidth-80, 24)];
+    self.eventDate.textAlignment = NSTextAlignmentCenter;
+    self.eventDate.textColor = [UIColor blackColor];
+    self.eventDate.font = [UIFont phBlond:19];
+    self.eventDate.userInteractionEnabled = NO;
+    self.eventDate.adjustsFontSizeToFitWidth = YES;
+    [self.mainScroll addSubview:self.eventDate];
     
-    self.venueName = [[UILabel alloc] initWithFrame:CGRectMake(30, self.eventTitle.frame.origin.y + self.eventTitle.frame.size.height, self.sharedData.screenWidth - 60, 20)];
-    self.venueName.font = [UIFont phBold:12];
+    self.venueName = [[UILabel alloc] initWithFrame:CGRectMake(30, self.eventDate.frame.origin.y + self.eventDate.frame.size.height + 4, self.sharedData.screenWidth - 60, 20)];
+    self.venueName.font = [UIFont phBold:16];
     self.venueName.textAlignment = NSTextAlignmentCenter;
-    self.venueName.textColor = [UIColor colorWithWhite:0 alpha:0.25];
+    self.venueName.textColor = [UIColor darkGrayColor];
     self.venueName.userInteractionEnabled = NO;
     self.venueName.backgroundColor = [UIColor clearColor];
     self.venueName.adjustsFontSizeToFitWidth = YES;
     [self.mainScroll addSubview:self.venueName];
     
     self.separator1 = [[UIView alloc] init];
-    self.separator1.backgroundColor = [UIColor colorWithWhite:0 alpha:0.05];
+    self.separator1.backgroundColor = [UIColor phDarkGrayColor];
     [self.mainScroll addSubview:self.separator1];
     
     self.listingContainer = [[UIView alloc] init];
@@ -121,7 +121,7 @@
     [self.listingContainer addGestureRecognizer:seeAllTap];
     
     self.hostNum = [[UILabel alloc] init];
-    self.hostNum.textColor = [UIColor colorWithWhite:0 alpha:0.25];
+    self.hostNum.textColor = [UIColor blackColor];
     self.hostNum.font = [UIFont phBold:12];
     [self.listingContainer addSubview:self.hostNum];
     
@@ -150,7 +150,7 @@
     [self.listingContainer addSubview:self.seeAllCaret];
     
     self.separator2 = [[UIView alloc] init];
-    self.separator2.backgroundColor = [UIColor colorWithWhite:0 alpha:0.05];
+    self.separator2.backgroundColor = [UIColor phDarkGrayColor];
     [self.mainScroll addSubview:self.separator2];
     
     KTCenterFlowLayout *layout = [KTCenterFlowLayout new];
@@ -166,17 +166,17 @@
     self.tagCollection.backgroundColor = [UIColor clearColor];
     [self.mainScroll addSubview:self.tagCollection];
     
-    self.eventDate = [[UILabel alloc] init];
-    self.eventDate.font = [UIFont phBold:12];
-    self.eventDate.textAlignment = NSTextAlignmentCenter;
-    self.eventDate.textColor = [UIColor colorWithWhite:0 alpha:0.25];
-    self.eventDate.userInteractionEnabled = NO;
-    self.eventDate.backgroundColor = [UIColor clearColor];
-    self.eventDate.adjustsFontSizeToFitWidth = YES;
-    [self.mainScroll addSubview:self.eventDate];
+//    self.eventDate = [[UILabel alloc] init];
+//    self.eventDate.font = [UIFont phBold:12];
+//    self.eventDate.textAlignment = NSTextAlignmentCenter;
+//    self.eventDate.textColor = [UIColor colorWithWhite:0 alpha:0.25];
+//    self.eventDate.userInteractionEnabled = NO;
+//    self.eventDate.backgroundColor = [UIColor clearColor];
+//    self.eventDate.adjustsFontSizeToFitWidth = YES;
+//    [self.mainScroll addSubview:self.eventDate];
     
     self.separator3 = [[UIView alloc] init];
-    self.separator3.backgroundColor = [UIColor colorWithWhite:0 alpha:0.05];
+    self.separator3.backgroundColor = [UIColor phDarkGrayColor];
     [self.mainScroll addSubview:self.separator3];
     
     self.aboutBody = [[UITextView alloc] init];
@@ -456,7 +456,7 @@
     
     //Title
     self.title.text = [dict[@"title"] uppercaseString];
-    self.eventTitle.text = [dict[@"title"] uppercaseString];
+    self.eventDate.text = [Constants toTitleDateRange:dict[@"start_datetime_str"] dbEndDateString:dict[@"end_datetime_str"]];
     
     //Venue
     self.venueName.text = [dict[@"venue_name"] uppercaseString];
@@ -590,15 +590,15 @@
         self.separator2.hidden = YES;
     }
 
-    //Event Date
-    self.eventDate.text = [[Constants toTitleDateRange:dict[@"start_datetime_str"] dbEndDateString:dict[@"end_datetime_str"]] uppercaseString];
-    self.eventDate.frame = CGRectMake(30, self.separator2.frame.origin.y + self.separator2.frame.size.height + 16, self.sharedData.screenWidth - 60, 20);
-    
-    //Separator 3
-    self.separator3.frame = CGRectMake(20,self.eventDate.frame.size.height + self.eventDate.frame.origin.y + 14, self.sharedData.screenWidth - 40, 1);
+//    //Event Date
+//    self.eventDate.text = [[Constants toTitleDateRange:dict[@"start_datetime_str"] dbEndDateString:dict[@"end_datetime_str"]] uppercaseString];
+//    self.eventDate.frame = CGRectMake(30, self.separator2.frame.origin.y + self.separator2.frame.size.height + 16, self.sharedData.screenWidth - 60, 20);
+//    
+//    //Separator 3
+//    self.separator3.frame = CGRectMake(20,self.eventDate.frame.size.height + self.eventDate.frame.origin.y + 14, self.sharedData.screenWidth - 40, 1);
     
     //About body
-    self.aboutBody.frame = CGRectMake(30, self.separator3.frame.size.height + self.separator3.frame.origin.y + 10, self.sharedData.screenWidth - 60, 0);
+    self.aboutBody.frame = CGRectMake(30, self.separator2.frame.size.height + self.separator2.frame.origin.y + 10, self.sharedData.screenWidth - 60, 0);
     self.aboutBody.text = dict[@"description"];
     [self.aboutBody sizeToFit];
     
@@ -812,7 +812,6 @@
     [self.tagCollection reloadData];
     
     //Title
-    self.eventTitle.text = @"";
     self.venueName.text = @"";
     self.aboutBody.text = @"";
     self.seeAllLabel.text = @"";

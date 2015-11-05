@@ -289,7 +289,7 @@ int const PHButtonHeight = 50; //This is the button at bottom of screen
     NSCalendar *calendar = [NSCalendar currentCalendar];
     
     //Do start date
-    [format setDateFormat:@"EEEE MMMM d"];
+    [format setDateFormat:@"EEEE, MMMM d"];
     NSString *startDatePart1 = [format stringFromDate:startDate];
     NSDateComponents *startComponents = [calendar components:(NSCalendarUnitHour | NSCalendarUnitMinute) fromDate:startDate];
     NSString *startDatePart2;
@@ -321,7 +321,7 @@ int const PHButtonHeight = 50; //This is the button at bottom of screen
     }
     
     
-    return [NSString stringWithFormat:@"%@ %@ to %@",startDatePart1,startDatePart2,endDatePart2];
+    return [NSString stringWithFormat:@"%@ At %@ to %@",startDatePart1,startDatePart2,endDatePart2];
 }
 
 +(NSString*)formatPhoneNumber:(NSString*)simpleNumber {
