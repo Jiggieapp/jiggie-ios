@@ -48,6 +48,7 @@
     
     self.tabBar = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.sharedData.screenWidth, 40)];
     self.tabBar.backgroundColor = [UIColor phPurpleColor];
+    [self.mainCon addSubview:self.tabBar];
     
     self.title = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.sharedData.screenWidth, 40)];
     self.title.text = @"THIS WEEK";
@@ -67,7 +68,7 @@
     [self.tabBar addSubview:self.btnCity];
     
     self.eventsA = [[NSMutableArray alloc] init];
-    self.eventsList = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, frame.size.height - 20)];
+    self.eventsList = [[UITableView alloc] initWithFrame:CGRectMake(0, 40, frame.size.width, frame.size.height - 20)];
     self.eventsList.backgroundColor = [UIColor clearColor];
     self.eventsList.delegate = self;
     self.eventsList.dataSource = self;
@@ -77,8 +78,6 @@
     self.eventsList.showsVerticalScrollIndicator = NO;
     self.eventsList.hidden = YES;
     [self.mainCon addSubview:self.eventsList];
-    
-    self.eventsList.tableHeaderView = self.tabBar;
     
     //When there are no entries
     self.emptyView = [[EmptyView alloc] initWithFrame:CGRectMake(0, 60, frame.size.width, frame.size.height - 60)];
@@ -568,11 +567,7 @@
     
 }
 
-//- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-//{
-//    return 20;
-//}
-
+#pragma mark - UITableViewDataSource
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     if(self.isEventsLoaded == YES) return 1;
@@ -627,7 +622,7 @@
     
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"EEE, MMM dd, hh:mm a"];
-    cell.date.text = [[dateFormatter stringFromDate:startDateTime] capitalizedString];
+    cell.date.text = [dateFormatter stringFromDate:startDateTime];
     
     [cell updateTrendingButton:[dict[@"special_type"] uppercaseString]];
     
@@ -693,7 +688,7 @@
 //    return seperator;
 //}
 
-
+#pragma mark - UITableViewDelegate
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:[tableView indexPathForSelectedRow] animated:YES];

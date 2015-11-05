@@ -89,7 +89,13 @@
         testPill1.layer.cornerRadius = 10;
         [self addSubview:testPill1];
         
-        UIButton *testPill2 = [[UIButton alloc] initWithFrame:CGRectMake(98, self.subtitle.frame.origin.y + self.subtitle.frame.size.height + 2, 60, 20)];
+        CGSize resizePill =  [self.sharedData sizeForLabelString:[testPill1 titleForState:UIControlStateNormal]
+                                                        withFont:testPill1.titleLabel.font
+                                                      andMaxSize:CGSizeMake(120, testPill1.bounds.size.height)];
+        [testPill1 setFrame:CGRectMake(testPill1.frame.origin.x, testPill1.frame.origin.y, resizePill.width + 14, resizePill.height + 7)];
+        
+        
+        UIButton *testPill2 = [[UIButton alloc] initWithFrame:CGRectMake(CGRectGetMaxX(testPill1.frame) + 10, self.subtitle.frame.origin.y + self.subtitle.frame.size.height + 2, 60, 20)];
         testPill2.titleLabel.font = [UIFont phBlond:13];
         testPill2.layer.borderWidth = 1.0;
         testPill2.layer.borderColor = [UIColor darkGrayColor].CGColor;

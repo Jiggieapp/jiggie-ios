@@ -20,16 +20,16 @@
         self.text = @"";
         self.canShow = YES;
         int size = MIN(frame.size.width,frame.size.height);
-        self.textField = [[UITextField alloc] init];
-        self.textField.frame = CGRectMake(0,0,frame.size.width,frame.size.height);
-        self.textField.backgroundColor = [UIColor redColor];
-        self.textField.font = [UIFont phBold:size * 0.60];
-        self.textField.textColor = [UIColor whiteColor];
-        self.textField.text = @"";
-        self.textField.textAlignment = NSTextAlignmentCenter;
-        self.textField.layer.cornerRadius = size/2;
-        
-        [self addSubview:self.textField];
+        self.contentView = [[UIButton alloc] init];
+        self.contentView.frame = CGRectMake(0,0,frame.size.width,frame.size.height);
+        self.contentView.backgroundColor = [UIColor redColor];
+        self.contentView.titleLabel.font = [UIFont phBold:size * 0.60];
+        self.contentView.layer.cornerRadius = size/2;
+        self.contentView.enabled = NO;
+        self.contentView.titleEdgeInsets = UIEdgeInsetsMake(2, 0, 0, 0);
+        [self.contentView setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [self.contentView setTitle:@"" forState:UIControlStateNormal];
+        [self addSubview:self.contentView];
     }
     return self;
 }
@@ -51,13 +51,13 @@
             self.hidden = NO;
         }
         if(newValue <= 99) { //Up to 99
-            self.textField.text = [NSString stringWithFormat:@"%i",newValue];
+            [self.contentView setTitle:[NSString stringWithFormat:@"%i",newValue] forState:UIControlStateNormal];
         }
         else { //Too many
-            self.textField.text = @"!";
+            [self.contentView setTitle:@"!" forState:UIControlStateNormal];
         }
     }
-    self.textField.hidden = self.hidden;
+    self.contentView.hidden = self.hidden;
     
     self.value = newValue;
 }

@@ -227,6 +227,8 @@
 
 -(UIColor*)colorWithHexString:(NSString*)hex;
 
+-(CGSize)sizeForLabelString:(NSString *)text withFont:(UIFont *)font andMaxSize:(CGSize)maxSize;
+
 -(void)loadImage:(NSString *)imgURL onCompletion:(void (^)(void))completionHandler;
 -(void)loadImageCue:(NSString *)imgURL;
 

@@ -40,7 +40,7 @@
     [self.tabBar addSubview:btnEvents];
     
     self.eventsIcon = [[UIImageView alloc] init];
-    self.eventsIcon.frame = CGRectMake(((frame.size.width/4) - 32)/2, 1, 32, 32);
+    self.eventsIcon.frame = CGRectMake(((frame.size.width/4) - 32)/2, 3, 32, 32);
     self.eventsIcon.image = [UIImage imageNamed:@"tab_events"];
     self.eventsIcon.image = [self.eventsIcon.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     self.eventsIcon.contentMode = UIViewContentModeScaleAspectFit;
@@ -57,7 +57,7 @@
     [self.tabBar addSubview:btnChat];
   
     self.chatIcon = [[UIImageView alloc] init];
-    self.chatIcon.frame = CGRectMake(((frame.size.width/4) - 32)/2, 1, 32, 32);
+    self.chatIcon.frame = CGRectMake(((frame.size.width/4) - 32)/2, 3, 32, 32);
     self.chatIcon.image = [UIImage imageNamed:@"tab_chat"];
     self.chatIcon.image = [self.chatIcon.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     self.chatIcon.contentMode = UIViewContentModeScaleAspectFit;
@@ -81,7 +81,7 @@
     [self.tabBar addSubview:btnFeed];
     
     self.feedIcon = [[UIImageView alloc] init];
-    self.feedIcon.frame = CGRectMake(((frame.size.width/4) - 32)/2, 1, 32, 32);
+    self.feedIcon.frame = CGRectMake(((frame.size.width/4) - 32)/2, 3, 32, 32);
     self.feedIcon.image = [UIImage imageNamed:@"tab_feed"];
     self.feedIcon.contentMode = UIViewContentModeScaleAspectFit;
     self.feedIcon.image = [self.feedIcon.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
@@ -105,7 +105,7 @@
     
     
     self.profileIcon = [[UIImageView alloc] init];
-    self.profileIcon.frame = CGRectMake(((frame.size.width/4) - 32)/2, 1, 32, 32);
+    self.profileIcon.frame = CGRectMake(((frame.size.width/4) - 32)/2, 3, 32, 32);
     self.profileIcon.image = [UIImage imageNamed:@"tab_more"];
     self.profileIcon.image = [self.profileIcon.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     self.profileIcon.contentMode = UIViewContentModeScaleAspectFit;
@@ -113,7 +113,7 @@
     [btnMore addSubview:self.profileIcon];
     
     
-    self.chatLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 30, frame.size.width/4, 15)];
+    self.chatLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 33, frame.size.width/4, 15)];
     self.chatLabel.text = @"CHAT";
     self.chatLabel.font = [UIFont phBold:10];
     self.chatLabel.textAlignment = NSTextAlignmentCenter;
@@ -123,7 +123,7 @@
     [btnChat addSubview:self.chatLabel];
     
     
-    self.eventsLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 30, frame.size.width/4, 15)];
+    self.eventsLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 33, frame.size.width/4, 15)];
     self.eventsLabel.text = @"EVENTS";
     self.eventsLabel.font = [UIFont phBold:10];
     self.eventsLabel.textAlignment = NSTextAlignmentCenter;
@@ -133,7 +133,7 @@
     [btnEvents addSubview:self.eventsLabel];
     
     
-    self.feedLabel = [[UILabel alloc] initWithFrame:CGRectMake(2, 30, frame.size.width/4, 15)];
+    self.feedLabel = [[UILabel alloc] initWithFrame:CGRectMake(2, 33, frame.size.width/4, 15)];
     self.feedLabel.text = @"SOCIAL";
     self.feedLabel.font = [UIFont phBold:10];
     self.feedLabel.textAlignment = NSTextAlignmentCenter;
@@ -142,7 +142,7 @@
     self.feedLabel.backgroundColor = [UIColor clearColor];
     [btnFeed addSubview:self.feedLabel];
     
-    self.profileLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 30, frame.size.width/4, 15)];
+    self.profileLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 33, frame.size.width/4, 15)];
     self.profileLabel.text = @"MORE";
     self.profileLabel.font = [UIFont phBold:10];
     self.profileLabel.textAlignment = NSTextAlignmentCenter;

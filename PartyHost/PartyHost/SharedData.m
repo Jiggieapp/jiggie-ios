@@ -368,6 +368,15 @@ static SharedData *sharedInstance = nil;
                            alpha:1.0f];
 }
 
+-(CGSize)sizeForLabelString:(NSString *)text withFont:(UIFont *)font andMaxSize:(CGSize)maxSize
+{
+    NSDictionary *attributedDict = @{ NSFontAttributeName : font};
+    CGRect attributedLabelRect = [text boundingRectWithSize:maxSize
+                                                    options:NSStringDrawingUsesLineFragmentOrigin
+                                                 attributes:attributedDict
+                                                    context:nil];
+    return attributedLabelRect.size;
+}
 
 - (NSDictionary *)parseQueryString:(NSString *)query
 {

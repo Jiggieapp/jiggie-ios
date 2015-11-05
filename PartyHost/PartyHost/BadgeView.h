@@ -12,7 +12,7 @@
 
 @property(nonatomic,assign) int value;
 @property(nonatomic,strong) NSString *text;
-@property(nonatomic,strong) UITextField *textField;
+@property(nonatomic,strong) UIButton *contentView;
 @property(nonatomic,assign) BOOL canShow;
 
 

@@ -205,7 +205,7 @@
         
         
         
-        UIImageView *textIcon = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 60, 60)];
+        UIImageView *textIcon = [[UIImageView alloc] initWithFrame:CGRectMake(10, 10, 40, 40)];
         textIcon.image = [UIImage imageNamed:@"text-icon"];
         [self.greenCircle addSubview:textIcon];
         
