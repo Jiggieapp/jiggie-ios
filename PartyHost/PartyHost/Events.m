@@ -587,7 +587,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 330;
+    return 338; //314
 }
 
 /*
@@ -627,7 +627,7 @@
     
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"EEE, MMM dd, hh:mm a"];
-    cell.date.text = [[dateFormatter stringFromDate:startDateTime] uppercaseString];
+    cell.date.text = [[dateFormatter stringFromDate:startDateTime] capitalizedString];
     
     [cell updateTrendingButton:[dict[@"special_type"] uppercaseString]];
     

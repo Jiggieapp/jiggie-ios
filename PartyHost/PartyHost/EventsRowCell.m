@@ -56,28 +56,48 @@
         [gradientView.layer insertSublayer:gradientMask atIndex:0];
         //[self addSubview:gradientView];
         
-        self.date = [[UILabel alloc] initWithFrame:CGRectMake(10, 254, self.sharedData.screenWidth - 20, 18)];
+        self.date = [[UILabel alloc] initWithFrame:CGRectMake(10, 250, self.sharedData.screenWidth - 20, 18)];
         self.date.textColor = [UIColor blackColor];
         self.date.adjustsFontSizeToFitWidth = YES;
         self.date.textAlignment = NSTextAlignmentLeft;
         self.date.font = [UIFont phThin:18];
         [self addSubview:self.date];
         
-        self.title = [[UILabel alloc] initWithFrame:CGRectMake(10, self.date.frame.origin.y + self.date.frame.size.height + 4, self.sharedData.screenWidth - 20, 25)];
+        self.title = [[UILabel alloc] initWithFrame:CGRectMake(10, self.date.frame.origin.y + self.date.frame.size.height , self.sharedData.screenWidth - 20, 20)];
         self.title.textColor = [UIColor blackColor];
         self.title.textAlignment = NSTextAlignmentLeft;
         self.title.adjustsFontSizeToFitWidth = YES;
-        self.title.font = [UIFont phBold:18];
+        self.title.font = [UIFont phBold:19];
         //self.title.shadowColor = [UIColor blackColor];
         //self.title.shadowOffset = CGSizeMake(0.5,0.5);
         [self addSubview:self.title];
         
-        self.subtitle = [[UILabel alloc] initWithFrame:CGRectMake(10, self.title.frame.origin.y + self.title.frame.size.height + 2, self.sharedData.screenWidth - 20, 14)];
+        self.subtitle = [[UILabel alloc] initWithFrame:CGRectMake(10, self.title.frame.origin.y + self.title.frame.size.height, self.sharedData.screenWidth - 20, 18)];
         self.subtitle.textColor = [UIColor blackColor];
         self.subtitle.adjustsFontSizeToFitWidth = YES;
         self.subtitle.textAlignment = NSTextAlignmentLeft;
-        self.subtitle.font = [UIFont phThin:12];
+        self.subtitle.font = [UIFont phThin:18];
         [self addSubview:self.subtitle];
+        
+        UIButton *testPill1 = [[UIButton alloc] initWithFrame:CGRectMake(10, self.subtitle.frame.origin.y + self.subtitle.frame.size.height + 2, 80, 20)];
+        testPill1.titleLabel.font = [UIFont phBlond:13];
+        testPill1.layer.borderWidth = 1.0;
+        testPill1.layer.borderColor = [UIColor darkGrayColor].CGColor;
+        testPill1.titleEdgeInsets = UIEdgeInsetsMake(2, 0, 0, 0);
+        [testPill1 setTitle:@"Art & Culture" forState:UIControlStateNormal];
+        [testPill1 setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
+        testPill1.layer.cornerRadius = 10;
+        [self addSubview:testPill1];
+        
+        UIButton *testPill2 = [[UIButton alloc] initWithFrame:CGRectMake(98, self.subtitle.frame.origin.y + self.subtitle.frame.size.height + 2, 60, 20)];
+        testPill2.titleLabel.font = [UIFont phBlond:13];
+        testPill2.layer.borderWidth = 1.0;
+        testPill2.layer.borderColor = [UIColor darkGrayColor].CGColor;
+        testPill2.titleEdgeInsets = UIEdgeInsetsMake(2, 0, 0, 0);
+        [testPill2 setTitle:@"Nightlife" forState:UIControlStateNormal];
+        [testPill2 setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
+        testPill2.layer.cornerRadius = 10;
+        [self addSubview:testPill2];
         
         self.trendingButton = [[TrendButton alloc] initWithFrame:CGRectMake(10, self.subtitle.frame.origin.y + self.subtitle.frame.size.height + 6, self.sharedData.screenWidth - 20, 10)];
         self.trendingButton.userInteractionEnabled = NO;
