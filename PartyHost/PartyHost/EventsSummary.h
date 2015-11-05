@@ -22,10 +22,14 @@
 @property (nonatomic, strong) NSMutableDictionary *mainDict;
 @property (nonatomic, strong) NSString *event_id;
 
-@property (nonatomic, strong) UIButton *btnBack;
+//Nav top
+@property(nonatomic,strong) UILabel *title;
+@property(nonatomic,strong) UIView *tabBar;
+@property(nonatomic,strong) UIButton *btnBack;
+
 @property (nonatomic, strong) UIButton *btnInfo;
 @property (nonatomic, strong) UIButton *btnHostHere;
-@property (nonatomic, strong) UILabel *title;
+@property (nonatomic, strong) UILabel *eventTitle;
 @property (nonatomic, strong) UILabel *venueName;
 @property (nonatomic, strong) UIView *separator1;
 @property (nonatomic, strong) UILabel *hostNum;

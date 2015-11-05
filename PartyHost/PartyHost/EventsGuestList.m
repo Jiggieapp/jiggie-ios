@@ -23,12 +23,12 @@
     self.mainDict = [[NSMutableDictionary alloc] init];
     self.hasMemberToLoad = NO;
     
-    self.tabBar = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.sharedData.screenWidth, 77)];
+    self.tabBar = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.sharedData.screenWidth, 60)];
     self.tabBar.backgroundColor = [UIColor phPurpleColor];
     [self addSubview:self.tabBar];
     
     self.btnBack = [UIButton buttonWithType:UIButtonTypeCustom];
-    self.btnBack.frame = CGRectMake(0, 24, 50, 50);
+    self.btnBack.frame = CGRectMake(0, 14, 50, 50);
     [self.btnBack setBackgroundImage:[UIImage imageNamed:@"nav_back"] forState:UIControlStateNormal];
     [self.btnBack addTarget:self action:@selector(goBack) forControlEvents:UIControlEventTouchUpInside];
     [self.tabBar addSubview:self.btnBack];
@@ -44,15 +44,8 @@
     self.title.textColor = [UIColor whiteColor];
     self.title.adjustsFontSizeToFitWidth = YES;
     self.title.font = [UIFont phBold:18];
+    self.title.text = @"GUEST INTERESTED";
     [self.tabBar addSubview:self.title];
-    
-    self.subtitle = [[UILabel alloc] initWithFrame:CGRectMake(30, self.title.frame.origin.y + self.title.frame.size.height -2, self.sharedData.screenWidth - 60, 20)];
-    self.subtitle.font = [UIFont phBold:9];
-    self.subtitle.textAlignment = NSTextAlignmentCenter;
-    self.subtitle.textColor = [UIColor colorWithWhite:1 alpha:0.75];
-    self.subtitle.userInteractionEnabled = NO;
-    self.subtitle.backgroundColor = [UIColor clearColor];
-    [self.tabBar addSubview:self.subtitle];
     
     //Create list
     self.hostersA = [[NSMutableArray alloc] init];
@@ -211,7 +204,6 @@
      object:self];
     
     self.isLoaded = NO;
-    self.title.text = self.subtitle.text = @"";
     self.hostersList.hidden = YES;
     [self.hostersA removeAllObjects];
     [self.hostersList reloadData];
@@ -257,13 +249,6 @@
     
     //Set current ID
     self.event_id = [NSString stringWithString:dict[@"_id"]];
-    
-    //Title
-    self.title.text = [dict[@"title"] uppercaseString];
-    
-    //Date
-    //self.subtitle.text = [[Constants toTitleDate:dict[@"start_datetime_str"]] uppercaseString];
-    self.subtitle.text = [[Constants toTitleDateRange:dict[@"start_datetime_str"] dbEndDateString:dict[@"end_datetime_str"]] uppercaseString];
     
     //Save list
     [self.hostersA removeAllObjects];

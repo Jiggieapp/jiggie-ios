@@ -24,7 +24,35 @@
     
     self.sharedData = [SharedData sharedInstance];
     
-    self.mainScroll = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 20, self.sharedData.screenWidth, self.sharedData.screenHeight - 20)];
+    self.tabBar = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.sharedData.screenWidth, 60)];
+    self.tabBar.backgroundColor = [UIColor phPurpleColor];
+    [self addSubview:self.tabBar];
+    
+    self.btnBack = [UIButton buttonWithType:UIButtonTypeCustom];
+    self.btnBack.frame = CGRectMake(0, 14, 50, 50);
+    [self.btnBack setBackgroundImage:[UIImage imageNamed:@"nav_back"] forState:UIControlStateNormal];
+    [self.btnBack addTarget:self action:@selector(goBack) forControlEvents:UIControlEventTouchUpInside];
+    [self.tabBar addSubview:self.btnBack];
+    
+    self.btnInfo = [UIButton buttonWithType:UIButtonTypeCustom];
+    self.btnInfo.frame = CGRectMake(self.sharedData.screenWidth - (93/4) - 5, 4 + 20, 93/6, 128/6);
+    [self.btnInfo setImage:[UIImage imageNamed:@"share_action"] forState:UIControlStateNormal];
+    self.btnInfo.imageView.contentMode = UIViewContentModeScaleAspectFit;
+    [self.btnInfo addTarget:self action:@selector(goShareHandler) forControlEvents:UIControlEventTouchUpInside];
+    self.btnInfo.hidden = YES;
+    [self.tabBar addSubview:self.btnInfo];
+    
+    self.title = [[UILabel alloc] initWithFrame:CGRectMake(40, 32, self.sharedData.screenWidth - 80, 22)];
+    self.title.textAlignment = NSTextAlignmentCenter;
+    self.title.textColor = [UIColor whiteColor];
+    self.title.adjustsFontSizeToFitWidth = YES;
+    self.title.font = [UIFont phBold:18];
+    [self.tabBar addSubview:self.title];
+    
+    self.mainScroll = [[UIScrollView alloc] initWithFrame:CGRectMake(0,
+                                                                     self.tabBar.bounds.size.height,
+                                                                     self.sharedData.screenWidth,
+                                                                     self.sharedData.screenHeight - self.tabBar.bounds.size.height)];
     self.mainScroll.showsVerticalScrollIndicator    = NO;
     self.mainScroll.showsHorizontalScrollIndicator  = NO;
     self.mainScroll.scrollEnabled                   = YES;
@@ -60,35 +88,20 @@
     [gradientView.layer insertSublayer:gradientMask atIndex:0];
     //[self addSubview:gradientView];
     
-    //Back button
-    self.btnBack = [UIButton buttonWithType:UIButtonTypeCustom];
-    self.btnBack.frame = CGRectMake(4, 0 + 20, 50, 50);
-    [self.btnBack setBackgroundImage:[UIImage imageNamed:@"nav_back"] forState:UIControlStateNormal];
-    [self.btnBack addTarget:self action:@selector(goBack) forControlEvents:UIControlEventTouchUpInside];
-    [self addSubview:self.btnBack];
-    
-    self.btnInfo = [UIButton buttonWithType:UIButtonTypeCustom];
-    self.btnInfo.frame = CGRectMake(self.sharedData.screenWidth - (93/4) - 5, 4 + 20, 93/4, 128/4);
-    [self.btnInfo setImage:[UIImage imageNamed:@"share_action"] forState:UIControlStateNormal];
-    self.btnInfo.imageView.contentMode = UIViewContentModeScaleAspectFit;
-    [self.btnInfo addTarget:self action:@selector(goShareHandler) forControlEvents:UIControlEventTouchUpInside];
-    self.btnInfo.hidden = YES;
-    [self addSubview:self.btnInfo];
-    
     //Picture paging
     self.pControl = [[UIPageControl alloc] initWithFrame:CGRectMake(0, self.picScroll.frame.size.height - 50, self.sharedData.screenWidth, 50)];
     self.pControl.userInteractionEnabled = NO;
     [self.mainScroll addSubview:self.pControl];
     
-    self.title = [[UILabel alloc] initWithFrame:CGRectMake(40, self.picScroll.frame.origin.y + self.picScroll.frame.size.height + 16 + 8, self.sharedData.screenWidth-80, 24)];
-    self.title.textAlignment = NSTextAlignmentCenter;
-    self.title.textColor = [UIColor blackColor];
-    self.title.font = [UIFont phBold:19];
-    self.title.userInteractionEnabled = NO;
-    self.title.adjustsFontSizeToFitWidth = YES;
-    [self.mainScroll addSubview:self.title];
+    self.eventTitle = [[UILabel alloc] initWithFrame:CGRectMake(40, self.picScroll.frame.origin.y + self.picScroll.frame.size.height + 16 + 8, self.sharedData.screenWidth-80, 24)];
+    self.eventTitle.textAlignment = NSTextAlignmentCenter;
+    self.eventTitle.textColor = [UIColor blackColor];
+    self.eventTitle.font = [UIFont phBold:19];
+    self.eventTitle.userInteractionEnabled = NO;
+    self.eventTitle.adjustsFontSizeToFitWidth = YES;
+    [self.mainScroll addSubview:self.eventTitle];
     
-    self.venueName = [[UILabel alloc] initWithFrame:CGRectMake(30, self.title.frame.origin.y + self.title.frame.size.height, self.sharedData.screenWidth - 60, 20)];
+    self.venueName = [[UILabel alloc] initWithFrame:CGRectMake(30, self.eventTitle.frame.origin.y + self.eventTitle.frame.size.height, self.sharedData.screenWidth - 60, 20)];
     self.venueName.font = [UIFont phBold:12];
     self.venueName.textAlignment = NSTextAlignmentCenter;
     self.venueName.textColor = [UIColor colorWithWhite:0 alpha:0.25];
@@ -443,6 +456,7 @@
     
     //Title
     self.title.text = [dict[@"title"] uppercaseString];
+    self.eventTitle.text = [dict[@"title"] uppercaseString];
     
     //Venue
     self.venueName.text = [dict[@"venue_name"] uppercaseString];
@@ -529,6 +543,7 @@
     
         //See all button
         self.seeAllView.frame = CGRectMake(-4,self.hostNum.frame.size.height + self.hostNum.frame.origin.y + 16, self.sharedData.screenWidth + 8, 56);
+        self.seeAllView.hidden = NO;
         
         //See all label
         self.seeAllLabel.frame = CGRectMake(-4,self.hostNum.frame.size.height + self.hostNum.frame.origin.y + 17, self.seeAllView.frame.size.width, self.seeAllView.frame.size.height);
@@ -537,6 +552,7 @@
         
         //See all caret
         self.seeAllCaret.frame = CGRectMake(self.sharedData.screenWidth-20-32,self.seeAllView.frame.origin.y + 12, 32, 32);
+        self.seeAllCaret.hidden = NO;
         
         self.btnInfo.hidden = NO;
     }
@@ -591,6 +607,7 @@
     
     //See map button
     self.seeMapView.frame = CGRectMake(-4,self.aboutBody.frame.size.height + self.aboutBody.frame.origin.y + 16, self.sharedData.screenWidth + 8, 56);
+    self.seeMapView.hidden = NO;
     
     //See all label
     self.seeMapLabel.frame = CGRectMake(-4,self.aboutBody.frame.size.height + self.aboutBody.frame.origin.y + 17, self.seeMapView.frame.size.width, self.seeMapView.frame.size.height);
@@ -598,6 +615,7 @@
     
     //See all caret
     self.seeMapCaret.frame = CGRectMake(self.sharedData.screenWidth-20-32,self.seeMapView.frame.origin.y + 12, 32, 32);
+    self.seeMapCaret.hidden = NO;
     
     //Config map
     self.mapView.frame = CGRectMake(0, self.seeMapView.frame.size.height + self.seeMapView.frame.origin.y, self.sharedData.screenWidth, 200);
@@ -656,7 +674,7 @@
     if([self.sharedData isHost] || [self.sharedData isMember]) //Host mode has HOST HERE button
     {
         self.btnHostHere.hidden = NO;
-        self.mainScroll.frame = CGRectMake(0, 20, self.sharedData.screenWidth, self.frame.size.height-20);
+        self.mainScroll.frame = CGRectMake(0, 60, self.sharedData.screenWidth, self.frame.size.height-60);
         
         
         self.btnHostHere.userInteractionEnabled = YES;
@@ -776,6 +794,9 @@
     
     self.btnInfo.hidden = YES;
     
+    //Clear NavBar
+    self.title.text = @"";
+    
     //Clear text
     [self.btnHostHere setTitle:@"" forState:UIControlStateNormal];
     
@@ -791,12 +812,19 @@
     [self.tagCollection reloadData];
     
     //Title
-    self.title.text = @"";
+    self.eventTitle.text = @"";
     self.venueName.text = @"";
     self.aboutBody.text = @"";
     self.seeAllLabel.text = @"";
     self.hostNum.text = @"";
     self.eventDate.text = @"";
+    
+    //See map
+    self.seeAllView.hidden = YES;
+    self.seeAllCaret.hidden = YES;
+    self.seeMapView.hidden = YES;
+    self.seeMapCaret.hidden = YES;
+    self.seeMapLabel.text = @"";
     
     //Rescroll
     self.mainScroll.contentOffset = CGPointMake(0, 0);

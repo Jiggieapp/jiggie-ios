@@ -570,19 +570,21 @@
 #pragma mark - UITableViewDataSource
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    if(self.isEventsLoaded == YES) return 1;
+    if(self.isEventsLoaded == YES) return [self.eventsA count];
     return 0;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if(self.isEventsLoaded == YES) return [self.eventsA count];
+    if(self.isEventsLoaded == YES) return [[self.eventsA objectAtIndex:section][@"events"] count];
     return 0;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 338; //314
+    CGFloat pictureHeightRatio = 3.0 / 4.0;
+    CGFloat cellHeight = pictureHeightRatio  * tableView.bounds.size.width + 98;
+    return cellHeight;
 }
 
 /*
@@ -606,8 +608,8 @@
         cell = [[EventsRowCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:simpleTableIdentifier];
     }
     
-    NSMutableArray *dictSection = [self.eventsA objectAtIndex:indexPath.row][@"events"];
-    NSDictionary *dict = [dictSection objectAtIndex:0];
+    NSMutableArray *dictSection = [self.eventsA objectAtIndex:indexPath.section][@"events"];
+    NSDictionary *dict = [dictSection objectAtIndex:indexPath.row];
     
     [cell clearData];
     
@@ -700,8 +702,8 @@
     
     self.cGuestListingIndexPath = indexPath;
     
-    NSMutableArray *dictSection = [self.eventsA objectAtIndex:indexPath.row][@"events"];
-    NSDictionary *dict = [dictSection objectAtIndex:0];
+    NSMutableArray *dictSection = [self.eventsA objectAtIndex:indexPath.section][@"events"];
+    NSDictionary *dict = [dictSection objectAtIndex:indexPath.row];
     
     [self.sharedData.selectedEvent removeAllObjects];
     [self.sharedData.selectedEvent addEntriesFromDictionary:dict];

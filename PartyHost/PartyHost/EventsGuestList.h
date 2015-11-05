@@ -18,7 +18,6 @@
 
 //Nav top
 @property(nonatomic,strong) UILabel *title;
-@property(nonatomic,strong) UILabel *subtitle;
 @property(nonatomic,strong) UIView *tabBar;
 @property(nonatomic,strong) UIButton *btnBack;
 @property(nonatomic,strong) UIButton *btnForward;

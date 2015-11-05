@@ -42,7 +42,8 @@
         self.cancelImagesA = [[NSMutableArray alloc] init];
         self.cPicIndex = -1;
         
-        self.mainImg = [[PHImage alloc] initWithFrame:CGRectMake(0, 0, self.sharedData.screenWidth, 240)];
+        CGFloat heightRatio = 3.0 / 4.0;
+        self.mainImg = [[PHImage alloc] initWithFrame:CGRectMake(0, 0, self.sharedData.screenWidth, self.sharedData.screenWidth * heightRatio)];
         self.mainImg.contentMode = UIViewContentModeScaleAspectFill;
         self.mainImg.layer.masksToBounds = YES;
         [self addSubview:self.mainImg];
@@ -56,14 +57,14 @@
         [gradientView.layer insertSublayer:gradientMask atIndex:0];
         //[self addSubview:gradientView];
         
-        self.date = [[UILabel alloc] initWithFrame:CGRectMake(10, 250, self.sharedData.screenWidth - 20, 18)];
+        self.date = [[UILabel alloc] initWithFrame:CGRectMake(10, CGRectGetMaxY(self.mainImg.frame) + 10, self.sharedData.screenWidth - 20, 18)];
         self.date.textColor = [UIColor blackColor];
         self.date.adjustsFontSizeToFitWidth = YES;
         self.date.textAlignment = NSTextAlignmentLeft;
         self.date.font = [UIFont phThin:18];
         [self addSubview:self.date];
         
-        self.title = [[UILabel alloc] initWithFrame:CGRectMake(10, self.date.frame.origin.y + self.date.frame.size.height , self.sharedData.screenWidth - 20, 20)];
+        self.title = [[UILabel alloc] initWithFrame:CGRectMake(10, CGRectGetMaxY(self.date.frame) , self.sharedData.screenWidth - 20, 20)];
         self.title.textColor = [UIColor blackColor];
         self.title.textAlignment = NSTextAlignmentLeft;
         self.title.adjustsFontSizeToFitWidth = YES;
@@ -72,14 +73,14 @@
         //self.title.shadowOffset = CGSizeMake(0.5,0.5);
         [self addSubview:self.title];
         
-        self.subtitle = [[UILabel alloc] initWithFrame:CGRectMake(10, self.title.frame.origin.y + self.title.frame.size.height, self.sharedData.screenWidth - 20, 18)];
+        self.subtitle = [[UILabel alloc] initWithFrame:CGRectMake(10, CGRectGetMaxY(self.title.frame), self.sharedData.screenWidth - 20, 18)];
         self.subtitle.textColor = [UIColor blackColor];
         self.subtitle.adjustsFontSizeToFitWidth = YES;
         self.subtitle.textAlignment = NSTextAlignmentLeft;
         self.subtitle.font = [UIFont phThin:18];
         [self addSubview:self.subtitle];
         
-        UIButton *testPill1 = [[UIButton alloc] initWithFrame:CGRectMake(10, self.subtitle.frame.origin.y + self.subtitle.frame.size.height + 2, 80, 20)];
+        UIButton *testPill1 = [[UIButton alloc] initWithFrame:CGRectMake(10, CGRectGetMaxY(self.subtitle.frame) + 2, 80, 20)];
         testPill1.titleLabel.font = [UIFont phBlond:13];
         testPill1.layer.borderWidth = 1.0;
         testPill1.layer.borderColor = [UIColor darkGrayColor].CGColor;
