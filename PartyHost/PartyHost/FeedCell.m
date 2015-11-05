@@ -228,7 +228,7 @@
         [self.cardOne addSubview:self.eventLabel];
         
         
-        self.recLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 290 - OffSet + OffSetLargeDevice * 0.7, self.sharedData.screenWidth, 30)];
+        self.recLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 300 - OffSet + OffSetLargeDevice * 0.8, self.sharedData.screenWidth, 30)];
         self.recLabel.textColor = [self.sharedData colorWithHexString:@"5c5c5c"];
         self.recLabel.font = [UIFont phBold:14 + OffsetFontLargeDevice];
         self.recLabel.textAlignment = NSTextAlignmentCenter;

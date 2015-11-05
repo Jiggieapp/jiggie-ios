@@ -18,6 +18,11 @@
 @property(nonatomic,assign) BOOL isFeedLoaded;
 @property(nonatomic,assign) BOOL startedPolling;
 @property(nonatomic,assign) BOOL canPoll;
+
+@property(nonatomic,strong) UILabel *hideTitle;
+@property(nonatomic,strong) UILabel *hideDescription;
+@property(nonatomic,strong) UISwitch *hideToggle;
+@property(nonatomic,strong) UIImageView *hideIcon;
 @property(nonatomic,strong) UIButton *btnHide;
 
 

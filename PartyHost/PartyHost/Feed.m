@@ -41,6 +41,21 @@
     self.title.textColor = [UIColor whiteColor];
     self.title.font = [UIFont phBold:21];
     
+//    self.hideIcon = [[UIImageView alloc] initWithFrame:CGRectMake(10, 4, 20.0, 20)];
+    
+    self.hideTitle = [[UILabel alloc] initWithFrame:CGRectMake(40, CGRectGetMaxY(self.title.frame) + 18, frame.size.width-80, 20)];
+    self.hideTitle.text = @"Invisible";
+    self.hideTitle.textColor = [UIColor darkGrayColor];
+    self.hideTitle.font = [UIFont phBlond:18];
+    [self addSubview:self.hideTitle];
+    
+    self.hideToggle = [[UISwitch alloc] initWithFrame:CGRectZero];
+    self.hideToggle.frame = CGRectMake(self.sharedData.screenWidth - self.hideToggle.bounds.size.width - 14,
+                                       CGRectGetMaxY(self.title.frame) + 8,
+                                       self.hideToggle.bounds.size.width,
+                                       self.hideToggle.bounds.size.height);
+    [self.hideToggle setOnTintColor:[UIColor phPurpleColor]];
+    [self addSubview:self.hideToggle];
     
     self.btnHide = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     self.btnHide.frame = CGRectMake(5, 65, self.sharedData.screenWidth-10, 40);
@@ -55,7 +70,7 @@
     self.btnHide.layer.cornerRadius = 5;
     self.btnHide.alpha = 0.8;
     self.btnHide.backgroundColor = [UIColor whiteColor];
-    [self addSubview:self.btnHide];
+//    [self addSubview:self.btnHide];
     //phBlond
     
     //Create table
