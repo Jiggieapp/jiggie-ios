@@ -781,7 +781,7 @@ static NSString *const kAllowTracking = @"allowTracking";
     }
     
     
-    [self.sharedData setMixPanelOnceParams];
+    
 }
 
 

@@ -21,14 +21,17 @@
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>fb840535009393707</string>
+				<string>jiggie</string>
 			</array>
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>717</string>
+	<string>721</string>
 	<key>Fabric</key>
 	<dict>
 		<key>APIKey</key>

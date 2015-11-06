@@ -571,6 +571,7 @@
              }
              
              [self.sharedData setMixPanelUserProfile];
+             [self.sharedData setMixPanelOnceParams];
              [self.sharedData setMixPanelSuperProperties];
              [self checkAppsFlyerData];
              [self performSelector:@selector(getUserImages) withObject:nil afterDelay:2.0];
