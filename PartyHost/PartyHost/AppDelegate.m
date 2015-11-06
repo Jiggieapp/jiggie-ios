@@ -61,6 +61,13 @@ static NSString *const kAllowTracking = @"allowTracking";
     //[Appsee start:@"ba0b4c483e6c4a3ebf9266d0db03e794"];
     
     
+    
+    [FBSDKProfile enableUpdatesOnAccessTokenChange:YES];
+    
+    [[FBSDKApplicationDelegate sharedInstance] application:application
+                             didFinishLaunchingWithOptions:launchOptions];
+    
+    
      NSString *idfaString = [[[ASIdentifierManager sharedManager] advertisingIdentifier] UUIDString];
     [AppsFlyerTracker sharedTracker].appsFlyerDevKey = @"Rkuw6TCpCtAMpUicmEUz27";
     [AppsFlyerTracker sharedTracker].appleAppID = @"906484188";
@@ -190,7 +197,6 @@ static NSString *const kAllowTracking = @"allowTracking";
 
 -(void)checkIfHasAPN
 {
-    //[self registerForNotifications];
     
     if([self notificationServicesEnabled])
     {
@@ -225,13 +231,14 @@ static NSString *const kAllowTracking = @"allowTracking";
         [[NSNotificationCenter defaultCenter]
          postNotificationName:@"APN_LOADED"
          object:self];
-        
+        /*
         if(![FBSession activeSession].isOpen)
         {
             [[NSNotificationCenter defaultCenter]
              postNotificationName:@"HIDE_LOADING"
              object:self];
         }
+    */
 }
 
 -(BOOL)notificationServicesEnabled
@@ -334,13 +341,43 @@ static NSString *const kAllowTracking = @"allowTracking";
          object:self];
     }
     
-    [FBAppEvents activateApp];
+     [FBSDKAppEvents activateApp];
+    
+    //[FBAppEvents activateApp];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application
 {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
+
+
+-(void)syncAPN
+{
+    //app/v3/apntoken/10152901432247953/123455466
+    
+    
+    AFHTTPRequestOperationManager *manager = [self.sharedData getOperationManager];
+    
+    NSString *urlToLoad = [NSString stringWithFormat:@"%@/user/hostings/details/%@",PHBaseURL,self.sharedData.cHostingIdFromInvite];
+    
+    urlToLoad = [NSString stringWithFormat:@"%@/apntoken/%@/%@",PHBaseURL,self.sharedData.fb_id,self.sharedData.apnToken];
+    
+    NSLog(@"APN_TOKEN_SYNC URL :: %@",urlToLoad);
+    
+    [manager GET:urlToLoad parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject)
+     {
+         
+         NSLog(@"APN_SYNC :: %@",responseObject);
+         
+         
+         NSLog(@"HOSTING_DETAILS_FROM_SHARE RESPONSE :: %@",responseObject);
+     } failure:^(AFHTTPRequestOperation *operation, NSError *error)
+     {
+         NSLog(@"APN_FAIL_SYNC");
+     }];
+}
+
 
 
 - (void)registerForNotifications
@@ -384,7 +421,23 @@ static NSString *const kAllowTracking = @"allowTracking";
      object:self];
     */
     
+    if(self.sharedData.isInAskingNotification)
+    {
+        [[NSNotificationCenter defaultCenter]
+         postNotificationName:@"HIDE_LOADING"
+         object:nil];
+    }
+    
+    self.sharedData.isInAskingNotification = NO;
+    
+    
     [self.sharedData.setupPage apnAskingDoneHandler];
+    
+    if(self.sharedData.isLoggedIn)
+    {
+        [self syncAPN];
+    }
+    
     /*
     [[NSNotificationCenter defaultCenter]
      postNotificationName:@"APN_ASKING_DONE"
@@ -739,7 +792,7 @@ static NSString *const kAllowTracking = @"allowTracking";
 {
     
     NSLog(@"URL :: %@",url.absoluteString);
-    if(contains(url.absoluteString,@"partyhost://"))
+    if(contains(url.absoluteString,@"jiggie://"))
     {
         if(self.sharedData.isLoggedIn)
         {
@@ -769,8 +822,16 @@ static NSString *const kAllowTracking = @"allowTracking";
      postNotificationName:@"SHOW_LOADING"
      object:self];
     
+    //[FBAppCall han]
+    
+    return [[FBSDKApplicationDelegate sharedInstance] application:application
+                                                          openURL:url
+                                                sourceApplication:sourceApplication
+                                                       annotation:annotation];
+    
+    //return YES;
     // attempt to extract a token from the url
-    return [FBAppCall handleOpenURL:url sourceApplication:sourceApplication];
+    //return [FBAppCall handleOpenURL:url sourceApplication:sourceApplication];
 }
 
 @end

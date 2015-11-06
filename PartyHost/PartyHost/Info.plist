@@ -23,12 +23,12 @@
 		<dict>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>fb320804988094239</string>
+				<string>fb840535009393707</string>
 			</array>
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>628</string>
+	<string>676</string>
 	<key>Fabric</key>
 	<dict>
 		<key>APIKey</key>
@@ -44,7 +44,7 @@
 		</array>
 	</dict>
 	<key>FacebookAppID</key>
-	<string>320804988094239</string>
+	<string>840535009393707</string>
 	<key>FacebookDisplayName</key>
 	<string>Jiggie</string>
 	<key>LSApplicationCategoryType</key>

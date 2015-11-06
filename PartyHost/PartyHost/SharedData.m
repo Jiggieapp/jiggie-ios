@@ -95,6 +95,7 @@ static SharedData *sharedInstance = nil;
         self.btnYesTxt           = @"";
         self.btnNOTxt           = @"";
         self.phoneCountry       = @"";
+        self.isInAskingNotification = NO;
         //int numLives = MPTweakValue(@"number of lives", 5);
         
         

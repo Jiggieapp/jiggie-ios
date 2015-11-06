@@ -7,8 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
- #import <AdSupport/ASIdentifierManager.h>
-#import <FacebookSDK/FacebookSDK.h>
+#import <AdSupport/ASIdentifierManager.h>
+#import <FBSDKCoreKit/FBSDKCoreKit.h>
+#import <FBSDKLoginKit/FBSDKLoginKit.h>
+//#import <FacebookSDK/FacebookSDK.h>
 #import "Messages.h"
 #import <Fabric/Fabric.h>
 #import <Crashlytics/Crashlytics.h>

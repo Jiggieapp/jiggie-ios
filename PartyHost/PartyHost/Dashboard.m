@@ -521,6 +521,12 @@
     
     
     self.sharedData.ABTestChat = MPTweakValue(@"PartyFeedABTestChat", @"YES");
+    
+    
+    [[NSNotificationCenter defaultCenter]
+     postNotificationName:@"ASK_APN_PERMISSION"
+     object:self];
+    
 }
 
 
