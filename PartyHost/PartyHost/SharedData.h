@@ -162,6 +162,9 @@
 @property(nonatomic,assign) BOOL                isInConversation;
 @property(nonatomic,assign) BOOL                hasMessageToLoad;
 
+
+@property(nonatomic,assign) BOOL                isInAskingNotification;
+
 @property(nonatomic,assign) BOOL                isLoggedIn;
 
 @property(nonatomic,assign) int                 screenWidth;

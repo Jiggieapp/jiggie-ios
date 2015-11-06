@@ -29,6 +29,8 @@
         self.didHerokuLogin = NO;
         self.didLogin = NO;
         self.didFBLogin = NO;
+        self.currentUser = [[NSMutableDictionary alloc] init];
+        
         
         //Load all pages
         self.pageViews = [[NSMutableArray alloc] init];
@@ -62,9 +64,17 @@
         [self.backgroundImages[0] setAlpha:1.0f];
         
         //Facbook login, this is hidden and will be fake-fired
+       /*
         self.loginView = [[FBLoginView alloc] initWithReadPermissions:@[@"public_profile",@"user_birthday", @"email", @"user_photos",@"user_friends",@"user_likes",@"user_relationships",@"user_about_me",@"user_location",@"user_photos",@"user_status",@"user_friends"]];
-        self.loginView.delegate = self;
+        self.loginView.delegate = self;*/
         [self.buttonFacebook setTitle:@"SIGN IN WITH FACEBOOK" forState:UIControlStateNormal];
+        [self.buttonFacebook addTarget:self action:@selector(onSignInHandler) forControlEvents:UIControlEventTouchUpInside];
+        
+        /*
+        self.btnLoginFB = [[FBSDKLoginButton alloc] init];
+        
+        self.btnLoginFB.readPermissions = @[@"public_profile",@"user_birthday", @"email", @"user_photos",@"user_friends",@"user_likes",@"user_about_me",@"user_location",@"user_photos"];
+        */
         
         [[NSNotificationCenter defaultCenter]
          addObserver:self
@@ -125,6 +135,121 @@
 
 -(void)onSignInHandler
 {
+    [self.buttonFacebook setTitle:@"SIGNING INTO JIGGIE" forState:UIControlStateNormal];
+    
+    
+    FBSDKLoginManager *logMeOut = [[FBSDKLoginManager alloc] init];
+    [logMeOut logOut];
+    
+    /*
+    FBSDKLoginManager *login = [[FBSDKLoginManager alloc] init];
+    [login logInWithReadPermissions:@[@"public_profile", @"email",@"user_about_me",@"user_birthday",@"user_friends"] handler:^(FBSDKLoginManagerLoginResult *result, NSError *error) {
+        if (error) {
+            // Process error
+            NSLog(@"error %@",error);
+        } else if (result.isCancelled) {
+            // Handle cancellations
+            NSLog(@"Cancelled");
+        } else {
+            if ([result.grantedPermissions containsObject:@"email"])
+            {
+                // Do work
+                //[self fetchUserInfo];
+            }
+        }
+    }];
+    */
+    
+    /*
+    [[[FBSDKGraphRequest alloc] initWithGraphPath:@"me" parameters:nil]
+     startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
+         if (!error) {
+             NSLog(@"Fetched User Information:%@", result);
+             NSLog(@"Fetched User Information:%@", result);
+             [[NSNotificationCenter defaultCenter]
+              postNotificationName:@"HIDE_LOADING"
+              object:self];
+         }
+         else {
+             NSLog(@"Error %@",error);
+         }
+     }];
+    */
+    
+    
+    FBSDKLoginManager *login = [[FBSDKLoginManager alloc] init];
+    [login
+     logInWithReadPermissions: @[@"public_profile",@"user_birthday", @"email", @"user_photos",@"user_friends",@"user_likes",@"user_relationships",@"user_about_me",@"user_location",@"user_photos",@"user_status",@"user_friends"]
+     fromViewController:self.window.rootViewController
+     handler:^(FBSDKLoginManagerLoginResult *result, NSError *error) {
+         NSLog(@"RESULT___ :: %@",result);
+         if (error) {
+             NSLog(@"Process error :: %@",error);
+         } else if (result.isCancelled) {
+             NSLog(@"Cancelled");
+         } else {
+             NSLog(@"Logged in :: %@",[FBSDKAccessToken currentAccessToken].tokenString);
+             
+             self.sharedData.fb_access_token = [FBSDKAccessToken currentAccessToken].tokenString;
+             
+             
+             [self.currentUser removeAllObjects];
+             
+             //[FBSDKAccessToken tokenString];
+             
+             //tokenString
+             //FBSDKAccessToken *token;
+             //token.tokenString;
+             
+             /*
+              @"public_profile",@"user_birthday", @"email", @"user_photos",@"user_friends",@"user_likes",@"user_relationships",@"user_about_me",@"user_location",@"user_photos",@"user_status",@"user_friends"]
+              */
+             
+             
+             [[[FBSDKGraphRequest alloc] initWithGraphPath:@"/me" parameters:@{@"fields":@"first_name,last_name,name,bio,gender,email,location,birthday,photos,albums"}]
+              startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error)
+             {
+                  if (!error) {
+                      NSLog(@"Fetched User Information:%@", result);
+                      //NSLog(@"Fetched User Information:%@", result);
+                     
+                      self.cAlbumId = [self getProfileAlbumId:result[@"albums"][@"data"]];
+                      
+                      //getProfileAlbumId
+                      
+                      NSLog(@"ALBUM_ID :: %@",self.cAlbumId);
+                      
+                      
+                      
+                      
+                      [self.currentUser removeAllObjects];
+                      [self.currentUser addEntriesFromDictionary:result];
+                      
+                      self.sharedData.fb_id = result[@"id"];
+                      
+                      [self doubleCheckPermissions];
+                      
+                      
+                      
+                      
+                      
+                      
+                      
+                  
+                  
+                  
+                  }
+                  else {
+                      NSLog(@"Error %@",error);
+                  }
+              }];
+             
+             
+             
+         }
+     }];
+    
+    /*
     FBSession *session = [[FBSession alloc] initWithPermissions:@[@"public_profile",@"user_birthday", @"email", @"user_photos",@"user_friends",@"user_likes",@"user_relationships",@"user_about_me",@"user_location",@"user_photos",@"user_status",@"user_friends"]];
     
     // Set the active session
@@ -147,9 +272,27 @@
                 }
                 
             }];
+    */
 
 }
 
+
+-(NSString *)getProfileAlbumId:(NSMutableArray *)dataA
+{
+    NSString *albumId;
+    
+    for (int i = 0; i < [dataA count]; i++)
+    {
+        NSString *name = [dataA objectAtIndex:i][@"name"];
+        if([name isEqualToString:@"Profile Pictures"])
+        {
+            albumId = [dataA objectAtIndex:i][@"id"];
+        }
+    }
+    return albumId;
+}
+
+/*
 - (void)loginViewFetchedUserInfo:(FBLoginView *)loginView user:(id<FBGraphUser>)user
 {
 //    return;
@@ -169,6 +312,8 @@
     
     [self.buttonFacebook setTitle:@"SIGNING INTO JIGGIE" forState:UIControlStateNormal];
 }
+
+*/
 
 -(void)loginWithToken
 {
@@ -191,7 +336,7 @@
              [self checkIfAPNisLoaded];
          }else{
              [[NSNotificationCenter defaultCenter] postNotificationName:@"HIDE_LOADING" object:self];
-             [FBSession.activeSession closeAndClearTokenInformation];
+             //[FBSession.activeSession closeAndClearTokenInformation];
              self.didFBInitInfo = NO;
              UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Login Error" message:@"There was an issue logging in, please try again" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
              [alert show];
@@ -209,15 +354,10 @@
 {
     NSLog(@"doubleCheckPermissions");
     
-    [FBRequestConnection startWithGraphPath:@"/me/permissions"
-                                 parameters:nil
-                                 HTTPMethod:@"GET"
-                          completionHandler:^(
-                                              FBRequestConnection *connection,
-                                              id result,
-                                              NSError *error
-                                              ) {
-                              
+    [[[FBSDKGraphRequest alloc] initWithGraphPath:@"/me/permissions" parameters:nil]
+     startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error)
+     {
+         
                               NSLog(@"PERMISSION_RESULT :: %@",result[@"data"]);
                               
                               BOOL canDo = YES;
@@ -241,7 +381,7 @@
                               if(!canDo)
                               {
                                   self.didFBInitInfo = NO;
-                                  [self clearLogin:self.currentUser[@"id"]];
+                                  //[self clearLogin:self.currentUser[@"id"]];
                                   
                                   errorMessage = [errorMessage substringToIndex:[errorMessage length] - 1];
                                   
@@ -265,6 +405,8 @@
                               }
                               
                           }];
+    
+    
 }
 
 -(void)changePage:(int)newPage {
@@ -317,6 +459,7 @@
 //---------------------------------------------------------------------//
 //FACEBOOK
 
+/*
 //Fake click the fb login view
 - (IBAction)buttonFacebookClicked:(id)sender {
     for(id object in self.loginView.subviews){
@@ -333,6 +476,8 @@
     
     NSLog(@"FB_LOGIN_ERROR :: %@",error);
 }
+
+*/
 //---------------------------------------------------------------------//
 
 
@@ -464,6 +609,8 @@
 
 -(void)getUserImages
 {
+    
+    
     NSMutableDictionary *infoToSend = [[NSMutableDictionary alloc] init];
     
     [infoToSend setObject:[self.sharedData.userDict objectForKey:@"fb_id"] forKey:@"fb_id"];
@@ -471,25 +618,62 @@
     [infoToSend setObject:@"" forKey:@"photo2"];
     [infoToSend setObject:@"" forKey:@"photo3"];
     [infoToSend setObject:@"" forKey:@"photo4"];
+
+  
+    NSLog(@"START_PHOTO");
     
-    FBRequest *request = [FBRequest requestForGraphPath:@"me/albums"];
-    [request startWithCompletionHandler:^(FBRequestConnection *connection, id result, NSError *error)
-     {
-         NSDictionary *album;// = matched[0];
-         NSArray *albums = result[@"data"];
-         for (int i = 0; i < [albums count]; i++)
-         {
-             if([[[albums objectAtIndex:i] objectForKey:@"type"] isEqualToString:@"profile"])
-             {
-                 album = [albums objectAtIndex:i];
-             }
-             NSLog(@"TYPE :: %@",[[albums objectAtIndex:i] objectForKey:@"type"]);
-         }
-         
-         FBRequest *request2 = [FBRequest requestForGraphPath:[NSString stringWithFormat:@"%@/photos", album[@"id"]]];
-         [request2 startWithCompletionHandler:^(FBRequestConnection *connection, id result, NSError *error)
-          {
-              NSLog(@"PHOTO_RESULTS");
+    [[[FBSDKGraphRequest alloc] initWithGraphPath:[NSString stringWithFormat:@"%@/photos",self.cAlbumId] parameters:@{@"fields":@"name,link,images"}]
+               startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error)
+               {
+              
+              
+              NSLog(@"PHOTO_RESULTS :: %@",result);
+                   
+                   NSMutableArray *tmpA = [[NSMutableArray alloc] init];
+                   int total = ([result[@"data"] count] >= self.sharedData.maxProfilePics)?self.sharedData.maxProfilePics:(int)[result[@"data"] count];
+                   [self.sharedData.photosDict removeAllObjects];
+                   
+                   for (int i = 0; i < total; i++)
+                   {
+                       NSDictionary *dict = [[result[@"data"] objectAtIndex:i][@"images"] objectAtIndex:0];
+                       
+                       if(i == 0)
+                       {
+                           [infoToSend setObject:[dict objectForKey:@"source"] forKey:@"photo1"];
+                           [tmpA addObject:[dict objectForKey:@"source"]];
+                       }
+                       if(i == 1)
+                       {
+                           [infoToSend setObject:[dict objectForKey:@"source"] forKey:@"photo2"];
+                           [tmpA addObject:[dict objectForKey:@"source"]];
+                       }
+                       if(i == 2)
+                       {
+                           [infoToSend setObject:[dict objectForKey:@"source"] forKey:@"photo3"];
+                           [tmpA addObject:[dict objectForKey:@"source"]];
+                       }
+                       if(i == 3)
+                       {
+                           [infoToSend setObject:[dict objectForKey:@"source"] forKey:@"photo4"];
+                           [tmpA addObject:[dict objectForKey:@"source"]];
+                       }
+                   }
+                   
+                   
+                   if(total == 0)
+                   {
+                       [infoToSend setObject:PHBlankImgURL forKey:@"photo1"];
+                       [tmpA addObject:PHBlankImgURL];
+                       
+                   }
+                   
+                   
+                   [self.sharedData.photosDict setObject:tmpA forKey:@"photos"];
+                   [self photosupdate:infoToSend];
+                   NSLog(@"PHOTOS_DICT :: %@",self.sharedData.photosDict);
+                   [self loadProfilePhotos];
+                   
+                   /*
               int total = ([result[@"data"] count] >= self.sharedData.maxProfilePics)?self.sharedData.maxProfilePics:(int)[result[@"data"] count];
               NSLog(@"total :: %d",total);
               total = (total < 0)?0:total;
@@ -539,8 +723,10 @@
               NSLog(@"PHOTOS_DICT :: %@",self.sharedData.photosDict);
               [self loadProfilePhotos];
               //[self performSelector:@selector(loadProfilePhotos) withObject:nil afterDelay:4.0];
+                   
+                   */
           }];
-     }];
+    
 }
 
 
@@ -581,7 +767,7 @@
 
 
 
--(NSMutableArray *)checkIfGotAllData:(id<FBGraphUser>)user
+-(NSMutableArray *)checkIfGotAllData:(id)user
 {
     NSMutableArray *tmpA = [[NSMutableArray alloc] init];
     if(user[@"first_name"] && user[@"last_name"] && user[@"email"] && user[@"birthday"] && user[@"gender"] && user[@"photos"])
@@ -680,6 +866,7 @@
 
 -(void)clearLogin:(NSString *)fb_id
 {
+    /*
     [FBRequestConnection startWithGraphPath:@"/me/permissions"
                                  parameters:nil
                                  HTTPMethod:@"DELETE"
@@ -688,17 +875,19 @@
                                               id result,
                                               NSError *error
                                               ) {
-                              /* handle the result */
+                    
                               
                               NSLog(@"PERMISSION_DELETE_RESULT");
                               NSLog(@"%@",result);
-                              /* handle the result */
+    
                               [FBSession.activeSession closeAndClearTokenInformation];
                               
                               [[NSNotificationCenter defaultCenter]
                                postNotificationName:@"HIDE_LOADING"
                                object:self];
                           }];
+    
+    */
 }
 
 

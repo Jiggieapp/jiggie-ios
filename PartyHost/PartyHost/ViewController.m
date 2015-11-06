@@ -172,11 +172,14 @@
 
 -(void)apnLoaded
 {
+    /*
     if(![FBSession activeSession].isOpen)
     {
        [self hideLoading];
     }
-
+     
+    */
+    [self hideLoading];
     //
     //[self performSelector:@selector(hideLoading) withObject:nil afterDelay:2.0];
 }
@@ -211,7 +214,7 @@
     [self showLoading];
     self.signupView.hidden = NO;
     [self.signupView initClass];
-    [FBSession.activeSession closeAndClearTokenInformation];
+    //[FBSession.activeSession closeAndClearTokenInformation];
     [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
     [UIView animateWithDuration:0.25 animations:^(void)
      {

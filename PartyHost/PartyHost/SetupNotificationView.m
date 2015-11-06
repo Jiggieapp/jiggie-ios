@@ -37,12 +37,36 @@
 -(BOOL)commitChanges {
     if([self.notificationSwitch isOn])
     {
+        SharedData *sharedData = [SharedData sharedInstance];
+        
+        sharedData.isInAskingNotification = YES;
         [[NSNotificationCenter defaultCenter]
          postNotificationName:@"ASK_APN_PERMISSION"
          object:self];
+        
+        [[NSNotificationCenter defaultCenter]
+         postNotificationName:@"SHOW_LOADING"
+         object:self];
+        
+         [self performSelector:@selector(checkIfHaveAPN) withObject:nil afterDelay:4.0];
     }
     
     return YES;
 }
+
+
+-(void)checkIfHaveAPN
+{
+    AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    SharedData *sharedData = [SharedData sharedInstance];
+    if(![appDelegate notificationServicesEnabled])
+    {
+        [sharedData.setupPage apnAskingDoneHandler];
+        [[NSNotificationCenter defaultCenter]
+         postNotificationName:@"HIDE_LOADING"
+         object:self];
+    }
+}
+
 
 @end

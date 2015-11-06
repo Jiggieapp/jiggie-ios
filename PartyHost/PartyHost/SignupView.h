@@ -7,10 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <FacebookSDK/FacebookSDK.h>
+//#import <FacebookSDK/FacebookSDK.h>
+#import <FBSDKCoreKit/FBSDKCoreKit.h>
+#import <FBSDKLoginKit/FBSDKLoginKit.h>
 #import "UpgradeScreen.h"
 
-@interface SignupView : UIView <UIScrollViewDelegate,FBLoginViewDelegate>
+
+
+@interface SignupView : UIView <UIScrollViewDelegate>
 
 @property (strong, nonatomic) SharedData    *sharedData;
 
@@ -37,9 +41,12 @@
 
 @property(nonatomic,assign)     BOOL             didFBInitInfo;
 
-@property(nonatomic, strong)   id<FBGraphUser>  currentUser;
-@property (strong, nonatomic)   FBLoginView     *loginView;
+@property(nonatomic, strong)   NSMutableDictionary  *currentUser;
+//@property (strong, nonatomic)   FBLoginView     *loginView;
+@property (strong, nonatomic)   FBSDKLoginButton        *btnLoginFB;
 
+
+@property (strong, nonatomic)   NSString           *cAlbumId;
 
 -(void)initClass;
 
