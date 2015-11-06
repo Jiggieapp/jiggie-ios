@@ -25,6 +25,8 @@
 @property(nonatomic,strong) TrendButton     *trendingButton;
 @property(nonatomic,strong) UILabel         *experienceLabel;
 
+@property(nonatomic,strong) UIView          *tagsView;
+
 @property(nonatomic,strong) UIView          *tmpWhiteView;
 
 @property(nonatomic,strong) UITextView      *infoBody;

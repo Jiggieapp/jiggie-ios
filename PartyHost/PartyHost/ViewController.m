@@ -292,7 +292,7 @@
     {
         MFMailComposeViewController *picker = [[MFMailComposeViewController alloc] init];
         [picker setSubject:@"Support"];
-        NSArray *myReceivers = [[NSArray alloc] initWithObjects:@"support@partyhostapp.com", nil];
+        NSArray *myReceivers = [[NSArray alloc] initWithObjects:@"support@jiggieapp.com", nil];
         [picker setToRecipients:myReceivers];
         picker.delegate = self;
         picker.mailComposeDelegate = self;

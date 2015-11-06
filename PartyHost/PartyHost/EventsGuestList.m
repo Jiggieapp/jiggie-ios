@@ -44,7 +44,7 @@
     self.title.textColor = [UIColor whiteColor];
     self.title.adjustsFontSizeToFitWidth = YES;
     self.title.font = [UIFont phBold:18];
-    self.title.text = @"GUEST INTERESTED";
+    self.title.text = @"GUESTS INTERESTED";
     [self.tabBar addSubview:self.title];
     
     //Create list

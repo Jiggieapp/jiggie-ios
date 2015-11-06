@@ -35,7 +35,7 @@
     [self.tabBar addSubview:self.btnBack];
     
     self.btnInfo = [UIButton buttonWithType:UIButtonTypeCustom];
-    self.btnInfo.frame = CGRectMake(self.sharedData.screenWidth - (93/4) - 5, 4 + 20, 93/6, 128/6);
+    self.btnInfo.frame = CGRectMake(self.sharedData.screenWidth - (93/4) - 5, 4 + 20, 93/5, 128/5);
     [self.btnInfo setImage:[UIImage imageNamed:@"share_action"] forState:UIControlStateNormal];
     self.btnInfo.imageView.contentMode = UIViewContentModeScaleAspectFit;
     [self.btnInfo addTarget:self action:@selector(goShareHandler) forControlEvents:UIControlEventTouchUpInside];
@@ -474,6 +474,7 @@
     
     //Separator 1
     self.separator1.frame = CGRectMake(20,self.venueName.frame.size.height + self.venueName.frame.origin.y + 16, self.sharedData.screenWidth - 40, 1);
+    self.separator1.hidden = NO;
     
     long totalUsers = [userList count];
     if(totalUsers>0)
@@ -598,7 +599,7 @@
 //    self.separator3.frame = CGRectMake(20,self.eventDate.frame.size.height + self.eventDate.frame.origin.y + 14, self.sharedData.screenWidth - 40, 1);
     
     //About body
-    self.aboutBody.frame = CGRectMake(30, self.separator2.frame.size.height + self.separator2.frame.origin.y + 10, self.sharedData.screenWidth - 60, 0);
+    self.aboutBody.frame = CGRectMake(16, self.separator2.frame.size.height + self.separator2.frame.origin.y + 10, self.sharedData.screenWidth - 32, 0);
     self.aboutBody.text = dict[@"description"];
     [self.aboutBody sizeToFit];
     
@@ -796,6 +797,8 @@
     
     //Clear NavBar
     self.title.text = @"";
+    
+    self.separator1.hidden = YES;
     
     //Clear text
     [self.btnHostHere setTitle:@"" forState:UIControlStateNormal];

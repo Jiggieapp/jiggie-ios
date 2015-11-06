@@ -279,7 +279,7 @@
         [self.cardTwo addSubview:self.btnUserImageTwo];
         
         self.grayLine = [[UIView alloc] initWithFrame:CGRectMake(10, 345 - OffSet + OffSetLargeDevice * 0.8, (self.sharedData.screenWidth- 10) - 20, 1)];
-        self.grayLine.backgroundColor = [self.sharedData colorWithHexString:@"c2c2c2"];
+        self.grayLine.backgroundColor = [UIColor phLightGrayColor];
         [self.mainCon addSubview:self.grayLine];
         
         int btnWidth = ((self.sharedData.screenWidth- 10)- 30)/2;
@@ -289,6 +289,7 @@
         self.btnDeny.backgroundColor = [self.sharedData colorWithHexString:@"c2c2c2"];
         [self.btnDeny setTitle:@"NO" forState:UIControlStateNormal];
         [self.btnDeny setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [self.btnDeny setTitleEdgeInsets:UIEdgeInsetsMake(4, 0, 0, 0)];
         self.btnDeny.titleLabel.font = [UIFont phBold:17];
         self.btnDeny.layer.cornerRadius = 12;
         self.btnDeny.layer.masksToBounds = YES;
@@ -301,6 +302,7 @@
         self.btnApprove.backgroundColor = [UIColor phBlueColor];
         [self.btnApprove setTitle:@"YES" forState:UIControlStateNormal];
         [self.btnApprove setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [self.btnApprove setTitleEdgeInsets:UIEdgeInsetsMake(4, 0, 0, 0)];
         self.btnApprove.titleLabel.font = [UIFont phBold:17];
         self.btnApprove.layer.cornerRadius = 12;
         self.btnApprove.layer.masksToBounds = YES;

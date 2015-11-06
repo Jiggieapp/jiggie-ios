@@ -1103,9 +1103,9 @@
     UIView *secCon = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, 15)];
     secCon.backgroundColor = [UIColor whiteColor];
     
-    UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(0, 5, self.frame.size.width, 10)];
-    title.font = [UIFont phBlond:9];
-    title.textColor = [UIColor phDarkGrayColor];
+    UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(0, 4, self.frame.size.width, 12)];
+    title.font = [UIFont phBlond:11];
+    title.textColor = [UIColor darkGrayColor];
     title.textAlignment = NSTextAlignmentCenter;
     title.text = [self.sectionsA objectAtIndex:section];
     [secCon addSubview:title];

@@ -80,31 +80,9 @@
         self.subtitle.font = [UIFont phThin:18];
         [self addSubview:self.subtitle];
         
-        UIButton *testPill1 = [[UIButton alloc] initWithFrame:CGRectMake(10, CGRectGetMaxY(self.subtitle.frame) + 2, 80, 20)];
-        testPill1.titleLabel.font = [UIFont phBlond:13];
-        testPill1.layer.borderWidth = 1.0;
-        testPill1.layer.borderColor = [UIColor darkGrayColor].CGColor;
-        testPill1.titleEdgeInsets = UIEdgeInsetsMake(2, 0, 0, 0);
-        [testPill1 setTitle:@"Art & Culture" forState:UIControlStateNormal];
-        [testPill1 setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
-        testPill1.layer.cornerRadius = 10;
-        [self addSubview:testPill1];
-        
-        CGSize resizePill =  [self.sharedData sizeForLabelString:[testPill1 titleForState:UIControlStateNormal]
-                                                        withFont:testPill1.titleLabel.font
-                                                      andMaxSize:CGSizeMake(120, testPill1.bounds.size.height)];
-        [testPill1 setFrame:CGRectMake(testPill1.frame.origin.x, testPill1.frame.origin.y, resizePill.width + 14, resizePill.height + 7)];
-        
-        
-        UIButton *testPill2 = [[UIButton alloc] initWithFrame:CGRectMake(CGRectGetMaxX(testPill1.frame) + 10, self.subtitle.frame.origin.y + self.subtitle.frame.size.height + 2, 60, 20)];
-        testPill2.titleLabel.font = [UIFont phBlond:13];
-        testPill2.layer.borderWidth = 1.0;
-        testPill2.layer.borderColor = [UIColor darkGrayColor].CGColor;
-        testPill2.titleEdgeInsets = UIEdgeInsetsMake(2, 0, 0, 0);
-        [testPill2 setTitle:@"Nightlife" forState:UIControlStateNormal];
-        [testPill2 setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
-        testPill2.layer.cornerRadius = 10;
-        [self addSubview:testPill2];
+        self.tagsView = [[UIView alloc] initWithFrame:CGRectMake(10, CGRectGetMaxY(self.subtitle.frame) + 2, self.sharedData.screenWidth, 20)];
+        self.tagsView.backgroundColor = [UIColor clearColor];
+        [self addSubview:self.tagsView];
         
         self.trendingButton = [[TrendButton alloc] initWithFrame:CGRectMake(10, self.subtitle.frame.origin.y + self.subtitle.frame.size.height + 6, self.sharedData.screenWidth - 20, 10)];
         self.trendingButton.userInteractionEnabled = NO;
@@ -372,6 +350,35 @@
         btnPic.titleLabel.font = [UIFont phBold:18];
         [btnPic setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [self.hostingsCon addSubview:btnPic];
+    }
+    
+    //remove all tags
+    NSArray *viewsToRemove = [self.tagsView subviews];
+    for (UIView *v in viewsToRemove) {
+        [v removeFromSuperview];
+    }
+    
+    NSArray *tags = [dict objectForKey:@"tags"];
+    int currX = 0;
+    for (NSString *tag in tags) {
+        UIButton *tagPil = [[UIButton alloc] initWithFrame:CGRectMake(currX, 0, 80, 20)];
+        tagPil.enabled = NO;
+        tagPil.titleLabel.font = [UIFont phBlond:13];
+        tagPil.layer.borderWidth = 1.0;
+        tagPil.layer.borderColor = [UIColor darkGrayColor].CGColor;
+        tagPil.titleEdgeInsets = UIEdgeInsetsMake(2, 0, 0, 0);
+        [tagPil setTitle:tag forState:UIControlStateNormal];
+        [tagPil setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
+        tagPil.layer.cornerRadius = 10;
+        [self addSubview:tagPil];
+        
+        CGSize resizePill =  [self.sharedData sizeForLabelString:[tagPil titleForState:UIControlStateNormal]
+                                                        withFont:tagPil.titleLabel.font
+                                                      andMaxSize:CGSizeMake(120, tagPil.bounds.size.height)];
+        [tagPil setFrame:CGRectMake(tagPil.frame.origin.x, tagPil.frame.origin.y, resizePill.width + 14, resizePill.height + 7)];
+        
+        [self.tagsView addSubview:tagPil];
+        currX = CGRectGetMaxX(tagPil.frame) + 8;
     }
     
     self.experienceLabel.hidden = self.trendingButton.hidden = NO;

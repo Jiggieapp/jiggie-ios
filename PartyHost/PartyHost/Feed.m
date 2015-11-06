@@ -226,17 +226,20 @@
     [self.sharedData.feedBadge updateValue:0];
     [self.sharedData updateBadgeIcon];
      */
-    [self.sharedData trackMixPanelWithDict:@"View Party Feed" withDict:@{}];
+    [self.sharedData trackMixPanelWithDict:@"View Social Feed" withDict:@{}];
     //[self.sharedData trackMixPanel:@"feed_tab"];
     [self loadData];
     
     //Special messages for guest and host
+    [self.emptyView setData:@"Check back soon" subtitle:@"Browse some events and your social feed will show members who are also interested in those same events." imageNamed:@"PickIcon"];
+    /*
     if(![self.sharedData isMember]) {
-        [self.emptyView setData:@"Check back soon" subtitle:@"Browse some events and your party feed will show your invites from party hosts." imageNamed:@"PickIcon"];
+        [self.emptyView setData:@"Check back soon" subtitle:@"Browse some events and your social feed will show your invites from party hosts." imageNamed:@"PickIcon"];
     }
     else {
-        [self.emptyView setData:@"Check back soon" subtitle:@"Browse some events and your party feed will show members who are also interested in those same events." imageNamed:@"PickIcon"];
+        [self.emptyView setData:@"Check back soon" subtitle:@"Browse some events and your social feed will show members who are also interested in those same events." imageNamed:@"PickIcon"];
     }
+     */
 }
 
 -(void)loadData

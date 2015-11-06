@@ -69,8 +69,8 @@ static NSString *const kAllowTracking = @"allowTracking";
     
     
      NSString *idfaString = [[[ASIdentifierManager sharedManager] advertisingIdentifier] UUIDString];
-    [AppsFlyerTracker sharedTracker].appsFlyerDevKey = @"Rkuw6TCpCtAMpUicmEUz27";
-    [AppsFlyerTracker sharedTracker].appleAppID = @"906484188";
+    [AppsFlyerTracker sharedTracker].appsFlyerDevKey = @"D4Uux6HSu3aYjNHkCHsTiC";
+    [AppsFlyerTracker sharedTracker].appleAppID = @"1047291489";
     [AppsFlyerTracker sharedTracker].customerUserID = idfaString;
     [AppsFlyerTracker sharedTracker].delegate = self;
     //[AppsFlyerTracker sharedTracker].isHTTPS = YES;

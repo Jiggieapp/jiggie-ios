@@ -179,19 +179,19 @@
     [self.aboutPanel addSubview:self.mutualFriendsLabel];
     
     self.separator1 = [[UIView alloc] init];
-    self.separator1.backgroundColor = [UIColor phGrayColor];
+    self.separator1.backgroundColor = [UIColor phLightGrayColor];
     [self.aboutPanel addSubview:self.separator1];
     
     self.separator2 = [[UIView alloc] init];
-    self.separator2.backgroundColor = [UIColor phGrayColor];
+    self.separator2.backgroundColor = [UIColor phLightGrayColor];
     [self.aboutPanel addSubview:self.separator2];
     
     self.separator3 = [[UIView alloc] init];
-    self.separator3.backgroundColor = [UIColor phGrayColor];
+    self.separator3.backgroundColor = [UIColor phLightGrayColor];
     [self.aboutPanel addSubview:self.separator3];
     
     self.separator4 = [[UIView alloc] init];
-    self.separator4.backgroundColor = [UIColor phGrayColor];
+    self.separator4.backgroundColor = [UIColor phLightGrayColor];
     [self.aboutPanel addSubview:self.separator4];
     
     [[NSNotificationCenter defaultCenter]
