@@ -286,9 +286,17 @@
              }else{
                  val = @"Chat";
              }
-             [self.sharedData trackMixPanelWithDict:@"View Feed Item" withDict:@{
-                                                                                 @"ABTestChat":val
-                                                                                 }];
+             
+             NSMutableDictionary *paramsToSend = [[NSMutableDictionary alloc] init];
+             [paramsToSend setObject:val forKey:@"ABTestChat"];
+             
+             if([self.feedData count] > 0)
+             {
+                 [paramsToSend setObject:[self.feedData objectAtIndex:0][@"type"] forKey:@"feed_item_type"];
+             }
+             
+             
+             [self.sharedData trackMixPanelWithDict:@"View Feed Item" withDict:paramsToSend];
          }else{
              NSLog(@"WTFWTFWTWFWT");
          }

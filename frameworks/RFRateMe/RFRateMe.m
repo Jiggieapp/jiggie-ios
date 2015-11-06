@@ -10,8 +10,8 @@
 #import "UIAlertView+NSCookbook.h"
 
 #define kNumberOfDaysUntilShowAgain 3
-#define kAppStoreAddress @"https://itunes.apple.com/us/app/partyhost-app/id906484188"
-#define kAppName @"Party Host"
+#define kAppStoreAddress @"https://itunes.apple.com/us/app/jiggie-social-event-discovery/id1047291489"
+#define kAppName @"Jiggie"
 
 @implementation RFRateMe
 

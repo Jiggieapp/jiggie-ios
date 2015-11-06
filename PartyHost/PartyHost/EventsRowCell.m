@@ -84,9 +84,11 @@
         self.tagsView.backgroundColor = [UIColor clearColor];
         [self addSubview:self.tagsView];
         
+        /*
+        
         self.trendingButton = [[TrendButton alloc] initWithFrame:CGRectMake(10, self.subtitle.frame.origin.y + self.subtitle.frame.size.height + 6, self.sharedData.screenWidth - 20, 10)];
         self.trendingButton.userInteractionEnabled = NO;
-//        [self addSubview:self.trendingButton];
+        [self addSubview:self.trendingButton];
         
         self.experienceLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, self.trendingButton.frame.origin.y + self.trendingButton.frame.size.height + 16, self.sharedData.screenWidth - 20, 11)];
         self.experienceLabel.textColor = [UIColor colorWithWhite:1 alpha:1];
@@ -107,7 +109,9 @@
         //self.hostNum.layer.masksToBounds = YES;
         self.hostNum.shadowColor = [UIColor blackColor];
         self.hostNum.shadowOffset = CGSizeMake(0.5,0.5);
-//        [self addSubview:self.hostNum];
+        [self addSubview:self.hostNum];
+         
+         */
         
         /*
         self.infoBody = [[UITextView alloc] initWithFrame:CGRectMake(5, 75, self.sharedData.screenWidth - 10, 60)];
@@ -161,11 +165,13 @@
         */
 
         //self.layer.masksToBounds = YES;
-        
+
+        /*
         int hostingWidth = (PROFILE_PICS * (PROFILE_SIZE+PROFILE_PADDING)) - PROFILE_PADDING;
         self.hostingsCon = [[UIView alloc] initWithFrame:CGRectMake(self.sharedData.screenWidth-hostingWidth-24, 220 - PROFILE_SIZE - 16, hostingWidth,PROFILE_SIZE)];
         self.hostingsCon.backgroundColor = [UIColor clearColor];
-//        [self addSubview:self.hostingsCon];
+        [self addSubview:self.hostingsCon];
+         */
         
         self.spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
         [self.spinner setColor:[UIColor whiteColor]];
@@ -182,29 +188,29 @@
 
 -(void)updateTrendingButton:(NSString*)title
 {
-    if([title length]>0) { //Has trend label
-        self.trendingButton.hidden = NO;
-        self.trendingButton.frame = CGRectMake(10, self.subtitle.frame.origin.y + self.subtitle.frame.size.height + 6, self.sharedData.screenWidth - 20, 10);
-        [self.trendingButton updateCenterFit:title color:[UIColor phBlueColor]];
-        
-        self.experienceLabel.frame = CGRectMake(10, self.trendingButton.frame.origin.y + self.trendingButton.frame.size.height + 16, self.sharedData.screenWidth - 20, 11);
-    }
-    else { //No trend
-        self.trendingButton.hidden = YES;
-        self.experienceLabel.frame = CGRectMake(10, self.trendingButton.frame.origin.y + 16, self.sharedData.screenWidth - 20, 11);
-    }
+//    if([title length]>0) { //Has trend label
+//        self.trendingButton.hidden = NO;
+//        self.trendingButton.frame = CGRectMake(10, self.subtitle.frame.origin.y + self.subtitle.frame.size.height + 6, self.sharedData.screenWidth - 20, 10);
+//        [self.trendingButton updateCenterFit:title color:[UIColor phBlueColor]];
+//        
+//        self.experienceLabel.frame = CGRectMake(10, self.trendingButton.frame.origin.y + self.trendingButton.frame.size.height + 16, self.sharedData.screenWidth - 20, 11);
+//    }
+//    else { //No trend
+//        self.trendingButton.hidden = YES;
+//        self.experienceLabel.frame = CGRectMake(10, self.trendingButton.frame.origin.y + 16, self.sharedData.screenWidth - 20, 11);
+//    }
 
 }
 
 -(void)clearData
 {
     self.cPicIndex = -1;
-    self.experienceLabel.hidden = self.trendingButton.hidden = YES;
+//    self.experienceLabel.hidden = self.trendingButton.hidden = YES;
     [self.infoA removeAllObjects];
     [self.btnsA removeAllObjects];
     [self.cancelImagesA removeAllObjects];
-    self.hostNum.text = @"";
-    [self.hostingsCon.subviews makeObjectsPerformSelector: @selector(removeFromSuperview)];
+//    self.hostNum.text = @"";
+//    [self.hostingsCon.subviews makeObjectsPerformSelector: @selector(removeFromSuperview)];
     [self dismissAllPopTipViews];
 }
 
@@ -237,18 +243,18 @@
 
 -(void)showLoading
 {
-    self.title.text = self.hostNum.text = self.subtitle.text = @"";
+    self.title.text = self.subtitle.text = @"";
     self.mainImg.image = nil;
-    self.experienceLabel.hidden = self.trendingButton.hidden = YES;
+//    self.experienceLabel.hidden = self.trendingButton.hidden = YES;
     [self dismissAllPopTipViews];
     [self.spinner startAnimating];
     [self addSubview:self.spinner];
-    [self.hostingsCon.subviews makeObjectsPerformSelector: @selector(removeFromSuperview)];
+//    [self.hostingsCon.subviews makeObjectsPerformSelector: @selector(removeFromSuperview)];
 }
 
 -(void)hideLoading
 {
-    self.experienceLabel.hidden = self.trendingButton.hidden = NO;
+//    self.experienceLabel.hidden = self.trendingButton.hidden = NO;
     [self.spinner stopAnimating];
     [self.spinner removeFromSuperview];
 }
@@ -259,99 +265,99 @@
     //[self dismissAllPopTipViews];
     
     //Host and guest view are combined here, so I have to IF everything??
-    NSMutableArray *hostingsA;
-    if([self.sharedData isHost] || [self.sharedData isMember])
-    {
-        hostingsA = [dict objectForKey:@"guests_viewed"];
-        if([hostingsA count]<=0)
-        {
-            self.hostNum.text = @"";
-        }
-        else
-        {
-            self.hostNum.text = [NSString stringWithFormat:@"%d GUEST%@\nINTERESTED",(int)[hostingsA count],([hostingsA count] > 1)?@"S":@""];
-            self.hostNum.numberOfLines = 2;
-        }
-    }
-    else if([self.sharedData isGuest])
-    {
-        hostingsA = [dict objectForKey:@"hosters"];
-        if([hostingsA count]<=0)
-        {
-            self.hostNum.text = @"NO HOSTS";
-        }
-        else
-        {
-            self.hostNum.text = [NSString stringWithFormat:@"%d HOST%@",(int)[hostingsA count],([hostingsA count] > 1)?@"S":@""];
-            self.hostNum.numberOfLines = 1;
-        }
-    }
+//    NSMutableArray *hostingsA;
+//    if([self.sharedData isHost] || [self.sharedData isMember])
+//    {
+//        hostingsA = [dict objectForKey:@"guests_viewed"];
+//        if([hostingsA count]<=0)
+//        {
+//            self.hostNum.text = @"";
+//        }
+//        else
+//        {
+//            self.hostNum.text = [NSString stringWithFormat:@"%d GUEST%@\nINTERESTED",(int)[hostingsA count],([hostingsA count] > 1)?@"S":@""];
+//            self.hostNum.numberOfLines = 2;
+//        }
+//    }
+//    else if([self.sharedData isGuest])
+//    {
+//        hostingsA = [dict objectForKey:@"hosters"];
+//        if([hostingsA count]<=0)
+//        {
+//            self.hostNum.text = @"NO HOSTS";
+//        }
+//        else
+//        {
+//            self.hostNum.text = [NSString stringWithFormat:@"%d HOST%@",(int)[hostingsA count],([hostingsA count] > 1)?@"S":@""];
+//            self.hostNum.numberOfLines = 1;
+//        }
+//    }
     
-    //Get starting location
-    long x1 = 0;
-    if([hostingsA count]<PROFILE_PICS) {
-        x1 = (PROFILE_PICS - [hostingsA count]) * (PROFILE_SIZE+PROFILE_PADDING);
-    }
-    
-    //Get total pics
-    long total_pics = [hostingsA count];
-    if(total_pics > PROFILE_PICS) total_pics = PROFILE_PICS - 1;
-    
-    //Loop through pics
-    for (int i = 0; i < total_pics; i++)
-    {
-        NSDictionary *event = [hostingsA objectAtIndex:i];
-        NSDictionary *user = event;
-        //if(self.sharedData.isGuest) user = event[@"host"]; //Gotta go one more deep for host
-        
-        if(self.sharedData.isHost || [self.sharedData isMember]) //Show bio of guest
-        {
-            if(user[@"about"]!=NULL) {[self.infoA addObject:user[@"about"]];}
-            else {[self.infoA addObject:@""];}
-        }
-        else if(self.sharedData.isGuest) //Shows event message, not BIO
-        {
-            if(event[@"description"]!=NULL) {[self.infoA addObject:event[@"description"]];}
-            else {[self.infoA addObject:@""];}
-        }
-        
-        //Add image
-        UserBubble *btnPic = [[UserBubble alloc] initWithFrame:CGRectMake(x1, 0, PROFILE_SIZE, PROFILE_SIZE)];
-        [self.btnsA addObject:btnPic];
-        btnPic.alpha = 1;
-        btnPic.tag = 10 + i;
-        btnPic.userInteractionEnabled = NO;
-        [btnPic setName:user[@"first_name"] lastName:nil];
-        NWURLConnection *connection = [btnPic loadFacebookImage:user[@"fb_id"]];
-        [self.cancelImagesA addObject:connection];
-        [self.hostingsCon addSubview:btnPic];
-        
-        x1 += PROFILE_SIZE + PROFILE_PADDING;
-    }
-    
-    //Show +MORE button
-    if([hostingsA count] > PROFILE_PICS)
-    {
-        UIButton *btnPic = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-        btnPic.userInteractionEnabled = NO;
-        btnPic.frame = CGRectMake( x1, 0, PROFILE_SIZE, PROFILE_SIZE);
-        
-        //Put a black background, because the background just disappears when pressed
-        UIView *blackBg = [[UIView alloc] initWithFrame:CGRectMake(0,0, PROFILE_SIZE, PROFILE_SIZE)];
-        blackBg.backgroundColor = [UIColor blackColor];
-        [btnPic addSubview:blackBg];
-        
-        btnPic.layer.cornerRadius = PROFILE_SIZE/2;
-        btnPic.layer.masksToBounds = YES;
-        btnPic.layer.borderColor = [UIColor whiteColor].CGColor;
-        btnPic.layer.borderWidth = 2.0;
-        [btnPic setTitleEdgeInsets:UIEdgeInsetsMake(2,0,0,2)];
-        [btnPic setTitle:[NSString stringWithFormat:@"+%d",(int)[hostingsA count] - PROFILE_PICS + 1] forState:UIControlStateNormal];
-        btnPic.titleLabel.font = [UIFont phBold:18];
-        [btnPic setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        [self.hostingsCon addSubview:btnPic];
-    }
-    
+//    //Get starting location
+//    long x1 = 0;
+//    if([hostingsA count]<PROFILE_PICS) {
+//        x1 = (PROFILE_PICS - [hostingsA count]) * (PROFILE_SIZE+PROFILE_PADDING);
+//    }
+//    
+//    //Get total pics
+//    long total_pics = [hostingsA count];
+//    if(total_pics > PROFILE_PICS) total_pics = PROFILE_PICS - 1;
+//    
+//    //Loop through pics
+//    for (int i = 0; i < total_pics; i++)
+//    {
+//        NSDictionary *event = [hostingsA objectAtIndex:i];
+//        NSDictionary *user = event;
+//        //if(self.sharedData.isGuest) user = event[@"host"]; //Gotta go one more deep for host
+//        
+//        if(self.sharedData.isHost || [self.sharedData isMember]) //Show bio of guest
+//        {
+//            if(user[@"about"]!=NULL) {[self.infoA addObject:user[@"about"]];}
+//            else {[self.infoA addObject:@""];}
+//        }
+//        else if(self.sharedData.isGuest) //Shows event message, not BIO
+//        {
+//            if(event[@"description"]!=NULL) {[self.infoA addObject:event[@"description"]];}
+//            else {[self.infoA addObject:@""];}
+//        }
+//        
+//        //Add image
+//        UserBubble *btnPic = [[UserBubble alloc] initWithFrame:CGRectMake(x1, 0, PROFILE_SIZE, PROFILE_SIZE)];
+//        [self.btnsA addObject:btnPic];
+//        btnPic.alpha = 1;
+//        btnPic.tag = 10 + i;
+//        btnPic.userInteractionEnabled = NO;
+//        [btnPic setName:user[@"first_name"] lastName:nil];
+//        NWURLConnection *connection = [btnPic loadFacebookImage:user[@"fb_id"]];
+//        [self.cancelImagesA addObject:connection];
+//        [self.hostingsCon addSubview:btnPic];
+//        
+//        x1 += PROFILE_SIZE + PROFILE_PADDING;
+//    }
+//    
+//    //Show +MORE button
+//    if([hostingsA count] > PROFILE_PICS)
+//    {
+//        UIButton *btnPic = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+//        btnPic.userInteractionEnabled = NO;
+//        btnPic.frame = CGRectMake( x1, 0, PROFILE_SIZE, PROFILE_SIZE);
+//        
+//        //Put a black background, because the background just disappears when pressed
+//        UIView *blackBg = [[UIView alloc] initWithFrame:CGRectMake(0,0, PROFILE_SIZE, PROFILE_SIZE)];
+//        blackBg.backgroundColor = [UIColor blackColor];
+//        [btnPic addSubview:blackBg];
+//        
+//        btnPic.layer.cornerRadius = PROFILE_SIZE/2;
+//        btnPic.layer.masksToBounds = YES;
+//        btnPic.layer.borderColor = [UIColor whiteColor].CGColor;
+//        btnPic.layer.borderWidth = 2.0;
+//        [btnPic setTitleEdgeInsets:UIEdgeInsetsMake(2,0,0,2)];
+//        [btnPic setTitle:[NSString stringWithFormat:@"+%d",(int)[hostingsA count] - PROFILE_PICS + 1] forState:UIControlStateNormal];
+//        btnPic.titleLabel.font = [UIFont phBold:18];
+//        [btnPic setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+//        [self.hostingsCon addSubview:btnPic];
+//    }
+
     //remove all tags
     NSArray *viewsToRemove = [self.tagsView subviews];
     for (UIView *v in viewsToRemove) {
@@ -380,10 +386,10 @@
         [self.tagsView addSubview:tagPil];
         currX = CGRectGetMaxX(tagPil.frame) + 8;
     }
-    
-    self.experienceLabel.hidden = self.trendingButton.hidden = NO;
-    
-    [self addSubview:self.infoBody];
+
+//    self.experienceLabel.hidden = self.trendingButton.hidden = NO;
+
+//    [self addSubview:self.infoBody];
 }
 
 /*

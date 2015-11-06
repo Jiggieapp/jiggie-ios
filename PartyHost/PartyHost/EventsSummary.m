@@ -251,7 +251,14 @@
      self.sharedData.shareHostingHostDate = self.sharedData.selectedHost[@"hosting"][@"start_datetime_str"];
      self.sharedData.cHostVenuePicURL = [Constants eventImageURL:self.sharedData.selectedEvent[@"_id"]]; //Need for SHARE HOSTING
      */
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"SHOW_GENERAL_INVITE" object:self];
+    
+    self.sharedData.shareHostingId = self.event_id;
+    
+    self.sharedData.shareHostingVenueName = self.sharedData.eventDict[@"venue_name"];
+    
+    self.sharedData.cHostVenuePicURL = self.sharedData.eventDict[@"photos"][0];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"SHOW_HOSTING_INVITE" object:self];
 }
 
 //Clicked 3 dots

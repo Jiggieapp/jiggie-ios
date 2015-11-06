@@ -179,7 +179,7 @@
     }
      
     */
-    [self hideLoading];
+    //[self hideLoading];
     //
     //[self performSelector:@selector(hideLoading) withObject:nil afterDelay:2.0];
 }
@@ -427,12 +427,12 @@
     NSLog(@">>> host_fb_id = %@",self.sharedData.shareHostingHostFbId);
     NSLog(@">>> hosting_id = %@",self.sharedData.shareHostingId);
     
-    NSDictionary *params = @{ @"type" : @"hosting",
+    NSDictionary *params = @{ @"type" : @"event",
                               @"from_fb_id":self.sharedData.fb_id,
                               @"venue_name":self.sharedData.shareHostingVenueName,
-                              @"host_name":self.sharedData.shareHostingHostName,
-                              @"host_date":self.sharedData.shareHostingHostDate,
-                              @"host_fb_id":self.sharedData.shareHostingHostFbId,
+                              //@"host_name":self.sharedData.shareHostingHostName,
+                              //@"host_date":self.sharedData.shareHostingHostDate,
+                              //@"host_fb_id":self.sharedData.shareHostingHostFbId,
                               @"hosting_id":self.sharedData.shareHostingId
                               };
     
@@ -451,7 +451,7 @@
     [tmpDict setObject:self.sharedData.userDict[@"email"] forKey:@"Inviter Email"];
     [tmpDict setObject:self.sharedData.userDict[@"gender"] forKey:@"Inviter Gender"];
     [tmpDict setObject:self.sharedData.userDict[@"birthday"] forKey:@"Inviter Birthday"];
-    [tmpDict setObject:@"hosting" forKey:@"type"];
+    [tmpDict setObject:@"event" forKey:@"type"];
     
     
     
@@ -557,7 +557,7 @@
     NSArray *activityItems = [[NSArray alloc] initWithArray:sharingItems];
     
     UIActivityViewController *activityController = [[UIActivityViewController alloc] initWithActivityItems:activityItems applicationActivities:nil];
-    [activityController setValue:@"Lets Party with Jiggie" forKey:@"subject"];
+    [activityController setValue:@"Lets go out with Jiggie" forKey:@"subject"];
     [self.view.window.rootViewController presentViewController:activityController animated:YES completion:nil];
 }
 

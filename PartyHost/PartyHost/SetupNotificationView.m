@@ -39,6 +39,10 @@
     {
         SharedData *sharedData = [SharedData sharedInstance];
         
+        [sharedData.setupPage apnAskingDoneHandler];
+        
+        /*
+        
         sharedData.isInAskingNotification = YES;
         [[NSNotificationCenter defaultCenter]
          postNotificationName:@"ASK_APN_PERMISSION"
@@ -49,6 +53,7 @@
          object:self];
         
          [self performSelector:@selector(checkIfHaveAPN) withObject:nil afterDelay:4.0];
+        */
     }
     
     return YES;

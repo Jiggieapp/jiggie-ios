@@ -231,6 +231,9 @@ static NSString *const kAllowTracking = @"allowTracking";
         [[NSNotificationCenter defaultCenter]
          postNotificationName:@"APN_LOADED"
          object:self];
+    
+    
+    
         /*
         if(![FBSession activeSession].isOpen)
         {

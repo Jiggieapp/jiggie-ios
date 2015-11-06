@@ -89,11 +89,54 @@
          object:nil];
         
         
+        
+        NSLog(@"TOKEN____ :: %@",[FBSDKAccessToken currentAccessToken].tokenString  );
+        
 //        [self performSelector:@selector(skipLogin) withObject:nil afterDelay:0.1];
+        
+        
+        [self performSelector:@selector(checkIfHasLogin) withObject:nil afterDelay:2.0];
     }
     return self;
 }
 
+
+-(void)checkIfHasLogin
+{
+    if([FBSDKAccessToken currentAccessToken].tokenString.length > 20)
+    {
+        [self autoLogin];
+    }else{
+        [[NSNotificationCenter defaultCenter]
+         postNotificationName:@"HIDE_LOADING"
+         object:self];
+    }
+}
+
+
+
+
+-(void)autoLogin
+{
+    self.sharedData.fb_access_token = [FBSDKAccessToken currentAccessToken].tokenString;
+    [[[FBSDKGraphRequest alloc] initWithGraphPath:@"/me" parameters:@{@"fields":@"first_name,last_name,name,bio,gender,email,location,birthday,photos,albums"}]
+     startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error)
+     {
+         if (!error) {
+             NSLog(@"Fetched User Information:%@", result);
+             self.cAlbumId = [self getProfileAlbumId:result[@"albums"][@"data"]];
+             [self.currentUser removeAllObjects];
+             [self.currentUser addEntriesFromDictionary:result];
+             self.sharedData.fb_id = result[@"id"];
+             [self doubleCheckPermissions];
+         }
+         else {
+             NSLog(@"Error %@",error);
+         }
+     }];
+    
+    
+}
 
 -(void)skipLogin
 {
@@ -190,61 +233,7 @@
          } else {
              NSLog(@"Logged in :: %@",[FBSDKAccessToken currentAccessToken].tokenString);
              
-             self.sharedData.fb_access_token = [FBSDKAccessToken currentAccessToken].tokenString;
-             
-             
-             [self.currentUser removeAllObjects];
-             
-             //[FBSDKAccessToken tokenString];
-             
-             //tokenString
-             //FBSDKAccessToken *token;
-             //token.tokenString;
-             
-             /*
-              @"public_profile",@"user_birthday", @"email", @"user_photos",@"user_friends",@"user_likes",@"user_relationships",@"user_about_me",@"user_location",@"user_photos",@"user_status",@"user_friends"]
-              */
-             
-             
-             [[[FBSDKGraphRequest alloc] initWithGraphPath:@"/me" parameters:@{@"fields":@"first_name,last_name,name,bio,gender,email,location,birthday,photos,albums"}]
-              startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error)
-             {
-                  if (!error) {
-                      NSLog(@"Fetched User Information:%@", result);
-                      //NSLog(@"Fetched User Information:%@", result);
-                     
-                      self.cAlbumId = [self getProfileAlbumId:result[@"albums"][@"data"]];
-                      
-                      //getProfileAlbumId
-                      
-                      NSLog(@"ALBUM_ID :: %@",self.cAlbumId);
-                      
-                      
-                      
-                      
-                      [self.currentUser removeAllObjects];
-                      [self.currentUser addEntriesFromDictionary:result];
-                      
-                      self.sharedData.fb_id = result[@"id"];
-                      
-                      [self doubleCheckPermissions];
-                      
-                      
-                      
-                      
-                      
-                      
-                      
-                  
-                  
-                  
-                  }
-                  else {
-                      NSLog(@"Error %@",error);
-                  }
-              }];
-             
-             
+             [self autoLogin];
              
          }
      }];

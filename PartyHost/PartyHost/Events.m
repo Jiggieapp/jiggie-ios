@@ -635,11 +635,11 @@
         NSString *tagsString = [tagsCut componentsJoinedByString:@"  "];
         if([tags count]>3) tagsString = [tagsString stringByAppendingString:@"  ..."];
         tagsString = [tagsString uppercaseString];
-        cell.experienceLabel.text = tagsString;
+//        cell.experienceLabel.text = tagsString;
     }
     else
     {
-        cell.experienceLabel.text = @"";
+//        cell.experienceLabel.text = @"";
     }
     
     cell.picURL = [Constants eventImageURL:dict[@"_id"]];
