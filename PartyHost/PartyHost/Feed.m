@@ -43,38 +43,27 @@
     
 //    self.hideIcon = [[UIImageView alloc] initWithFrame:CGRectMake(10, 4, 20.0, 20)];
     
-    self.hideTitle = [[UILabel alloc] initWithFrame:CGRectMake(40, CGRectGetMaxY(self.title.frame) + 18, frame.size.width-80, 20)];
-    self.hideTitle.text = @"Invisible";
+    self.hideView = [[UIView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(tabBar.frame), self.sharedData.screenWidth, 40)];
+    self.hideView.backgroundColor = [UIColor clearColor];
+    [self.mainCon addSubview:self.hideView];
+    
+    self.hideTitle = [[UILabel alloc] initWithFrame:CGRectMake(14, 18, frame.size.width-80, 20)];
+    self.hideTitle.text = @"Socialize";
     self.hideTitle.textColor = [UIColor darkGrayColor];
-    self.hideTitle.font = [UIFont phBlond:18];
-    [self addSubview:self.hideTitle];
+    self.hideTitle.font = [UIFont phBold:18];
+    [self.hideView addSubview:self.hideTitle];
     
     self.hideToggle = [[UISwitch alloc] initWithFrame:CGRectZero];
     self.hideToggle.frame = CGRectMake(self.sharedData.screenWidth - self.hideToggle.bounds.size.width - 14,
-                                       CGRectGetMaxY(self.title.frame) + 8,
+                                       8,
                                        self.hideToggle.bounds.size.width,
                                        self.hideToggle.bounds.size.height);
     [self.hideToggle setOnTintColor:[UIColor phPurpleColor]];
-    [self addSubview:self.hideToggle];
-    
-    self.btnHide = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    self.btnHide.frame = CGRectMake(5, 65, self.sharedData.screenWidth-10, 40);
-    self.btnHide.titleLabel.font = [UIFont phBlond:18];
-    [self.btnHide setTitleEdgeInsets:UIEdgeInsetsMake(3,0,0,0)];
-    [self.btnHide setTitle:@"" forState:UIControlStateNormal];
-    [self.btnHide setTitleColor:[UIColor phDarkGrayColor] forState:UIControlStateNormal];
-    [self.btnHide setBackgroundColor:[UIColor clearColor]];
-    [self.btnHide addTarget:self action:@selector(btnHideHandler) forControlEvents:UIControlEventTouchUpInside];
-    self.btnHide.layer.borderWidth = 1.0;
-    self.btnHide.layer.borderColor = [UIColor phDarkGrayColor].CGColor;
-    self.btnHide.layer.cornerRadius = 5;
-    self.btnHide.alpha = 0.8;
-    self.btnHide.backgroundColor = [UIColor whiteColor];
-//    [self addSubview:self.btnHide];
-    //phBlond
+    [self.hideToggle addTarget:self action:@selector(hideToggleHandler) forControlEvents:UIControlEventTouchUpInside];
+    [self.hideView addSubview:self.hideToggle];
     
     //Create table
-    self.feedTable = [[UITableView alloc] initWithFrame:CGRectMake(0, self.sharedData.screenHeight - self.sharedData.feedCellHeightLong - 50 - 3, frame.size.width, frame.size.height - 60 - self.btnHide.frame.size.height)];
+    self.feedTable = [[UITableView alloc] initWithFrame:CGRectMake(0, self.sharedData.screenHeight - self.sharedData.feedCellHeightLong - 50 - 3, frame.size.width, frame.size.height - 60 - self.hideView.frame.size.height)];
     self.feedTable.delegate = self;
     self.feedTable.dataSource = self;
     self.feedTable.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -115,14 +104,14 @@
     return self;
 }
 
--(void)btnHideHandler
+-(void)hideToggleHandler
 {
     NSLog(@"TOUCHED!!!");
     
     if(self.sharedData.matchMe)
     {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Go Invisible?"
-                                                        message:@"By going invisible, you will be able to browse events without showing up on the 'guest viewed' list and you won't show up in anyone's partyfeed. You can be back to visible mode using the Match Me link."
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Turn off socialize?"
+                                                        message:@"while turned off, your profile card won't be shown to other users."
                                                        delegate:self
                                               cancelButtonTitle:@"Go Invisible"
                                               otherButtonTitles:@"Cancel",nil];
@@ -138,6 +127,8 @@
     if(buttonIndex==0)
     {
         [self toggleMatch];
+    } else {
+        [self.hideToggle setOn:self.sharedData.matchMe];
     }
 }
 
@@ -157,12 +148,8 @@
     [manager GET:url parameters:@{} success:^(AFHTTPRequestOperation *operation, id responseObject)
      {
          NSLog(@"Match_responseObject :: %@",responseObject);
-         if(self.sharedData.matchMe)
-         {
-             [self.btnHide setTitle:@"Go Invisible" forState:UIControlStateNormal];
-         }else{
-             [self.btnHide setTitle:@"Go Visible" forState:UIControlStateNormal];
-         }
+         
+         [self.hideToggle setOn:self.sharedData.matchMe];
          
          self.feedTable.hidden = !(self.sharedData.matchMe);
          self.sharedData.feedBadge.hidden = !(self.sharedData.matchMe);
@@ -229,12 +216,7 @@
 -(void)initClass
 {
     
-    if(self.sharedData.matchMe)
-    {
-        [self.btnHide setTitle:@"Go Invisible" forState:UIControlStateNormal];
-    }else{
-        [self.btnHide setTitle:@"Go Visible" forState:UIControlStateNormal];
-    }
+    [self.hideToggle setOn:self.sharedData.matchMe];
     
     self.feedTable.hidden = !(self.sharedData.matchMe);
     self.sharedData.feedBadge.hidden = !(self.sharedData.matchMe);
@@ -335,8 +317,6 @@
              self.feedTable.hidden = !(self.sharedData.matchMe);;
              [self.emptyView setMode:@"hide"];
          }
-         
-         self.btnHide.hidden = self.feedTable.hidden;
          
          /*
          //If we are on the page then clear out badge

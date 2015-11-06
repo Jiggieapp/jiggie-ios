@@ -265,7 +265,7 @@
         self.greenCircleTwo.layer.masksToBounds = YES;
         [self.cardTwo addSubview:self.greenCircleTwo];
         
-        UIImageView *textIconTwo = [[UIImageView alloc] initWithFrame:CGRectMake(15, 15, 60, 60)];
+        UIImageView *textIconTwo = [[UIImageView alloc] initWithFrame:CGRectMake(20, 20, 50, 50)];
         textIconTwo.image = [UIImage imageNamed:@"text-icon"];
         [self.greenCircleTwo addSubview:textIconTwo];
         
