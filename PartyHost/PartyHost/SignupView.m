@@ -27,8 +27,8 @@
         self.didAPNUpdate = NO;
         self.didFBInitInfo = NO;
         self.didHerokuLogin = NO;
-        self.didLogin = NO;
         self.didFBLogin = NO;
+        self.didLogin = NO;
         self.currentUser = [[NSMutableDictionary alloc] init];
         
         
@@ -179,10 +179,13 @@
 -(void)onSignInHandler
 {
     [self.buttonFacebook setTitle:@"SIGNING INTO JIGGIE" forState:UIControlStateNormal];
-    
+    [FBSDKAccessToken setCurrentAccessToken:nil];
     
     FBSDKLoginManager *logMeOut = [[FBSDKLoginManager alloc] init];
     [logMeOut logOut];
+    
+    
+    
     
     /*
     FBSDKLoginManager *login = [[FBSDKLoginManager alloc] init];
@@ -564,6 +567,7 @@
              {
                  [self.sharedData setMixPanelOnSignUp];
                  [self.sharedData trackMixPanelWithDict:@"Sign Up" withDict:@{}];
+                 [self.sharedData setMixPanelOnceParams];
              }else{
                  [self.sharedData setMixPanelOnLogin];
                  [self.sharedData trackMixPanelWithDict:@"Log In" withDict:@{}];
@@ -571,7 +575,7 @@
              }
              
              [self.sharedData setMixPanelUserProfile];
-             [self.sharedData setMixPanelOnceParams];
+             
              [self.sharedData setMixPanelSuperProperties];
              [self checkAppsFlyerData];
              [self performSelector:@selector(getUserImages) withObject:nil afterDelay:2.0];
@@ -652,8 +656,8 @@
                    
                    if(total == 0)
                    {
-                       [infoToSend setObject:PHBlankImgURL forKey:@"photo1"];
-                       [tmpA addObject:PHBlankImgURL];
+                       //[infoToSend setObject:PHBlankImgURL forKey:@"photo1"];
+                       //[tmpA addObject:PHBlankImgURL];
                        
                    }
                    
