@@ -223,7 +223,7 @@
             
             if (indexPath.row==0)
             {
-                cell.textLabel.text = @"Party Feed";
+                cell.textLabel.text = @"Social Feed";
                 UISwitch *switchView = (UISwitch*)cell.accessoryView;
                 [switchView setOn:self.sharedData.notification_feed animated:NO];
                 [switchView addTarget:self action:@selector(notificationPartyFeedChanged:) forControlEvents:UIControlEventValueChanged];

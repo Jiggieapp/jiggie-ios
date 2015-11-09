@@ -214,6 +214,11 @@
     [self showLoading];
     self.signupView.hidden = NO;
     [self.signupView initClass];
+    
+    [FBSDKAccessToken setCurrentAccessToken:nil];
+    FBSDKLoginManager *logMeOut = [[FBSDKLoginManager alloc] init];
+    [logMeOut logOut];
+    
     //[FBSession.activeSession closeAndClearTokenInformation];
     [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
     [UIView animateWithDuration:0.25 animations:^(void)
@@ -435,11 +440,11 @@
                               //@"host_fb_id":self.sharedData.shareHostingHostFbId,
                               @"hosting_id":self.sharedData.shareHostingId
                               };
-    
+    /*
     UIImage *hostingImg = [self.sharedData.imagesDict objectForKey:self.sharedData.cHostVenuePicURL];
     CGImageRef newCgIm = CGImageCreateCopy(hostingImg.CGImage);
     UIImage *newImage = [UIImage imageWithCGImage:newCgIm scale:hostingImg.scale orientation:hostingImg.imageOrientation];
-    
+    */
     
     
     
@@ -469,7 +474,14 @@
           postNotificationName:@"HIDE_LOADING"
           object:self];
          
-         [self shareText:responseObject[@"message"] andImage:newImage andUrl:[[NSURL alloc] initWithString:responseObject[@"url"]]];
+         //[self shareText:responseObject[@"message"] andImage:newImage andUrl:[[NSURL alloc] initWithString:responseObject[@"url"]]];
+         
+         
+         [self shareText:responseObject[@"message"] andImage:[UIImage imageNamed:@"splashLogoWhite"] andUrl:[[NSURL alloc] initWithString:responseObject[@"url"]]];
+         
+         
+         //
+         
      } failure:^(AFHTTPRequestOperation *operation, NSError *error)
      {
          NSLog(@"ERROR :: %@",error);
@@ -477,26 +489,32 @@
           postNotificationName:@"HIDE_LOADING"
           object:self];
          
-         [self shareText:[self getHostingShareTitle] andImage:newImage andUrl:[[NSURL alloc] initWithString:[self getHostingShareLink]]];
+         [self shareText:[self getHostingShareTitle] andImage:[UIImage imageNamed:@"splashLogoWhite"] andUrl:[[NSURL alloc] initWithString:[self getHostingShareLink]]];
      }];
 }
 
 -(void)showHostingInvite
 {
+    NSLog(@"STARTING_LINK_LOAD :: %@",self.sharedData.cHostVenuePicURL);
+    
     [[NSNotificationCenter defaultCenter]
      postNotificationName:@"SHOW_LOADING"
      object:self];
+<<<<<<< HEAD
 
     NSLog(@"START_1 :; %@",self.sharedData.cHostVenuePicURL);
     
+=======
+    /*
+>>>>>>> b41605b0c393c501bd09e2c3f7a5ab9276de88a2
     [self.sharedData loadImage:self.sharedData.cHostVenuePicURL onCompletion:^()
      {
          NSLog(@"START_2");
          [self getHostingInviteLink];
-         
-         /*[self shareText:[self getHostingShareTitle] andImage:hostingImg andUrl:[[NSURL alloc] initWithString:[self getHostingShareLink]]];
-         */
      }];
+    */
+    
+    [self getHostingInviteLink];
 }
 
 

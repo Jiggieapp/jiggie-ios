@@ -30,18 +30,22 @@
     
     self.cGuestListingIndexPath = nil;
     
-    self.didLoadFromHostings = NO;
+    
     self.isEventsLoaded = NO;
+    self.didLoadFromHostings = NO;
     self.didLoadFromInvite = NO;
     self.isLoading = NO;
+    
+    
     
     self.mainCon = [[UIView alloc] initWithFrame:CGRectMake(0, 20, self.sharedData.screenWidth * SCREENS_DEEP, self.sharedData.screenHeight - PHTabHeight)];
 
     self.mainCon.layer.masksToBounds = YES;
     
     self.whiteBK = [[UIView alloc] initWithFrame:CGRectMake(0, self.sharedData.screenHeight/2, self.sharedData.screenWidth, self.sharedData.screenHeight)];
-    self.whiteBK.backgroundColor = [UIColor whiteColor];
     self.whiteBK.hidden = YES;
+    self.whiteBK.backgroundColor = [UIColor whiteColor];
+    
     [self.mainCon addSubview:self.whiteBK];
     
     [self addSubview:self.mainCon];

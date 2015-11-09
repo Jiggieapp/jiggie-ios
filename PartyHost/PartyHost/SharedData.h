@@ -167,6 +167,9 @@
 
 @property(nonatomic,assign) BOOL                isLoggedIn;
 
+
+@property(nonatomic,assign) BOOL                didAppsFlyerLoad;
+
 @property(nonatomic,assign) int                 screenWidth;
 @property(nonatomic,assign) int                 screenHeight;
 

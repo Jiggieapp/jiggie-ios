@@ -231,17 +231,6 @@ static NSString *const kAllowTracking = @"allowTracking";
         [[NSNotificationCenter defaultCenter]
          postNotificationName:@"APN_LOADED"
          object:self];
-    
-    
-    
-        /*
-        if(![FBSession activeSession].isOpen)
-        {
-            [[NSNotificationCenter defaultCenter]
-             postNotificationName:@"HIDE_LOADING"
-             object:self];
-        }
-    */
 }
 
 -(BOOL)notificationServicesEnabled
@@ -741,12 +730,15 @@ static NSString *const kAllowTracking = @"allowTracking";
 {
     id status = [installData objectForKey:@"af_status"];
     
-    
+    if(self.sharedData.didAppsFlyerLoad == YES)
+    {
+        return;
+    }
     
     
     if([status isEqualToString:@"Non-organic"])
     {
-        
+        self.sharedData.didAppsFlyerLoad = YES;
         id sourceID = [installData objectForKey:@"media_source"];
         id campaign = [installData objectForKey:@"campaign"];
         NSLog(@"This is a non organic install.");

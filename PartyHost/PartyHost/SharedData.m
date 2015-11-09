@@ -96,6 +96,7 @@ static SharedData *sharedInstance = nil;
         self.btnNOTxt           = @"";
         self.phoneCountry       = @"";
         self.isInAskingNotification = NO;
+        self.didAppsFlyerLoad   = NO;
         //int numLives = MPTweakValue(@"number of lives", 5);
         
         
@@ -628,7 +629,7 @@ static SharedData *sharedInstance = nil;
     if(PHMixPanelOn==NO) return;
     
     Mixpanel *mixpanel = [Mixpanel sharedInstance];
-    
+    [mixpanel identify:self.fb_id];
     NSString *location = [self.userDict[@"location"] lowercaseString];
     
     [mixpanel registerSuperProperties:@{@"account_type": self.account_type}];
@@ -688,6 +689,9 @@ static SharedData *sharedInstance = nil;
     [mixpanel.people set:@{@"email": email}];
     [mixpanel.people set:@{@"fb_id": facebookId}];
     
+    
+    [mixpanel.people set:@{@"name_and_fb_id": [NSString stringWithFormat:@"%@_%@_%@",first_name,last_name,facebookId]}];
+    
 }
 
 
@@ -696,15 +700,20 @@ static SharedData *sharedInstance = nil;
     if(PHMixPanelOn==NO) return;
     
     Mixpanel *mixpanel = [Mixpanel sharedInstance];
-    
+    [mixpanel identify:self.fb_id];
     NSString *media_source = self.appsFlyerDict[@"media_source"];
     NSString *campaign = self.appsFlyerDict[@"campaign"];
     NSString *installType = self.appsFlyerDict[@"af_status"];
     
     
-    [mixpanel registerSuperPropertiesOnce:@{@"media_source": media_source}];
-    [mixpanel registerSuperPropertiesOnce:@{@"campaign": campaign}];
-    [mixpanel registerSuperPropertiesOnce:@{@"install_type": installType}];
+    [mixpanel registerSuperPropertiesOnce:@{@"AFmedia_source": media_source}];
+    [mixpanel registerSuperPropertiesOnce:@{@"AFcampaign": campaign}];
+    [mixpanel registerSuperPropertiesOnce:@{@"AFinstall_type": installType}];
+    
+    
+    [mixpanel.people set:@{@"AFmedia_source": media_source}];
+    [mixpanel.people set:@{@"AFcampaign": campaign}];
+    [mixpanel.people set:@{@"AFinstall_type": installType}];
 }
 
 -(void)trackMixPanelIncrementWithDict:(NSDictionary *)dict
