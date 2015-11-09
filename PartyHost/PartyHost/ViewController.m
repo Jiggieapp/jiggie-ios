@@ -486,9 +486,12 @@
     [[NSNotificationCenter defaultCenter]
      postNotificationName:@"SHOW_LOADING"
      object:self];
+
+    NSLog(@"START_1 :; %@",self.sharedData.cHostVenuePicURL);
     
     [self.sharedData loadImage:self.sharedData.cHostVenuePicURL onCompletion:^()
      {
+         NSLog(@"START_2");
          [self getHostingInviteLink];
          
          /*[self shareText:[self getHostingShareTitle] andImage:hostingImg andUrl:[[NSURL alloc] initWithString:[self getHostingShareLink]]];
