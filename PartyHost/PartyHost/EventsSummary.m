@@ -14,6 +14,7 @@
 
 @implementation EventsSummary {
     NSString *lastEventId;
+    CGSize picSize;
 }
 
 - (id)initWithFrame:(CGRect)frame
@@ -67,8 +68,12 @@
     self.innerBg.backgroundColor = [UIColor whiteColor];
     [self.mainScroll addSubview:self.innerBg];
     
+    //calculate picture size
+    CGFloat pictureHeightRatio = 3.0 / 4.0;
+    picSize = CGSizeMake(self.sharedData.screenWidth, pictureHeightRatio * self.sharedData.screenWidth);
+    
     //Scrollable pictures
-    self.picScroll = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.sharedData.screenWidth, 300)];
+    self.picScroll = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, picSize.width, picSize.height)];
     self.picScroll.showsVerticalScrollIndicator    = NO;
     self.picScroll.showsHorizontalScrollIndicator  = NO;
     self.picScroll.scrollEnabled                   = YES;
@@ -645,10 +650,10 @@
     self.picScroll.contentOffset = CGPointMake(0, 0);
     for (int i = 0; i < [photos count]; i++)
     {
-        UIView *imgCon = [[UIView alloc] initWithFrame:CGRectMake(i * self.sharedData.screenWidth, 0, self.sharedData.screenWidth, 300)];
+        UIView *imgCon = [[UIView alloc] initWithFrame:CGRectMake(i * self.sharedData.screenWidth, 0, picSize.width, picSize.height)];
         imgCon.layer.masksToBounds = YES;
         
-        PHImage *img = [[PHImage alloc] initWithFrame:CGRectMake(0, 0, self.sharedData.screenWidth, 300)];
+        PHImage *img = [[PHImage alloc] initWithFrame:CGRectMake(0, 0, picSize.width, picSize.height)];
         img.contentMode = UIViewContentModeScaleAspectFill;
         NSString *picURL = photos[i];
         picURL = [self.sharedData picURL:picURL];
@@ -657,7 +662,7 @@
         [imgCon addSubview:img];
         [self.picScroll addSubview:imgCon];
     }
-    self.picScroll.contentSize = CGSizeMake([photos count] * self.sharedData.screenWidth, 300);
+    self.picScroll.contentSize = CGSizeMake([photos count] * picSize.width, picSize.height);
     
     //Map
     CLGeocoder *geocoder = [[CLGeocoder alloc] init];
@@ -726,7 +731,7 @@
                 [defaults setValue:@"YES" forKey:@"SHOWED_EVENTS_SUMMARY_HOST_OVERLAY"];
                 [defaults synchronize];
                 
-                [self.mainScroll setContentOffset:CGPointMake(0,300) animated:NO];
+                [self.mainScroll setContentOffset:CGPointMake(0,picSize.height) animated:NO];
                 CGPoint pt = [[[UIApplication sharedApplication] keyWindow] convertPoint:CGPointZero fromView:self.seeAllView];
                 pt.x += CGRectGetMidX(self.seeAllView.frame) + 4;
                 pt.y += 28;
@@ -742,7 +747,7 @@
                 [defaults setValue:@"YES" forKey:@"SHOWED_EVENTS_SUMMARY_GUEST_OVERLAY"];
                 [defaults synchronize];
                 
-                [self.mainScroll setContentOffset:CGPointMake(0,300) animated:NO];
+                [self.mainScroll setContentOffset:CGPointMake(0,picSize.height) animated:NO];
                 CGPoint pt = [[[UIApplication sharedApplication] keyWindow] convertPoint:CGPointZero fromView:self.seeAllView];
                 pt.x += CGRectGetMidX(self.seeAllView.frame) + 4;
                 pt.y += 28;

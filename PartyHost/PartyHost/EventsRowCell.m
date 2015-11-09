@@ -143,14 +143,16 @@
     self.subtitle.text = [dict[@"venue_name"] capitalizedString];
     
     // Format date layout
-    NSDateFormatter *serverFormatter = [[NSDateFormatter alloc] init];
-    [serverFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US"]];
-    [serverFormatter setDateFormat: @"yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ"];
-    NSDate *startDateTime = [serverFormatter dateFromString:dict[@"start_datetime"]];
+//    NSDateFormatter *serverFormatter = [[NSDateFormatter alloc] init];
+//    [serverFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US"]];
+//    [serverFormatter setDateFormat: @"yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ"];
+//    NSDate *startDateTime = [serverFormatter dateFromString:dict[@"start_datetime"]];
+//    
+//    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+//    [dateFormatter setDateFormat:@"EEE, MMM dd, hh:mm a"];
+//    self.date.text = [dateFormatter stringFromDate:startDateTime];
     
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:@"EEE, MMM dd, hh:mm a"];
-    self.date.text = [dateFormatter stringFromDate:startDateTime];
+    self.date.text = dict[@"start_datetime_str"];
     
     self.picURL = [Constants eventImageURL:dict[@"_id"]];
     
