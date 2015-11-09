@@ -500,19 +500,12 @@
     [[NSNotificationCenter defaultCenter]
      postNotificationName:@"SHOW_LOADING"
      object:self];
-<<<<<<< HEAD
-
-    NSLog(@"START_1 :; %@",self.sharedData.cHostVenuePicURL);
     
-=======
-    /*
->>>>>>> b41605b0c393c501bd09e2c3f7a5ab9276de88a2
     [self.sharedData loadImage:self.sharedData.cHostVenuePicURL onCompletion:^()
      {
          NSLog(@"START_2");
          [self getHostingInviteLink];
      }];
-    */
     
     [self getHostingInviteLink];
 }
