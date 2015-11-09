@@ -17,13 +17,9 @@
 @property(nonatomic,strong) UILabel         *title;
 @property(nonatomic,strong) UILabel         *subtitle;
 @property(nonatomic,strong) UILabel         *date;
-//@property(nonatomic,strong) UILabel         *hostNum;
 
 @property(nonatomic,strong) PHImage         *mainImg;
 @property(nonatomic,strong) NSString        *picURL;
-//@property(nonatomic,strong) UIView          *hostingsCon;
-//@property(nonatomic,strong) TrendButton     *trendingButton;
-//@property(nonatomic,strong) UILabel         *experienceLabel;
 
 @property(nonatomic,strong) UIView          *tagsView;
 
@@ -44,12 +40,12 @@
 @property (nonatomic, strong)	NSMutableArray	*visiblePopTipViews;
 @property (nonatomic, strong)	id				currentPopTipViewTarget;
 
+@property (nonatomic, assign) BOOL isFeaturedEvent;
+
 -(void)clearData;
 -(void)loadData:(NSDictionary *)dict;
 -(void)showLoading;
 -(void)hideLoading;
-//-(void)btnTapHandler:(UIButton *)btn;
--(void)updateTrendingButton:(NSString*)title;
 -(void)goPreselect;
 -(void)wentOffscreen;
 

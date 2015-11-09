@@ -93,12 +93,12 @@
     
     NSLog(@"RECT_ :: %@",NSStringFromCGRect(bar1.frame));
     self.subtitle = [[UILabel alloc] initWithFrame:bar1.bounds];
-    self.subtitle.text = @"US - United States";
+    self.subtitle.text = @"International";
     
     
     NSDictionary *underlineAttribute = @{NSUnderlineStyleAttributeName: @(NSUnderlineStyleSingle)};
-    self.subtitle.attributedText = [[NSAttributedString alloc] initWithString:@"US - United States"
-                                                             attributes:underlineAttribute];
+    self.subtitle.attributedText = [[NSAttributedString alloc] initWithString:@"International"
+                                                                   attributes:underlineAttribute];
     
     self.subtitle.textAlignment = NSTextAlignmentCenter;
     self.subtitle.textColor = [UIColor blackColor];
@@ -120,7 +120,7 @@
     self.phoneField.textColor = [UIColor blackColor];
     self.phoneField.font = [UIFont phBlond:19];
     self.phoneField.keyboardType = UIKeyboardTypeNumberPad;
-    self.phoneField.text = @"+1-";
+    self.phoneField.text = @"+";
     [bar2 addSubview:self.phoneField];
     
     //Resign first responder when tapped away
@@ -141,9 +141,7 @@
     [self.mainCon addSubview:self.btnVerify];
     
     [bar1 addSubview:self.subtitle];
-    self.isLocal = YES;
-    
-    
+    self.isLocal = NO;
     
     //Details screen
     [[NSNotificationCenter defaultCenter]
@@ -343,9 +341,9 @@
     self.hidden = NO;
     //self.phoneField.text = placeholderText;
     //self.phoneField.textColor = placeholderColor;
-    self.isLocal = YES;
-    self.phoneField.text = @"+1-";
-    self.subtitle.text = @"US - United States";
+    self.isLocal = NO;
+    self.phoneField.text = @"+";
+    self.subtitle.text = @"International";
     
     NSDictionary *underlineAttribute = @{NSUnderlineStyleAttributeName: @(NSUnderlineStyleSingle)};
     self.subtitle.attributedText = [[NSAttributedString alloc] initWithString:self.subtitle.text
@@ -414,6 +412,8 @@
     [self.mainScroll setContentOffset:CGPointZero animated:YES];
 }
 
+#pragma mark - UITextFieldDelegate
+
 -(BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
     NSString* totalString = [NSString stringWithFormat:@"%@%@",textField.text,string];
     
@@ -425,6 +425,24 @@
         textField.text = [self formatPhoneNumber:totalString deleteLastChar:NO ];
     }
     return false;
+}
+
+- (void)textFieldDidBeginEditing:(UITextField *)textField
+{
+    if([textField.text isEqualToString:placeholderText])
+    {
+        textField.text = @"";
+        textField.textColor = [UIColor whiteColor];
+    }
+}
+
+-(void) textFieldDidEndEditing:(UITextField *)textField
+{
+    if([textField.text length]==0)
+    {
+        textField.text = placeholderText;
+        textField.textColor = placeholderColor;
+    }
 }
 
 -(NSString*)formatPhoneNumber:(NSString*) simpleNumber deleteLastChar:(BOOL)deleteLastChar {
@@ -460,7 +478,8 @@
     if(self.isLocal)
     {
         begin = @"+1-";
-    }else{
+    }else
+    {
         begin = @"+";
     }
     
@@ -535,24 +554,6 @@
      object:nil];
     
     [self.phoneField resignFirstResponder];
-}
-
-- (void)textFieldDidBeginEditing:(UITextField *)textField
-{
-    if([textField.text isEqualToString:placeholderText])
-    {
-        textField.text = @"";
-        textField.textColor = [UIColor whiteColor];
-    }
-}
-
--(void) textFieldDidEndEditing:(UITextField *)textField
-{
-    if([textField.text length]==0)
-    {
-        textField.text = placeholderText;
-        textField.textColor = placeholderColor;
-    }
 }
 
 @end

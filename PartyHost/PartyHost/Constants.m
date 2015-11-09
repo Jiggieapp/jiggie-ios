@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "Constants.h"
 
-NSString *const PHVersion = @"1.0.0";
+NSString *const PHVersion = @"1.0.1";
 BOOL const PHMixPanelOn = YES;
 
 //DEBUG, should be NO when released!

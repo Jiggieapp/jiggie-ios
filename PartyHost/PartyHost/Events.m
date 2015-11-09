@@ -19,11 +19,7 @@
     self.backgroundColor = [UIColor whiteColor];
     
     self.sharedData = [SharedData sharedInstance];
-    
-    
-    
-    
-    
+
     UIView *tmpPurpleView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.sharedData.screenWidth, 40)];
     tmpPurpleView.backgroundColor = [UIColor phPurpleColor];
     [self addSubview:tmpPurpleView];
@@ -617,82 +613,19 @@
     
     [cell clearData];
     
-    cell.title.text = [dict[@"title"] uppercaseString];
-    cell.subtitle.text = [dict[@"venue_name"] capitalizedString];
-    
-    // Format date layout
-    NSDateFormatter *serverFormatter = [[NSDateFormatter alloc] init];
-    [serverFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US"]];
-    [serverFormatter setDateFormat: @"yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ"];
-    NSDate *startDateTime = [serverFormatter dateFromString:dict[@"start_datetime"]];
-    
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:@"EEE, MMM dd, hh:mm a"];
-    cell.date.text = [dateFormatter stringFromDate:startDateTime];
-    
-    [cell updateTrendingButton:[dict[@"special_type"] uppercaseString]];
-    
-    if([dict[@"tags"] count]>0) {
-        NSMutableArray *tags = [[NSMutableArray alloc] init];
-        [tags addObjectsFromArray:dict[@"tags"]];
-        NSArray *tagsCut = [tags subarrayWithRange:NSMakeRange(0, MIN(3,[tags count]))]; //Only join the first 3 tags!
-        NSString *tagsString = [tagsCut componentsJoinedByString:@"  "];
-        if([tags count]>3) tagsString = [tagsString stringByAppendingString:@"  ..."];
-        tagsString = [tagsString uppercaseString];
-//        cell.experienceLabel.text = tagsString;
-    }
-    else
+    if ([[self.eventsA objectAtIndex:indexPath.section][@"date_day"] isEqualToString:@"Featured Events"])
     {
-//        cell.experienceLabel.text = @"";
+        cell.isFeaturedEvent = YES;
+    } else
+    {
+        cell.isFeaturedEvent = NO;
     }
-    
-    cell.picURL = [Constants eventImageURL:dict[@"_id"]];
-    
-    //Load venue image
-    [cell.mainImg loadImage:cell.picURL defaultImageNamed:@"nightclub_default"]; //This will load and can be cancelled?
     
     [cell loadData:dict];
     
     return cell;
 }
 
-
-//- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-//        //    NSDate *day = [NSDate dateFromIsoDate:self.events[section][@"date"]];
-//    //NSString *relativeDate = [self.eventsA[section][@"date"] phFormattedNoTime];
-//    
-//    
-//    EventsHeader *seperator = [self.eventsList dequeueReusableCellWithIdentifier:[[EventsHeader class] description]];
-//    
-//    if(!seperator)
-//    {
-//        seperator = [[EventsHeader alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:[[EventsHeader class] description]];
-//    }
-//    
-//    //2015-02-12T00:00:00-05:00
-//    
-//    
-//    //2015-02-12T00:00:00-05:00
-//    if(self.isEventsLoaded)
-//    {
-//       // NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-//        //[dateFormatter setDateFormat:@"YYYY-MM-dd'T'HH:mm:ss'"];
-//        //NSDate *date = [dateFormatter dateFromString:[self.eventsA[section][@"date"] substringToIndex:19]];
-//        
-//        //seperator.dateStrg = [self.eventsA[section][@"date"] substringToIndex:19];
-//        //NSLog(@"DATE_ :: %@",self.eventsA[section][@"date"]);
-//        //[dateFormatter setDateFormat:@"EEEE"];
-//        //NSString *dateWithNewFormat = [dateFormatter stringFromDate:date];
-//        seperator.sectionHeaderLabel.text = [[self.eventsA objectAtIndex:section][@"date_day"] uppercaseString];//dateWithNewFormat;
-//        
-//        seperator.btnDown.hidden = (section == [self.eventsA count] - 1);
-//        seperator.btnUp.hidden = (section == 0);
-//    }else{
-//        seperator.btnDown.hidden = YES;
-//        seperator.btnUp.hidden = YES;
-//    }
-//    return seperator;
-//}
 
 #pragma mark - UITableViewDelegate
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -744,6 +677,8 @@
     EventsRowCell *eventsRowCell = (EventsRowCell*)cell;
     [eventsRowCell wentOffscreen];
 }
+
+#pragma mark - Navigations
 
 //2nd Screen (VENUE+LIST)
 -(void)goToSummary
