@@ -18,7 +18,7 @@
 
 @property(nonatomic,strong) UILabel *nameTitle;
 @property(nonatomic,strong) UserBubble *userImg;
-@property(nonatomic,strong) UILabel *infoBody;
+//@property(nonatomic,strong) UILabel *infoBody;
 @property(nonatomic,strong) SelectionButton *btnInvite;
 @property(nonatomic,strong) NSMutableDictionary *mainDict;
 @property(nonatomic,strong) NSMutableDictionary *userDict;

@@ -28,7 +28,7 @@
         self.selectionStyle = UITableViewCellSelectionStyleNone;
         self.backgroundColor = [UIColor whiteColor];
         
-        self.nameTitle = [[UILabel alloc] initWithFrame:CGRectMake(70, 24, self.sharedData.screenWidth - 100 - 90, 20)];
+        self.nameTitle = [[UILabel alloc] initWithFrame:CGRectMake(70, 32, self.sharedData.screenWidth - 100 - 90, 20)];
         self.nameTitle.adjustsFontSizeToFitWidth = YES;
         self.nameTitle.textColor = [UIColor blackColor];
         //self.nameTitle.backgroundColor = [UIColor redColor];
@@ -39,7 +39,7 @@
         [self.userImg addTarget:self action:@selector(userIconClicked:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:self.userImg];
         
-        self.btnInvite = [[SelectionButton alloc] initWithFrame:CGRectMake(self.sharedData.screenWidth-100-11, 16, 100, 32)];
+        self.btnInvite = [[SelectionButton alloc] initWithFrame:CGRectMake(self.sharedData.screenWidth-100-11, 24, 100, 32)];
         [self.btnInvite.button setTitle:@"" forState:UIControlStateNormal];
         [self.btnInvite.button addTarget:self action:@selector(inviteGuestButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:self.btnInvite];
@@ -49,17 +49,16 @@
         self.btnInvite.offBorderColor = [UIColor phPurpleColor];
         self.btnInvite.hidden = YES;
         
-        self.infoBody = [[UILabel alloc] init];
-        //self.infoBody.backgroundColor = [UIColor redColor];
-        self.infoBody.textColor = [UIColor phDarkGrayColor];
-        self.infoBody.numberOfLines = 2;
-        self.infoBody.adjustsFontSizeToFitWidth = NO;
-        self.infoBody.lineBreakMode = NSLineBreakByTruncatingTail;
-        self.infoBody.font = [UIFont phBlond:12];
-        self.infoBody.textAlignment = NSTextAlignmentLeft;
-        self.infoBody.userInteractionEnabled = NO;
+//        self.infoBody = [[UILabel alloc] init];
+//        self.infoBody.textColor = [UIColor phDarkGrayColor];
+//        self.infoBody.numberOfLines = 2;
+//        self.infoBody.adjustsFontSizeToFitWidth = NO;
+//        self.infoBody.lineBreakMode = NSLineBreakByTruncatingTail;
+//        self.infoBody.font = [UIFont phBlond:12];
+//        self.infoBody.textAlignment = NSTextAlignmentLeft;
+//        self.infoBody.userInteractionEnabled = NO;
         
-        [self addSubview:self.infoBody];
+//        [self addSubview:self.infoBody];
     }
     return self;
 }
@@ -77,16 +76,16 @@
     self.nameTitle.text = [firstName uppercaseString];
     
     //Get the ABOUT for the user
-    NSString *aboutText = self.userDict[@"about"];
-    if(aboutText==NULL) aboutText = @"";
-    else if ([aboutText length]==0) aboutText = @"";
-    self.infoBody.frame = CGRectMake(self.nameTitle.frame.origin.x, self.nameTitle.frame.origin.y + self.nameTitle.frame.size.height + 15, self.sharedData.screenWidth - 110 - 16 + 28, 28);
-    NSMutableAttributedString* attrString = [[NSMutableAttributedString alloc] initWithString:aboutText];
-    NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
-    [style setLineSpacing:4];
-    [attrString addAttribute:NSParagraphStyleAttributeName value:style range:NSMakeRange(0, [aboutText length])];
-    self.infoBody.attributedText = attrString;
-    [self.infoBody sizeToFit];
+//    NSString *aboutText = self.userDict[@"about"];
+//    if(aboutText==NULL) aboutText = @"";
+//    else if ([aboutText length]==0) aboutText = @"";
+//    self.infoBody.frame = CGRectMake(self.nameTitle.frame.origin.x, self.nameTitle.frame.origin.y + self.nameTitle.frame.size.height + 15, self.sharedData.screenWidth - 110 - 16 + 28, 28);
+//    NSMutableAttributedString* attrString = [[NSMutableAttributedString alloc] initWithString:aboutText];
+//    NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
+//    [style setLineSpacing:4];
+//    [attrString addAttribute:NSParagraphStyleAttributeName value:style range:NSMakeRange(0, [aboutText length])];
+//    self.infoBody.attributedText = attrString;
+//    [self.infoBody sizeToFit];
     
     //self.infoBody.text = @"At very least, using the .contentInset property allows you to place your fields with the positions, and accommodate the deviations without offsetting your UITextViews.  At very least, using the .contentInset property allows you to place your fields with the positions, and accommodate the deviations without offsetting your UITextViews.";
     

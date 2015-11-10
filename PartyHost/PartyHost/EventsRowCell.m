@@ -48,6 +48,12 @@
         self.mainImg.layer.masksToBounds = YES;
         [self addSubview:self.mainImg];
         
+        self.dimView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.mainImg.bounds.size.width, self.mainImg.bounds.size.height)];
+        self.dimView.backgroundColor = [UIColor blackColor];
+        self.dimView.alpha = 0.5;
+        self.dimView.hidden = YES;
+        [self addSubview:self.dimView];
+        
         self.date = [[UILabel alloc] initWithFrame:CGRectMake(10, CGRectGetMaxY(self.mainImg.frame) + 10, self.sharedData.screenWidth - 20, 18)];
         self.date.textColor = [UIColor blackColor];
         self.date.adjustsFontSizeToFitWidth = YES;
@@ -84,6 +90,14 @@
          object:nil];
     }
     return self;
+}
+
+- (void)setHighlighted:(BOOL)highlighted animated:(BOOL)animated {
+    [UIView animateWithDuration:0.15 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+        self.dimView.hidden = !highlighted;
+    } completion:^(BOOL finished) {
+        
+    }];
 }
 
 -(void)clearData

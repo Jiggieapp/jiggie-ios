@@ -46,6 +46,7 @@
     self.hideView = [[UIView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(tabBar.frame), self.sharedData.screenWidth, 40)];
     self.hideView.backgroundColor = [UIColor clearColor];
     [self.mainCon addSubview:self.hideView];
+    self.hideView.hidden = YES;
     
     self.hideTitle = [[UILabel alloc] initWithFrame:CGRectMake(14, 18, frame.size.width-80, 20)];
     self.hideTitle.text = @"Socialize";
@@ -232,14 +233,6 @@
     
     //Special messages for guest and host
     [self.emptyView setData:@"Check back soon" subtitle:@"Browse some events and your social feed will show members who are also interested in those same events." imageNamed:@"PickIcon"];
-    /*
-    if(![self.sharedData isMember]) {
-        [self.emptyView setData:@"Check back soon" subtitle:@"Browse some events and your social feed will show your invites from party hosts." imageNamed:@"PickIcon"];
-    }
-    else {
-        [self.emptyView setData:@"Check back soon" subtitle:@"Browse some events and your social feed will show members who are also interested in those same events." imageNamed:@"PickIcon"];
-    }
-     */
 }
 
 -(void)loadData
@@ -321,10 +314,12 @@
          
          //Show empty
          if(self.feedData.count == 0) {
+             self.hideView.hidden = YES;
              self.feedTable.hidden = YES;
              [self.emptyView setMode:@"empty"];
          }
          else {
+             self.hideView.hidden = NO;
              self.feedTable.hidden = !(self.sharedData.matchMe);;
              [self.emptyView setMode:@"hide"];
          }

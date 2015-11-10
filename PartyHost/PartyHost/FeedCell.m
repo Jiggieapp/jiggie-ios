@@ -217,13 +217,16 @@
         self.nameLabel.textAlignment = NSTextAlignmentCenter;
         [self.cardOne addSubview:self.nameLabel];
         
-        self.eventLabel = [UIButton buttonWithType:UIButtonTypeRoundedRect];//[[UILabel alloc] initWithFrame:CGRectMake(0, 280, self.sharedData.screenWidth, 30)];
-        self.eventLabel.frame = CGRectMake(0, 272 - OffSet + OffSetLargeDevice * 0.7, self.sharedData.screenWidth, 30);
+        self.eventLabel = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+        self.eventLabel.frame = CGRectMake(0, 280 - OffSet + OffSetLargeDevice * 0.7, self.sharedData.screenWidth, 40);
         self.eventLabel.titleLabel.textColor = [self.sharedData colorWithHexString:@"5c5c5c"];
         [self.eventLabel setTitleColor:[self.sharedData colorWithHexString:@"5c5c5c"] forState:UIControlStateNormal];
-        //self.eventLabel.titleLabel.font = [UIFont phBlond:14];
         self.eventLabel.titleLabel.font = [UIFont phBlond:13 + OffsetFontLargeDevice];
         self.eventLabel.titleLabel.textAlignment = NSTextAlignmentCenter;
+        self.eventLabel.titleLabel.lineBreakMode = NSLineBreakByWordWrapping;
+        self.eventLabel.titleLabel.numberOfLines = 2;
+        self.eventLabel.contentVerticalAlignment = UIControlContentVerticalAlignmentTop;
+        [self.eventLabel setTitleEdgeInsets:UIEdgeInsetsMake(0, 30, 0, 30)];
         [self.eventLabel addTarget:self action:@selector(eventInfoHandler) forControlEvents:UIControlEventTouchUpInside];
         [self.cardOne addSubview:self.eventLabel];
         
@@ -251,9 +254,13 @@
         [self.cardTwo addSubview:self.nameLabelTwo];
         
         self.eventLabelTwo = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-        self.eventLabelTwo.frame = CGRectMake(0, 80 - OffSet/3 + OffSetLargeDevice * 0.3, self.sharedData.screenWidth, 30);
+        self.eventLabelTwo.frame = CGRectMake(0, 86 - OffSet/3 + OffSetLargeDevice * 0.3, self.sharedData.screenWidth, 40);
         [self.eventLabelTwo setTitleColor:[self.sharedData colorWithHexString:@"5c5c5c"] forState:UIControlStateNormal];
-        
+        self.eventLabelTwo.titleLabel.lineBreakMode = NSLineBreakByWordWrapping;
+        self.eventLabelTwo.titleLabel.textAlignment = NSTextAlignmentCenter;
+        self.eventLabelTwo.titleLabel.numberOfLines = 2;
+        self.eventLabelTwo.contentVerticalAlignment = UIControlContentVerticalAlignmentTop;
+        [self.eventLabelTwo setTitleEdgeInsets:UIEdgeInsetsMake(0, 30, 0, 30)];
         [self.eventLabelTwo addTarget:self action:@selector(eventInfoHandler) forControlEvents:UIControlEventTouchUpInside];
         self.eventLabelTwo.titleLabel.font = [UIFont phBlond:15 + OffsetFontLargeDevice];
         [self.cardTwo addSubview:self.eventLabelTwo];
@@ -353,7 +360,7 @@
     NSString *first_name = [self.sharedData capitalizeFirstLetter:self.mainData[@"from_first_name"]];
     self.nameLabel.text = [NSString stringWithFormat:@"%@ is also interested in",first_name];
     [self.eventLabel setTitle:[NSString stringWithFormat:@"%@",self.mainData[@"event_name"]] forState:UIControlStateNormal];
-    
+    NSLog(@"NUMBER OF LINE :: %li", self.eventLabel.titleLabel.numberOfLines);
     
     if([self.sharedData.ABTestChat isEqualToString:@"YES"])
     {

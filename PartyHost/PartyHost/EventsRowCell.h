@@ -21,6 +21,8 @@
 @property(nonatomic,strong) PHImage         *mainImg;
 @property(nonatomic,strong) NSString        *picURL;
 
+@property(nonatomic, strong) UIView         *dimView;
+
 @property(nonatomic,strong) UIView          *tagsView;
 
 @property(nonatomic,strong) UIView          *tmpWhiteView;
