@@ -41,6 +41,11 @@
         
         [sharedData.setupPage apnAskingDoneHandler];
         
+        sharedData.isInAskingNotification = YES;
+        [[NSNotificationCenter defaultCenter]
+         postNotificationName:@"ASK_APN_PERMISSION"
+         object:self];
+        
         /*
         
         sharedData.isInAskingNotification = YES;

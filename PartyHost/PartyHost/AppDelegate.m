@@ -539,7 +539,7 @@ static NSString *const kAllowTracking = @"allowTracking";
      postNotificationName:@"APN_LOADED"
      object:self];
     
-    [self.sharedData.setupPage apnAskingDoneHandler];
+//    [self.sharedData.setupPage apnAskingDoneHandler];
     /*
     [[NSNotificationCenter defaultCenter]
      postNotificationName:@"APN_ASKING_DONE"
