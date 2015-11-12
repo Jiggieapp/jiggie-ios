@@ -26,11 +26,11 @@
     
     self.cGuestListingIndexPath = nil;
     
-    
+    self.isLoading = NO;
     self.isEventsLoaded = NO;
     self.didLoadFromHostings = NO;
     self.didLoadFromInvite = NO;
-    self.isLoading = NO;
+    
     
     
     

@@ -23,7 +23,7 @@
     
     
     UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(0, 20, frame.size.width, 40)];
-    title.text = @"Party Host Upgrade";
+    title.text = @"Jiggie Upgrade";
     title.textAlignment = NSTextAlignmentCenter;
     title.textColor = [UIColor whiteColor];
     title.font = [UIFont phBold:21];
@@ -32,7 +32,7 @@
     
     
     UITextView *upgradeTxt = [[UITextView alloc] initWithFrame:CGRectMake(20, 140, self.sharedData.screenWidth - 40, 200)];
-    upgradeTxt.text = @"There is a new version of \nParty Host!\n Please tap below to upgrade!";
+    upgradeTxt.text = @"There is a new version of \nJiggie!\n Please tap below to upgrade!";
     upgradeTxt.textAlignment = NSTextAlignmentCenter;
     upgradeTxt.font = [UIFont phBlond:18];
     [self addSubview:upgradeTxt];
@@ -48,6 +48,7 @@
     btnUpgrade.layer.masksToBounds = YES;
     btnUpgrade.layer.cornerRadius = 10.0;
     btnUpgrade.backgroundColor = [UIColor phPurpleColor];
+    btnUpgrade.titleEdgeInsets = UIEdgeInsetsMake(4, 0, 0, 0);
     //btnUpgrade.hidden = YES;
     //btnUpgrade.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
     [self addSubview:btnUpgrade];
@@ -62,7 +63,7 @@
 
 -(void)btnTapHandler
 {
-    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://itunes.apple.com/us/app/partyhost-app/id906484188"]];
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://itunes.apple.com/us/app/jiggie-social-event-discovery/id1047291489"]];
 }
 
 
