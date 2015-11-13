@@ -136,7 +136,7 @@
     
     //Review count
     self.reviewLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 24 + 6, self.sharedData.screenWidth, 24)];
-    self.reviewLabel.text = @"4.0 PartyHost Rating, 10 Reviews";
+    self.reviewLabel.text = @"4.0 Jiggie Rating, 10 Reviews";
     self.reviewLabel.textAlignment = NSTextAlignmentCenter;
     self.reviewLabel.font = [UIFont phBlond:10];
     self.reviewLabel.textColor = [UIColor colorFromHexCode:@"5C5C5C"];
@@ -477,7 +477,7 @@
     if(reviewCount>0)
     {
         float rating = [self.memberProfileDict[@"rating"] floatValue];
-        self.reviewLabel.text = [NSString stringWithFormat:@"%.02f PartyHost score, %i review%@",rating,reviewCount,(reviewCount==1)?@"":@"s"];
+        self.reviewLabel.text = [NSString stringWithFormat:@"%.02f Jiggie score, %i review%@",rating,reviewCount,(reviewCount==1)?@"":@"s"];
         [self.reviewRatingView updateRating:nil stars:rating];
     }
     else

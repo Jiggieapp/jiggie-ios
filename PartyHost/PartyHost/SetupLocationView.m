@@ -31,14 +31,14 @@
     {
         if (&UIApplicationOpenSettingsURLString != NULL)
         { //iOS 8
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Location Services" message:@"Please go to your settings and enable location services for Party Host." delegate:self cancelButtonTitle:nil otherButtonTitles:@"Okay", nil];
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Location Services" message:@"Please go to your settings and enable location services for Jiggie." delegate:self cancelButtonTitle:nil otherButtonTitles:@"Okay", nil];
             alert.tag = 1;
             [alert show];
             return NO;
         }
         else
         {  //Old OS
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Location Services" message:@"Please go to your settings and enable location services for Party Host." delegate:nil cancelButtonTitle:nil otherButtonTitles:@"Okay", nil];
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Location Services" message:@"Please go to your settings and enable location services for Jiggie." delegate:nil cancelButtonTitle:nil otherButtonTitles:@"Okay", nil];
             [alert show];
             return NO;
         }

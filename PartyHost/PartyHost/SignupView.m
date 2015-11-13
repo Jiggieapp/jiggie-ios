@@ -328,6 +328,11 @@
              [self checkIfAPNisLoaded];
          }else{
              [[NSNotificationCenter defaultCenter] postNotificationName:@"HIDE_LOADING" object:self];
+             
+             [FBSDKAccessToken setCurrentAccessToken:nil];
+             FBSDKLoginManager *logMeOut = [[FBSDKLoginManager alloc] init];
+             [logMeOut logOut];
+             
              //[FBSession.activeSession closeAndClearTokenInformation];
              self.didFBInitInfo = NO;
              UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Login Error" message:@"There was an issue logging in, please try again" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
@@ -373,7 +378,7 @@
                               if(!canDo)
                               {
                                   self.didFBInitInfo = NO;
-                                  //[self clearLogin:self.currentUser[@"id"]];
+                                  [self clearLogin:self.currentUser[@"id"]];
                                   
                                   errorMessage = [errorMessage substringToIndex:[errorMessage length] - 1];
                                   
@@ -860,30 +865,21 @@
 
 -(void)clearLogin:(NSString *)fb_id
 {
-    /*
-    [FBRequestConnection startWithGraphPath:@"/me/permissions"
-                                 parameters:nil
-                                 HTTPMethod:@"DELETE"
-                          completionHandler:^(
-                                              FBRequestConnection *connection,
-                                              id result,
-                                              NSError *error
-                                              ) {
-                    
-                              
-                              NSLog(@"PERMISSION_DELETE_RESULT");
-                              NSLog(@"%@",result);
-    
-                              [FBSession.activeSession closeAndClearTokenInformation];
-                              
-                              [[NSNotificationCenter defaultCenter]
-                               postNotificationName:@"HIDE_LOADING"
-                               object:self];
-                          }];
-    
-    */
+    [[[FBSDKGraphRequest alloc] initWithGraphPath:@"me/permissions"
+                                       parameters:nil
+                                       HTTPMethod:@"DELETE"]
+     startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
+         NSLog(@"PERMISSION_DELETE_RESULT");
+         NSLog(@"%@",result);
+         
+         [FBSDKAccessToken setCurrentAccessToken:nil];
+         FBSDKLoginManager *logMeOut = [[FBSDKLoginManager alloc] init];
+         [logMeOut logOut];
+         
+         [[NSNotificationCenter defaultCenter]
+          postNotificationName:@"HIDE_LOADING"
+          object:self];
+     }];
 }
-
-
 
 @end

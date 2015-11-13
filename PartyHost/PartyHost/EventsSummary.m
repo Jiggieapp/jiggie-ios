@@ -36,9 +36,10 @@
     [self.tabBar addSubview:self.btnBack];
     
     self.btnInfo = [UIButton buttonWithType:UIButtonTypeCustom];
-    self.btnInfo.frame = CGRectMake(self.sharedData.screenWidth - (93/4) - 5, 4 + 20, 93/5, 128/5);
+    self.btnInfo.frame = CGRectMake(self.sharedData.screenWidth - (93/4) - 8, 2 + 20, 28, 36);
     [self.btnInfo setImage:[UIImage imageNamed:@"share_action"] forState:UIControlStateNormal];
     self.btnInfo.imageView.contentMode = UIViewContentModeScaleAspectFit;
+    self.btnInfo.imageEdgeInsets = UIEdgeInsetsMake(4, 4, 4, 4);
     [self.btnInfo addTarget:self action:@selector(goShareHandler) forControlEvents:UIControlEventTouchUpInside];
     self.btnInfo.hidden = YES;
     [self.tabBar addSubview:self.btnInfo];

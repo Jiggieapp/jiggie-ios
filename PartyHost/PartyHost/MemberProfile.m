@@ -98,7 +98,7 @@
     
     //Review count
     self.reviewLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 24 + 6, self.sharedData.screenWidth, 24)];
-    self.reviewLabel.text = @"4.0 PartyHost Rating, 10 Reviews";
+    self.reviewLabel.text = @"4.0 Jiggie Rating, 10 Reviews";
     self.reviewLabel.textAlignment = NSTextAlignmentCenter;
     self.reviewLabel.font = [UIFont phBlond:10];
     self.reviewLabel.textColor = [UIColor colorFromHexCode:@"5C5C5C"];
