@@ -93,6 +93,7 @@ static NSString *const kAllowTracking = @"allowTracking";
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     
+    /*
     if(![defaults objectForKey:@"FIRST_RUN"])
     {
         [self.sharedData trackMixPanelWithDict:@"Install" withDict:@{}];
@@ -101,7 +102,7 @@ static NSString *const kAllowTracking = @"allowTracking";
         [defaults setValue:@"YES" forKey:@"FIRST_RUN"];
         [defaults synchronize];
     }
-    
+    */
     
     
     

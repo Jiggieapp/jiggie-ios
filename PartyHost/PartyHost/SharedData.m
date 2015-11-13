@@ -631,24 +631,70 @@ static SharedData *sharedInstance = nil;
     Mixpanel *mixpanel = [Mixpanel sharedInstance];
     [mixpanel identify:self.fb_id];
     NSString *location = [self.userDict[@"location"] lowercaseString];
+    NSString *birthday = self.userDict[@"birthday"];
+    NSString *age = @"";
+    NSString *first_name = [self.userDict objectForKey:@"first_name"];
+    NSString *last_name = [self.userDict objectForKey:@"last_name"];
+    NSString *email = [self.userDict objectForKey:@"email"];
     
-    [mixpanel registerSuperProperties:@{@"account_type": self.account_type}];
+    
+    if([birthday length]==10)
+    {
+        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+        [formatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US"]];
+        [formatter setDateFormat:@"MM/dd/yyyy"];
+        NSDateComponents* ageComponents = [[NSCalendar currentCalendar]
+                                           components:NSCalendarUnitYear
+                                           fromDate:[formatter dateFromString:birthday]
+                                           toDate:[NSDate date]
+                                           options:0];
+        int num_age = (int)[ageComponents year];
+        if(num_age>0) {age = [NSString stringWithFormat: @"%d", num_age];} //Sanity check
+    }
+    
+    [mixpanel registerSuperProperties:@{@"age": age}];
+    //[mixpanel registerSuperProperties:@{@"account_type": self.account_type}];
     [mixpanel registerSuperProperties:@{@"gender": self.gender}];
     [mixpanel registerSuperProperties:@{@"gender_interest": self.gender_interest}];
     [mixpanel registerSuperProperties:@{@"os_version": [UIDevice currentDevice].systemVersion}];
     [mixpanel registerSuperProperties:@{@"device_type": self.deviceType}];
     [mixpanel registerSuperProperties:@{@"location": location}];
     [mixpanel registerSuperProperties:@{@"app_version":PHVersion}];
+    [mixpanel registerSuperProperties:@{@"email":email}];
     
+    
+    [mixpanel registerSuperProperties:@{@"first_name": first_name}];
+    [mixpanel registerSuperProperties:@{@"last_name": last_name}];
+    [mixpanel registerSuperProperties:@{@"birthday": birthday}];
+    
+    
+    NSString *facebookId = [self.userDict objectForKey:@"fb_id"];
+    
+    [mixpanel registerSuperProperties:
+  @{@"name_and_fb_id": [NSString stringWithFormat:@"%@_%@_%@",first_name,last_name,facebookId]}];
     
     NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
-    [dict setObject:self.account_type forKey:@"account_type"];
+    //[dict setObject:self.account_type forKey:@"account_type"];
     [dict setObject:self.gender forKey:@"gender"];
     [dict setObject:self.gender_interest forKey:@"gender_interest"];
     [dict setObject:[UIDevice currentDevice].systemVersion forKey:@"os_version"];
     [dict setObject:self.deviceType forKey:@"device_type"];
     [dict setObject:location forKey:@"location"];
     [dict setObject:PHVersion forKey:@"app_version"];
+    
+    
+    
+    [dict setObject:first_name forKey:@"first_name"];
+    [dict setObject:last_name forKey:@"last_name"];
+    [dict setObject:birthday forKey:@"birthday"];
+    [dict setObject:email forKey:@"email"];
+    [dict setObject:location forKey:@"location"];
+    [dict setObject:age forKey:@"age"];
+    [dict setObject:facebookId forKey:@"fb_id"];
+    [dict setObject:PHVersion forKey:@"app_version"];
+    [dict setObject:[NSString stringWithFormat:@"%@_%@_%@",first_name,last_name,facebookId] forKey:@"name_and_fb_id"];
+    
+    
     
     [self syncSuperPropertiesOnServer:dict];
 }
@@ -688,6 +734,15 @@ static SharedData *sharedInstance = nil;
     [mixpanel.people set:@{@"age": age}];
     [mixpanel.people set:@{@"email": email}];
     [mixpanel.people set:@{@"fb_id": facebookId}];
+    
+    
+    [mixpanel.people set:@{@"gender": self.gender}];
+    [mixpanel.people set:@{@"gender_interest": self.gender_interest}];
+    [mixpanel.people set:@{@"app_version": PHVersion}];
+    
+    
+    
+    
     
     
     [mixpanel.people set:@{@"name_and_fb_id": [NSString stringWithFormat:@"%@_%@_%@",first_name,last_name,facebookId]}];

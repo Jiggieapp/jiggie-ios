@@ -182,6 +182,31 @@ int totalPages;
 //Fake click the fb login view
 - (IBAction)buttonClicked:(id)sender {
     
+    
+    if(pageIndex == 0)
+    {
+        [self.sharedData trackMixPanelWithDict:@"Walkthrough Gender" withDict:@{}];
+    }
+    
+    if(pageIndex == 1)
+    {
+        [self.sharedData trackMixPanelWithDict:@"Walkthrough Tags" withDict:@{}];
+    }
+    
+    
+    if(pageIndex == 2)
+    {
+        [self.sharedData trackMixPanelWithDict:@"Walkthrough Push Notifications" withDict:@{}];
+    }
+    
+    
+    if(pageIndex == 3)
+    {
+        [self.sharedData trackMixPanelWithDict:@"Walkthrough Location" withDict:@{}];
+    }
+    
+    
+    
     //Walkthrough ended
     if(pageIndex==2) { //Notifications
         if([self.notificationView.notificationSwitch isOn])
@@ -259,6 +284,10 @@ int totalPages;
          NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
          [defaults setObject:@"YES" forKey:@"SHOWED_WALKTHROUGH"];
          [defaults synchronize];
+         
+         
+         [self.sharedData trackMixPanelWithDict:@"Completed Walkthrough" withDict:@{}];
+         
          
      } failure:^(AFHTTPRequestOperation *operation, NSError *error)
      {

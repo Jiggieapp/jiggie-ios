@@ -567,6 +567,8 @@
              self.sharedData.matchMe = [responseObject[@"matchme"] boolValue];
              self.sharedData.feedBadge.hidden = !(self.sharedData.matchMe);
              self.sharedData.feedBadge.canShow = self.sharedData.matchMe;
+             NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+             
              
              if([responseObject[@"is_new_user"] boolValue])
              {
@@ -575,8 +577,26 @@
                  [self.sharedData setMixPanelOnceParams];
              }else{
                  [self.sharedData setMixPanelOnLogin];
-                 [self.sharedData trackMixPanelWithDict:@"Log In" withDict:@{}];
+                
+                 NSString *isFirst = ([defaults objectForKey:@"FIRST_RUN"])?@"NO":@"YES";
+                 
+                 
+                 [self.sharedData trackMixPanelWithDict:@"Log In" withDict:@
+                 {
+                     @"new_device":isFirst
+                 }];
                  [self.sharedData trackMixPanelIncrementWithDict:@{@"login_count":@1}];
+             }
+             
+             
+             
+             if(![defaults objectForKey:@"FIRST_RUN"])
+             {
+                 [self.sharedData trackMixPanelWithDict:@"Install" withDict:@{}];
+                 
+                 //[self.sharedData trackMixPanel:@"ios-party-host-install"];
+                 [defaults setValue:@"YES" forKey:@"FIRST_RUN"];
+                 [defaults synchronize];
              }
              
              [self.sharedData setMixPanelUserProfile];

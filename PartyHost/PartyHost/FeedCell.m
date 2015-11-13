@@ -375,6 +375,9 @@
     
     [self.eventLabelTwo setTitle:[NSString stringWithFormat:@"%@",self.mainData[@"event_name"]] forState:UIControlStateNormal];
     
+    
+    //NSLog(@"TYPE_______ :: %@",self.mainData[@"type"]);
+    
     /*
      //from_first_name
     NSString* fbId = dict[@"user"][@"fb_id"];
@@ -566,8 +569,12 @@
     }else{
         val = @"Chat";
     }
+    
+    // [paramsToSend setObject:[self.feedData objectAtIndex:0][@"type"] forKey:@"feed_item_type"];
+    
     [self.sharedData trackMixPanelWithDict:@"Accept Feed Item" withDict:@{
-                                                                        @"ABTestChat":val
+                                                                        @"ABTestChat":val,
+                                                                        @"feed_item_type":self.mainData[@"type"]
                                                                         }];
     
     
@@ -617,7 +624,8 @@
         val = @"Chat";
     }
     [self.sharedData trackMixPanelWithDict:@"Passed Feed Item" withDict:@{
-                                                                          @"ABTestChat":val
+                                                                          @"ABTestChat":val,
+                                                                          @"feed_item_type":self.mainData[@"type"]
                                                                           }];
     
     

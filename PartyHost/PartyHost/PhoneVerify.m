@@ -365,7 +365,7 @@
      }];
     
     
-    [self.sharedData trackMixPanelWithDict:@"Phone Verification View" withDict:@{}];
+    [self.sharedData trackMixPanelWithDict:@"View Phone Verification" withDict:@{}];
 }
 
 //Special scroll up for iPhone4 short screens

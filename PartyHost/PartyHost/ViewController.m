@@ -397,7 +397,7 @@
     [tmpDict setObject:self.sharedData.userDict[@"birthday"] forKey:@"Inviter Birthday"];
     [tmpDict setObject:@"general" forKey:@"type"];
     
-    [self.sharedData trackMixPanelWithDict:@"INVITE_GENERAL" withDict:tmpDict];
+    //[self.sharedData trackMixPanelWithDict:@"INVITE_GENERAL" withDict:tmpDict];
     
     //[self.sharedData trackMixPanel:@"display_login"];
     
@@ -461,7 +461,7 @@
     
     
     
-    [self.sharedData trackMixPanelWithDict:@"INVITE_HOSTING" withDict:params];
+    //[self.sharedData trackMixPanelWithDict:@"INVITE_HOSTING" withDict:params];
     
     NSLog(@"INVITE_LINK_PARAMS :: %@",params);
     

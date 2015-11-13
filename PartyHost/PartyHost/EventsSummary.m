@@ -258,11 +258,43 @@
      self.sharedData.cHostVenuePicURL = [Constants eventImageURL:self.sharedData.selectedEvent[@"_id"]]; //Need for SHARE HOSTING
      */
     
+    
+    [self.sharedData.mixPanelCEventDict removeAllObjects];
+    [self.sharedData.mixPanelCEventDict setObject:self.sharedData.eventDict[@"_id"] forKey:@"Event Id"];
+    [self.sharedData.mixPanelCEventDict setObject:self.sharedData.eventDict[@"title"] forKey:@"Event Name"];
+    [self.sharedData.mixPanelCEventDict setObject:self.sharedData.eventDict[@"start_datetime_str"] forKey:@"Event Start Time"];
+    [self.sharedData.mixPanelCEventDict setObject:self.sharedData.eventDict[@"end_datetime_str"] forKey:@"Event End Time"];
+    [self.sharedData.mixPanelCEventDict setObject:self.sharedData.eventDict[@"description"] forKey:@"Event Description"];
+    [self.sharedData.mixPanelCEventDict setObject:self.sharedData.eventDict[@"venue_name"] forKey:@"Event Venue Name"];
+    [self.sharedData.mixPanelCEventDict setObject:self.sharedData.eventDict[@"venue"][@"neighborhood"] forKey:@"Event Venue Neighborhood"];
+    [self.sharedData.mixPanelCEventDict setObject:self.sharedData.eventDict[@"venue"][@"city"] forKey:@"Event Venue City"];
+    //[self.sharedData.mixPanelCEventDict setObject:responseObject[@"venue"][@"state"] forKey:@"Event Venue State"];
+    [self.sharedData.mixPanelCEventDict setObject:self.sharedData.eventDict[@"venue"][@"description"] forKey:@"Event Venue Description"];
+    [self.sharedData.mixPanelCEventDict setObject:self.sharedData.eventDict[@"venue"][@"zip"] forKey:@"Event Venue Zip"];
+    
+    
+    
+    NSMutableDictionary *tmpDict = [[NSMutableDictionary alloc] init];
+    [tmpDict setObject:self.sharedData.userDict[@"first_name"] forKey:@"Inviter First Name"];
+    [tmpDict setObject:self.sharedData.userDict[@"last_name"] forKey:@"Inviter Last Name"];
+    [tmpDict setObject:[NSString stringWithFormat:@"%@ %@",self.sharedData.userDict[@"first_name"],self.sharedData.userDict[@"last_name"]] forKey:@"Inviter Whole Name"];
+    [tmpDict setObject:self.sharedData.userDict[@"fb_id"] forKey:@"Inviter FB ID"];
+    [tmpDict setObject:self.sharedData.userDict[@"email"] forKey:@"Inviter Email"];
+    [tmpDict setObject:self.sharedData.userDict[@"gender"] forKey:@"Inviter Gender"];
+    [tmpDict setObject:self.sharedData.userDict[@"birthday"] forKey:@"Inviter Birthday"];
+    [tmpDict setObject:@"event" forKey:@"type"];
+    
+    [self.sharedData.mixPanelCEventDict addEntriesFromDictionary:tmpDict];
+    
+    
     self.sharedData.shareHostingId = self.event_id;
     
     self.sharedData.shareHostingVenueName = self.sharedData.eventDict[@"venue_name"];
     
     self.sharedData.cHostVenuePicURL = self.sharedData.eventDict[@"photos"][0];
+    
+    [self.sharedData trackMixPanelWithDict:@"Share Event" withDict:self.sharedData.mixPanelCEventDict];
+    
     
     [[NSNotificationCenter defaultCenter] postNotificationName:@"SHOW_HOSTING_INVITE" object:self];
 }
