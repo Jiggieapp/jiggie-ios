@@ -226,7 +226,8 @@ int totalPages;
         }
     }
     else if(pageIndex==3) { //Location
-        if([self.locationView commitChanges]==YES) //Dont move on if there was an error
+        ;
+        if([self.locationView commitChanges]) //Dont move on if there was an error
         {
             self.isAnimating = NO;
             [self saveAndExitWalkthrough];
@@ -236,6 +237,13 @@ int totalPages;
     
     //Next page
     pageIndex++;
+    
+    if(pageIndex > 3)
+    {
+        pageIndex = 3;
+    }
+    
+    
     if(pageIndex==totalPages-1) {
         [self.button setTitle:@"DONE" forState:UIControlStateNormal];
     }
