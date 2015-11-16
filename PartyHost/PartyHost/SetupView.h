@@ -27,6 +27,9 @@
 @property (strong, nonatomic) SetupLocationView *locationView;
 @property (strong, nonatomic) NSTimer* locationTimer;
 
+@property (assign, nonatomic) BOOL isAnimating;
+
+
 - (void)initClass;
 -(void)apnAskingDoneHandler;
 @end

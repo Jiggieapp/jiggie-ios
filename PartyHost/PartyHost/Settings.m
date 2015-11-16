@@ -109,7 +109,7 @@
         
     }
     else if (section==1) {
-        return 2;
+        return 1;
     }
     else if (section==2) {
         return 2;
@@ -154,7 +154,7 @@
             sectionName = @"Notifications";
             break;
         case 1:
-            sectionName = @"Gender";
+            sectionName = @"Gender Interest";
             break;
         case 2:
             sectionName = @"Documents";
@@ -288,7 +288,7 @@
             cell.detailTextLabel.textColor = [UIColor phPurpleColor];
         }
         
-        if(indexPath.row==0)
+        if(indexPath.row==1)
         {
             cell.textLabel.text = @"I am a";
             if([self.sharedData.gender isEqualToString:@"female"])
@@ -301,7 +301,7 @@
             }
             return cell;
         }
-        else if(indexPath.row==1)
+        else if(indexPath.row==0)
         {
             cell.textLabel.text = @"Interested in meeting";
             [cell.textLabel sizeToFit];
@@ -383,7 +383,7 @@
     else if (indexPath.section==1) //Gender
     {
         //UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-        if(indexPath.row==0)
+        if(indexPath.row==1)
         {
             if([self.sharedData.gender isEqualToString:@"female"]) {
                 self.sharedData.gender = @"male";
@@ -393,7 +393,7 @@
                 //self.sharedData.gender_interest = @"male";
             }
             [self saveSettings];
-        } else if(indexPath.row==1) {
+        } else if(indexPath.row==0) {
             if([self.sharedData.gender_interest isEqualToString:@"female"]) {
                 self.sharedData.gender_interest = @"male";
                 //self.sharedData.gender = @"female";

@@ -22,7 +22,7 @@ int totalPages;
     {
         self = [[[NSBundle mainBundle] loadNibNamed:@"Setup" owner:self options:nil] objectAtIndex:0];
         [self setFrame:frame];
-        
+        self.isAnimating = NO;
         //Init
         pageControlUsed = NO;
         pageIndex = 0;
@@ -59,6 +59,7 @@ int totalPages;
         self.pageControl.numberOfPages = totalPages;
         self.pageControl.hidden = YES;
         
+        [self buttonClicked:nil];
         
         [[NSNotificationCenter defaultCenter]
          addObserver:self
@@ -182,6 +183,14 @@ int totalPages;
 //Fake click the fb login view
 - (IBAction)buttonClicked:(id)sender {
     
+    NSLog(@"buttonClicked!!!!");
+    if(self.isAnimating)
+    {
+        return;
+    }
+    NSLog(@"DONE!!!!");
+    
+    self.isAnimating = YES;
     
     if(pageIndex == 0)
     {
@@ -211,6 +220,7 @@ int totalPages;
     if(pageIndex==2) { //Notifications
         if([self.notificationView.notificationSwitch isOn])
         {
+            self.isAnimating = NO;
             [self.notificationView commitChanges];
             return;
         }
@@ -218,6 +228,7 @@ int totalPages;
     else if(pageIndex==3) { //Location
         if([self.locationView commitChanges]==YES) //Dont move on if there was an error
         {
+            self.isAnimating = NO;
             [self saveAndExitWalkthrough];
         }
         return;
@@ -236,7 +247,18 @@ int totalPages;
     CGFloat pageWidth  = self.scrollView.frame.size.width;
     CGFloat pageHeight = self.scrollView.frame.size.height;
     CGRect rect = CGRectMake(pageWidth * pageIndex, 0, pageWidth, pageHeight);
-    [self.scrollView scrollRectToVisible:rect animated:YES];
+    //[self.scrollView scrollRectToVisible:rect animated:YES];
+    
+    [UIView animateWithDuration:0.25 animations:^()
+    {
+        [self.scrollView scrollRectToVisible:rect animated:NO];
+    } completion:^(BOOL finished)
+    {
+        self.isAnimating = NO;
+    }];
+    
+    
+    
 }
 
 -(void)apnAskingDoneHandler
