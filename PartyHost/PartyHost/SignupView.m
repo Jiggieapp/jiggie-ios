@@ -12,8 +12,6 @@
 
 @implementation SignupView
 
-
-
 - (id)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
@@ -68,7 +66,7 @@
         self.loginView = [[FBLoginView alloc] initWithReadPermissions:@[@"public_profile",@"user_birthday", @"email", @"user_photos",@"user_friends",@"user_likes",@"user_relationships",@"user_about_me",@"user_location",@"user_photos",@"user_status",@"user_friends"]];
         self.loginView.delegate = self;*/
         [self.buttonFacebook setTitle:@"SIGN IN WITH FACEBOOK" forState:UIControlStateNormal];
-        [self.buttonFacebook addTarget:self action:@selector(onSignInHandler) forControlEvents:UIControlEventTouchUpInside];
+        [self.buttonFacebook addTarget:self action:@selector(buttonFacebookDidTap) forControlEvents:UIControlEventTouchUpInside];
         
         /*
         self.btnLoginFB = [[FBSDKLoginButton alloc] init];
@@ -90,16 +88,14 @@
         
         
         
-        NSLog(@"TOKEN____ :: %@",[FBSDKAccessToken currentAccessToken].tokenString  );
+        NSLog(@"TOKEN____ :: %@",[FBSDKAccessToken currentAccessToken].tokenString);
         
 //        [self performSelector:@selector(skipLogin) withObject:nil afterDelay:0.1];
-        
-        
+
         [self performSelector:@selector(checkIfHasLogin) withObject:nil afterDelay:2.0];
     }
     return self;
 }
-
 
 -(void)checkIfHasLogin
 {
@@ -112,9 +108,6 @@
          object:self];
     }
 }
-
-
-
 
 -(void)autoLogin
 {
@@ -134,8 +127,6 @@
              NSLog(@"Error %@",error);
          }
      }];
-    
-    
 }
 
 -(void)skipLogin
@@ -176,17 +167,14 @@
     [self.buttonFacebook setTitle:@"SIGN IN WITH FACEBOOK" forState:UIControlStateNormal];
 }
 
--(void)onSignInHandler
+-(void)buttonFacebookDidTap
 {
     [self.buttonFacebook setTitle:@"SIGNING INTO JIGGIE" forState:UIControlStateNormal];
     [FBSDKAccessToken setCurrentAccessToken:nil];
     
     FBSDKLoginManager *logMeOut = [[FBSDKLoginManager alloc] init];
     [logMeOut logOut];
-    
-    
-    
-    
+
     /*
     FBSDKLoginManager *login = [[FBSDKLoginManager alloc] init];
     [login logInWithReadPermissions:@[@"public_profile", @"email",@"user_about_me",@"user_birthday",@"user_friends"] handler:^(FBSDKLoginManagerLoginResult *result, NSError *error) {
@@ -230,9 +218,13 @@
      handler:^(FBSDKLoginManagerLoginResult *result, NSError *error) {
          NSLog(@"RESULT___ :: %@",result);
          if (error) {
-             NSLog(@"Process error :: %@",error);
+             NSLog(@"FB Process error :: %@",error);
          } else if (result.isCancelled) {
-             NSLog(@"Cancelled");
+             NSLog(@"FB Cancelled");
+             
+             [[NSNotificationCenter defaultCenter]
+              postNotificationName:@"HIDE_LOADING"
+              object:self];
          } else {
              NSLog(@"Logged in :: %@",[FBSDKAccessToken currentAccessToken].tokenString);
              
@@ -355,55 +347,53 @@
      startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error)
      {
          
-                              NSLog(@"PERMISSION_RESULT :: %@",result[@"data"]);
-                              
-                              BOOL canDo = YES;
-                              NSString *errorMessage = @"To get the full benefits of Jiggie please accept the following Facebook permission(s):";
-                              
-                              for (int i = 0; i < [(NSArray *)result[@"data"] count]; i++)
-                              {
-                                  NSDictionary *dict = [(NSArray *)result[@"data"] objectAtIndex:i];
-                                  if([[dict objectForKey:@"status"] isEqualToString:@"declined"])
-                                  {
-                                      NSLog(@"NOT_GRANTED!!! :: %@",[dict objectForKey:@"permission"] );
-                                      canDo = NO;
-                                      NSString *permission = [dict objectForKey:@"permission"];
-                                      permission = [permission stringByReplacingOccurrencesOfString:@"user_" withString:@""];
-                                      permission = [self.sharedData capitalizeFirstLetter:permission];
-                                      errorMessage = [NSString stringWithFormat:@"%@ %@,",errorMessage,permission];
-                                  }
-                                  
-                              }
-                              
-                              if(!canDo)
-                              {
-                                  self.didFBInitInfo = NO;
-                                  [self clearLogin:self.currentUser[@"id"]];
-                                  
-                                  errorMessage = [errorMessage substringToIndex:[errorMessage length] - 1];
-                                  
-                                  UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Permission Error" message:errorMessage delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-                                  [alert show];
-                              }else{
-                                  SET_IF_NOT_NULL(self.sharedData.userDict[@"first_name"],self.currentUser[@"first_name"]);
-                                  SET_IF_NOT_NULL(self.sharedData.userDict[@"last_name"],self.currentUser[@"last_name"]);
-                                  SET_IF_NOT_NULL(self.sharedData.userDict[@"fb_id"],self.currentUser[@"id"]);
-                                  SET_IF_NOT_NULL(self.sharedData.userDict[@"gender"],self.currentUser[@"gender"]);
-                                  SET_IF_NOT_NULL(self.sharedData.userDict[@"email"],self.currentUser[@"email"]);
-                                  SET_IF_NOT_NULL(self.sharedData.userDict[@"birthday"],self.currentUser[@"birthday"]);
-                                  SET_IF_NOT_NULL(self.sharedData.userDict[@"location"],self.currentUser[@"location"][@"name"]);
-                                  SET_IF_NOT_NULL(self.sharedData.userDict[@"about"],self.currentUser[@"bio"]);
-                                  
-                                  NSLog(@"self.sharedData.userDict");
-                                  NSLog(@"%@",self.sharedData.userDict);
-                                  
-                                  //[self checkIfAPNisLoaded];
-                                  [self loginWithToken];
-                              }
-                              
-                          }];
-    
-    
+          NSLog(@"PERMISSION_RESULT :: %@",result[@"data"]);
+          
+          BOOL canDo = YES;
+          NSString *errorMessage = @"To get the full benefits of Jiggie please accept the following Facebook permission(s):";
+          
+          for (int i = 0; i < [(NSArray *)result[@"data"] count]; i++)
+          {
+              NSDictionary *dict = [(NSArray *)result[@"data"] objectAtIndex:i];
+              if([[dict objectForKey:@"status"] isEqualToString:@"declined"])
+              {
+                  NSLog(@"NOT_GRANTED!!! :: %@",[dict objectForKey:@"permission"] );
+                  canDo = NO;
+                  NSString *permission = [dict objectForKey:@"permission"];
+                  permission = [permission stringByReplacingOccurrencesOfString:@"user_" withString:@""];
+                  permission = [self.sharedData capitalizeFirstLetter:permission];
+                  errorMessage = [NSString stringWithFormat:@"%@ %@,",errorMessage,permission];
+              }
+              
+          }
+          
+          if(!canDo)
+          {
+              self.didFBInitInfo = NO;
+              [self clearLogin:self.currentUser[@"id"]];
+              
+              errorMessage = [errorMessage substringToIndex:[errorMessage length] - 1];
+              
+              UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Permission Error" message:errorMessage delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+              [alert show];
+          }else{
+              SET_IF_NOT_NULL(self.sharedData.userDict[@"first_name"],self.currentUser[@"first_name"]);
+              SET_IF_NOT_NULL(self.sharedData.userDict[@"last_name"],self.currentUser[@"last_name"]);
+              SET_IF_NOT_NULL(self.sharedData.userDict[@"fb_id"],self.currentUser[@"id"]);
+              SET_IF_NOT_NULL(self.sharedData.userDict[@"gender"],self.currentUser[@"gender"]);
+              SET_IF_NOT_NULL(self.sharedData.userDict[@"email"],self.currentUser[@"email"]);
+              SET_IF_NOT_NULL(self.sharedData.userDict[@"birthday"],self.currentUser[@"birthday"]);
+              SET_IF_NOT_NULL(self.sharedData.userDict[@"location"],self.currentUser[@"location"][@"name"]);
+              SET_IF_NOT_NULL(self.sharedData.userDict[@"about"],self.currentUser[@"bio"]);
+              
+              NSLog(@"self.sharedData.userDict");
+              NSLog(@"%@",self.sharedData.userDict);
+              
+              //[self checkIfAPNisLoaded];
+              [self loginWithToken];
+          }
+          
+      }];
 }
 
 -(void)changePage:(int)newPage {
