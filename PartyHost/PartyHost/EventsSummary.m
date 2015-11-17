@@ -330,6 +330,17 @@
 //Go to the ADD HOSTING screen
 -(void)hostHereButtonClicked:(UIButton *)button
 {
+    
+    NSMutableDictionary *tmpDict = [[NSMutableDictionary alloc] init];
+    [tmpDict addEntriesFromDictionary:self.sharedData.mixPanelCEventDict];
+    [tmpDict setObject:self.fillValue forKey:@"fulfillment_value"];
+    [tmpDict setObject:self.fillType forKey:@"fulfillment_type"];
+    [self.sharedData trackMixPanelWithDict:@"Fufillment Request" withDict:tmpDict];
+    
+    
+    
+    [self.sharedData trackMixPanelIncrementWithDict:@{@"fulfillment_request":@1}];
+    
     if([self.fillType isEqualToString:@"phone_number"])
     {
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"telprompt:%@",self.fillValue]]];
@@ -347,7 +358,7 @@
         [self.sharedData.cAddEventDict removeAllObjects];
         [self.sharedData.cAddEventDict addEntriesFromDictionary:self.mainDict];
         
-        [self.sharedData trackMixPanelIncrementWithDict:@{@"host_here":@1}];
+        
         
         [[NSNotificationCenter defaultCenter]
          postNotificationName:@"SHOW_BOOKTABLE"

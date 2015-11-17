@@ -27,8 +27,13 @@
     
     if(self.locationSwitch.isOn==NO) return YES; //Just ignore
     
+    
+    
+    
     if([CLLocationManager authorizationStatus]==kCLAuthorizationStatusDenied || [CLLocationManager authorizationStatus]==kCLAuthorizationStatusRestricted )
     {
+        
+        return YES;
         if (&UIApplicationOpenSettingsURLString != NULL)
         { //iOS 8
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Location Services" message:@"Please go to your settings and enable location services for Jiggie." delegate:self cancelButtonTitle:nil otherButtonTitles:@"Okay", nil];
