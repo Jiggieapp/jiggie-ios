@@ -566,6 +566,7 @@
                  [self.sharedData trackMixPanelWithDict:@"Sign Up" withDict:@{}];
                  [self.sharedData setMixPanelOnceParams];
              }else{
+                 // tech debt : set dummy profile!! 
                  [self.sharedData setMixPanelOnLogin];
                 
                  NSString *isFirst = ([defaults objectForKey:@"FIRST_RUN"])?@"NO":@"YES";

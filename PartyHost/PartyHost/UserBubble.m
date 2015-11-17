@@ -25,7 +25,7 @@
         [self setTitle:@"" forState:UIControlStateNormal];
         self.titleLabel.font = [UIFont phBold:frame.size.height/2.5];
         self.titleEdgeInsets = UIEdgeInsetsMake(2,0,0,0);
-        self.layer.borderWidth = 2;
+        self.layer.borderWidth = 0;
         self.layer.borderColor = [UIColor colorWithWhite:0 alpha:0.50].CGColor;
         
         [self reset];
@@ -69,7 +69,7 @@
         [self cancel];
         [self setImage:img forState:UIControlStateNormal];
         [self setTitle:@"" forState:UIControlStateNormal];
-        self.layer.borderWidth = 2;
+        self.layer.borderWidth = 0;
         return [[NWURLConnection alloc] init];
     }
     
@@ -77,12 +77,12 @@
     [self reset];
     [self setImage:nil forState:UIControlStateNormal];
     [self setTitle:self.initials forState:UIControlStateNormal];
-    self.layer.borderWidth = 2;
+    self.layer.borderWidth = 0;
     self.connection = [sharedData loadImageCancelable:self.url completionBlock:^(UIImage *image)
    {
        [self setImage:image forState:UIControlStateNormal];
        [self setTitle:@"" forState:UIControlStateNormal];
-       self.layer.borderWidth = 2;
+       self.layer.borderWidth = 0;
    }];
     return self.connection;
 }

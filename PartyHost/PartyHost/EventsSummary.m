@@ -591,7 +591,7 @@
             btnPic.layer.borderColor = [UIColor phCyanColor].CGColor;
             btnPic.layer.borderWidth = 2.0;
             btnPic.backgroundColor = [UIColor clearColor];
-            [btnPic setTitleEdgeInsets:UIEdgeInsetsMake(2,0,0,2)];
+            [btnPic setTitleEdgeInsets:UIEdgeInsetsMake(6,0,0,2)];
             [btnPic setTitle:[NSString stringWithFormat:@"+%d",(int)[userList count] - PROFILE_PICS + 1] forState:UIControlStateNormal];
             btnPic.titleLabel.font = [UIFont phBold:18];
             [btnPic setTitleColor:[UIColor phCyanColor] forState:UIControlStateNormal];
@@ -910,9 +910,25 @@
     NSString *title = self.tagArray[indexPath.row];
     [cell.button.button setTitle:[title uppercaseString] forState:UIControlStateNormal];
     cell.button.button.titleLabel.font = [UIFont phBold:12];
-    cell.button.offBorderColor = [UIColor colorFromHexCode:@"D7D7D7"];
-    cell.button.offTextColor = [UIColor colorFromHexCode:@"D7D7D7"];
+//    cell.button.offBorderColor = [UIColor colorFromHexCode:@"D7D7D7"];
+//    cell.button.offTextColor = [UIColor colorFromHexCode:@"D7D7D7"];
+    cell.button.offTextColor = [UIColor whiteColor];
     cell.button.offBackgroundColor = [UIColor clearColor];
+    
+    if ([title isEqualToString:@"Featured"]) {
+        cell.button.offBackgroundColor = [UIColor colorFromHexCode:@"D9603E"];
+    } else if ([title isEqualToString:@"Music"]) {
+        cell.button.offBackgroundColor = [UIColor colorFromHexCode:@"5E3ED9"];
+    } else if ([title isEqualToString:@"Nightlife"]) {
+        cell.button.offBackgroundColor = [UIColor colorFromHexCode:@"4A555A"];
+    } else if ([title isEqualToString:@"Food & Drink"]) {
+        cell.button.offBackgroundColor = [UIColor colorFromHexCode:@"DDC54D"];
+    } else if ([title isEqualToString:@"Fashion"]) {
+        cell.button.offBackgroundColor = [UIColor colorFromHexCode:@"68CE49"];
+    } else {
+        cell.button.offBackgroundColor = [UIColor colorFromHexCode:@"10BBFF"];
+    }
+    
     [cell setNeedsLayout];
     [cell layoutIfNeeded];
     

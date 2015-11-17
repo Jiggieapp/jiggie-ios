@@ -27,7 +27,7 @@
     self.button.layer.borderWidth = 1.5;
     [self.button setTitleColor:self.offTextColor forState:UIControlStateNormal];
     self.button.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
-    [self.button setTitleEdgeInsets:UIEdgeInsetsMake(6,6,4,6)];
+    [self.button setTitleEdgeInsets:UIEdgeInsetsMake(10,6,4,6)];
     self.button.titleLabel.font = [UIFont phBold:14];
     [self.button setTitle:@"BUTTON" forState:UIControlStateNormal];
     [self addSubview:self.button];

@@ -189,13 +189,27 @@
         UIButton *tagPil = [[UIButton alloc] initWithFrame:CGRectMake(currX, 0, 80, 20)];
         tagPil.enabled = NO;
         tagPil.titleLabel.font = [UIFont phBlond:13];
-        tagPil.layer.borderWidth = 1.0;
-        tagPil.layer.borderColor = [UIColor darkGrayColor].CGColor;
-        tagPil.titleEdgeInsets = UIEdgeInsetsMake(2, 0, 0, 0);
+//        tagPil.layer.borderWidth = 1.0;
+//        tagPil.layer.borderColor = [UIColor darkGrayColor].CGColor;
+        tagPil.titleEdgeInsets = UIEdgeInsetsMake(3, 0, 0, 0);
         [tagPil setTitle:tag forState:UIControlStateNormal];
-        [tagPil setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
+        [tagPil setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         tagPil.layer.cornerRadius = 10;
         [self addSubview:tagPil];
+        
+        if ([tag isEqualToString:@"Featured"]) {
+            tagPil.backgroundColor = [UIColor colorFromHexCode:@"D9603E"];
+        } else if ([tag isEqualToString:@"Music"]) {
+            tagPil.backgroundColor = [UIColor colorFromHexCode:@"5E3ED9"];
+        } else if ([tag isEqualToString:@"Nightlife"]) {
+            tagPil.backgroundColor = [UIColor colorFromHexCode:@"4A555A"];
+        } else if ([tag isEqualToString:@"Food & Drink"]) {
+            tagPil.backgroundColor = [UIColor colorFromHexCode:@"DDC54D"];
+        } else if ([tag isEqualToString:@"Fashion"]) {
+            tagPil.backgroundColor = [UIColor colorFromHexCode:@"68CE49"];
+        } else {
+            tagPil.backgroundColor = [UIColor colorFromHexCode:@"10BBFF"];
+        }
         
         CGSize resizePill =  [self.sharedData sizeForLabelString:[tagPil titleForState:UIControlStateNormal]
                                                         withFont:tagPil.titleLabel.font
