@@ -219,8 +219,9 @@
         
         self.eventLabel = [UIButton buttonWithType:UIButtonTypeRoundedRect];
         self.eventLabel.frame = CGRectMake(0, 280 - OffSet + OffSetLargeDevice * 0.7, self.sharedData.screenWidth, 40);
-        self.eventLabel.titleLabel.textColor = [self.sharedData colorWithHexString:@"5c5c5c"];
-        [self.eventLabel setTitleColor:[self.sharedData colorWithHexString:@"5c5c5c"] forState:UIControlStateNormal];
+//        self.eventLabel.titleLabel.textColor = [self.sharedData colorWithHexString:@"5c5c5c"];
+//        [self.eventLabel setTitleColor:[self.sharedData colorWithHexString:@"5c5c5c"] forState:UIControlStateNormal];
+        [self.eventLabel setTitleColor:[UIColor phBlueColor] forState:UIControlStateNormal];
         self.eventLabel.titleLabel.font = [UIFont phBlond:13 + OffsetFontLargeDevice];
         self.eventLabel.titleLabel.textAlignment = NSTextAlignmentCenter;
         self.eventLabel.titleLabel.lineBreakMode = NSLineBreakByWordWrapping;
@@ -249,20 +250,22 @@
         
         self.nameLabelTwo = [[UILabel alloc] initWithFrame:CGRectMake(0, 60 - OffSet/3 + OffSetLargeDevice * 0.3, self.sharedData.screenWidth, 30)];
         self.nameLabelTwo.textColor = [self.sharedData colorWithHexString:@"5c5c5c"];
-        self.nameLabelTwo.font = [UIFont phBlond:15 + OffsetFontLargeDevice];
+        self.nameLabelTwo.font = [UIFont phBlond:17 + OffsetFontLargeDevice];
         self.nameLabelTwo.textAlignment = NSTextAlignmentCenter;
         [self.cardTwo addSubview:self.nameLabelTwo];
         
         self.eventLabelTwo = [UIButton buttonWithType:UIButtonTypeRoundedRect];
         self.eventLabelTwo.frame = CGRectMake(0, 86 - OffSet/3 + OffSetLargeDevice * 0.3, self.sharedData.screenWidth, 40);
-        [self.eventLabelTwo setTitleColor:[self.sharedData colorWithHexString:@"5c5c5c"] forState:UIControlStateNormal];
+//        [self.eventLabelTwo setTitleColor:[self.sharedData colorWithHexString:@"5c5c5c"] forState:UIControlStateNormal];
+        [self.eventLabelTwo setTitleColor:[UIColor phBlueColor] forState:UIControlStateNormal];
+        
         self.eventLabelTwo.titleLabel.lineBreakMode = NSLineBreakByWordWrapping;
         self.eventLabelTwo.titleLabel.textAlignment = NSTextAlignmentCenter;
         self.eventLabelTwo.titleLabel.numberOfLines = 2;
         self.eventLabelTwo.contentVerticalAlignment = UIControlContentVerticalAlignmentTop;
         [self.eventLabelTwo setTitleEdgeInsets:UIEdgeInsetsMake(0, 30, 0, 30)];
         [self.eventLabelTwo addTarget:self action:@selector(eventInfoHandler) forControlEvents:UIControlEventTouchUpInside];
-        self.eventLabelTwo.titleLabel.font = [UIFont phBlond:15 + OffsetFontLargeDevice];
+        self.eventLabelTwo.titleLabel.font = [UIFont phBlond:17 + OffsetFontLargeDevice];
         [self.cardTwo addSubview:self.eventLabelTwo];
         
         

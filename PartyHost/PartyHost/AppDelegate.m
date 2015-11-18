@@ -423,9 +423,6 @@ static NSString *const kAllowTracking = @"allowTracking";
     
     self.sharedData.isInAskingNotification = NO;
     
-    
-    [self.sharedData.setupPage apnAskingDoneHandler];
-    
     if(self.sharedData.isLoggedIn)
     {
         [self syncAPN];

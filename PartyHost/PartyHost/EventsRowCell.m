@@ -189,10 +189,10 @@
         UIButton *tagPil = [[UIButton alloc] initWithFrame:CGRectMake(currX, 0, 80, 20)];
         tagPil.enabled = NO;
         tagPil.titleLabel.font = [UIFont phBlond:13];
-//        tagPil.layer.borderWidth = 1.0;
-//        tagPil.layer.borderColor = [UIColor darkGrayColor].CGColor;
         tagPil.titleEdgeInsets = UIEdgeInsetsMake(3, 0, 0, 0);
         [tagPil setTitle:tag forState:UIControlStateNormal];
+        //        tagPil.layer.borderWidth = 1.0;
+        //        tagPil.layer.borderColor = [UIColor darkGrayColor].CGColor;
         [tagPil setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         tagPil.layer.cornerRadius = 10;
         [self addSubview:tagPil];
