@@ -200,9 +200,9 @@
     
     NSLog(@"RESET DONE");
     
-    [[NSNotificationCenter defaultCenter]
-     postNotificationName:@"SHOW_LOADING"
-     object:self];
+//    [[NSNotificationCenter defaultCenter]
+//     postNotificationName:@"SHOW_LOADING"
+//     object:self];
     
     self.isLoaded = NO;
     self.hostersList.hidden = YES;
@@ -293,9 +293,9 @@
     //Prepare venue data
     [self.sharedData.eventsPage.eventsVenueDetail loadData:dict];
     
-    [[NSNotificationCenter defaultCenter]
-     postNotificationName:@"HIDE_LOADING"
-     object:self];
+//    [[NSNotificationCenter defaultCenter]
+//     postNotificationName:@"HIDE_LOADING"
+//     object:self];
     
     self.spinner.hidden = YES;
     [self.spinner stopAnimating];

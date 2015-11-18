@@ -44,10 +44,10 @@
         cell.button.offTextColor = [UIColor whiteColor];
 
         
-        [cell.button buttonSelect:YES animated:NO];
+        [cell.button buttonSelect:YES checkmark:YES animated:NO];
     }
     else {
-        [cell.button buttonSelect:NO animated:NO];
+        [cell.button buttonSelect:NO checkmark:NO animated:NO];
     }
     
     return cell;
@@ -75,14 +75,14 @@
     SharedData *sharedData = [SharedData sharedInstance];
     if (![sharedData.experiences containsObject:cell.button.button.titleLabel.text])
         [sharedData.experiences addObject:cell.button.button.titleLabel.text];
-    [cell.button buttonSelect:YES animated:YES];
+    [cell.button buttonSelect:YES checkmark:YES animated:YES];
 }
 
 -(void)collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
     SetupPickViewCell *cell = (SetupPickViewCell*)[collectionView cellForItemAtIndexPath:indexPath];
     SharedData *sharedData = [SharedData sharedInstance];
     [sharedData.experiences removeObject:cell.button.button.titleLabel.text];
-    [cell.button buttonSelect:NO animated:YES];
+    [cell.button buttonSelect:NO checkmark:NO animated:YES];
 }
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView {

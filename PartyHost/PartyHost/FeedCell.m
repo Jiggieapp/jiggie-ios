@@ -183,10 +183,10 @@
         int OffsetFontLargeDevice = 0;
         if (self.sharedData.isIphone6) {
             OffSetLargeDevice = 86;
-            OffsetFontLargeDevice = 3;
+            OffsetFontLargeDevice = 2;
         } else if (self.sharedData.isIphone6plus) {
             OffSetLargeDevice = 146;
-            OffsetFontLargeDevice = 6;
+            OffsetFontLargeDevice = 3;
         }
         
         self.btnUserImage = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -242,7 +242,7 @@
         
         self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 270 - OffSet/2 + OffSetLargeDevice * 0.7, self.sharedData.screenWidth, 30)];
         self.titleLabel.textColor = [self.sharedData colorWithHexString:@"5c5c5c"];
-        self.titleLabel.font = [UIFont phBold:17 + OffsetFontLargeDevice];
+        self.titleLabel.font = [UIFont phBold:19 + OffsetFontLargeDevice];
         self.titleLabel.textAlignment = NSTextAlignmentCenter;
         self.titleLabel.text = @"Party Tonight?";
         [self.cardTwo addSubview:self.titleLabel];
@@ -250,7 +250,7 @@
         
         self.nameLabelTwo = [[UILabel alloc] initWithFrame:CGRectMake(0, 60 - OffSet/3 + OffSetLargeDevice * 0.3, self.sharedData.screenWidth, 30)];
         self.nameLabelTwo.textColor = [self.sharedData colorWithHexString:@"5c5c5c"];
-        self.nameLabelTwo.font = [UIFont phBlond:17 + OffsetFontLargeDevice];
+        self.nameLabelTwo.font = [UIFont phBlond:18 + OffsetFontLargeDevice];
         self.nameLabelTwo.textAlignment = NSTextAlignmentCenter;
         [self.cardTwo addSubview:self.nameLabelTwo];
         
@@ -265,7 +265,7 @@
         self.eventLabelTwo.contentVerticalAlignment = UIControlContentVerticalAlignmentTop;
         [self.eventLabelTwo setTitleEdgeInsets:UIEdgeInsetsMake(0, 30, 0, 30)];
         [self.eventLabelTwo addTarget:self action:@selector(eventInfoHandler) forControlEvents:UIControlEventTouchUpInside];
-        self.eventLabelTwo.titleLabel.font = [UIFont phBlond:17 + OffsetFontLargeDevice];
+        self.eventLabelTwo.titleLabel.font = [UIFont phBold:18 + OffsetFontLargeDevice];
         [self.cardTwo addSubview:self.eventLabelTwo];
         
         
@@ -375,7 +375,8 @@
         self.recLabel.text = [NSString stringWithFormat:@"Chat with %@?",first_name];
         self.titleLabel.text = [NSString stringWithFormat:@"Chat with %@?",first_name];
     }
-    
+//    NSString *title = [NSString stringWithFormat:@"%@ %@", [NSString stringWithFormat:@"%@",self.mainData[@"event_name"]], [NSString stringWithFormat:@"%@",self.mainData[@"event_name"]]];
+//        [self.eventLabelTwo setTitle:title forState:UIControlStateNormal];
     [self.eventLabelTwo setTitle:[NSString stringWithFormat:@"%@",self.mainData[@"event_name"]] forState:UIControlStateNormal];
     
     

@@ -98,7 +98,15 @@
     {
         //Not hosting but allow this invite anyway
         [self.btnInvite.button setTitle:@"YOU" forState:UIControlStateNormal];
-        [self.btnInvite buttonSelect:NO animated:NO];
+        [self.btnInvite buttonSelect:NO checkmark:NO animated:NO];
+        //[self.btnInvite setBackgroundColor:[UIColor lightGrayColor]];
+        self.btnInvite.hidden = NO;
+        self.btnInvite.userInteractionEnabled = NO;
+    }
+    else if ([self.userDict[@"is_connected"] boolValue]==YES) //Already invited, button is gray
+    {
+        [self.btnInvite.button setTitle:@"CONNECTED" forState:UIControlStateNormal];
+        [self.btnInvite buttonSelect:YES checkmark:NO animated:NO];
         //[self.btnInvite setBackgroundColor:[UIColor lightGrayColor]];
         self.btnInvite.hidden = NO;
         self.btnInvite.userInteractionEnabled = NO;
@@ -111,7 +119,7 @@
         
         //Not hosting but allow this invite anyway
         [self.btnInvite.button setTitle:@"CONNECT" forState:UIControlStateNormal];
-        [self.btnInvite buttonSelect:NO animated:NO];
+        [self.btnInvite buttonSelect:NO checkmark:NO animated:NO];
         //[self.btnInvite setBackgroundColor:[UIColor phPurpleColor]];
         self.btnInvite.hidden = NO;
         self.btnInvite.userInteractionEnabled = YES;
@@ -119,7 +127,7 @@
     else if ([self.userDict[@"is_invited"] boolValue]==YES) //Already invited, button is gray
     {
         [self.btnInvite.button setTitle:@"SENT" forState:UIControlStateNormal];
-        [self.btnInvite buttonSelect:YES animated:NO];
+        [self.btnInvite buttonSelect:YES checkmark:YES animated:NO];
         //[self.btnInvite setBackgroundColor:[UIColor lightGrayColor]];
         self.btnInvite.hidden = NO;
         self.btnInvite.userInteractionEnabled = NO;
@@ -127,7 +135,7 @@
     else //Allow invite this guest
     {
         [self.btnInvite.button setTitle:@"INVITE" forState:UIControlStateNormal];
-        [self.btnInvite buttonSelect:NO animated:NO];
+        [self.btnInvite buttonSelect:NO checkmark:NO animated:NO];
         //[self.btnInvite setBackgroundColor:[UIColor phPurpleColor]];
         self.btnInvite.hidden = NO;
         self.btnInvite.userInteractionEnabled = YES;
@@ -180,7 +188,7 @@
     
     [manager GET:url parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject)
      {
-         [self.btnInvite buttonSelect:YES animated:NO];
+         [self.btnInvite buttonSelect:YES checkmark:YES animated:NO];
          [self.btnInvite.button setTitle:@"SENT" forState:UIControlStateNormal];
          self.btnInvite.hidden = NO;
          self.btnInvite.userInteractionEnabled = NO;

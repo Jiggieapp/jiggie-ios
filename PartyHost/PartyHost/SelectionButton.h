@@ -21,6 +21,6 @@
 @property (strong, nonatomic) UIColor *onBorderColor;
 @property (strong, nonatomic) UIColor *onTextColor;
 
--(void)buttonSelect:(BOOL)selected animated:(BOOL)animated;
+-(void)buttonSelect:(BOOL)selected checkmark:(BOOL)checkmark animated:(BOOL)animated;
 
 @end

@@ -56,7 +56,7 @@
     [self.confirmArea addSubview:self.confirmLabel];
     
     self.messagesA = [[NSMutableArray alloc] init];
-    self.messagesListFrame = CGRectMake(0, 70, frame.size.width, frame.size.height - 40);
+    self.messagesListFrame = CGRectMake(0, 60, frame.size.width, frame.size.height - 60 - 40);
     self.messagesList = [[UITableView alloc] initWithFrame:self.messagesListFrame style:UITableViewStyleGrouped];
     self.messagesList.backgroundColor = [UIColor greenColor];
     self.messagesList.delegate = self;

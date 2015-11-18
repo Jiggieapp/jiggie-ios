@@ -936,11 +936,11 @@
     if ([collectionView.indexPathsForSelectedItems containsObject:indexPath])
     {
         [collectionView selectItemAtIndexPath:indexPath animated:FALSE scrollPosition:UICollectionViewScrollPositionNone];
-        [cell.button buttonSelect:YES animated:NO];
+        [cell.button buttonSelect:YES checkmark:YES animated:NO];
     }
     else
     {
-        [cell.button buttonSelect:NO animated:NO];
+        [cell.button buttonSelect:NO checkmark:NO animated:NO];
     }
     
     return cell;

@@ -30,8 +30,8 @@
         SharedData *sharedData = [SharedData sharedInstance];
         sharedData.gender = @"male";
         
-        [self.buttonTop buttonSelect:YES animated:YES];
-        [self.buttonBottom buttonSelect:NO animated:YES];
+        [self.buttonTop buttonSelect:YES checkmark:YES animated:YES];
+        [self.buttonBottom buttonSelect:NO checkmark:NO animated:YES];
     }
 }
 
@@ -40,19 +40,19 @@
         SharedData *sharedData = [SharedData sharedInstance];
         sharedData.gender = @"female";
         
-        [self.buttonTop buttonSelect:NO animated:YES];
-        [self.buttonBottom buttonSelect:YES animated:YES];
+        [self.buttonTop buttonSelect:NO checkmark:NO animated:YES];
+        [self.buttonBottom buttonSelect:YES checkmark:YES animated:YES];
     }
 }
 
 -(void)maleSet {
-    [self.buttonTop buttonSelect:YES animated:YES];
-    [self.buttonBottom buttonSelect:NO animated:YES];
+    [self.buttonTop buttonSelect:YES checkmark:YES animated:YES];
+    [self.buttonBottom buttonSelect:NO checkmark:NO animated:YES];
 }
 
 -(void)femaleSet {
-    [self.buttonTop buttonSelect:NO animated:NO];
-    [self.buttonBottom buttonSelect:YES animated:NO];
+    [self.buttonTop buttonSelect:NO checkmark:NO animated:NO];
+    [self.buttonBottom buttonSelect:YES checkmark:YES animated:NO];
 }
 
 
