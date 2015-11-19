@@ -58,7 +58,7 @@
         self.toMessage.font = [UIFont phBold:self.sharedData.messageFontSize];
         self.toMessage.layer.borderWidth = 0;
         self.toMessage.layer.masksToBounds = YES;
-        self.toMessage.layer.cornerRadius = 15;
+        self.toMessage.layer.cornerRadius = 10;
         self.toMessage.textContainerInset = UIEdgeInsetsMake(7.0f, 5.0f, 30, 0);
         self.toMessage.editable = NO;
         self.toMessage.selectable = NO;
@@ -73,7 +73,7 @@
         self.fromMessage.font = [UIFont phBold:self.sharedData.messageFontSize];
         self.fromMessage.layer.borderWidth = 0;
         self.fromMessage.layer.masksToBounds = YES;
-        self.fromMessage.layer.cornerRadius = 15;
+        self.fromMessage.layer.cornerRadius = 10;
         self.fromMessage.textContainerInset = UIEdgeInsetsMake(7.0f, 5.0f, 20, 0);
         self.fromMessage.contentInset = UIEdgeInsetsMake(0.0f, 0.0f, 30, 0);
         [self addSubview:self.fromMessage];
@@ -165,7 +165,7 @@
         fromFrame.size.height -= 10;
         fromFrame.size.width = self.sharedData.screenWidth - 28;
         self.fromMessage.frame = fromFrame;
-        self.fromMessage.layer.cornerRadius = fromFrame.size.height/2;
+//        self.fromMessage.layer.cornerRadius = fromFrame.size.height/2;
         
         
         //self.fromMessage.frame = CGRectMake(10, 10, self.frame.size.width - 28, boundingRect.size.height + 15 + headerOffset + 15);
@@ -221,7 +221,7 @@
         toFrame.size.height -= 10;
         toFrame.size.width = self.sharedData.screenWidth - 8 - 70;
         self.toMessage.frame = toFrame;
-        self.toMessage.layer.cornerRadius = toFrame.size.height/2;
+//        self.toMessage.layer.cornerRadius = toFrame.size.height/2;
         
         [self.toIcon loadImage:self.sharedData.toImgURL];
     }

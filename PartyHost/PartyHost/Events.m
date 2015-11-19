@@ -54,13 +54,15 @@
     self.title.text = @"THIS WEEK";
     self.title.textColor = [UIColor whiteColor];
     self.title.textAlignment = NSTextAlignmentCenter;
-    self.title.font = [UIFont phBold:21];
+//    self.title.font = [UIFont phBold:21];
+    self.title.font = [UIFont latoBold:18];
     [self.tabBar addSubview:self.title];
     
     //Cancel button
     self.btnCity = [UIButton buttonWithType:UIButtonTypeCustom];
     self.btnCity.frame = CGRectMake(8, 0, 80, 40);
-    self.btnCity.titleLabel.font = [UIFont phBold:14];
+//    self.btnCity.titleLabel.font = [UIFont phBold:14];
+    self.btnCity.titleLabel.font = [UIFont latoBold:11];
     self.btnCity.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
     [self.btnCity setTitle:@"JKT" forState:UIControlStateNormal];
     [self.btnCity setTitleColor:[UIColor phLightGrayColor] forState:UIControlStateNormal];
@@ -94,7 +96,8 @@
     tabTitle.text = @"THIS WEEK";
     tabTitle.textAlignment = NSTextAlignmentCenter;
     tabTitle.textColor = [UIColor whiteColor];
-    tabTitle.font = [UIFont phBold:21];
+//    tabTitle.font = [UIFont phBold:21];
+    tabTitle.font = [UIFont latoBold:18];
     [self.emptyView addSubview:tabTitle];
     
     [self addSubview:self.emptyView];

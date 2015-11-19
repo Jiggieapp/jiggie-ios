@@ -48,7 +48,8 @@
     self.title.textAlignment = NSTextAlignmentCenter;
     self.title.textColor = [UIColor whiteColor];
     self.title.adjustsFontSizeToFitWidth = YES;
-    self.title.font = [UIFont phBold:18];
+//    self.title.font = [UIFont phBold:18];
+    self.title.font = [UIFont latoBold:15];
     [self.tabBar addSubview:self.title];
     
     self.mainScroll = [[UIScrollView alloc] initWithFrame:CGRectMake(0,
@@ -102,13 +103,15 @@
     self.eventDate = [[UILabel alloc] initWithFrame:CGRectMake(40, self.picScroll.frame.origin.y + self.picScroll.frame.size.height + 16 + 8, self.sharedData.screenWidth-80, 24)];
     self.eventDate.textAlignment = NSTextAlignmentCenter;
     self.eventDate.textColor = [UIColor blackColor];
-    self.eventDate.font = [UIFont phBlond:19];
+    self.eventDate.font = [UIFont latoBlond:16];
+//    self.eventDate.font = [UIFont phBlond:19];
     self.eventDate.userInteractionEnabled = NO;
     self.eventDate.adjustsFontSizeToFitWidth = YES;
     [self.mainScroll addSubview:self.eventDate];
     
     self.venueName = [[UILabel alloc] initWithFrame:CGRectMake(30, self.eventDate.frame.origin.y + self.eventDate.frame.size.height + 4, self.sharedData.screenWidth - 60, 20)];
-    self.venueName.font = [UIFont phBold:16];
+//    self.venueName.font = [UIFont phBold:16];
+    self.venueName.font = [UIFont latoBold:13];
     self.venueName.textAlignment = NSTextAlignmentCenter;
     self.venueName.textColor = [UIColor darkGrayColor];
     self.venueName.userInteractionEnabled = NO;
@@ -128,7 +131,8 @@
     
     self.hostNum = [[UILabel alloc] init];
     self.hostNum.textColor = [UIColor blackColor];
-    self.hostNum.font = [UIFont phBold:12];
+    self.hostNum.font = [UIFont latoBold:9];
+//    self.hostNum.font = [UIFont phBold:12];
     [self.listingContainer addSubview:self.hostNum];
     
     self.userContainer = [[UIView alloc] init];
@@ -142,7 +146,8 @@
     [self.listingContainer addSubview:self.seeAllView];
     
     self.seeAllLabel = [[UILabel alloc] init];
-    self.seeAllLabel.font = [UIFont phBold:14];
+//    self.seeAllLabel.font = [UIFont phBold:14];
+    self.seeAllLabel.font = [UIFont latoBold:11];
     self.seeAllLabel.textAlignment = NSTextAlignmentCenter;
     self.seeAllLabel.textColor = [UIColor blackColor];
     self.seeAllLabel.userInteractionEnabled = NO;
@@ -186,7 +191,8 @@
     [self.mainScroll addSubview:self.separator3];
     
     self.aboutBody = [[UITextView alloc] init];
-    self.aboutBody.font = [UIFont phBlond:15];
+    self.aboutBody.font = [UIFont latoBlond:12];
+//    self.aboutBody.font = [UIFont phBlond:15];
     self.aboutBody.textColor = [UIColor blackColor];
     self.aboutBody.textAlignment = NSTextAlignmentLeft;
     self.aboutBody.userInteractionEnabled = NO;
@@ -202,7 +208,8 @@
     [self.mainScroll addSubview:self.seeMapView];
     
     self.seeMapLabel = [[UILabel alloc] init];
-    self.seeMapLabel.font = [UIFont phBold:14];
+    self.seeMapLabel.font = [UIFont latoBold:11];
+//    self.seeMapLabel.font = [UIFont phBold:14];
     self.seeMapLabel.textAlignment = NSTextAlignmentCenter;
     self.seeMapLabel.textColor = [UIColor blackColor];
     self.seeMapLabel.userInteractionEnabled = NO;
@@ -224,7 +231,8 @@
     //Create big HOST HERE button
     self.btnHostHere = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     self.btnHostHere.frame = CGRectMake(0, self.sharedData.screenHeight - 44 - PHTabHeight, self.sharedData.screenWidth, 44);
-    self.btnHostHere.titleLabel.font = [UIFont phBold:18];
+    self.btnHostHere.titleLabel.font = [UIFont latoBold:15];
+//    self.btnHostHere.titleLabel.font = [UIFont phBold:18];
     [self.btnHostHere setTitle:@"" forState:UIControlStateNormal];
     [self.btnHostHere setTitleEdgeInsets:UIEdgeInsetsMake(3,0,0,0)];
     [self.btnHostHere setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
@@ -233,7 +241,8 @@
     [self addSubview:self.btnHostHere];
     
     self.externalSiteLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 33, self.sharedData.screenWidth, 10)];
-    self.externalSiteLabel.font = [UIFont phBlond:9];
+//    self.externalSiteLabel.font = [UIFont phBlond:9];
+    self.externalSiteLabel.font = [UIFont latoBlond:6];
     self.externalSiteLabel.textColor = [UIColor whiteColor];
     self.externalSiteLabel.text = @"(EXTERNAL SITE)";
     self.externalSiteLabel.textAlignment = NSTextAlignmentCenter;
