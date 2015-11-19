@@ -14,10 +14,6 @@
 + (UIFont *)phThin:(CGFloat)size;
 + (UIFont *)phBlond:(CGFloat)size;
 
-+ (UIFont *)latoThin:(CGFloat)size;
-+ (UIFont *)latoBold:(CGFloat)size;
-+ (UIFont *)latoBlond:(CGFloat)size;
-
 /*
 //Replace system fonts
 //http://stackoverflow.com/questions/8707082/set-a-default-font-for-whole-ios-app

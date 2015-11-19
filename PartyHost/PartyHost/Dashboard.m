@@ -115,7 +115,7 @@
     
     self.chatLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 33, frame.size.width/4, 15)];
     self.chatLabel.text = @"CHAT";
-    self.chatLabel.font = [UIFont phBold:10];
+    self.chatLabel.font = [UIFont phBold:9];
     self.chatLabel.textAlignment = NSTextAlignmentCenter;
     self.chatLabel.textColor = [UIColor whiteColor];
     self.chatLabel.backgroundColor = [UIColor clearColor];
@@ -125,7 +125,7 @@
     
     self.eventsLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 33, frame.size.width/4, 15)];
     self.eventsLabel.text = @"EVENTS";
-    self.eventsLabel.font = [UIFont phBold:10];
+    self.eventsLabel.font = [UIFont phBold:9];
     self.eventsLabel.textAlignment = NSTextAlignmentCenter;
     self.eventsLabel.textColor = [UIColor whiteColor];
     self.eventsLabel.backgroundColor = [UIColor clearColor];
@@ -133,9 +133,9 @@
     [btnEvents addSubview:self.eventsLabel];
     
     
-    self.feedLabel = [[UILabel alloc] initWithFrame:CGRectMake(2, 33, frame.size.width/4, 15)];
+    self.feedLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 33, frame.size.width/4, 15)];
     self.feedLabel.text = @"SOCIAL";
-    self.feedLabel.font = [UIFont phBold:10];
+    self.feedLabel.font = [UIFont phBold:9];
     self.feedLabel.textAlignment = NSTextAlignmentCenter;
     self.feedLabel.textColor = [UIColor whiteColor];
     self.feedLabel.alpha = 1;
@@ -144,7 +144,7 @@
     
     self.profileLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 33, frame.size.width/4, 15)];
     self.profileLabel.text = @"MORE";
-    self.profileLabel.font = [UIFont phBold:10];
+    self.profileLabel.font = [UIFont phBold:9];
     self.profileLabel.textAlignment = NSTextAlignmentCenter;
     self.profileLabel.alpha = 1;
     self.profileLabel.textColor = [UIColor whiteColor];
@@ -165,7 +165,7 @@
     
     
     CALayer *topBorder = [CALayer layer];
-    topBorder.borderColor = [UIColor darkGrayColor].CGColor;
+    topBorder.borderColor = [UIColor phLightGrayColor].CGColor;
     topBorder.borderWidth = 1;
     topBorder.frame = CGRectMake(-1,0,self.sharedData.screenWidth+2,1);
     [self.tabBar.layer addSublayer:topBorder];

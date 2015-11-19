@@ -68,10 +68,10 @@
     [self addSubview:self.messagesList];
     
     
-    self.toLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 22, frame.size.width, 40)];
+    self.toLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 20, frame.size.width, 40)];
     self.toLabel.textColor = [UIColor whiteColor];
     self.toLabel.backgroundColor = [UIColor clearColor];
-    self.toLabel.font = [UIFont phBold:21];
+    self.toLabel.font = [UIFont phBold:18];
     self.toLabel.textAlignment = NSTextAlignmentCenter;
     [self.tabBar addSubview:self.toLabel];
     
@@ -92,7 +92,7 @@
     
     
     self.input = [[UITextView alloc] initWithFrame:CGRectMake(0, frame.size.height - 40, frame.size.width - 50, 40)];
-    self.input.font = [UIFont phBlond:15];
+    self.input.font = [UIFont phBlond:13];
     self.input.delegate = self;
     self.input.backgroundColor = [UIColor whiteColor];
     self.input.textColor = [UIColor blackColor];
@@ -104,7 +104,7 @@
     
     
     CALayer *rightBorder = [CALayer layer];
-    rightBorder.borderColor = [UIColor phDarkGrayColor].CGColor;
+    rightBorder.borderColor = [UIColor phLightGrayColor].CGColor;
     rightBorder.borderWidth = 1;
     rightBorder.frame = CGRectMake(-1,0,self.sharedData.screenWidth+2,1);
     [self.input.layer addSublayer:rightBorder];
@@ -115,13 +115,13 @@
     [self.sharedData.keyboardsA addObject:self.input];
     
     self.btnSend = [[UIView alloc] initWithFrame:CGRectMake(frame.size.width - 60, frame.size.height - 40, 60, 40)];
-    self.btnSend.backgroundColor = [UIColor phBlueColor];
+    self.btnSend.backgroundColor = [UIColor clearColor];
     self.btnSend.layer.masksToBounds = YES;
     [self addSubview:self.btnSend];
     
     self.sendTxt = [[UILabel alloc] initWithFrame:self.btnSend.bounds];
-    self.sendTxt.font = [UIFont phBold:16];
-    self.sendTxt.textColor = [UIColor whiteColor];
+    self.sendTxt.font = [UIFont phBold:13];
+    self.sendTxt.textColor = [UIColor phBlueColor];
     self.sendTxt.textAlignment = NSTextAlignmentCenter;
     self.sendTxt.text = @"SEND";
     self.sendTxt.backgroundColor = [UIColor clearColor];
@@ -131,7 +131,7 @@
     
     
     CALayer *topBorder = [CALayer layer];
-    topBorder.borderColor = [UIColor phDarkGrayColor].CGColor;
+    topBorder.borderColor = [UIColor phLightGrayColor].CGColor;
     topBorder.borderWidth = 1;
     topBorder.frame = CGRectMake(-1,0,self.btnSend.frame.size.width+2,1);
     [self.btnSend.layer addSublayer:topBorder];
@@ -157,7 +157,8 @@
     UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
     //[spinner setColor:[UIColor whiteColor]];
     [spinner startAnimating];
-    spinner.center = CGPointMake(self.loadingView.center.x, 100);
+//    spinner.center = CGPointMake(self.loadingView.center.x, self.loadingView.center.y);
+    spinner.frame = CGRectMake(0, 0, self.sharedData.screenWidth, self.sharedData.screenHeight);
     [self.loadingView addSubview:spinner];
     
     [self addSubview:self.loadingView];
@@ -373,7 +374,7 @@
 
 -(void)reset
 {
-    self.sendTxt.textColor = [UIColor whiteColor];
+    self.sendTxt.textColor = [UIColor phBlueColor];
     self.canCheckScrollDown = NO;
     self.loadingView.alpha = 1.0;
     self.loadingView.hidden = NO;
@@ -1123,7 +1124,7 @@
     //MessageCell *cell = (MessageCell *)[tableView cellForRowAtIndexPath:indexPath];
     if(!self.isMessagesLoaded)
     {
-        return 70.0;
+        return tableView.bounds.size.height;
     }
     
     NSString *cKey = [self.sectionsA objectAtIndex:indexPath.section];
@@ -1233,7 +1234,7 @@
     btnFrame.origin.y -= 20 * (self.inputNumLines - 1);
     self.btnSend.frame = btnFrame;
     
-    self.sendTxt.frame = CGRectMake(0,self.btnSend.bounds.size.height - 25,self.btnSend.bounds.size.width,20);
+    self.sendTxt.frame = CGRectMake(0,self.btnSend.bounds.size.height - 29,self.btnSend.bounds.size.width,20);
     
     int length = (self.input.text.length < 1)?1:(int)self.input.text.length;
     NSRange range = NSMakeRange(length - 1, 1);

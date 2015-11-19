@@ -39,7 +39,7 @@
     self.title.text = @"SOCIAL";
     self.title.textAlignment = NSTextAlignmentCenter;
     self.title.textColor = [UIColor whiteColor];
-    self.title.font = [UIFont phBold:21];
+    self.title.font = [UIFont phBold:18];
     
 //    self.hideIcon = [[UIImageView alloc] initWithFrame:CGRectMake(10, 4, 20.0, 20)];
     
@@ -48,10 +48,10 @@
     [self.mainCon addSubview:self.hideView];
     self.hideView.hidden = YES;
     
-    self.hideTitle = [[UILabel alloc] initWithFrame:CGRectMake(14, 18, frame.size.width-80, 20)];
+    self.hideTitle = [[UILabel alloc] initWithFrame:CGRectMake(14, 16, frame.size.width-80, 20)];
     self.hideTitle.text = @"Socialize";
     self.hideTitle.textColor = [UIColor darkGrayColor];
-    self.hideTitle.font = [UIFont phBold:18];
+    self.hideTitle.font = [UIFont phBold:17];
     [self.hideView addSubview:self.hideTitle];
     
     self.hideToggle = [[UISwitch alloc] initWithFrame:CGRectZero];

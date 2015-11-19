@@ -35,7 +35,7 @@
     title.text = @"MORE";
     title.textAlignment = NSTextAlignmentCenter;
     title.textColor = [UIColor whiteColor];
-    title.font = [UIFont phBold:21];
+    title.font = [UIFont phBold:18];
     [tabBar addSubview:title];
     
     self.dataA = [[NSMutableArray alloc] init]; //Fill this out in initClass
@@ -98,7 +98,7 @@
     self.labelEmpty.textAlignment = NSTextAlignmentCenter;
     self.labelEmpty.textColor = [UIColor lightGrayColor];
     self.labelEmpty.hidden = YES;
-    self.labelEmpty.font = [UIFont phBlond:16];
+    self.labelEmpty.font = [UIFont phBlond:17];
     [self.mainCon addSubview:self.labelEmpty];
     
     //Add spinner to middle
@@ -179,6 +179,8 @@
      }];
 }
 
+#pragma mark - UITableViewDataSource
+
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     return 3;
@@ -189,9 +191,42 @@
     if (section==0)
     {
         return 5;
-    }else if (section==1) return 0;
-    else if (section==2) return 1;
-    else return 0;
+    }else if (section==1) {
+        return 0;
+    }
+    else if (section==2) {
+        return 1;
+    }
+    else {
+        return 0;
+    }
+}
+
+- (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
+{
+    // Text Color
+    UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *)view;
+    header.textLabel.font = [UIFont phBold:10];
+    header.backgroundView.backgroundColor = [UIColor clearColor];
+    [header.textLabel setTextColor:[UIColor blackColor]];
+}
+
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    NSString *sectionName;
+    switch (section)
+    {
+        case 0:
+            sectionName = @"Options";
+            break;
+        case 1:
+            sectionName = @"";
+            break;
+        case 2:
+            sectionName = @"Log Out";
+            break;
+    }
+    return sectionName;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -236,7 +271,7 @@
         {
             cell = [tableView dequeueReusableCellWithIdentifier:@"MyProfileCell"];
             if (cell == nil) {cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"MyProfileCell"];}
-            cell.textLabel.font = [UIFont phBlond:19];
+            cell.textLabel.font = [UIFont phBlond:17];
             cell.textLabel.text = @"Profile";
             cell.accessoryType = UITableViewCellAccessoryNone;
             
@@ -248,7 +283,7 @@
         {
             cell = [tableView dequeueReusableCellWithIdentifier:@"MyPurchasesCell"];
             if (cell == nil) {cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"MyPurchasesCell"];}
-            cell.textLabel.font = [UIFont phBlond:19];
+            cell.textLabel.font = [UIFont phBlond:17];
             cell.textLabel.text = @"Purchases";
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }
@@ -256,14 +291,14 @@
         {
             cell = [tableView dequeueReusableCellWithIdentifier:@"PhoneVerificationCell"];
             if (cell == nil) {cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"PhoneVerificationCell"];}
-            cell.textLabel.font = [UIFont phBlond:19];
+            cell.textLabel.font = [UIFont phBlond:17];
             cell.textLabel.text = @"Phone Number";
             cell.accessoryType = UITableViewCellAccessoryNone;
             
             if([self.sharedData.phone length]>0) cell.detailTextLabel.text = [NSString stringWithFormat:@"+%@",self.sharedData.phone];//[Constants formatPhoneNumber:self.sharedData.phone];
             else cell.detailTextLabel.text = @"N/A";
             
-            cell.detailTextLabel.font = [UIFont phBold:16];
+            cell.detailTextLabel.font = [UIFont phBold:14];
             cell.detailTextLabel.adjustsFontSizeToFitWidth = YES;
             cell.detailTextLabel.textColor = [UIColor phPurpleColor];
         }
@@ -271,10 +306,10 @@
         {
             cell = [tableView dequeueReusableCellWithIdentifier:@"CreditCardCell"];
             if (cell == nil) {cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"CreditCardCell"];}
-            cell.textLabel.font = [UIFont phBlond:19];
+            cell.textLabel.font = [UIFont phBlond:17];
             cell.textLabel.text = @"Credit Card";;
             cell.accessoryType = UITableViewCellAccessoryNone;
-            cell.detailTextLabel.font = [UIFont phBlond:16];
+            cell.detailTextLabel.font = [UIFont phBlond:17];
             
             if([self.sharedData.ccLast4 length]>0) cell.detailTextLabel.text = [NSString stringWithFormat:@"•••• %@",self.sharedData.ccLast4];
             else cell.detailTextLabel.text = @"N/A";
@@ -286,7 +321,7 @@
         {
             cell = [tableView dequeueReusableCellWithIdentifier:@"InviteFriendsCell"];
             if (cell == nil) {cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"InviteFriendsCell"];}
-            cell.textLabel.font = [UIFont phBlond:19];
+            cell.textLabel.font = [UIFont phBlond:17];
             cell.textLabel.text = @"Invite Friends";
             cell.accessoryType = UITableViewCellAccessoryNone;
         }
@@ -294,7 +329,7 @@
         {
             cell = [tableView dequeueReusableCellWithIdentifier:@"EmailSupportCell"];
             if (cell == nil) {cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"EmailSupportCell"];}
-            cell.textLabel.font = [UIFont phBlond:19];
+            cell.textLabel.font = [UIFont phBlond:17];
             cell.textLabel.text = @"Email Support";
             cell.accessoryType = UITableViewCellAccessoryNone;
         }
@@ -302,14 +337,14 @@
         {
             cell = [tableView dequeueReusableCellWithIdentifier:@"SettingsCell"];
             if (cell == nil) {cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"SettingsCell"];}
-            cell.textLabel.font = [UIFont phBlond:19];
+            cell.textLabel.font = [UIFont phBlond:17];
             cell.textLabel.text = @"Settings";
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }else if(indexPath.row==5)
         {
             cell = [tableView dequeueReusableCellWithIdentifier:@"PushNotificationsCell"];
             if (cell == nil) {cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"PushNotificationsCell"];}
-            cell.textLabel.font = [UIFont phBlond:19];
+            cell.textLabel.font = [UIFont phBlond:17];
             cell.textLabel.text = @"Turn On Push Notifications";
             cell.accessoryType = UITableViewCellAccessoryNone;
         }
@@ -350,7 +385,7 @@
                 if([self.sharedData.phone length]>0) cell.detailTextLabel.text = [Constants formatPhoneNumber:self.sharedData.phone];
                 else cell.detailTextLabel.text = @"N/A";
                 
-                cell.detailTextLabel.font = [UIFont phBlond:16];
+                cell.detailTextLabel.font = [UIFont phBlond:17];
                 cell.detailTextLabel.adjustsFontSizeToFitWidth = YES;
                 cell.detailTextLabel.textColor = [UIColor colorFromHexCode:@"5C5C5C"];
             }
@@ -361,7 +396,7 @@
                 cell.textLabel.font = [UIFont phBlond:19];
                 cell.textLabel.text = @"Credit Card";;
                 cell.accessoryType = UITableViewCellAccessoryNone;
-                cell.detailTextLabel.font = [UIFont phBlond:16];
+                cell.detailTextLabel.font = [UIFont phBlond:17];
 
                 if([self.sharedData.ccLast4 length]>0) cell.detailTextLabel.text = [NSString stringWithFormat:@"•••• %@",self.sharedData.ccLast4];
                 else cell.detailTextLabel.text = @"N/A";
@@ -440,8 +475,8 @@
         {
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"HostGuestCell"];
             cell.detailTextLabel.textColor = [UIColor colorFromHexCode:@"5C5C5C"];
-            cell.textLabel.font = [UIFont phBlond:19];
-            cell.detailTextLabel.font = [UIFont phBlond:12];
+            cell.textLabel.font = [UIFont phBlond:17];
+            cell.detailTextLabel.font = [UIFont phBlond:11];
         }
         
         if(indexPath.row==0)
@@ -464,7 +499,7 @@
         cell = [tableView dequeueReusableCellWithIdentifier:@"LogOutCell"];
         if (cell == nil) {cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"LogOutCell"];}
         cell.accessoryType = UITableViewCellAccessoryNone;
-        cell.textLabel.font = [UIFont phBlond:19];
+        cell.textLabel.font = [UIFont phBlond:17];
         cell.textLabel.text = @"Log Out";
     }
     
@@ -474,6 +509,7 @@
     return cell;
 }
 
+#pragma mark - UITableViewDelegate
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -690,6 +726,7 @@
     }
  }
 
+#pragma mark - Navigation Action
 
 -(void)goToHosting
 {
@@ -738,24 +775,6 @@
      {
          self.mainCon.frame = CGRectMake(-self.sharedData.screenWidth, 0, self.sharedData.screenWidth * 3, self.sharedData.screenHeight - PHTabHeight);
      }];
-}
-
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-{
-    NSString *sectionName;
-    switch (section)
-    {
-        case 0:
-            sectionName = @"Options";
-            break;
-        case 1:
-            sectionName = @"";
-            break;
-        case 2:
-            sectionName = @"Log Out";
-            break;
-    }
-    return sectionName;
 }
 
 -(void)updateTable {
@@ -869,16 +888,6 @@
      {
          NSLog(@"ERROR :: %@",error);
      }];
-}
-
-
-- (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
-{
-    // Text Color
-    UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *)view;
-    header.textLabel.font = [UIFont phBold:12];
-    header.backgroundView.backgroundColor = [UIColor clearColor];
-    [header.textLabel setTextColor:[UIColor blackColor]];
 }
 
 -(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex

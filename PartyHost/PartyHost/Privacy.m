@@ -25,7 +25,7 @@
     self.title = [[UILabel alloc] initWithFrame:CGRectMake(0, 20, frame.size.width, 40)];
     self.title.text = @"PRIVACY";
     self.title.textAlignment = NSTextAlignmentCenter;
-    self.title.font = [UIFont phBold:21];
+    self.title.font = [UIFont phBold:18];
     self.title.textColor = [UIColor whiteColor];
     [tabBar addSubview:self.title];
     

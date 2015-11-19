@@ -46,10 +46,10 @@
     self.bgView.hidden = NO;
     [self.mainScroll addSubview:self.bgView];
     
-    self.toLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 24, self.sharedData.screenWidth, 40)];
+    self.toLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 20, self.sharedData.screenWidth, 40)];
     self.toLabel.textColor = [UIColor whiteColor];
     self.toLabel.backgroundColor = [UIColor clearColor];
-    self.toLabel.font = [UIFont phBold:21];
+    self.toLabel.font = [UIFont phBold:18];
     self.toLabel.textAlignment = NSTextAlignmentCenter;
     [self.tabBar addSubview:self.toLabel];
     

@@ -32,7 +32,7 @@
         self.nameTitle.adjustsFontSizeToFitWidth = YES;
         self.nameTitle.textColor = [UIColor blackColor];
         //self.nameTitle.backgroundColor = [UIColor redColor];
-        self.nameTitle.font = [UIFont phBold:18];
+        self.nameTitle.font = [UIFont phBold:15];
         [self addSubview:self.nameTitle];
         
         self.userImg = [[UserBubble alloc] initWithFrame:CGRectMake(10, 10 + 5, 50, 50)];

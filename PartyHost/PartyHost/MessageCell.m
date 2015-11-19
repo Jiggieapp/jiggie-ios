@@ -42,12 +42,12 @@
         [self.toIconCon addSubview:self.toIcon];
         
         self.dateLabel = [[UILabel alloc] initWithFrame:CGRectMake(2, 35, 60, 45)];
-        self.dateLabel.font = [UIFont phBlond:9.0];
+        self.dateLabel.font = [UIFont phBlond:8];
         self.dateLabel.textColor = [UIColor colorFromHexCode:@"5C5C5C"];
         self.dateLabel.textAlignment = NSTextAlignmentCenter;
         
         self.myDateLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.frame.size.width - 70, 35, 60, 45)];
-        self.myDateLabel.font = [UIFont phBlond:9.0];
+        self.myDateLabel.font = [UIFont phBlond:8];
         self.myDateLabel.textColor = [UIColor colorFromHexCode:@"5C5C5C"];
         self.myDateLabel.textAlignment = NSTextAlignmentRight;
         
@@ -249,9 +249,6 @@
         self.dateLabel.hidden = loading;
     }
 }
-
-
-
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];

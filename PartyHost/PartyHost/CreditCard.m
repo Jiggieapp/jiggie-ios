@@ -51,7 +51,7 @@
     self.title.text = @"ADD CARD";
     self.title.textAlignment = NSTextAlignmentCenter;
     self.title.textColor = [UIColor whiteColor];
-    self.title.font = [UIFont phBold:21];
+    self.title.font = [UIFont phBold:18];
     [tabBar addSubview:self.title];
     
     UIView *separator1 = [[UIView alloc] initWithFrame:CGRectMake(0,tabBar.frame.origin.y-1,self.sharedData.screenWidth,1)];

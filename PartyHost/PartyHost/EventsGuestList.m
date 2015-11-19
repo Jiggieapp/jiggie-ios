@@ -39,7 +39,7 @@
     [self.btnForward addTarget:self action:@selector(hostingLocTapHandler:) forControlEvents:UIControlEventTouchUpInside];
     //[self.tabBar addSubview:self.btnForward];
     
-    self.title = [[UILabel alloc] initWithFrame:CGRectMake(40, 32, self.sharedData.screenWidth - 80, 22)];
+    self.title = [[UILabel alloc] initWithFrame:CGRectMake(40, 20, self.sharedData.screenWidth - 80, 40)];
     self.title.textAlignment = NSTextAlignmentCenter;
     self.title.textColor = [UIColor whiteColor];
     self.title.adjustsFontSizeToFitWidth = YES;

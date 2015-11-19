@@ -13,6 +13,7 @@
 
 #define SET_IF_NOT_NULL(TARGET, VAL) if(VAL && VAL != [NSNull null]) { TARGET = VAL; }else {TARGET = @"";}
 
+#pragma mark - Object Lifecycle
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
@@ -31,7 +32,7 @@
     title.text = @"SETTINGS";
     title.textAlignment = NSTextAlignmentCenter;
     title.textColor = [UIColor whiteColor];
-    title.font = [UIFont phBold:21];
+    title.font = [UIFont phBold:18];
     [tabBar addSubview:title];
     
     self.settingsList = [[UITableView alloc] initWithFrame:CGRectMake(0, 60, frame.size.width, frame.size.height - 60) style:UITableViewStyleGrouped];
@@ -54,6 +55,7 @@
     [self.settingsList reloadData];
 }
 
+#pragma mark - Methods
 -(void)loadSettings
 {
     //Start spinner
@@ -91,6 +93,54 @@
      }];
 }
 
+-(void)notificationPartyFeedChanged:(id)sender
+{
+    UISwitch* switchControl = sender;
+    self.sharedData.notification_feed = switchControl.on;
+    [self saveSettings];
+}
+
+
+-(void)notificationChatMessagesChanged:(id)sender
+{
+    UISwitch* switchControl = sender;
+    self.sharedData.notification_messages = switchControl.on;
+    [self saveSettings];
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    [self saveSettings];
+}
+
+-(void)saveSettings
+{
+    //Start spinner
+    [[NSNotificationCenter defaultCenter]
+     postNotificationName:@"SHOW_LOADING"
+     object:self];
+    
+    AFHTTPRequestOperationManager *manager = [self.sharedData getOperationManager];
+    
+    NSString *url = [Constants memberSettingsURL];
+    [manager POST:url parameters:[self.sharedData createSaveSettingsParams] success:^(AFHTTPRequestOperation *operation, id responseObject)
+     {
+         NSLog(@"SETTINGS responseObject :: %@",responseObject);
+         
+         //Reload table view
+         [self.settingsList reloadData];
+         
+         //Hide spinner
+         [[NSNotificationCenter defaultCenter]
+          postNotificationName:@"HIDE_LOADING"
+          object:self];
+         
+     } failure:^(AFHTTPRequestOperation *operation, NSError *error)
+     {
+         NSLog(@"ERROR :: %@",error);
+     }];
+}
+
+#pragma mark - UITableViewDataSource
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     return 3;
@@ -119,13 +169,6 @@
     }
     return 0;
 }
-
-/*
- - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
- {
- return 50;
- }
- */
 
 //This leaves the bottom blank
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
@@ -166,6 +209,15 @@
     return sectionName;
 }
 
+- (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
+{
+    // Text Color
+    UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *)view;
+    header.textLabel.font = [UIFont phBold:10];
+    header.backgroundView.backgroundColor = [UIColor clearColor];
+    [header.textLabel setTextColor:[UIColor blackColor]];
+}
+
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     return 50.0;
@@ -184,7 +236,7 @@
                 cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"DocumentsCell"];
                 cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
                 cell.textLabel.textColor = [UIColor darkGrayColor];
-                cell.textLabel.font = [UIFont phBlond:19];
+                cell.textLabel.font = [UIFont phBlond:17];
                 cell.backgroundColor = [UIColor whiteColor];
             }
             
@@ -204,7 +256,7 @@
                 cell.accessoryView = switchView;
                 cell.backgroundColor = [UIColor whiteColor];
                 cell.textLabel.textColor = [UIColor darkGrayColor];
-                cell.textLabel.font = [UIFont phBlond:19];
+                cell.textLabel.font = [UIFont phBlond:17];
             }
             
             AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -239,16 +291,6 @@
             }
             
         }
-        
-        
-        
-        
-        
-        
-        
-       
-        
-        
     }
     else if (indexPath.section==2) //Documents
     {
@@ -258,7 +300,7 @@
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"DocumentsCell"];
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             cell.textLabel.textColor = [UIColor darkGrayColor];
-            cell.textLabel.font = [UIFont phBlond:19];
+            cell.textLabel.font = [UIFont phBlond:17];
             cell.backgroundColor = [UIColor whiteColor];
         }
         
@@ -281,9 +323,9 @@
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"GenderPreference"];
             cell.accessoryType = UITableViewCellAccessoryNone;
             cell.textLabel.textColor = [UIColor darkGrayColor];
-            cell.textLabel.font = [UIFont phBlond:19];
+            cell.textLabel.font = [UIFont phBlond:17];
             cell.backgroundColor = [UIColor whiteColor];
-            cell.detailTextLabel.font = [UIFont phBold:16];
+            cell.detailTextLabel.font = [UIFont phBold:14];
             cell.detailTextLabel.adjustsFontSizeToFitWidth = YES;
             cell.detailTextLabel.textColor = [UIColor phPurpleColor];
         }
@@ -325,7 +367,7 @@
             if (cell == nil)
             {
                 cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"DeleteAccountCell"];
-                cell.textLabel.font = [UIFont phBlond:19];
+                cell.textLabel.font = [UIFont phBlond:17];
                 cell.textLabel.textColor = [UIColor redColor];
                 cell.textLabel.text = @"Delete Account";
                 cell.textLabel.textAlignment = NSTextAlignmentCenter;
@@ -338,22 +380,7 @@
     return nil;
 }
 
-
-- (void) notificationPartyFeedChanged:(id)sender
-{
-    UISwitch* switchControl = sender;
-    self.sharedData.notification_feed = switchControl.on;
-    [self saveSettings];
-}
-
-
-- (void) notificationChatMessagesChanged:(id)sender
-{
-    UISwitch* switchControl = sender;
-    self.sharedData.notification_messages = switchControl.on;
-    [self saveSettings];
-}
-
+#pragma mark - UITableViewDelegate
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if(indexPath.section==0 && indexPath.row==2)
@@ -432,47 +459,6 @@
     
     
     [tableView deselectRowAtIndexPath:[tableView indexPathForSelectedRow] animated:YES];
-}
-
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    [self saveSettings];
-}
-
--(void)saveSettings
-{
-    //Start spinner
-    [[NSNotificationCenter defaultCenter]
-     postNotificationName:@"SHOW_LOADING"
-     object:self];
-    
-    AFHTTPRequestOperationManager *manager = [self.sharedData getOperationManager];
-    
-    NSString *url = [Constants memberSettingsURL];
-    [manager POST:url parameters:[self.sharedData createSaveSettingsParams] success:^(AFHTTPRequestOperation *operation, id responseObject)
-     {
-         NSLog(@"SETTINGS responseObject :: %@",responseObject);
-         
-         //Reload table view
-         [self.settingsList reloadData];
-         
-         //Hide spinner
-         [[NSNotificationCenter defaultCenter]
-          postNotificationName:@"HIDE_LOADING"
-          object:self];
-         
-     } failure:^(AFHTTPRequestOperation *operation, NSError *error)
-     {
-         NSLog(@"ERROR :: %@",error);
-     }];
-}
-
-- (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
-{
-    // Text Color
-    UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *)view;
-    header.textLabel.font = [UIFont phBold:12];
-    header.backgroundView.backgroundColor = [UIColor clearColor];
-    [header.textLabel setTextColor:[UIColor blackColor]];
 }
 
 @end

@@ -44,7 +44,7 @@
     self.title.text = @"Hostings";
     self.title.textAlignment = NSTextAlignmentCenter;
     self.title.textColor = [UIColor whiteColor];
-    self.title.font = [UIFont phBold:21];
+    self.title.font = [UIFont phBold:18];
     [self.tabBar addSubview:self.title];
     
     self.btnBack = [UIButton buttonWithType:UIButtonTypeCustom];

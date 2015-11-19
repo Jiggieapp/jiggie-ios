@@ -41,13 +41,13 @@
         
         self.nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(75, 16+6, self.sharedData.screenWidth - 100 - 80, 20)];
         self.nameLabel.adjustsFontSizeToFitWidth = YES;
-        self.nameLabel.font = [UIFont phBold:18];
+        self.nameLabel.font = [UIFont phBold:15];
         self.nameLabel.textColor = [UIColor blackColor];
         //self.nameLabel.backgroundColor = [UIColor redColor];
         [self.contentView addSubview:self.nameLabel];
         
         self.lastLabel = [[UILabel alloc] initWithFrame:CGRectMake(75, self.nameLabel.frame.origin.y + self.nameLabel.frame.size.height+1, self.sharedData.screenWidth - 75 - 32, 20)];
-        self.lastLabel.font = [UIFont phBlond:14];
+        self.lastLabel.font = [UIFont phBlond:11];
         self.lastLabel.textColor = [UIColor lightGrayColor];
         self.lastLabel.adjustsFontSizeToFitWidth = NO;
         self.lastLabel.lineBreakMode = NSLineBreakByTruncatingTail;
@@ -61,7 +61,7 @@
         
         self.dateLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.sharedData.screenWidth - 100 - 38, self.nameLabel.frame.origin.y, 100, 12)];
         //self.dateLabel.backgroundColor = [UIColor greenColor];
-        self.dateLabel.font = [UIFont phBlond:11];
+        self.dateLabel.font = [UIFont phBlond:9];
         self.dateLabel.textColor = [UIColor lightGrayColor];
         self.dateLabel.text = @"";
         self.dateLabel.textAlignment = NSTextAlignmentRight;

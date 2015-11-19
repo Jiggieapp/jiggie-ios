@@ -27,8 +27,8 @@
     self.button.layer.borderWidth = 1.5;
     [self.button setTitleColor:self.offTextColor forState:UIControlStateNormal];
     self.button.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
-    [self.button setTitleEdgeInsets:UIEdgeInsetsMake(10,6,4,6)];
-    self.button.titleLabel.font = [UIFont phBold:14];
+    [self.button setTitleEdgeInsets:UIEdgeInsetsMake(4,6,4,6)];
+    self.button.titleLabel.font = [UIFont phBold:12];
     [self.button setTitle:@"BUTTON" forState:UIControlStateNormal];
     [self addSubview:self.button];
     
@@ -65,7 +65,7 @@
     if(selected) {
         if(!animated) {
             [self.button.layer removeAllAnimations];
-            [self.button setTitleEdgeInsets:UIEdgeInsetsMake(9,6,4,20)];
+            [self.button setTitleEdgeInsets:UIEdgeInsetsMake(4,6,4,20)];
             [self.button layoutIfNeeded];
             [self.button setTitleColor:self.onTextColor forState:UIControlStateNormal];
             self.button.layer.borderColor = self.onBorderColor.CGColor;
@@ -75,7 +75,7 @@
                 self.checkmark.alpha = 1.0;
                 self.checkmark.transform = CGAffineTransformMakeScale(1.0,1.0);
             } else {
-                [self.button setTitleEdgeInsets:UIEdgeInsetsMake(9,6,4,6)];
+                [self.button setTitleEdgeInsets:UIEdgeInsetsMake(4,6,4,6)];
                 self.checkmark.alpha = 0.0;
             }
             [self.checkmark layoutIfNeeded];
@@ -86,7 +86,7 @@
             self.checkmark.alpha = 0;
             self.checkmark.transform = CGAffineTransformMakeScale(1.5,1.5);
             [UIView animateWithDuration:0.35f delay:0 options:UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationOptionCurveEaseOut animations:^{
-                self.button.titleEdgeInsets = UIEdgeInsetsMake(9,6,4,20);
+                self.button.titleEdgeInsets = UIEdgeInsetsMake(4,6,4,20);
                 [self.button setTitleColor:self.onTextColor forState:UIControlStateNormal];
                 self.button.layer.borderColor = self.onBorderColor.CGColor;
                 self.button.backgroundColor = self.onBackgroundColor;
@@ -95,7 +95,7 @@
                     self.checkmark.alpha = 1.0;
                     self.checkmark.transform = CGAffineTransformMakeScale(1.0,1.0);
                 } else {
-                    self.button.titleEdgeInsets = UIEdgeInsetsMake(9,6,4,6);
+                    self.button.titleEdgeInsets = UIEdgeInsetsMake(4,6,4,6);
                     self.checkmark.alpha = 0.0;
                 }
                 [self.checkmark layoutIfNeeded];
@@ -106,7 +106,7 @@
     else {
         if(!animated) {
             [self.button.layer removeAllAnimations];
-            [self.button setTitleEdgeInsets:UIEdgeInsetsMake(9,6,4,6)];
+            [self.button setTitleEdgeInsets:UIEdgeInsetsMake(4,6,4,6)];
             [self.button setTitleColor:self.offTextColor forState:UIControlStateNormal];
             self.button.layer.borderColor = self.offBorderColor.CGColor;
             self.button.backgroundColor = self.offBackgroundColor;
@@ -119,7 +119,7 @@
             self.checkmark.transform = CGAffineTransformMakeScale(1.0,1.0);
             [self layoutIfNeeded];
             [UIView animateWithDuration:0.25f delay:0 options:UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationOptionCurveEaseOut animations:^{
-                self.button.titleEdgeInsets = UIEdgeInsetsMake(9,6,4,6);
+                self.button.titleEdgeInsets = UIEdgeInsetsMake(4,6,4,6);
                 [self.button setTitleColor:self.offTextColor forState:UIControlStateNormal];
                 self.button.layer.borderColor = self.offBorderColor.CGColor;
                 self.button.backgroundColor = self.offBackgroundColor;

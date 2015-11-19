@@ -14,8 +14,8 @@
 
 + (UIFont *)phThin:(CGFloat)size {
     //return [UIFont fontWithName:@"FaktPro-Thin" size:size];
-    return [UIFont fontWithName:@"Calibre-Light" size:size];
-//    return [UIFont fontWithName:@"Lato-Light" size:size];
+    //return [UIFont fontWithName:@"Calibre-Light" size:size];
+    return [UIFont fontWithName:@"Lato-Light" size:size];
 }
 
 + (UIFont *)phBold:(CGFloat)size {
@@ -23,26 +23,14 @@
     //return [UIFont fontWithName:@"FaktPro-Blond" size:size];
     //return [UIFont fontWithName:@"FaktPro-SemiBold" size:size];
     //return [UIFont fontWithName:@"Calibre-Regular" size:size];
-    return [UIFont fontWithName:@"Calibre-Semibold" size:size];
-//    return [UIFont fontWithName:@"Lato-Bold" size:size];
+    //return [UIFont fontWithName:@"Calibre-Semibold" size:size];
+    return [UIFont fontWithName:@"Lato-Bold" size:size];
 }
 
 + (UIFont *)phBlond:(CGFloat)size {
     //return [UIFont fontWithName:@"Calibre Bold" size:size];
     //return [UIFont fontWithName:@"FaktPro-Blond" size:size];
-    return [UIFont fontWithName:@"Calibre-Regular" size:size];
-//    return [UIFont fontWithName:@"Lato-Regular" size:size];
-}
-
-+ (UIFont *)latoThin:(CGFloat)size {
-    return [UIFont fontWithName:@"Lato-Light" size:size];
-}
-
-+ (UIFont *)latoBold:(CGFloat)size {
-    return [UIFont fontWithName:@"Lato-Bold" size:size];
-}
-
-+ (UIFont *)latoBlond:(CGFloat)size {
+    //return [UIFont fontWithName:@"Calibre-Regular" size:size];
     return [UIFont fontWithName:@"Lato-Regular" size:size];
 }
 

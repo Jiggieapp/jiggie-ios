@@ -29,7 +29,7 @@
     title.text = @"CHAT";
     title.textAlignment = NSTextAlignmentCenter;
     title.textColor = [UIColor whiteColor];
-    title.font = [UIFont phBold:21];
+    title.font = [UIFont phBold:18];
     [tabBar addSubview:title];
     
     self.conversationsA = [[NSMutableArray alloc] init];

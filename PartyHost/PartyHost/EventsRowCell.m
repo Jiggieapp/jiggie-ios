@@ -54,31 +54,28 @@
         self.dimView.hidden = YES;
         [self addSubview:self.dimView];
         
-        self.date = [[UILabel alloc] initWithFrame:CGRectMake(10, CGRectGetMaxY(self.mainImg.frame) + 10, self.sharedData.screenWidth - 20, 18)];
+        self.date = [[UILabel alloc] initWithFrame:CGRectMake(10, CGRectGetMaxY(self.mainImg.frame) + 6, self.sharedData.screenWidth - 20, 18)];
         self.date.textColor = [UIColor blackColor];
         self.date.adjustsFontSizeToFitWidth = YES;
         self.date.textAlignment = NSTextAlignmentLeft;
-//        self.date.font = [UIFont phThin:18];
-        self.date.font = [UIFont latoThin:15];
+        self.date.font = [UIFont phThin:15];
         [self addSubview:self.date];
         
         self.title = [[UILabel alloc] initWithFrame:CGRectMake(10, CGRectGetMaxY(self.date.frame) , self.sharedData.screenWidth - 20, 20)];
         self.title.textColor = [UIColor blackColor];
         self.title.textAlignment = NSTextAlignmentLeft;
         self.title.adjustsFontSizeToFitWidth = YES;
-//        self.title.font = [UIFont phBold:19];
-        self.title.font = [UIFont latoBold:16];
+        self.title.font = [UIFont phBold:17];
         [self addSubview:self.title];
         
         self.subtitle = [[UILabel alloc] initWithFrame:CGRectMake(10, CGRectGetMaxY(self.title.frame), self.sharedData.screenWidth - 20, 18)];
         self.subtitle.textColor = [UIColor blackColor];
         self.subtitle.adjustsFontSizeToFitWidth = YES;
         self.subtitle.textAlignment = NSTextAlignmentLeft;
-//        self.subtitle.font = [UIFont phThin:18];
-        self.subtitle.font = [UIFont latoThin:15];
+        self.subtitle.font = [UIFont phThin:15];
         [self addSubview:self.subtitle];
         
-        self.tagsView = [[UIView alloc] initWithFrame:CGRectMake(10, CGRectGetMaxY(self.subtitle.frame) + 2, self.sharedData.screenWidth, 20)];
+        self.tagsView = [[UIView alloc] initWithFrame:CGRectMake(10, CGRectGetMaxY(self.subtitle.frame) + 6, self.sharedData.screenWidth, 20)];
         self.tagsView.backgroundColor = [UIColor clearColor];
         [self addSubview:self.tagsView];
         
@@ -191,9 +188,8 @@
     for (NSString *tag in tags) {
         UIButton *tagPil = [[UIButton alloc] initWithFrame:CGRectMake(currX, 0, 80, 20)];
         tagPil.enabled = NO;
-//        tagPil.titleLabel.font = [UIFont phBlond:13];
-        tagPil.titleLabel.font = [UIFont latoBlond:10];
-        tagPil.titleEdgeInsets = UIEdgeInsetsMake(0, 0, 1, 0);
+        tagPil.titleLabel.font = [UIFont phBlond:11];
+        tagPil.titleEdgeInsets = UIEdgeInsetsMake(0, 0, 2, 0);
         [tagPil setTitle:tag forState:UIControlStateNormal];
         //        tagPil.layer.borderWidth = 1.0;
         //        tagPil.layer.borderColor = [UIColor darkGrayColor].CGColor;
