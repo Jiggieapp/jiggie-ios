@@ -41,40 +41,40 @@
         self.toIcon.userInteractionEnabled = NO;
         [self.toIconCon addSubview:self.toIcon];
         
-        self.dateLabel = [[UILabel alloc] initWithFrame:CGRectMake(2, 35, 60, 45)];
-        self.dateLabel.font = [UIFont phBlond:8];
-        self.dateLabel.textColor = [UIColor colorFromHexCode:@"5C5C5C"];
+        self.dateLabel = [[UILabel alloc] initWithFrame:CGRectMake(54, 35, 60, 45)];
+        self.dateLabel.font = [UIFont phBlond:9];
+        self.dateLabel.textColor = [UIColor phDarkGrayColor];
         self.dateLabel.textAlignment = NSTextAlignmentCenter;
         
         self.myDateLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.frame.size.width - 70, 35, 60, 45)];
-        self.myDateLabel.font = [UIFont phBlond:8];
-        self.myDateLabel.textColor = [UIColor colorFromHexCode:@"5C5C5C"];
+        self.myDateLabel.font = [UIFont phBlond:9];
+        self.myDateLabel.textColor = [UIColor phDarkGrayColor];
         self.myDateLabel.textAlignment = NSTextAlignmentRight;
         
         self.toMessage = [[UITextView alloc] initWithFrame:CGRectMake(70, 0, self.frame.size.width - 90, 30)];
         //self.toMessage.backgroundColor = [self.sharedData colorWithHexString:@"292929"];
         self.toMessage.hidden = YES;
         self.toMessage.userInteractionEnabled = YES;
-        self.toMessage.font = [UIFont phBold:self.sharedData.messageFontSize];
+        self.toMessage.font = [UIFont phBlond:self.sharedData.messageFontSize];
         self.toMessage.layer.borderWidth = 0;
         self.toMessage.layer.masksToBounds = YES;
-        self.toMessage.layer.cornerRadius = 10;
-        self.toMessage.textContainerInset = UIEdgeInsetsMake(7.0f, 5.0f, 30, 0);
+        self.toMessage.layer.cornerRadius = 17;
+        self.toMessage.textContainerInset = UIEdgeInsetsMake(7.0f, 8.0f, 20, 0.0);
         self.toMessage.editable = NO;
         self.toMessage.selectable = NO;
         self.toMessage.userInteractionEnabled = NO;
-        self.toMessage.contentInset = UIEdgeInsetsMake(0.0f, 0.0f, 20, 0);
+        self.toMessage.contentInset = UIEdgeInsetsMake(0.0f, 0.0f, 30, 0);
         [self addSubview:self.toMessage];
         
         self.fromMessage = [[UITextView alloc] initWithFrame:CGRectMake(10, 0, self.frame.size.width - 30, 30)];
         //self.fromMessage.backgroundColor = [UIColor whiteColor];
         self.fromMessage.hidden = YES;
         self.fromMessage.userInteractionEnabled = NO;
-        self.fromMessage.font = [UIFont phBold:self.sharedData.messageFontSize];
+        self.fromMessage.font = [UIFont phBlond:self.sharedData.messageFontSize];
         self.fromMessage.layer.borderWidth = 0;
         self.fromMessage.layer.masksToBounds = YES;
-        self.fromMessage.layer.cornerRadius = 10;
-        self.fromMessage.textContainerInset = UIEdgeInsetsMake(7.0f, 5.0f, 20, 0);
+        self.fromMessage.layer.cornerRadius = 17;
+        self.fromMessage.textContainerInset = UIEdgeInsetsMake(7.0f, 8.0f, 20, 0.0);
         self.fromMessage.contentInset = UIEdgeInsetsMake(0.0f, 0.0f, 30, 0);
         [self addSubview:self.fromMessage];
         
@@ -156,26 +156,25 @@
         
         
         //CGRect boundingRect = [msgText boundingRectWithSize:CGSizeMake(wrappingWidth, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin                                               attributes:@{ NSFontAttributeName: self.fromMessage.font } context:nil];
+        
+        self.fromMessage.frame = CGRectMake(10, 0, self.frame.size.width - 30, 30);
         [self.fromMessage sizeToFit];
         //[self.subtitle sizeToFit];
         
         CGRect fromFrame = self.fromMessage.frame;
-        fromFrame.origin.x = 10;
+        fromFrame.origin.x = self.frame.size.width - fromFrame.size.width - 16 - 8;
         fromFrame.origin.y = 10;
         fromFrame.size.height -= 10;
-        fromFrame.size.width = self.sharedData.screenWidth - 28;
+        fromFrame.size.width += 8;
         self.fromMessage.frame = fromFrame;
-//        self.fromMessage.layer.cornerRadius = fromFrame.size.height/2;
         
         
         //self.fromMessage.frame = CGRectMake(10, 10, self.frame.size.width - 28, boundingRect.size.height + 15 + headerOffset + 15);
         self.myDateLabel.numberOfLines = 2;
         self.myDateLabel.text = [formatter stringFromDate:dte];
-        self.myDateLabel.frame = CGRectMake(self.frame.size.width - 70, self.fromMessage.frame.size.height, 60, 45);
+        self.myDateLabel.frame = CGRectMake(self.frame.size.width - 80, self.fromMessage.frame.size.height, 60, 45);
     }else{
         int headerOffset = 0;
-        self.dateLabel.numberOfLines = 2;
-        self.dateLabel.text = [formatter stringFromDate:dte];
         
         NSString *msgText = [dict objectForKey:@"message"];
         if(![[dict objectForKey:@"header"] isEqualToString:@""])
@@ -200,7 +199,7 @@
         { //Regular message
             self.toMessage.backgroundColor = [UIColor phDarkGrayColor];
             self.toMessage.textColor = [UIColor whiteColor];
-            self.triangle.color = [UIColor phDarkGrayColor];
+            self.triangle.color = [UIColor phGrayColor];
         }
         
         self.triangle.frame = CGRectMake(58, 17, 15, 15);
@@ -212,17 +211,22 @@
         //CGFloat wrappingWidth = self.toMessage.bounds.size.width - (self.toMessage.textContainerInset.left + self.toMessage.textContainerInset.right + 2 * self.toMessage.textContainer.lineFragmentPadding);
         //CGRect boundingRect = [msgText boundingRectWithSize:CGSizeMake(wrappingWidth, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin                                               attributes:@{ NSFontAttributeName: self.toMessage.font } context:nil];
         
-        //self.toMessage.frame = CGRectMake(70, 10, self.frame.size.width - 8 - 70, boundingRect.size.height + 15 + headerOffset + 10);
+        self.toMessage.frame = CGRectMake(70, 0, self.frame.size.width - 90, 30);
         [self.toMessage sizeToFit];
         
         CGRect toFrame = self.toMessage.frame;
         toFrame.origin.x = 70;
         toFrame.origin.y = 10;
         toFrame.size.height -= 10;
-        toFrame.size.width = self.sharedData.screenWidth - 8 - 70;
+        toFrame.size.width += 8;
         self.toMessage.frame = toFrame;
-//        self.toMessage.layer.cornerRadius = toFrame.size.height/2;
         
+        self.dateLabel.numberOfLines = 2;
+        self.dateLabel.text = [formatter stringFromDate:dte];
+        self.dateLabel.frame = CGRectMake(self.dateLabel.frame.origin.x, self.toMessage.frame.size.height, 60, 45);
+        NSLog(@"FROM MESSAGE :: %@", NSStringFromCGRect(self.fromMessage.frame));
+        
+        NSLog(@"TO MESSAGE :: %@", NSStringFromCGRect(self.toMessage.frame));
         [self.toIcon loadImage:self.sharedData.toImgURL];
     }
 }

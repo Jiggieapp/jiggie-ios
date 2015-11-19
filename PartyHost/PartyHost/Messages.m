@@ -151,7 +151,7 @@
     //[self.btnSend addSubview:btnSendIcon];
     
     //self.isKeyBoardShowing = NO;
-    self.loadingView = [[UIView alloc] initWithFrame:CGRectMake(0, 65, frame.size.width, frame.size.height - 65)];
+    self.loadingView = [[UIView alloc] initWithFrame:CGRectMake(0, 60, frame.size.width, frame.size.height - 60)];
     self.loadingView.backgroundColor = self.backgroundColor;
     
     UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
@@ -1105,8 +1105,8 @@
     secCon.backgroundColor = [UIColor whiteColor];
     
     UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(0, 4, self.frame.size.width, 12)];
-    title.font = [UIFont phBlond:11];
-    title.textColor = [UIColor darkGrayColor];
+    title.font = [UIFont phBlond:12];
+    title.textColor = [UIColor phDarkGrayColor];
     title.textAlignment = NSTextAlignmentCenter;
     title.text = [self.sectionsA objectAtIndex:section];
     [secCon addSubview:title];
@@ -1257,7 +1257,7 @@
         
         NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
         [formatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US"]];
-        [formatter setDateFormat:@"EEEE MMMM d"];
+        [formatter setDateFormat:@"EE, MMM d"];
         NSString *day = [formatter stringFromDate:dte];
         
         if(![self.mainDataA objectForKey:day])

@@ -26,7 +26,7 @@
         self.contentView.titleLabel.font = [UIFont phBold:size * 0.60];
         self.contentView.layer.cornerRadius = size/2;
         self.contentView.enabled = NO;
-        self.contentView.titleEdgeInsets = UIEdgeInsetsMake(2, 0, 0, 0);
+        self.contentView.titleEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 0);
         [self.contentView setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [self.contentView setTitle:@"" forState:UIControlStateNormal];
         [self addSubview:self.contentView];

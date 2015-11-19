@@ -372,8 +372,9 @@
              }
          }
          
-         [self.conversationsList beginUpdates];
-         [self.conversationsList endUpdates];
+//         [self.conversationsList beginUpdates];
+//         [self.conversationsList endUpdates];
+         [self.conversationsList reloadData];
          
          self.isLoading = NO;
          
