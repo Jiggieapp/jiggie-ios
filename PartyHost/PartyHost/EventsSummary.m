@@ -155,10 +155,6 @@
     self.seeAllCaret.tintColor = [UIColor lightGrayColor];
     [self.listingContainer addSubview:self.seeAllCaret];
     
-    self.separator2 = [[UIView alloc] init];
-    self.separator2.backgroundColor = [UIColor phDarkGrayColor];
-    [self.mainScroll addSubview:self.separator2];
-    
     KTCenterFlowLayout *layout = [KTCenterFlowLayout new];
     layout.minimumInteritemSpacing = 8.f;
     layout.minimumLineSpacing = 8.f;
@@ -180,10 +176,6 @@
 //    self.eventDate.backgroundColor = [UIColor clearColor];
 //    self.eventDate.adjustsFontSizeToFitWidth = YES;
 //    [self.mainScroll addSubview:self.eventDate];
-    
-    self.separator3 = [[UIView alloc] init];
-    self.separator3.backgroundColor = [UIColor phDarkGrayColor];
-    [self.mainScroll addSubview:self.separator3];
     
     self.aboutBody = [[UITextView alloc] init];
     self.aboutBody.font = [UIFont phBlond:12];
@@ -208,6 +200,7 @@
     self.seeMapLabel.userInteractionEnabled = NO;
     self.seeMapLabel.backgroundColor = [UIColor clearColor];
     self.seeMapLabel.adjustsFontSizeToFitWidth = YES;
+    self.seeMapLabel.numberOfLines = 2;
     [self.mainScroll addSubview:self.seeMapLabel];
     
     self.seeMapCaret = [[UIImageView alloc] init];
@@ -228,7 +221,7 @@
     [self.btnHostHere setTitle:@"" forState:UIControlStateNormal];
     [self.btnHostHere setTitleEdgeInsets:UIEdgeInsetsMake(0,0,0,0)];
     [self.btnHostHere setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [self.btnHostHere setBackgroundColor:[UIColor phLightTitleColor]];
+    [self.btnHostHere setBackgroundColor:[UIColor phBlueColor]];
     [self.btnHostHere addTarget:self action:@selector(hostHereButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:self.btnHostHere];
     
@@ -307,10 +300,6 @@
     [[NSNotificationCenter defaultCenter]
      postNotificationName:@"EVENTS_GO_GUEST_LIST"
      object:self];
-    
-    
-    
-   
     
     /*
     if([self.sharedData isGuest] && ![self.sharedData isMember])
@@ -528,8 +517,26 @@
         userList = [dict objectForKey:@"hosters"];
     }
     
+    //Get tags
+    self.tagArray = [[NSMutableArray alloc] init];
+    [self.tagArray removeAllObjects];
+    [self.tagArray addObjectsFromArray:dict[@"tags"]];
+    
+    //Tags!!!
+    if([self.tagArray count]>0)
+    {
+        self.tagCollection.frame = CGRectMake(20, self.venueName.frame.size.height + self.venueName.frame.origin.y + 16, self.sharedData.screenWidth - 40, 44);
+        //[self.tagArray addObjectsFromArray:@[@"HOUSE",@"TECHO",@"RAP",@"BLUES",@"HOUSE",@"TECHO",@"RAP",@"BLUES"]];
+        [self.tagCollection reloadData];
+        self.tagCollection.frame = CGRectMake(20, self.venueName.frame.size.height + self.venueName .frame.origin.y + 16, self.sharedData.screenWidth - 40, self.tagCollection.collectionViewLayout.collectionViewContentSize.height);
+    }
+    else
+    {
+        self.tagCollection.frame = CGRectMake(20, self.venueName.frame.size.height + self.venueName.frame.origin.y, self.sharedData.screenWidth - 40, 0);
+    }
+    
     //Separator 1
-    self.separator1.frame = CGRectMake(20,self.venueName.frame.size.height + self.venueName.frame.origin.y + 16, self.sharedData.screenWidth - 40, 1);
+    self.separator1.frame = CGRectMake(20,self.tagCollection.frame.size.height + self.tagCollection.frame.origin.y + 16, self.sharedData.screenWidth - 40, 1);
     self.separator1.hidden = NO;
     
     long totalUsers = [userList count];
@@ -620,32 +627,6 @@
         
         self.btnInfo.hidden = YES;
     }
-    
-    //Get tags
-    self.tagArray = [[NSMutableArray alloc] init];
-    [self.tagArray removeAllObjects];
-    [self.tagArray addObjectsFromArray:dict[@"tags"]];
-    
-    //Tags!!!
-    if([self.tagArray count]>0)
-    {
-        self.tagCollection.frame = CGRectMake(20, self.listingContainer.frame.size.height + self.listingContainer.frame.origin.y + 16, self.sharedData.screenWidth - 40, 44);
-        //[self.tagArray addObjectsFromArray:@[@"HOUSE",@"TECHO",@"RAP",@"BLUES",@"HOUSE",@"TECHO",@"RAP",@"BLUES"]];
-        [self.tagCollection reloadData];
-        self.tagCollection.frame = CGRectMake(20, self.listingContainer.frame.size.height + self.listingContainer.frame.origin.y + 16, self.sharedData.screenWidth - 40, self.tagCollection.collectionViewLayout.collectionViewContentSize.height);
-        
-        //Separator 2
-        self.separator2.frame = CGRectMake(20,self.tagCollection.frame.size.height + self.tagCollection.frame.origin.y + 16, self.sharedData.screenWidth - 40, 1);
-        self.separator2.hidden = NO;
-    }
-    else
-    {
-        self.tagCollection.frame = CGRectMake(20, self.listingContainer.frame.size.height + self.listingContainer.frame.origin.y, self.sharedData.screenWidth - 40, 0);
-        
-        //Separator 2
-        self.separator2.frame = CGRectMake(20,self.tagCollection.frame.size.height + self.tagCollection.frame.origin.y, self.sharedData.screenWidth - 40, 1);
-        self.separator2.hidden = YES;
-    }
 
 //    //Event Date
 //    self.eventDate.text = [[Constants toTitleDateRange:dict[@"start_datetime_str"] dbEndDateString:dict[@"end_datetime_str"]] uppercaseString];
@@ -655,7 +636,7 @@
 //    self.separator3.frame = CGRectMake(20,self.eventDate.frame.size.height + self.eventDate.frame.origin.y + 14, self.sharedData.screenWidth - 40, 1);
     
     //About body
-    self.aboutBody.frame = CGRectMake(16, self.separator2.frame.size.height + self.separator2.frame.origin.y + 10, self.sharedData.screenWidth - 32, 0);
+    self.aboutBody.frame = CGRectMake(16, self.listingContainer.frame.size.height + self.listingContainer.frame.origin.y + 10, self.sharedData.screenWidth - 32, 0);
     self.aboutBody.text = dict[@"description"];
     [self.aboutBody sizeToFit];
     
@@ -667,7 +648,8 @@
     self.seeMapView.hidden = NO;
     
     //See all label
-    self.seeMapLabel.frame = CGRectMake(-4,self.aboutBody.frame.size.height + self.aboutBody.frame.origin.y + 17, self.seeMapView.frame.size.width, self.seeMapView.frame.size.height);
+//    self.seeMapLabel.frame = CGRectMake(-4,self.aboutBody.frame.size.height + self.aboutBody.frame.origin.y + 17, self.seeMapView.frame.size.width, self.seeMapView.frame.size.height);
+    self.seeMapLabel.frame = CGRectMake(52,self.aboutBody.frame.size.height + self.aboutBody.frame.origin.y + 16, self.sharedData.screenWidth-40-64, 56);
     self.seeMapLabel.text = [dict[@"venue"][@"address"] uppercaseString];
     
     //See all caret
@@ -709,9 +691,29 @@
     self.picScroll.contentSize = CGSizeMake([photos count] * picSize.width, picSize.height);
     
     //Map
+//    CLGeocoder *geocoder = [[CLGeocoder alloc] init];
+//    NSString *fullAddress = [NSString stringWithFormat:@"%@,%@,%@ %@",dict[@"venue_name"], dict[@"venue"][@"address"],dict[@"venue"][@"city"],dict[@"venue"][@"zip"]];
+//    [geocoder geocodeAddressString:fullAddress completionHandler:^(NSArray *placemarks, NSError *error) {
+//        if (placemarks) {
+//            if([placemarks count] == 0)
+//            {
+//                return ;
+//            }
+//            NSLog(@"ANNOTATIONS :: %@", placemarks);
+//            MKPointAnnotation *pointAnnotation = [[MKPointAnnotation alloc] init];
+//            pointAnnotation.coordinate = ((CLPlacemark *)placemarks[0]).location.coordinate;
+//            self.cPlaceAnnotation = pointAnnotation;
+//            [self.mapView addAnnotation:pointAnnotation];
+//            self.mapView.centerCoordinate = ((CLPlacemark *)placemarks[0]).location.coordinate;
+//            MKCoordinateRegion region = MKCoordinateRegionMake(((CLPlacemark *)placemarks[0]).location.coordinate, MKCoordinateSpanMake(.01f, .01f));
+//            self.mapView.region = region;
+//        }
+//    }];
+    CLLocationDegrees latitude = [dict[@"venue"][@"lat"] doubleValue];
+    CLLocationDegrees longitude = [dict[@"venue"][@"long"] doubleValue];
+    CLLocation *location = [[CLLocation alloc] initWithLatitude:latitude longitude:longitude];
     CLGeocoder *geocoder = [[CLGeocoder alloc] init];
-    NSString *fullAddress = [NSString stringWithFormat:@"%@,%@ %@",dict[@"venue"][@"address"],dict[@"venue"][@"city"],dict[@"venue"][@"zip"]];
-    [geocoder geocodeAddressString:fullAddress completionHandler:^(NSArray *placemarks, NSError *error) {
+    [geocoder reverseGeocodeLocation:location completionHandler:^(NSArray *placemarks, NSError *error) {
         if (placemarks) {
             if([placemarks count] == 0)
             {
@@ -727,6 +729,17 @@
         }
     }];
     
+//    CLLocationCoordinate2D coordinate = CLLocationCoordinate2DMake(latitude, longitude);
+//    MKPointAnnotation *pointAnnotation = [[MKPointAnnotation alloc] init];
+//    pointAnnotation.title = [NSString stringWithFormat:@"%@,%@,%@ %@",dict[@"venue_name"], dict[@"venue"][@"address"],dict[@"venue"][@"city"],dict[@"venue"][@"zip"]];
+//    pointAnnotation.coordinate = coordinate;
+//    self.cPlaceAnnotation = pointAnnotation;
+//    [self.mapView addAnnotation:pointAnnotation];
+//    self.mapView.centerCoordinate = pointAnnotation.coordinate;
+//    MKCoordinateRegion region = MKCoordinateRegionMake(pointAnnotation.coordinate, MKCoordinateSpanMake(.01f, .01f));
+//    self.mapView.region = region;
+    
+    
     //Calc host here
     if([self.sharedData isHost] || [self.sharedData isMember]) //Host mode has HOST HERE button
     {
@@ -735,7 +748,6 @@
         
         
         self.btnHostHere.userInteractionEnabled = YES;
-        self.btnHostHere.backgroundColor = [UIColor phPurpleColor];
         [self.btnHostHere setTitle:@"BOOK TABLE" forState:UIControlStateNormal];
         
         /*
@@ -890,6 +902,31 @@
     self.isLoaded = NO;
 }
 
+-(void)addViewCount
+{
+    //Guests only
+    //if(self.sharedData.isHost) return;
+    
+    NSLog(@"VIEW_COUNT :: %@",self.event_id);
+    
+    AFHTTPRequestOperationManager *manager = [self.sharedData getOperationManager];
+    
+    NSString *url = [Constants guestEventsViewedURL:self.event_id fb_id:self.sharedData.fb_id];
+    
+    NSLog(@"VIEW_COUNT_URL :: %@",url);
+    
+    [manager GET:url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject)
+     {
+         NSLog(@"VIEW_COUNT_UPDATED");
+         
+     } failure:^(AFHTTPRequestOperation *operation, NSError *error)
+     {
+         NSLog(@"VIEW_COUNT_ERROR :: %@",error);
+     }];
+}
+
+#pragma mark - UICollectionViewDataSource
+
 -(NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
 {
     return 1;
@@ -986,29 +1023,6 @@
     [cell.button buttonSelect:NO animated:YES];
     [self updateSelected];
      */
-}
-
--(void)addViewCount
-{
-    //Guests only
-    //if(self.sharedData.isHost) return;
-    
-    NSLog(@"VIEW_COUNT :: %@",self.event_id);
-    
-    AFHTTPRequestOperationManager *manager = [self.sharedData getOperationManager];
-    
-    NSString *url = [Constants guestEventsViewedURL:self.event_id fb_id:self.sharedData.fb_id];
-    
-    NSLog(@"VIEW_COUNT_URL :: %@",url);
-    
-    [manager GET:url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject)
-     {
-         NSLog(@"VIEW_COUNT_UPDATED");
-         
-     } failure:^(AFHTTPRequestOperation *operation, NSError *error)
-     {
-         NSLog(@"VIEW_COUNT_ERROR :: %@",error);
-     }];
 }
 
 @end

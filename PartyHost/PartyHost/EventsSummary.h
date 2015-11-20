@@ -41,9 +41,7 @@
 @property (nonatomic, strong) NSMutableArray *tagArray;
 @property (nonatomic, strong) UICollectionView *tagCollection;
 
-@property (nonatomic, strong) UIView *separator2;
 @property (nonatomic, strong) UILabel *eventDate;
-@property (nonatomic, strong) UIView *separator3;
 @property (nonatomic, strong) UITextView *aboutBody;
 @property (nonatomic, strong) UIScrollView *mainScroll;
 @property (nonatomic, strong) UIScrollView *picScroll;

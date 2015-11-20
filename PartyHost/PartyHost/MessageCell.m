@@ -224,9 +224,7 @@
         self.dateLabel.numberOfLines = 2;
         self.dateLabel.text = [formatter stringFromDate:dte];
         self.dateLabel.frame = CGRectMake(self.dateLabel.frame.origin.x, self.toMessage.frame.size.height, 60, 45);
-        NSLog(@"FROM MESSAGE :: %@", NSStringFromCGRect(self.fromMessage.frame));
-        
-        NSLog(@"TO MESSAGE :: %@", NSStringFromCGRect(self.toMessage.frame));
+
         [self.toIcon loadImage:self.sharedData.toImgURL];
     }
 }

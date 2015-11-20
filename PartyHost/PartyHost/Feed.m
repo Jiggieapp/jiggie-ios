@@ -162,6 +162,8 @@
              [self loadData];
          }
          
+         [self.sharedData trackMixPanelWithDict:@"Socialize Toggle" withDict:@{@"toggle":matchMe}];
+         
          [[NSNotificationCenter defaultCenter]
           postNotificationName:@"HIDE_LOADING"
           object:self];

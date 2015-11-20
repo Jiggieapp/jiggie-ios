@@ -430,7 +430,7 @@
     NSLog(@">>> host_name = %@",self.sharedData.shareHostingHostName);
     NSLog(@">>> host_date = %@",self.sharedData.shareHostingHostDate);
     NSLog(@">>> host_fb_id = %@",self.sharedData.shareHostingHostFbId);
-    NSLog(@">>> hosting_id = %@",self.sharedData.shareHostingId);
+    NSLog(@">>> event_id = %@",self.sharedData.shareHostingId);
     
     NSDictionary *params = @{ @"type" : @"event",
                               @"from_fb_id":self.sharedData.fb_id,
@@ -438,7 +438,7 @@
                               //@"host_name":self.sharedData.shareHostingHostName,
                               //@"host_date":self.sharedData.shareHostingHostDate,
                               //@"host_fb_id":self.sharedData.shareHostingHostFbId,
-                              @"hosting_id":self.sharedData.shareHostingId
+                              @"event_id":self.sharedData.shareHostingId
                               };
     /*
     UIImage *hostingImg = [self.sharedData.imagesDict objectForKey:self.sharedData.cHostVenuePicURL];
