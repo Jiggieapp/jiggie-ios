@@ -667,6 +667,7 @@
     //if([photos count]==0) {photos = dict[@"venue"][@"photos"];}
     
     NSLog(@"VENUE_PHOTOS :: %@",photos);
+    
     //Page control
     self.pControl.currentPage = 0;
     self.pControl.numberOfPages = [photos count];
