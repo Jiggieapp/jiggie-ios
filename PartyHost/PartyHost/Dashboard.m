@@ -512,14 +512,20 @@
     }else{
         [self showEvents];
 //        [self showFeed];
+        
+        if(self.sharedData.isLoggedIn && self.sharedData.hasInitEventSelection)
+        {
+            self.sharedData.hasInitEventSelection = NO;
+            
+            [[NSNotificationCenter defaultCenter]
+             postNotificationName:@"SHOW_EVENT_MODAL"
+             object:self];
+        }
     }
     
     
     self.sharedData.btnYesTxt = MPTweakValue(@"PartyFeedButtonYesText", @"YES");
     self.sharedData.btnNOTxt = MPTweakValue(@"PartyFeedButtonNoText", @"NO");
-    
-    
-    
     self.sharedData.ABTestChat = MPTweakValue(@"PartyFeedABTestChat", @"YES");
     
     

@@ -187,7 +187,7 @@
 @property(nonatomic,assign) BOOL                isIphone6plus;
 @property(nonatomic,strong) NSString            *deviceType;
 
-@property(nonatomic,assign) BOOL                hasInitHosting;
+@property(nonatomic,assign) BOOL                hasInitEventSelection;
 
 @property(nonatomic,strong) NSMutableDictionary *tapDict;
 

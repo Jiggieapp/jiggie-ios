@@ -53,7 +53,7 @@
     self.mainScroll = [[UIScrollView alloc] initWithFrame:CGRectMake(0,
                                                                      self.tabBar.bounds.size.height,
                                                                      self.sharedData.screenWidth,
-                                                                     self.sharedData.screenHeight - self.tabBar.bounds.size.height)];
+                                                                     self.sharedData.screenHeight - self.tabBar.bounds.size.height - PHTabHeight)];
     self.mainScroll.showsVerticalScrollIndicator    = NO;
     self.mainScroll.showsHorizontalScrollIndicator  = NO;
     self.mainScroll.scrollEnabled                   = YES;
@@ -424,6 +424,18 @@
          
          self.externalSiteLabel.hidden = ![self.fillType isEqualToString:@"link"];
          
+         if([self.fillType isEqualToString:@"none"]) {
+             [self.mainScroll setFrame:CGRectMake(0,
+                                                  self.tabBar.bounds.size.height,
+                                                  self.sharedData.screenWidth,
+                                                  self.sharedData.screenHeight - self.tabBar.bounds.size.height - PHTabHeight)];
+         } else
+         {
+             [self.mainScroll setFrame:CGRectMake(0,
+                                                  self.tabBar.bounds.size.height,
+                                                  self.sharedData.screenWidth,
+                                                  self.sharedData.screenHeight - self.tabBar.bounds.size.height - PHTabHeight - 44)];
+         }
          
          if([self.fillType isEqualToString:@"none"])
          {
@@ -723,15 +735,15 @@
     
     
     //Calc host here
-    if([self.sharedData isHost] || [self.sharedData isMember]) //Host mode has HOST HERE button
-    {
-        self.btnHostHere.hidden = NO;
-        self.mainScroll.frame = CGRectMake(0, 60, self.sharedData.screenWidth, self.frame.size.height-60);
-        
-        
-        self.btnHostHere.userInteractionEnabled = YES;
-        [self.btnHostHere setTitle:@"BOOK TABLE" forState:UIControlStateNormal];
-        
+//    if([self.sharedData isHost] || [self.sharedData isMember]) //Host mode has HOST HERE button
+//    {
+//        self.btnHostHere.hidden = NO;
+//        self.mainScroll.frame = CGRectMake(0, 60, self.sharedData.screenWidth, self.frame.size.height-60);
+//        
+//        
+//        self.btnHostHere.userInteractionEnabled = YES;
+//        [self.btnHostHere setTitle:@"BOOK TABLE" forState:UIControlStateNormal];
+    
         /*
         if([dict[@"has_hostings"] boolValue]==NO)
         {
@@ -746,12 +758,12 @@
             [self.btnHostHere setTitle:@"YOU ARE HOSTING HERE" forState:UIControlStateNormal];
         }
         */
-    }
-    else //Guest mode
-    {
-        self.btnHostHere.hidden = YES;
-        self.mainScroll.frame = CGRectMake(0, 20, self.sharedData.screenWidth, self.sharedData.screenHeight-20-PHTabHeight);
-    }
+//    }
+//    else //Guest mode
+//    {
+//        self.btnHostHere.hidden = YES;
+//        self.mainScroll.frame = CGRectMake(0, 20, self.sharedData.screenWidth, self.sharedData.screenHeight-20-PHTabHeight);
+//    }
     
         
     self.mainScroll.contentSize = CGSizeMake(self.sharedData.screenWidth, self.mapView.frame.origin.y + self.mapView.frame.size.height);
@@ -878,6 +890,10 @@
     
     //Rescroll
     self.mainScroll.contentOffset = CGPointMake(0, 0);
+    [self.mainScroll setFrame:CGRectMake(0,
+                                         self.tabBar.bounds.size.height,
+                                         self.sharedData.screenWidth,
+                                         self.sharedData.screenHeight - self.tabBar.bounds.size.height - PHTabHeight)];
     
     self.isLoaded = NO;
 }

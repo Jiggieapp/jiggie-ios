@@ -73,7 +73,7 @@ static SharedData *sharedInstance = nil;
         self.member_user_id     = @"";
         self.cEventId_toLoad    = @"";
         self.tapDict            = [[NSMutableDictionary alloc] init];
-        self.hasInitHosting     = NO;
+        self.hasInitEventSelection     = NO;
         self.cEventId           = @"";
         self.cInviteName        = @"";
         self.cameFromEventsTab  = NO;
@@ -813,6 +813,8 @@ static SharedData *sharedInstance = nil;
     if(PHMixPanelOn==NO) return;
     
     Mixpanel *mixpanel = [Mixpanel sharedInstance];
+    
+    [mixpanel identify:@"dummy123"];
     
     [mixpanel.people set:@{@"first_name": @"orphan_user"}];
     [mixpanel.people set:@{@"last_name": @"orphan_user"}];
