@@ -35,14 +35,13 @@
     [self.btnBack addTarget:self action:@selector(goBack) forControlEvents:UIControlEventTouchUpInside];
     [self.tabBar addSubview:self.btnBack];
     
-    self.btnInfo = [UIButton buttonWithType:UIButtonTypeCustom];
-    self.btnInfo.frame = CGRectMake(self.sharedData.screenWidth - (93/4) - 8, 2 + 20, 28, 36);
-    [self.btnInfo setImage:[UIImage imageNamed:@"share_action"] forState:UIControlStateNormal];
-    self.btnInfo.imageView.contentMode = UIViewContentModeScaleAspectFit;
-    self.btnInfo.imageEdgeInsets = UIEdgeInsetsMake(4, 4, 4, 4);
-    [self.btnInfo addTarget:self action:@selector(goShareHandler) forControlEvents:UIControlEventTouchUpInside];
-    self.btnInfo.hidden = YES;
-    [self.tabBar addSubview:self.btnInfo];
+    self.btnShare = [UIButton buttonWithType:UIButtonTypeCustom];
+    self.btnShare.frame = CGRectMake(self.sharedData.screenWidth - (93/4) - 8, 2 + 20, 28, 36);
+    [self.btnShare setImage:[UIImage imageNamed:@"share_action"] forState:UIControlStateNormal];
+    self.btnShare.imageView.contentMode = UIViewContentModeScaleAspectFit;
+    self.btnShare.imageEdgeInsets = UIEdgeInsetsMake(4, 4, 4, 4);
+    [self.btnShare addTarget:self action:@selector(goShareHandler) forControlEvents:UIControlEventTouchUpInside];
+    [self.tabBar addSubview:self.btnShare];
     
     self.title = [[UILabel alloc] initWithFrame:CGRectMake(40, 20, self.sharedData.screenWidth - 80, 40)];
     self.title.textAlignment = NSTextAlignmentCenter;
@@ -423,50 +422,38 @@
          self.sharedData.cFillType = self.fillType;
          self.sharedData.cFillValue = self.fillValue;
          
+         self.externalSiteLabel.hidden = ![self.fillType isEqualToString:@"link"];
+         
+         
          if([self.fillType isEqualToString:@"none"])
          {
              self.btnHostHere.hidden = YES;
-         }
-         
-         
-         if([self.fillType isEqualToString:@"phone_number"])
+             
+         } else if([self.fillType isEqualToString:@"phone_number"])
          {
              self.btnHostHere.hidden = NO;
              [self.btnHostHere setTitle:[NSString stringWithFormat:@"CALL"] forState:UIControlStateNormal];
-         }
-         
-         if([self.fillType isEqualToString:@"link"])
+             
+         } else if([self.fillType isEqualToString:@"link"])
          {
              self.btnHostHere.hidden = NO;
              [self.btnHostHere setTitle:[NSString stringWithFormat:@"BOOK NOW"] forState:UIControlStateNormal];
-             self.externalSiteLabel.hidden = NO;
-         }else{
-             self.externalSiteLabel.hidden = YES;
-         }
-         
-         
-         if([self.fillType isEqualToString:@"reservation"])
+             
+         } else if([self.fillType isEqualToString:@"reservation"])
          {
              self.btnHostHere.hidden = NO;
              [self.btnHostHere setTitle:@"RESERVE TABLE" forState:UIControlStateNormal];
-         }
-         
-         if([self.fillType isEqualToString:@"purchase"])
+             
+         } else if([self.fillType isEqualToString:@"purchase"])
          {
              self.btnHostHere.hidden = NO;
              [self.btnHostHere setTitle:@"PURCHASE TABLE" forState:UIControlStateNormal];
          }
          
-         //
-         
-         //self.btnHostHere.hidden = YES;
-         
-         
-         
-         
          [[NSNotificationCenter defaultCenter]
           postNotificationName:@"HIDE_LOADING"
           object:self];
+         
      } failure:^(AFHTTPRequestOperation *operation, NSError *error)
      {
          NSLog(@"EVENTS_SUMMARY_LIST_ERROR (%@) :: %@",self.sharedData.account_type,error);
@@ -549,14 +536,12 @@
         self.hostNum.frame = CGRectMake(20, 0, self.sharedData.screenWidth - 40, PROFILE_SIZE);
         if([self.sharedData isHost] || [self.sharedData isMember])
         {
-            self.btnInfo.hidden = NO;
             self.hostNum.textAlignment = NSTextAlignmentLeft;
             self.hostNum.text = [NSString stringWithFormat:@"%d GUEST%@\nINTERESTED",(int)[userList count],([userList count] > 1)?@"S":@""];
             self.hostNum.numberOfLines = 2;
         }
         else if([self.sharedData isGuest])
         {
-            self.btnInfo.hidden = NO;
             self.hostNum.textAlignment = NSTextAlignmentLeft;
             self.hostNum.text = [NSString stringWithFormat:@"%d HOST%@",(int)[userList count],([userList count] > 1)?@"S":@""];
             self.hostNum.numberOfLines = 1;
@@ -618,14 +603,12 @@
         self.seeAllCaret.frame = CGRectMake(self.sharedData.screenWidth-20-32,self.seeAllView.frame.origin.y + 12, 32, 32);
         self.seeAllCaret.hidden = NO;
         
-        self.btnInfo.hidden = NO;
     }
     else
     {
         self.listingContainer.frame = CGRectMake(0, self.separator1.frame.origin.y + self.separator1.frame.size.height, self.sharedData.screenWidth, 0);
         self.listingContainer.hidden = YES;
         
-        self.btnInfo.hidden = YES;
     }
 
 //    //Event Date
@@ -648,7 +631,6 @@
     self.seeMapView.hidden = NO;
     
     //See all label
-//    self.seeMapLabel.frame = CGRectMake(-4,self.aboutBody.frame.size.height + self.aboutBody.frame.origin.y + 17, self.seeMapView.frame.size.width, self.seeMapView.frame.size.height);
     self.seeMapLabel.frame = CGRectMake(52,self.aboutBody.frame.size.height + self.aboutBody.frame.origin.y + 16, self.sharedData.screenWidth-40-64, 56);
     self.seeMapLabel.text = [dict[@"venue"][@"address"] uppercaseString];
     
@@ -665,7 +647,6 @@
     //Get photos from event then venue
     NSArray *photos = dict[@"photos"];
     //if([photos count]==0) {photos = dict[@"venue"][@"photos"];}
-    
     NSLog(@"VENUE_PHOTOS :: %@",photos);
     
     //Page control
@@ -861,8 +842,6 @@
     
     //Add to view count if guest
     [self addViewCount];
-    
-    self.btnInfo.hidden = YES;
     
     //Clear NavBar
     self.title.text = @"";

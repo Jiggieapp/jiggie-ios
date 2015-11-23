@@ -291,6 +291,7 @@
 -(void)setMixPanelOnLogin;
 -(void)trackMixPanelIncrementWithDict:(NSDictionary *)dict;
 -(void)trackMixPanelIncrementWithEventDict:(NSDictionary *)eventDict;
+-(void)createMixPanelDummyProfile;
 //===================================================================================================//
 //SPECIAL LOAD WITH CANCEL
 -(NWURLConnection*)loadImageCancelable:(NSString *)imgURL completionBlock:(void (^)(UIImage *image))completionBlock;

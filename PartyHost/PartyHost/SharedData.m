@@ -808,6 +808,19 @@ static SharedData *sharedInstance = nil;
     [mixpanel track:eventName properties:dict];
 }
 
+-(void)createMixPanelDummyProfile
+{
+    if(PHMixPanelOn==NO) return;
+    
+    Mixpanel *mixpanel = [Mixpanel sharedInstance];
+    
+    [mixpanel.people set:@{@"first_name": @"orphan_user"}];
+    [mixpanel.people set:@{@"last_name": @"orphan_user"}];
+    [mixpanel.people set:@{@"email": @"orphanuser@tfbnw.net"}];
+    [mixpanel.people set:@{@"fb_id": @"orphan"}];
+    
+}
+
 - (NSString *) platformType:(NSString *)platform
 {
     if ([platform isEqualToString:@"iPhone1,1"])    return @"iPhone 1G";
