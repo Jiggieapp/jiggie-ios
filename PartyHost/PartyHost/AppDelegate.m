@@ -93,7 +93,6 @@ static NSString *const kAllowTracking = @"allowTracking";
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     
-    /*
     if(![defaults objectForKey:@"FIRST_RUN"])
     {
         [self.sharedData trackMixPanelWithDict:@"Install" withDict:@{}];
@@ -102,8 +101,6 @@ static NSString *const kAllowTracking = @"allowTracking";
         [defaults setValue:@"YES" forKey:@"FIRST_RUN"];
         [defaults synchronize];
     }
-    */
-    
     
     
     //config.odin1 = @"82a53f1222f8781a5063a773231d4a7ee41bdd6f";
@@ -312,8 +309,6 @@ static NSString *const kAllowTracking = @"allowTracking";
     //[AppsFlyerTracker sharedTracker].isHTTPS = YES;
     [[AppsFlyerTracker sharedTracker] trackAppLaunch];
     
-    //[[AppsFlyerTracker sharedTracker] trackAppLaunch];
-    
     //[self.sharedData trackMixPanel:@"ios-party-host-open"];
     
     if(self.sharedData.isLoggedIn)
@@ -335,8 +330,6 @@ static NSString *const kAllowTracking = @"allowTracking";
     }
     
      [FBSDKAppEvents activateApp];
-    
-    //[FBAppEvents activateApp];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application

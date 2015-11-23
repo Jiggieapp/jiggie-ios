@@ -584,14 +584,7 @@
              
              
              
-             if(![defaults objectForKey:@"FIRST_RUN"])
-             {
-                 [self.sharedData trackMixPanelWithDict:@"Install" withDict:@{}];
-                 
-                 //[self.sharedData trackMixPanel:@"ios-party-host-install"];
-                 [defaults setValue:@"YES" forKey:@"FIRST_RUN"];
-                 [defaults synchronize];
-             }
+             
              
              [self.sharedData setMixPanelUserProfile];
              
