@@ -91,7 +91,7 @@
     [self.tabBar addSubview:self.btnInfo];
     
     
-    self.input = [[UITextView alloc] initWithFrame:CGRectMake(0, frame.size.height - 40, frame.size.width - 50, 40)];
+    self.input = [[UITextView alloc] initWithFrame:CGRectMake(0, frame.size.height - 40, frame.size.width - 60, 40)];
     self.input.font = [UIFont phBlond:13];
     self.input.delegate = self;
     self.input.backgroundColor = [UIColor whiteColor];
@@ -115,7 +115,7 @@
     [self.sharedData.keyboardsA addObject:self.input];
     
     self.btnSend = [[UIView alloc] initWithFrame:CGRectMake(frame.size.width - 60, frame.size.height - 40, 60, 40)];
-    self.btnSend.backgroundColor = [UIColor clearColor];
+    self.btnSend.backgroundColor = [UIColor whiteColor];
     self.btnSend.layer.masksToBounds = YES;
     [self addSubview:self.btnSend];
     
@@ -374,13 +374,12 @@
 
 -(void)reset
 {
-    self.sendTxt.textColor = [UIColor phBlueColor];
     self.canCheckScrollDown = NO;
     self.loadingView.alpha = 1.0;
     self.loadingView.hidden = NO;
     self.isMessagesLoaded = NO;
-    self.input.frame = CGRectMake(0, self.frame.size.height - 40, self.frame.size.width - 50, 40);
-    self.btnSend.frame = CGRectMake(self.frame.size.width - 50, self.frame.size.height - 40, 50, 40);
+    self.input.frame = CGRectMake(0, self.frame.size.height - 40, self.frame.size.width - 60, 40);
+    self.btnSend.frame = CGRectMake(self.frame.size.width - 60, self.frame.size.height - 40, 60, 40);
     self.messagesList.frame = self.messagesListFrame;
     self.inputNumLines = 1;
     
@@ -871,7 +870,7 @@
     [UIView animateWithDuration:0.25 animations:^()
      {
          self.input.frame = CGRectMake(0, self.frame.size.height - 40, self.frame.size.width, 50);
-         self.messagesList.frame = CGRectMake(0, 65, self.frame.size.width, self.frame.size.height - 65 - 40);
+         self.messagesList.frame = CGRectMake(0, 60, self.frame.size.width, self.frame.size.height - 60 - 40);
      } completion:^(BOOL finished)
      {
          //NSUInteger sectionCount = [self.sectionsA count] - 1;
@@ -1281,17 +1280,17 @@
     
     if(self.isKeyBoardShowing)
     {
-        self.input.frame = CGRectMake(0, self.frame.size.height - 40 - self.keyBoardHeight, self.frame.size.width - 50, 40);
-        self.btnSend.frame = CGRectMake(self.frame.size.width - 50, self.frame.size.height - 40 - self.keyBoardHeight, 50, 40);
+        self.input.frame = CGRectMake(0, self.frame.size.height - 40 - self.keyBoardHeight, self.frame.size.width - 60, 40);
+        self.btnSend.frame = CGRectMake(self.frame.size.width - 60, self.frame.size.height - 40 - self.keyBoardHeight, 60, 40);
     }
     else
     {
-        self.btnSend.frame = CGRectMake(self.frame.size.width - 50, self.frame.size.height - 40, 50, 40);
-        self.input.frame = CGRectMake(0, self.frame.size.height - 40, self.frame.size.width - 50, 40);
+        self.btnSend.frame = CGRectMake(self.frame.size.width - 60, self.frame.size.height - 40, 60, 40);
+        self.input.frame = CGRectMake(0, self.frame.size.height - 40, self.frame.size.width - 60, 40);
     }
     
     
-    self.sendTxt.frame = CGRectMake(0,self.btnSend.bounds.size.height - 25,self.btnSend.bounds.size.width,20);
+    self.sendTxt.frame = CGRectMake(0,self.btnSend.bounds.size.height - 29,self.btnSend.bounds.size.width,20);
     self.input.text = @"";
     
     self.inputNumLines = 1;
@@ -1300,7 +1299,6 @@
     
     [self sendMessageToServer:message];
     
-    self.sendTxt.textColor = [UIColor whiteColor];
     NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
     [dict setObject:message forKey:@"message"];
     NSDate *now = [NSDate date];
@@ -1618,7 +1616,7 @@
     
     self.input.frame = CGRectMake(0, self.frame.size.height - 40 - self.keyBoardHeight - ((self.inputNumLines - 1) * 20), self.frame.size.width - 60, 40 + ((self.inputNumLines - 1) * 20));
     self.btnSend.frame = CGRectMake(self.frame.size.width - 60, self.frame.size.height - 40 - self.keyBoardHeight - ((self.inputNumLines - 1) * 20), 60, 40 + ((self.inputNumLines - 1) * 20));
-    self.messagesList.frame = CGRectMake(0, 65, self.frame.size.width, self.frame.size.height - 65 - 40 - self.keyBoardHeight);
+    self.messagesList.frame = CGRectMake(0, 60, self.frame.size.width, self.frame.size.height - 60 - 40 - self.keyBoardHeight);
     
     [self scrollToBottom:NO];
     
@@ -1654,7 +1652,7 @@
     
     self.input.frame = CGRectMake(0, self.frame.size.height - 40, self.frame.size.width - 60, 40);
     self.btnSend.frame = CGRectMake(self.frame.size.width - 60, self.frame.size.height - 40, 60, 40);
-    self.messagesList.frame = CGRectMake(0, 65, self.frame.size.width, self.frame.size.height - 65 - 40);
+    self.messagesList.frame = CGRectMake(0, 60, self.frame.size.width, self.frame.size.height - 60 - 40);
 }
 
 

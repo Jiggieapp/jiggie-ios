@@ -43,7 +43,6 @@
 
 
 @property (strong, nonatomic) UIView                *cardOne;
-@property (strong, nonatomic) UIView                *bgWhite;
 @property (strong, nonatomic) UIView                *greenCircle;
 @property (strong, nonatomic) UILabel               *nameLabel;
 @property (strong, nonatomic) UIButton              *eventLabel;

@@ -195,7 +195,6 @@
         //        tagPil.layer.borderColor = [UIColor darkGrayColor].CGColor;
         [tagPil setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         tagPil.layer.cornerRadius = 10;
-        [self addSubview:tagPil];
         
         if ([tag isEqualToString:@"Featured"]) {
             tagPil.backgroundColor = [UIColor colorFromHexCode:@"D9603E"];
@@ -208,7 +207,7 @@
         } else if ([tag isEqualToString:@"Fashion"]) {
             tagPil.backgroundColor = [UIColor colorFromHexCode:@"68CE49"];
         } else {
-            tagPil.backgroundColor = [UIColor colorFromHexCode:@"10BBFF"];
+            tagPil.backgroundColor = [UIColor colorFromHexCode:@"ED4FC4"];
         }
         
         CGSize resizePill =  [self.sharedData sizeForLabelString:[tagPil titleForState:UIControlStateNormal]

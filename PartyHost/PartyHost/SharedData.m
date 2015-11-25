@@ -165,10 +165,10 @@ static SharedData *sharedInstance = nil;
         
         //Height of feed cells
         self.feedCellHeightShort = 80;
-        self.feedCellHeightLong = 405;
+        self.feedCellHeightLong = 365;
         if(self.isIphone4)
         {
-            self.feedCellHeightLong = 405 - 86;
+            self.feedCellHeightLong = 385 - 86;
         } else if (self.isIphone6)
         {
             self.feedCellHeightLong = 504;

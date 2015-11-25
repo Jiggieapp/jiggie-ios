@@ -959,7 +959,7 @@
     } else if ([title isEqualToString:@"Fashion"]) {
         cell.button.offBackgroundColor = [UIColor colorFromHexCode:@"68CE49"];
     } else {
-        cell.button.offBackgroundColor = [UIColor colorFromHexCode:@"10BBFF"];
+        cell.button.offBackgroundColor = [UIColor colorFromHexCode:@"ED4FC4"];
     }
     
     [cell setNeedsLayout];

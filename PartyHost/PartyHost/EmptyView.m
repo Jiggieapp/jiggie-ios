@@ -28,8 +28,8 @@
     self.title.text = @"Check back soon";
     self.title.textAlignment = NSTextAlignmentCenter;
     self.title.adjustsFontSizeToFitWidth = YES;
-    self.title.textColor = [UIColor phDarkGrayColor];
-    self.title.font = [UIFont phBold:20];
+    self.title.textColor = [UIColor blackColor];
+    self.title.font = [UIFont phBlond:22];
     
     
     //self.title.layer.borderColor = [UIColor whiteColor].CGColor;
@@ -49,7 +49,7 @@
     self.subtitle.text = @"You’ve looked through everyone interested";
     self.subtitle.textAlignment = NSTextAlignmentCenter;
     self.subtitle.adjustsFontSizeToFitWidth = YES;
-    self.subtitle.textColor = [UIColor blackColor];
+    self.subtitle.textColor = [UIColor phDarkGrayColor];
     self.subtitle.font = [UIFont phBlond:14];
     self.subtitle.numberOfLines = 2;
     [self.container addSubview:self.subtitle];

@@ -16,7 +16,7 @@
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
-    self.backgroundColor = [UIColor phLightSilverColor];
+    self.backgroundColor = [UIColor whiteColor];
     self.sharedData = [SharedData sharedInstance];
     self.sharedData.feedPage = self;
     self.isFeedLoaded = NO;
@@ -43,12 +43,12 @@
     
 //    self.hideIcon = [[UIImageView alloc] initWithFrame:CGRectMake(10, 4, 20.0, 20)];
     
-    self.hideView = [[UIView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(tabBar.frame), self.sharedData.screenWidth, 40)];
+    self.hideView = [[UIView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(tabBar.frame) + 10, self.sharedData.screenWidth, 40)];
     self.hideView.backgroundColor = [UIColor clearColor];
     [self.mainCon addSubview:self.hideView];
     self.hideView.hidden = YES;
     
-    self.hideTitle = [[UILabel alloc] initWithFrame:CGRectMake(14, 16, frame.size.width-80, 20)];
+    self.hideTitle = [[UILabel alloc] initWithFrame:CGRectMake(14, 14, frame.size.width-80, 20)];
     self.hideTitle.text = @"Socialize";
     self.hideTitle.textColor = [UIColor darkGrayColor];
     self.hideTitle.font = [UIFont phBold:17];
@@ -59,12 +59,12 @@
                                        8,
                                        self.hideToggle.bounds.size.width,
                                        self.hideToggle.bounds.size.height);
-    [self.hideToggle setOnTintColor:[UIColor phPurpleColor]];
+    [self.hideToggle setOnTintColor:[UIColor phBlueColor]];
     [self.hideToggle addTarget:self action:@selector(hideToggleHandler) forControlEvents:UIControlEventTouchUpInside];
     [self.hideView addSubview:self.hideToggle];
     
     //Create table
-    self.feedTable = [[UITableView alloc] initWithFrame:CGRectMake(0, self.sharedData.screenHeight - self.sharedData.feedCellHeightLong - 50 - 3, frame.size.width, frame.size.height - 60 - self.hideView.frame.size.height)];
+    self.feedTable = [[UITableView alloc] initWithFrame:CGRectMake(0, self.sharedData.screenHeight - self.sharedData.feedCellHeightLong - 70 - 3, frame.size.width, frame.size.height - 60 - self.hideView.frame.size.height)];
     self.feedTable.delegate = self;
     self.feedTable.dataSource = self;
     self.feedTable.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -367,6 +367,26 @@
      }];
 }
 
+#pragma mark - UITableViewDataSource
+-(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return 1;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return ([self.feedData count] > 0)?1:0;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSDictionary *data = [self.feedData objectAtIndex:indexPath.row];
+    NSString* typeCell = data[@"type"];
+    
+    if([typeCell isEqualToString:@"login"] || [typeCell isEqualToString:@"signedup"]) {return self.sharedData.feedCellHeightShort;}
+    
+    return self.sharedData.feedCellHeightLong;
+}
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     
@@ -388,30 +408,6 @@
     }
     
     return cell;
-}
-
-- (void)tableView:(UITableView *)tableView willDisplayCell:(FeedCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-}
-
--(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
-    return 1;
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    return ([self.feedData count] > 0)?1:0;
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    NSDictionary *data = [self.feedData objectAtIndex:indexPath.row];
-    NSString* typeCell = data[@"type"];
-    
-    if([typeCell isEqualToString:@"login"] || [typeCell isEqualToString:@"signedup"]) {return self.sharedData.feedCellHeightShort;}
-    
-    return self.sharedData.feedCellHeightLong;
 }
 
 @end
