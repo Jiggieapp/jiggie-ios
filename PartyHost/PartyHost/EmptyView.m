@@ -24,7 +24,7 @@
     self.image.contentMode = UIViewContentModeScaleAspectFill;
     [self.container addSubview:self.image];
     
-    self.title = [[UILabel alloc] initWithFrame:CGRectMake(16, 64+16, frame.size.width-32, 32)];
+    self.title = [[UILabel alloc] initWithFrame:CGRectMake(16, 64+12, frame.size.width-32, 32)];
     self.title.text = @"Check back soon";
     self.title.textAlignment = NSTextAlignmentCenter;
     self.title.adjustsFontSizeToFitWidth = YES;
@@ -45,7 +45,7 @@
     
     [self.container addSubview:self.title];
     
-    self.subtitle = [[UILabel alloc] initWithFrame:CGRectMake(16, self.title.frame.origin.y + self.title.frame.size.height + 4, frame.size.width - 32, 50)];
+    self.subtitle = [[UILabel alloc] initWithFrame:CGRectMake(16, self.title.frame.origin.y + self.title.frame.size.height + 12, frame.size.width - 32, 50)];
     self.subtitle.text = @"You’ve looked through everyone interested";
     self.subtitle.textAlignment = NSTextAlignmentCenter;
     self.subtitle.adjustsFontSizeToFitWidth = YES;
@@ -69,7 +69,7 @@
     self.title.text = title;
     
     //Need line spacing cause this font is bad!!!
-    self.subtitle.frame = CGRectMake(16, self.title.frame.origin.y + self.title.frame.size.height + 4, self.frame.size.width - 32, 50);
+    self.subtitle.frame = CGRectMake(16, self.title.frame.origin.y + self.title.frame.size.height + 12, self.frame.size.width - 32, 50);
     NSMutableAttributedString* attrString = [[NSMutableAttributedString alloc] initWithString:subtitle];
     NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
     [style setAlignment:NSTextAlignmentCenter];
@@ -79,7 +79,7 @@
                        range:NSMakeRange(0, [subtitle length])];
     self.subtitle.attributedText = attrString;
     [self.subtitle sizeToFit];
-    self.subtitle.frame = CGRectMake(16, self.title.frame.origin.y + self.title.frame.size.height + 4, self.frame.size.width - 32, self.subtitle.frame.size.height);
+    self.subtitle.frame = CGRectMake(16, self.title.frame.origin.y + self.title.frame.size.height + 12, self.frame.size.width - 32, self.subtitle.frame.size.height);
     
     self.image.image = [[UIImage imageNamed:imageNamed] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     self.image.tintColor = [UIColor phLightGrayColor];
