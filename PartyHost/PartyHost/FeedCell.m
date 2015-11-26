@@ -30,8 +30,6 @@
         self.sharedData = [SharedData sharedInstance];
         self.mainData = [[NSMutableDictionary alloc] init];
         
-        
-        
         self.mainCon = [[UIView alloc] initWithFrame:CGRectMake(10, 0, self.sharedData.screenWidth-20, self.sharedData.feedCellHeightLong)];
         self.mainCon.backgroundColor = [UIColor clearColor];
         self.mainCon.layer.masksToBounds = YES;
@@ -178,7 +176,7 @@
         int OffsetFontLargeDevice = 0;
         if (self.sharedData.isIphone6) {
             OffSetLargeDevice = 86;
-            OffsetFontLargeDevice = 2;
+            OffsetFontLargeDevice = 1;
         } else if (self.sharedData.isIphone6plus) {
             OffSetLargeDevice = 146;
             OffsetFontLargeDevice = 3;
@@ -209,18 +207,18 @@
         [self.cardOne addSubview:self.nameLabel];
         
         self.eventLabel = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-        self.eventLabel.frame = CGRectMake(0, 245 - OffSet + OffSetLargeDevice * 0.7, self.mainCon.bounds.size.width, 40);
+        self.eventLabel.frame = CGRectMake(0, 235 - OffSet + OffSetLargeDevice * 0.7, self.mainCon.bounds.size.width, 40);
         [self.eventLabel setTitleColor:[UIColor phBlueColor] forState:UIControlStateNormal];
         self.eventLabel.titleLabel.font = [UIFont phBold:16 + OffsetFontLargeDevice];
         self.eventLabel.titleLabel.textAlignment = NSTextAlignmentCenter;
         self.eventLabel.titleLabel.lineBreakMode = NSLineBreakByWordWrapping;
         self.eventLabel.titleLabel.numberOfLines = 2;
-        self.eventLabel.contentVerticalAlignment = UIControlContentVerticalAlignmentTop;
+//        self.eventLabel.contentVerticalAlignment = UIControlContentVerticalAlignmentTop;
         [self.eventLabel setTitleEdgeInsets:UIEdgeInsetsMake(0, 30, 0, 30)];
         [self.eventLabel addTarget:self action:@selector(eventInfoHandler) forControlEvents:UIControlEventTouchUpInside];
         [self.cardOne addSubview:self.eventLabel];
         
-        self.recLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 265 - OffSet + OffSetLargeDevice * 0.7, self.mainCon.bounds.size.width, 30)];
+        self.recLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 255 - OffSet + OffSetLargeDevice * 0.7, self.mainCon.bounds.size.width, 30)];
         self.recLabel.textColor = [self.sharedData colorWithHexString:@"5c5c5c"];
         self.recLabel.font = [UIFont phBlond:15 + OffsetFontLargeDevice];
         self.recLabel.textAlignment = NSTextAlignmentCenter;
@@ -244,8 +242,7 @@
         [self.cardTwo addSubview:self.nameLabelTwo];
         
         self.eventLabelTwo = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-        self.eventLabelTwo.frame = CGRectMake(0, 66 - OffSet/3 + OffSetLargeDevice * 0.3, self.mainCon.bounds.size.width, 40);
-//        [self.eventLabelTwo setTitleColor:[self.sharedData colorWithHexString:@"5c5c5c"] forState:UIControlStateNormal];
+        self.eventLabelTwo.frame = CGRectMake(0, 66 - OffSet/3 + OffSetLargeDevice * 0.4, self.mainCon.bounds.size.width, 40);
         [self.eventLabelTwo setTitleColor:[UIColor phBlueColor] forState:UIControlStateNormal];
         
         self.eventLabelTwo.titleLabel.lineBreakMode = NSLineBreakByWordWrapping;
@@ -324,14 +321,13 @@
     [self.mainData addEntriesFromDictionary:dict];
     
     
-    self.cardTwo.hidden = ![self.mainData[@"type"] isEqualToString:@"approved"];
+    self.cardTwo.hidden = [self.mainData[@"type"] isEqualToString:@"approved"];
     
     NSString *usrImgURL = [self.sharedData profileImgLarge:self.mainData[@"from_fb_id"]];
     
     [self.btnUserImage setImage:[UIImage imageNamed:@"fbperson_blank_square"] forState:UIControlStateNormal];
     self.btnUserImage.contentMode = UIViewContentModeScaleToFill;
     self.btnUserImage.imageView.contentMode = UIViewContentModeScaleToFill;
-    
     
     [self.btnUserImageTwo setImage:[UIImage imageNamed:@"fbperson_blank_square"] forState:UIControlStateNormal];
     
@@ -349,8 +345,9 @@
 
     NSString *first_name = [self.sharedData capitalizeFirstLetter:self.mainData[@"from_first_name"]];
     self.nameLabel.text = [NSString stringWithFormat:@"%@ is also interested in",first_name];
-    [self.eventLabel setTitle:[NSString stringWithFormat:@"%@",self.mainData[@"event_name"]] forState:UIControlStateNormal];
-    NSLog(@"NUMBER OF LINE :: %li", self.eventLabel.titleLabel.numberOfLines);
+    NSString *eventLabelText = [NSString stringWithFormat:@"%@",self.mainData[@"event_name"]];
+    [self.eventLabel setTitle:eventLabelText forState:UIControlStateNormal];
+    
     
     if([self.sharedData.ABTestChat isEqualToString:@"YES"])
     {
@@ -362,9 +359,30 @@
         self.recLabel.text = [NSString stringWithFormat:@"Chat with %@?",first_name];
         self.titleLabel.text = [NSString stringWithFormat:@"Chat with %@?",first_name];
     }
-//    NSString *title = [NSString stringWithFormat:@"%@ %@", [NSString stringWithFormat:@"%@",self.mainData[@"event_name"]], [NSString stringWithFormat:@"%@",self.mainData[@"event_name"]]];
-//        [self.eventLabelTwo setTitle:title forState:UIControlStateNormal];
+    
     [self.eventLabelTwo setTitle:[NSString stringWithFormat:@"%@",self.mainData[@"event_name"]] forState:UIControlStateNormal];
+    
+    
+    
+    CGSize eventSize = CGSizeMake(self.eventLabel.bounds.size.width - 60, self.eventLabel.bounds.size.height);
+    CGRect stringFrame = [eventLabelText boundingRectWithSize:eventSize
+                                                      options:NSStringDrawingUsesLineFragmentOrigin
+                                                   attributes:@{NSFontAttributeName:self.eventLabel.titleLabel.font}
+                                                      context:nil];
+    
+    int Offset = -8;
+    if (self.sharedData.isIphone6 || self.sharedData.isIphone6plus) {
+        Offset = 8;
+    }
+    
+    self.eventLabel.frame = CGRectMake(self.eventLabel.frame.origin.x,
+                                       CGRectGetMaxY(self.nameLabel.frame) + Offset,
+                                       self.eventLabel.frame.size.width,
+                                       stringFrame.size.height + 10);
+    self.recLabel.frame = CGRectMake(self.recLabel.frame.origin.x,
+                                     CGRectGetMaxY(self.eventLabel.frame) + Offset,
+                                     self.recLabel.frame.size.width,
+                                     self.recLabel.frame.size.height);
     
     
     //NSLog(@"TYPE_______ :: %@",self.mainData[@"type"]);

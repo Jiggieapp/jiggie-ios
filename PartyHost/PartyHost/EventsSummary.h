@@ -13,6 +13,7 @@
 #import "SetupPickViewCell.h"
 #import "UICollectionViewLeftAlignedLayout.h"
 #import "KTCenterFlowLayout.h"
+#import "EmptyView.h"
 
 @interface EventsSummary : UIView<UIScrollViewDelegate,CLLocationManagerDelegate,MKMapViewDelegate,UICollectionViewDataSource,UICollectionViewDelegate,UICollectionViewDelegateFlowLayout>
 
@@ -23,10 +24,12 @@
 @property (nonatomic, strong) NSString *event_id;
 
 //Nav top
-@property(nonatomic,strong) UILabel *title;
-@property(nonatomic,strong) UIView *tabBar;
-@property(nonatomic,strong) UIButton *btnBack;
+@property (nonatomic,strong) UILabel *title;
+@property (nonatomic,strong) UIView *tabBar;
+@property (nonatomic,strong) UIButton *btnBack;
 @property (nonatomic, strong) UIButton *btnShare;
+
+@property (nonatomic, strong) EmptyView *emptyView;
 
 @property (nonatomic, strong) UIButton *btnHostHere;
 @property (nonatomic, strong) UILabel *venueName;

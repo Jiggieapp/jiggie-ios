@@ -82,14 +82,16 @@
     [self.mainCon addSubview:self.privacyPage];
     
     self.btnBack = [UIButton buttonWithType:UIButtonTypeCustom];
-    self.btnBack.frame = CGRectMake(self.sharedData.screenWidth, 13, 50, 50);
-    [self.btnBack setBackgroundImage:[UIImage imageNamed:@"nav_back"] forState:UIControlStateNormal];
+    self.btnBack.frame = CGRectMake(self.sharedData.screenWidth, 20, 40, 40);
+    [self.btnBack setImage:[UIImage imageNamed:@"nav_back"] forState:UIControlStateNormal];
+    [self.btnBack setImageEdgeInsets:UIEdgeInsetsMake(8, 14, 8, 14)];
     [self.btnBack addTarget:self action:@selector(goHome) forControlEvents:UIControlEventTouchUpInside];
     self.sharedData.morePageBtnBack = self.btnBack;
     
     self.btnPTBack = [UIButton buttonWithType:UIButtonTypeCustom];
-    self.btnPTBack.frame = CGRectMake(self.sharedData.screenWidth * 2, 15, 50, 50);
-    [self.btnPTBack setBackgroundImage:[UIImage imageNamed:@"nav_back"] forState:UIControlStateNormal];
+    self.btnPTBack.frame = CGRectMake(self.sharedData.screenWidth * 2, 20, 40, 40);
+    [self.btnPTBack setImage:[UIImage imageNamed:@"nav_back"] forState:UIControlStateNormal];
+    [self.btnPTBack setImageEdgeInsets:UIEdgeInsetsMake(8, 14, 8, 14)];
     [self.btnPTBack addTarget:self action:@selector(goPTBack) forControlEvents:UIControlEventTouchUpInside];
     
     //Create empty label

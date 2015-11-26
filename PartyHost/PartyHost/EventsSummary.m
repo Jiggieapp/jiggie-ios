@@ -21,7 +21,7 @@
 {
     self = [super initWithFrame:frame];
     lastEventId = @"";
-    //self.backgroundColor = [UIColor redColor];
+    self.backgroundColor = [UIColor whiteColor];
     
     self.sharedData = [SharedData sharedInstance];
     
@@ -30,8 +30,9 @@
     [self addSubview:self.tabBar];
     
     self.btnBack = [UIButton buttonWithType:UIButtonTypeCustom];
-    self.btnBack.frame = CGRectMake(0, 14, 50, 50);
-    [self.btnBack setBackgroundImage:[UIImage imageNamed:@"nav_back"] forState:UIControlStateNormal];
+    self.btnBack.frame = CGRectMake(0, 20, 40, 40);
+    [self.btnBack setImage:[UIImage imageNamed:@"nav_back"] forState:UIControlStateNormal];
+    [self.btnBack setImageEdgeInsets:UIEdgeInsetsMake(8, 14, 8, 14)];
     [self.btnBack addTarget:self action:@selector(goBack) forControlEvents:UIControlEventTouchUpInside];
     [self.tabBar addSubview:self.btnBack];
     
@@ -232,6 +233,13 @@
     self.externalSiteLabel.hidden = YES;
     [self.btnHostHere addSubview:self.externalSiteLabel];
     
+    self.emptyView = [[EmptyView alloc] initWithFrame:CGRectMake(0,
+                                                                self.tabBar.bounds.size.height,
+                                                                self.sharedData.screenWidth,
+                                                                self.sharedData.screenHeight - self.tabBar.bounds.size.height - PHTabHeight)];
+    self.emptyView.backgroundColor = [UIColor whiteColor];
+    [self addSubview:self.emptyView];
+    
     //version_3.0
     return self;
 }
@@ -389,10 +397,8 @@
                  [alert show];
                  
                  [self goBack];
-                 
-                 [[NSNotificationCenter defaultCenter]
-                  postNotificationName:@"HIDE_LOADING"
-                  object:self];
+
+                 [self.emptyView setMode:@"hide"];
                  
                  return;
              }
@@ -462,16 +468,13 @@
              [self.btnHostHere setTitle:@"PURCHASE TABLE" forState:UIControlStateNormal];
          }
          
-         [[NSNotificationCenter defaultCenter]
-          postNotificationName:@"HIDE_LOADING"
-          object:self];
+         [self.emptyView setMode:@"hide"];
          
      } failure:^(AFHTTPRequestOperation *operation, NSError *error)
      {
          NSLog(@"EVENTS_SUMMARY_LIST_ERROR (%@) :: %@",self.sharedData.account_type,error);
-         [[NSNotificationCenter defaultCenter]
-          postNotificationName:@"HIDE_LOADING"
-          object:self];
+         
+         [self.emptyView setMode:@"empty"];
      }];
 }
 
@@ -592,13 +595,13 @@
 
             btnPic.layer.cornerRadius = PROFILE_SIZE/2;
             btnPic.layer.masksToBounds = YES;
-            btnPic.layer.borderColor = [UIColor phCyanColor].CGColor;
+            btnPic.layer.borderColor = [UIColor phBlueColor].CGColor;
             btnPic.layer.borderWidth = 2.0;
             btnPic.backgroundColor = [UIColor clearColor];
-            [btnPic setTitleEdgeInsets:UIEdgeInsetsMake(6,0,0,2)];
+            [btnPic setTitleEdgeInsets:UIEdgeInsetsMake(0,0,0,2)];
             [btnPic setTitle:[NSString stringWithFormat:@"+%d",(int)[userList count] - PROFILE_PICS + 1] forState:UIControlStateNormal];
             btnPic.titleLabel.font = [UIFont phBold:18];
-            [btnPic setTitleColor:[UIColor phCyanColor] forState:UIControlStateNormal];
+            [btnPic setTitleColor:[UIColor phBlueColor] forState:UIControlStateNormal];
             [self.userContainer addSubview:btnPic];
         }
     
@@ -848,9 +851,7 @@
     if([lastEventId isEqualToString:self.event_id]) return;
     if(self.event_id!=nil) lastEventId = [NSString stringWithString:self.event_id];
     
-    [[NSNotificationCenter defaultCenter]
-     postNotificationName:@"SHOW_LOADING"
-     object:self];
+    [self.emptyView setMode:@"load"];
     
     //Add to view count if guest
     [self addViewCount];

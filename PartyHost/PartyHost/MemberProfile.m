@@ -111,17 +111,17 @@
     
     [self.aboutPanel addSubview:self.reviewContainer];
     
-    self.aboutLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, 80, self.sharedData.screenHeight-40, 18)];
+    self.aboutLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, 80, self.sharedData.screenHeight-40, 20)];
     self.aboutLabel.text = @"ABOUT";
     self.aboutLabel.hidden = YES;
     self.aboutLabel.textAlignment = NSTextAlignmentLeft;
-    self.aboutLabel.font = [UIFont phBold:15];
+    self.aboutLabel.font = [UIFont phBold:13];
     self.aboutLabel.textColor = [UIColor blackColor];
     self.aboutLabel.backgroundColor = [UIColor clearColor];
     [self.aboutPanel addSubview:self.aboutLabel];
     
     self.aboutBody = [[UITextView alloc] initWithFrame:CGRectMake(15, self.aboutLabel.frame.origin.y + self.aboutLabel.frame.size.height, frame.size.width - 40, 0)];
-    self.aboutBody.font = [UIFont phBlond:17];
+    self.aboutBody.font = [UIFont phBlond:16];
     self.aboutBody.textColor = [UIColor darkGrayColor];
     self.aboutBody.textAlignment = NSTextAlignmentLeft;
     self.aboutBody.userInteractionEnabled = NO;
@@ -144,7 +144,7 @@
     
     self.hostingsBody = [[UITextView alloc] init];
     self.hostingsBody.frame = CGRectMake(15, self.hostingsLabel.frame.origin.y + self.hostingsLabel.frame.size.height, frame.size.width - 40, 0);
-    self.hostingsBody.font = [UIFont phBlond:15];
+    self.hostingsBody.font = [UIFont phBlond:16];
     self.hostingsBody.textColor = [UIColor blackColor];
     self.hostingsBody.textAlignment = NSTextAlignmentLeft;
     self.hostingsBody.userInteractionEnabled = NO;
@@ -297,7 +297,7 @@
         y1 += SPACE_BETWEEN_SECTIONS;
         
         self.aboutLabel.hidden = NO;
-        self.aboutLabel.frame = CGRectMake(self.nameLabel.frame.origin.x, y1, self.nameLabel.frame.size.width, 25);
+        self.aboutLabel.frame = CGRectMake(self.nameLabel.frame.origin.x, y1, self.nameLabel.frame.size.width, 20);
         y1+=self.aboutLabel.frame.size.height+2;
         
         self.aboutBody.hidden = NO;
@@ -340,24 +340,15 @@
     }
     */
     
-    
-    
-    
     self.separator4.hidden = YES;
     self.hostingsLabel.hidden = YES;
     self.hostingsBody.hidden = YES;
     
     self.aboutPanel.frame = CGRectMake(0, self.aboutPanel.frame.origin.y, self.sharedData.screenWidth, y1);
-    
-    self.mainScroll.contentSize = CGSizeMake(self.sharedData.screenWidth, self.picScroll.frame.size.height + y1 + self.sharedData.screenHeight/2);
+
+    self.mainScroll.contentSize = CGSizeMake(self.sharedData.screenWidth, CGRectGetMaxY(self.aboutPanel.frame) + 20);
     
     self.bgView.frame = CGRectMake(0, self.picScroll.frame.origin.y + self.picScroll.frame.size.height, self.sharedData.screenWidth, self.mainScroll.contentSize.height);
-    
-    
-    
-    CGRect AboutFrame = self.aboutBody.frame;
-    AboutFrame.origin.y -= 10;
-    self.aboutBody.frame = AboutFrame;
 }
 
 //This handles the logic for host/guest whether they "can_write_review" and depending on how reviews are already there

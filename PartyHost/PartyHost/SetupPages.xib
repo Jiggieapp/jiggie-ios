@@ -420,7 +420,7 @@
                                                 <action selector="locationSwitchChanged:" destination="LCs-lu-55V" eventType="valueChanged" id="KJm-um-IhB"/>
                                             </connections>
                                         </switch>
-                                        <textView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" editable="NO" text="Stay in the know on hot events and hostings around you" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="auc-Ea-5uA">
+                                        <textView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" editable="NO" text="Stay in the know on most popular events around you" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="auc-Ea-5uA">
                                             <rect key="frame" x="4" y="49" width="211" height="71"/>
                                             <animations/>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
