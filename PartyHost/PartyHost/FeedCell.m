@@ -364,7 +364,7 @@
     
     
     
-    CGSize eventSize = CGSizeMake(self.eventLabel.bounds.size.width - 60, self.eventLabel.bounds.size.height);
+    CGSize eventSize = CGSizeMake(self.eventLabel.bounds.size.width - 60, 40);
     CGRect stringFrame = [eventLabelText boundingRectWithSize:eventSize
                                                       options:NSStringDrawingUsesLineFragmentOrigin
                                                    attributes:@{NSFontAttributeName:self.eventLabel.titleLabel.font}
