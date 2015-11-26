@@ -321,7 +321,7 @@
     [self.mainData addEntriesFromDictionary:dict];
     
     
-    self.cardTwo.hidden = [self.mainData[@"type"] isEqualToString:@"approved"];
+    self.cardTwo.hidden = ![self.mainData[@"type"] isEqualToString:@"approved"];
     
     NSString *usrImgURL = [self.sharedData profileImgLarge:self.mainData[@"from_fb_id"]];
     
