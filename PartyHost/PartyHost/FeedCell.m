@@ -372,7 +372,7 @@
     
     int Offset = -8;
     if (self.sharedData.isIphone6 || self.sharedData.isIphone6plus) {
-        Offset = 8;
+        Offset = 4;
     }
     
     self.eventLabel.frame = CGRectMake(self.eventLabel.frame.origin.x,
