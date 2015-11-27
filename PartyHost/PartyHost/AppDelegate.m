@@ -72,9 +72,7 @@ static NSString *const kAllowTracking = @"allowTracking";
     [AppsFlyerTracker sharedTracker].appsFlyerDevKey = @"D4Uux6HSu3aYjNHkCHsTiC";
     [AppsFlyerTracker sharedTracker].appleAppID = @"1047291489";
     [AppsFlyerTracker sharedTracker].customerUserID = idfaString;
-    [AppsFlyerTracker sharedTracker].delegate = self;
-    //[AppsFlyerTracker sharedTracker].isHTTPS = YES;
-    [[AppsFlyerTracker sharedTracker] trackAppLaunch];
+    NSLog(@"idfaString :: %@",idfaString);
     
     
     [Mixpanel sharedInstanceWithToken:@"39ae6be779ffea77ea2b2a898305f560"];
@@ -304,6 +302,16 @@ static NSString *const kAllowTracking = @"allowTracking";
     
     self.inAskingAPNMode = NO;
     //UPDATE_CONVERSATION_LIST
+    
+    
+    
+    //[AppsFlyerTracker sharedTracker].isHTTPS = YES;
+    [[AppsFlyerTracker sharedTracker] trackAppLaunch];
+    
+    
+    [AppsFlyerTracker sharedTracker].delegate = self;
+    
+    /*
     NSString *idfaString = [[[ASIdentifierManager sharedManager] advertisingIdentifier] UUIDString];
     [AppsFlyerTracker sharedTracker].appsFlyerDevKey = @"Rkuw6TCpCtAMpUicmEUz27";
     [AppsFlyerTracker sharedTracker].appleAppID = @"906484188";
@@ -311,6 +319,9 @@ static NSString *const kAllowTracking = @"allowTracking";
     [AppsFlyerTracker sharedTracker].delegate = self;
     //[AppsFlyerTracker sharedTracker].isHTTPS = YES;
     [[AppsFlyerTracker sharedTracker] trackAppLaunch];
+    NSLog(@"idfaString :: %@",idfaString);
+    */
+    
     
     //[self.sharedData trackMixPanel:@"ios-party-host-open"];
     
@@ -777,6 +788,9 @@ static NSString *const kAllowTracking = @"allowTracking";
 #pragma AppsFlyerTrackerDelegate methods
 - (void)onConversionDataReceived:(NSDictionary*) installData
 {
+    NSLog(@"RECEIVE_INSTALL DATA :: %@",installData);
+    
+    
     id status = [installData objectForKey:@"af_status"];
     
     if(self.sharedData.didAppsFlyerLoad == YES)
@@ -823,6 +837,13 @@ static NSString *const kAllowTracking = @"allowTracking";
     
     
     
+}
+
+
+
+
+- (void) onConversionDataRequestFailure:(NSError *)error{
+    NSLog(@"Failed to get data from AppsFlyer's server: %@",[error localizedDescription]);
 }
 
 @end
