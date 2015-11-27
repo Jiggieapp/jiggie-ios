@@ -21,9 +21,9 @@
     self.pagesA = [[NSMutableArray alloc] init];
     self.labelsA = [[NSMutableArray alloc] init];
     
-    
-    self.callInit = YES;
     self.cIndex = 0;
+    self.callInit = YES;
+    
     self.didTapTwice = 0;
     self.mainCon = [[UIView alloc] initWithFrame:CGRectMake(0, 0, frame.size.width * 2, frame.size.height)];
     

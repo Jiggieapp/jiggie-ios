@@ -63,7 +63,7 @@
         self.toMessage.editable = NO;
         self.toMessage.selectable = NO;
         self.toMessage.userInteractionEnabled = NO;
-        self.toMessage.contentInset = UIEdgeInsetsMake(0.0f, 0.0f, 30, 0);
+        //self.toMessage.contentInset = UIEdgeInsetsMake(0.0f, 0.0f, 30, 0);
         [self addSubview:self.toMessage];
         
         self.fromMessage = [[UITextView alloc] initWithFrame:CGRectMake(10, 0, self.frame.size.width - 30, 30)];
@@ -75,7 +75,7 @@
         self.fromMessage.layer.masksToBounds = YES;
         self.fromMessage.layer.cornerRadius = 17;
         self.fromMessage.textContainerInset = UIEdgeInsetsMake(7.0f, 8.0f, 20, 0.0);
-        self.fromMessage.contentInset = UIEdgeInsetsMake(0.0f, 0.0f, 30, 0);
+        //self.fromMessage.contentInset = UIEdgeInsetsMake(0.0f, 0.0f, 30, 0);
         [self addSubview:self.fromMessage];
         
         
