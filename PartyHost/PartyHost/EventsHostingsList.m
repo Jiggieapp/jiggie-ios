@@ -188,6 +188,7 @@
         self.labelEmpty.hidden = YES;
         self.hostersList.hidden = NO;
         
+        /*
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
         if(![defaults objectForKey:@"SHOWED_EVENTS_HOST_LIST_OVERLAY"])
         {
@@ -196,6 +197,7 @@
             
             [self.sharedData.overlayView popup:@"Find a host" subtitle: @"Tap on a hosting to get details on the offering." x:0 y:130];
         }
+         */
     }
     
     //Get hostings

@@ -339,7 +339,7 @@
     }
     else
     { //Write message to host
-        [self.sharedData.popupView popup:@"EventsHostMessage" animated:YES];
+        //[self.sharedData.popupView popup:@"EventsHostMessage" animated:YES];
     }
 
 }

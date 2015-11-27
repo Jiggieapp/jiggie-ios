@@ -774,6 +774,7 @@
     self.isLoaded = YES;
     
     //Show overlay
+    /*
     if(totalUsers>0)
     {
         if(self.sharedData.isGuest && ![self.sharedData isMember])
@@ -808,7 +809,7 @@
                 [self.sharedData.overlayView popup:@"Who's interested?" subtitle: @"Check out guests interested in attending." x:pt.x y:pt.y];
             }
         }
-    }
+    } */
 }
 
 -(void)initClass

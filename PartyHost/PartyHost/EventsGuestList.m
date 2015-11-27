@@ -268,7 +268,7 @@
         {
             [defaults setValue:@"YES" forKey:@"SHOWED_EVENTS_GUEST_LIST_OVERLAY"];
             [defaults synchronize];
-            [self.sharedData.overlayView popup:@"Meet people" subtitle: @"Connect with guests to start chatting!" x:0 y:self.sharedData.screenHeight - 100];
+            //[self.sharedData.overlayView popup:@"Meet people" subtitle: @"Connect with guests to start chatting!" x:0 y:self.sharedData.screenHeight - 100];
         }
     }
     
