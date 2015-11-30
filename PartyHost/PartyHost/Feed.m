@@ -9,7 +9,7 @@
 #import "Feed.h"
 #import "FeedCell.h"
 
-#define POLL_SECONDS 5
+#define POLL_SECONDS 25
 
 @implementation Feed
 

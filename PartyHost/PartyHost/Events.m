@@ -548,7 +548,7 @@
             NSString *picURL = [Constants eventImageURL:dict[@"_id"]];
             NSLog(@"EVENT_IMG_URL :: %@",picURL);
             //[self.sharedData loadImageCue:picURL];
-            [self.sharedData loadTimeImage:picURL withTimeOut:count * .25];
+            //[self.sharedData loadTimeImage:picURL withTimeOut:count * .25];
             count++;
         }
     }

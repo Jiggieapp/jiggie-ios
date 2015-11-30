@@ -218,6 +218,27 @@ static SharedData *sharedInstance = nil;
 
 -(NSString *)picURL:(NSString *)url
 {
+    
+    /*
+    NSLog(@"url___ :: %@",url);
+    NSMutableArray *tmpA = [[NSMutableArray alloc] initWithArray:[url componentsSeparatedByString:@".png"]];
+    NSMutableArray *tmpAA = [[NSMutableArray alloc] initWithArray:[tmpA[0] componentsSeparatedByString:@"://"]];
+    NSLog(@"new_url:: %@",[NSString stringWithFormat:@"%@.jpg",tmpA[0]]);
+    NSMutableArray *tmpAAA = [[NSMutableArray alloc] initWithArray:[tmpAA[1] componentsSeparatedByString:@"."]];
+    NSString *joined = [tmpAAA componentsJoinedByString:@"_"];
+    NSMutableArray *tmpAAAA = [[NSMutableArray alloc] initWithArray:[joined componentsSeparatedByString:@"/"]];
+    NSString *joinedA = [tmpAAAA componentsJoinedByString:@"_"];
+    NSLog(@"joined___%@",joinedA);
+    // https://s3-us-west-2.amazonaws.com/cdnpartyhost/1447944614629.png
+    // s3-us-west-2_amazonaws_com_cdnpartyhost_1447944614629
+    // s3-us-west-2_amazonaws_com_cdnpartyhost_1447944614629
+    
+    // http://res.cloudinary.com/havbengny/image/upload/v1448704756/s3-us-west-2_amazonaws_com_cdnpartyhost_1447059934749.jpg
+    
+    
+    //return url;
+    //return [NSString stringWithFormat:@"http://res.cloudinary.com/havbengny/image/upload/v1448704756/%@.jpg",joinedA];//[NSString stringWithFormat:@"%@.jpg",tmpA[0]];
+    */
     return [NSString stringWithFormat:@"%@/image?url=%@",PHBaseDomain,url];
 }
 

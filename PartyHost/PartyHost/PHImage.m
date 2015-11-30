@@ -82,7 +82,7 @@
 - (void)downloadImageWithURL:(NSURL *)url completionBlock:(void (^)(BOOL succeeded, UIImage *image, NSString *key))completionBlock
 {
     //Cancel if previous
-    [self cancelImage];
+    //[self cancelImage];
     
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
     

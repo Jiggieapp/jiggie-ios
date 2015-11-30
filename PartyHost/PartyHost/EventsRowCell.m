@@ -173,6 +173,9 @@
     //Load venue image
     [self.mainImg loadImage:self.picURL defaultImageNamed:@"nightclub_default"]; //This will load and can be cancelled?
     
+    
+    NSLog(@"LOADING_IMG_URL :: %@",self.picURL);
+    
     //remove all tags
     NSArray *viewsToRemove = [self.tagsView subviews];
     for (UIView *v in viewsToRemove) {
