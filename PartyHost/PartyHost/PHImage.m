@@ -32,6 +32,9 @@
     if([self.sharedData.imagesDict objectForKey:imgURL] && [[self.sharedData.imagesDict objectForKey:imgURL] isKindOfClass:[UIImage class]])
     {
         self.image = [self.sharedData.imagesDict objectForKey:imgURL];
+        [self.spinner stopAnimating];
+        [self.spinner removeFromSuperview];
+        
         return;
     }
     else if(defaultImageNamed!=nil) //Use default image

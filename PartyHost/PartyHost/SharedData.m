@@ -239,7 +239,7 @@ static SharedData *sharedInstance = nil;
     //return url;
     //return [NSString stringWithFormat:@"http://res.cloudinary.com/havbengny/image/upload/v1448704756/%@.jpg",joinedA];//[NSString stringWithFormat:@"%@.jpg",tmpA[0]];
     */
-    return [NSString stringWithFormat:@"%@/image?url=%@",PHBaseDomain,url];
+    return [NSString stringWithFormat:@"%@/image?url=%@",PHBaseURL,url];
 }
 
 -(NSString *)profileImg:(NSString *)fb_id

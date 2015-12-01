@@ -84,9 +84,10 @@
     
     
     self.btnInfo = [UIButton buttonWithType:UIButtonTypeCustom];
-    self.btnInfo.frame = CGRectMake(frame.size.width - 50 + 4, 15, 50, 50);
+    self.btnInfo.frame = CGRectMake(frame.size.width - 50 + 4, 20, 40, 40);
     //self.btnInfo.backgroundColor = [UIColor redColor];
     [self.btnInfo setImage:[UIImage imageNamed:@"nav_dots"] forState:UIControlStateNormal];
+    [self.btnInfo setImageEdgeInsets:UIEdgeInsetsMake(16, 10, 16, 10)];
     self.btnInfo.imageView.contentMode = UIViewContentModeScaleAspectFit;
     [self.btnInfo addTarget:self action:@selector(showInfo) forControlEvents:UIControlEventTouchUpInside];
     [self.tabBar addSubview:self.btnInfo];

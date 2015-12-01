@@ -48,12 +48,20 @@
     bar1.layer.borderWidth = 1.0;
     [centerText addSubview:bar1];
     
-    self.phoneCountry = [[UILabel alloc] initWithFrame:bar1.bounds];
-    self.phoneCountry.text = @"";
-    self.phoneCountry.textAlignment = NSTextAlignmentCenter;
-    self.phoneCountry.textColor = [UIColor whiteColor];
-    self.phoneCountry.font = [UIFont phBlond:19];
-    [bar1 addSubview:self.phoneCountry];
+//    self.phoneCountry = [[UILabel alloc] initWithFrame:bar1.bounds];
+//    self.phoneCountry.text = @"";
+//    self.phoneCountry.textAlignment = NSTextAlignmentCenter;
+//    self.phoneCountry.textColor = [UIColor whiteColor];
+//    self.phoneCountry.font = [UIFont phBlond:19];
+//    [bar1 addSubview:self.phoneCountry];
+    
+    self.subtitle = [[UILabel alloc] initWithFrame:bar1.bounds];
+    self.subtitle.text = @"You're number is verified ... all good!";
+    self.subtitle.textAlignment = NSTextAlignmentCenter;
+    self.subtitle.adjustsFontSizeToFitWidth = YES;
+    self.subtitle.textColor = [UIColor phDarkGrayColor];
+    self.subtitle.font = [UIFont phBlond:18];
+    [bar1 addSubview:self.subtitle];
     
     UIView *bar2 = [[UIView alloc] initWithFrame:CGRectMake(-2, bar1.frame.origin.y + bar1.frame.size.height -1, self.sharedData.screenWidth+4, 64)];
     bar2.backgroundColor = [UIColor whiteColor];
@@ -68,13 +76,13 @@
     self.phoneNumber.font = [UIFont phBlond:19];
     [bar2 addSubview:self.phoneNumber];
     
-    self.subtitle = [[UILabel alloc] initWithFrame:CGRectMake(0, bar2.frame.origin.y + bar2.frame.size.height + 16, self.sharedData.screenWidth, 16)];
-    self.subtitle.text = @"You're number is verified ... all good!";
-    self.subtitle.textAlignment = NSTextAlignmentCenter;
-    self.subtitle.adjustsFontSizeToFitWidth = YES;
-    self.subtitle.textColor = [UIColor phDarkGrayColor];
-    self.subtitle.font = [UIFont phBlond:14];
-    [centerText addSubview:self.subtitle];
+//    self.subtitle = [[UILabel alloc] initWithFrame:CGRectMake(0, bar2.frame.origin.y + bar2.frame.size.height + 16, self.sharedData.screenWidth, 16)];
+//    self.subtitle.text = @"You're number is verified ... all good!";
+//    self.subtitle.textAlignment = NSTextAlignmentCenter;
+//    self.subtitle.adjustsFontSizeToFitWidth = YES;
+//    self.subtitle.textColor = [UIColor phDarkGrayColor];
+//    self.subtitle.font = [UIFont phBlond:16];
+//    [centerText addSubview:self.subtitle];
     
     //Create big HOST HERE button
     self.btnContinue = [UIButton buttonWithType:UIButtonTypeRoundedRect];
@@ -93,7 +101,7 @@
 -(void)initClass
 {
     self.sharedData.has_phone = YES;
-    self.phoneCountry.text = self.sharedData.phoneCountry;
+//    self.phoneCountry.text = self.sharedData.phoneCountry;
     self.phoneNumber.text = self.sharedData.phoneVerify.phone;
     [self.check1 buttonSelect:NO animated:NO];
 }

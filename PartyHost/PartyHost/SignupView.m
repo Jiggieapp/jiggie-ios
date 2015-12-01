@@ -513,7 +513,7 @@
     userLastName = [userLastName lowercaseString];
     
     NSLog(@"APN_TOKEN :: %@",self.sharedData.apnToken);
-    
+
     AFHTTPRequestOperationManager *manager = [self.sharedData getOperationManager];
     NSDictionary *params = @{
                              @"fb_id" : facebookId,
