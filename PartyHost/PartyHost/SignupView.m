@@ -91,8 +91,8 @@
         NSLog(@"TOKEN____ :: %@",[FBSDKAccessToken currentAccessToken].tokenString);
         
 //        [self performSelector:@selector(skipLogin) withObject:nil afterDelay:0.1];
-
-        [self performSelector:@selector(checkIfHasLogin) withObject:nil afterDelay:2.0];
+        
+        [self performSelector:@selector(checkIfHasLogin) withObject:nil afterDelay:0.0];
     }
     return self;
 }
@@ -125,6 +125,10 @@
          }
          else {
              NSLog(@"Error %@",error);
+             [[NSNotificationCenter defaultCenter]
+              postNotificationName:@"HIDE_LOADING"
+              object:self];
+
          }
      }];
 }
@@ -221,7 +225,6 @@
              NSLog(@"FB Process error :: %@",error);
          } else if (result.isCancelled) {
              NSLog(@"FB Cancelled");
-             
              [[NSNotificationCenter defaultCenter]
               postNotificationName:@"HIDE_LOADING"
               object:self];

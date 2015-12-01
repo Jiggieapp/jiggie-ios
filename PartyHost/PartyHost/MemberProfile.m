@@ -819,7 +819,8 @@
     
     self.aboutPanel.frame = CGRectMake(0, self.sharedData.screenHeight - 110, self.sharedData.screenWidth, 650);
     
-    self.nameLabel.text = self.toLabel.text = self.sharedData.member_first_name;
+    //removed because make issue in cache title name
+    //self.nameLabel.text = self.toLabel.text = self.sharedData.member_first_name;
     
     [self loadData];
 }

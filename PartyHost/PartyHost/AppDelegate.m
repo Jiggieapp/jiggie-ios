@@ -391,7 +391,7 @@ static NSString *const kAllowTracking = @"allowTracking";
         }
         return YES;
     }
-    
+
     [[NSNotificationCenter defaultCenter]
      postNotificationName:@"SHOW_LOADING"
      object:self];
