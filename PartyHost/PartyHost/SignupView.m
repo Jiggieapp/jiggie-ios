@@ -217,7 +217,7 @@
     
     FBSDKLoginManager *login = [[FBSDKLoginManager alloc] init];
     [login
-     logInWithReadPermissions: @[@"public_profile",@"user_birthday", @"email", @"user_photos",@"user_friends",@"user_likes",@"user_relationships",@"user_about_me",@"user_location",@"user_photos",@"user_status",@"user_friends"]
+     logInWithReadPermissions: @[@"public_profile",@"user_birthday", @"email", @"user_photos",@"user_friends",@"user_about_me",@"user_location"]
      fromViewController:self.window.rootViewController
      handler:^(FBSDKLoginManagerLoginResult *result, NSError *error) {
          NSLog(@"RESULT___ :: %@",result);
@@ -232,7 +232,6 @@
              NSLog(@"Logged in :: %@",[FBSDKAccessToken currentAccessToken].tokenString);
              
              [self autoLogin];
-             
          }
      }];
     

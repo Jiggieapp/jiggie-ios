@@ -182,7 +182,6 @@
 }
 
 #pragma mark - UITableViewDataSource
-
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     return 3;
@@ -351,124 +350,6 @@
             cell.accessoryType = UITableViewCellAccessoryNone;
         }
         
-        
-        
-        
-        //Host
-        /*
-        else if(self.sharedData.isHost)
-        {
-            if(indexPath.row==100)
-            {
-                
-                //cell = [tableView dequeueReusableCellWithIdentifier:@"MyHostingsCell"];
-                //if (cell == nil) {cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"MyHostingsCell"];}
-                //cell.textLabel.font = [UIFont phBlond:19];
-                //cell.textLabel.text = @"Hostings";
-                //cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-         
-            }
-            else if(indexPath.row==1)
-            {
-                cell = [tableView dequeueReusableCellWithIdentifier:@"MyPurchasesCell"];
-                if (cell == nil) {cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"MyPurchasesCell"];}
-                cell.textLabel.font = [UIFont phBlond:19];
-                cell.textLabel.text = @"Purchases";
-                cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-            }
-            else if(indexPath.row==2)
-            {
-                cell = [tableView dequeueReusableCellWithIdentifier:@"PhoneVerificationCell"];
-                if (cell == nil) {cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"PhoneVerificationCell"];}
-                cell.textLabel.font = [UIFont phBlond:19];
-                cell.textLabel.text = @"Phone Number";
-                cell.accessoryType = UITableViewCellAccessoryNone;
-                
-                if([self.sharedData.phone length]>0) cell.detailTextLabel.text = [Constants formatPhoneNumber:self.sharedData.phone];
-                else cell.detailTextLabel.text = @"N/A";
-                
-                cell.detailTextLabel.font = [UIFont phBlond:17];
-                cell.detailTextLabel.adjustsFontSizeToFitWidth = YES;
-                cell.detailTextLabel.textColor = [UIColor colorFromHexCode:@"5C5C5C"];
-            }
-            else if(indexPath.row==3)
-            {
-                cell = [tableView dequeueReusableCellWithIdentifier:@"CreditCardCell"];
-                if (cell == nil) {cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"CreditCardCell"];}
-                cell.textLabel.font = [UIFont phBlond:19];
-                cell.textLabel.text = @"Credit Card";;
-                cell.accessoryType = UITableViewCellAccessoryNone;
-                cell.detailTextLabel.font = [UIFont phBlond:17];
-
-                if([self.sharedData.ccLast4 length]>0) cell.detailTextLabel.text = [NSString stringWithFormat:@"•••• %@",self.sharedData.ccLast4];
-                else cell.detailTextLabel.text = @"N/A";
-                
-                cell.detailTextLabel.adjustsFontSizeToFitWidth = YES;
-                cell.detailTextLabel.textColor = [UIColor colorFromHexCode:@"5C5C5C"];
-            }
-            else if(indexPath.row==4)
-            {
-                cell = [tableView dequeueReusableCellWithIdentifier:@"InviteFriendsCell"];
-                if (cell == nil) {cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"InviteFriendsCell"];}
-                cell.textLabel.font = [UIFont phBlond:19];
-                cell.textLabel.text = @"Invite Friends";
-                cell.accessoryType = UITableViewCellAccessoryNone;
-            }
-            else if(indexPath.row==5)
-            {
-                cell = [tableView dequeueReusableCellWithIdentifier:@"EmailSupportCell"];
-                if (cell == nil) {cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"EmailSupportCell"];}
-                cell.textLabel.font = [UIFont phBlond:19];
-                cell.textLabel.text = @"Email Support";
-                cell.accessoryType = UITableViewCellAccessoryNone;
-            }
-            else if(indexPath.row==6)
-            {
-                cell = [tableView dequeueReusableCellWithIdentifier:@"SettingsCell"];
-                if (cell == nil) {cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"SettingsCell"];}
-                cell.textLabel.font = [UIFont phBlond:19];
-                cell.textLabel.text = @"Settings";
-                cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-            }
-        }
-        
-        //Guest
-        else
-        {
-            if(indexPath.row==1)
-            {
-                cell = [tableView dequeueReusableCellWithIdentifier:@"MyConfirmationsCell"];
-                if (cell == nil) {cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"MyConfirmationsCell"];}
-                cell.textLabel.font = [UIFont phBlond:19];
-                cell.textLabel.text = @"Confirmations";
-                cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-            }
-            else if(indexPath.row==2)
-            {
-                cell = [tableView dequeueReusableCellWithIdentifier:@"InviteFriendsCell"];
-                if (cell == nil) {cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"InviteFriendsCell"];}
-                cell.textLabel.font = [UIFont phBlond:19];
-                cell.textLabel.text = @"Invite Friends";
-                cell.accessoryType = UITableViewCellAccessoryNone;
-            }
-            else if(indexPath.row==3)
-            {
-                cell = [tableView dequeueReusableCellWithIdentifier:@"EmailSupportCell"];
-                if (cell == nil) {cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"EmailSupportCell"];}
-                cell.textLabel.font = [UIFont phBlond:19];
-                cell.textLabel.text = @"Email Support";
-                cell.accessoryType = UITableViewCellAccessoryNone;
-            }
-            else if(indexPath.row==4)
-            {
-                cell = [tableView dequeueReusableCellWithIdentifier:@"SettingsCell"];
-                if (cell == nil) {cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"SettingsCell"];}
-                cell.textLabel.font = [UIFont phBlond:19];
-                cell.textLabel.text = @"Settings";
-                cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-            }
-        }
-        */
     }
     else if (indexPath.section==1)
     {
@@ -512,7 +393,6 @@
 }
 
 #pragma mark - UITableViewDelegate
-
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     //Change role
