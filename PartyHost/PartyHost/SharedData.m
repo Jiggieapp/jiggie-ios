@@ -441,7 +441,7 @@ static SharedData *sharedInstance = nil;
     return [strg stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 }
 
-
+#pragma mark - MixPanel
 -(void)trackMixPanel:(NSString *)eventName
 {
     /*
@@ -755,19 +755,10 @@ static SharedData *sharedInstance = nil;
     [mixpanel.people set:@{@"age": age}];
     [mixpanel.people set:@{@"email": email}];
     [mixpanel.people set:@{@"fb_id": facebookId}];
-    
-    
     [mixpanel.people set:@{@"gender": self.gender}];
     [mixpanel.people set:@{@"gender_interest": self.gender_interest}];
     [mixpanel.people set:@{@"app_version": PHVersion}];
-    
-    
-    
-    
-    
-    
     [mixpanel.people set:@{@"name_and_fb_id": [NSString stringWithFormat:@"%@_%@_%@",first_name,last_name,facebookId]}];
-    
 }
 
 
@@ -844,6 +835,7 @@ static SharedData *sharedInstance = nil;
     
 }
 
+#pragma mark -
 - (NSString *) platformType:(NSString *)platform
 {
     if ([platform isEqualToString:@"iPhone1,1"])    return @"iPhone 1G";

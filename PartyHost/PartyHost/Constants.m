@@ -159,7 +159,7 @@ int const PHButtonHeight = 50; //This is the button at bottom of screen
 {
     NSString *url = [NSString stringWithString:PHEventImageURL];
     url = [url stringByReplacingOccurrencesOfString:@":event_id" withString:event_id];
-    return [NSString stringWithFormat:@"%@%@",PHBaseDomain,url];
+    return [NSString stringWithFormat:@"%@%@",PHBaseURL,url];
 }
 
 +(NSString*)eventProductsURL:(NSString*)event_id

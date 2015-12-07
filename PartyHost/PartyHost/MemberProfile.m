@@ -501,11 +501,13 @@
             [dict[@"photos"] addObject:responseObject[@"photos"][j]];
         }
          self.pControl.numberOfPages = [responseObject[@"photos"] count];
+         self.pControl.hidden = NO;
          
          if([responseObject[@"photos"] count] == 0)
          {
              [dict[@"photos"] addObject:PHBlankImgURL];
              self.pControl.numberOfPages = 1;
+             self.pControl.hidden = YES;
          }
          
          self.toLabel.text = [responseObject[@"user_first_name"] uppercaseString];
@@ -546,8 +548,6 @@
                  self.nameLabel.text = [NSString stringWithFormat:@"%@, %d",self.nameLabel.text,(int)age];
              }
          }
-         
-         self.pControl.hidden = ([responseObject[@"photos"] count] == 0);
          
          self.picScroll.contentOffset = CGPointMake(0, 0);
          for (int i = 0; i < [dict[@"photos"] count]; i++)

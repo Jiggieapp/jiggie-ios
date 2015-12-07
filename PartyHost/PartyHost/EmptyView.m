@@ -29,7 +29,7 @@
     self.title.textAlignment = NSTextAlignmentCenter;
     self.title.adjustsFontSizeToFitWidth = YES;
     self.title.textColor = [UIColor blackColor];
-    self.title.font = [UIFont phBlond:22];
+    self.title.font = [UIFont phBlond:20];
     
     
     //self.title.layer.borderColor = [UIColor whiteColor].CGColor;

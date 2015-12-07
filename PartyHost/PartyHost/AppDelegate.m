@@ -411,7 +411,6 @@ static NSString *const kAllowTracking = @"allowTracking";
 {
     //app/v3/apntoken/10152901432247953/123455466
     
-    
     AFHTTPRequestOperationManager *manager = [self.sharedData getOperationManager];
     
     NSString *urlToLoad = [NSString stringWithFormat:@"%@/user/hostings/details/%@",PHBaseURL,self.sharedData.cHostingIdFromInvite];

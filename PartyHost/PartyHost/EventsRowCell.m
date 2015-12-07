@@ -170,6 +170,8 @@
     
     self.picURL = [Constants eventImageURL:dict[@"_id"]];
     
+    self.picURL = [self.sharedData picURL:dict[@"photos"][0]];
+    
     //Load venue image
     [self.mainImg loadImage:self.picURL defaultImageNamed:@"nightclub_default"]; //This will load and can be cancelled?
     
