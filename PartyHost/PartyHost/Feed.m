@@ -41,17 +41,19 @@
     self.title.textColor = [UIColor whiteColor];
     self.title.font = [UIFont phBold:18];
     
-//    self.hideIcon = [[UIImageView alloc] initWithFrame:CGRectMake(10, 4, 20.0, 20)];
-    
     self.hideView = [[UIView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(tabBar.frame) + 10, self.sharedData.screenWidth, 40)];
     self.hideView.backgroundColor = [UIColor clearColor];
     [self.mainCon addSubview:self.hideView];
     self.hideView.hidden = YES;
     
-    self.hideTitle = [[UILabel alloc] initWithFrame:CGRectMake(14, 14, frame.size.width-80, 20)];
+    self.hideIcon = [[UIImageView alloc] initWithFrame:CGRectMake(14, 14, 30, 20)];
+    self.hideIcon.image = [UIImage imageNamed:@"discover_off.png"];
+    [self.hideView addSubview:self.hideIcon];
+    
+    self.hideTitle = [[UILabel alloc] initWithFrame:CGRectMake(56, 14, frame.size.width-80, 20)];
     self.hideTitle.text = @"Socialize";
-    self.hideTitle.textColor = [UIColor darkGrayColor];
-    self.hideTitle.font = [UIFont phBold:17];
+    self.hideTitle.textColor = [UIColor blackColor];
+    self.hideTitle.font = [UIFont phBlond:17];
     [self.hideView addSubview:self.hideTitle];
     
     self.hideToggle = [[UISwitch alloc] initWithFrame:CGRectZero];
@@ -130,6 +132,11 @@
         [self toggleMatch];
     } else {
         [self.hideToggle setOn:self.sharedData.matchMe];
+        if (self.sharedData.matchMe) {
+            self.hideIcon.image = [UIImage imageNamed:@"discover_on.png"];
+        } else {
+            self.hideIcon.image = [UIImage imageNamed:@"discover_off.png"];
+        }
     }
 }
 
@@ -151,6 +158,11 @@
          NSLog(@"Match_responseObject :: %@",responseObject);
          
          [self.hideToggle setOn:self.sharedData.matchMe];
+         if (self.sharedData.matchMe) {
+             self.hideIcon.image = [UIImage imageNamed:@"discover_on.png"];
+         } else {
+             self.hideIcon.image = [UIImage imageNamed:@"discover_off.png"];
+         }
          
          self.feedTable.hidden = !(self.sharedData.matchMe);
          self.sharedData.feedBadge.hidden = !(self.sharedData.matchMe);
@@ -220,6 +232,11 @@
 {
     
     [self.hideToggle setOn:self.sharedData.matchMe];
+    if (self.sharedData.matchMe) {
+        self.hideIcon.image = [UIImage imageNamed:@"discover_on.png"];
+    } else {
+        self.hideIcon.image = [UIImage imageNamed:@"discover_off.png"];
+    }
     
     self.feedTable.hidden = !(self.sharedData.matchMe);
     self.sharedData.feedBadge.hidden = !(self.sharedData.matchMe);
