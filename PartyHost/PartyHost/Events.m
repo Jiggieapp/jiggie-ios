@@ -244,7 +244,7 @@
          //SHOW HOST VENUE DETAIL FROM HARE AS A TEST
         self.sharedData.cInitHosting_id = @"55d387422e351903005b8ca8";
         self.sharedData.cHostingIdFromInvite = @"55d387422e351903005b8ca8";
-        self.sharedData.hasInitHosting = NO;
+        self.sharedData.hasInitEventSelection = NO;
         [[NSNotificationCenter defaultCenter]
          postNotificationName:@"SHOW_HOST_VENUE_DETAIL_FROM_SHARE"
          object:self];
@@ -258,7 +258,7 @@
             {
                 [defaults setValue:@"YES" forKey:@"SHOWED_EVENTS_OVERLAY"];
                 [defaults synchronize];
-                [self.sharedData.overlayView popup:@"Get your night going!" subtitle: @"Tap on any event that peaks your interest." x:0 y:0];
+                //[self.sharedData.overlayView popup:@"Get your night going!" subtitle: @"Tap on any event that peaks your interest." x:0 y:0];
             }
         }
     }
@@ -369,7 +369,7 @@
              [self.emptyView setMode:@"hide"];
          }
           /*
-         if(self.sharedData.hasInitHosting)
+         if(self.sharedData.hasInitEventSelection)
          {
              //self.sharedData.cHostingIdFromInvite = dict[@"af_sub2"];
              
@@ -377,7 +377,7 @@
               postNotificationName:@"SHOW_HOST_VENUE_DETAIL_FROM_SHARE"
               object:self];
          }
-         self.sharedData.hasInitHosting = NO;
+         self.sharedData.hasInitEventSelection = NO;
          
      
          if(self.didLoadFromInvite)
@@ -547,6 +547,9 @@
             NSDictionary *dict = [[self.eventsA objectAtIndex:i][@"events"] objectAtIndex:j];
             NSString *picURL = [Constants eventImageURL:dict[@"_id"]];
             NSLog(@"EVENT_IMG_URL :: %@",picURL);
+            
+            picURL = [self.sharedData picURL:dict[@"photos"][0]];
+            
             //[self.sharedData loadImageCue:picURL];
             [self.sharedData loadTimeImage:picURL withTimeOut:count * .25];
             count++;

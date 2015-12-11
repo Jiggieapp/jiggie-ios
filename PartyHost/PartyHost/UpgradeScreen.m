@@ -25,8 +25,8 @@
     UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(0, 20, frame.size.width, 40)];
     title.text = @"Jiggie Upgrade";
     title.textAlignment = NSTextAlignmentCenter;
-    title.textColor = [UIColor whiteColor];
     title.font = [UIFont phBold:18];
+    title.textColor = [UIColor whiteColor];
     [tabBar addSubview:title];
     
     

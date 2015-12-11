@@ -13,7 +13,7 @@
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
-    self.backgroundColor = [UIColor phLightSilverColor];
+    self.backgroundColor = [UIColor whiteColor];
     self.sharedData = [SharedData sharedInstance];
     
     self.isConvosLoaded = NO;

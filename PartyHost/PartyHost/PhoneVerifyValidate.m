@@ -156,10 +156,10 @@
          else {
              [self.sharedData trackMixPanelWithDict:@"Phone Verification Success" withDict:@{}];
              //Set phone now
-             self.sharedData.phone = self.sharedData.phoneVerify.phone;
+             self.sharedData.phone = [self.sharedData.phoneVerify.phone stringByReplacingOccurrencesOfString:@"+" withString:@""];
              
              //Reload more
-             [self.sharedData.morePage.moreList reloadData];
+             [self.sharedData.morePage.userProfilePhone setTitle:self.sharedData.phoneVerify.phone forState:UIControlStateNormal];
              
              [self keyboardOff];
              [[NSNotificationCenter defaultCenter]

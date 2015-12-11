@@ -30,11 +30,14 @@
 @property(nonatomic,strong) MyPurchases     *purchasesPage;
 @property(nonatomic,strong) MyConfirmations *confirmationsPage;
 @property(nonatomic,strong) NSMutableArray  *dataA;
+@property(nonatomic,strong) UserBubble      *userProfilePicture;
+@property(nonatomic,strong) UILabel         *userProfileName;
+@property(nonatomic,strong) UIButton        *userProfilePhone;
 @property(nonatomic,strong) UITableView     *moreList;
+@property(nonatomic,strong) UIButton        *logoutButton;
 @property(nonatomic,assign) BOOL            isLoaded;
 @property(nonatomic,strong) NSMutableDictionary *settingsData;
-@property(nonatomic,strong) UILabel *labelEmpty;
-@property(strong,nonatomic) UIActivityIndicatorView *spinner;
+@property(nonatomic,strong) EmptyView *emptyView;
 
 -(void)initClass;
 -(void)checkIfGoBack;

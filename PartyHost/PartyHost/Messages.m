@@ -76,22 +76,24 @@
     [self.tabBar addSubview:self.toLabel];
     
     self.btnBack = [UIButton buttonWithType:UIButtonTypeCustom];
-    self.btnBack.frame = CGRectMake(0, 13, 50, 50);
-    [self.btnBack setBackgroundImage:[UIImage imageNamed:@"nav_back"] forState:UIControlStateNormal];
+    self.btnBack.frame = CGRectMake(0, 20, 40, 40);
+    [self.btnBack setImage:[UIImage imageNamed:@"nav_back"] forState:UIControlStateNormal];
+    [self.btnBack setImageEdgeInsets:UIEdgeInsetsMake(8, 14, 8, 14)];
     [self.btnBack addTarget:self action:@selector(goBack) forControlEvents:UIControlEventTouchUpInside];
     [self.tabBar addSubview:self.btnBack];
     
     
     self.btnInfo = [UIButton buttonWithType:UIButtonTypeCustom];
-    self.btnInfo.frame = CGRectMake(frame.size.width - 50 + 4, 15, 50, 50);
+    self.btnInfo.frame = CGRectMake(frame.size.width - 50 + 4, 20, 40, 40);
     //self.btnInfo.backgroundColor = [UIColor redColor];
     [self.btnInfo setImage:[UIImage imageNamed:@"nav_dots"] forState:UIControlStateNormal];
+    [self.btnInfo setImageEdgeInsets:UIEdgeInsetsMake(16, 10, 16, 10)];
     self.btnInfo.imageView.contentMode = UIViewContentModeScaleAspectFit;
     [self.btnInfo addTarget:self action:@selector(showInfo) forControlEvents:UIControlEventTouchUpInside];
     [self.tabBar addSubview:self.btnInfo];
     
     
-    self.input = [[UITextView alloc] initWithFrame:CGRectMake(0, frame.size.height - 40, frame.size.width - 50, 40)];
+    self.input = [[UITextView alloc] initWithFrame:CGRectMake(0, frame.size.height - 40, frame.size.width - 60, 40)];
     self.input.font = [UIFont phBlond:13];
     self.input.delegate = self;
     self.input.backgroundColor = [UIColor whiteColor];
@@ -115,7 +117,7 @@
     [self.sharedData.keyboardsA addObject:self.input];
     
     self.btnSend = [[UIView alloc] initWithFrame:CGRectMake(frame.size.width - 60, frame.size.height - 40, 60, 40)];
-    self.btnSend.backgroundColor = [UIColor clearColor];
+    self.btnSend.backgroundColor = [UIColor whiteColor];
     self.btnSend.layer.masksToBounds = YES;
     [self addSubview:self.btnSend];
     
@@ -374,13 +376,12 @@
 
 -(void)reset
 {
-    self.sendTxt.textColor = [UIColor phBlueColor];
     self.canCheckScrollDown = NO;
     self.loadingView.alpha = 1.0;
     self.loadingView.hidden = NO;
     self.isMessagesLoaded = NO;
-    self.input.frame = CGRectMake(0, self.frame.size.height - 40, self.frame.size.width - 50, 40);
-    self.btnSend.frame = CGRectMake(self.frame.size.width - 50, self.frame.size.height - 40, 50, 40);
+    self.input.frame = CGRectMake(0, self.frame.size.height - 40, self.frame.size.width - 60, 40);
+    self.btnSend.frame = CGRectMake(self.frame.size.width - 60, self.frame.size.height - 40, 60, 40);
     self.messagesList.frame = self.messagesListFrame;
     self.inputNumLines = 1;
     
@@ -829,7 +830,10 @@
 }
 
 
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+//- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView
+                  willDecelerate:(BOOL)decelerate
 {
     
     
@@ -839,6 +843,7 @@
     {
         CGPoint location = [scrollView.panGestureRecognizer locationInView:self.window.rootViewController.view];
         
+        NSLog(@"LOCATION SCROLL :: %f > %f", location.y, self.tabBar.frame.size.height + self.messagesList.frame.size.height + 90 - (self.inputNumLines * 20));
         if(location.y > self.tabBar.frame.size.height + self.messagesList.frame.size.height + 90 - (self.inputNumLines * 20))
         {
             NSLog(@"POINT ::  %@",NSStringFromCGPoint(location));
@@ -871,7 +876,7 @@
     [UIView animateWithDuration:0.25 animations:^()
      {
          self.input.frame = CGRectMake(0, self.frame.size.height - 40, self.frame.size.width, 50);
-         self.messagesList.frame = CGRectMake(0, 65, self.frame.size.width, self.frame.size.height - 65 - 40);
+         self.messagesList.frame = CGRectMake(0, 60, self.frame.size.width, self.frame.size.height - 60 - 40);
      } completion:^(BOOL finished)
      {
          //NSUInteger sectionCount = [self.sectionsA count] - 1;
@@ -1086,7 +1091,7 @@
     [self initClass];
 }
 
-
+#pragma mark - UITableViewDataSource
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     return [self.sectionsA count];
@@ -1281,17 +1286,17 @@
     
     if(self.isKeyBoardShowing)
     {
-        self.input.frame = CGRectMake(0, self.frame.size.height - 40 - self.keyBoardHeight, self.frame.size.width - 50, 40);
-        self.btnSend.frame = CGRectMake(self.frame.size.width - 50, self.frame.size.height - 40 - self.keyBoardHeight, 50, 40);
+        self.input.frame = CGRectMake(0, self.frame.size.height - 40 - self.keyBoardHeight, self.frame.size.width - 60, 40);
+        self.btnSend.frame = CGRectMake(self.frame.size.width - 60, self.frame.size.height - 40 - self.keyBoardHeight, 60, 40);
     }
     else
     {
-        self.btnSend.frame = CGRectMake(self.frame.size.width - 50, self.frame.size.height - 40, 50, 40);
-        self.input.frame = CGRectMake(0, self.frame.size.height - 40, self.frame.size.width - 50, 40);
+        self.btnSend.frame = CGRectMake(self.frame.size.width - 60, self.frame.size.height - 40, 60, 40);
+        self.input.frame = CGRectMake(0, self.frame.size.height - 40, self.frame.size.width - 60, 40);
     }
     
     
-    self.sendTxt.frame = CGRectMake(0,self.btnSend.bounds.size.height - 25,self.btnSend.bounds.size.width,20);
+    self.sendTxt.frame = CGRectMake(0,self.btnSend.bounds.size.height - 29,self.btnSend.bounds.size.width,20);
     self.input.text = @"";
     
     self.inputNumLines = 1;
@@ -1300,7 +1305,6 @@
     
     [self sendMessageToServer:message];
     
-    self.sendTxt.textColor = [UIColor whiteColor];
     NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
     [dict setObject:message forKey:@"message"];
     NSDate *now = [NSDate date];
@@ -1486,7 +1490,7 @@
 
 ///TEXTVIEW
 
-
+#pragma mark - UITableViewDelegate
 - (BOOL)textViewShouldBeginEditing:(UITextView *)aTextView
 {
     return YES;
@@ -1543,7 +1547,7 @@
 
 
 
-
+#pragma mark - UIKeyboard Notification
 -(void)keyboardOn
 {
     NSLog(@"keyboardOn");
@@ -1618,7 +1622,7 @@
     
     self.input.frame = CGRectMake(0, self.frame.size.height - 40 - self.keyBoardHeight - ((self.inputNumLines - 1) * 20), self.frame.size.width - 60, 40 + ((self.inputNumLines - 1) * 20));
     self.btnSend.frame = CGRectMake(self.frame.size.width - 60, self.frame.size.height - 40 - self.keyBoardHeight - ((self.inputNumLines - 1) * 20), 60, 40 + ((self.inputNumLines - 1) * 20));
-    self.messagesList.frame = CGRectMake(0, 65, self.frame.size.width, self.frame.size.height - 65 - 40 - self.keyBoardHeight);
+    self.messagesList.frame = CGRectMake(0, 60, self.frame.size.width, self.frame.size.height - 60 - 40 - self.keyBoardHeight);
     
     [self scrollToBottom:NO];
     
@@ -1654,7 +1658,7 @@
     
     self.input.frame = CGRectMake(0, self.frame.size.height - 40, self.frame.size.width - 60, 40);
     self.btnSend.frame = CGRectMake(self.frame.size.width - 60, self.frame.size.height - 40, 60, 40);
-    self.messagesList.frame = CGRectMake(0, 65, self.frame.size.width, self.frame.size.height - 65 - 40);
+    self.messagesList.frame = CGRectMake(0, 60, self.frame.size.width, self.frame.size.height - 60 - 40);
 }
 
 

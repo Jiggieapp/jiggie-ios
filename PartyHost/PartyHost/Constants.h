@@ -8,9 +8,9 @@
 
 #ifndef PartyHost_Constants_h
 #define PartyHost_Constants_h
+#define PHVersion [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"]
 
 //Others
-extern NSString *const PHVersion;
 extern BOOL const PHDebugOn; //Pretend we are a new user in debug mode, they will see walkthrough, alerts etc.
 extern int const PHTabHeight;
 extern int const PHButtonHeight;

@@ -187,7 +187,7 @@
 @property(nonatomic,assign) BOOL                isIphone6plus;
 @property(nonatomic,strong) NSString            *deviceType;
 
-@property(nonatomic,assign) BOOL                hasInitHosting;
+@property(nonatomic,assign) BOOL                hasInitEventSelection;
 
 @property(nonatomic,strong) NSMutableDictionary *tapDict;
 
@@ -291,6 +291,7 @@
 -(void)setMixPanelOnLogin;
 -(void)trackMixPanelIncrementWithDict:(NSDictionary *)dict;
 -(void)trackMixPanelIncrementWithEventDict:(NSDictionary *)eventDict;
+-(void)createMixPanelDummyProfile;
 //===================================================================================================//
 //SPECIAL LOAD WITH CANCEL
 -(NWURLConnection*)loadImageCancelable:(NSString *)imgURL completionBlock:(void (^)(UIImage *image))completionBlock;
