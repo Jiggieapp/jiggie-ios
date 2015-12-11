@@ -68,23 +68,23 @@
     [self.mainCon addSubview:self.userProfilePhone];
     
     self.dataA = [[NSMutableArray alloc] init]; //Fill this out in initClass
-    self.moreList = [[UITableView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(self.userProfilePhone.frame) + OffSetLargeDevice - OffSet, frame.size.width, 220) style:UITableViewStyleGrouped];
+    self.moreList = [[UITableView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(self.userProfilePhone.frame) + 30 + OffSetLargeDevice - OffSet, frame.size.width, 240 - OffSet*3) style:UITableViewStylePlain];
     self.moreList.delegate = self;
     self.moreList.dataSource = self;
     self.moreList.allowsMultipleSelectionDuringEditing = NO;
     self.moreList.hidden = YES;
     self.moreList.backgroundColor = [UIColor whiteColor];
     self.moreList.separatorColor = [UIColor phLightGrayColor];
-    self.moreList.scrollEnabled = NO;
+    self.moreList.scrollEnabled = (self.sharedData.isIphone4)?YES:NO;
     [self.mainCon addSubview:self.moreList];
     
-    self.logoutButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    self.logoutButton.frame = CGRectMake(self.sharedData.screenWidth/2 - 100, self.sharedData.screenHeight - PHTabHeight - 45 - OffSetLargeDevice, 200, 36);
-    self.logoutButton.titleLabel.font = [UIFont phBlond:16];
-    [self.logoutButton setTitleColor:[UIColor phDarkGrayColor] forState:UIControlStateNormal];
-    [self.logoutButton setTitle:@"Log Out" forState:UIControlStateNormal];
-    [self.logoutButton addTarget:self action:@selector(logoutButtonDidTap) forControlEvents:UIControlEventTouchUpInside];
-    [self.mainCon addSubview:self.logoutButton];
+//    self.logoutButton = [UIButton buttonWithType:UIButtonTypeCustom];
+//    self.logoutButton.frame = CGRectMake(self.sharedData.screenWidth/2 - 100, self.sharedData.screenHeight - PHTabHeight - 45 - OffSetLargeDevice, 200, 36);
+//    self.logoutButton.titleLabel.font = [UIFont phBlond:16];
+//    [self.logoutButton setTitleColor:[UIColor phDarkGrayColor] forState:UIControlStateNormal];
+//    [self.logoutButton setTitle:@"Log Out" forState:UIControlStateNormal];
+//    [self.logoutButton addTarget:self action:@selector(logoutButtonDidTap) forControlEvents:UIControlEventTouchUpInside];
+//    [self.mainCon addSubview:self.logoutButton];
     
     self.profilePage = [[Profile alloc] initWithFrame:CGRectMake(self.sharedData.screenWidth, 0, self.sharedData.screenWidth, frame.size.height)];
     //self.sharedData.profilePage  = self.profilePage;
@@ -231,16 +231,11 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (section==0)
-    {
-        return 3;
-    }else if (section==1) {
+    if (section==0) {
+        return 4;
+    } else if (section==1) {
         return 0;
-    }
-    else if (section==2) {
-        return 0;
-    }
-    else {
+    } else {
         return 0;
     }
 }
@@ -274,23 +269,7 @@
 //
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
     return 60.0;
-}
-
-//This leaves the bottom blank
-- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
-{
-    if (section == tableView.numberOfSections - 1) {
-        return [[UIView alloc] initWithFrame:CGRectMake(0, 0, 1, 100)];
-    }
-    return nil;
-}
-
-//This leaves the bottom blank
-- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
-{
-    return 0;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -303,6 +282,10 @@
         {
             cell = [tableView dequeueReusableCellWithIdentifier:@"SettingsCell"];
             if (cell == nil) {cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"SettingsCell"];}
+            
+            UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(10, 0, self.sharedData.screenWidth, 0.4)];
+            [lineView setBackgroundColor:[UIColor phLightGrayColor]];
+            [[cell contentView] addSubview:lineView];
             
             UILabel *textLabel = [[UILabel alloc] initWithFrame:CGRectMake(70, 20, 180, 20)];
             textLabel.backgroundColor = [UIColor clearColor];
@@ -318,6 +301,12 @@
             UIImageView *iconImage = [[UIImageView alloc] initWithFrame:CGRectMake(10, 10, 20, 20)];
             [iconImage setImage:[UIImage imageNamed:@"icon_settings.png"]];
             [cellImage addSubview:iconImage];
+            
+            UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0.0, 0.0, 11.0, 21.0)];
+            [imageView setBackgroundColor:[UIColor clearColor]];
+            [imageView setImage:[UIImage imageNamed:@"forward.png"]];
+            [cell setAccessoryView:imageView];
+            [[cell accessoryView] setBackgroundColor:[UIColor clearColor]];
         }
         else if(indexPath.row==1)
         {
@@ -338,6 +327,12 @@
             UIImageView *iconImage = [[UIImageView alloc] initWithFrame:CGRectMake(10, 10, 20, 20)];
             [iconImage setImage:[UIImage imageNamed:@"icon_friends.png"]];
             [cellImage addSubview:iconImage];
+            
+            UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0.0, 0.0, 11.0, 21.0)];
+            [imageView setBackgroundColor:[UIColor clearColor]];
+            [imageView setImage:[UIImage imageNamed:@"forward.png"]];
+            [cell setAccessoryView:imageView];
+            [[cell accessoryView] setBackgroundColor:[UIColor clearColor]];
 
         }
         else if(indexPath.row==2)
@@ -359,15 +354,24 @@
             UIImageView *iconImage = [[UIImageView alloc] initWithFrame:CGRectMake(10, 10, 20, 20)];
             [iconImage setImage:[UIImage imageNamed:@"icon_support.png"]];
             [cellImage addSubview:iconImage];
+            
+            UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0.0, 0.0, 11.0, 21.0)];
+            [imageView setBackgroundColor:[UIColor clearColor]];
+            [imageView setImage:[UIImage imageNamed:@"forward.png"]];
+            [cell setAccessoryView:imageView];
+            [[cell accessoryView] setBackgroundColor:[UIColor clearColor]];
 
+        } else if (indexPath.row==3)
+        {
+            cell = [tableView dequeueReusableCellWithIdentifier:@"LogOutCell"];
+            if (cell == nil) {cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"LogOutCell"];}
+            cell.accessoryType = UITableViewCellAccessoryNone;
+            cell.textLabel.font = [UIFont phBlond:16];
+            cell.textLabel.text = @"Log Out";
+            cell.textLabel.textColor = [UIColor phDarkGrayColor];
+            cell.textLabel.textAlignment = NSTextAlignmentCenter;
+            cell.accessoryView = nil;
         }
-        
-        UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0.0, 0.0, 11.0, 21.0)];
-        [imageView setBackgroundColor:[UIColor clearColor]];
-        [imageView setImage:[UIImage imageNamed:@"forward.png"]];
-        [cell setAccessoryView:imageView];
-        [[cell accessoryView] setBackgroundColor:[UIColor clearColor]];
-        
     }
     else if (indexPath.section==1)
     {
@@ -395,14 +399,6 @@
             cell.detailTextLabel.adjustsFontSizeToFitWidth = YES;
         }
     }
-    else if (indexPath.section==2)
-    {
-        cell = [tableView dequeueReusableCellWithIdentifier:@"LogOutCell"];
-        if (cell == nil) {cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"LogOutCell"];}
-        cell.accessoryType = UITableViewCellAccessoryNone;
-        cell.textLabel.font = [UIFont phBlond:17];
-        cell.textLabel.text = @"Log Out";
-    }
     
     cell.textLabel.textColor = [UIColor blackColor];
     cell.backgroundColor = [UIColor whiteColor];
@@ -419,16 +415,14 @@
         
         UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
         
-        //My profile
-        if([cell.textLabel.text isEqualToString:@"Profile"])
+        //Settings
+        if(indexPath.row == 0)
         {
-            self.settingsPage.hidden = YES;
+            self.settingsPage.hidden = NO;
+            self.profilePage.hidden = YES;
             self.hostingsPage.hidden = YES;
             self.confirmationsPage.hidden = YES;
-            self.purchasesPage.hidden = YES;
-            
-            self.profilePage.hidden = NO;
-            [self.profilePage initClass];
+            [self.settingsPage initClass];
             
             self.btnBack.hidden = NO;
             [UIView animateWithDuration:0.25 animations:^()
@@ -436,9 +430,9 @@
                  self.mainCon.frame = CGRectMake(-self.sharedData.screenWidth, 0, self.sharedData.screenWidth * 3, self.sharedData.screenHeight - PHTabHeight);
              }];
         }
-        
+
         //Invite friends
-        else if([cell.textLabel.text isEqualToString:@"Invite Friends"])
+        else if(indexPath.row == 1)
         {
             [self.sharedData trackMixPanelWithDict:@"Share App" withDict:@{@"origin":@"More"}];
             
@@ -450,7 +444,7 @@
         }
         
         //Email support
-        else if([cell.textLabel.text isEqualToString:@"Support"])
+        else if(indexPath.row == 2)
         {
             [[NSNotificationCenter defaultCenter]
              postNotificationName:@"SHOW_MAIL_MESSAGE"
@@ -459,14 +453,28 @@
             return;
         }
         
-        //Settings
-        else if([cell.textLabel.text isEqualToString:@"Settings"])
+        //Log Out
+        else if(indexPath.row == 3)
         {
-            self.settingsPage.hidden = NO;
-            self.profilePage.hidden = YES;
+            [[NSNotificationCenter defaultCenter]
+             postNotificationName:@"SHOW_LOGIN"
+             object:self];
+            
+            [tableView deselectRowAtIndexPath:[tableView indexPathForSelectedRow] animated:YES];
+            
+            return;
+        }
+        
+        //My profile
+        else if([cell.textLabel.text isEqualToString:@"Profile"])
+        {
+            self.settingsPage.hidden = YES;
             self.hostingsPage.hidden = YES;
             self.confirmationsPage.hidden = YES;
-            [self.settingsPage initClass];
+            self.purchasesPage.hidden = YES;
+            
+            self.profilePage.hidden = NO;
+            [self.profilePage initClass];
             
             self.btnBack.hidden = NO;
             [UIView animateWithDuration:0.25 animations:^()
@@ -614,16 +622,6 @@
         }
         return;
     }
-    else if(indexPath.section==2) //Logout
-    {
-        [[NSNotificationCenter defaultCenter]
-         postNotificationName:@"SHOW_LOGIN"
-         object:self];
-        
-        [tableView deselectRowAtIndexPath:[tableView indexPathForSelectedRow] animated:YES];
-        
-        return;
-    }
  }
 
 #pragma mark - Navigation Action
@@ -661,11 +659,11 @@
     }
 }
 
--(void)logoutButtonDidTap {
-    [[NSNotificationCenter defaultCenter]
-     postNotificationName:@"SHOW_LOGIN"
-     object:self];
-}
+//-(void)logoutButtonDidTap {
+//    [[NSNotificationCenter defaultCenter]
+//     postNotificationName:@"SHOW_LOGIN"
+//     object:self];
+//}
 
 -(void)goToHosting
 {

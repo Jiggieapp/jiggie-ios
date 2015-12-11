@@ -830,7 +830,10 @@
 }
 
 
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+//- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView
+                  willDecelerate:(BOOL)decelerate
 {
     
     
@@ -840,6 +843,7 @@
     {
         CGPoint location = [scrollView.panGestureRecognizer locationInView:self.window.rootViewController.view];
         
+        NSLog(@"LOCATION SCROLL :: %f > %f", location.y, self.tabBar.frame.size.height + self.messagesList.frame.size.height + 90 - (self.inputNumLines * 20));
         if(location.y > self.tabBar.frame.size.height + self.messagesList.frame.size.height + 90 - (self.inputNumLines * 20))
         {
             NSLog(@"POINT ::  %@",NSStringFromCGPoint(location));
@@ -1087,7 +1091,7 @@
     [self initClass];
 }
 
-
+#pragma mark - UITableViewDataSource
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     return [self.sectionsA count];
@@ -1486,7 +1490,7 @@
 
 ///TEXTVIEW
 
-
+#pragma mark - UITableViewDelegate
 - (BOOL)textViewShouldBeginEditing:(UITextView *)aTextView
 {
     return YES;
@@ -1543,7 +1547,7 @@
 
 
 
-
+#pragma mark - UIKeyboard Notification
 -(void)keyboardOn
 {
     NSLog(@"keyboardOn");

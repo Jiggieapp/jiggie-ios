@@ -168,7 +168,7 @@
     
     self.date.text = dict[@"start_datetime_str"];
     
-    self.picURL = [Constants eventImageURL:dict[@"_id"]];
+//    self.picURL = [Constants eventImageURL:dict[@"_id"]];
     
     self.picURL = [self.sharedData picURL:dict[@"photos"][0]];
     
@@ -176,7 +176,7 @@
     [self.mainImg loadImage:self.picURL defaultImageNamed:@"nightclub_default"]; //This will load and can be cancelled?
     
     
-    NSLog(@"LOADING_IMG_URL :: %@",self.picURL);
+    NSLog(@"LOADING_IMG_URL :: %@ - %@",self.title.text, self.picURL);
     
     //remove all tags
     NSArray *viewsToRemove = [self.tagsView subviews];

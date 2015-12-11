@@ -34,46 +34,46 @@ static SharedData *sharedInstance = nil;
     {
         self.apnToken   =   @"";
         self.toImgURL   =   @"";
-        self.userDict   =   [[NSMutableDictionary alloc] init];
-        self.photosDict =   [[NSMutableDictionary alloc] init];
-        self.imagesDict =   [[NSMutableDictionary alloc] init];
-        self.venuesNameList =   [[NSMutableArray alloc] init];
-        self.keyboardsA     =   [[NSMutableArray alloc] init];
-        self.appsFlyerDict  = [[NSMutableDictionary alloc] init];
-        self.memberProfileDict  = [[NSMutableDictionary alloc] init];
-        self.selectedHost = [[NSMutableDictionary alloc] init];
-        self.selectedEvent = [[NSMutableDictionary alloc] init];
-        self.messagesPage = nil;
-        self.profilePage  = nil;
-        self.memberProfile = nil;
+        self.userDict   =   [[NSMutableDictionary alloc] init]; // user login when
+        self.photosDict =   [[NSMutableDictionary alloc] init]; // user's photos
+        self.imagesDict =   [[NSMutableDictionary alloc] init]; // all photos member profile, events, event detail
+        self.venuesNameList =   [[NSMutableArray alloc] init]; // not use anymore
+        self.keyboardsA     =   [[NSMutableArray alloc] init]; // clear for the keyboard.. all object to resign the keyboard
+        self.appsFlyerDict  = [[NSMutableDictionary alloc] init]; // dict for appsflyer when login or app launch
+        self.memberProfileDict  = [[NSMutableDictionary alloc] init]; // other user member profile
+        self.selectedHost = [[NSMutableDictionary alloc] init]; // not use
+        self.selectedEvent = [[NSMutableDictionary alloc] init]; // not use or for share link
+        self.messagesPage = nil; // messages
+        self.profilePage  = nil; // profile
+        self.memberProfile = nil; // memberprofile
         self.messageFontSize    = 14;
         self.maxProfilePics     = 4;
-        self.appKey             =   @"kT7bgkacbx73i3yxma09su0u901nu209mnuu30akhkpHJJ";
-        self.fb_id              =   @"";
-        self.isInConversation = NO;
+        self.appKey             =   @"kT7bgkacbx73i3yxma09su0u901nu209mnuu30akhkpHJJ"; // not use anymore
+        self.fb_id              =   @""; // user's fb id
+        self.isInConversation = NO; // if in the user conversation
         self.cPageIndex     = 0;
-        self.hasMessageToLoad = NO;
-        self.ph_token       = @"";
-        self.user_id        = @"";
-        self.cVenueListIndex = 0;
-        self.isLoggedIn     = NO;
-        self.cHostDict      = [[NSMutableDictionary alloc] init];
-        self.cHostVenuePicURL   = @"";
-        self.imdowntext         = @"Send Message";
-        self.baseAPIURL         = @"https://api.partyhostapp.com";
-        self.member_fb_id       = @"";
-        self.cEventsDatesStrg   = @"";
-        self.cVenueName         = @"";
-        self.member_first_name  = @"";
-        self.cHost_fb_id        = @"";
-        self.cHost_index        = -1;
-        self.cHost_index_path   = nil;
+        self.hasMessageToLoad = NO; // boolean to open the message when going to the app
+        self.ph_token       = @""; // not use
+        self.user_id        = @""; //
+        self.cVenueListIndex = 0; // not use
+        self.isLoggedIn     = NO; // not use
+        self.cHostDict      = [[NSMutableDictionary alloc] init]; // not use
+        self.cHostVenuePicURL   = @""; // for share link
+        self.imdowntext         = @"Send Message"; // not use
+        self.baseAPIURL         = @"https://api.partyhostapp.com"; // not use
+        self.member_fb_id       = @""; // use for share link
+        self.cEventsDatesStrg   = @""; // not use
+        self.cVenueName         = @""; // not use
+        self.member_first_name  = @""; // for member profile
+        self.cHost_fb_id        = @""; // not use
+        self.cHost_index        = -1; // event / deep linking
+        self.cHost_index_path   = nil; //
         self.cHosting_id        = @"";
         self.cInitHosting_id    = @"";
         self.member_user_id     = @"";
         self.cEventId_toLoad    = @"";
-        self.tapDict            = [[NSMutableDictionary alloc] init];
-        self.hasInitEventSelection     = NO;
+        self.tapDict            = [[NSMutableDictionary alloc] init]; // not use
+        self.hasInitEventSelection     = NO; // not use
         self.cEventId           = @"";
         self.cInviteName        = @"";
         self.cameFromEventsTab  = NO;
@@ -85,15 +85,15 @@ static SharedData *sharedInstance = nil;
         self.unreadChatCount    = 0;
         self.unreadFeedCount    = 0;
         self.cShareHostingId    = @"";
-        self.mixPanelCEventDict = [[NSMutableDictionary alloc] init];
-        self.cEventId_Feed      = @"";
-        self.cEventId_Modal     = @"";
-        self.matchMe            = YES;
+        self.mixPanelCEventDict = [[NSMutableDictionary alloc] init]; // mixpanel data
+        self.cEventId_Feed      = @""; // current feed id
+        self.cEventId_Modal     = @""; // current modal id
+        self.matchMe            = YES; // use in feed
         self.isInFeed           = NO;
         self.cFillType          = @"";
         self.cFillValue          = @"";
-        self.btnYesTxt           = @"";
-        self.btnNOTxt           = @"";
+        self.btnYesTxt           = @""; // on matching button
+        self.btnNOTxt           = @""; // on matching
         self.phoneCountry       = @"";
         self.isInAskingNotification = NO;
         self.didAppsFlyerLoad   = NO;
@@ -106,7 +106,7 @@ static SharedData *sharedInstance = nil;
         self.btnYesTxt = @"YES";
         self.btnNOTxt = @"NO";
         
-        self.ABTestChat = @"";
+        self.ABTestChat = @""; // feed 
         
         NSArray *vComp = [[UIDevice currentDevice].systemVersion componentsSeparatedByString:@"."];
         
@@ -168,7 +168,7 @@ static SharedData *sharedInstance = nil;
         self.feedCellHeightLong = 365;
         if(self.isIphone4)
         {
-            self.feedCellHeightLong = 365 - 86;
+            self.feedCellHeightLong = 290;
         } else if (self.isIphone6)
         {
             self.feedCellHeightLong = 464;
@@ -239,7 +239,9 @@ static SharedData *sharedInstance = nil;
     //return url;
     //return [NSString stringWithFormat:@"http://res.cloudinary.com/havbengny/image/upload/v1448704756/%@.jpg",joinedA];//[NSString stringWithFormat:@"%@.jpg",tmpA[0]];
     */
-    return [NSString stringWithFormat:@"%@/image?url=%@",PHBaseURL,url];
+    
+    NSString *newUrl = [url stringByReplacingOccurrencesOfString:@"_original.png" withString:@"_540.jpg"];
+    return [NSString stringWithFormat:@"%@/image?url=%@",PHBaseURL,newUrl];
 }
 
 -(NSString *)profileImg:(NSString *)fb_id

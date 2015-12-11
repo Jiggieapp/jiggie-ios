@@ -171,7 +171,7 @@
         [self.mainCon addSubview:self.cardTwo];
         
         
-        int OffSet = (self.sharedData.isIphone4)?86:0;
+        int OffSet = (self.sharedData.isIphone4)?96:0;
         int OffSetLargeDevice = 0;
         int OffsetFontLargeDevice = 0;
         if (self.sharedData.isIphone6) {
@@ -184,13 +184,13 @@
         
         /// ---- CARD ONE ---- ///
         self.btnUserImage = [UIButton buttonWithType:UIButtonTypeCustom];
-        self.btnUserImage.frame = CGRectMake(0, 0, self.mainCon.bounds.size.width, 185 - OffSet + OffSetLargeDevice/2);
+        self.btnUserImage.frame = CGRectMake(0, 0, self.mainCon.bounds.size.width, 185 - OffSet/2 + OffSetLargeDevice/2);
         self.btnUserImage.contentMode = UIViewContentModeScaleAspectFill;
         self.btnUserImage.layer.masksToBounds = YES;
         [self.btnUserImage addTarget:self action:@selector(profileHandler) forControlEvents:UIControlEventTouchUpInside];
         [self.cardOne addSubview:self.btnUserImage];
         
-        self.greenCircle = [[UIView alloc] initWithFrame:CGRectMake((self.mainCon.bounds.size.width/2) - 30, 185 - 35  - OffSet + OffSetLargeDevice/2, 60, 60)];
+        self.greenCircle = [[UIView alloc] initWithFrame:CGRectMake((self.mainCon.bounds.size.width/2) - 30, 185 - 35  - OffSet/2 + OffSetLargeDevice/2, 60, 60)];
         self.greenCircle.backgroundColor = [UIColor phBlueColor];
         self.greenCircle.layer.cornerRadius = 30;
         self.greenCircle.layer.masksToBounds = YES;
@@ -200,25 +200,28 @@
         textIcon.image = [UIImage imageNamed:@"text-icon"];
         [self.greenCircle addSubview:textIcon];
 
-        self.nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 215 - OffSet + OffSetLargeDevice * 0.7, self.mainCon.bounds.size.width, 30)];
+        self.nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 215 - OffSet/2 + OffSetLargeDevice * 0.7, self.mainCon.bounds.size.width, 30)];
         self.nameLabel.textColor = [self.sharedData colorWithHexString:@"5c5c5c"];
         self.nameLabel.font = [UIFont phBlond:15 + OffsetFontLargeDevice];
         self.nameLabel.textAlignment = NSTextAlignmentCenter;
         [self.cardOne addSubview:self.nameLabel];
         
         self.eventLabel = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-        self.eventLabel.frame = CGRectMake(0, 235 - OffSet + OffSetLargeDevice * 0.7, self.mainCon.bounds.size.width, 40);
+        self.eventLabel.frame = CGRectMake(0, 235 - OffSet/2 + OffSetLargeDevice * 0.7, self.mainCon.bounds.size.width, 40);
         [self.eventLabel setTitleColor:[UIColor phBlueColor] forState:UIControlStateNormal];
         self.eventLabel.titleLabel.font = [UIFont phBold:16 + OffsetFontLargeDevice];
         self.eventLabel.titleLabel.textAlignment = NSTextAlignmentCenter;
         self.eventLabel.titleLabel.lineBreakMode = NSLineBreakByWordWrapping;
         self.eventLabel.titleLabel.numberOfLines = 2;
+        if (self.sharedData.isIphone4) {
+            self.eventLabel.titleLabel.numberOfLines = 1;
+        }
 //        self.eventLabel.contentVerticalAlignment = UIControlContentVerticalAlignmentTop;
         [self.eventLabel setTitleEdgeInsets:UIEdgeInsetsMake(0, 30, 0, 30)];
         [self.eventLabel addTarget:self action:@selector(eventInfoHandler) forControlEvents:UIControlEventTouchUpInside];
         [self.cardOne addSubview:self.eventLabel];
         
-        self.recLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 255 - OffSet + OffSetLargeDevice * 0.7, self.mainCon.bounds.size.width, 30)];
+        self.recLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 255 - OffSet/2 + OffSetLargeDevice * 0.7, self.mainCon.bounds.size.width, 30)];
         self.recLabel.textColor = [self.sharedData colorWithHexString:@"5c5c5c"];
         self.recLabel.font = [UIFont phBlond:15 + OffsetFontLargeDevice];
         self.recLabel.textAlignment = NSTextAlignmentCenter;
@@ -365,6 +368,9 @@
     
     
     CGSize eventSize = CGSizeMake(self.eventLabel.bounds.size.width - 60, 40);
+    if (self.sharedData.isIphone4) {
+        eventSize = CGSizeMake(self.eventLabel.bounds.size.width - 60, 20);
+    }
     CGRect stringFrame = [eventLabelText boundingRectWithSize:eventSize
                                                       options:NSStringDrawingUsesLineFragmentOrigin
                                                    attributes:@{NSFontAttributeName:self.eventLabel.titleLabel.font}

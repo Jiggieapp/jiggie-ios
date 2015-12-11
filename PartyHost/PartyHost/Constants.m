@@ -18,10 +18,13 @@ BOOL const PHDebugOn = NO;
 NSString *const PHBaseURL = @"https://jiggie.herokuapp.com/app/v3";
 NSString *const PHBaseDomain = @"https://jiggie.herokuapp.com";
 
+
+
+
+
+
 //NSString *const PHBaseDomain = @"https://partyhostapp.herokuapp.com";
 //NSString *const PHBaseURL = @"https://partyhostapp.herokuapp.com/app/v3";
-
-
 
 
 NSString *const PHEventsURL = @"/events/:account_type/upcoming/:fb_id";
