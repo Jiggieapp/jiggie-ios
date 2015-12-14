@@ -91,8 +91,8 @@
         NSLog(@"TOKEN____ :: %@",[FBSDKAccessToken currentAccessToken].tokenString);
         
 //        [self performSelector:@selector(skipLogin) withObject:nil afterDelay:0.1];
-
-        [self performSelector:@selector(checkIfHasLogin) withObject:nil afterDelay:2.0];
+        
+        [self performSelector:@selector(checkIfHasLogin) withObject:nil afterDelay:0.0];
     }
     return self;
 }
@@ -125,6 +125,10 @@
          }
          else {
              NSLog(@"Error %@",error);
+             [[NSNotificationCenter defaultCenter]
+              postNotificationName:@"HIDE_LOADING"
+              object:self];
+
          }
      }];
 }
@@ -213,7 +217,7 @@
     
     FBSDKLoginManager *login = [[FBSDKLoginManager alloc] init];
     [login
-     logInWithReadPermissions: @[@"public_profile",@"user_birthday", @"email", @"user_photos",@"user_friends",@"user_likes",@"user_relationships",@"user_about_me",@"user_location",@"user_photos",@"user_status",@"user_friends"]
+     logInWithReadPermissions: @[@"public_profile",@"user_birthday", @"email", @"user_photos",@"user_friends",@"user_about_me",@"user_location"]
      fromViewController:self.window.rootViewController
      handler:^(FBSDKLoginManagerLoginResult *result, NSError *error) {
          NSLog(@"RESULT___ :: %@",result);
@@ -221,7 +225,6 @@
              NSLog(@"FB Process error :: %@",error);
          } else if (result.isCancelled) {
              NSLog(@"FB Cancelled");
-             
              [[NSNotificationCenter defaultCenter]
               postNotificationName:@"HIDE_LOADING"
               object:self];
@@ -229,7 +232,6 @@
              NSLog(@"Logged in :: %@",[FBSDKAccessToken currentAccessToken].tokenString);
              
              [self autoLogin];
-             
          }
      }];
     
@@ -510,7 +512,7 @@
     userLastName = [userLastName lowercaseString];
     
     NSLog(@"APN_TOKEN :: %@",self.sharedData.apnToken);
-    
+
     AFHTTPRequestOperationManager *manager = [self.sharedData getOperationManager];
     NSDictionary *params = @{
                              @"fb_id" : facebookId,
@@ -566,7 +568,10 @@
                  [self.sharedData trackMixPanelWithDict:@"Sign Up" withDict:@{}];
                  [self.sharedData setMixPanelOnceParams];
              }else{
-                 // tech debt : set dummy profile!! 
+                 // tech debt : set dummy profile!!
+                 [self.sharedData createMixPanelDummyProfile];
+                 
+                 
                  [self.sharedData setMixPanelOnLogin];
                 
                  NSString *isFirst = ([defaults objectForKey:@"FIRST_RUN"])?@"NO":@"YES";
@@ -581,14 +586,7 @@
              
              
              
-             if(![defaults objectForKey:@"FIRST_RUN"])
-             {
-                 [self.sharedData trackMixPanelWithDict:@"Install" withDict:@{}];
-                 
-                 //[self.sharedData trackMixPanel:@"ios-party-host-install"];
-                 [defaults setValue:@"YES" forKey:@"FIRST_RUN"];
-                 [defaults synchronize];
-             }
+             
              
              [self.sharedData setMixPanelUserProfile];
              

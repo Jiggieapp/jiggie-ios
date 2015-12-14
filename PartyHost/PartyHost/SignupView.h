@@ -26,7 +26,6 @@
 @property (weak, nonatomic) IBOutlet UIImageView *backgroundImage3;
 
 
-
 @property(nonatomic,assign)     int             pageIndex;
 @property(nonatomic,assign)     BOOL            pageControlUsed;
 @property(nonatomic,strong)     NSMutableArray  *pageViews;

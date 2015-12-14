@@ -420,8 +420,8 @@
                                                 <action selector="locationSwitchChanged:" destination="LCs-lu-55V" eventType="valueChanged" id="KJm-um-IhB"/>
                                             </connections>
                                         </switch>
-                                        <textView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" editable="NO" text="Stay in the know on hot events and hostings around you" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="auc-Ea-5uA">
-                                            <rect key="frame" x="4" y="49" width="211" height="71"/>
+                                        <textView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" editable="NO" text="Stay in the know on most popular events around you" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="auc-Ea-5uA">
+                                            <rect key="frame" x="4" y="49" width="247" height="71"/>
                                             <animations/>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -436,7 +436,7 @@
                                         <constraint firstAttribute="bottom" secondItem="auc-Ea-5uA" secondAttribute="bottom" id="NbF-3H-3ud"/>
                                         <constraint firstItem="RF8-vC-Fsv" firstAttribute="top" secondItem="hF5-P8-awZ" secondAttribute="top" constant="8" id="OPl-Nc-rHN"/>
                                         <constraint firstItem="RF8-vC-Fsv" firstAttribute="leading" secondItem="dTZ-Lf-6nt" secondAttribute="trailing" constant="8" symbolic="YES" id="XZQ-EO-4VV"/>
-                                        <constraint firstAttribute="trailing" secondItem="auc-Ea-5uA" secondAttribute="trailing" constant="65" id="YqX-pS-8QO"/>
+                                        <constraint firstAttribute="trailing" secondItem="auc-Ea-5uA" secondAttribute="trailing" constant="29" id="YqX-pS-8QO"/>
                                         <constraint firstItem="auc-Ea-5uA" firstAttribute="leading" secondItem="hF5-P8-awZ" secondAttribute="leading" constant="4" id="ZvP-Wv-ehL"/>
                                         <constraint firstAttribute="height" constant="120" id="jqy-7m-Cny"/>
                                         <constraint firstItem="auc-Ea-5uA" firstAttribute="top" secondItem="dTZ-Lf-6nt" secondAttribute="bottom" constant="16" id="nh1-f5-0FA"/>

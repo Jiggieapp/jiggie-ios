@@ -17,7 +17,7 @@
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
-    //self.backgroundColor = [UIColor whiteColor];
+    self.backgroundColor = [UIColor whiteColor];
     self.isPanelOpen = NO;
     self.sharedData = [SharedData sharedInstance];
     self.layer.masksToBounds = YES;
@@ -29,7 +29,7 @@
     self.tabBar.backgroundColor = [UIColor phPurpleColor];
     
     self.mainScroll = [[UIScrollView alloc] initWithFrame:CGRectMake(0, self.tabBar.frame.size.height, self.sharedData.screenWidth, self.sharedData.screenHeight - PHTabHeight - self.tabBar.frame.size.height)];
-    self.mainScroll.backgroundColor = [UIColor phDarkBodyColor];
+    self.mainScroll.backgroundColor = [UIColor whiteColor];
     self.mainScroll.delegate = self;
     self.mainScroll.contentSize = CGSizeMake(self.sharedData.screenWidth, 900);
     
@@ -55,10 +55,10 @@
     
     self.btnEdit = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.btnEdit setTitle:@"Edit" forState:UIControlStateNormal];
-    self.btnEdit.titleLabel.font  = [UIFont phBlond:18];
+    self.btnEdit.titleLabel.font  = [UIFont phBlond:16];
     self.btnEdit.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
-    self.btnEdit.frame = CGRectMake(frame.size.width - 50-8, 10, 50, 50);
-    self.btnEdit.titleEdgeInsets = UIEdgeInsetsMake(15, 0, 0, 0);
+    self.btnEdit.frame = CGRectMake(frame.size.width - 50 - 8, 20, 50, 40);
+    self.btnEdit.titleEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 0);
     [self.btnEdit addTarget:self action:@selector(editHandler) forControlEvents:UIControlEventTouchUpInside];
     [self.tabBar addSubview:self.btnEdit];
     
@@ -104,7 +104,7 @@
     [self.aboutPanel addSubview:self.separator1];
     
     self.aboutBody = [[UITextView alloc] init];
-    self.aboutBody.font = [UIFont phBlond:18];
+    self.aboutBody.font = [UIFont phBlond:16];
     self.aboutBody.textColor = [UIColor darkGrayColor];
     self.aboutBody.textAlignment = NSTextAlignmentLeft;
     self.aboutBody.userInteractionEnabled = NO;
@@ -157,7 +157,7 @@
     
     if(self.aboutBody.text.length>0)
     {
-        self.aboutLabel.frame = CGRectMake(self.nameLabel.frame.origin.x, y1, self.nameLabel.frame.size.width, 25);
+        self.aboutLabel.frame = CGRectMake(self.nameLabel.frame.origin.x, y1, self.nameLabel.frame.size.width, 20);
         y1+=self.aboutLabel.frame.size.height+2;
         
         self.aboutBody.frame = CGRectMake(self.nameLabel.frame.origin.x - 10, y1, self.nameLabel.frame.size.width + 20, 0);
@@ -167,7 +167,7 @@
     }
     else
     {
-        self.aboutLabel.frame = CGRectMake(self.nameLabel.frame.origin.x, y1, self.nameLabel.frame.size.width, 25);
+        self.aboutLabel.frame = CGRectMake(self.nameLabel.frame.origin.x, y1, self.nameLabel.frame.size.width, 20);
         y1+=self.aboutLabel.frame.size.height+2;
         
         self.aboutBody.frame = CGRectMake(self.nameLabel.frame.origin.x - 10, y1, self.nameLabel.frame.size.width + 20, 120);
@@ -176,14 +176,9 @@
     
     self.aboutPanel.frame = CGRectMake(0, self.aboutPanel.frame.origin.y, self.sharedData.screenWidth, y1);
     
-    self.mainScroll.contentSize = CGSizeMake(self.sharedData.screenWidth, self.picScroll.frame.size.height + y1 + self.sharedData.screenHeight * 0.5);
+    self.mainScroll.contentSize = CGSizeMake(self.sharedData.screenWidth, CGRectGetMaxY(self.aboutPanel.frame) + 20);
     
     self.bgView.frame = CGRectMake(0, self.picScroll.frame.origin.y + self.picScroll.frame.size.height, self.sharedData.screenWidth, self.mainScroll.contentSize.height);
-    
-    
-    CGRect AboutFrame = self.aboutBody.frame;
-    AboutFrame.origin.y -= 10;
-    self.aboutBody.frame = AboutFrame;
 }
 
 -(void)initClass

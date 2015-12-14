@@ -9,20 +9,22 @@
 #import <Foundation/Foundation.h>
 #import "Constants.h"
 
-NSString *const PHVersion = @"1.0.1";
 BOOL const PHMixPanelOn = YES;
 
 //DEBUG, should be NO when released!
 BOOL const PHDebugOn = NO;
 
 //URLs with substitution
-NSString *const PHBaseURL = @"https://jiggie-dev.herokuapp.com/app/v3";
-NSString *const PHBaseDomain = @"https://jiggie-dev.herokuapp.com";
+NSString *const PHBaseURL = @"https://jiggie.herokuapp.com/app/v3";
+NSString *const PHBaseDomain = @"https://jiggie.herokuapp.com";
+
+
+
+
+
 
 //NSString *const PHBaseDomain = @"https://partyhostapp.herokuapp.com";
 //NSString *const PHBaseURL = @"https://partyhostapp.herokuapp.com/app/v3";
-
-
 
 
 NSString *const PHEventsURL = @"/events/:account_type/upcoming/:fb_id";
@@ -160,7 +162,7 @@ int const PHButtonHeight = 50; //This is the button at bottom of screen
 {
     NSString *url = [NSString stringWithString:PHEventImageURL];
     url = [url stringByReplacingOccurrencesOfString:@":event_id" withString:event_id];
-    return [NSString stringWithFormat:@"%@%@",PHBaseDomain,url];
+    return [NSString stringWithFormat:@"%@%@",PHBaseURL,url];
 }
 
 +(NSString*)eventProductsURL:(NSString*)event_id

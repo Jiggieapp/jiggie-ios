@@ -9,14 +9,14 @@
 #import "Feed.h"
 #import "FeedCell.h"
 
-#define POLL_SECONDS 5
+#define POLL_SECONDS 25
 
 @implementation Feed
 
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
-    self.backgroundColor = [UIColor phLightSilverColor];
+    self.backgroundColor = [UIColor whiteColor];
     self.sharedData = [SharedData sharedInstance];
     self.sharedData.feedPage = self;
     self.isFeedLoaded = NO;
@@ -41,17 +41,19 @@
     self.title.textColor = [UIColor whiteColor];
     self.title.font = [UIFont phBold:18];
     
-//    self.hideIcon = [[UIImageView alloc] initWithFrame:CGRectMake(10, 4, 20.0, 20)];
-    
-    self.hideView = [[UIView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(tabBar.frame), self.sharedData.screenWidth, 40)];
+    self.hideView = [[UIView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(tabBar.frame) + 10, self.sharedData.screenWidth, 40)];
     self.hideView.backgroundColor = [UIColor clearColor];
     [self.mainCon addSubview:self.hideView];
     self.hideView.hidden = YES;
     
-    self.hideTitle = [[UILabel alloc] initWithFrame:CGRectMake(14, 16, frame.size.width-80, 20)];
+    self.hideIcon = [[UIImageView alloc] initWithFrame:CGRectMake(14, 14, 30, 20)];
+    self.hideIcon.image = [UIImage imageNamed:@"discover_off.png"];
+    [self.hideView addSubview:self.hideIcon];
+    
+    self.hideTitle = [[UILabel alloc] initWithFrame:CGRectMake(56, 14, frame.size.width-80, 20)];
     self.hideTitle.text = @"Socialize";
-    self.hideTitle.textColor = [UIColor darkGrayColor];
-    self.hideTitle.font = [UIFont phBold:17];
+    self.hideTitle.textColor = [UIColor blackColor];
+    self.hideTitle.font = [UIFont phBlond:17];
     [self.hideView addSubview:self.hideTitle];
     
     self.hideToggle = [[UISwitch alloc] initWithFrame:CGRectZero];
@@ -59,12 +61,12 @@
                                        8,
                                        self.hideToggle.bounds.size.width,
                                        self.hideToggle.bounds.size.height);
-    [self.hideToggle setOnTintColor:[UIColor phPurpleColor]];
+    [self.hideToggle setOnTintColor:[UIColor phBlueColor]];
     [self.hideToggle addTarget:self action:@selector(hideToggleHandler) forControlEvents:UIControlEventTouchUpInside];
     [self.hideView addSubview:self.hideToggle];
     
     //Create table
-    self.feedTable = [[UITableView alloc] initWithFrame:CGRectMake(0, self.sharedData.screenHeight - self.sharedData.feedCellHeightLong - 50 - 3, frame.size.width, frame.size.height - 60 - self.hideView.frame.size.height)];
+    self.feedTable = [[UITableView alloc] initWithFrame:CGRectMake(0, self.sharedData.screenHeight - self.sharedData.feedCellHeightLong - 70 - 3, frame.size.width, frame.size.height - 60 - self.hideView.frame.size.height)];
     self.feedTable.delegate = self;
     self.feedTable.dataSource = self;
     self.feedTable.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -130,6 +132,11 @@
         [self toggleMatch];
     } else {
         [self.hideToggle setOn:self.sharedData.matchMe];
+        if (self.sharedData.matchMe) {
+            self.hideIcon.image = [UIImage imageNamed:@"discover_on.png"];
+        } else {
+            self.hideIcon.image = [UIImage imageNamed:@"discover_off.png"];
+        }
     }
 }
 
@@ -151,6 +158,11 @@
          NSLog(@"Match_responseObject :: %@",responseObject);
          
          [self.hideToggle setOn:self.sharedData.matchMe];
+         if (self.sharedData.matchMe) {
+             self.hideIcon.image = [UIImage imageNamed:@"discover_on.png"];
+         } else {
+             self.hideIcon.image = [UIImage imageNamed:@"discover_off.png"];
+         }
          
          self.feedTable.hidden = !(self.sharedData.matchMe);
          self.sharedData.feedBadge.hidden = !(self.sharedData.matchMe);
@@ -220,6 +232,11 @@
 {
     
     [self.hideToggle setOn:self.sharedData.matchMe];
+    if (self.sharedData.matchMe) {
+        self.hideIcon.image = [UIImage imageNamed:@"discover_on.png"];
+    } else {
+        self.hideIcon.image = [UIImage imageNamed:@"discover_off.png"];
+    }
     
     self.feedTable.hidden = !(self.sharedData.matchMe);
     self.sharedData.feedBadge.hidden = !(self.sharedData.matchMe);
@@ -234,7 +251,7 @@
     [self loadData];
     
     //Special messages for guest and host
-    [self.emptyView setData:@"Check back soon" subtitle:@"Browse some events and your social feed will show members who are also interested in those same events." imageNamed:@"PickIcon"];
+    [self.emptyView setData:@"Check back soon" subtitle:@"Browse some events and your social feed will show members who like the same events you do." imageNamed:@"PickIcon"];
 }
 
 -(void)loadData
@@ -367,6 +384,26 @@
      }];
 }
 
+#pragma mark - UITableViewDataSource
+-(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return 1;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return ([self.feedData count] > 0)?1:0;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSDictionary *data = [self.feedData objectAtIndex:indexPath.row];
+    NSString* typeCell = data[@"type"];
+    
+    if([typeCell isEqualToString:@"login"] || [typeCell isEqualToString:@"signedup"]) {return self.sharedData.feedCellHeightShort;}
+    
+    return self.sharedData.feedCellHeightLong;
+}
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     
@@ -388,30 +425,6 @@
     }
     
     return cell;
-}
-
-- (void)tableView:(UITableView *)tableView willDisplayCell:(FeedCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-}
-
--(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
-    return 1;
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    return ([self.feedData count] > 0)?1:0;
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    NSDictionary *data = [self.feedData objectAtIndex:indexPath.row];
-    NSString* typeCell = data[@"type"];
-    
-    if([typeCell isEqualToString:@"login"] || [typeCell isEqualToString:@"signedup"]) {return self.sharedData.feedCellHeightShort;}
-    
-    return self.sharedData.feedCellHeightLong;
 }
 
 @end

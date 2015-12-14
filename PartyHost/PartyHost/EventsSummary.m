@@ -21,7 +21,7 @@
 {
     self = [super initWithFrame:frame];
     lastEventId = @"";
-    //self.backgroundColor = [UIColor redColor];
+    self.backgroundColor = [UIColor whiteColor];
     
     self.sharedData = [SharedData sharedInstance];
     
@@ -30,19 +30,19 @@
     [self addSubview:self.tabBar];
     
     self.btnBack = [UIButton buttonWithType:UIButtonTypeCustom];
-    self.btnBack.frame = CGRectMake(0, 14, 50, 50);
-    [self.btnBack setBackgroundImage:[UIImage imageNamed:@"nav_back"] forState:UIControlStateNormal];
+    self.btnBack.frame = CGRectMake(0, 20, 40, 40);
+    [self.btnBack setImage:[UIImage imageNamed:@"nav_back"] forState:UIControlStateNormal];
+    [self.btnBack setImageEdgeInsets:UIEdgeInsetsMake(8, 14, 8, 14)];
     [self.btnBack addTarget:self action:@selector(goBack) forControlEvents:UIControlEventTouchUpInside];
     [self.tabBar addSubview:self.btnBack];
     
-    self.btnInfo = [UIButton buttonWithType:UIButtonTypeCustom];
-    self.btnInfo.frame = CGRectMake(self.sharedData.screenWidth - (93/4) - 8, 2 + 20, 28, 36);
-    [self.btnInfo setImage:[UIImage imageNamed:@"share_action"] forState:UIControlStateNormal];
-    self.btnInfo.imageView.contentMode = UIViewContentModeScaleAspectFit;
-    self.btnInfo.imageEdgeInsets = UIEdgeInsetsMake(4, 4, 4, 4);
-    [self.btnInfo addTarget:self action:@selector(goShareHandler) forControlEvents:UIControlEventTouchUpInside];
-    self.btnInfo.hidden = YES;
-    [self.tabBar addSubview:self.btnInfo];
+    self.btnShare = [UIButton buttonWithType:UIButtonTypeCustom];
+    self.btnShare.frame = CGRectMake(self.sharedData.screenWidth - (93/4) - 8, 2 + 20, 28, 36);
+    [self.btnShare setImage:[UIImage imageNamed:@"share_action"] forState:UIControlStateNormal];
+    self.btnShare.imageView.contentMode = UIViewContentModeScaleAspectFit;
+    self.btnShare.imageEdgeInsets = UIEdgeInsetsMake(4, 4, 4, 4);
+    [self.btnShare addTarget:self action:@selector(goShareHandler) forControlEvents:UIControlEventTouchUpInside];
+    [self.tabBar addSubview:self.btnShare];
     
     self.title = [[UILabel alloc] initWithFrame:CGRectMake(40, 20, self.sharedData.screenWidth - 80, 40)];
     self.title.textAlignment = NSTextAlignmentCenter;
@@ -54,7 +54,7 @@
     self.mainScroll = [[UIScrollView alloc] initWithFrame:CGRectMake(0,
                                                                      self.tabBar.bounds.size.height,
                                                                      self.sharedData.screenWidth,
-                                                                     self.sharedData.screenHeight - self.tabBar.bounds.size.height)];
+                                                                     self.sharedData.screenHeight - self.tabBar.bounds.size.height - PHTabHeight)];
     self.mainScroll.showsVerticalScrollIndicator    = NO;
     self.mainScroll.showsHorizontalScrollIndicator  = NO;
     self.mainScroll.scrollEnabled                   = YES;
@@ -233,6 +233,13 @@
     self.externalSiteLabel.hidden = YES;
     [self.btnHostHere addSubview:self.externalSiteLabel];
     
+    self.emptyView = [[EmptyView alloc] initWithFrame:CGRectMake(0,
+                                                                self.tabBar.bounds.size.height,
+                                                                self.sharedData.screenWidth,
+                                                                self.sharedData.screenHeight - self.tabBar.bounds.size.height - PHTabHeight)];
+    self.emptyView.backgroundColor = [UIColor whiteColor];
+    [self addSubview:self.emptyView];
+    
     //version_3.0
     return self;
 }
@@ -390,10 +397,8 @@
                  [alert show];
                  
                  [self goBack];
-                 
-                 [[NSNotificationCenter defaultCenter]
-                  postNotificationName:@"HIDE_LOADING"
-                  object:self];
+
+                 [self.emptyView setMode:@"hide"];
                  
                  return;
              }
@@ -423,56 +428,53 @@
          self.sharedData.cFillType = self.fillType;
          self.sharedData.cFillValue = self.fillValue;
          
+         self.externalSiteLabel.hidden = ![self.fillType isEqualToString:@"link"];
+         
+         if([self.fillType isEqualToString:@"none"]) {
+             [self.mainScroll setFrame:CGRectMake(0,
+                                                  self.tabBar.bounds.size.height,
+                                                  self.sharedData.screenWidth,
+                                                  self.sharedData.screenHeight - self.tabBar.bounds.size.height - PHTabHeight)];
+         } else
+         {
+             [self.mainScroll setFrame:CGRectMake(0,
+                                                  self.tabBar.bounds.size.height,
+                                                  self.sharedData.screenWidth,
+                                                  self.sharedData.screenHeight - self.tabBar.bounds.size.height - PHTabHeight - 44)];
+         }
+         
          if([self.fillType isEqualToString:@"none"])
          {
              self.btnHostHere.hidden = YES;
-         }
-         
-         
-         if([self.fillType isEqualToString:@"phone_number"])
+             
+         } else if([self.fillType isEqualToString:@"phone_number"])
          {
              self.btnHostHere.hidden = NO;
              [self.btnHostHere setTitle:[NSString stringWithFormat:@"CALL"] forState:UIControlStateNormal];
-         }
-         
-         if([self.fillType isEqualToString:@"link"])
+             
+         } else if([self.fillType isEqualToString:@"link"])
          {
              self.btnHostHere.hidden = NO;
              [self.btnHostHere setTitle:[NSString stringWithFormat:@"BOOK NOW"] forState:UIControlStateNormal];
-             self.externalSiteLabel.hidden = NO;
-         }else{
-             self.externalSiteLabel.hidden = YES;
-         }
-         
-         
-         if([self.fillType isEqualToString:@"reservation"])
+             
+         } else if([self.fillType isEqualToString:@"reservation"])
          {
              self.btnHostHere.hidden = NO;
              [self.btnHostHere setTitle:@"RESERVE TABLE" forState:UIControlStateNormal];
-         }
-         
-         if([self.fillType isEqualToString:@"purchase"])
+             
+         } else if([self.fillType isEqualToString:@"purchase"])
          {
              self.btnHostHere.hidden = NO;
              [self.btnHostHere setTitle:@"PURCHASE TABLE" forState:UIControlStateNormal];
          }
          
-         //
+         [self.emptyView setMode:@"hide"];
          
-         //self.btnHostHere.hidden = YES;
-         
-         
-         
-         
-         [[NSNotificationCenter defaultCenter]
-          postNotificationName:@"HIDE_LOADING"
-          object:self];
      } failure:^(AFHTTPRequestOperation *operation, NSError *error)
      {
          NSLog(@"EVENTS_SUMMARY_LIST_ERROR (%@) :: %@",self.sharedData.account_type,error);
-         [[NSNotificationCenter defaultCenter]
-          postNotificationName:@"HIDE_LOADING"
-          object:self];
+         
+         [self.emptyView setMode:@"empty"];
      }];
 }
 
@@ -549,14 +551,12 @@
         self.hostNum.frame = CGRectMake(20, 0, self.sharedData.screenWidth - 40, PROFILE_SIZE);
         if([self.sharedData isHost] || [self.sharedData isMember])
         {
-            self.btnInfo.hidden = NO;
             self.hostNum.textAlignment = NSTextAlignmentLeft;
             self.hostNum.text = [NSString stringWithFormat:@"%d GUEST%@\nINTERESTED",(int)[userList count],([userList count] > 1)?@"S":@""];
             self.hostNum.numberOfLines = 2;
         }
         else if([self.sharedData isGuest])
         {
-            self.btnInfo.hidden = NO;
             self.hostNum.textAlignment = NSTextAlignmentLeft;
             self.hostNum.text = [NSString stringWithFormat:@"%d HOST%@",(int)[userList count],([userList count] > 1)?@"S":@""];
             self.hostNum.numberOfLines = 1;
@@ -595,13 +595,13 @@
 
             btnPic.layer.cornerRadius = PROFILE_SIZE/2;
             btnPic.layer.masksToBounds = YES;
-            btnPic.layer.borderColor = [UIColor phCyanColor].CGColor;
+            btnPic.layer.borderColor = [UIColor phBlueColor].CGColor;
             btnPic.layer.borderWidth = 2.0;
             btnPic.backgroundColor = [UIColor clearColor];
-            [btnPic setTitleEdgeInsets:UIEdgeInsetsMake(6,0,0,2)];
+            [btnPic setTitleEdgeInsets:UIEdgeInsetsMake(0,0,0,2)];
             [btnPic setTitle:[NSString stringWithFormat:@"+%d",(int)[userList count] - PROFILE_PICS + 1] forState:UIControlStateNormal];
             btnPic.titleLabel.font = [UIFont phBold:18];
-            [btnPic setTitleColor:[UIColor phCyanColor] forState:UIControlStateNormal];
+            [btnPic setTitleColor:[UIColor phBlueColor] forState:UIControlStateNormal];
             [self.userContainer addSubview:btnPic];
         }
     
@@ -618,14 +618,12 @@
         self.seeAllCaret.frame = CGRectMake(self.sharedData.screenWidth-20-32,self.seeAllView.frame.origin.y + 12, 32, 32);
         self.seeAllCaret.hidden = NO;
         
-        self.btnInfo.hidden = NO;
     }
     else
     {
         self.listingContainer.frame = CGRectMake(0, self.separator1.frame.origin.y + self.separator1.frame.size.height, self.sharedData.screenWidth, 0);
         self.listingContainer.hidden = YES;
         
-        self.btnInfo.hidden = YES;
     }
 
 //    //Event Date
@@ -648,7 +646,6 @@
     self.seeMapView.hidden = NO;
     
     //See all label
-//    self.seeMapLabel.frame = CGRectMake(-4,self.aboutBody.frame.size.height + self.aboutBody.frame.origin.y + 17, self.seeMapView.frame.size.width, self.seeMapView.frame.size.height);
     self.seeMapLabel.frame = CGRectMake(52,self.aboutBody.frame.size.height + self.aboutBody.frame.origin.y + 16, self.sharedData.screenWidth-40-64, 56);
     self.seeMapLabel.text = [dict[@"venue"][@"address"] uppercaseString];
     
@@ -665,8 +662,8 @@
     //Get photos from event then venue
     NSArray *photos = dict[@"photos"];
     //if([photos count]==0) {photos = dict[@"venue"][@"photos"];}
-    
     NSLog(@"VENUE_PHOTOS :: %@",photos);
+    
     //Page control
     self.pControl.currentPage = 0;
     self.pControl.numberOfPages = [photos count];
@@ -741,15 +738,15 @@
     
     
     //Calc host here
-    if([self.sharedData isHost] || [self.sharedData isMember]) //Host mode has HOST HERE button
-    {
-        self.btnHostHere.hidden = NO;
-        self.mainScroll.frame = CGRectMake(0, 60, self.sharedData.screenWidth, self.frame.size.height-60);
-        
-        
-        self.btnHostHere.userInteractionEnabled = YES;
-        [self.btnHostHere setTitle:@"BOOK TABLE" forState:UIControlStateNormal];
-        
+//    if([self.sharedData isHost] || [self.sharedData isMember]) //Host mode has HOST HERE button
+//    {
+//        self.btnHostHere.hidden = NO;
+//        self.mainScroll.frame = CGRectMake(0, 60, self.sharedData.screenWidth, self.frame.size.height-60);
+//        
+//        
+//        self.btnHostHere.userInteractionEnabled = YES;
+//        [self.btnHostHere setTitle:@"BOOK TABLE" forState:UIControlStateNormal];
+    
         /*
         if([dict[@"has_hostings"] boolValue]==NO)
         {
@@ -764,12 +761,12 @@
             [self.btnHostHere setTitle:@"YOU ARE HOSTING HERE" forState:UIControlStateNormal];
         }
         */
-    }
-    else //Guest mode
-    {
-        self.btnHostHere.hidden = YES;
-        self.mainScroll.frame = CGRectMake(0, 20, self.sharedData.screenWidth, self.sharedData.screenHeight-20-PHTabHeight);
-    }
+//    }
+//    else //Guest mode
+//    {
+//        self.btnHostHere.hidden = YES;
+//        self.mainScroll.frame = CGRectMake(0, 20, self.sharedData.screenWidth, self.sharedData.screenHeight-20-PHTabHeight);
+//    }
     
         
     self.mainScroll.contentSize = CGSizeMake(self.sharedData.screenWidth, self.mapView.frame.origin.y + self.mapView.frame.size.height);
@@ -777,6 +774,7 @@
     self.isLoaded = YES;
     
     //Show overlay
+    /*
     if(totalUsers>0)
     {
         if(self.sharedData.isGuest && ![self.sharedData isMember])
@@ -811,7 +809,7 @@
                 [self.sharedData.overlayView popup:@"Who's interested?" subtitle: @"Check out guests interested in attending." x:pt.x y:pt.y];
             }
         }
-    }
+    } */
 }
 
 -(void)initClass
@@ -854,14 +852,10 @@
     if([lastEventId isEqualToString:self.event_id]) return;
     if(self.event_id!=nil) lastEventId = [NSString stringWithString:self.event_id];
     
-    [[NSNotificationCenter defaultCenter]
-     postNotificationName:@"SHOW_LOADING"
-     object:self];
+    [self.emptyView setMode:@"load"];
     
     //Add to view count if guest
     [self addViewCount];
-    
-    self.btnInfo.hidden = YES;
     
     //Clear NavBar
     self.title.text = @"";
@@ -898,6 +892,10 @@
     
     //Rescroll
     self.mainScroll.contentOffset = CGPointMake(0, 0);
+    [self.mainScroll setFrame:CGRectMake(0,
+                                         self.tabBar.bounds.size.height,
+                                         self.sharedData.screenWidth,
+                                         self.sharedData.screenHeight - self.tabBar.bounds.size.height - PHTabHeight)];
     
     self.isLoaded = NO;
 }
@@ -963,7 +961,7 @@
     } else if ([title isEqualToString:@"Fashion"]) {
         cell.button.offBackgroundColor = [UIColor colorFromHexCode:@"68CE49"];
     } else {
-        cell.button.offBackgroundColor = [UIColor colorFromHexCode:@"10BBFF"];
+        cell.button.offBackgroundColor = [UIColor colorFromHexCode:@"ED4FC4"];
     }
     
     [cell setNeedsLayout];

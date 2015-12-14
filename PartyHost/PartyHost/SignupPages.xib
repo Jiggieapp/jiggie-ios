@@ -12,8 +12,10 @@
             <string>FaktPro-Blond</string>
             <string>FaktPro-Blond</string>
             <string>FaktPro-Blond</string>
+            <string>FaktPro-Blond</string>
         </mutableArray>
         <mutableArray key="FaktPro-SemiBold.ttf">
+            <string>FaktPro-SemiBold</string>
             <string>FaktPro-SemiBold</string>
             <string>FaktPro-SemiBold</string>
             <string>FaktPro-SemiBold</string>
@@ -79,7 +81,7 @@
                 <constraint firstItem="Owr-Ob-CMO" firstAttribute="leading" secondItem="aFC-R2-ees" secondAttribute="leading" id="tCe-Ad-Dbo"/>
                 <constraint firstItem="7iG-No-Xkr" firstAttribute="top" secondItem="mDc-JH-4zH" secondAttribute="bottom" constant="96" id="xnU-ZL-MZE"/>
             </constraints>
-            <point key="canvasLocation" x="869" y="297"/>
+            <point key="canvasLocation" x="555" y="297"/>
         </view>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view userInteractionEnabled="NO" contentMode="scaleToFill" id="hku-nV-cEA" userLabel="Page2">
@@ -93,11 +95,11 @@
                             <rect key="frame" x="0.0" y="96" width="320" height="326"/>
                             <animations/>
                         </imageView>
-                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" editable="NO" text="Browse the latest events in Jakarta" textAlignment="center" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qbZ-FQ-bL3">
-                            <rect key="frame" x="40" y="44" width="240" height="81"/>
+                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" text="Discover upcoming food bazaars, music, fashion and nightlife events" textAlignment="center" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qbZ-FQ-bL3">
+                            <rect key="frame" x="19" y="44" width="283" height="54"/>
                             <animations/>
                             <constraints>
-                                <constraint firstAttribute="height" constant="52" id="dLS-Bm-rHv"/>
+                                <constraint firstAttribute="height" constant="54" id="dLS-Bm-rHv"/>
                             </constraints>
                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                             <fontDescription key="fontDescription" name="FaktPro-Blond" family="Fakt Pro" pointSize="18"/>
@@ -107,13 +109,13 @@
                     <animations/>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     <constraints>
-                        <constraint firstItem="w46-ar-tPO" firstAttribute="top" secondItem="qbZ-FQ-bL3" secondAttribute="bottom" id="B4B-Zg-Gg4"/>
+                        <constraint firstItem="w46-ar-tPO" firstAttribute="top" secondItem="qbZ-FQ-bL3" secondAttribute="bottom" constant="-2" id="B4B-Zg-Gg4"/>
                         <constraint firstItem="w46-ar-tPO" firstAttribute="leading" secondItem="gje-ou-dKG" secondAttribute="leading" id="PUe-Gb-U7X"/>
-                        <constraint firstItem="qbZ-FQ-bL3" firstAttribute="leading" secondItem="gje-ou-dKG" secondAttribute="leading" constant="20" id="hKw-p5-8vn"/>
+                        <constraint firstItem="qbZ-FQ-bL3" firstAttribute="leading" secondItem="gje-ou-dKG" secondAttribute="leading" constant="19" id="hKw-p5-8vn"/>
                         <constraint firstAttribute="trailing" secondItem="w46-ar-tPO" secondAttribute="trailing" id="hvJ-bt-eyG"/>
                         <constraint firstItem="qbZ-FQ-bL3" firstAttribute="top" secondItem="gje-ou-dKG" secondAttribute="top" constant="44" id="ijD-6R-Dsy"/>
                         <constraint firstAttribute="bottom" secondItem="w46-ar-tPO" secondAttribute="bottom" constant="82" id="wdo-pk-szl"/>
-                        <constraint firstAttribute="trailing" secondItem="qbZ-FQ-bL3" secondAttribute="trailing" constant="40" id="xLr-3D-CHf"/>
+                        <constraint firstAttribute="trailing" secondItem="qbZ-FQ-bL3" secondAttribute="trailing" constant="18" id="xLr-3D-CHf"/>
                     </constraints>
                 </view>
                 <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="O7q-d6-Xvj">
@@ -141,9 +143,70 @@
                 <constraint firstAttribute="bottom" secondItem="gje-ou-dKG" secondAttribute="bottom" constant="64" id="euN-Yu-Ueb"/>
                 <constraint firstAttribute="trailing" secondItem="O7q-d6-Xvj" secondAttribute="trailing" id="zpe-zE-a2q"/>
             </constraints>
+            <point key="canvasLocation" x="936" y="297"/>
+        </view>
+        <view userInteractionEnabled="NO" contentMode="scaleToFill" id="n6O-d6-Afb" userLabel="Page3">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9zI-ed-rWL">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="504"/>
+                    <subviews>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="signup_2" translatesAutoresizingMaskIntoConstraints="NO" id="MDz-Nz-LfT">
+                            <rect key="frame" x="0.0" y="96" width="320" height="326"/>
+                            <animations/>
+                        </imageView>
+                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" text="Get detailed information on events and book your tickets" textAlignment="center" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jgg-om-YLh">
+                            <rect key="frame" x="19" y="44" width="283" height="54"/>
+                            <animations/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="54" id="SxG-oc-PxY"/>
+                            </constraints>
+                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                            <fontDescription key="fontDescription" name="FaktPro-Blond" family="Fakt Pro" pointSize="18"/>
+                            <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                        </textView>
+                    </subviews>
+                    <animations/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="trailing" secondItem="MDz-Nz-LfT" secondAttribute="trailing" id="B8C-0I-IlE"/>
+                        <constraint firstAttribute="bottom" secondItem="MDz-Nz-LfT" secondAttribute="bottom" constant="82" id="Bkf-uC-oy6"/>
+                        <constraint firstItem="MDz-Nz-LfT" firstAttribute="top" secondItem="jgg-om-YLh" secondAttribute="bottom" constant="-2" id="FIB-to-iIP"/>
+                        <constraint firstItem="jgg-om-YLh" firstAttribute="leading" secondItem="9zI-ed-rWL" secondAttribute="leading" constant="19" id="FRc-VY-y2Y"/>
+                        <constraint firstItem="MDz-Nz-LfT" firstAttribute="leading" secondItem="9zI-ed-rWL" secondAttribute="leading" id="JjY-Kt-xlH"/>
+                        <constraint firstItem="jgg-om-YLh" firstAttribute="top" secondItem="9zI-ed-rWL" secondAttribute="top" constant="44" id="TTC-he-37H"/>
+                        <constraint firstAttribute="trailing" secondItem="jgg-om-YLh" secondAttribute="trailing" constant="18" id="sOG-EN-Hnw"/>
+                    </constraints>
+                </view>
+                <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JeB-a6-I1L">
+                    <rect key="frame" x="0.0" y="504" width="320" height="64"/>
+                    <animations/>
+                    <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.5" colorSpace="calibratedRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="64" id="4VV-o9-ZIE"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" name="FaktPro-SemiBold" family="Fakt Pro" pointSize="18"/>
+                    <state key="normal" title="SIGN IN WITH FACEBOOK">
+                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                </button>
+            </subviews>
+            <animations/>
+            <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstAttribute="bottom" secondItem="9zI-ed-rWL" secondAttribute="bottom" constant="64" id="4Ty-lQ-Xol"/>
+                <constraint firstItem="9zI-ed-rWL" firstAttribute="leading" secondItem="n6O-d6-Afb" secondAttribute="leading" id="9px-ty-Ka7"/>
+                <constraint firstAttribute="bottom" secondItem="JeB-a6-I1L" secondAttribute="bottom" id="Dze-uv-6q0"/>
+                <constraint firstItem="JeB-a6-I1L" firstAttribute="leading" secondItem="n6O-d6-Afb" secondAttribute="leading" id="G3O-w8-FCe"/>
+                <constraint firstItem="9zI-ed-rWL" firstAttribute="top" secondItem="n6O-d6-Afb" secondAttribute="top" id="XQy-xU-KpZ"/>
+                <constraint firstAttribute="trailing" secondItem="JeB-a6-I1L" secondAttribute="trailing" id="mVt-lv-2tt"/>
+                <constraint firstAttribute="trailing" secondItem="9zI-ed-rWL" secondAttribute="trailing" id="oXs-HN-H1m"/>
+            </constraints>
             <point key="canvasLocation" x="1319" y="297"/>
         </view>
-        <view userInteractionEnabled="NO" contentMode="scaleToFill" id="Q1A-t5-WJj" userLabel="Page3">
+        <view userInteractionEnabled="NO" contentMode="scaleToFill" id="Q1A-t5-WJj" userLabel="Page4">
             <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
@@ -154,8 +217,8 @@
                             <rect key="frame" x="0.0" y="96" width="320" height="325.5"/>
                             <animations/>
                         </imageView>
-                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" editable="NO" text="Check out other guests who like the same events you do " textAlignment="center" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tfn-6c-zAf">
-                            <rect key="frame" x="16" y="44" width="288" height="59.5"/>
+                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" text="Check out other guests who like the same events you do " textAlignment="center" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tfn-6c-zAf">
+                            <rect key="frame" x="16" y="44" width="288" height="52"/>
                             <animations/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="52" id="bF0-jc-hIa"/>
@@ -204,7 +267,7 @@
             </constraints>
             <point key="canvasLocation" x="1703" y="297"/>
         </view>
-        <view userInteractionEnabled="NO" contentMode="scaleToFill" id="pxX-w4-B8m" userLabel="Page4">
+        <view userInteractionEnabled="NO" contentMode="scaleToFill" id="pxX-w4-B8m" userLabel="Page5">
             <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
@@ -215,11 +278,11 @@
                             <rect key="frame" x="0.0" y="96" width="320" height="326"/>
                             <animations/>
                         </imageView>
-                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" editable="NO" text="Connect with other fun-loving people and make new friends" textAlignment="center" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="n2k-TQ-bfm">
-                            <rect key="frame" x="40" y="44" width="240" height="81"/>
+                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" text="Connect with other fun-loving people and make new friends" textAlignment="center" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="n2k-TQ-bfm">
+                            <rect key="frame" x="27" y="44" width="272" height="58"/>
                             <animations/>
                             <constraints>
-                                <constraint firstAttribute="height" constant="52" id="Euu-fR-Sc1"/>
+                                <constraint firstAttribute="height" constant="58" id="Euu-fR-Sc1"/>
                             </constraints>
                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                             <fontDescription key="fontDescription" name="FaktPro-Blond" family="Fakt Pro" pointSize="18"/>
@@ -233,9 +296,9 @@
                         <constraint firstItem="Ead-wv-khY" firstAttribute="leading" secondItem="mYI-DO-DmE" secondAttribute="leading" id="6UD-Qh-qcB"/>
                         <constraint firstAttribute="trailing" secondItem="Ead-wv-khY" secondAttribute="trailing" id="BpM-UD-Hoe"/>
                         <constraint firstItem="n2k-TQ-bfm" firstAttribute="top" secondItem="mYI-DO-DmE" secondAttribute="top" constant="44" id="Omv-BO-NR6"/>
-                        <constraint firstAttribute="trailing" secondItem="n2k-TQ-bfm" secondAttribute="trailing" constant="40" id="SQb-uB-qPY"/>
-                        <constraint firstItem="n2k-TQ-bfm" firstAttribute="leading" secondItem="mYI-DO-DmE" secondAttribute="leading" constant="40" id="SbH-ZB-2z7"/>
-                        <constraint firstItem="Ead-wv-khY" firstAttribute="top" secondItem="n2k-TQ-bfm" secondAttribute="bottom" id="Vxx-nH-KfK"/>
+                        <constraint firstAttribute="trailing" secondItem="n2k-TQ-bfm" secondAttribute="trailing" constant="21" id="SQb-uB-qPY"/>
+                        <constraint firstItem="n2k-TQ-bfm" firstAttribute="leading" secondItem="mYI-DO-DmE" secondAttribute="leading" constant="27" id="SbH-ZB-2z7"/>
+                        <constraint firstItem="Ead-wv-khY" firstAttribute="top" secondItem="n2k-TQ-bfm" secondAttribute="bottom" constant="-6" id="Vxx-nH-KfK"/>
                     </constraints>
                 </view>
                 <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ie9-XD-Zn8">
@@ -265,7 +328,7 @@
             </constraints>
             <point key="canvasLocation" x="2077" y="297"/>
         </view>
-        <view userInteractionEnabled="NO" contentMode="scaleToFill" id="wqa-Rd-x6g" userLabel="Page5">
+        <view userInteractionEnabled="NO" contentMode="scaleToFill" id="wqa-Rd-x6g" userLabel="Page6">
             <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
@@ -276,8 +339,8 @@
                             <rect key="frame" x="0.0" y="96" width="320" height="325.5"/>
                             <animations/>
                         </imageView>
-                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" editable="NO" text="Chat with your new friends and make plans to meet up" textAlignment="center" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Faj-MP-Nmv">
-                            <rect key="frame" x="16" y="44" width="288" height="59.5"/>
+                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" text="Chat with your new friends and make plans to meet up" textAlignment="center" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Faj-MP-Nmv">
+                            <rect key="frame" x="16" y="44" width="288" height="52"/>
                             <animations/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="52" id="KdV-6s-BYk"/>
@@ -328,9 +391,10 @@
         </view>
     </objects>
     <resources>
-        <image name="signup_1" width="640" height="1136"/>
-        <image name="signup_3" width="640" height="1136"/>
-        <image name="signup_4" width="640" height="1136"/>
-        <image name="signup_5" width="640" height="1136"/>
+        <image name="signup_1" width="750" height="1334"/>
+        <image name="signup_2" width="750" height="1334"/>
+        <image name="signup_3" width="750" height="1334"/>
+        <image name="signup_4" width="750" height="1334"/>
+        <image name="signup_5" width="750" height="1334"/>
     </resources>
 </document>

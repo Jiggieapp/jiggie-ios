@@ -168,10 +168,15 @@
     
     self.date.text = dict[@"start_datetime_str"];
     
-    self.picURL = [Constants eventImageURL:dict[@"_id"]];
+//    self.picURL = [Constants eventImageURL:dict[@"_id"]];
+    
+    self.picURL = [self.sharedData picURL:dict[@"photos"][0]];
     
     //Load venue image
     [self.mainImg loadImage:self.picURL defaultImageNamed:@"nightclub_default"]; //This will load and can be cancelled?
+    
+    
+    NSLog(@"LOADING_IMG_URL :: %@ - %@",self.title.text, self.picURL);
     
     //remove all tags
     NSArray *viewsToRemove = [self.tagsView subviews];
@@ -195,7 +200,6 @@
         //        tagPil.layer.borderColor = [UIColor darkGrayColor].CGColor;
         [tagPil setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         tagPil.layer.cornerRadius = 10;
-        [self addSubview:tagPil];
         
         if ([tag isEqualToString:@"Featured"]) {
             tagPil.backgroundColor = [UIColor colorFromHexCode:@"D9603E"];
@@ -208,7 +212,7 @@
         } else if ([tag isEqualToString:@"Fashion"]) {
             tagPil.backgroundColor = [UIColor colorFromHexCode:@"68CE49"];
         } else {
-            tagPil.backgroundColor = [UIColor colorFromHexCode:@"10BBFF"];
+            tagPil.backgroundColor = [UIColor colorFromHexCode:@"ED4FC4"];
         }
         
         CGSize resizePill =  [self.sharedData sizeForLabelString:[tagPil titleForState:UIControlStateNormal]

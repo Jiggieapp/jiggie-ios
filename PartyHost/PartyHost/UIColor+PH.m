@@ -74,6 +74,7 @@
     dispatch_once(&dispatchToken, ^{phBlue = [UIColor colorFromHexCode:@"10BBFF"];});
     return phBlue;
 }
+
 + (UIColor *) phNavyColor {
     static UIColor *phBlue = nil;
     static dispatch_once_t dispatchToken;

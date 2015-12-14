@@ -625,6 +625,7 @@
     self.isLoaded = YES;
     
     //Show overlay
+    /*
     if(totalUsers>0)
     {
         if(self.sharedData.isGuest && ![self.sharedData isMember])
@@ -660,6 +661,7 @@
             }
         }
     }
+     */
 }
 
 -(void)initClass

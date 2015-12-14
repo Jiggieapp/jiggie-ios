@@ -38,15 +38,53 @@
     title.font = [UIFont phBold:18];
     [tabBar addSubview:title];
     
+    int OffSet = (self.sharedData.isIphone4)?18:0;
+    int OffSetLargeDevice = 0;
+    int OffsetFontLargeDevice = 0;
+    if (self.sharedData.isIphone6) {
+        OffSetLargeDevice = 20;
+        OffsetFontLargeDevice = 1;
+    } else if (self.sharedData.isIphone6plus) {
+        OffSetLargeDevice = 40;
+        OffsetFontLargeDevice = 3;
+    }
+    
+    self.userProfilePicture = [[UserBubble alloc] initWithFrame:CGRectMake(self.sharedData.screenWidth/2 - 45 , 90 + OffSetLargeDevice - OffSet, 90, 90)];
+    [self.userProfilePicture addTarget:self action:@selector(goProfile) forControlEvents:UIControlEventTouchUpInside];
+    [self.mainCon addSubview:self.userProfilePicture];
+    
+    self.userProfileName = [[UILabel alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(self.userProfilePicture.frame) + 12, self.sharedData.screenWidth, 20)];
+    self.userProfileName.textAlignment = NSTextAlignmentCenter;
+    self.userProfileName.font = [UIFont phBlond:17];
+    self.userProfileName.textColor = [UIColor blackColor];
+    self.userProfileName.backgroundColor = [UIColor clearColor];
+    [self.mainCon addSubview:self.userProfileName];
+    
+    self.userProfilePhone = [UIButton buttonWithType:UIButtonTypeCustom];
+    self.userProfilePhone.frame = CGRectMake(self.sharedData.screenWidth/2 - 100, CGRectGetMaxY(self.userProfileName.frame), 200, 36);
+    self.userProfilePhone.titleLabel.font = [UIFont phBlond:15];
+    [self.userProfilePhone setTitleColor:[UIColor phBlueColor] forState:UIControlStateNormal];
+    [self.userProfilePhone addTarget:self action:@selector(userProfilePhoneDidTap) forControlEvents:UIControlEventTouchUpInside];
+    [self.mainCon addSubview:self.userProfilePhone];
+    
     self.dataA = [[NSMutableArray alloc] init]; //Fill this out in initClass
-    self.moreList = [[UITableView alloc] initWithFrame:CGRectMake(0, 60, frame.size.width, frame.size.height - 60) style:UITableViewStyleGrouped];
+    self.moreList = [[UITableView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(self.userProfilePhone.frame) + 30 + OffSetLargeDevice - OffSet, frame.size.width, 240 - OffSet*3) style:UITableViewStylePlain];
     self.moreList.delegate = self;
     self.moreList.dataSource = self;
     self.moreList.allowsMultipleSelectionDuringEditing = NO;
     self.moreList.hidden = YES;
-    self.moreList.backgroundColor = [UIColor phLightSilverColor];
-    self.moreList.separatorColor = [UIColor phDarkGrayColor];
+    self.moreList.backgroundColor = [UIColor whiteColor];
+    self.moreList.separatorColor = [UIColor phLightGrayColor];
+    self.moreList.scrollEnabled = (self.sharedData.isIphone4)?YES:NO;
     [self.mainCon addSubview:self.moreList];
+    
+//    self.logoutButton = [UIButton buttonWithType:UIButtonTypeCustom];
+//    self.logoutButton.frame = CGRectMake(self.sharedData.screenWidth/2 - 100, self.sharedData.screenHeight - PHTabHeight - 45 - OffSetLargeDevice, 200, 36);
+//    self.logoutButton.titleLabel.font = [UIFont phBlond:16];
+//    [self.logoutButton setTitleColor:[UIColor phDarkGrayColor] forState:UIControlStateNormal];
+//    [self.logoutButton setTitle:@"Log Out" forState:UIControlStateNormal];
+//    [self.logoutButton addTarget:self action:@selector(logoutButtonDidTap) forControlEvents:UIControlEventTouchUpInside];
+//    [self.mainCon addSubview:self.logoutButton];
     
     self.profilePage = [[Profile alloc] initWithFrame:CGRectMake(self.sharedData.screenWidth, 0, self.sharedData.screenWidth, frame.size.height)];
     //self.sharedData.profilePage  = self.profilePage;
@@ -82,30 +120,25 @@
     [self.mainCon addSubview:self.privacyPage];
     
     self.btnBack = [UIButton buttonWithType:UIButtonTypeCustom];
-    self.btnBack.frame = CGRectMake(self.sharedData.screenWidth, 13, 50, 50);
-    [self.btnBack setBackgroundImage:[UIImage imageNamed:@"nav_back"] forState:UIControlStateNormal];
+    self.btnBack.frame = CGRectMake(self.sharedData.screenWidth, 20, 40, 40);
+    [self.btnBack setImage:[UIImage imageNamed:@"nav_back"] forState:UIControlStateNormal];
+    [self.btnBack setImageEdgeInsets:UIEdgeInsetsMake(8, 14, 8, 14)];
     [self.btnBack addTarget:self action:@selector(goHome) forControlEvents:UIControlEventTouchUpInside];
     self.sharedData.morePageBtnBack = self.btnBack;
     
     self.btnPTBack = [UIButton buttonWithType:UIButtonTypeCustom];
-    self.btnPTBack.frame = CGRectMake(self.sharedData.screenWidth * 2, 15, 50, 50);
-    [self.btnPTBack setBackgroundImage:[UIImage imageNamed:@"nav_back"] forState:UIControlStateNormal];
+    self.btnPTBack.frame = CGRectMake(self.sharedData.screenWidth * 2, 20, 40, 40);
+    [self.btnPTBack setImage:[UIImage imageNamed:@"nav_back"] forState:UIControlStateNormal];
+    [self.btnPTBack setImageEdgeInsets:UIEdgeInsetsMake(8, 14, 8, 14)];
     [self.btnPTBack addTarget:self action:@selector(goPTBack) forControlEvents:UIControlEventTouchUpInside];
-    
-    //Create empty label
-    self.labelEmpty = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.sharedData.screenWidth, self.sharedData.screenHeight)];
-    self.labelEmpty.text = @"Please Try Again";
-    self.labelEmpty.textAlignment = NSTextAlignmentCenter;
-    self.labelEmpty.textColor = [UIColor lightGrayColor];
-    self.labelEmpty.hidden = YES;
-    self.labelEmpty.font = [UIFont phBlond:17];
-    [self.mainCon addSubview:self.labelEmpty];
-    
-    //Add spinner to middle
-    self.spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-    self.spinner.frame = CGRectMake(0, 0, self.sharedData.screenWidth, self.sharedData.screenHeight);
-    self.spinner.hidden = NO;
-    [self.mainCon addSubview:self.spinner];
+        
+    self.emptyView = [[EmptyView alloc] initWithFrame:CGRectMake(0,
+                                                                 tabBar.bounds.size.height,
+                                                                 self.sharedData.screenWidth,
+                                                                 self.sharedData.screenHeight - tabBar.bounds.size.height - PHTabHeight)];
+    [self.emptyView setData:@"Please Try Again" subtitle:@"" imageNamed:@""];
+    self.emptyView.backgroundColor = [UIColor whiteColor];
+    [self addSubview:self.emptyView];
     
     //Add others
     [self.mainCon addSubview:tabBar];
@@ -155,6 +188,17 @@
     [self.hostingsPage goQuickBack];
     [self.confirmationsPage goQuickBack];
     
+    [self.userProfilePicture loadFacebookImage:self.sharedData.fb_id];
+    self.userProfileName.text = self.sharedData.userDict[@"first_name"];
+    if([self.sharedData.phone length]>0)
+    {
+        [self.userProfilePhone setTitle:[NSString stringWithFormat:@"+%@",self.sharedData.phone] forState:UIControlStateNormal];
+    }
+    else
+    {
+       [self.userProfilePhone setTitle:@"Verify Phone Number" forState:UIControlStateNormal];
+    }
+    
     //Load settings now
     [self loadSettings];
 }
@@ -180,85 +224,52 @@
 }
 
 #pragma mark - UITableViewDataSource
-
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 3;
+    return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (section==0)
-    {
-        return 5;
-    }else if (section==1) {
+    if (section==0) {
+        return 4;
+    } else if (section==1) {
         return 0;
-    }
-    else if (section==2) {
-        return 1;
-    }
-    else {
+    } else {
         return 0;
     }
 }
 
-- (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
-{
-    // Text Color
-    UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *)view;
-    header.textLabel.font = [UIFont phBold:10];
-    header.backgroundView.backgroundColor = [UIColor clearColor];
-    [header.textLabel setTextColor:[UIColor blackColor]];
-}
-
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-{
-    NSString *sectionName;
-    switch (section)
-    {
-        case 0:
-            sectionName = @"Options";
-            break;
-        case 1:
-            sectionName = @"";
-            break;
-        case 2:
-            sectionName = @"Log Out";
-            break;
-    }
-    return sectionName;
-}
-
+//- (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
+//{
+//    // Text Color
+//    UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *)view;
+//    header.textLabel.font = [UIFont phBold:10];
+//    header.backgroundView.backgroundColor = [UIColor clearColor];
+//    [header.textLabel setTextColor:[UIColor blackColor]];
+//}
+//
+//- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+//{
+//    NSString *sectionName;
+//    switch (section)
+//    {
+//        case 0:
+//            sectionName = @"Options";
+//            break;
+//        case 1:
+//            sectionName = @"";
+//            break;
+//        case 2:
+//            sectionName = @"Log Out";
+//            break;
+//    }
+//    return sectionName;
+//}
+//
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if(indexPath.section == 0)
-    {
-        if(self.sharedData.isHost)
-        {
-            if(indexPath.row==3 || indexPath.row==4) return 50.0;
-        }
-    }
-    else if(indexPath.section == 1)
-    {
-        return 72.0;
-    }
-    
-    return 50.0;
-}
-
-//This leaves the bottom blank
-- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
-{
-    if (section == tableView.numberOfSections - 1) {
-        return [[UIView alloc] initWithFrame:CGRectMake(0, 0, 1, 100)];
-    }
-    return nil;
-}
-
-//This leaves the bottom blank
-- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
-{
-    return 0;
+    return 60.0;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -267,206 +278,100 @@
     
     if (indexPath.section==0)
     {
-        if (indexPath.row==0)
-        {
-            cell = [tableView dequeueReusableCellWithIdentifier:@"MyProfileCell"];
-            if (cell == nil) {cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"MyProfileCell"];}
-            cell.textLabel.font = [UIFont phBlond:17];
-            cell.textLabel.text = @"Profile";
-            cell.accessoryType = UITableViewCellAccessoryNone;
-            
-            UserBubble *userBubble = [[UserBubble alloc] initWithFrame:CGRectMake(self.sharedData.screenWidth - 32 - 16, 50/2 - 32/2, 32, 32)];
-            [userBubble setName:self.sharedData.userDict[@"first_name"] lastName:nil];
-            [userBubble loadFacebookImage:self.sharedData.fb_id];
-            [cell addSubview:userBubble];
-        } else if(indexPath.row==12)
-        {
-            cell = [tableView dequeueReusableCellWithIdentifier:@"MyPurchasesCell"];
-            if (cell == nil) {cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"MyPurchasesCell"];}
-            cell.textLabel.font = [UIFont phBlond:17];
-            cell.textLabel.text = @"Purchases";
-            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-        }
-        else if(indexPath.row==1)
-        {
-            cell = [tableView dequeueReusableCellWithIdentifier:@"PhoneVerificationCell"];
-            if (cell == nil) {cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"PhoneVerificationCell"];}
-            cell.textLabel.font = [UIFont phBlond:17];
-            cell.textLabel.text = @"Phone Number";
-            cell.accessoryType = UITableViewCellAccessoryNone;
-            
-            if([self.sharedData.phone length]>0) cell.detailTextLabel.text = [NSString stringWithFormat:@"+%@",self.sharedData.phone];//[Constants formatPhoneNumber:self.sharedData.phone];
-            else cell.detailTextLabel.text = @"N/A";
-            
-            cell.detailTextLabel.font = [UIFont phBold:14];
-            cell.detailTextLabel.adjustsFontSizeToFitWidth = YES;
-            cell.detailTextLabel.textColor = [UIColor phPurpleColor];
-        }
-        else if(indexPath.row==32)
-        {
-            cell = [tableView dequeueReusableCellWithIdentifier:@"CreditCardCell"];
-            if (cell == nil) {cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"CreditCardCell"];}
-            cell.textLabel.font = [UIFont phBlond:17];
-            cell.textLabel.text = @"Credit Card";;
-            cell.accessoryType = UITableViewCellAccessoryNone;
-            cell.detailTextLabel.font = [UIFont phBlond:17];
-            
-            if([self.sharedData.ccLast4 length]>0) cell.detailTextLabel.text = [NSString stringWithFormat:@"•••• %@",self.sharedData.ccLast4];
-            else cell.detailTextLabel.text = @"N/A";
-            
-            cell.detailTextLabel.adjustsFontSizeToFitWidth = YES;
-            cell.detailTextLabel.textColor = [UIColor colorFromHexCode:@"5C5C5C"];
-        }
-        else if(indexPath.row==2)
-        {
-            cell = [tableView dequeueReusableCellWithIdentifier:@"InviteFriendsCell"];
-            if (cell == nil) {cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"InviteFriendsCell"];}
-            cell.textLabel.font = [UIFont phBlond:17];
-            cell.textLabel.text = @"Invite Friends";
-            cell.accessoryType = UITableViewCellAccessoryNone;
-        }
-        else if(indexPath.row==3)
-        {
-            cell = [tableView dequeueReusableCellWithIdentifier:@"EmailSupportCell"];
-            if (cell == nil) {cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"EmailSupportCell"];}
-            cell.textLabel.font = [UIFont phBlond:17];
-            cell.textLabel.text = @"Email Support";
-            cell.accessoryType = UITableViewCellAccessoryNone;
-        }
-        else if(indexPath.row==4)
+        if(indexPath.row==0)
         {
             cell = [tableView dequeueReusableCellWithIdentifier:@"SettingsCell"];
             if (cell == nil) {cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"SettingsCell"];}
-            cell.textLabel.font = [UIFont phBlond:17];
-            cell.textLabel.text = @"Settings";
-            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-        }else if(indexPath.row==5)
-        {
-            cell = [tableView dequeueReusableCellWithIdentifier:@"PushNotificationsCell"];
-            if (cell == nil) {cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"PushNotificationsCell"];}
-            cell.textLabel.font = [UIFont phBlond:17];
-            cell.textLabel.text = @"Turn On Push Notifications";
-            cell.accessoryType = UITableViewCellAccessoryNone;
+            
+            UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(10, 0, self.sharedData.screenWidth, 0.4)];
+            [lineView setBackgroundColor:[UIColor phLightGrayColor]];
+            [[cell contentView] addSubview:lineView];
+            
+            UILabel *textLabel = [[UILabel alloc] initWithFrame:CGRectMake(70, 20, 180, 20)];
+            textLabel.backgroundColor = [UIColor clearColor];
+            textLabel.font = [UIFont phBlond:16];
+            textLabel.text = @"Settings";
+            [[cell contentView] addSubview:textLabel];
+            
+            UIImageView *cellImage = [[UIImageView alloc] initWithFrame:CGRectMake(14, 10, 40, 40)];
+            cellImage.backgroundColor = [UIColor phBlueColor];
+            cellImage.layer.cornerRadius = 20;
+            [[cell contentView] addSubview:cellImage];
+            
+            UIImageView *iconImage = [[UIImageView alloc] initWithFrame:CGRectMake(10, 10, 20, 20)];
+            [iconImage setImage:[UIImage imageNamed:@"icon_settings.png"]];
+            [cellImage addSubview:iconImage];
+            
+            UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0.0, 0.0, 11.0, 21.0)];
+            [imageView setBackgroundColor:[UIColor clearColor]];
+            [imageView setImage:[UIImage imageNamed:@"forward.png"]];
+            [cell setAccessoryView:imageView];
+            [[cell accessoryView] setBackgroundColor:[UIColor clearColor]];
         }
-        
-        
-        
-        
-        //Host
-        /*
-        else if(self.sharedData.isHost)
+        else if(indexPath.row==1)
         {
-            if(indexPath.row==100)
-            {
-                
-                //cell = [tableView dequeueReusableCellWithIdentifier:@"MyHostingsCell"];
-                //if (cell == nil) {cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"MyHostingsCell"];}
-                //cell.textLabel.font = [UIFont phBlond:19];
-                //cell.textLabel.text = @"Hostings";
-                //cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-         
-            }
-            else if(indexPath.row==1)
-            {
-                cell = [tableView dequeueReusableCellWithIdentifier:@"MyPurchasesCell"];
-                if (cell == nil) {cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"MyPurchasesCell"];}
-                cell.textLabel.font = [UIFont phBlond:19];
-                cell.textLabel.text = @"Purchases";
-                cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-            }
-            else if(indexPath.row==2)
-            {
-                cell = [tableView dequeueReusableCellWithIdentifier:@"PhoneVerificationCell"];
-                if (cell == nil) {cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"PhoneVerificationCell"];}
-                cell.textLabel.font = [UIFont phBlond:19];
-                cell.textLabel.text = @"Phone Number";
-                cell.accessoryType = UITableViewCellAccessoryNone;
-                
-                if([self.sharedData.phone length]>0) cell.detailTextLabel.text = [Constants formatPhoneNumber:self.sharedData.phone];
-                else cell.detailTextLabel.text = @"N/A";
-                
-                cell.detailTextLabel.font = [UIFont phBlond:17];
-                cell.detailTextLabel.adjustsFontSizeToFitWidth = YES;
-                cell.detailTextLabel.textColor = [UIColor colorFromHexCode:@"5C5C5C"];
-            }
-            else if(indexPath.row==3)
-            {
-                cell = [tableView dequeueReusableCellWithIdentifier:@"CreditCardCell"];
-                if (cell == nil) {cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"CreditCardCell"];}
-                cell.textLabel.font = [UIFont phBlond:19];
-                cell.textLabel.text = @"Credit Card";;
-                cell.accessoryType = UITableViewCellAccessoryNone;
-                cell.detailTextLabel.font = [UIFont phBlond:17];
+            cell = [tableView dequeueReusableCellWithIdentifier:@"InviteFriendsCell"];
+            if (cell == nil) {cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"InviteFriendsCell"];}
+            
+            UILabel *textLabel = [[UILabel alloc] initWithFrame:CGRectMake(70, 20, 180, 20)];
+            textLabel.backgroundColor = [UIColor clearColor];
+            textLabel.font = [UIFont phBlond:16];
+            textLabel.text = @"Invite Friends";
+            [[cell contentView] addSubview:textLabel];
+            
+            UIImageView *cellImage = [[UIImageView alloc] initWithFrame:CGRectMake(14, 10, 40, 40)];
+            cellImage.backgroundColor = [UIColor colorFromHexCode:@"68CE49"];
+            cellImage.layer.cornerRadius = 20;
+            [[cell contentView] addSubview:cellImage];
+            
+            UIImageView *iconImage = [[UIImageView alloc] initWithFrame:CGRectMake(10, 10, 20, 20)];
+            [iconImage setImage:[UIImage imageNamed:@"icon_friends.png"]];
+            [cellImage addSubview:iconImage];
+            
+            UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0.0, 0.0, 11.0, 21.0)];
+            [imageView setBackgroundColor:[UIColor clearColor]];
+            [imageView setImage:[UIImage imageNamed:@"forward.png"]];
+            [cell setAccessoryView:imageView];
+            [[cell accessoryView] setBackgroundColor:[UIColor clearColor]];
 
-                if([self.sharedData.ccLast4 length]>0) cell.detailTextLabel.text = [NSString stringWithFormat:@"•••• %@",self.sharedData.ccLast4];
-                else cell.detailTextLabel.text = @"N/A";
-                
-                cell.detailTextLabel.adjustsFontSizeToFitWidth = YES;
-                cell.detailTextLabel.textColor = [UIColor colorFromHexCode:@"5C5C5C"];
-            }
-            else if(indexPath.row==4)
-            {
-                cell = [tableView dequeueReusableCellWithIdentifier:@"InviteFriendsCell"];
-                if (cell == nil) {cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"InviteFriendsCell"];}
-                cell.textLabel.font = [UIFont phBlond:19];
-                cell.textLabel.text = @"Invite Friends";
-                cell.accessoryType = UITableViewCellAccessoryNone;
-            }
-            else if(indexPath.row==5)
-            {
-                cell = [tableView dequeueReusableCellWithIdentifier:@"EmailSupportCell"];
-                if (cell == nil) {cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"EmailSupportCell"];}
-                cell.textLabel.font = [UIFont phBlond:19];
-                cell.textLabel.text = @"Email Support";
-                cell.accessoryType = UITableViewCellAccessoryNone;
-            }
-            else if(indexPath.row==6)
-            {
-                cell = [tableView dequeueReusableCellWithIdentifier:@"SettingsCell"];
-                if (cell == nil) {cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"SettingsCell"];}
-                cell.textLabel.font = [UIFont phBlond:19];
-                cell.textLabel.text = @"Settings";
-                cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-            }
         }
-        
-        //Guest
-        else
+        else if(indexPath.row==2)
         {
-            if(indexPath.row==1)
-            {
-                cell = [tableView dequeueReusableCellWithIdentifier:@"MyConfirmationsCell"];
-                if (cell == nil) {cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"MyConfirmationsCell"];}
-                cell.textLabel.font = [UIFont phBlond:19];
-                cell.textLabel.text = @"Confirmations";
-                cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-            }
-            else if(indexPath.row==2)
-            {
-                cell = [tableView dequeueReusableCellWithIdentifier:@"InviteFriendsCell"];
-                if (cell == nil) {cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"InviteFriendsCell"];}
-                cell.textLabel.font = [UIFont phBlond:19];
-                cell.textLabel.text = @"Invite Friends";
-                cell.accessoryType = UITableViewCellAccessoryNone;
-            }
-            else if(indexPath.row==3)
-            {
-                cell = [tableView dequeueReusableCellWithIdentifier:@"EmailSupportCell"];
-                if (cell == nil) {cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"EmailSupportCell"];}
-                cell.textLabel.font = [UIFont phBlond:19];
-                cell.textLabel.text = @"Email Support";
-                cell.accessoryType = UITableViewCellAccessoryNone;
-            }
-            else if(indexPath.row==4)
-            {
-                cell = [tableView dequeueReusableCellWithIdentifier:@"SettingsCell"];
-                if (cell == nil) {cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"SettingsCell"];}
-                cell.textLabel.font = [UIFont phBlond:19];
-                cell.textLabel.text = @"Settings";
-                cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-            }
+            cell = [tableView dequeueReusableCellWithIdentifier:@"EmailSupportCell"];
+            if (cell == nil) {cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"EmailSupportCell"];}
+            
+            UILabel *textLabel = [[UILabel alloc] initWithFrame:CGRectMake(70, 20, 180, 20)];
+            textLabel.backgroundColor = [UIColor clearColor];
+            textLabel.font = [UIFont phBlond:16];
+            textLabel.text = @"Support";
+            [[cell contentView] addSubview:textLabel];
+            
+            UIImageView *cellImage = [[UIImageView alloc] initWithFrame:CGRectMake(14, 10, 40, 40)];
+            cellImage.backgroundColor = [UIColor phGrayColor];
+            cellImage.layer.cornerRadius = 20;
+            [[cell contentView] addSubview:cellImage];
+            
+            UIImageView *iconImage = [[UIImageView alloc] initWithFrame:CGRectMake(10, 10, 20, 20)];
+            [iconImage setImage:[UIImage imageNamed:@"icon_support.png"]];
+            [cellImage addSubview:iconImage];
+            
+            UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0.0, 0.0, 11.0, 21.0)];
+            [imageView setBackgroundColor:[UIColor clearColor]];
+            [imageView setImage:[UIImage imageNamed:@"forward.png"]];
+            [cell setAccessoryView:imageView];
+            [[cell accessoryView] setBackgroundColor:[UIColor clearColor]];
+
+        } else if (indexPath.row==3)
+        {
+            cell = [tableView dequeueReusableCellWithIdentifier:@"LogOutCell"];
+            if (cell == nil) {cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"LogOutCell"];}
+            cell.accessoryType = UITableViewCellAccessoryNone;
+            cell.textLabel.font = [UIFont phBlond:16];
+            cell.textLabel.text = @"Log Out";
+            cell.textLabel.textColor = [UIColor phDarkGrayColor];
+            cell.textLabel.textAlignment = NSTextAlignmentCenter;
+            cell.accessoryView = nil;
         }
-        */
     }
     else if (indexPath.section==1)
     {
@@ -494,23 +399,14 @@
             cell.detailTextLabel.adjustsFontSizeToFitWidth = YES;
         }
     }
-    else if (indexPath.section==2)
-    {
-        cell = [tableView dequeueReusableCellWithIdentifier:@"LogOutCell"];
-        if (cell == nil) {cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"LogOutCell"];}
-        cell.accessoryType = UITableViewCellAccessoryNone;
-        cell.textLabel.font = [UIFont phBlond:17];
-        cell.textLabel.text = @"Log Out";
-    }
     
-    cell.textLabel.textColor = [UIColor darkGrayColor];
+    cell.textLabel.textColor = [UIColor blackColor];
     cell.backgroundColor = [UIColor whiteColor];
     
     return cell;
 }
 
 #pragma mark - UITableViewDelegate
-
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     //Change role
@@ -519,16 +415,14 @@
         
         UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
         
-        //My profile
-        if([cell.textLabel.text isEqualToString:@"Profile"])
+        //Settings
+        if(indexPath.row == 0)
         {
-            self.settingsPage.hidden = YES;
+            self.settingsPage.hidden = NO;
+            self.profilePage.hidden = YES;
             self.hostingsPage.hidden = YES;
             self.confirmationsPage.hidden = YES;
-            self.purchasesPage.hidden = YES;
-            
-            self.profilePage.hidden = NO;
-            [self.profilePage initClass];
+            [self.settingsPage initClass];
             
             self.btnBack.hidden = NO;
             [UIView animateWithDuration:0.25 animations:^()
@@ -536,9 +430,9 @@
                  self.mainCon.frame = CGRectMake(-self.sharedData.screenWidth, 0, self.sharedData.screenWidth * 3, self.sharedData.screenHeight - PHTabHeight);
              }];
         }
-        
+
         //Invite friends
-        else if([cell.textLabel.text isEqualToString:@"Invite Friends"])
+        else if(indexPath.row == 1)
         {
             [self.sharedData trackMixPanelWithDict:@"Share App" withDict:@{@"origin":@"More"}];
             
@@ -550,7 +444,7 @@
         }
         
         //Email support
-        else if([cell.textLabel.text isEqualToString:@"Email Support"])
+        else if(indexPath.row == 2)
         {
             [[NSNotificationCenter defaultCenter]
              postNotificationName:@"SHOW_MAIL_MESSAGE"
@@ -559,14 +453,28 @@
             return;
         }
         
-        //Settings
-        else if([cell.textLabel.text isEqualToString:@"Settings"])
+        //Log Out
+        else if(indexPath.row == 3)
         {
-            self.settingsPage.hidden = NO;
-            self.profilePage.hidden = YES;
+            [[NSNotificationCenter defaultCenter]
+             postNotificationName:@"SHOW_LOGIN"
+             object:self];
+            
+            [tableView deselectRowAtIndexPath:[tableView indexPathForSelectedRow] animated:YES];
+            
+            return;
+        }
+        
+        //My profile
+        else if([cell.textLabel.text isEqualToString:@"Profile"])
+        {
+            self.settingsPage.hidden = YES;
             self.hostingsPage.hidden = YES;
             self.confirmationsPage.hidden = YES;
-            [self.settingsPage initClass];
+            self.purchasesPage.hidden = YES;
+            
+            self.profilePage.hidden = NO;
+            [self.profilePage initClass];
             
             self.btnBack.hidden = NO;
             [UIView animateWithDuration:0.25 animations:^()
@@ -714,19 +622,48 @@
         }
         return;
     }
-    else if(indexPath.section==2) //Logout
-    {
-        [[NSNotificationCenter defaultCenter]
-         postNotificationName:@"SHOW_LOGIN"
-         object:self];
-        
-        [tableView deselectRowAtIndexPath:[tableView indexPathForSelectedRow] animated:YES];
-        
-        return;
-    }
  }
 
 #pragma mark - Navigation Action
+
+-(void)goProfile {
+    self.settingsPage.hidden = YES;
+    self.hostingsPage.hidden = YES;
+    self.confirmationsPage.hidden = YES;
+    self.purchasesPage.hidden = YES;
+    
+    self.profilePage.hidden = NO;
+    [self.profilePage initClass];
+    
+    self.btnBack.hidden = NO;
+    [UIView animateWithDuration:0.25 animations:^()
+     {
+         self.mainCon.frame = CGRectMake(-self.sharedData.screenWidth, 0, self.sharedData.screenWidth * 3, self.sharedData.screenHeight - PHTabHeight);
+     }];
+}
+
+-(void)userProfilePhoneDidTap {
+    if([self.sharedData.phone length]>0)
+    {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Phone Number" message:@"Change your phone number?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Change",nil];
+        alert.tag = 1;
+        [alert show];
+        return;
+    }
+    else
+    {
+        self.sharedData.btnPhoneVerifyCancel.hidden = NO;
+        [[NSNotificationCenter defaultCenter]
+         postNotificationName:@"SHOW_PHONE_VERIFY"
+         object:self];
+    }
+}
+
+//-(void)logoutButtonDidTap {
+//    [[NSNotificationCenter defaultCenter]
+//     postNotificationName:@"SHOW_LOGIN"
+//     object:self];
+//}
 
 -(void)goToHosting
 {
@@ -809,9 +746,7 @@
     //Start spinner
     if(!self.isLoaded)
     {
-        self.spinner.hidden = NO;
-        self.labelEmpty.hidden = YES;
-        [self.spinner startAnimating];
+        [self.emptyView setMode:@"load"];
     }
     
     NSString *facebookId = [self.sharedData.userDict objectForKey:@"fb_id"];
@@ -830,8 +765,7 @@
          {
              NSLog(@"SETTINGS responseObject SAME");
              
-             self.spinner.hidden = YES;
-             [self.spinner stopAnimating];
+             [self.emptyView setMode:@"hide"];
              return;
          }
          
@@ -848,15 +782,11 @@
          [self updateTable];
          
          //Hide spinner
-         self.spinner.hidden = YES;
-         self.labelEmpty.hidden = YES;
-         [self.spinner stopAnimating];
+         [self.emptyView setMode:@"hide"];
          
      } failure:^(AFHTTPRequestOperation *operation, NSError *error)
      {
-         //self.spinner.hidden = YES;
-         //self.labelEmpty.hidden = NO;
-         //[self.spinner stopAnimating];
+         [self.emptyView setMode:@"empty"];
          
          NSLog(@"ERROR :: %@",error);
      }];

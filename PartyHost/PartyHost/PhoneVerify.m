@@ -74,7 +74,7 @@
     self.title.text = @"Verify your phone number";
     self.title.textAlignment = NSTextAlignmentCenter;
     self.title.textColor = [UIColor blackColor];
-    self.title.font = [UIFont phBlond:18];
+    self.title.font = [UIFont phBlond:16];
     [self.mainScroll addSubview:self.title];
     
     UILabel *warning = [[UILabel alloc] initWithFrame:CGRectMake(0, self.title.frame.origin.y + self.title.frame.size.height + 4, self.sharedData.screenWidth, 16)];
@@ -102,7 +102,7 @@
     
     self.subtitle.textAlignment = NSTextAlignmentCenter;
     self.subtitle.textColor = [UIColor blackColor];
-    self.subtitle.font = [UIFont phBlond:19];
+    self.subtitle.font = [UIFont phBlond:17];
     self.subtitle.layer.borderColor = [UIColor phGrayColor].CGColor;
     self.subtitle.layer.borderWidth = 1.0;
     

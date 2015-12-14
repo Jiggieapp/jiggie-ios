@@ -72,9 +72,7 @@ static NSString *const kAllowTracking = @"allowTracking";
     [AppsFlyerTracker sharedTracker].appsFlyerDevKey = @"D4Uux6HSu3aYjNHkCHsTiC";
     [AppsFlyerTracker sharedTracker].appleAppID = @"1047291489";
     [AppsFlyerTracker sharedTracker].customerUserID = idfaString;
-    [AppsFlyerTracker sharedTracker].delegate = self;
-    //[AppsFlyerTracker sharedTracker].isHTTPS = YES;
-    [[AppsFlyerTracker sharedTracker] trackAppLaunch];
+    NSLog(@"idfaString :: %@",idfaString);
     
     
     [Mixpanel sharedInstanceWithToken:@"39ae6be779ffea77ea2b2a898305f560"];
@@ -93,17 +91,15 @@ static NSString *const kAllowTracking = @"allowTracking";
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     
-    /*
     if(![defaults objectForKey:@"FIRST_RUN"])
     {
-        [self.sharedData trackMixPanelWithDict:@"Install" withDict:@{}];
+        Mixpanel *mixpanel = [Mixpanel sharedInstance];
+        [mixpanel track:@"Install" properties:nil];
         
         //[self.sharedData trackMixPanel:@"ios-party-host-install"];
         [defaults setValue:@"YES" forKey:@"FIRST_RUN"];
         [defaults synchronize];
     }
-    */
-    
     
     
     //config.odin1 = @"82a53f1222f8781a5063a773231d4a7ee41bdd6f";
@@ -142,25 +138,27 @@ static NSString *const kAllowTracking = @"allowTracking";
     //Mixpanel *mixpanel = [Mixpanel sharedInstance];
     //[mixpanel track:@"APP_LOADED" properties:@{@"Prop": @"Value",}];
     NSLog(@"APP_LAUNCH");
-
     
     NSURL *launchUrl = [launchOptions objectForKey:UIApplicationLaunchOptionsURLKey];
     if(launchUrl)
     {
         NSURL *url = launchUrl;
-        if(contains(url.absoluteString,@"partyhost://"))
+        if(contains(url.absoluteString,@"jiggie://"))
         {
             NSDictionary *dict = [self.sharedData parseQueryString:[url query]];
             if(dict[@"af_sub2"])
             {
-                self.sharedData.hasInitHosting = YES;
-                self.sharedData.cInitHosting_id = dict[@"af_sub2"];
-                self.sharedData.cHostingIdFromInvite = dict[@"af_sub2"];
+                self.sharedData.hasInitEventSelection = YES;
+//                self.sharedData.cInitHosting_id = dict[@"af_sub2"];
+//                self.sharedData.cHostingIdFromInvite = dict[@"af_sub2"];
+                
+                self.sharedData.cEventId_Feed = dict[@"af_sub2"];
+                self.sharedData.cEventId_Modal = dict[@"af_sub2"];
             }
         }
     }
     
-    
+
     //For debug mode clear out all ONE-TIME popups
     if(PHDebugOn==YES) {
         NSLog(@">>> PhDebugOn==YES: Clearing all ONE-TIME helpers.");
@@ -304,6 +302,16 @@ static NSString *const kAllowTracking = @"allowTracking";
     
     self.inAskingAPNMode = NO;
     //UPDATE_CONVERSATION_LIST
+    
+    
+    
+    //[AppsFlyerTracker sharedTracker].isHTTPS = YES;
+    [[AppsFlyerTracker sharedTracker] trackAppLaunch];
+    
+    
+    [AppsFlyerTracker sharedTracker].delegate = self;
+    
+    /*
     NSString *idfaString = [[[ASIdentifierManager sharedManager] advertisingIdentifier] UUIDString];
     [AppsFlyerTracker sharedTracker].appsFlyerDevKey = @"Rkuw6TCpCtAMpUicmEUz27";
     [AppsFlyerTracker sharedTracker].appleAppID = @"906484188";
@@ -311,8 +319,9 @@ static NSString *const kAllowTracking = @"allowTracking";
     [AppsFlyerTracker sharedTracker].delegate = self;
     //[AppsFlyerTracker sharedTracker].isHTTPS = YES;
     [[AppsFlyerTracker sharedTracker] trackAppLaunch];
+    NSLog(@"idfaString :: %@",idfaString);
+    */
     
-    //[[AppsFlyerTracker sharedTracker] trackAppLaunch];
     
     //[self.sharedData trackMixPanel:@"ios-party-host-open"];
     
@@ -335,8 +344,7 @@ static NSString *const kAllowTracking = @"allowTracking";
     }
     
      [FBSDKAppEvents activateApp];
-    
-    //[FBAppEvents activateApp];
+
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application
@@ -344,11 +352,64 @@ static NSString *const kAllowTracking = @"allowTracking";
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
 
+- (BOOL)application:(UIApplication *)application
+            openURL:(NSURL *)url
+  sourceApplication:(NSString *)sourceApplication
+         annotation:(id)annotation
+{
+    
+    NSLog(@"URL :: %@",url.absoluteString);
+    if(contains(url.absoluteString,@"jiggie://"))
+    {
+        if(self.sharedData.isLoggedIn)
+        {
+            NSDictionary *dict = [self.sharedData parseQueryString:[url query]];
+            if(dict[@"af_sub2"])
+            {
+//                self.sharedData.cInitHosting_id = dict[@"af_sub2"];
+//                
+//                self.sharedData.cHostingIdFromInvite = dict[@"af_sub2"];
+//                self.sharedData.hasInitEventSelection = NO;
+//
+//                [[NSNotificationCenter defaultCenter]
+//                 postNotificationName:@"SHOW_HOST_VENUE_DETAIL_FROM_SHARE"
+//                 object:self];
+                
+                self.sharedData.cEventId_Feed = dict[@"af_sub2"];
+                self.sharedData.cEventId_Modal = dict[@"af_sub2"];
+                
+                [[NSNotificationCenter defaultCenter]
+                 postNotificationName:@"SHOW_EVENT_MODAL"
+                 object:self];
+                
+                /*
+                 [[NSNotificationCenter defaultCenter]
+                 postNotificationName:@"GO_TO_INIT_HOSTING"
+                 object:self];
+                 */
+            }
+        }
+        return YES;
+    }
+
+    [[NSNotificationCenter defaultCenter]
+     postNotificationName:@"SHOW_LOADING"
+     object:self];
+    
+    return [[FBSDKApplicationDelegate sharedInstance] application:application
+                                                          openURL:url
+                                                sourceApplication:sourceApplication
+                                                       annotation:annotation];
+    
+    //return YES;
+    // attempt to extract a token from the url
+    //return [FBAppCall handleOpenURL:url sourceApplication:sourceApplication];
+}
+
 
 -(void)syncAPN
 {
     //app/v3/apntoken/10152901432247953/123455466
-    
     
     AFHTTPRequestOperationManager *manager = [self.sharedData getOperationManager];
     
@@ -724,8 +785,11 @@ static NSString *const kAllowTracking = @"allowTracking";
 
 
 #pragma AppsFlyerTrackerDelegate methods
-- (void) onConversionDataReceived:(NSDictionary*) installData
+- (void)onConversionDataReceived:(NSDictionary*) installData
 {
+    NSLog(@"RECEIVE_INSTALL DATA :: %@",installData);
+    
+    
     id status = [installData objectForKey:@"af_status"];
     
     if(self.sharedData.didAppsFlyerLoad == YES)
@@ -752,7 +816,7 @@ static NSString *const kAllowTracking = @"allowTracking";
         {
             if(self.sharedData.appsFlyerDict[@"af_sub2"])
             {
-                self.sharedData.hasInitHosting = YES;
+                self.sharedData.hasInitEventSelection = YES;
                 self.sharedData.cInitHosting_id = self.sharedData.appsFlyerDict[@"af_sub2"];
                 self.sharedData.cHostingIdFromInvite = self.sharedData.appsFlyerDict[@"af_sub2"];
             }
@@ -777,54 +841,8 @@ static NSString *const kAllowTracking = @"allowTracking";
 
 
 
-
-- (BOOL)application:(UIApplication *)application
-            openURL:(NSURL *)url
-  sourceApplication:(NSString *)sourceApplication
-         annotation:(id)annotation
-{
-    
-    NSLog(@"URL :: %@",url.absoluteString);
-    if(contains(url.absoluteString,@"jiggie://"))
-    {
-        if(self.sharedData.isLoggedIn)
-        {
-            NSDictionary *dict = [self.sharedData parseQueryString:[url query]];
-            if(dict[@"af_sub2"])
-            {
-                self.sharedData.cInitHosting_id = dict[@"af_sub2"];
-                
-                self.sharedData.cHostingIdFromInvite = dict[@"af_sub2"];
-                self.sharedData.hasInitHosting = NO;
-                
-                [[NSNotificationCenter defaultCenter]
-                 postNotificationName:@"SHOW_HOST_VENUE_DETAIL_FROM_SHARE"
-                 object:self];
-                
-                /*
-                [[NSNotificationCenter defaultCenter]
-                 postNotificationName:@"GO_TO_INIT_HOSTING"
-                 object:self];
-                */
-            }
-        }
-        return YES;
-    }
-    
-    [[NSNotificationCenter defaultCenter]
-     postNotificationName:@"SHOW_LOADING"
-     object:self];
-    
-    //[FBAppCall han]
-    
-    return [[FBSDKApplicationDelegate sharedInstance] application:application
-                                                          openURL:url
-                                                sourceApplication:sourceApplication
-                                                       annotation:annotation];
-    
-    //return YES;
-    // attempt to extract a token from the url
-    //return [FBAppCall handleOpenURL:url sourceApplication:sourceApplication];
+- (void) onConversionDataRequestFailure:(NSError *)error{
+    NSLog(@"Failed to get data from AppsFlyer's server: %@",[error localizedDescription]);
 }
 
 @end

@@ -28,8 +28,9 @@
     [self addSubview:self.tabBar];
     
     self.btnBack = [UIButton buttonWithType:UIButtonTypeCustom];
-    self.btnBack.frame = CGRectMake(0, 14, 50, 50);
-    [self.btnBack setBackgroundImage:[UIImage imageNamed:@"nav_back"] forState:UIControlStateNormal];
+    self.btnBack.frame = CGRectMake(0, 20, 40, 40);
+    [self.btnBack setImage:[UIImage imageNamed:@"nav_back"] forState:UIControlStateNormal];
+    [self.btnBack setImageEdgeInsets:UIEdgeInsetsMake(8, 14, 8, 14)];
     [self.btnBack addTarget:self action:@selector(goBack) forControlEvents:UIControlEventTouchUpInside];
     [self.tabBar addSubview:self.btnBack];
     
@@ -267,7 +268,7 @@
         {
             [defaults setValue:@"YES" forKey:@"SHOWED_EVENTS_GUEST_LIST_OVERLAY"];
             [defaults synchronize];
-            [self.sharedData.overlayView popup:@"Meet people" subtitle: @"Connect with guests to start chatting!" x:0 y:self.sharedData.screenHeight - 100];
+            //[self.sharedData.overlayView popup:@"Meet people" subtitle: @"Connect with guests to start chatting!" x:0 y:self.sharedData.screenHeight - 100];
         }
     }
     

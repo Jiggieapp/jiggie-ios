@@ -14,7 +14,7 @@
 
 @property (strong, nonatomic) UILabel *title;
 @property (strong, nonatomic) UILabel *subtitle;
-@property (strong, nonatomic) UILabel *phoneCountry;
+//@property (strong, nonatomic) UILabel *phoneCountry;
 @property (strong, nonatomic) UILabel *phoneNumber;
 @property (strong, nonatomic) UIButton *btnContinue;
 @property (strong, nonatomic) SelectionCheckmark *check1;
