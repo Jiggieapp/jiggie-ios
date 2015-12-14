@@ -1055,6 +1055,13 @@
 			name = ChatPopup;
 			sourceTree = "<group>";
 		};
+		DAABAFDD1C1EC994004DDCFA /* Components */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
 		FA1126DB1ABC3AB70075568E /* MGSwipeTableCell */ = {
 			isa = PBXGroup;
 			children = (
@@ -1245,6 +1252,7 @@
 		FA4D2EEE1A4D9A77006828E7 /* PartyHost */ = {
 			isa = PBXGroup;
 			children = (
+				DAABAFDD1C1EC994004DDCFA /* Components */,
 				FA4D2EEF1A4D9A77006828E7 /* Supporting Files */,
 				FAD902131AC47AE100312AA2 /* Fonts */,
 				FA4D2F1E1A4DC2B2006828E7 /* Frameworks */,
