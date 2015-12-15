@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		CB2BEDD21B348073004FC3C0 /* Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = CB2BEDD11B348073004FC3C0 /* Constants.m */; };
 		CB3EB6C81B459177003F658F /* App.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CB3EB6C71B459177003F658F /* App.xcassets */; };
 		CB3EB6CA1B459184003F658F /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = CB3EB6C91B459184003F658F /* LaunchScreen.xib */; };
 		CB3EB6CC1B45919A003F658F /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CB3EB6CB1B45919A003F658F /* Images.xcassets */; };
@@ -254,13 +253,14 @@
 		DAABB2F41C1FFDF4004DDCFA /* FBSDKShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAABB2F01C1FFDF4004DDCFA /* FBSDKShareKit.framework */; };
 		DAABB2F81C200227004DDCFA /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAABB2F61C200227004DDCFA /* Crashlytics.framework */; };
 		DAABB2F91C200227004DDCFA /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAABB2F71C200227004DDCFA /* Fabric.framework */; };
+		DAABB2FE1C200414004DDCFA /* Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = DAABB2FB1C200414004DDCFA /* Constants.m */; };
+		DAABB2FF1C200414004DDCFA /* SharedData.m in Sources */ = {isa = PBXBuildFile; fileRef = DAABB2FD1C200414004DDCFA /* SharedData.m */; };
 		FA3702B81A8F9E9000B2BD6A /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA3702B71A8F9E9000B2BD6A /* MapKit.framework */; };
 		FA3702BA1A8F9EC300B2BD6A /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA3702B91A8F9EC300B2BD6A /* CoreLocation.framework */; };
 		FA4D2EF21A4D9A77006828E7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = FA4D2EF11A4D9A77006828E7 /* main.m */; };
 		FA4D2EF51A4D9A77006828E7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = FA4D2EF41A4D9A77006828E7 /* AppDelegate.m */; };
 		FA4D2EF81A4D9A77006828E7 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA4D2EF71A4D9A77006828E7 /* ViewController.m */; };
 		FA4D2EFB1A4D9A77006828E7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FA4D2EF91A4D9A77006828E7 /* Main.storyboard */; };
-		FA4D2F191A4DBDF1006828E7 /* SharedData.m in Sources */ = {isa = PBXBuildFile; fileRef = FA4D2F181A4DBDF1006828E7 /* SharedData.m */; };
 		FAEE1C0A1A92E1AA0007737F /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAEE1C091A92E1AA0007737F /* MessageUI.framework */; };
 		FAEE84681A8AE1630073E81A /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = FAEE84671A8AE1630073E81A /* libicucore.dylib */; };
 		FAEE847C1A8AE54D0073E81A /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAEE847B1A8AE54D0073E81A /* CoreData.framework */; };
@@ -275,8 +275,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		CB2BEDD11B348073004FC3C0 /* Constants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Constants.m; sourceTree = "<group>"; };
-		CB2BEDD31B348083004FC3C0 /* Constants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
 		CB3EB6C71B459177003F658F /* App.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = App.xcassets; sourceTree = "<group>"; };
 		CB3EB6C91B459184003F658F /* LaunchScreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LaunchScreen.xib; sourceTree = "<group>"; };
 		CB3EB6CB1B45919A003F658F /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
@@ -733,6 +731,10 @@
 		DAABB2F01C1FFDF4004DDCFA /* FBSDKShareKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKShareKit.framework; sourceTree = "<group>"; };
 		DAABB2F61C200227004DDCFA /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
 		DAABB2F71C200227004DDCFA /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = "<group>"; };
+		DAABB2FA1C200414004DDCFA /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
+		DAABB2FB1C200414004DDCFA /* Constants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Constants.m; sourceTree = "<group>"; };
+		DAABB2FC1C200414004DDCFA /* SharedData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SharedData.h; sourceTree = "<group>"; };
+		DAABB2FD1C200414004DDCFA /* SharedData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SharedData.m; sourceTree = "<group>"; };
 		FA3702B71A8F9E9000B2BD6A /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		FA3702B91A8F9EC300B2BD6A /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		FA4D2EEC1A4D9A77006828E7 /* Jiggie.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Jiggie.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -745,8 +747,6 @@
 		FA4D2EFA1A4D9A77006828E7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		FA4D2F0A1A4D9A77006828E7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		FA4D2F0B1A4D9A77006828E7 /* PartyHostTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PartyHostTests.m; sourceTree = "<group>"; };
-		FA4D2F171A4DBDF1006828E7 /* SharedData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SharedData.h; sourceTree = "<group>"; };
-		FA4D2F181A4DBDF1006828E7 /* SharedData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SharedData.m; sourceTree = "<group>"; };
 		FA4D2F4A1A4DDDA2006828E7 /* PartyHost.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PartyHost.pch; sourceTree = "<group>"; };
 		FAEE1C091A92E1AA0007737F /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		FAEE84671A8AE1630073E81A /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
@@ -1177,6 +1177,10 @@
 		DAABB1111C1FF0F3004DDCFA /* SharedData */ = {
 			isa = PBXGroup;
 			children = (
+				DAABB2FA1C200414004DDCFA /* Constants.h */,
+				DAABB2FB1C200414004DDCFA /* Constants.m */,
+				DAABB2FC1C200414004DDCFA /* SharedData.h */,
+				DAABB2FD1C200414004DDCFA /* SharedData.m */,
 			);
 			path = SharedData;
 			sourceTree = "<group>";
@@ -1646,7 +1650,6 @@
 				DAABB2D51C1FF993004DDCFA /* Fonts */,
 				FA4D2EEF1A4D9A77006828E7 /* Supporting Files */,
 				FA4D2F1E1A4DC2B2006828E7 /* Frameworks */,
-				FA4D2F161A4DBDD9006828E7 /* SharedData */,
 				FA4D2F151A4DBDCB006828E7 /* Main */,
 				CB3EB6C71B459177003F658F /* App.xcassets */,
 				CB3EB6CB1B45919A003F658F /* Images.xcassets */,
@@ -1693,17 +1696,6 @@
 				FA4D2EF71A4D9A77006828E7 /* ViewController.m */,
 			);
 			name = Main;
-			sourceTree = "<group>";
-		};
-		FA4D2F161A4DBDD9006828E7 /* SharedData */ = {
-			isa = PBXGroup;
-			children = (
-				FA4D2F171A4DBDF1006828E7 /* SharedData.h */,
-				FA4D2F181A4DBDF1006828E7 /* SharedData.m */,
-				CB2BEDD31B348083004FC3C0 /* Constants.h */,
-				CB2BEDD11B348073004FC3C0 /* Constants.m */,
-			);
-			name = SharedData;
 			sourceTree = "<group>";
 		};
 		FA4D2F1E1A4DC2B2006828E7 /* Frameworks */ = {
@@ -1841,7 +1833,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "./../frameworks/Fabric.framework/run 1714fcc893d2312cb2b248ed57743517e718c399 d43e9f3ac34264bb351c5a934a53897c9ce593802cd79f2684fb1a4778b0ecd8\n#!/bin/bash\nbuildNumber=$(/usr/libexec/PlistBuddy -c \"Print CFBundleVersion\" \"$INFOPLIST_FILE\")\nbuildNumber=$(($buildNumber + 1))\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $buildNumber\" \"$INFOPLIST_FILE\"\n";
+			shellScript = "./PartyHost/ExtraLibraries/Fabric/Fabric.framework/run 1714fcc893d2312cb2b248ed57743517e718c399 d43e9f3ac34264bb351c5a934a53897c9ce593802cd79f2684fb1a4778b0ecd8\n#!/bin/bash\nbuildNumber=$(/usr/libexec/PlistBuddy -c \"Print CFBundleVersion\" \"$INFOPLIST_FILE\")\nbuildNumber=$(($buildNumber + 1))\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $buildNumber\" \"$INFOPLIST_FILE\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -1897,8 +1889,8 @@
 				DAABB0BA1C1FD50E004DDCFA /* BookTableOffering.m in Sources */,
 				DAABB2711C1FF5AE004DDCFA /* UITableViewCell+FlatUI.m in Sources */,
 				DAABB29F1C1FF5AE004DDCFA /* MPNotificationViewController.m in Sources */,
+				DAABB2FE1C200414004DDCFA /* Constants.m in Sources */,
 				DAABB0B21C1FD50E004DDCFA /* BookTableAbout.m in Sources */,
-				CB2BEDD21B348073004FC3C0 /* Constants.m in Sources */,
 				DAABB1141C1FF0F3004DDCFA /* UIColor+PH.m in Sources */,
 				DAABB0BF1C1FD50E004DDCFA /* MessageCell.m in Sources */,
 				DAABB2CE1C1FF5AE004DDCFA /* TSLogging.m in Sources */,
@@ -1914,6 +1906,7 @@
 				DAABB0C11C1FD50E004DDCFA /* CreditCard.m in Sources */,
 				DAABB2991C1FF5AE004DDCFA /* MPDesignerEventBindingResponseMesssage.m in Sources */,
 				DAABB0F01C1FD50E004DDCFA /* FeedPopupView.m in Sources */,
+				DAABB2FF1C200414004DDCFA /* SharedData.m in Sources */,
 				DAABB0ED1C1FD50E004DDCFA /* EventsPopupView.m in Sources */,
 				DAABB2B51C1FF5AE004DDCFA /* MPUIControlBinding.m in Sources */,
 				DAABB0E31C1FD50E004DDCFA /* GenericOverlayView.m in Sources */,
@@ -2010,7 +2003,6 @@
 				DAABB28C1C1FF5AE004DDCFA /* MPABTestDesignerTweakResponseMessage.m in Sources */,
 				DAABB2551C1FF5AE004DDCFA /* AFHTTPRequestOperationManager.m in Sources */,
 				DAABB0F91C1FD50E004DDCFA /* SetupNotificationView.m in Sources */,
-				FA4D2F191A4DBDF1006828E7 /* SharedData.m in Sources */,
 				DAABB2871C1FF5AE004DDCFA /* MPABTestDesignerDeviceInfoResponseMessage.m in Sources */,
 				DAABB0B61C1FD50E004DDCFA /* BookTableConfirmCreditCell.m in Sources */,
 				DAABB2CF1C1FF5AE004DDCFA /* TSPlatformImpl.m in Sources */,
