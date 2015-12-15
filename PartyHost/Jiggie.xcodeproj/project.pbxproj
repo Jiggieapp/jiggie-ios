@@ -11,10 +11,6 @@
 		CB3EB6C81B459177003F658F /* App.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CB3EB6C71B459177003F658F /* App.xcassets */; };
 		CB3EB6CA1B459184003F658F /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = CB3EB6C91B459184003F658F /* LaunchScreen.xib */; };
 		CB3EB6CC1B45919A003F658F /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CB3EB6CB1B45919A003F658F /* Images.xcassets */; };
-		DA31FC4C1BFD7BA200C19BEF /* Lato-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DA31FC481BFD7BA200C19BEF /* Lato-Bold.ttf */; };
-		DA31FC4D1BFD7BA200C19BEF /* Lato-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DA31FC491BFD7BA200C19BEF /* Lato-Italic.ttf */; };
-		DA31FC4E1BFD7BA200C19BEF /* Lato-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DA31FC4A1BFD7BA200C19BEF /* Lato-Light.ttf */; };
-		DA31FC4F1BFD7BA200C19BEF /* Lato-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DA31FC4B1BFD7BA200C19BEF /* Lato-Regular.ttf */; };
 		DA728DCF1BE9DEFC002D436E /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA728DCC1BE9DEFC002D436E /* Crashlytics.framework */; };
 		DA728DD01BE9DEFC002D436E /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA728DCD1BE9DEFC002D436E /* Fabric.framework */; };
 		DAABB0B11C1FD50E004DDCFA /* BookTable.m in Sources */ = {isa = PBXBuildFile; fileRef = DAABB0091C1FD50E004DDCFA /* BookTable.m */; };
@@ -243,10 +239,17 @@
 		DAABB2D21C1FF5AE004DDCFA /* TSUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = DAABB24B1C1FF5AE004DDCFA /* TSUtils.m */; };
 		DAABB2D31C1FF5AE004DDCFA /* UICollectionViewLeftAlignedLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = DAABB24F1C1FF5AE004DDCFA /* UICollectionViewLeftAlignedLayout.m */; };
 		DAABB2D41C1FF5AE004DDCFA /* UIImageViewAligned.m in Sources */ = {isa = PBXBuildFile; fileRef = DAABB2521C1FF5AE004DDCFA /* UIImageViewAligned.m */; };
-		FA1A3FB61BE717DA0084B2F2 /* Calibre-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FA1A3FB21BE717DA0084B2F2 /* Calibre-Bold.ttf */; };
-		FA1A3FB71BE717DA0084B2F2 /* Calibre-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FA1A3FB31BE717DA0084B2F2 /* Calibre-Light.ttf */; };
-		FA1A3FB81BE717DA0084B2F2 /* Calibre-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FA1A3FB41BE717DA0084B2F2 /* Calibre-Regular.ttf */; };
-		FA1A3FB91BE717DA0084B2F2 /* Calibre-Semibold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FA1A3FB51BE717DA0084B2F2 /* Calibre-Semibold.ttf */; };
+		DAABB2E11C1FF993004DDCFA /* Calibre-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DAABB2D61C1FF993004DDCFA /* Calibre-Bold.ttf */; };
+		DAABB2E21C1FF993004DDCFA /* Calibre-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DAABB2D71C1FF993004DDCFA /* Calibre-Light.ttf */; };
+		DAABB2E31C1FF993004DDCFA /* Calibre-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DAABB2D81C1FF993004DDCFA /* Calibre-Regular.ttf */; };
+		DAABB2E41C1FF993004DDCFA /* Calibre-Semibold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DAABB2D91C1FF993004DDCFA /* Calibre-Semibold.ttf */; };
+		DAABB2E51C1FF993004DDCFA /* FaktPro-Blond.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DAABB2DA1C1FF993004DDCFA /* FaktPro-Blond.ttf */; };
+		DAABB2E61C1FF993004DDCFA /* FaktPro-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DAABB2DB1C1FF993004DDCFA /* FaktPro-SemiBold.ttf */; };
+		DAABB2E71C1FF993004DDCFA /* FaktPro-Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DAABB2DC1C1FF993004DDCFA /* FaktPro-Thin.ttf */; };
+		DAABB2E81C1FF993004DDCFA /* Lato-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DAABB2DD1C1FF993004DDCFA /* Lato-Bold.ttf */; };
+		DAABB2E91C1FF993004DDCFA /* Lato-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DAABB2DE1C1FF993004DDCFA /* Lato-Italic.ttf */; };
+		DAABB2EA1C1FF993004DDCFA /* Lato-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DAABB2DF1C1FF993004DDCFA /* Lato-Light.ttf */; };
+		DAABB2EB1C1FF993004DDCFA /* Lato-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DAABB2E01C1FF993004DDCFA /* Lato-Regular.ttf */; };
 		FA3702B81A8F9E9000B2BD6A /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA3702B71A8F9E9000B2BD6A /* MapKit.framework */; };
 		FA3702BA1A8F9EC300B2BD6A /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA3702B91A8F9EC300B2BD6A /* CoreLocation.framework */; };
 		FA4D2EF21A4D9A77006828E7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = FA4D2EF11A4D9A77006828E7 /* main.m */; };
@@ -254,9 +257,6 @@
 		FA4D2EF81A4D9A77006828E7 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA4D2EF71A4D9A77006828E7 /* ViewController.m */; };
 		FA4D2EFB1A4D9A77006828E7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FA4D2EF91A4D9A77006828E7 /* Main.storyboard */; };
 		FA4D2F191A4DBDF1006828E7 /* SharedData.m in Sources */ = {isa = PBXBuildFile; fileRef = FA4D2F181A4DBDF1006828E7 /* SharedData.m */; };
-		FAD902171AC47AF600312AA2 /* FaktPro-Blond.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FAD902141AC47AF600312AA2 /* FaktPro-Blond.ttf */; };
-		FAD902181AC47AF600312AA2 /* FaktPro-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FAD902151AC47AF600312AA2 /* FaktPro-SemiBold.ttf */; };
-		FAD902191AC47AF600312AA2 /* FaktPro-Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FAD902161AC47AF600312AA2 /* FaktPro-Thin.ttf */; };
 		FADD082A1BEC551D00F16680 /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FADD08261BEC551D00F16680 /* FBSDKCoreKit.framework */; };
 		FADD082B1BEC551D00F16680 /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FADD08271BEC551D00F16680 /* FBSDKLoginKit.framework */; };
 		FADD082C1BEC551D00F16680 /* FBSDKMessengerShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FADD08281BEC551D00F16680 /* FBSDKMessengerShareKit.framework */; };
@@ -280,10 +280,6 @@
 		CB3EB6C71B459177003F658F /* App.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = App.xcassets; sourceTree = "<group>"; };
 		CB3EB6C91B459184003F658F /* LaunchScreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LaunchScreen.xib; sourceTree = "<group>"; };
 		CB3EB6CB1B45919A003F658F /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		DA31FC481BFD7BA200C19BEF /* Lato-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Lato-Bold.ttf"; sourceTree = "<group>"; };
-		DA31FC491BFD7BA200C19BEF /* Lato-Italic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Lato-Italic.ttf"; sourceTree = "<group>"; };
-		DA31FC4A1BFD7BA200C19BEF /* Lato-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Lato-Light.ttf"; sourceTree = "<group>"; };
-		DA31FC4B1BFD7BA200C19BEF /* Lato-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Lato-Regular.ttf"; sourceTree = "<group>"; };
 		DA728DCC1BE9DEFC002D436E /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
 		DA728DCD1BE9DEFC002D436E /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = "<group>"; };
 		DAABB0081C1FD50E004DDCFA /* BookTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BookTable.h; sourceTree = "<group>"; };
@@ -722,10 +718,17 @@
 		DAABB24F1C1FF5AE004DDCFA /* UICollectionViewLeftAlignedLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UICollectionViewLeftAlignedLayout.m; sourceTree = "<group>"; };
 		DAABB2511C1FF5AE004DDCFA /* UIImageViewAligned.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIImageViewAligned.h; sourceTree = "<group>"; };
 		DAABB2521C1FF5AE004DDCFA /* UIImageViewAligned.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIImageViewAligned.m; sourceTree = "<group>"; };
-		FA1A3FB21BE717DA0084B2F2 /* Calibre-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Calibre-Bold.ttf"; sourceTree = "<group>"; };
-		FA1A3FB31BE717DA0084B2F2 /* Calibre-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Calibre-Light.ttf"; sourceTree = "<group>"; };
-		FA1A3FB41BE717DA0084B2F2 /* Calibre-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Calibre-Regular.ttf"; sourceTree = "<group>"; };
-		FA1A3FB51BE717DA0084B2F2 /* Calibre-Semibold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Calibre-Semibold.ttf"; sourceTree = "<group>"; };
+		DAABB2D61C1FF993004DDCFA /* Calibre-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Calibre-Bold.ttf"; sourceTree = "<group>"; };
+		DAABB2D71C1FF993004DDCFA /* Calibre-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Calibre-Light.ttf"; sourceTree = "<group>"; };
+		DAABB2D81C1FF993004DDCFA /* Calibre-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Calibre-Regular.ttf"; sourceTree = "<group>"; };
+		DAABB2D91C1FF993004DDCFA /* Calibre-Semibold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Calibre-Semibold.ttf"; sourceTree = "<group>"; };
+		DAABB2DA1C1FF993004DDCFA /* FaktPro-Blond.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FaktPro-Blond.ttf"; sourceTree = "<group>"; };
+		DAABB2DB1C1FF993004DDCFA /* FaktPro-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FaktPro-SemiBold.ttf"; sourceTree = "<group>"; };
+		DAABB2DC1C1FF993004DDCFA /* FaktPro-Thin.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FaktPro-Thin.ttf"; sourceTree = "<group>"; };
+		DAABB2DD1C1FF993004DDCFA /* Lato-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Lato-Bold.ttf"; sourceTree = "<group>"; };
+		DAABB2DE1C1FF993004DDCFA /* Lato-Italic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Lato-Italic.ttf"; sourceTree = "<group>"; };
+		DAABB2DF1C1FF993004DDCFA /* Lato-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Lato-Light.ttf"; sourceTree = "<group>"; };
+		DAABB2E01C1FF993004DDCFA /* Lato-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Lato-Regular.ttf"; sourceTree = "<group>"; };
 		FA3702B71A8F9E9000B2BD6A /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		FA3702B91A8F9EC300B2BD6A /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		FA4D2EEC1A4D9A77006828E7 /* Jiggie.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Jiggie.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -741,9 +744,6 @@
 		FA4D2F171A4DBDF1006828E7 /* SharedData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SharedData.h; sourceTree = "<group>"; };
 		FA4D2F181A4DBDF1006828E7 /* SharedData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SharedData.m; sourceTree = "<group>"; };
 		FA4D2F4A1A4DDDA2006828E7 /* PartyHost.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PartyHost.pch; sourceTree = "<group>"; };
-		FAD902141AC47AF600312AA2 /* FaktPro-Blond.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "FaktPro-Blond.ttf"; path = "../../fonts/FaktPro-Blond.ttf"; sourceTree = "<group>"; };
-		FAD902151AC47AF600312AA2 /* FaktPro-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "FaktPro-SemiBold.ttf"; path = "../../fonts/FaktPro-SemiBold.ttf"; sourceTree = "<group>"; };
-		FAD902161AC47AF600312AA2 /* FaktPro-Thin.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "FaktPro-Thin.ttf"; path = "../../fonts/FaktPro-Thin.ttf"; sourceTree = "<group>"; };
 		FADD08261BEC551D00F16680 /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKCoreKit.framework; sourceTree = "<group>"; };
 		FADD08271BEC551D00F16680 /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKLoginKit.framework; sourceTree = "<group>"; };
 		FADD08281BEC551D00F16680 /* FBSDKMessengerShareKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKMessengerShareKit.framework; sourceTree = "<group>"; };
@@ -1579,6 +1579,24 @@
 			path = UIImageViewAligned;
 			sourceTree = "<group>";
 		};
+		DAABB2D51C1FF993004DDCFA /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				DAABB2D61C1FF993004DDCFA /* Calibre-Bold.ttf */,
+				DAABB2D71C1FF993004DDCFA /* Calibre-Light.ttf */,
+				DAABB2D81C1FF993004DDCFA /* Calibre-Regular.ttf */,
+				DAABB2D91C1FF993004DDCFA /* Calibre-Semibold.ttf */,
+				DAABB2DA1C1FF993004DDCFA /* FaktPro-Blond.ttf */,
+				DAABB2DB1C1FF993004DDCFA /* FaktPro-SemiBold.ttf */,
+				DAABB2DC1C1FF993004DDCFA /* FaktPro-Thin.ttf */,
+				DAABB2DD1C1FF993004DDCFA /* Lato-Bold.ttf */,
+				DAABB2DE1C1FF993004DDCFA /* Lato-Italic.ttf */,
+				DAABB2DF1C1FF993004DDCFA /* Lato-Light.ttf */,
+				DAABB2E01C1FF993004DDCFA /* Lato-Regular.ttf */,
+			);
+			path = Fonts;
+			sourceTree = "<group>";
+		};
 		FA4D2EE31A4D9A77006828E7 = {
 			isa = PBXGroup;
 			children = (
@@ -1599,12 +1617,12 @@
 		FA4D2EEE1A4D9A77006828E7 /* Jiggie */ = {
 			isa = PBXGroup;
 			children = (
+				DAABB2D51C1FF993004DDCFA /* Fonts */,
 				DAABB1181C1FF13A004DDCFA /* Views */,
 				DAABB0061C1FD50E004DDCFA /* Controllers */,
 				DAABAFE81C1FC6F8004DDCFA /* ExtraLibraries */,
 				DAABAFDD1C1EC994004DDCFA /* Components */,
 				FA4D2EEF1A4D9A77006828E7 /* Supporting Files */,
-				FAD902131AC47AE100312AA2 /* Fonts */,
 				FA4D2F1E1A4DC2B2006828E7 /* Frameworks */,
 				FA4D2F161A4DBDD9006828E7 /* SharedData */,
 				FA4D2F151A4DBDCB006828E7 /* Main */,
@@ -1692,24 +1710,6 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		FAD902131AC47AE100312AA2 /* Fonts */ = {
-			isa = PBXGroup;
-			children = (
-				DA31FC481BFD7BA200C19BEF /* Lato-Bold.ttf */,
-				DA31FC491BFD7BA200C19BEF /* Lato-Italic.ttf */,
-				DA31FC4A1BFD7BA200C19BEF /* Lato-Light.ttf */,
-				DA31FC4B1BFD7BA200C19BEF /* Lato-Regular.ttf */,
-				FA1A3FB21BE717DA0084B2F2 /* Calibre-Bold.ttf */,
-				FA1A3FB31BE717DA0084B2F2 /* Calibre-Light.ttf */,
-				FA1A3FB41BE717DA0084B2F2 /* Calibre-Regular.ttf */,
-				FA1A3FB51BE717DA0084B2F2 /* Calibre-Semibold.ttf */,
-				FAD902141AC47AF600312AA2 /* FaktPro-Blond.ttf */,
-				FAD902151AC47AF600312AA2 /* FaktPro-SemiBold.ttf */,
-				FAD902161AC47AF600312AA2 /* FaktPro-Thin.ttf */,
-			);
-			name = Fonts;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1769,44 +1769,44 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DAABB2E21C1FF993004DDCFA /* Calibre-Light.ttf in Resources */,
+				DAABB2EA1C1FF993004DDCFA /* Lato-Light.ttf in Resources */,
 				DAABB29E1C1FF5AE004DDCFA /* MPNotification.storyboard in Resources */,
+				DAABB2E31C1FF993004DDCFA /* Calibre-Regular.ttf in Resources */,
+				DAABB2E71C1FF993004DDCFA /* FaktPro-Thin.ttf in Resources */,
 				DAABB2AB1C1FF5AE004DDCFA /* MPSurvey.storyboard in Resources */,
 				DAABB1001C1FD50E004DDCFA /* SignupPages.xib in Resources */,
-				FA1A3FB91BE717DA0084B2F2 /* Calibre-Semibold.ttf in Resources */,
-				DA31FC4E1BFD7BA200C19BEF /* Lato-Light.ttf in Resources */,
+				DAABB2E91C1FF993004DDCFA /* Lato-Italic.ttf in Resources */,
 				DAABB0EB1C1FD50E004DDCFA /* EventsPopup.xcassets in Resources */,
-				FAD902181AC47AF600312AA2 /* FaktPro-SemiBold.ttf in Resources */,
+				DAABB2E81C1FF993004DDCFA /* Lato-Bold.ttf in Resources */,
+				DAABB2EB1C1FF993004DDCFA /* Lato-Regular.ttf in Resources */,
 				DAABB2961C1FF5AE004DDCFA /* MPCloseBtn.png in Resources */,
 				DAABB2761C1FF5AE004DDCFA /* GSTouchImage.png in Resources */,
-				FAD902191AC47AF600312AA2 /* FaktPro-Thin.ttf in Resources */,
 				DAABB2BE1C1FF5AE004DDCFA /* snapshot_config.json in Resources */,
-				DA31FC4D1BFD7BA200C19BEF /* Lato-Italic.ttf in Resources */,
+				DAABB2E11C1FF993004DDCFA /* Calibre-Bold.ttf in Resources */,
 				DAABB0E81C1FD50E004DDCFA /* ChatPopup.xcassets in Resources */,
-				DA31FC4C1BFD7BA200C19BEF /* Lato-Bold.ttf in Resources */,
 				DAABB27E1C1FF5AE004DDCFA /* Media.xcassets in Resources */,
-				DA31FC4F1BFD7BA200C19BEF /* Lato-Regular.ttf in Resources */,
+				DAABB2E51C1FF993004DDCFA /* FaktPro-Blond.ttf in Resources */,
 				DAABB0EC1C1FD50E004DDCFA /* EventsPopup.xib in Resources */,
 				DAABB0FA1C1FD50E004DDCFA /* SetupPages.xib in Resources */,
 				DAABB0FF1C1FD50E004DDCFA /* Signup.xib in Resources */,
 				FA4D2EFB1A4D9A77006828E7 /* Main.storyboard in Resources */,
 				CB3EB6C81B459177003F658F /* App.xcassets in Resources */,
 				DAABB0E21C1FD50E004DDCFA /* GenericOverlay.xib in Resources */,
+				DAABB2E61C1FF993004DDCFA /* FaktPro-SemiBold.ttf in Resources */,
 				DAABB2971C1FF5AE004DDCFA /* MPCloseBtn@2x.png in Resources */,
 				DAABB0E91C1FD50E004DDCFA /* ChatPopup.xib in Resources */,
 				DAABB0EF1C1FD50E004DDCFA /* FeedPopup.xib in Resources */,
 				DAABB0FE1C1FD50E004DDCFA /* Signup.xcassets in Resources */,
-				FA1A3FB81BE717DA0084B2F2 /* Calibre-Regular.ttf in Resources */,
 				DAABB0D01C1FD50E004DDCFA /* EventsHostMessage.xib in Resources */,
 				DAABB0EE1C1FD50E004DDCFA /* FeedPopup.xcassets in Resources */,
-				FA1A3FB71BE717DA0084B2F2 /* Calibre-Light.ttf in Resources */,
 				DAABB2C41C1FF5AE004DDCFA /* NSDateTimeAgo.bundle in Resources */,
-				FAD902171AC47AF600312AA2 /* FaktPro-Blond.ttf in Resources */,
 				DAABB0F61C1FD50E004DDCFA /* Setup.xib in Resources */,
-				FA1A3FB61BE717DA0084B2F2 /* Calibre-Bold.ttf in Resources */,
 				DAABB2BF1C1FF5AE004DDCFA /* test_variant.json in Resources */,
 				DAABB2771C1FF5AE004DDCFA /* GSTouchImage@2x.png in Resources */,
 				CB3EB6CA1B459184003F658F /* LaunchScreen.xib in Resources */,
 				DAABB0F51C1FD50E004DDCFA /* Setup.xcassets in Resources */,
+				DAABB2E41C1FF993004DDCFA /* Calibre-Semibold.ttf in Resources */,
 				CB3EB6CC1B45919A003F658F /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
