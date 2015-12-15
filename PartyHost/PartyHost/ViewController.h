@@ -9,7 +9,6 @@
 #import <UIKit/UIKit.h>
 //#import <FacebookSDK/FacebookSDK.h>
 #import <MessageUI/MessageUI.h>
-#import "Login.h"
 #import "Dashboard.h"
 //#import "AsyncImageView.h"
 #import "PHImage.h"
@@ -17,7 +16,7 @@
 #import "SetupView.h"
 
 
-@interface ViewController : UIViewController<FBLoginViewDelegate,MFMailComposeViewControllerDelegate,UINavigationControllerDelegate>
+@interface ViewController : UIViewController<MFMailComposeViewControllerDelegate,UINavigationControllerDelegate>
 
 @property (strong, nonatomic) SharedData    *sharedData;
 

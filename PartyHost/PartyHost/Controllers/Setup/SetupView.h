@@ -7,13 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <FacebookSDK/FacebookSDK.h>
 #import "SetupGenderView.h"
 #import "SetupPickView.h"
 #import "SetupLocationView.h"
 #import "SetupNotificationView.h"
 
-@interface SetupView : UIView <UIScrollViewDelegate,FBLoginViewDelegate>
+@interface SetupView : UIView <UIScrollViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UIButton *button;
 @property (weak, nonatomic) IBOutlet UIPageControl *pageControl;
