@@ -10,4 +10,7 @@
 
 @interface AnalyticManager : NSObject
 
++ (AnalyticManager *)sharedManager;
+- (void)startAnalytics;
+
 @end

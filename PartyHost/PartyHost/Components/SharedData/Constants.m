@@ -8,19 +8,24 @@
 
 #import <Foundation/Foundation.h>
 #import "Constants.h"
+#import "Mixpanel.h"
+#import "AppsFlyerTracker.h"
+
 
 BOOL const PHMixPanelOn = YES;
 
 //DEBUG, should be NO when released!
 BOOL const PHDebugOn = NO;
 
+//App Dev Key
+NSString *const MixpanelDevKey = @"39ae6be779ffea77ea2b2a898305f560";
+NSString *const AppsFlyerDevKey = @"D4Uux6HSu3aYjNHkCHsTiC";
+
+NSString *const JiggieItunesID = @"1047291489";
+
 //URLs with substitution
 NSString *const PHBaseURL = @"https://jiggie.herokuapp.com/app/v3";
 NSString *const PHBaseDomain = @"https://jiggie.herokuapp.com";
-
-
-
-
 
 
 //NSString *const PHBaseDomain = @"https://partyhostapp.herokuapp.com";

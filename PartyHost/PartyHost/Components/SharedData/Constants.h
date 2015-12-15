@@ -16,6 +16,12 @@ extern int const PHTabHeight;
 extern int const PHButtonHeight;
 extern BOOL const PHMixPanelOn;
 
+//App Dev Key
+extern NSString *const MixpanelDevKey;
+extern NSString *const AppsFlyerDevKey;
+
+extern NSString *const JiggieItunesID;
+
 //URL
 extern NSString *const PHBaseURL;
 extern NSString *const PHBaseDomain;

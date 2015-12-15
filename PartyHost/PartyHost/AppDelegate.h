@@ -7,7 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <AdSupport/ASIdentifierManager.h>
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import <FBSDKLoginKit/FBSDKLoginKit.h>
 //#import <FacebookSDK/FacebookSDK.h>
@@ -28,13 +27,10 @@
 @property (strong, nonatomic) SharedData    *sharedData;
 
 @property (strong, nonatomic) NSString      *apnToken;
-@property (strong, nonatomic)    id<GAITracker>      tracker;
+@property (strong, nonatomic) id<GAITracker> tracker;
 @property (strong, nonatomic) UIButton      *btnNotify;
 
-
-
 @property (assign, nonatomic) BOOL      inAskingAPNMode;
-
 @property (assign, nonatomic) BOOL      isShowNotification;
 
 -(BOOL)notificationServicesEnabled;

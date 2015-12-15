@@ -546,9 +546,18 @@
         {
             NSDictionary *dict = [[self.eventsA objectAtIndex:i][@"events"] objectAtIndex:j];
             NSString *picURL = [Constants eventImageURL:dict[@"_id"]];
-            NSLog(@"EVENT_IMG_URL :: %@",picURL);
+            NSLog(@"EVENT_IMG_URL :: %@ - %@",picURL, dict[@"venue_name"]);
             
-            picURL = [self.sharedData picURL:dict[@"photos"][0]];
+            @try {
+                picURL = [self.sharedData picURL:dict[@"photos"][0]];
+            }
+            @catch (NSException *exception) {
+                NSLog(@"CRASH EVENT_IMG_URL :: %@ - %@",picURL, dict[@"venue_name"]);
+            }
+            @finally {
+                
+            }
+            
             
             //[self.sharedData loadImageCue:picURL];
             [self.sharedData loadTimeImage:picURL withTimeOut:count * .25];

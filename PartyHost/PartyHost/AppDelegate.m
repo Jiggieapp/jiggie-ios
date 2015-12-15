@@ -7,7 +7,7 @@
 //
 
 #import "AppDelegate.h"
-
+#import "AnalyticManager.h"
 
 ///REMOVE THIS WHEN LIVE
 //#import "GSTouchesShowingWindow.h"
@@ -68,15 +68,8 @@ static NSString *const kAllowTracking = @"allowTracking";
                              didFinishLaunchingWithOptions:launchOptions];
     
     
-     NSString *idfaString = [[[ASIdentifierManager sharedManager] advertisingIdentifier] UUIDString];
-    [AppsFlyerTracker sharedTracker].appsFlyerDevKey = @"D4Uux6HSu3aYjNHkCHsTiC";
-    [AppsFlyerTracker sharedTracker].appleAppID = @"1047291489";
-    [AppsFlyerTracker sharedTracker].customerUserID = idfaString;
-    NSLog(@"idfaString :: %@",idfaString);
-    
-    
-    [Mixpanel sharedInstanceWithToken:@"39ae6be779ffea77ea2b2a898305f560"];
-    
+    //Start Analytics
+    [[AnalyticManager sharedManager] startAnalytics];
     
     
     
