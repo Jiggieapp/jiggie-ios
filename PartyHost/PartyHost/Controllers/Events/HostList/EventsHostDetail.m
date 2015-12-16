@@ -7,6 +7,7 @@
 //
 
 #import "EventsHostDetail.h"
+#import "AnalyticManager.h"
 
 @implementation EventsHostDetail {
     NSString *lastFbId;
@@ -348,7 +349,7 @@
 {
     if(self.isSelf) return;
     
-    [self.sharedData trackMixPanelWithDict:@"Share Hosting" withDict:@{@"origin":@"HostDetails"}];
+    [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Share Hosting" withDict:@{@"origin":@"HostDetails"}];
     
     NSLog(@">>> %@",self.sharedData.selectedHost);
     

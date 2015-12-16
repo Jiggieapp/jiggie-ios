@@ -7,6 +7,7 @@
 //
 
 #import "EventsSummaryModal.h"
+#import "AnalyticManager.h"
 
 #define PROFILE_PICS 4 //If more than 4 then last is +MORE
 #define PROFILE_SIZE 40
@@ -271,7 +272,7 @@
     [self.sharedData.cAddEventDict removeAllObjects];
     [self.sharedData.cAddEventDict addEntriesFromDictionary:self.mainDict];
     
-    [self.sharedData trackMixPanelIncrementWithDict:@{@"host_here":@1}];
+    [[AnalyticManager sharedManager] trackMixPanelIncrementWithDict:@{@"host_here":@1}];
     
     [[NSNotificationCenter defaultCenter]
      postNotificationName:@"SHOW_BOOKTABLE"
@@ -373,7 +374,7 @@
 -(void)populateData:(NSDictionary *)dict
 {
     NSLog(@"EVENTS_DICT :: %@",self.sharedData.mixPanelCEventDict);
-    [self.sharedData trackMixPanelWithDict:@"View Event Details Modal" withDict:self.sharedData.mixPanelCEventDict];
+    [[AnalyticManager sharedManager] trackMixPanelWithDict:@"View Event Details Modal" withDict:self.sharedData.mixPanelCEventDict];
     //[self.sharedData trackMixPanel:@"display_venue_details"];
     
     //Title

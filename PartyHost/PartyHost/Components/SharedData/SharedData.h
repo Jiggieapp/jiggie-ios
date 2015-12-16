@@ -244,8 +244,6 @@
 
 -(NSString *)clipSpace:(NSString *)strg;
 
--(void)trackMixPanel:(NSString *)eventName;
--(void)trackMixPanelWithDict:(NSString *)eventName withDict:(NSDictionary *)dict;
 -(NSString *)picURL:(NSString *)url;
 -(NSString *)profileImg:(NSString *)fb_id;
 -(NSString *)profileImgLarge:(NSString *)fb_id;
@@ -282,20 +280,11 @@
 -(void)calculateDefaultGenderSettings; //Calc account_type and gender_interest based on gender
 //===================================================================================================//
 
-
-//=============MixPanel==============================================================================//
--(void)setMixPanelSuperProperties;
--(void)setMixPanelOnceParams;
--(void)setMixPanelOnSignUp;
--(void)setMixPanelUserProfile;
--(void)setMixPanelOnLogin;
--(void)trackMixPanelIncrementWithDict:(NSDictionary *)dict;
--(void)trackMixPanelIncrementWithEventDict:(NSDictionary *)eventDict;
--(void)createMixPanelDummyProfile;
-//===================================================================================================//
 //SPECIAL LOAD WITH CANCEL
 -(NWURLConnection*)loadImageCancelable:(NSString *)imgURL completionBlock:(void (^)(UIImage *image))completionBlock;
 //===================================================================================================//
+
+-(void)syncSuperPropertiesOnServer:(NSMutableDictionary *)dict;
 
 -(AFHTTPRequestOperationManager *)getOperationManager;
 -(void)loadTimeImage:(NSString *)imgURL withTimeOut:(float)time;

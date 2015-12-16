@@ -7,6 +7,7 @@
 //
 
 #import "BookTable.h"
+#import "AnalyticManager.h"
 
 #define SCREEN_LEVELS 7
 
@@ -567,7 +568,7 @@
          [tmpDict addEntriesFromDictionary:self.sharedData.mixPanelCEventDict];
          
          
-         [self.sharedData trackMixPanelWithDict:@"Ticket List View" withDict:tmpDict];
+         [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Ticket List View" withDict:tmpDict];
          //Show empty
          if(self.mainArray.count == 0) {
              self.tableView.hidden = YES;
@@ -660,7 +661,7 @@
     [tmpDict setObject:self.sharedData.userDict[@"birthday"] forKey:@"User Birthday"];
 
     
-    [self.sharedData trackMixPanelWithDict:@"Help Pressed" withDict:tmpDict];
+    [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Help Pressed" withDict:tmpDict];
     
     NSString *url = [NSString stringWithFormat:@"sms://%@",self.sharedData.help_phone];
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:url]];

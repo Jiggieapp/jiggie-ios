@@ -7,6 +7,7 @@
 //
 
 #import "Messages.h"
+#import "AnalyticManager.h"
 
 #define MESSAGE_PLACEHOLDER @"Type your message here ..."
 
@@ -472,12 +473,12 @@
          
          if(isHost)
          {
-             [self.sharedData trackMixPanelWithDict:@"Add Host Confirmation" withDict:@{}];
+             [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Add Host Confirmation" withDict:@{}];
          }else{
-             [self.sharedData trackMixPanelWithDict:@"Add Guest Confirmation" withDict:@{}];
+             [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Add Guest Confirmation" withDict:@{}];
          }
          
-         [self.sharedData trackMixPanelIncrementWithDict:@{@"confirm_hosting":@1}];
+         [[AnalyticManager sharedManager] trackMixPanelIncrementWithDict:@{@"confirm_hosting":@1}];
          
          [self alertConfirm];
          
@@ -618,8 +619,8 @@
          [[NSNotificationCenter defaultCenter]
           postNotificationName:@"HIDE_LOADING"
           object:self];
-         [self.sharedData trackMixPanelWithDict:@"Unconfirm Hosting" withDict:@{@"origin":@"Chat"}];
-         [self.sharedData trackMixPanelIncrementWithDict:@{@"unconfirm_hosting":@1}];
+         [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Unconfirm Hosting" withDict:@{@"origin":@"Chat"}];
+         [[AnalyticManager sharedManager] trackMixPanelIncrementWithDict:@{@"unconfirm_hosting":@1}];
          
          UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Cancelled" message:@"You have cancelled this hosting." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
          [alert show];
@@ -689,8 +690,8 @@
           postNotificationName:@"HIDE_LOADING"
           object:self];
          
-         [self.sharedData trackMixPanelIncrementWithDict:@{@"confirm_hosting":@1}];
-         [self.sharedData trackMixPanelWithDict:origin withDict:@{}];
+         [[AnalyticManager sharedManager] trackMixPanelIncrementWithDict:@{@"confirm_hosting":@1}];
+         [[AnalyticManager sharedManager] trackMixPanelWithDict:origin withDict:@{}];
          
          [self alertConfirm];
          
@@ -759,9 +760,8 @@
           postNotificationName:@"HIDE_LOADING"
           object:self];
          
-         [self.sharedData trackMixPanelIncrementWithDict:@{@"cancelled_hosting":@1}];
-         
-         [self.sharedData trackMixPanelWithDict:origin withDict:@{}];
+         [[AnalyticManager sharedManager] trackMixPanelIncrementWithDict:@{@"cancelled_hosting":@1}];
+         [[AnalyticManager sharedManager] trackMixPanelWithDict:origin withDict:@{}];
          
          UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Cancelled" message:@"You have cancelled this hosting." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
          [alert show];
@@ -1040,8 +1040,8 @@
               postNotificationName:@"HIDE_LOADING"
               object:self];
              
-             [self.sharedData trackMixPanelIncrementWithDict:@{@"confirm_hosting":@1}];
-             [self.sharedData trackMixPanelWithDict:origin withDict:@{}];
+             [[AnalyticManager sharedManager] trackMixPanelIncrementWithDict:@{@"confirm_hosting":@1}];
+             [[AnalyticManager sharedManager] trackMixPanelWithDict:origin withDict:@{}];
              
              [self alertConfirm];
              
@@ -1388,7 +1388,7 @@
      {
          NSLog(@"DONE!! :: %@",responseObject);
          
-         [self.sharedData trackMixPanelIncrementWithDict:@{@"send_message":@1}];
+         [[AnalyticManager sharedManager] trackMixPanelIncrementWithDict:@{@"send_message":@1}];
          
          //[self.sharedData trackMixPanel:responseObject[@"chat_state"]];
          

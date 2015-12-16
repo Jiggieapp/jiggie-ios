@@ -7,6 +7,7 @@
 //
 
 #import "AppDelegate.h"
+#import "AnalyticManager.h"
 #import "Profile.h"
 #import "More.h"
 
@@ -368,7 +369,7 @@
      {
          NSLog(@"UPDATE_ABOUT_RESPONSE :: %@",responseObject);
          
-         [self.sharedData trackMixPanelWithDict:@"MyProfile Update" withDict:@{}];
+         [[AnalyticManager sharedManager] trackMixPanelWithDict:@"MyProfile Update" withDict:@{}];
          
          [self.sharedData.userDict setValue:self.aboutBody.text forKey:@"about"];
          

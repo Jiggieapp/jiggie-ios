@@ -7,6 +7,7 @@
 //
 
 #import "PhoneVerify.h"
+#import "AnalyticManager.h"
 
 #define SCREEN_LEVELS 3
 
@@ -365,7 +366,7 @@
      }];
     
     
-    [self.sharedData trackMixPanelWithDict:@"View Phone Verification" withDict:@{}];
+    [[AnalyticManager sharedManager] trackMixPanelWithDict:@"View Phone Verification" withDict:@{}];
 }
 
 //Special scroll up for iPhone4 short screens

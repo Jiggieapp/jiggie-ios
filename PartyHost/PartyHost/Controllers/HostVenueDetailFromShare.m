@@ -7,6 +7,7 @@
 //
 
 #import "HostVenueDetailFromShare.h"
+#import "AnalyticManager.h"
 
 @implementation HostVenueDetailFromShare
 
@@ -287,7 +288,7 @@
      {
          
          NSLog(@"EVENT_DETAILS_RESPONSE :: %@",responseObject);
-         [self.sharedData trackMixPanelWithDict:@"Event Details Popup From Share" withDict:@{}];
+         [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Event Details Popup From Share" withDict:@{}];
          
          [self loadData:responseObject];
          
@@ -355,7 +356,7 @@
         //[self.sharedData trackMixPanel:responseObject[@"chat_state"]];
          
          
-         [self.sharedData trackMixPanelWithDict:@"Accept Invite" withDict:@{@"origin":@"Host Details Popup Share"}];
+         [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Accept Invite" withDict:@{@"origin":@"Host Details Popup Share"}];
          
          [[NSNotificationCenter defaultCenter]
           postNotificationName:@"HIDE_LOADING"

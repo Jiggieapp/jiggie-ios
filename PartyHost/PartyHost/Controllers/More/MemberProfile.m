@@ -7,6 +7,7 @@
 //
 
 #import "MemberProfile.h"
+#import "AnalyticManager.h"
 
 #define MAX_MUTUAL_FRIENDS 4
 #define SPACE_BETWEEN_SECTIONS 20
@@ -481,7 +482,7 @@
      {
          NSLog(@"MEMBER_PROFILE :: %@",responseObject);
          
-         [self.sharedData trackMixPanelWithDict:@"View Member Profile" withDict:@{}];
+         [[AnalyticManager sharedManager] trackMixPanelWithDict:@"View Member Profile" withDict:@{}];
          
          [self loadMutualFriends];
          

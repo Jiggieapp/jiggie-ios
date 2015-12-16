@@ -7,6 +7,7 @@
 //
 
 #import "MyConfirmations.h"
+#import "AnalyticManager.h"
 
 @implementation MyConfirmations
 
@@ -239,7 +240,7 @@
      {
          NSLog(@"MY_CONFIRMATIONS :: %@",responseObject);
          
-         [self.sharedData trackMixPanelWithDict:@"View MyConfirmations" withDict:@{}];
+         [[AnalyticManager sharedManager] trackMixPanelWithDict:@"View MyConfirmations" withDict:@{}];
          
          self.hasHostings = ([responseObject count] > 0);
          self.isHostingsLoaded = YES;
@@ -473,9 +474,9 @@
      {
          NSLog(@"UNCONFIRM_HOSTING_RESPONSE :: %@",responseObject);
          
-         [self.sharedData trackMixPanelWithDict:@"Unconfirm Hosting" withDict:@{@"origin":@"MyConfirmations"}];
+         [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Unconfirm Hosting" withDict:@{@"origin":@"MyConfirmations"}];
          
-         [self.sharedData trackMixPanelIncrementWithDict:@{@"unconfirm_hosting":@1}];
+         [[AnalyticManager sharedManager] trackMixPanelIncrementWithDict:@{@"unconfirm_hosting":@1}];
          
          [self loadData];
          

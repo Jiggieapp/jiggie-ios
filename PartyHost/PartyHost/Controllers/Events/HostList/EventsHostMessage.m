@@ -9,6 +9,7 @@
 #import "Events.h"
 #import "EventsHostDetail.h"
 #import "EventsHostMessage.h"
+#import "AnalyticManager.h"
 
 @implementation EventsHostMessage
 {
@@ -217,9 +218,10 @@
          [self.sharedData.eventsPage.eventsHostDetail.button1 setTitle:@"CHAT" forState:UIControlStateNormal];
          
          //Mix panel
-         [self.sharedData trackMixPanelWithDict:@"Accept Invite" withDict:@{@"origin":@"Host Details"}];
-         [self.sharedData trackMixPanelIncrementWithDict:@{@"send_message":@1}];
-         [self.sharedData trackMixPanelIncrementWithDict:@{@"contact_host":@1}];
+         AnalyticManager *analyticManager = [AnalyticManager sharedManager];
+         [analyticManager trackMixPanelWithDict:@"Accept Invite" withDict:@{@"origin":@"Host Details"}];
+         [analyticManager trackMixPanelIncrementWithDict:@{@"send_message":@1}];
+         [analyticManager trackMixPanelIncrementWithDict:@{@"contact_host":@1}];
          
          UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Success" message:@"Your message was sent to the host. Share hosting with friends for a quicker response." delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
          alert.tag = 0;

@@ -8,6 +8,7 @@
 
 #import "More.h"
 #import "Feed.h"
+#import "AnalyticManager.h"
 
 #define SCREEN_LEVELS 3
 
@@ -434,7 +435,7 @@
         //Invite friends
         else if(indexPath.row == 1)
         {
-            [self.sharedData trackMixPanelWithDict:@"Share App" withDict:@{@"origin":@"More"}];
+            [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Share App" withDict:@{@"origin":@"More"}];
             
             [[NSNotificationCenter defaultCenter]
              postNotificationName:@"SHOW_GENERAL_INVITE"
@@ -758,7 +759,7 @@
      {
          NSLog(@"SETTINGS responseObject :: %@",responseObject);
          
-         [self.sharedData trackMixPanelWithDict:@"View Settings" withDict:@{}];
+         [[AnalyticManager sharedManager] trackMixPanelWithDict:@"View Settings" withDict:@{}];
          
          //Check if already equal
          if([self.settingsData isEqualToDictionary:responseObject])

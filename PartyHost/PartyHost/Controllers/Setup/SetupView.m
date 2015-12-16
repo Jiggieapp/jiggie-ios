@@ -7,6 +7,7 @@
 //
 
 #import "SetupView.h"
+#import "AnalyticManager.h"
 
 @implementation SetupView
 
@@ -192,29 +193,26 @@ int totalPages;
     
     self.isAnimating = YES;
     
+    AnalyticManager *analyticManager = [AnalyticManager sharedManager];
     if(pageIndex == 0)
     {
-        [self.sharedData trackMixPanelWithDict:@"Walkthrough Gender" withDict:@{}];
+        [analyticManager trackMixPanelWithDict:@"Walkthrough Gender" withDict:@{}];
     }
     
     if(pageIndex == 1)
     {
-        [self.sharedData trackMixPanelWithDict:@"Walkthrough Tags" withDict:@{}];
+        [analyticManager trackMixPanelWithDict:@"Walkthrough Tags" withDict:@{}];
     }
-    
     
     if(pageIndex == 2)
     {
-        [self.sharedData trackMixPanelWithDict:@"Walkthrough Push Notifications" withDict:@{}];
+        [analyticManager trackMixPanelWithDict:@"Walkthrough Push Notifications" withDict:@{}];
     }
-    
     
     if(pageIndex == 3)
     {
-        [self.sharedData trackMixPanelWithDict:@"Walkthrough Location" withDict:@{}];
+        [analyticManager trackMixPanelWithDict:@"Walkthrough Location" withDict:@{}];
     }
-    
-    
     
     //Walkthrough ended
     if(pageIndex==2) { //Notifications
@@ -316,7 +314,7 @@ int totalPages;
          [defaults synchronize];
          
          
-         [self.sharedData trackMixPanelWithDict:@"Completed Walkthrough" withDict:@{}];
+         [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Completed Walkthrough" withDict:@{}];
          
          
      } failure:^(AFHTTPRequestOperation *operation, NSError *error)

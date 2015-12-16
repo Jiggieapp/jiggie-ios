@@ -7,6 +7,7 @@
 //
 
 #import "EventsSummary.h"
+#import "AnalyticManager.h"
 
 #define PROFILE_PICS 4 //If more than 4 then last is +MORE
 #define PROFILE_SIZE 40
@@ -293,7 +294,7 @@
     
     self.sharedData.cHostVenuePicURL = self.sharedData.eventDict[@"photos"][0];
     
-    [self.sharedData trackMixPanelWithDict:@"Share Event" withDict:self.sharedData.mixPanelCEventDict];
+    [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Share Event" withDict:self.sharedData.mixPanelCEventDict];
     
     
     [[NSNotificationCenter defaultCenter] postNotificationName:@"SHOW_HOSTING_INVITE" object:self];
@@ -331,11 +332,9 @@
     [tmpDict addEntriesFromDictionary:self.sharedData.mixPanelCEventDict];
     [tmpDict setObject:self.fillValue forKey:@"fulfillment_value"];
     [tmpDict setObject:self.fillType forKey:@"fulfillment_type"];
-    [self.sharedData trackMixPanelWithDict:@"Fufillment Request" withDict:tmpDict];
     
-    
-    
-    [self.sharedData trackMixPanelIncrementWithDict:@{@"fulfillment_request":@1}];
+    [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Fufillment Request" withDict:tmpDict];
+    [[AnalyticManager sharedManager] trackMixPanelIncrementWithDict:@{@"fulfillment_request":@1}];
     
     if([self.fillType isEqualToString:@"phone_number"])
     {
@@ -498,7 +497,7 @@
 -(void)populateData:(NSDictionary *)dict
 {
     NSLog(@"EVENTS_DICT :: %@",self.sharedData.mixPanelCEventDict);
-    [self.sharedData trackMixPanelWithDict:@"View Event Details" withDict:self.sharedData.mixPanelCEventDict];
+    [[AnalyticManager sharedManager] trackMixPanelWithDict:@"View Event Details" withDict:self.sharedData.mixPanelCEventDict];
     //[self.sharedData trackMixPanel:@"display_venue_details"];
     
     //Title

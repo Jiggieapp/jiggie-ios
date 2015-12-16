@@ -7,6 +7,7 @@
 //
 
 #import "Chat.h"
+#import "AnalyticManager.h"
 
 @implementation Chat
 
@@ -316,7 +317,7 @@
              NSLog(@"CONVERSATIONS_responseObject :: %@",responseObject);
              
              
-             [self.sharedData trackMixPanelWithDict:@"Conversations List" withDict:@{}];
+             [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Conversations List" withDict:@{}];
              
              [self.conversationsList setContentOffset:CGPointZero animated:YES];
              [self.conversationsA removeAllObjects];
@@ -551,7 +552,7 @@
          NSLog(@"RESULT :: %@",resultObj);
          [self initClass];
          [self showSuccess];
-         [self.sharedData trackMixPanelWithDict:@"Block User" withDict:@{@"origin":@"Chat"}];
+         [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Block User" withDict:@{@"origin":@"Chat"}];
          
      } failure:^(AFHTTPRequestOperation *operation, NSError *error)
      {
@@ -609,7 +610,7 @@
          NSLog(@"RESULT :: %@",resultObj);
          [self initClass];
          [self showSuccessDelete];
-         [self.sharedData trackMixPanelWithDict:@"Delete Messages" withDict:@{@"origin":@"Chat"}];
+         [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Delete Messages" withDict:@{@"origin":@"Chat"}];
      } failure:^(AFHTTPRequestOperation *operation, NSError *error)
      {
          

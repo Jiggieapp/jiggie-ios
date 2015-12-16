@@ -9,6 +9,7 @@
 #import "Events.h"
 #import "EventsGuestList.h"
 #import "EventsGuestListCell.h"
+#import "AnalyticManager.h"
 
 @implementation EventsGuestList {
     NSString *lastEventId;
@@ -105,7 +106,7 @@
     [self.sharedData.cAddEventDict removeAllObjects];
     [self.sharedData.cAddEventDict addEntriesFromDictionary:self.mainDict];
     
-    [self.sharedData trackMixPanelIncrementWithDict:@{@"host_here":@1}];
+    [[AnalyticManager sharedManager] trackMixPanelIncrementWithDict:@{@"host_here":@1}];
     
     [[NSNotificationCenter defaultCenter]
      postNotificationName:@"SHOW_BOOKTABLE"
@@ -235,7 +236,7 @@
     [manager GET:url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject)
      {
          NSLog(@"EVENTS_GUEST_LIST_RESPONSE :: %@",responseObject);
-         [self.sharedData trackMixPanelWithDict:@"View Guest Listings" withDict:self.sharedData.mixPanelCEventDict];
+         [[AnalyticManager sharedManager] trackMixPanelWithDict:@"View Guest Listings" withDict:self.sharedData.mixPanelCEventDict];
          [self populateData:responseObject];
      } failure:^(AFHTTPRequestOperation *operation, NSError *error)
      {

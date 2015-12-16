@@ -7,6 +7,7 @@
 //
 
 #import "MyHostings.h"
+#import "AnalyticManager.h"
 
 #define PICKER_PADDING (60*60*24*3) //Allow 1 days just so the picker isnt so restrictive
 #define DATE_DISPLAY @"EEE, MMM d, yyyy h:mm a" //This is shown to the user
@@ -448,7 +449,7 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:@"SHOW_HOSTING_INVITE" object:self];
     
     //Mixpanel
-    [self.sharedData trackMixPanelWithDict:@"Share Hosting" withDict:@{@"origin":@"MyHostings"}];
+    [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Share Hosting" withDict:@{@"origin":@"MyHostings"}];
 }
 
 -(void)addEditTapHandler
@@ -569,7 +570,7 @@
      {
          NSLog(@"MY_HOSTINGS :: %@",responseObject);
          
-         [self.sharedData trackMixPanelWithDict:@"View MyHostings" withDict:@{}];
+         [[AnalyticManager sharedManager] trackMixPanelWithDict:@"View MyHostings" withDict:@{}];
          
          self.hasHostings = ([responseObject count] > 0);
          self.isHostingsLoaded = YES;
@@ -1051,9 +1052,8 @@
      {
          NSLog(@"DELETE_HOSTING :: %@",responseObject);
          
-         [self.sharedData trackMixPanelWithDict:@"Delete Hosting" withDict:@{}];
-         
-         [self.sharedData trackMixPanelIncrementWithDict:@{@"delete_hosting":@1}];
+         [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Delete Hosting" withDict:@{}];
+         [[AnalyticManager sharedManager] trackMixPanelIncrementWithDict:@{@"delete_hosting":@1}];
          
          [self loadData];
          
@@ -1137,9 +1137,9 @@
          }
          
          
-         [self.sharedData trackMixPanelWithDict:@"Add Hosting" withDict:@{@"origin":origin}];
+         [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Add Hosting" withDict:@{@"origin":origin}];
          
-         [self.sharedData trackMixPanelIncrementWithDict:@{@"create_hosting":@1}];
+         [[AnalyticManager sharedManager] trackMixPanelIncrementWithDict:@{@"create_hosting":@1}];
          
          //[self.sharedData trackMixPanel:@"create_hosting_saved"];
          [self goBack];
@@ -1201,8 +1201,8 @@
          }
          
          
-         [self.sharedData trackMixPanelWithDict:@"Add Hosting" withDict:@{@"origin":@"MyHostings Admin Event"}];
-         [self.sharedData trackMixPanelIncrementWithDict:@{@"create_hosting":@1}];
+         [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Add Hosting" withDict:@{@"origin":@"MyHostings Admin Event"}];
+         [[AnalyticManager sharedManager] trackMixPanelIncrementWithDict:@{@"create_hosting":@1}];
          
          NSLog(@"ADD_EXISTING_HOSTING_RESPONSE :: %@",responseObject);
          //[self.sharedData trackMixPanel:@"create_hosting_saved"];
@@ -1282,8 +1282,8 @@
          }
          
          
-         [self.sharedData trackMixPanelWithDict:@"Update Hosting" withDict:@{}];
-         [self.sharedData trackMixPanelIncrementWithDict:@{@"update_hosting":@1}];
+         [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Update Hosting" withDict:@{}];
+         [[AnalyticManager sharedManager] trackMixPanelIncrementWithDict:@{@"update_hosting":@1}];
          
          //[self.sharedData trackMixPanel:@"edit_hosting_updated"];
          [self goBack];

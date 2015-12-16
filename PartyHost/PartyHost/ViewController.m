@@ -7,6 +7,7 @@
 //
 
 #import "ViewController.h"
+#import "AnalyticManager.h"
 
 @interface ViewController ()
 
@@ -202,7 +203,7 @@
 {
     self.sharedData.walkthroughOn = NO;
     self.canPoll = NO;
-    [self.sharedData trackMixPanel:@"display_login"];
+    [[AnalyticManager sharedManager] trackMixPanel:@"display_login"];
     [self showLoading];
     self.signupView.hidden = NO;
     [self.signupView initClass];

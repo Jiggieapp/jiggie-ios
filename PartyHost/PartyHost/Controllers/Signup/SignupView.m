@@ -7,6 +7,7 @@
 //
 
 #import "SignupView.h"
+#import "AnalyticManager.h"
 
 #define SET_IF_NOT_NULL(TARGET, VAL) if(VAL && VAL != [NSNull null]) { TARGET = VAL; } else {TARGET = @"";}
 
@@ -562,35 +563,24 @@
              NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
              
              
+             AnalyticManager *analyticManager = [AnalyticManager sharedManager];
              if([responseObject[@"is_new_user"] boolValue])
              {
-                 [self.sharedData setMixPanelOnSignUp];
-                 [self.sharedData trackMixPanelWithDict:@"Sign Up" withDict:@{}];
-                 [self.sharedData setMixPanelOnceParams];
+                 [analyticManager setMixPanelOnSignUp];
+                 [analyticManager trackMixPanelWithDict:@"Sign Up" withDict:@{}];
+                 [analyticManager setMixPanelOnceParams];
              }else{
                  // tech debt : set dummy profile!!
-                 [self.sharedData createMixPanelDummyProfile];
-                 
-                 
-                 [self.sharedData setMixPanelOnLogin];
+                 [analyticManager createMixPanelDummyProfile];
+                 [analyticManager setMixPanelOnLogin];
                 
                  NSString *isFirst = ([defaults objectForKey:@"FIRST_RUN"])?@"NO":@"YES";
                  
-                 
-                 [self.sharedData trackMixPanelWithDict:@"Log In" withDict:@
-                 {
-                     @"new_device":isFirst
-                 }];
-                 [self.sharedData trackMixPanelIncrementWithDict:@{@"login_count":@1}];
+                 [analyticManager trackMixPanelWithDict:@"Log In" withDict:@{@"new_device":isFirst}];
+                 [analyticManager trackMixPanelIncrementWithDict:@{@"login_count":@1}];
              }
-             
-             
-             
-             
-             
-             [self.sharedData setMixPanelUserProfile];
-             
-             [self.sharedData setMixPanelSuperProperties];
+             [analyticManager setMixPanelUserProfile];
+             [analyticManager setMixPanelSuperProperties];
              [self checkAppsFlyerData];
              [self performSelector:@selector(getUserImages) withObject:nil afterDelay:2.0];
              

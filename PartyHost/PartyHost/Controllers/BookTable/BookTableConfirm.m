@@ -10,6 +10,7 @@
 #import "BookTableConfirm.h"
 #import "BookTableDetailsCell.h"
 #import "BookTableConfirmCreditCell.h"
+#import "AnalyticManager.h"
 
 #define CELL_HEIGHT 64
 #define CELLS_SHOWN 2
@@ -173,7 +174,7 @@
     [tmpDict addEntriesFromDictionary:self.sharedData.mixPanelCEventDict];
     [tmpDict addEntriesFromDictionary:self.sharedData.bookTable.selectedTicket];
     
-    [self.sharedData trackMixPanelWithDict:@"Ticket Details Purchase Confirmation View" withDict:tmpDict];
+    [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Ticket Details Purchase Confirmation View" withDict:tmpDict];
     
     
 
@@ -448,7 +449,7 @@
          
          if(![responseObject[@"success"] boolValue]) {
 
-            [self.sharedData trackMixPanelWithDict:@"Ticket Purchase Fail" withDict:tmpDict];
+             [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Ticket Purchase Fail" withDict:tmpDict];
              UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Invalid Booking" message:responseObject[@"reason"] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
              [alert show];
              
@@ -459,11 +460,7 @@
              return;
          }
          else {
-             
-             
-             
-             [self.sharedData trackMixPanelWithDict:@"Ticket Purchase Success" withDict:tmpDict];
-             
+             [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Ticket Purchase Success" withDict:tmpDict];
              
              [[NSNotificationCenter defaultCenter]
               postNotificationName:@"GO_BOOKTABLE_COMPLETE"
@@ -477,7 +474,7 @@
          NSData *data = [operation.responseString dataUsingEncoding:NSUTF8StringEncoding];
          id json = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
          
-         [self.sharedData trackMixPanelWithDict:@"Ticket Purchase Fail" withDict:tmpDict];
+         [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Ticket Purchase Fail" withDict:tmpDict];
          
          [[NSNotificationCenter defaultCenter]
           postNotificationName:@"HIDE_LOADING"

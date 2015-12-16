@@ -8,6 +8,7 @@
 
 #import "MemberReviews.h"
 #import "MemberReviewCell.h"
+#import "AnalyticManager.h"
 
 @implementation MemberReviews
 
@@ -115,7 +116,7 @@
      {
          NSLog(@"MEMBER_REVIEWS RESPONSE :: %@",responseObject);
          
-         [self.sharedData trackMixPanelWithDict:@"View Reviews" withDict:@{}];
+         [[AnalyticManager sharedManager] trackMixPanelWithDict:@"View Reviews" withDict:@{}];
          self.isLoaded = YES;
          if([responseObject count] > 0)
          {

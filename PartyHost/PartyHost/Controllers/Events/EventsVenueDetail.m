@@ -7,6 +7,7 @@
 //
 
 #import "EventsVenueDetail.h"
+#import "AnalyticManager.h"
 
 @implementation EventsVenueDetail
 
@@ -109,7 +110,7 @@
     [self.sharedData.mixPanelCEventDict setObject:dict[@"venue"][@"description"] forKey:@"Event Venue Description"];
     [self.sharedData.mixPanelCEventDict setObject:dict[@"venue"][@"zip"] forKey:@"Event Venue Zip"];
     
-    [self.sharedData trackMixPanelWithDict:@"View Event Details" withDict:self.sharedData.mixPanelCEventDict];
+    [[AnalyticManager sharedManager] trackMixPanelWithDict:@"View Event Details" withDict:self.sharedData.mixPanelCEventDict];
     //[self.sharedData trackMixPanel:@"display_venue_details"];
     
     //Title

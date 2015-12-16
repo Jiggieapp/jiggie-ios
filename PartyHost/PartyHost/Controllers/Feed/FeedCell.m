@@ -9,7 +9,7 @@
 
 
 #import "FeedCell.h"
-
+#import "AnalyticManager.h"
 
 #define CIRCLE_SIZE 44
 #define INNER_PADDING 12
@@ -587,7 +587,8 @@
     
     // [paramsToSend setObject:[self.feedData objectAtIndex:0][@"type"] forKey:@"feed_item_type"];
     
-    [self.sharedData trackMixPanelWithDict:@"Accept Feed Item" withDict:@{
+    AnalyticManager *analyticManager = [AnalyticManager sharedManager];
+    [analyticManager trackMixPanelWithDict:@"Accept Feed Item" withDict:@{
                                                                         @"ABTestChat":val,
                                                                         @"feed_item_type":self.mainData[@"type"]
                                                                         }];
@@ -595,8 +596,8 @@
     
     //[self.sharedData trackMixPanelWithDict:@"Accept Feed Item" withDict:@{}];
     
-    [self.sharedData trackMixPanelIncrementWithDict:@{@"feed_item_accept":@1}];
-    [self.sharedData trackMixPanelIncrementWithDict:@{@"feed_item_response":@1}];
+    [analyticManager trackMixPanelIncrementWithDict:@{@"feed_item_accept":@1}];
+    [analyticManager trackMixPanelIncrementWithDict:@{@"feed_item_response":@1}];
     
     AFHTTPRequestOperationManager *manager = [self.sharedData getOperationManager];
     
@@ -638,7 +639,9 @@
     }else{
         val = @"Chat";
     }
-    [self.sharedData trackMixPanelWithDict:@"Passed Feed Item" withDict:@{
+    
+    AnalyticManager *analyticManager = [AnalyticManager sharedManager];
+    [analyticManager trackMixPanelWithDict:@"Passed Feed Item" withDict:@{
                                                                           @"ABTestChat":val,
                                                                           @"feed_item_type":self.mainData[@"type"]
                                                                           }];
@@ -646,8 +649,8 @@
     
     //[self.sharedData trackMixPanelWithDict:@"Passed Feed Item" withDict:@{}];
     
-    [self.sharedData trackMixPanelIncrementWithDict:@{@"feed_item_passed":@1}];
-    [self.sharedData trackMixPanelIncrementWithDict:@{@"feed_item_response":@1}];
+    [analyticManager trackMixPanelIncrementWithDict:@{@"feed_item_passed":@1}];
+    [analyticManager trackMixPanelIncrementWithDict:@{@"feed_item_response":@1}];
     
     AFHTTPRequestOperationManager *manager = [self.sharedData getOperationManager];
     
@@ -817,35 +820,35 @@
          
          //[self.sharedData trackMixPanelWithDict:@"Ticket List View" withDict:tmpDict];
          
+         AnalyticManager *analyticManager = [AnalyticManager sharedManager];
          
          if([apiChoice isEqualToString:@"invite"])
          {
-             [self.sharedData trackMixPanelWithDict:@"Sent Event Invite" withDict:tmpDict];
-             
-             [self.sharedData trackMixPanelIncrementWithDict:@{@"send_invite":@1}];
+             [analyticManager trackMixPanelWithDict:@"Sent Event Invite" withDict:tmpDict];
+             [analyticManager trackMixPanelIncrementWithDict:@{@"send_invite":@1}];
          }
          
          if([apiChoice isEqualToString:@"accepted"])
          {
              [tmpDict setObject:@"type" forKey:typeCell];
-             [self.sharedData trackMixPanelWithDict:@"Accept Feed Item" withDict:tmpDict];
-             [self.sharedData trackMixPanelIncrementWithDict:@{@"accept_feed_item":@1}];
+             [analyticManager trackMixPanelWithDict:@"Accept Feed Item" withDict:tmpDict];
+             [analyticManager trackMixPanelIncrementWithDict:@{@"accept_feed_item":@1}];
          }
          
          
          if([apiChoice isEqualToString:@"passed"])
          {
              [tmpDict setObject:@"type" forKey:typeCell];
-             [self.sharedData trackMixPanelWithDict:@"Passed Feed Item" withDict:tmpDict];
-             [self.sharedData trackMixPanelIncrementWithDict:@{@"pass_feed_item":@1}];
+             [analyticManager trackMixPanelWithDict:@"Passed Feed Item" withDict:tmpDict];
+             [analyticManager trackMixPanelIncrementWithDict:@{@"pass_feed_item":@1}];
          }
          
          //[self.sharedData trackMixPanelIncrementWithDict:@{@"send_invite":@1}];
          
          if([apiChoice isEqualToString:@"rejected"])
          {
-             [self.sharedData trackMixPanelWithDict:@"Invitation Rejection" withDict:tmpDict];
-             [self.sharedData trackMixPanelIncrementWithDict:@{@"reject_invite":@1}];
+             [analyticManager trackMixPanelWithDict:@"Invitation Rejection" withDict:tmpDict];
+             [analyticManager trackMixPanelIncrementWithDict:@{@"reject_invite":@1}];
          }
 
          

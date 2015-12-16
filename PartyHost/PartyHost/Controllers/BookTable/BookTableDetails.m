@@ -11,6 +11,7 @@
 
 #import "BookTable.h"
 #import "BookTableDetails.h"
+#import "AnalyticManager.h"
 
 #define CELL_HEIGHT 64
 
@@ -182,7 +183,7 @@
     [tmpDict addEntriesFromDictionary:self.sharedData.mixPanelCEventDict];
     [tmpDict addEntriesFromDictionary:self.sharedData.bookTable.selectedTicket];
     
-    [self.sharedData trackMixPanelWithDict:@"Ticket Details View" withDict:tmpDict];
+    [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Ticket Details View" withDict:tmpDict];
 }
 
 -(void)btnCancelClicked

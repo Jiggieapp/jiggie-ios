@@ -9,6 +9,7 @@
 #import "Events.h"
 #import "BookTable.h"
 #import "BookTableHostingComplete.h"
+#import "AnalyticManager.h"
 
 @implementation BookTableHostingComplete
 
@@ -100,7 +101,7 @@
     [tmpDict addEntriesFromDictionary:self.sharedData.mixPanelCEventDict];
     //[tmpDict addEntriesFromDictionary:self.sharedData.bookTable.selectedTicket];
     
-    [self.sharedData trackMixPanelWithDict:@"Add Hosting Complete View" withDict:tmpDict];
+    [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Add Hosting Complete View" withDict:tmpDict];
 }
 
 -(void)btnHelpClicked

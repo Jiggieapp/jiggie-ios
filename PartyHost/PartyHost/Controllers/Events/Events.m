@@ -8,6 +8,7 @@
 
 
 #import "Events.h"
+#import "AnalyticManager.h"
 
 #define SCREENS_DEEP 4
 
@@ -344,7 +345,7 @@
          self.isEventsLoaded = YES;
          self.backgroundColor = [UIColor phPurpleColor];
          self.whiteBK.hidden = NO;
-         [self.sharedData trackMixPanelWithDict:@"View Events" withDict:@{}];
+         [[AnalyticManager sharedManager] trackMixPanelWithDict:@"View Events" withDict:@{}];
          
          NSLog(@"EVENTS_RESPONSE :: %@",responseObject);
          if([[self eventsA] isEqualToArray:responseObject] && [responseObject count] > 0)
@@ -487,7 +488,7 @@
          self.didLoadFromInvite = YES;
          //[self loadData];
          //[self performSelector:@selector(loadData) withObject:nil afterDelay:2.0];
-         [self.sharedData trackMixPanelWithDict:@"Sent Event Invite" withDict:@{@"origin":@"guestlisting"}];
+         [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Sent Event Invite" withDict:@{@"origin":@"guestlisting"}];
          
          
          [[NSNotificationCenter defaultCenter]

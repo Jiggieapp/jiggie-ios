@@ -8,7 +8,7 @@
 
 #import "Events.h"
 #import "EventsHostingsList.h"
-
+#import "AnalyticManager.h"
 
 @implementation EventsHostingsList {
     NSString *lastEventId;
@@ -145,7 +145,7 @@
      {
          NSLog(@"EVENTS_HOSTINGS_LIST_RESPONSE :: %@",responseObject);
          
-         [self.sharedData trackMixPanelWithDict:@"View Host Listings" withDict:self.sharedData.mixPanelCEventDict];
+         [[AnalyticManager sharedManager] trackMixPanelWithDict:@"View Host Listings" withDict:self.sharedData.mixPanelCEventDict];
          
          [self populateData:responseObject];
          

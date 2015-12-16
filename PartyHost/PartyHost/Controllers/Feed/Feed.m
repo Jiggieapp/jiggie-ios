@@ -8,6 +8,7 @@
 
 #import "Feed.h"
 #import "FeedCell.h"
+#import "AnalyticManager.h"
 
 #define POLL_SECONDS 25
 
@@ -174,7 +175,7 @@
              [self loadData];
          }
          
-         [self.sharedData trackMixPanelWithDict:@"Socialize Toggle" withDict:@{@"toggle":matchMe}];
+         [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Socialize Toggle" withDict:@{@"toggle":matchMe}];
          
          [[NSNotificationCenter defaultCenter]
           postNotificationName:@"HIDE_LOADING"
@@ -246,7 +247,7 @@
     [self.sharedData.feedBadge updateValue:0];
     [self.sharedData updateBadgeIcon];
      */
-    [self.sharedData trackMixPanelWithDict:@"View Social Feed" withDict:@{}];
+    [[AnalyticManager sharedManager] trackMixPanelWithDict:@"View Social Feed" withDict:@{}];
     //[self.sharedData trackMixPanel:@"feed_tab"];
     [self loadData];
     
@@ -308,13 +309,13 @@
              }
              
              
-             [self.sharedData trackMixPanelWithDict:@"View Feed Item" withDict:paramsToSend];
+             [[AnalyticManager sharedManager] trackMixPanelWithDict:@"View Feed Item" withDict:paramsToSend];
          }else{
              NSLog(@"WTFWTFWTWFWT");
          }
          
          
-         [self.sharedData trackMixPanelWithDict:@"New Feed Item" withDict:@{}];
+         [[AnalyticManager sharedManager] trackMixPanelWithDict:@"New Feed Item" withDict:@{}];
          
          //Clear table
          [self.feedData removeAllObjects];

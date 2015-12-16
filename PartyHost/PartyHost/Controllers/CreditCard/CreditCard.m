@@ -8,6 +8,7 @@
 
 #import "More.h"
 #import "CreditCard.h"
+#import "AnalyticManager.h"
 
 #define SCREEN_LEVELS 2
 
@@ -155,7 +156,7 @@
              [self keyboardOn];
      }];
     
-    [self.sharedData trackMixPanelWithDict:@"Credit Card List" withDict:@{}];
+    [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Credit Card List" withDict:@{}];
 }
 
 -(void)exitHandler
@@ -601,7 +602,7 @@ NSMutableString *filteredCreditCardStringFromStringWithFilter(NSString *string, 
          
          if(![responseObject[@"success"] boolValue]) {
              
-             [self.sharedData trackMixPanelWithDict:@"Credit Card Add Fail" withDict:@{}];
+             [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Credit Card Add Fail" withDict:@{}];
              UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Credit Card Invalid" message:responseObject[@"reason"] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
              alert.tag = 1;
              [alert show];
@@ -609,7 +610,7 @@ NSMutableString *filteredCreditCardStringFromStringWithFilter(NSString *string, 
              return;
          }
          else {
-             [self.sharedData trackMixPanelWithDict:@"Credit Card Add Success" withDict:@{}];
+             [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Credit Card Add Success" withDict:@{}];
              
              self.sharedData.ccLast4 = responseObject[@"data"][@"creditCard"][@"last4"];
              self.sharedData.ccName = responseObject[@"data"][@"creditCard"][@"cardholderName"];

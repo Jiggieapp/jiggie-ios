@@ -7,6 +7,7 @@
 //
 
 #import "EventsGuestListCell.h"
+#import "AnalyticManager.h"
 
 #define SET_IF_NOT_NULL(TARGET, VAL) if(VAL && VAL != [NSNull null]) { TARGET = VAL; }else {TARGET = @"";}
 
@@ -276,7 +277,7 @@
     [manager POST:url parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject)
      {
          NSLog(@"INVITE_GUEST_RESPONSE responseObject :: %@",responseObject);
-         [self.sharedData trackMixPanelWithDict:@"Sent Event invite" withDict:@{@"origin":@"guestlisting"}];
+         [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Sent Event invite" withDict:@{@"origin":@"guestlisting"}];
          
          //Set object to yes
          //self.userDict[@"is_invited"] = @YES;

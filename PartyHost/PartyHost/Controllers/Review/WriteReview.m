@@ -10,6 +10,7 @@
 #import "EventsHostDetail.h"
 #import "WriteReview.h"
 #import "MemberProfile.h"
+#import "AnalyticManager.h"
 
 #define REVIEW_PLACEHOLDER @"Write your review here ..."
 
@@ -176,7 +177,7 @@
           postNotificationName:@"HIDE_LOADING"
           object:self];
          
-         [self.sharedData trackMixPanelWithDict:@"Reviews Write" withDict:@{}];
+         [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Reviews Write" withDict:@{}];
          
          UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Success" message:@"Your review has been submitted!" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
          [alert show];

@@ -7,6 +7,7 @@
 //
 
 #import "BookTable.h"
+#import "AnalyticManager.h"
 #import "BookTableComplete.h"
 
 @implementation BookTableComplete
@@ -126,7 +127,7 @@
     NSMutableDictionary *tmpDict = [[NSMutableDictionary alloc] init];
     [tmpDict addEntriesFromDictionary:self.sharedData.mixPanelCEventDict];
     [tmpDict addEntriesFromDictionary:self.sharedData.bookTable.selectedTicket];
-    [self.sharedData trackMixPanelWithDict:@"Purchase Complete View" withDict:tmpDict];
+    [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Purchase Complete View" withDict:tmpDict];
     
 }
 

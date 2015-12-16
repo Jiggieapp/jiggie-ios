@@ -8,6 +8,7 @@
 
 #import "BookTable.h"
 #import "BookTableOffering.h"
+#import "AnalyticManager.h"
 
 @implementation BookTableOffering
 
@@ -134,7 +135,7 @@
     [tmpDict addEntriesFromDictionary:self.sharedData.mixPanelCEventDict];
     //[tmpDict addEntriesFromDictionary:self.sharedData.bookTable.selectedTicket];
     
-    [self.sharedData trackMixPanelWithDict:@"Add Hostings Offerings View" withDict:tmpDict];
+    [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Add Hostings Offerings View" withDict:tmpDict];
 }
 
 -(void)reset

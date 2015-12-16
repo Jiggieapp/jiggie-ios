@@ -9,6 +9,7 @@
 #import "More.h"
 #import "PhoneVerify.h"
 #import "PhoneVerifyValidate.h"
+#import "AnalyticManager.h"
 
 @implementation PhoneVerifyValidate
 {
@@ -146,7 +147,7 @@
          
          if(![responseObject[@"success"] boolValue]) {
              
-             [self.sharedData trackMixPanelWithDict:@"Phone Verification Fail" withDict:@{}];
+             [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Phone Verification Fail" withDict:@{}];
              UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Validation Incorrect" message:@"Please check the number and try again." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
              alert.tag = 1;
              [alert show];
@@ -154,7 +155,7 @@
              return;
          }
          else {
-             [self.sharedData trackMixPanelWithDict:@"Phone Verification Success" withDict:@{}];
+             [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Phone Verification Success" withDict:@{}];
              //Set phone now
              self.sharedData.phone = [self.sharedData.phoneVerify.phone stringByReplacingOccurrencesOfString:@"+" withString:@""];
              
@@ -168,7 +169,7 @@
          }
      } failure:^(AFHTTPRequestOperation *operation, NSError *error)
      {
-         [self.sharedData trackMixPanelWithDict:@"Phone Verification Fail" withDict:@{}];
+         [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Phone Verification Fail" withDict:@{}];
          NSLog(@"PHONE_VERIFY_SEND_ERROR :: %@",error);
          [[NSNotificationCenter defaultCenter]
           postNotificationName:@"HIDE_LOADING"
