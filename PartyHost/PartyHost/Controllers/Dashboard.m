@@ -628,7 +628,7 @@
     [self updatePages];
     if(oldIndex == 3)
     {
-        [self.morePage checkIfGoBack];
+//        [self.morePage checkIfGoBack];
     }
 }
 
@@ -639,7 +639,7 @@
     [self updatePages];
     if(oldIndex == 3)
     {
-        [self.morePage checkIfGoBack];
+//        [self.morePage checkIfGoBack];
     }
     [self.morePage goToHosting];
 }

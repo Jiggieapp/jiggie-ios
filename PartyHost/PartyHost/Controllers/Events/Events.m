@@ -33,8 +33,6 @@
     self.didLoadFromInvite = NO;
     
     
-    
-    
     self.mainCon = [[UIView alloc] initWithFrame:CGRectMake(0, 20, self.sharedData.screenWidth * SCREENS_DEEP, self.sharedData.screenHeight - PHTabHeight)];
 
     self.mainCon.layer.masksToBounds = YES;
@@ -265,32 +263,6 @@
     }
 }
 
-
--(void)goHome
-{
-    self.sharedData.isGuestListingsShowing = NO;
-    [UIView animateWithDuration:0.25 animations:^()
-     {
-         self.mainCon.frame = CGRectMake(0, 20, self.sharedData.screenWidth * SCREENS_DEEP, self.sharedData.screenHeight - 20);
-     } completion:^(BOOL finished)
-     {
-         [self loadData];
-     }];
-}
-
--(void)goHomeNoLoad
-{
-    self.sharedData.isGuestListingsShowing = NO;
-    [UIView animateWithDuration:0.25 animations:^()
-     {
-         self.mainCon.frame = CGRectMake(0, 20, self.sharedData.screenWidth * SCREENS_DEEP, self.sharedData.screenHeight - 20);
-     } completion:^(BOOL finished)
-     {
-        
-     }];
-}
-
-
 -(void)eventsPreSelectHandler
 {
     [self tableView:self.eventsList didSelectRowAtIndexPath:self.sharedData.cHost_index_path];
@@ -308,7 +280,7 @@
 
 -(void)goToNextSection
 {
-     NSUInteger sectionNumber = [[self.eventsList indexPathForCell:[[self.eventsList visibleCells] objectAtIndex:0]] section];
+    NSUInteger sectionNumber = [[self.eventsList indexPathForCell:[[self.eventsList visibleCells] objectAtIndex:0]] section];
     sectionNumber = (sectionNumber + 1 < [self.eventsA count])?sectionNumber + 1:sectionNumber;
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:sectionNumber];
     [self.eventsList scrollToRowAtIndexPath:indexPath
@@ -326,6 +298,7 @@
                                    animated:YES];
 }
 
+#pragma mark - API
 -(void)loadData 
 {
     self.isLoading = YES;
@@ -399,7 +372,6 @@
          if(self.sharedData.isGuestListingsShowing)
          {
              NSLog(@"GUEST_LISTINGS_SHOWING.....");
-             //[self.eventsList selectRowAtIndexPath:self.cGuestListingIndexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
              [self tableView:self.eventsList didSelectRowAtIndexPath:self.cGuestListingIndexPath];
          }
          
@@ -558,23 +530,12 @@
             @finally {
                 
             }
-            
-            
+
             //[self.sharedData loadImageCue:picURL];
             [self.sharedData loadTimeImage:picURL withTimeOut:count * .25];
             count++;
         }
     }
-}
-
--(void)successSelector
-{
-    
-}
-
--(void)failureSelector
-{
-    
 }
 
 #pragma mark - UITableViewDataSource
@@ -689,6 +650,30 @@
 }
 
 #pragma mark - Navigations
+
+-(void)goHome
+{
+    self.sharedData.isGuestListingsShowing = NO;
+    [UIView animateWithDuration:0.25 animations:^()
+     {
+         self.mainCon.frame = CGRectMake(0, 20, self.sharedData.screenWidth * SCREENS_DEEP, self.sharedData.screenHeight - 20);
+     } completion:^(BOOL finished)
+     {
+         [self loadData];
+     }];
+}
+
+-(void)goHomeNoLoad
+{
+    self.sharedData.isGuestListingsShowing = NO;
+    [UIView animateWithDuration:0.25 animations:^()
+     {
+         self.mainCon.frame = CGRectMake(0, 20, self.sharedData.screenWidth * SCREENS_DEEP, self.sharedData.screenHeight - 20);
+     } completion:^(BOOL finished)
+     {
+         
+     }];
+}
 
 //2nd Screen (VENUE+LIST)
 -(void)goToSummary

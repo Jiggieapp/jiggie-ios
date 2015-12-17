@@ -34,13 +34,11 @@
 @property(nonatomic,strong) UILabel         *userProfileName;
 @property(nonatomic,strong) UIButton        *userProfilePhone;
 @property(nonatomic,strong) UITableView     *moreList;
-@property(nonatomic,strong) UIButton        *logoutButton;
 @property(nonatomic,assign) BOOL            isLoaded;
 @property(nonatomic,strong) NSMutableDictionary *settingsData;
 @property(nonatomic,strong) EmptyView *emptyView;
 
 -(void)initClass;
--(void)checkIfGoBack;
 -(void)goPrivacy;
 -(void)goTerms;
 -(void)goToHosting;

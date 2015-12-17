@@ -122,7 +122,6 @@
     [self.mainScroll addSubview:self.separator1];
     
     self.listingContainer = [[UIView alloc] init];
-    //self.listingContainer.backgroundColor = [UIColor greenColor];
     [self.mainScroll addSubview:self.listingContainer];
     UITapGestureRecognizer *seeAllTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(infoButtonClicked)];
     [self.listingContainer addGestureRecognizer:seeAllTap];
@@ -160,23 +159,12 @@
     layout.minimumInteritemSpacing = 8.f;
     layout.minimumLineSpacing = 8.f;
     
-    //UICollectionViewLeftAlignedLayout *layout=[[UICollectionViewLeftAlignedLayout alloc] init];
-    //UICollectionViewFlowLayout *layout=[[UICollectionViewFlowLayout alloc] init];
     self.tagCollection = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:layout];
     [self.tagCollection registerClass:[SetupPickViewCell class] forCellWithReuseIdentifier:@"EventsSummaryTagCell"];
     self.tagCollection.delegate = self;
     self.tagCollection.dataSource = self;
     self.tagCollection.backgroundColor = [UIColor clearColor];
     [self.mainScroll addSubview:self.tagCollection];
-    
-//    self.eventDate = [[UILabel alloc] init];
-//    self.eventDate.font = [UIFont phBold:12];
-//    self.eventDate.textAlignment = NSTextAlignmentCenter;
-//    self.eventDate.textColor = [UIColor colorWithWhite:0 alpha:0.25];
-//    self.eventDate.userInteractionEnabled = NO;
-//    self.eventDate.backgroundColor = [UIColor clearColor];
-//    self.eventDate.adjustsFontSizeToFitWidth = YES;
-//    [self.mainScroll addSubview:self.eventDate];
     
     self.aboutBody = [[UITextView alloc] init];
     self.aboutBody.font = [UIFont phBlond:12];
@@ -245,7 +233,73 @@
     return self;
 }
 
+-(void)reset
+{
+    self.btnHostHere.hidden = YES;
+    
+    if([lastEventId isEqualToString:self.event_id]) return;
+    if(self.event_id!=nil) lastEventId = [NSString stringWithString:self.event_id];
+    
+    [self.emptyView setMode:@"load"];
+    
+    //Add to view count if guest
+    [self addViewCount];
+    
+    //Clear NavBar
+    self.title.text = @"";
+    
+    self.separator1.hidden = YES;
+    
+    //Clear text
+    [self.btnHostHere setTitle:@"" forState:UIControlStateNormal];
+    
+    //Clear pics
+    self.picScroll.contentOffset = CGPointMake(0, 0);
+    [self.picScroll.subviews makeObjectsPerformSelector: @selector(removeFromSuperview)];
+    
+    //Clear users
+    [self.userContainer.subviews makeObjectsPerformSelector: @selector(removeFromSuperview)];
+    
+    //Clear tags
+    [self.tagArray removeAllObjects];
+    [self.tagCollection reloadData];
+    
+    //Title
+    self.venueName.text = @"";
+    self.aboutBody.text = @"";
+    self.seeAllLabel.text = @"";
+    self.hostNum.text = @"";
+    self.eventDate.text = @"";
+    
+    //See map
+    self.seeAllView.hidden = YES;
+    self.seeAllCaret.hidden = YES;
+    self.seeMapView.hidden = YES;
+    self.seeMapCaret.hidden = YES;
+    self.seeMapLabel.text = @"";
+    
+    //Rescroll
+    self.mainScroll.contentOffset = CGPointMake(0, 0);
+    [self.mainScroll setFrame:CGRectMake(0,
+                                         self.tabBar.bounds.size.height,
+                                         self.sharedData.screenWidth,
+                                         self.sharedData.screenHeight - self.tabBar.bounds.size.height - PHTabHeight)];
+    
+    self.isLoaded = NO;
+}
 
+-(void)initClass
+{
+}
+
+-(void)goBack
+{
+    [[NSNotificationCenter defaultCenter]
+     postNotificationName:@"EVENTS_GO_HOME"
+     object:self];
+}
+
+#pragma mark - Button Action
 -(void)goShareHandler
 {
     NSLog(@">>> %@",self.sharedData.selectedHost);
@@ -259,45 +313,53 @@
      self.sharedData.cHostVenuePicURL = [Constants eventImageURL:self.sharedData.selectedEvent[@"_id"]]; //Need for SHARE HOSTING
      */
     
+    @try {
+        [self.sharedData.mixPanelCEventDict removeAllObjects];
+        [self.sharedData.mixPanelCEventDict setObject:self.sharedData.eventDict[@"_id"] forKey:@"Event Id"];
+        [self.sharedData.mixPanelCEventDict setObject:self.sharedData.eventDict[@"title"] forKey:@"Event Name"];
+        [self.sharedData.mixPanelCEventDict setObject:self.sharedData.eventDict[@"start_datetime_str"] forKey:@"Event Start Time"];
+        [self.sharedData.mixPanelCEventDict setObject:self.sharedData.eventDict[@"end_datetime_str"] forKey:@"Event End Time"];
+        [self.sharedData.mixPanelCEventDict setObject:self.sharedData.eventDict[@"description"] forKey:@"Event Description"];
+        [self.sharedData.mixPanelCEventDict setObject:self.sharedData.eventDict[@"venue_name"] forKey:@"Event Venue Name"];
+        [self.sharedData.mixPanelCEventDict setObject:self.sharedData.eventDict[@"venue"][@"neighborhood"] forKey:@"Event Venue Neighborhood"];
+        [self.sharedData.mixPanelCEventDict setObject:self.sharedData.eventDict[@"venue"][@"city"] forKey:@"Event Venue City"];
+        //[self.sharedData.mixPanelCEventDict setObject:responseObject[@"venue"][@"state"] forKey:@"Event Venue State"];
+        [self.sharedData.mixPanelCEventDict setObject:self.sharedData.eventDict[@"venue"][@"description"] forKey:@"Event Venue Description"];
+        [self.sharedData.mixPanelCEventDict setObject:self.sharedData.eventDict[@"venue"][@"zip"] forKey:@"Event Venue Zip"];
+        
+        
+        
+        NSMutableDictionary *tmpDict = [[NSMutableDictionary alloc] init];
+        [tmpDict setObject:self.sharedData.userDict[@"first_name"] forKey:@"Inviter First Name"];
+        [tmpDict setObject:self.sharedData.userDict[@"last_name"] forKey:@"Inviter Last Name"];
+        [tmpDict setObject:[NSString stringWithFormat:@"%@ %@",self.sharedData.userDict[@"first_name"],self.sharedData.userDict[@"last_name"]] forKey:@"Inviter Whole Name"];
+        [tmpDict setObject:self.sharedData.userDict[@"fb_id"] forKey:@"Inviter FB ID"];
+        [tmpDict setObject:self.sharedData.userDict[@"email"] forKey:@"Inviter Email"];
+        [tmpDict setObject:self.sharedData.userDict[@"gender"] forKey:@"Inviter Gender"];
+        [tmpDict setObject:self.sharedData.userDict[@"birthday"] forKey:@"Inviter Birthday"];
+        [tmpDict setObject:@"event" forKey:@"type"];
+        
+        [self.sharedData.mixPanelCEventDict addEntriesFromDictionary:tmpDict];
+        
+        
+        self.sharedData.shareHostingId = self.event_id;
+        
+        self.sharedData.shareHostingVenueName = self.sharedData.eventDict[@"venue_name"];
+        
+        self.sharedData.cHostVenuePicURL = self.sharedData.eventDict[@"photos"][0];
+        
+        [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Share Event" withDict:self.sharedData.mixPanelCEventDict];
+        
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"SHOW_HOSTING_INVITE" object:self];
+    }
+    @catch (NSException *exception) {
+        NSLog(@"SHARE_ERROR");
+    }
+    @finally {
+        
+    }
     
-    [self.sharedData.mixPanelCEventDict removeAllObjects];
-    [self.sharedData.mixPanelCEventDict setObject:self.sharedData.eventDict[@"_id"] forKey:@"Event Id"];
-    [self.sharedData.mixPanelCEventDict setObject:self.sharedData.eventDict[@"title"] forKey:@"Event Name"];
-    [self.sharedData.mixPanelCEventDict setObject:self.sharedData.eventDict[@"start_datetime_str"] forKey:@"Event Start Time"];
-    [self.sharedData.mixPanelCEventDict setObject:self.sharedData.eventDict[@"end_datetime_str"] forKey:@"Event End Time"];
-    [self.sharedData.mixPanelCEventDict setObject:self.sharedData.eventDict[@"description"] forKey:@"Event Description"];
-    [self.sharedData.mixPanelCEventDict setObject:self.sharedData.eventDict[@"venue_name"] forKey:@"Event Venue Name"];
-    [self.sharedData.mixPanelCEventDict setObject:self.sharedData.eventDict[@"venue"][@"neighborhood"] forKey:@"Event Venue Neighborhood"];
-    [self.sharedData.mixPanelCEventDict setObject:self.sharedData.eventDict[@"venue"][@"city"] forKey:@"Event Venue City"];
-    //[self.sharedData.mixPanelCEventDict setObject:responseObject[@"venue"][@"state"] forKey:@"Event Venue State"];
-    [self.sharedData.mixPanelCEventDict setObject:self.sharedData.eventDict[@"venue"][@"description"] forKey:@"Event Venue Description"];
-    [self.sharedData.mixPanelCEventDict setObject:self.sharedData.eventDict[@"venue"][@"zip"] forKey:@"Event Venue Zip"];
-    
-    
-    
-    NSMutableDictionary *tmpDict = [[NSMutableDictionary alloc] init];
-    [tmpDict setObject:self.sharedData.userDict[@"first_name"] forKey:@"Inviter First Name"];
-    [tmpDict setObject:self.sharedData.userDict[@"last_name"] forKey:@"Inviter Last Name"];
-    [tmpDict setObject:[NSString stringWithFormat:@"%@ %@",self.sharedData.userDict[@"first_name"],self.sharedData.userDict[@"last_name"]] forKey:@"Inviter Whole Name"];
-    [tmpDict setObject:self.sharedData.userDict[@"fb_id"] forKey:@"Inviter FB ID"];
-    [tmpDict setObject:self.sharedData.userDict[@"email"] forKey:@"Inviter Email"];
-    [tmpDict setObject:self.sharedData.userDict[@"gender"] forKey:@"Inviter Gender"];
-    [tmpDict setObject:self.sharedData.userDict[@"birthday"] forKey:@"Inviter Birthday"];
-    [tmpDict setObject:@"event" forKey:@"type"];
-    
-    [self.sharedData.mixPanelCEventDict addEntriesFromDictionary:tmpDict];
-    
-    
-    self.sharedData.shareHostingId = self.event_id;
-    
-    self.sharedData.shareHostingVenueName = self.sharedData.eventDict[@"venue_name"];
-    
-    self.sharedData.cHostVenuePicURL = self.sharedData.eventDict[@"photos"][0];
-    
-    [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Share Event" withDict:self.sharedData.mixPanelCEventDict];
-    
-    
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"SHOW_HOSTING_INVITE" object:self];
 }
 
 //Clicked 3 dots
@@ -362,6 +424,7 @@
     
 }
 
+#pragma mark - API
 -(void)loadData:(NSString*)event_id
 {
     self.event_id = event_id;
@@ -624,10 +687,7 @@
         self.listingContainer.hidden = YES;
         
     }
-
-//    //Event Date
-//    self.eventDate.text = [[Constants toTitleDateRange:dict[@"start_datetime_str"] dbEndDateString:dict[@"end_datetime_str"]] uppercaseString];
-//    self.eventDate.frame = CGRectMake(30, self.separator2.frame.origin.y + self.separator2.frame.size.height + 16, self.sharedData.screenWidth - 60, 20);
+    
 //    
 //    //Separator 3
 //    self.separator3.frame = CGRectMake(20,self.eventDate.frame.size.height + self.eventDate.frame.origin.y + 14, self.sharedData.screenWidth - 40, 1);
@@ -811,92 +871,12 @@
     } */
 }
 
--(void)initClass
-{
-}
-
--(void)goBack
-{
-    [[NSNotificationCenter defaultCenter]
-     postNotificationName:@"EVENTS_GO_HOME"
-     object:self];
-}
-
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView
-{
-    int width = self.picScroll.frame.size.width;
-    float xPos = scrollView.contentOffset.x+10;
-    
-    //Calculate the page we are on based on x coordinate position and width of scroll view
-    self.pControl.currentPage = (int)xPos/width;
-}
-
-- (void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view {
-    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showAddressInMap)];
-    [view addGestureRecognizer:tap];
-}
-
 -(void)showAddressInMap
 {
     MKPlacemark *placemark = [[MKPlacemark alloc] initWithPlacemark:self.cPlaceMark];
     MKMapItem *endingItem = [[MKMapItem alloc] initWithPlacemark:placemark];
     NSMutableDictionary *launchOptions = [[NSMutableDictionary alloc] init];
     [endingItem openInMapsWithLaunchOptions:launchOptions];
-}
-
--(void)reset
-{
-    self.btnHostHere.hidden = YES;
-    
-    if([lastEventId isEqualToString:self.event_id]) return;
-    if(self.event_id!=nil) lastEventId = [NSString stringWithString:self.event_id];
-    
-    [self.emptyView setMode:@"load"];
-    
-    //Add to view count if guest
-    [self addViewCount];
-    
-    //Clear NavBar
-    self.title.text = @"";
-    
-    self.separator1.hidden = YES;
-    
-    //Clear text
-    [self.btnHostHere setTitle:@"" forState:UIControlStateNormal];
-    
-    //Clear pics
-    self.picScroll.contentOffset = CGPointMake(0, 0);
-    [self.picScroll.subviews makeObjectsPerformSelector: @selector(removeFromSuperview)];
-    
-    //Clear users
-    [self.userContainer.subviews makeObjectsPerformSelector: @selector(removeFromSuperview)];
-    
-    //Clear tags
-    [self.tagArray removeAllObjects];
-    [self.tagCollection reloadData];
-    
-    //Title
-    self.venueName.text = @"";
-    self.aboutBody.text = @"";
-    self.seeAllLabel.text = @"";
-    self.hostNum.text = @"";
-    self.eventDate.text = @"";
-    
-    //See map
-    self.seeAllView.hidden = YES;
-    self.seeAllCaret.hidden = YES;
-    self.seeMapView.hidden = YES;
-    self.seeMapCaret.hidden = YES;
-    self.seeMapLabel.text = @"";
-    
-    //Rescroll
-    self.mainScroll.contentOffset = CGPointMake(0, 0);
-    [self.mainScroll setFrame:CGRectMake(0,
-                                         self.tabBar.bounds.size.height,
-                                         self.sharedData.screenWidth,
-                                         self.sharedData.screenHeight - self.tabBar.bounds.size.height - PHTabHeight)];
-    
-    self.isLoaded = NO;
 }
 
 -(void)addViewCount
@@ -922,8 +902,23 @@
      }];
 }
 
-#pragma mark - UICollectionViewDataSource
+#pragma mark - UIScrollViewDelegate
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    int width = self.picScroll.frame.size.width;
+    float xPos = scrollView.contentOffset.x+10;
+    
+    //Calculate the page we are on based on x coordinate position and width of scroll view
+    self.pControl.currentPage = (int)xPos/width;
+}
 
+#pragma mark - MKMapViewDelegate
+- (void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view {
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showAddressInMap)];
+    [view addGestureRecognizer:tap];
+}
+
+#pragma mark - UICollectionViewDataSource
 -(NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
 {
     return 1;
@@ -936,16 +931,12 @@
 
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSLog(@"%ld",[self.tagArray count]);
-    
     static NSString *cellIdentifier = @"EventsSummaryTagCell";
     SetupPickViewCell *cell = (SetupPickViewCell*)[collectionView dequeueReusableCellWithReuseIdentifier:cellIdentifier forIndexPath:indexPath];
     
     NSString *title = self.tagArray[indexPath.row];
     [cell.button.button setTitle:[title uppercaseString] forState:UIControlStateNormal];
     cell.button.button.titleLabel.font = [UIFont phBold:12];
-//    cell.button.offBorderColor = [UIColor colorFromHexCode:@"D7D7D7"];
-//    cell.button.offTextColor = [UIColor colorFromHexCode:@"D7D7D7"];
     cell.button.offTextColor = [UIColor whiteColor];
     cell.button.offBackgroundColor = [UIColor clearColor];
     

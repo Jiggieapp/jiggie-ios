@@ -20,7 +20,11 @@
 #import "RFRateMe.h"
 #import "SetupView.h"
 
-@interface AppDelegate : UIResponder <UIApplicationDelegate,AppsFlyerTrackerDelegate>
+@interface AppDelegate : UIResponder <UIApplicationDelegate,AppsFlyerTrackerDelegate> {
+    NSManagedObjectModel *managedObjectModel;
+    NSManagedObjectContext *managedObjectContext;
+    NSPersistentStoreCoordinator *persistentStoreCoordinator;
+}
 
 @property (strong, nonatomic) UIWindow *window;
 
@@ -32,6 +36,10 @@
 
 @property (assign, nonatomic) BOOL      inAskingAPNMode;
 @property (assign, nonatomic) BOOL      isShowNotification;
+
+@property (readonly, strong, nonatomic) NSManagedObjectContext *managedObjectContext;
+@property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
+@property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 
 -(BOOL)notificationServicesEnabled;
 

@@ -77,6 +77,33 @@
     return self;
 }
 
+
+-(void)initClass
+{
+    if(!self.isLoading)
+    {
+        //self.isLoading = YES;
+        dispatch_queue_t someQueue = dispatch_queue_create("com.partyhost.app.chat_section", nil);
+        dispatch_async(someQueue,
+                       ^{
+                           [self loadConvos];
+                       });
+    }
+    
+    //Set a special message depending on account type
+    if([self.sharedData isMember])
+    {
+        //self.labelEmpty.text = @"Reach out to a\nparty host and start a chat.\nWhat are you waiting for?";
+        [self.emptyView setData:@"No chats yet" subtitle:@"Browse events to connect with guest so you can start chatting!" imageNamed:@"tab_chat"];
+    }
+    else
+    {
+        //self.labelEmpty.text = @"Post a hosting and start\nchatting with interested guests\nto secure party plans now!";
+        [self.emptyView setData:@"No chats yet" subtitle:@"Book a table and start chatting with interested guests right now!" imageNamed:@"tab_chat"];
+    }
+}
+
+#pragma mark - Button Action
 -(void)chatTappedHandler
 {
     [self.conversationsList setContentOffset:CGPointZero animated:YES];
@@ -104,55 +131,226 @@
     }
 }
 
-
--(void)initClass
+#pragma mark - API
+-(void)loadConvos
 {
-    if(!self.isLoading)
-    {
-        //self.isLoading = YES;
-        dispatch_queue_t someQueue = dispatch_queue_create("com.partyhost.app.chat_section", nil);
-        dispatch_async(someQueue,
-                       ^{
-                           [self loadConvos];
-                       });
-    }
+    //self.isLoading = YES;
+    NSString *facebookId = [self.sharedData.userDict objectForKey:@"fb_id"];
+    AFHTTPRequestOperationManager *manager = [self.sharedData getOperationManager];
     
-    //Set a special message depending on account type
-    if([self.sharedData isMember])
-    {
-        //self.labelEmpty.text = @"Reach out to a\nparty host and start a chat.\nWhat are you waiting for?";
-        [self.emptyView setData:@"No chats yet" subtitle:@"Browse events to connect with guest so you can start chatting!" imageNamed:@"tab_chat"];
-    }
-    else
-    {
-        //self.labelEmpty.text = @"Post a hosting and start\nchatting with interested guests\nto secure party plans now!";
-        [self.emptyView setData:@"No chats yet" subtitle:@"Book a table and start chatting with interested guests right now!" imageNamed:@"tab_chat"];
-    }
+    //facebookId = @"10152712297546999";
+    //facebookId = @"10152215526006990";//Jay
+    //facebookId = @"1376680319326091";
     
-    //[self.sharedData trackMixPanel:@"display_conversations_list"];
+    
+    //facebookId = @"1410449462602170"; //Harry
+    
+    NSDictionary *params = @{ @"fb_id" : facebookId };
+    
+    
+    NSString *url = [NSString stringWithFormat:@"%@/conversations",PHBaseURL];
+    //NSLog(@"CHAT_START_LOAD :: %@",url);
+    
+    
+    [manager GET:url parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject)
+     {
+         self.isConvosLoaded = YES;
+         
+         if([self.conversationsA isEqualToArray:responseObject] && [self.conversationsA count] > 0)
+         {
+             NSLog(@"CHAT_SAME_DATA");
+         }
+         else
+         {
+             NSLog(@"CONVERSATIONS_responseObject :: %@",responseObject);
+             
+             
+             [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Conversations List" withDict:@{}];
+             
+             [self.conversationsList setContentOffset:CGPointZero animated:YES];
+             [self.conversationsA removeAllObjects];
+             [self.conversationsA addObjectsFromArray:responseObject];
+             
+             [self.conversationsList reloadData];
+             
+             //Show empty
+             if(self.conversationsA.count <= 0) {
+                 self.conversationsList.hidden = YES;
+                 [self.emptyView setMode:@"empty"];
+             }
+             else {
+                 self.conversationsList.hidden = NO;
+                 [self.emptyView setMode:@"hide"];
+             }
+             
+             //[self loadImages];
+             
+             int unreadcount = 0;
+             for (int j = 0; j < [self.conversationsA count]; j++)
+             {
+                 NSDictionary *dict = [self.conversationsA objectAtIndex:j];
+                 if(![[dict objectForKey:@"unread"] isEqualToString:@"0"])
+                 {
+                     unreadcount++;
+                 }
+             }
+             
+             self.sharedData.unreadChatCount = unreadcount;
+             
+             //Update badges
+             [self.sharedData.chatBadge updateValue:unreadcount];
+             [self.sharedData updateBadgeIcon];
+             
+             if(self.sharedData.hasMessageToLoad)
+             {
+                 self.sharedData.hasMessageToLoad = NO;
+                 /*
+                  int userIndex = 0;
+                  for (int i = 0; i < [self.conversationsA count]; i++)
+                  {
+                  NSDictionary *dict = [self.conversationsA objectAtIndex:i];
+                  if(![[dict objectForKey:@"fb_id"] isEqualToString:self.sharedData.fromMailId])
+                  {
+                  userIndex = i;
+                  }
+                  }
+                  
+                  NSIndexPath* selectedCellIndexPath= [NSIndexPath indexPathForRow:userIndex inSection:0];
+                  [self.conversationsList selectRowAtIndexPath:selectedCellIndexPath animated:false scrollPosition:UITableViewScrollPositionMiddle];
+                  */
+             }
+         }
+         
+         //         [self.conversationsList beginUpdates];
+         //         [self.conversationsList endUpdates];
+         [self.conversationsList reloadData];
+         
+         self.isLoading = NO;
+         
+         [[NSNotificationCenter defaultCenter]
+          postNotificationName:@"HIDE_LOADING"
+          object:self];
+         
+         
+     } failure:^(AFHTTPRequestOperation *operation, NSError *error)
+     {
+         NSLog(@"ERROR :: %@",error);
+     }];
 }
 
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+
+-(void)loadImages
 {
-    if (editingStyle == UITableViewCellEditingStyleDelete)
+    for (int i = 0; i < [self.conversationsA count]; i++)
     {
-        
+        NSDictionary *dict = [self.conversationsA objectAtIndex:i];
+        NSString *pic_url = [self.sharedData profileImg:[dict objectForKey:@"fb_id"]];
+        [self.sharedData loadImageCue:pic_url];
     }
 }
 
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+-(void)blockUser
 {
-    // Return YES if you want the specified item to be editable.
-    if (self.sharedData.osVersion < 8)
-    {
-        return NO;
-    }
-    return YES;
+    [[NSNotificationCenter defaultCenter]
+     postNotificationName:@"SHOW_LOADING"
+     object:self];
+    
+    
+    AFHTTPRequestOperationManager *manager = [self.sharedData getOperationManager];
+    
+    
+    NSDictionary *params =@{
+                            @"fromId" : self.sharedData.fb_id,
+                            @"toId":self.sharedData.member_fb_id,
+                            };
+    NSString *urlToLoad = [NSString stringWithFormat:@"%@/blockuserwithfbid",PHBaseURL];
+    [manager GET:urlToLoad parameters:params success:^
+     (AFHTTPRequestOperation *operation, id resultObj)
+     {
+         NSLog(@"RESULT :: %@",resultObj);
+         [self initClass];
+         [self showSuccess];
+         [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Block User" withDict:@{@"origin":@"Chat"}];
+         
+     } failure:^(AFHTTPRequestOperation *operation, NSError *error)
+     {
+         [self showFail];
+         [[NSNotificationCenter defaultCenter]
+          postNotificationName:@"HIDE_LOADING"
+          object:self];
+         
+     }];
 }
 
+-(void)showSuccess
+{
+    self.isInBlockMode = NO;
+    
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Blocked User"
+                                                    message:[NSString stringWithFormat:@"%@ has been blocked",self.sharedData.member_first_name]
+                                                   delegate:self
+                                          cancelButtonTitle:@"OK"
+                                          otherButtonTitles:nil];
+    alert.delegate = self;
+    [alert show];
+}
 
+-(void)showFail
+{
+    self.isInBlockMode = NO;
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Blocked User"
+                                                    message:@"Fail"
+                                                   delegate:self
+                                          cancelButtonTitle:@"OK"
+                                          otherButtonTitles:nil];
+    
+    [alert show];
+}
 
+-(void)deleteUser
+{
+    [[NSNotificationCenter defaultCenter]
+     postNotificationName:@"SHOW_LOADING"
+     object:self];
+    
+    
+    AFHTTPRequestOperationManager *manager = [self.sharedData getOperationManager];
+    
+    NSDictionary *params =@{
+                            @"fromId" : self.sharedData.fb_id,
+                            @"toId":self.sharedData.member_fb_id,
+                            };
+    NSString *urlToLoad = [NSString stringWithFormat:@"%@/deletemessageswithfbid",PHBaseURL];
+    
+    [manager GET:urlToLoad parameters:params success:^
+     (AFHTTPRequestOperation *operation, id resultObj)
+     {
+         NSLog(@"RESULT :: %@",resultObj);
+         [self initClass];
+         [self showSuccessDelete];
+         [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Delete Messages" withDict:@{@"origin":@"Chat"}];
+     } failure:^(AFHTTPRequestOperation *operation, NSError *error)
+     {
+         
+         [self showFailDelete];
+         
+         [[NSNotificationCenter defaultCenter]
+          postNotificationName:@"HIDE_LOADING"
+          object:self];
+         
+     }];
+    
+}
 
+-(void)showAlertQuestion:(NSString *)title withMessage:(NSString *)message
+{
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title message:message delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
+    // optional - add more buttons:
+    [alert addButtonWithTitle:@"Yes"];
+    [alert show];
+}
+
+#pragma mark - UITableViewDataSource
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     return 1;
@@ -283,122 +481,22 @@
     [self performSelector:@selector(loadConvos) withObject:nil afterDelay:0.5];
 }
 
-
--(void)loadConvos
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    //self.isLoading = YES;
-    NSString *facebookId = [self.sharedData.userDict objectForKey:@"fb_id"];
-    AFHTTPRequestOperationManager *manager = [self.sharedData getOperationManager];
-    
-    //facebookId = @"10152712297546999";
-    //facebookId = @"10152215526006990";//Jay
-    //facebookId = @"1376680319326091";
-    
-    
-    //facebookId = @"1410449462602170"; //Harry
-    
-    NSDictionary *params = @{ @"fb_id" : facebookId };
-    
-    
-    NSString *url = [NSString stringWithFormat:@"%@/conversations",PHBaseURL];
-    //NSLog(@"CHAT_START_LOAD :: %@",url);
-    
-    
-    [manager GET:url parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject)
-     {
-         self.isConvosLoaded = YES;
-         
-         if([self.conversationsA isEqualToArray:responseObject] && [self.conversationsA count] > 0)
-         {
-             NSLog(@"CHAT_SAME_DATA");
-         }
-         else
-         {
-             NSLog(@"CONVERSATIONS_responseObject :: %@",responseObject);
-             
-             
-             [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Conversations List" withDict:@{}];
-             
-             [self.conversationsList setContentOffset:CGPointZero animated:YES];
-             [self.conversationsA removeAllObjects];
-             [self.conversationsA addObjectsFromArray:responseObject];
-             
-             [self.conversationsList reloadData];
-             
-             //Show empty
-             if(self.conversationsA.count <= 0) {
-                 self.conversationsList.hidden = YES;
-                 [self.emptyView setMode:@"empty"];
-             }
-             else {
-                 self.conversationsList.hidden = NO;
-                 [self.emptyView setMode:@"hide"];
-             }
-             
-             //[self loadImages];
-             
-             int unreadcount = 0;
-             for (int j = 0; j < [self.conversationsA count]; j++)
-             {
-                 NSDictionary *dict = [self.conversationsA objectAtIndex:j];
-                 if(![[dict objectForKey:@"unread"] isEqualToString:@"0"])
-                 {
-                     unreadcount++;
-                 }
-             }
-             
-             self.sharedData.unreadChatCount = unreadcount;
-             
-             //Update badges
-             [self.sharedData.chatBadge updateValue:unreadcount];
-             [self.sharedData updateBadgeIcon];
-             
-             if(self.sharedData.hasMessageToLoad)
-             {
-                 self.sharedData.hasMessageToLoad = NO;
-                 /*
-                  int userIndex = 0;
-                  for (int i = 0; i < [self.conversationsA count]; i++)
-                  {
-                  NSDictionary *dict = [self.conversationsA objectAtIndex:i];
-                  if(![[dict objectForKey:@"fb_id"] isEqualToString:self.sharedData.fromMailId])
-                  {
-                  userIndex = i;
-                  }
-                  }
-                  
-                  NSIndexPath* selectedCellIndexPath= [NSIndexPath indexPathForRow:userIndex inSection:0];
-                  [self.conversationsList selectRowAtIndexPath:selectedCellIndexPath animated:false scrollPosition:UITableViewScrollPositionMiddle];
-                  */
-             }
-         }
-         
-//         [self.conversationsList beginUpdates];
-//         [self.conversationsList endUpdates];
-         [self.conversationsList reloadData];
-         
-         self.isLoading = NO;
-         
-         [[NSNotificationCenter defaultCenter]
-          postNotificationName:@"HIDE_LOADING"
-          object:self];
-         
-         
-     } failure:^(AFHTTPRequestOperation *operation, NSError *error)
-     {
-         NSLog(@"ERROR :: %@",error);
-     }];
+    if (editingStyle == UITableViewCellEditingStyleDelete)
+    {
+        
+    }
 }
 
-
--(void)loadImages
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    for (int i = 0; i < [self.conversationsA count]; i++)
+    // Return YES if you want the specified item to be editable.
+    if (self.sharedData.osVersion < 8)
     {
-        NSDictionary *dict = [self.conversationsA objectAtIndex:i];
-        NSString *pic_url = [self.sharedData profileImg:[dict objectForKey:@"fb_id"]];
-        [self.sharedData loadImageCue:pic_url];
+        return NO;
     }
+    return YES;
 }
 
 
@@ -455,8 +553,8 @@
     return @[button,button2];
 }
 
-
--(BOOL) swipeTableCell:(MGSwipeTableCell*) cell canSwipe:(MGSwipeDirection) direction;
+#pragma mark - MGSwipeDelegate
+-(BOOL) swipeTableCell:(MGSwipeTableCell*)cell canSwipe:(MGSwipeDirection)direction;
 {
     return YES;
 }
@@ -527,111 +625,22 @@
     }
     
     return nil;
-    
 }
 
-
--(void)blockUser
+-(void)swipeTableCell:(MGSwipeTableCell*) cell didChangeSwipeState:(MGSwipeState)state gestureIsActive:(BOOL)gestureIsActive
 {
-    [[NSNotificationCenter defaultCenter]
-     postNotificationName:@"SHOW_LOADING"
-     object:self];
-    
-    
-    AFHTTPRequestOperationManager *manager = [self.sharedData getOperationManager];
-    
-    
-    NSDictionary *params =@{
-                            @"fromId" : self.sharedData.fb_id,
-                            @"toId":self.sharedData.member_fb_id,
-                            };
-    NSString *urlToLoad = [NSString stringWithFormat:@"%@/blockuserwithfbid",PHBaseURL];
-    [manager GET:urlToLoad parameters:params success:^
-     (AFHTTPRequestOperation *operation, id resultObj)
-     {
-         NSLog(@"RESULT :: %@",resultObj);
-         [self initClass];
-         [self showSuccess];
-         [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Block User" withDict:@{@"origin":@"Chat"}];
-         
-     } failure:^(AFHTTPRequestOperation *operation, NSError *error)
-     {
-         [self showFail];
-         [[NSNotificationCenter defaultCenter]
-          postNotificationName:@"HIDE_LOADING"
-          object:self];
-         
-     }];
+    NSString * str;
+    switch (state) {
+        case MGSwipeStateNone: str = @"None"; break;
+        case MGSwipeStateSwippingLeftToRight: str = @"SwippingLeftToRight"; break;
+        case MGSwipeStateSwippingRightToLeft: str = @"SwippingRightToLeft"; break;
+        case MGSwipeStateExpandingLeftToRight: str = @"ExpandingLeftToRight"; break;
+        case MGSwipeStateExpandingRightToLeft: str = @"ExpandingRightToLeft"; break;
+    }
+    NSLog(@"Swipe state: %@ ::: Gesture: %@", str, gestureIsActive ? @"Active" : @"Ended");
 }
 
--(void)showSuccess
-{
-    self.isInBlockMode = NO;
-    
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Blocked User"
-                                                    message:[NSString stringWithFormat:@"%@ has been blocked",self.sharedData.member_first_name]
-                                                   delegate:self
-                                          cancelButtonTitle:@"OK"
-                                          otherButtonTitles:nil];
-    alert.delegate = self;
-    [alert show];
-}
-
--(void)showFail
-{
-    self.isInBlockMode = NO;
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Blocked User"
-                                                    message:@"Fail"
-                                                   delegate:self
-                                          cancelButtonTitle:@"OK"
-                                          otherButtonTitles:nil];
-    
-    [alert show];
-}
-
--(void)deleteUser
-{
-    [[NSNotificationCenter defaultCenter]
-     postNotificationName:@"SHOW_LOADING"
-     object:self];
-    
-    
-    AFHTTPRequestOperationManager *manager = [self.sharedData getOperationManager];
-    
-    NSDictionary *params =@{
-                            @"fromId" : self.sharedData.fb_id,
-                            @"toId":self.sharedData.member_fb_id,
-                            };
-    NSString *urlToLoad = [NSString stringWithFormat:@"%@/deletemessageswithfbid",PHBaseURL];
-    
-    [manager GET:urlToLoad parameters:params success:^
-     (AFHTTPRequestOperation *operation, id resultObj)
-     {
-         NSLog(@"RESULT :: %@",resultObj);
-         [self initClass];
-         [self showSuccessDelete];
-         [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Delete Messages" withDict:@{@"origin":@"Chat"}];
-     } failure:^(AFHTTPRequestOperation *operation, NSError *error)
-     {
-         
-         [self showFailDelete];
-         
-         [[NSNotificationCenter defaultCenter]
-          postNotificationName:@"HIDE_LOADING"
-          object:self];
-         
-     }];
-    
-}
-
--(void)showAlertQuestion:(NSString *)title withMessage:(NSString *)message
-{
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title message:message delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
-    // optional - add more buttons:
-    [alert addButtonWithTitle:@"Yes"];
-    [alert show];
-}
-
+#pragma mark - UIAlertViewDelegate
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
     if (buttonIndex == 1)
     {
@@ -644,7 +653,6 @@
         {
             [self deleteUser];
         }
-        
         
         self.isInDeleteMode = NO;
         self.isInBlockMode = NO;
@@ -675,27 +683,5 @@
                                           otherButtonTitles:nil];
     [alert show];
 }
-
--(void) swipeTableCell:(MGSwipeTableCell*) cell didChangeSwipeState:(MGSwipeState)state gestureIsActive:(BOOL)gestureIsActive
-{
-    NSString * str;
-    switch (state) {
-        case MGSwipeStateNone: str = @"None"; break;
-        case MGSwipeStateSwippingLeftToRight: str = @"SwippingLeftToRight"; break;
-        case MGSwipeStateSwippingRightToLeft: str = @"SwippingRightToLeft"; break;
-        case MGSwipeStateExpandingLeftToRight: str = @"ExpandingLeftToRight"; break;
-        case MGSwipeStateExpandingRightToLeft: str = @"ExpandingRightToLeft"; break;
-    }
-    NSLog(@"Swipe state: %@ ::: Gesture: %@", str, gestureIsActive ? @"Active" : @"Ended");
-}
-
-
-/*
- // Only override drawRect: if you perform custom drawing.
- // An empty implementation adversely affects performance during animation.
- - (void)drawRect:(CGRect)rect {
- // Drawing code
- }
- */
 
 @end

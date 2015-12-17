@@ -14,6 +14,7 @@
 
 
 #ifdef __OBJC__
+    #import <CoreData/CoreData.h>
     #import "SharedData.h"
     #import "UIColor+PH.h"
     #import "UIFont+PH.h"

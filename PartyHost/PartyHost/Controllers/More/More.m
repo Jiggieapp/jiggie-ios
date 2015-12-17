@@ -65,7 +65,7 @@
     self.userProfilePhone.frame = CGRectMake(self.sharedData.screenWidth/2 - 100, CGRectGetMaxY(self.userProfileName.frame), 200, 36);
     self.userProfilePhone.titleLabel.font = [UIFont phBlond:15];
     [self.userProfilePhone setTitleColor:[UIColor phBlueColor] forState:UIControlStateNormal];
-    [self.userProfilePhone addTarget:self action:@selector(userProfilePhoneDidTap) forControlEvents:UIControlEventTouchUpInside];
+    [self.userProfilePhone addTarget:self action:@selector(goVerifyPhone) forControlEvents:UIControlEventTouchUpInside];
     [self.mainCon addSubview:self.userProfilePhone];
     
     self.dataA = [[NSMutableArray alloc] init]; //Fill this out in initClass
@@ -78,14 +78,6 @@
     self.moreList.separatorColor = [UIColor phLightGrayColor];
     self.moreList.scrollEnabled = (self.sharedData.isIphone4)?YES:NO;
     [self.mainCon addSubview:self.moreList];
-    
-//    self.logoutButton = [UIButton buttonWithType:UIButtonTypeCustom];
-//    self.logoutButton.frame = CGRectMake(self.sharedData.screenWidth/2 - 100, self.sharedData.screenHeight - PHTabHeight - 45 - OffSetLargeDevice, 200, 36);
-//    self.logoutButton.titleLabel.font = [UIFont phBlond:16];
-//    [self.logoutButton setTitleColor:[UIColor phDarkGrayColor] forState:UIControlStateNormal];
-//    [self.logoutButton setTitle:@"Log Out" forState:UIControlStateNormal];
-//    [self.logoutButton addTarget:self action:@selector(logoutButtonDidTap) forControlEvents:UIControlEventTouchUpInside];
-//    [self.mainCon addSubview:self.logoutButton];
     
     self.profilePage = [[Profile alloc] initWithFrame:CGRectMake(self.sharedData.screenWidth, 0, self.sharedData.screenWidth, frame.size.height)];
     //self.sharedData.profilePage  = self.profilePage;
@@ -204,24 +196,111 @@
     [self loadSettings];
 }
 
--(void)checkIfGoBack
+#pragma mark - API
+-(void)loadSettings
 {
-    /*
-     if(self.mainCon.frame.origin.x != 0)
+    //Start spinner
+    if(!self.isLoaded)
+    {
+        [self.emptyView setMode:@"load"];
+    }
+    
+    NSString *facebookId = [self.sharedData.userDict objectForKey:@"fb_id"];
+    AFHTTPRequestOperationManager *manager = [self.sharedData getOperationManager];
+    
+    NSDictionary *params = @{ @"fb_id" : facebookId };
+    NSString *url = [Constants memberSettingsURL];
+    [manager GET:url parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject)
      {
-     [self goBack];
-     }
-     */
+         NSLog(@"SETTINGS responseObject :: %@",responseObject);
+         
+         [[AnalyticManager sharedManager] trackMixPanelWithDict:@"View Settings" withDict:@{}];
+         
+         //Check if already equal
+         if([self.settingsData isEqualToDictionary:responseObject])
+         {
+             NSLog(@"SETTINGS responseObject SAME");
+             
+             [self.emptyView setMode:@"hide"];
+             return;
+         }
+         
+         //Clear table
+         self.settingsData = [[NSMutableDictionary alloc] initWithDictionary:responseObject];
+         
+         //Load data
+         [self.sharedData loadSettingsResponse:responseObject];
+         
+         //Reload table view
+         self.isLoaded = YES;
+         
+         //Update table
+         [self updateTable];
+         
+         //Hide spinner
+         [self.emptyView setMode:@"hide"];
+         
+     } failure:^(AFHTTPRequestOperation *operation, NSError *error)
+     {
+         [self.emptyView setMode:@"empty"];
+         
+         NSLog(@"ERROR :: %@",error);
+     }];
 }
 
--(void)goHome
+-(void)saveSettings
 {
-    //self.btnBack.hidden = YES;
-    [self.sharedData clearKeyBoards];
-    [UIView animateWithDuration:0.25 animations:^()
+    //Start spinner
+    [[NSNotificationCenter defaultCenter]
+     postNotificationName:@"SHOW_LOADING"
+     object:self];
+    
+    AFHTTPRequestOperationManager *manager = [self.sharedData getOperationManager];
+    
+    NSString *url = [Constants memberSettingsURL];
+    [manager POST:url parameters:[self.sharedData createSaveSettingsParams] success:^(AFHTTPRequestOperation *operation, id responseObject)
      {
-         self.mainCon.frame = CGRectMake(0, 0, self.sharedData.screenWidth * SCREEN_LEVELS, self.sharedData.screenHeight - 60);
+         NSLog(@"SETTINGS responseObject :: %@",responseObject);
+         
+         //Update table
+         [self updateTable];
+         
+         //Hide spinner
+         [[NSNotificationCenter defaultCenter]
+          postNotificationName:@"HIDE_LOADING"
+          object:self];
+         
+     } failure:^(AFHTTPRequestOperation *operation, NSError *error)
+     {
+         NSLog(@"ERROR :: %@",error);
      }];
+}
+
+-(void)updateTable {
+    //Section 1
+    [self.dataA removeAllObjects];
+    [self.dataA addObject:@"Profile"];
+    
+    //This must be refreshed when changing roles
+    if([self.sharedData isGuest])
+    {
+        [self.dataA addObject:@"Confirmations"];
+    }
+    else if([self.sharedData isHost])
+    {
+        [self.dataA addObject:@"Hostings"];
+        [self.dataA addObject:@"Purchases"];
+        [self.dataA addObject:@"Credit Card"];
+        [self.dataA addObject:@"Phone Number"];
+    }
+    
+    [self.dataA addObject:@"Invite Friends"];
+    [self.dataA addObject:@"Email Support"];
+    [self.dataA addObject:@"Settings"];
+    
+    [self.moreList reloadData];
+    [self.moreList setContentOffset:CGPointZero animated:NO];
+    self.moreList.hidden = NO;
 }
 
 #pragma mark - UITableViewDataSource
@@ -625,7 +704,38 @@
     }
  }
 
-#pragma mark - Navigation Action
+#pragma mark - UIAlertViewDelegate
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if(alertView.tag == 0) //Host/Guest mode change
+    {
+        [self saveSettings];
+    }
+    else if(alertView.tag == 1 && buttonIndex == 1) //Change phone
+    {
+        self.sharedData.btnPhoneVerifyCancel.hidden = NO;
+        [[NSNotificationCenter defaultCenter]
+         postNotificationName:@"SHOW_PHONE_VERIFY"
+         object:self];
+    }
+    else if(alertView.tag==2 && buttonIndex == 1) //Change CC
+    {
+        [[NSNotificationCenter defaultCenter]
+         postNotificationName:@"SHOW_CREDIT_CARD"
+         object:self];
+    }
+}
+
+#pragma mark - Navigation
+-(void)goHome
+{
+    //self.btnBack.hidden = YES;
+    [self.sharedData clearKeyBoards];
+    [UIView animateWithDuration:0.25 animations:^()
+     {
+         self.mainCon.frame = CGRectMake(0, 0, self.sharedData.screenWidth * SCREEN_LEVELS, self.sharedData.screenHeight - 60);
+     }];
+}
 
 -(void)goProfile {
     self.settingsPage.hidden = YES;
@@ -643,7 +753,7 @@
      }];
 }
 
--(void)userProfilePhoneDidTap {
+-(void)goVerifyPhone {
     if([self.sharedData.phone length]>0)
     {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Phone Number" message:@"Change your phone number?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Change",nil];
@@ -659,12 +769,6 @@
          object:self];
     }
 }
-
-//-(void)logoutButtonDidTap {
-//    [[NSNotificationCenter defaultCenter]
-//     postNotificationName:@"SHOW_LOGIN"
-//     object:self];
-//}
 
 -(void)goToHosting
 {
@@ -713,133 +817,6 @@
      {
          self.mainCon.frame = CGRectMake(-self.sharedData.screenWidth, 0, self.sharedData.screenWidth * 3, self.sharedData.screenHeight - PHTabHeight);
      }];
-}
-
--(void)updateTable {
-    //Section 1
-    [self.dataA removeAllObjects];
-    [self.dataA addObject:@"Profile"];
-    
-    //This must be refreshed when changing roles
-    if([self.sharedData isGuest])
-    {
-        [self.dataA addObject:@"Confirmations"];
-    }
-    else if([self.sharedData isHost])
-    {
-        [self.dataA addObject:@"Hostings"];
-        [self.dataA addObject:@"Purchases"];
-        [self.dataA addObject:@"Credit Card"];
-        [self.dataA addObject:@"Phone Number"];
-    }
-    
-    [self.dataA addObject:@"Invite Friends"];
-    [self.dataA addObject:@"Email Support"];
-    [self.dataA addObject:@"Settings"];
-    
-    [self.moreList reloadData];
-    [self.moreList setContentOffset:CGPointZero animated:NO];
-    self.moreList.hidden = NO;
-}
-
--(void)loadSettings
-{
-    //Start spinner
-    if(!self.isLoaded)
-    {
-        [self.emptyView setMode:@"load"];
-    }
-    
-    NSString *facebookId = [self.sharedData.userDict objectForKey:@"fb_id"];
-    AFHTTPRequestOperationManager *manager = [self.sharedData getOperationManager];
-    
-    NSDictionary *params = @{ @"fb_id" : facebookId };
-    NSString *url = [Constants memberSettingsURL];
-    [manager GET:url parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject)
-     {
-         NSLog(@"SETTINGS responseObject :: %@",responseObject);
-         
-         [[AnalyticManager sharedManager] trackMixPanelWithDict:@"View Settings" withDict:@{}];
-         
-         //Check if already equal
-         if([self.settingsData isEqualToDictionary:responseObject])
-         {
-             NSLog(@"SETTINGS responseObject SAME");
-             
-             [self.emptyView setMode:@"hide"];
-             return;
-         }
-         
-         //Clear table
-         self.settingsData = [[NSMutableDictionary alloc] initWithDictionary:responseObject];
-         
-         //Load data
-         [self.sharedData loadSettingsResponse:responseObject];
-         
-         //Reload table view
-         self.isLoaded = YES;
-         
-         //Update table
-         [self updateTable];
-         
-         //Hide spinner
-         [self.emptyView setMode:@"hide"];
-         
-     } failure:^(AFHTTPRequestOperation *operation, NSError *error)
-     {
-         [self.emptyView setMode:@"empty"];
-         
-         NSLog(@"ERROR :: %@",error);
-     }];
-}
-
--(void)saveSettings
-{
-    //Start spinner
-    [[NSNotificationCenter defaultCenter]
-     postNotificationName:@"SHOW_LOADING"
-     object:self];
-    
-    AFHTTPRequestOperationManager *manager = [self.sharedData getOperationManager];
-    
-    NSString *url = [Constants memberSettingsURL];
-    [manager POST:url parameters:[self.sharedData createSaveSettingsParams] success:^(AFHTTPRequestOperation *operation, id responseObject)
-     {
-         NSLog(@"SETTINGS responseObject :: %@",responseObject);
-         
-         //Update table
-         [self updateTable];
-         
-         //Hide spinner
-         [[NSNotificationCenter defaultCenter]
-          postNotificationName:@"HIDE_LOADING"
-          object:self];
-         
-     } failure:^(AFHTTPRequestOperation *operation, NSError *error)
-     {
-         NSLog(@"ERROR :: %@",error);
-     }];
-}
-
--(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    if(alertView.tag == 0) //Host/Guest mode change
-    {
-        [self saveSettings];
-    }
-    else if(alertView.tag == 1 && buttonIndex == 1) //Change phone
-    {
-        self.sharedData.btnPhoneVerifyCancel.hidden = NO;
-        [[NSNotificationCenter defaultCenter]
-         postNotificationName:@"SHOW_PHONE_VERIFY"
-         object:self];
-    }
-    else if(alertView.tag==2 && buttonIndex == 1) //Change CC
-    {
-        [[NSNotificationCenter defaultCenter]
-         postNotificationName:@"SHOW_CREDIT_CARD"
-         object:self];
-    }
 }
 
 @end

@@ -10,6 +10,7 @@
 		CB3EB6C81B459177003F658F /* App.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CB3EB6C71B459177003F658F /* App.xcassets */; };
 		CB3EB6CA1B459184003F658F /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = CB3EB6C91B459184003F658F /* LaunchScreen.xib */; };
 		CB3EB6CC1B45919A003F658F /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CB3EB6CB1B45919A003F658F /* Images.xcassets */; };
+		DA4305611C22823700ED6C54 /* Jiggie.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = DA43055F1C22823700ED6C54 /* Jiggie.xcdatamodeld */; };
 		DAABB0B11C1FD50E004DDCFA /* BookTable.m in Sources */ = {isa = PBXBuildFile; fileRef = DAABB0091C1FD50E004DDCFA /* BookTable.m */; };
 		DAABB0B21C1FD50E004DDCFA /* BookTableAbout.m in Sources */ = {isa = PBXBuildFile; fileRef = DAABB00B1C1FD50E004DDCFA /* BookTableAbout.m */; };
 		DAABB0B31C1FD50E004DDCFA /* BookTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DAABB00D1C1FD50E004DDCFA /* BookTableCell.m */; };
@@ -278,6 +279,7 @@
 		CB3EB6C71B459177003F658F /* App.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = App.xcassets; sourceTree = "<group>"; };
 		CB3EB6C91B459184003F658F /* LaunchScreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LaunchScreen.xib; sourceTree = "<group>"; };
 		CB3EB6CB1B45919A003F658F /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		DA4305601C22823700ED6C54 /* Jiggie.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Jiggie.xcdatamodel; sourceTree = "<group>"; };
 		DAABB0081C1FD50E004DDCFA /* BookTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BookTable.h; sourceTree = "<group>"; };
 		DAABB0091C1FD50E004DDCFA /* BookTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BookTable.m; sourceTree = "<group>"; };
 		DAABB00A1C1FD50E004DDCFA /* BookTableAbout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BookTableAbout.h; sourceTree = "<group>"; };
@@ -766,6 +768,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FAEE847C1A8AE54D0073E81A /* CoreData.framework in Frameworks */,
 				DAABB2F91C200227004DDCFA /* Fabric.framework in Frameworks */,
 				FAEFCC131AB7FF210070097D /* QuartzCore.framework in Frameworks */,
 				DAABB2731C1FF5AE004DDCFA /* libAdIdAccess.a in Frameworks */,
@@ -787,7 +790,6 @@
 				DAABB27D1C1FF5AE004DDCFA /* libMPCategoryHelpers.a in Frameworks */,
 				FAEE847E1A8AE5520073E81A /* SystemConfiguration.framework in Frameworks */,
 				DAABB2741C1FF5AE004DDCFA /* libGoogleAnalyticsServices.a in Frameworks */,
-				FAEE847C1A8AE54D0073E81A /* CoreData.framework in Frameworks */,
 				FAEE84681A8AE1630073E81A /* libicucore.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -981,15 +983,15 @@
 			children = (
 				DAABB0561C1FD50E004DDCFA /* Confirmations */,
 				DAABB05B1C1FD50E004DDCFA /* Hostings */,
-				DAABB0641C1FD50E004DDCFA /* MemberProfile.h */,
-				DAABB0651C1FD50E004DDCFA /* MemberProfile.m */,
+				DAABB06C1C1FD50E004DDCFA /* Purchases */,
 				DAABB0661C1FD50E004DDCFA /* More.h */,
 				DAABB0671C1FD50E004DDCFA /* More.m */,
+				DAABB0641C1FD50E004DDCFA /* MemberProfile.h */,
+				DAABB0651C1FD50E004DDCFA /* MemberProfile.m */,
 				DAABB0681C1FD50E004DDCFA /* Privacy.h */,
 				DAABB0691C1FD50E004DDCFA /* Privacy.m */,
 				DAABB06A1C1FD50E004DDCFA /* Profile.h */,
 				DAABB06B1C1FD50E004DDCFA /* Profile.m */,
-				DAABB06C1C1FD50E004DDCFA /* Purchases */,
 				DAABB0711C1FD50E004DDCFA /* Settings.h */,
 				DAABB0721C1FD50E004DDCFA /* Settings.m */,
 			);
@@ -1653,6 +1655,7 @@
 				FA4D2F151A4DBDCB006828E7 /* Main */,
 				CB3EB6C71B459177003F658F /* App.xcassets */,
 				CB3EB6CB1B45919A003F658F /* Images.xcassets */,
+				DA43055F1C22823700ED6C54 /* Jiggie.xcdatamodeld */,
 				FA4D2EF91A4D9A77006828E7 /* Main.storyboard */,
 				CB3EB6C91B459184003F658F /* LaunchScreen.xib */,
 			);
@@ -1948,6 +1951,7 @@
 				DAABB2B61C1FF5AE004DDCFA /* MPUIEdgeInsetsToNSDictionaryValueTransformer.m in Sources */,
 				DAABB2CC1C1FF5AE004DDCFA /* TSEvent.m in Sources */,
 				DAABB2581C1FF5AE004DDCFA /* AFSecurityPolicy.m in Sources */,
+				DA4305611C22823700ED6C54 /* Jiggie.xcdatamodeld in Sources */,
 				DAABB2981C1FF5AE004DDCFA /* MPDesignerEventBindingRequestMesssage.m in Sources */,
 				DAABB2C21C1FF5AE004DDCFA /* UIImage+MPImageEffects.m in Sources */,
 				DAABB0C51C1FD50E004DDCFA /* EventsHeader.m in Sources */,
@@ -2111,7 +2115,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				BUNDLE_APP_NAME = "PH [DEV]";
-				CODE_SIGN_IDENTITY = "iPhone Developer: Han Kao (E6FU8YA6RY)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: PARTYHOST, LLC (RNSG55F2T7)";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2135,7 +2139,7 @@
 					"$(PROJECT_DIR)/PartyHost/ExtraLibraries/AF-iOS-SDK-v3.3.0",
 					"$(PROJECT_DIR)/PartyHost/ExtraLibraries/Mixpanel",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.partyhost.jiggie;
+				PRODUCT_BUNDLE_IDENTIFIER = com.partyhost.jiggiedev;
 				PRODUCT_NAME = Jiggie;
 				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = 1;
@@ -2185,7 +2189,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				BUNDLE_APP_NAME = "PH [DEV]";
-				CODE_SIGN_IDENTITY = "iPhone Developer: Han Kao (E6FU8YA6RY)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: PARTYHOST, LLC (RNSG55F2T7)";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2209,7 +2213,7 @@
 					"$(PROJECT_DIR)/PartyHost/ExtraLibraries/AF-iOS-SDK-v3.3.0",
 					"$(PROJECT_DIR)/PartyHost/ExtraLibraries/Mixpanel",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.partyhost.jiggie;
+				PRODUCT_BUNDLE_IDENTIFIER = com.partyhost.jiggiedev;
 				PRODUCT_NAME = Jiggie;
 				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = 1;
@@ -2302,7 +2306,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				BUNDLE_APP_NAME = Jiggie;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Han Kao (E6FU8YA6RY)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: PARTYHOST, LLC (RNSG55F2T7)";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2326,7 +2330,7 @@
 					"$(PROJECT_DIR)/PartyHost/ExtraLibraries/AF-iOS-SDK-v3.3.0",
 					"$(PROJECT_DIR)/PartyHost/ExtraLibraries/Mixpanel",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.partyhost.jiggie;
+				PRODUCT_BUNDLE_IDENTIFIER = com.partyhost.jiggiedev;
 				PRODUCT_NAME = Jiggie;
 				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = 1;
@@ -2339,7 +2343,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				BUNDLE_APP_NAME = Jiggie;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Han Kao (E6FU8YA6RY)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: PARTYHOST, LLC (RNSG55F2T7)";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2363,7 +2367,7 @@
 					"$(PROJECT_DIR)/PartyHost/ExtraLibraries/AF-iOS-SDK-v3.3.0",
 					"$(PROJECT_DIR)/PartyHost/ExtraLibraries/Mixpanel",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.partyhost.jiggie;
+				PRODUCT_BUNDLE_IDENTIFIER = com.partyhost.jiggiedev;
 				PRODUCT_NAME = Jiggie;
 				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = 1;
@@ -2396,6 +2400,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		DA43055F1C22823700ED6C54 /* Jiggie.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				DA4305601C22823700ED6C54 /* Jiggie.xcdatamodel */,
+			);
+			currentVersion = DA4305601C22823700ED6C54 /* Jiggie.xcdatamodel */;
+			path = Jiggie.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = FA4D2EE41A4D9A77006828E7 /* Project object */;
 }
