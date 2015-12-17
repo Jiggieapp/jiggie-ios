@@ -9,6 +9,8 @@
 
 #import "Events.h"
 #import "AnalyticManager.h"
+#import "Event.h"
+#import "AppDelegate.h"
 
 #define SCREENS_DEEP 4
 
@@ -232,6 +234,8 @@
 
 -(void)initClass
 {
+//    [self reloadFetch:nil];
+    
     NSLog(@"EVENT_INIT_CLASS %@-%@",(self.isLoading == YES)?@"Y":@"N",(self.sharedData.isLoggedIn == YES)?@"Y":@"N");
     if(!self.isLoading && self.sharedData.isLoggedIn)
     {
@@ -298,6 +302,62 @@
                                    animated:YES];
 }
 
+#pragma mark Fetch
+- (NSFetchedResultsController *)fetchedResultsController {
+    
+    if (fetchedResultsController != nil) {
+        return fetchedResultsController;
+    }
+    
+    AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    NSManagedObjectContext *globalManagedObjectContext = [appDelegate managedObjectContext];
+    self.managedObjectContext = [appDelegate managedObjectContext];
+    
+    NSEntityDescription *entityDescription =
+    [NSEntityDescription entityForName:NSStringFromClass([Event class])
+                inManagedObjectContext:globalManagedObjectContext];
+    NSSortDescriptor *sortDescriptor =
+    [NSSortDescriptor sortDescriptorWithKey:@"title"
+                                  ascending:NO];
+    NSArray *sortDescriptors = [NSArray arrayWithObjects:sortDescriptor, nil];
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    [fetchRequest setEntity:entityDescription];
+    [fetchRequest setSortDescriptors:sortDescriptors];
+    [fetchRequest setPredicate:nil];
+    
+    fetchedResultsController = nil;
+    fetchedResultsController = [[NSFetchedResultsController alloc]
+                                initWithFetchRequest:fetchRequest
+                                managedObjectContext:globalManagedObjectContext
+                                sectionNameKeyPath:nil
+                                cacheName:@"eventListCache"];
+    [fetchedResultsController setDelegate:self];
+    
+    return fetchedResultsController;
+}
+
+- (BOOL)reloadFetch:(NSError **)error {
+    //    NSLog(@"--- reloadAndPerformFetch");
+    // delete cache
+    [NSFetchedResultsController deleteCacheWithName:@"eventListCache"];
+    if(fetchedResultsController){
+        [fetchedResultsController setDelegate:nil];
+        fetchedResultsController = nil;
+    }
+    
+    BOOL performFetchResult = [[self fetchedResultsController] performFetch:error];
+    
+    return performFetchResult;
+}
+
+- (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
+    NSLog(@"TEST");
+//    if ([self isViewLoaded]) {
+//        [_tableView reloadData];
+//    }
+}
+
+
 #pragma mark - API
 -(void)loadData 
 {
@@ -342,6 +402,16 @@
              self.eventsList.hidden = NO;
              [self.emptyView setMode:@"hide"];
          }
+         
+//         Event *item = (Event *)[NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([Event class])
+//                                                                    inManagedObjectContext:self.managedObjectContext];
+//         item.eventID = @"ABC";
+//         item.title = @"ABC";
+//         item.venue = @"ABC";
+//         
+//         NSError *error;
+//         if (![self.managedObjectContext save:&error]) NSLog(@"Error: %@", [error localizedDescription]);
+         
           /*
          if(self.sharedData.hasInitEventSelection)
          {

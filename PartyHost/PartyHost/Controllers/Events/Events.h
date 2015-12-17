@@ -16,7 +16,11 @@
 #import "EventsSummary.h"
 #import "PHImage.h"
 
-@interface Events : UIView<UITableViewDelegate,UITableViewDataSource,UITextViewDelegate,UIAlertViewDelegate>
+@interface Events : UIView
+<UITableViewDelegate,UITableViewDataSource,UITextViewDelegate,UIAlertViewDelegate,NSFetchedResultsControllerDelegate> {
+    NSFetchedResultsController *fetchedResultsController;
+    NSManagedObjectContext *managedObjectContext;
+}
 
 @property (strong, nonatomic) SharedData    *sharedData;
 
@@ -46,6 +50,9 @@
 @property(nonatomic,strong) EmptyView *emptyView;
 
 @property (strong, nonatomic) UIButton *btnCity;
+
+@property (nonatomic, retain) NSFetchedResultsController *fetchedResultsController;
+@property (nonatomic, retain) NSManagedObjectContext *managedObjectContext;
 
 -(void)initClass;
 -(void)resetApp;
