@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "CMPopTipView.h"
+#import "Event.h"
 
 @interface EventsRowCell : UITableViewCell <CMPopTipViewDelegate>
 
@@ -45,7 +46,7 @@
 @property (nonatomic, assign) BOOL isFeaturedEvent;
 
 -(void)clearData;
--(void)loadData:(NSDictionary *)dict;
+-(void)loadData:(Event *)event;
 -(void)showLoading;
 -(void)hideLoading;
 -(void)goPreselect;

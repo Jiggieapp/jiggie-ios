@@ -224,6 +224,9 @@
          NSLog(@"RESULT___ :: %@",result);
          if (error) {
              NSLog(@"FB Process error :: %@",error);
+             [[NSNotificationCenter defaultCenter]
+              postNotificationName:@"HIDE_LOADING"
+              object:self];
          } else if (result.isCancelled) {
              NSLog(@"FB Cancelled");
              [[NSNotificationCenter defaultCenter]

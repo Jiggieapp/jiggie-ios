@@ -549,7 +549,6 @@
     self.cIndex = 0;
     self.callInit = NO;
     [self updatePages];
-    [self.eventsPage askAboutInvite];
 }
 
 -(void)showEvents

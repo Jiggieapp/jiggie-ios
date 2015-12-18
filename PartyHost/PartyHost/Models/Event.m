@@ -16,5 +16,9 @@
 @dynamic tags;
 @dynamic title;
 @dynamic venue;
+@dynamic modified;
+@dynamic startDatetime;
+@dynamic endDatetime;
+@dynamic isFeatured;
 
 @end

@@ -151,30 +151,19 @@
     [self.spinner removeFromSuperview];
 }
 
--(void)loadData:(NSDictionary *)dict
+-(void)loadData:(Event *)event
 {
-    self.title.text = [dict[@"title"] uppercaseString];
-    self.subtitle.text = [dict[@"venue_name"] capitalizedString];
+    self.title.text = [event.title uppercaseString];
+    self.subtitle.text = [event.venue capitalizedString];
     
-    // Format date layout
-//    NSDateFormatter *serverFormatter = [[NSDateFormatter alloc] init];
-//    [serverFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US"]];
-//    [serverFormatter setDateFormat: @"yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ"];
-//    NSDate *startDateTime = [serverFormatter dateFromString:dict[@"start_datetime"]];
-//    
-//    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-//    [dateFormatter setDateFormat:@"EEE, MMM dd, hh:mm a"];
-//    self.date.text = [dateFormatter stringFromDate:startDateTime];
-    
-    self.date.text = dict[@"start_datetime_str"];
+    self.date.text = event.startDatetimeStr;
     
 //    self.picURL = [Constants eventImageURL:dict[@"_id"]];
     
-    self.picURL = [self.sharedData picURL:dict[@"photos"][0]];
+    self.picURL = [self.sharedData picURL:event.photo];
     
     //Load venue image
     [self.mainImg loadImage:self.picURL defaultImageNamed:@"nightclub_default"]; //This will load and can be cancelled?
-    
     
     NSLog(@"LOADING_IMG_URL :: %@ - %@",self.title.text, self.picURL);
     
@@ -184,7 +173,7 @@
         [v removeFromSuperview];
     }
     
-    NSMutableArray *tags = [NSMutableArray arrayWithArray:[dict objectForKey:@"tags"]];
+    NSMutableArray *tags = [NSMutableArray arrayWithArray:[event.tags componentsSeparatedByString:@","]];
     if (self.isFeaturedEvent) {
         [tags insertObject:@"Featured" atIndex:0];
     }

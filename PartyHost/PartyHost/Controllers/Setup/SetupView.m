@@ -196,7 +196,7 @@ int totalPages;
     AnalyticManager *analyticManager = [AnalyticManager sharedManager];
     if(pageIndex == 0)
     {
-        [analyticManager trackMixPanelWithDict:@"Walkthrough Gender" withDict:@{}];
+//        [analyticManager trackMixPanelWithDict:@"Walkthrough Gender" withDict:@{}];
     }
     
     if(pageIndex == 1)

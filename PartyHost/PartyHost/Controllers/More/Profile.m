@@ -409,7 +409,7 @@
          
      } failure:^(AFHTTPRequestOperation *operation, NSError *error)
      {
-         NSLog(@"MEMBER_PROFILE_ERROR :: %@",error);
+         NSLog(@"MEMBER_PROFILE_ERROR :: %@",error.localizedDescription);
      }];
 }
 

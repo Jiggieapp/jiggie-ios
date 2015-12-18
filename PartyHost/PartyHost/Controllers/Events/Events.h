@@ -30,8 +30,8 @@
 @property(nonatomic,strong) UIView              *mainCon;
 @property(nonatomic,strong) NSMutableArray      *eventsA;
 @property(nonatomic,strong) UITableView         *eventsList;
+@property(nonatomic,assign) BOOL                needUpdateContents;
 @property(nonatomic,assign) BOOL                isEventsLoaded;
-@property(nonatomic,assign) BOOL                isLoading;
 @property(nonatomic,assign) BOOL                didLoadFromHostings;
 @property(nonatomic,assign) BOOL                didLoadFromInvite;
 @property(nonatomic,strong) EventsSummary       *eventsSummary;
@@ -57,5 +57,4 @@
 -(void)initClass;
 -(void)resetApp;
 -(void)eventsPreSelectHandler;
--(void)askAboutInvite;
 @end

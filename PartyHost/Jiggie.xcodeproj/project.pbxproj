@@ -12,6 +12,7 @@
 		CB3EB6CC1B45919A003F658F /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CB3EB6CB1B45919A003F658F /* Images.xcassets */; };
 		DA4305611C22823700ED6C54 /* Jiggie.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = DA43055F1C22823700ED6C54 /* Jiggie.xcdatamodeld */; };
 		DA4305691C22916E00ED6C54 /* Event.m in Sources */ = {isa = PBXBuildFile; fileRef = DA4305671C22916E00ED6C54 /* Event.m */; };
+		DA43056C1C23E7D000ED6C54 /* BaseModel.m in Sources */ = {isa = PBXBuildFile; fileRef = DA43056B1C23E7D000ED6C54 /* BaseModel.m */; };
 		DAABB0B11C1FD50E004DDCFA /* BookTable.m in Sources */ = {isa = PBXBuildFile; fileRef = DAABB0091C1FD50E004DDCFA /* BookTable.m */; };
 		DAABB0B21C1FD50E004DDCFA /* BookTableAbout.m in Sources */ = {isa = PBXBuildFile; fileRef = DAABB00B1C1FD50E004DDCFA /* BookTableAbout.m */; };
 		DAABB0B31C1FD50E004DDCFA /* BookTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DAABB00D1C1FD50E004DDCFA /* BookTableCell.m */; };
@@ -283,6 +284,8 @@
 		DA4305601C22823700ED6C54 /* Jiggie.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Jiggie.xcdatamodel; sourceTree = "<group>"; };
 		DA4305661C22916E00ED6C54 /* Event.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Event.h; sourceTree = "<group>"; };
 		DA4305671C22916E00ED6C54 /* Event.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Event.m; sourceTree = "<group>"; };
+		DA43056A1C23E7D000ED6C54 /* BaseModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseModel.h; sourceTree = "<group>"; };
+		DA43056B1C23E7D000ED6C54 /* BaseModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseModel.m; sourceTree = "<group>"; };
 		DAABB0081C1FD50E004DDCFA /* BookTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BookTable.h; sourceTree = "<group>"; };
 		DAABB0091C1FD50E004DDCFA /* BookTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BookTable.m; sourceTree = "<group>"; };
 		DAABB00A1C1FD50E004DDCFA /* BookTableAbout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BookTableAbout.h; sourceTree = "<group>"; };
@@ -817,6 +820,8 @@
 				DAABB10F1C1FF0F3004DDCFA /* PHImage.h */,
 				DAABB1101C1FF0F3004DDCFA /* PHImage.m */,
 				DAABB1111C1FF0F3004DDCFA /* SharedData */,
+				DA43056A1C23E7D000ED6C54 /* BaseModel.h */,
+				DA43056B1C23E7D000ED6C54 /* BaseModel.m */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -1978,6 +1983,7 @@
 				DAABB26E1C1FF5AE004DDCFA /* UISlider+FlatUI.m in Sources */,
 				DAABB2931C1FF5AE004DDCFA /* MPCGRectToNSDictionaryValueTransformer.m in Sources */,
 				DAABB0BC1C1FD50E004DDCFA /* Chat.m in Sources */,
+				DA43056C1C23E7D000ED6C54 /* BaseModel.m in Sources */,
 				DAABB2701C1FF5AE004DDCFA /* UITabBar+FlatUI.m in Sources */,
 				DAABB2791C1FF5AE004DDCFA /* MKMapView+ZoomLevel.m in Sources */,
 				DAABB2AA1C1FF5AE004DDCFA /* MPSurvey.m in Sources */,

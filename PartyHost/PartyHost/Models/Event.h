@@ -18,6 +18,10 @@
 @property (nonatomic, retain) NSString *tags;
 @property (nonatomic, retain) NSString *title;
 @property (nonatomic, retain) NSString *venue;
+@property (nonatomic, retain) NSDate *modified;
+@property (nonatomic, retain) NSDate *startDatetime;
+@property (nonatomic, retain) NSDate *endDatetime;
+@property (nonatomic, retain) NSNumber *isFeatured;
 
 @end
 
