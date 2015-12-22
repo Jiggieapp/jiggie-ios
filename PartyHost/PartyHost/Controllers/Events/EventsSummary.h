@@ -14,8 +14,13 @@
 #import "UICollectionViewLeftAlignedLayout.h"
 #import "KTCenterFlowLayout.h"
 #import "EmptyView.h"
+#import "Event.h"
 
-@interface EventsSummary : UIView<UIScrollViewDelegate,CLLocationManagerDelegate,MKMapViewDelegate,UICollectionViewDataSource,UICollectionViewDelegate,UICollectionViewDelegateFlowLayout>
+@interface EventsSummary : UIView<UIScrollViewDelegate,CLLocationManagerDelegate,MKMapViewDelegate,UICollectionViewDataSource,UICollectionViewDelegate,UICollectionViewDelegateFlowLayout,NSFetchedResultsControllerDelegate>
+{
+    NSFetchedResultsController *fetchedResultsController;
+    NSManagedObjectContext *managedObjectContext;
+}
 
 @property (strong, nonatomic) SharedData *sharedData;
 
@@ -61,10 +66,14 @@
 @property (nonatomic, strong) NSString *fillType;
 @property (nonatomic, strong) NSString *fillValue;
 
+@property (nonatomic, strong) Event *cEvent;
+@property (nonatomic, retain) NSFetchedResultsController *fetchedResultsController;
+@property (nonatomic, retain) NSManagedObjectContext *managedObjectContext;
+
 
 -(void)loadData:(NSString*)event_id;
 -(void)populateData:(NSDictionary *)dict;
--(void)initClass;
+-(void)initClassWithEvent:(Event *)event;
 -(void)reset;
 
 @end

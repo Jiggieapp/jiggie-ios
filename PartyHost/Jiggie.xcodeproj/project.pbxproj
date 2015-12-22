@@ -258,6 +258,7 @@
 		DAABB2F91C200227004DDCFA /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAABB2F71C200227004DDCFA /* Fabric.framework */; };
 		DAABB2FE1C200414004DDCFA /* Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = DAABB2FB1C200414004DDCFA /* Constants.m */; };
 		DAABB2FF1C200414004DDCFA /* SharedData.m in Sources */ = {isa = PBXBuildFile; fileRef = DAABB2FD1C200414004DDCFA /* SharedData.m */; };
+		DAB3AF951C27D66900AA7E25 /* EventDetail.m in Sources */ = {isa = PBXBuildFile; fileRef = DAB3AF931C27D66900AA7E25 /* EventDetail.m */; };
 		FA3702B81A8F9E9000B2BD6A /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA3702B71A8F9E9000B2BD6A /* MapKit.framework */; };
 		FA3702BA1A8F9EC300B2BD6A /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA3702B91A8F9EC300B2BD6A /* CoreLocation.framework */; };
 		FA4D2EF21A4D9A77006828E7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = FA4D2EF11A4D9A77006828E7 /* main.m */; };
@@ -743,6 +744,8 @@
 		DAABB2FB1C200414004DDCFA /* Constants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Constants.m; sourceTree = "<group>"; };
 		DAABB2FC1C200414004DDCFA /* SharedData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SharedData.h; sourceTree = "<group>"; };
 		DAABB2FD1C200414004DDCFA /* SharedData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SharedData.m; sourceTree = "<group>"; };
+		DAB3AF921C27D66900AA7E25 /* EventDetail.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventDetail.h; sourceTree = "<group>"; };
+		DAB3AF931C27D66900AA7E25 /* EventDetail.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventDetail.m; sourceTree = "<group>"; };
 		FA3702B71A8F9E9000B2BD6A /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		FA3702B91A8F9EC300B2BD6A /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		FA4D2EEC1A4D9A77006828E7 /* Jiggie.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Jiggie.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -808,6 +811,8 @@
 			children = (
 				DA4305661C22916E00ED6C54 /* Event.h */,
 				DA4305671C22916E00ED6C54 /* Event.m */,
+				DAB3AF921C27D66900AA7E25 /* EventDetail.h */,
+				DAB3AF931C27D66900AA7E25 /* EventDetail.m */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -1892,6 +1897,7 @@
 				DAABB0B41C1FD50E004DDCFA /* BookTableComplete.m in Sources */,
 				DAABB2B81C1FF5AE004DDCFA /* MPUIImageToNSDictionaryValueTransformer.m in Sources */,
 				DAABB0D41C1FD50E004DDCFA /* HostVenueDetailFromShare.m in Sources */,
+				DAB3AF951C27D66900AA7E25 /* EventDetail.m in Sources */,
 				DAABB0CF1C1FD50E004DDCFA /* EventsHostMessage.m in Sources */,
 				DAABB0B51C1FD50E004DDCFA /* BookTableConfirm.m in Sources */,
 				DAABB0BD1C1FD50E004DDCFA /* ConvoCell.m in Sources */,

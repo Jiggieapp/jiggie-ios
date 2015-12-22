@@ -230,7 +230,7 @@
 
 -(void)initClass
 {
-    NSLog(@"EVENT_INIT_CLASS @",(self.sharedData.isLoggedIn == YES)?@"Y":@"N");
+    NSLog(@"EVENT_INIT_CLASS %@",(self.sharedData.isLoggedIn == YES)?@"Y":@"N");
     if(self.sharedData.isLoggedIn)
     {
         NSLog(@"EVENT_INSIDE");
@@ -318,7 +318,7 @@
     [NSEntityDescription entityForName:NSStringFromClass([Event class])
                 inManagedObjectContext:globalManagedObjectContext];
     NSSortDescriptor *sortDescriptor =
-    [NSSortDescriptor sortDescriptorWithKey:@"startDatetime"
+    [NSSortDescriptor sortDescriptorWithKey:@"modified"
                                   ascending:YES];
     NSPredicate *eventPredicate = [NSPredicate predicateWithFormat:@"startDatetime > %@", [NSDate date]];
     NSArray *sortDescriptors = [NSArray arrayWithObjects:sortDescriptor, nil];
@@ -348,7 +348,7 @@
     }
     
     BOOL performFetchResult = [[self fetchedResultsController] performFetch:error];
-    
+   
     if ([[self.fetchedResultsController fetchedObjects] count]>0) {
         self.eventsList.hidden = NO;
         [self.emptyView setMode:@"hide"];
@@ -417,86 +417,93 @@
 //                 [self tableView:self.eventsList didSelectRowAtIndexPath:self.cGuestListingIndexPath];
 //             }
              
-             
-             NSArray *fetchEvents = [BaseModel fetchManagedObject:self.managedObjectContext
-                                                         inEntity:NSStringFromClass([Event class])
-                                                     andPredicate:nil];
-             
-             for (NSDictionary *eventSection in json) {
-                 BOOL isFeatured = NO;
-                 if ([[eventSection objectForKey:@"date_day"] isEqualToString:@"Featured Events"]) {
-                     isFeatured = YES;
-                 }
-                 for (NSDictionary *eventRow in eventSection[@"events"]) {
-                     Event *item = (Event *)[NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([Event class])
-                                                                          inManagedObjectContext:self.managedObjectContext];
-                     
-                     NSString *title = [eventRow objectForKey:@"title"];
-                     if (title && ![title isEqual:[NSNull null]]) {
-                         item.title = title;
-                     } else {
-                         item.title = @"";
+             @try {
+                 NSArray *fetchEvents = [BaseModel fetchManagedObject:self.managedObjectContext
+                                                             inEntity:NSStringFromClass([Event class])
+                                                         andPredicate:nil];
+                 
+                 for (NSDictionary *eventSection in json) {
+                     BOOL isFeatured = NO;
+                     if ([[eventSection objectForKey:@"date_day"] isEqualToString:@"Featured Events"]) {
+                         isFeatured = YES;
                      }
-                     
-                     NSString *_id = [eventRow objectForKey:@"_id"];
-                     if (_id && ![_id isEqual:[NSNull null]]) {
-                         item.eventID = _id;
-                     } else {
-                         item.eventID = @"";
-                     }
-                     
-                     NSString *start_datetime_str = [eventRow objectForKey:@"start_datetime_str"];
-                     if (start_datetime_str && ![start_datetime_str isEqual:[NSNull null]]) {
-                         item.startDatetimeStr = start_datetime_str;
-                     } else {
-                         item.startDatetimeStr = @"";
-                     }
-
-                     NSString *venue_name = [eventRow objectForKey:@"venue_name"];
-                     if (venue_name && ![venue_name isEqual:[NSNull null]]) {
-                         item.venue = venue_name;
-                     } else {
-                         item.venue = @"";
-                     }
-
-                     NSArray *tags = [eventRow objectForKey:@"tags"];
-                     if (tags && ![tags isEqual:[NSNull null]]) {
-                         item.tags = [tags componentsJoinedByString:@","];
-                     }
-                     
-                     NSArray *photos = [eventRow objectForKey:@"photos"];
-                     if (photos && ![photos isEqual:[NSNull null]]) {
-                         item.photo = [photos objectAtIndex:0];
-                     }
-                     
-                     item.isFeatured = [NSNumber numberWithBool:isFeatured];
-                     
-                     NSString *start_datetime = [eventRow objectForKey:@"start_datetime"];
-                     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-                     [formatter setDateFormat:PHDateFormatServer];
-                     NSDate *startDatetime = [formatter dateFromString:start_datetime];
-                     if (startDatetime != nil) {
-                         item.startDatetime = startDatetime;
-                     }
-                     
-                     NSString *end_datetime = [eventRow objectForKey:@"end_datetime"];
-                     NSDate *endDatetime = [formatter dateFromString:end_datetime];
-                     if (endDatetime != nil) {
-                         item.endDatetime = endDatetime;
-                     }
-                     
-                     item.modified = [NSDate date];
-                     
-                     for (Event *fetchEvent in fetchEvents) {
-                         if ([fetchEvent.eventID isEqualToString:item.eventID]) {
-                             [self.managedObjectContext deleteObject:fetchEvent];
+                     for (NSDictionary *eventRow in eventSection[@"events"]) {
+                         Event *item = (Event *)[NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([Event class])
+                                                                              inManagedObjectContext:self.managedObjectContext];
+                         
+                         NSString *title = [eventRow objectForKey:@"title"];
+                         if (title && ![title isEqual:[NSNull null]]) {
+                             item.title = title;
+                         } else {
+                             item.title = @"";
                          }
+                         
+                         NSString *_id = [eventRow objectForKey:@"_id"];
+                         if (_id && ![_id isEqual:[NSNull null]]) {
+                             item.eventID = _id;
+                         } else {
+                             item.eventID = @"";
+                         }
+                         
+                         NSString *start_datetime_str = [eventRow objectForKey:@"start_datetime_str"];
+                         if (start_datetime_str && ![start_datetime_str isEqual:[NSNull null]]) {
+                             item.startDatetimeStr = start_datetime_str;
+                         } else {
+                             item.startDatetimeStr = @"";
+                         }
+                         
+                         NSString *venue_name = [eventRow objectForKey:@"venue_name"];
+                         if (venue_name && ![venue_name isEqual:[NSNull null]]) {
+                             item.venue = venue_name;
+                         } else {
+                             item.venue = @"";
+                         }
+                         
+                         NSArray *tags = [eventRow objectForKey:@"tags"];
+                         if (tags && ![tags isEqual:[NSNull null]]) {
+                             item.tags = [tags componentsJoinedByString:@","];
+                         }
+                         
+                         NSArray *photos = [eventRow objectForKey:@"photos"];
+                         if (photos && ![photos isEqual:[NSNull null]]) {
+                             item.photo = [photos objectAtIndex:0];
+                         }
+                         
+                         item.isFeatured = [NSNumber numberWithBool:isFeatured];
+                         
+                         NSString *start_datetime = [eventRow objectForKey:@"start_datetime"];
+                         NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+                         [formatter setDateFormat:PHDateFormatServer];
+                         NSDate *startDatetime = [formatter dateFromString:start_datetime];
+                         if (startDatetime != nil) {
+                             item.startDatetime = startDatetime;
+                         }
+                         
+                         NSString *end_datetime = [eventRow objectForKey:@"end_datetime"];
+                         NSDate *endDatetime = [formatter dateFromString:end_datetime];
+                         if (endDatetime != nil) {
+                             item.endDatetime = endDatetime;
+                         }
+                         
+                         item.modified = [NSDate date];
+                         
+                         for (Event *fetchEvent in fetchEvents) {
+                             if ([fetchEvent.eventID isEqualToString:item.eventID]) {
+                                 [self.managedObjectContext deleteObject:fetchEvent];
+                             }
+                         }
+                         
+                         NSError *error;
+                         if (![self.managedObjectContext save:&error]) NSLog(@"Error: %@", [error localizedDescription]);
+                         
                      }
-                     
-                     NSError *error;
-                     if (![self.managedObjectContext save:&error]) NSLog(@"Error: %@", [error localizedDescription]);
-
                  }
+             }
+             @catch (NSException *exception) {
+                 
+             }
+             @finally {
+                 
              }
              
              [self.eventsList reloadData];
@@ -615,8 +622,7 @@
     
     if([self.sharedData isGuest] && ![self.sharedData isMember])
     {
-        [self.eventsSummary initClass];
-        [self.eventsSummary loadData:event.eventID];
+        [self.eventsSummary initClassWithEvent:event];
         
         self.eventsSummary.hidden = NO;
         self.eventsGuestList.hidden = YES;
@@ -624,8 +630,7 @@
     }
     else if([self.sharedData isHost] || [self.sharedData isMember])
     {
-        [self.eventsSummary initClass];
-        [self.eventsSummary loadData:event.eventID];
+        [self.eventsSummary initClassWithEvent:event];
         
         self.eventsSummary.hidden = NO;
         self.eventsGuestList.hidden = NO;
