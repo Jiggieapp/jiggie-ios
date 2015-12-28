@@ -545,7 +545,7 @@
     self.tagArray = [[NSMutableArray alloc] init];
     [self.tagArray removeAllObjects];
     
-    NSMutableArray *tags = [NSMutableArray arrayWithArray:[self.cEvent.tags componentsSeparatedByString:@","]];
+    NSMutableArray *tags = (NSMutableArray *)[NSKeyedUnarchiver unarchiveObjectWithData:self.cEvent.tags];
 //    if (self.cEvent.isFeatured) {
 //        [tags insertObject:@"Featured" atIndex:0];
 //    }
@@ -605,8 +605,6 @@
          
          dispatch_async(dispatch_get_main_queue(), ^{
              
-             [[AnalyticManager sharedManager] trackMixPanelWithDict:@"View Event Details" withDict:self.sharedData.mixPanelCEventDict];
-             
              //Check if valid
              if(responseObject[@"success"]) {
                  if(![responseObject[@"success"] boolValue]) {
@@ -640,6 +638,7 @@
                  [self.sharedData.eventDict removeAllObjects];
                  [self.sharedData.eventDict addEntriesFromDictionary:responseObject];
                  
+                 [[AnalyticManager sharedManager] trackMixPanelWithDict:@"View Event Details" withDict:self.sharedData.mixPanelCEventDict];
                  
                  NSPredicate *eventPredicate = [NSPredicate predicateWithFormat:@"eventID = %@", [json objectForKey:@"_id"]];
                  NSArray *fetchEventDetail = [BaseModel fetchManagedObject:self.managedObjectContext

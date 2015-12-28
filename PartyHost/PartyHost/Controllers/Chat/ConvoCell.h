@@ -10,6 +10,8 @@
 #import "NSDate+TimeAgo.h"
 #import "MGSwipeTableCell.h"
 
+@class Chat;
+
 @interface ConvoCell : MGSwipeTableCell
 
 @property (strong, nonatomic) SharedData    *sharedData;
@@ -20,5 +22,8 @@
 @property(nonatomic,strong) UserBubble  *icon;
 @property(nonatomic,strong) UIView      *iconCon;
 @property(nonatomic,strong) UILabel     *dateLabel;
+
+- (void)clearData;
+- (void)loadData:(Chat *)chat;
 
 @end

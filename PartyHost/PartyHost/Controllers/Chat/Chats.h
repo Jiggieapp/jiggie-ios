@@ -14,19 +14,25 @@
 #import "MGSwipeTableCell.h"
 #import "PHImage.h"
 
-@interface Chat : UIView <UITableViewDelegate,UITableViewDataSource,MGSwipeTableCellDelegate>
+@interface Chats : UIView <UITableViewDelegate,UITableViewDataSource,MGSwipeTableCellDelegate,NSFetchedResultsControllerDelegate>{
+    NSFetchedResultsController *fetchedResultsController;
+    NSManagedObjectContext *managedObjectContext;
+}
 
 @property (strong, nonatomic) SharedData    *sharedData;
-@property(nonatomic,strong) NSMutableArray *conversationsA;
 @property(nonatomic,strong) UITableView *conversationsList;
 @property(nonatomic,assign) BOOL isConvosLoaded;
 @property(nonatomic,assign) BOOL isLoading;
+@property(nonatomic,assign) BOOL needUpdateContents;
 
 @property(nonatomic,assign) BOOL isInBlockMode;
 @property(nonatomic,assign) BOOL isInDeleteMode;
 
 //When there are no entries to see
 @property(nonatomic,strong) EmptyView *emptyView;
+
+@property (nonatomic, retain) NSFetchedResultsController *fetchedResultsController;
+@property (nonatomic, retain) NSManagedObjectContext *managedObjectContext;
 
 -(void)initClass;
 -(void)forceReload;

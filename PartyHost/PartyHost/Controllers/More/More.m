@@ -9,6 +9,7 @@
 #import "More.h"
 #import "Feed.h"
 #import "AnalyticManager.h"
+#import "UserManager.h"
 
 #define SCREEN_LEVELS 3
 
@@ -125,13 +126,13 @@
     [self.btnPTBack setImageEdgeInsets:UIEdgeInsetsMake(8, 14, 8, 14)];
     [self.btnPTBack addTarget:self action:@selector(goPTBack) forControlEvents:UIControlEventTouchUpInside];
         
-    self.emptyView = [[EmptyView alloc] initWithFrame:CGRectMake(0,
-                                                                 tabBar.bounds.size.height,
-                                                                 self.sharedData.screenWidth,
-                                                                 self.sharedData.screenHeight - tabBar.bounds.size.height - PHTabHeight)];
-    [self.emptyView setData:@"Please Try Again" subtitle:@"" imageNamed:@""];
-    self.emptyView.backgroundColor = [UIColor whiteColor];
-    [self addSubview:self.emptyView];
+//    self.emptyView = [[EmptyView alloc] initWithFrame:CGRectMake(0,
+//                                                                 tabBar.bounds.size.height,
+//                                                                 self.sharedData.screenWidth,
+//                                                                 self.sharedData.screenHeight - tabBar.bounds.size.height - PHTabHeight)];
+//    [self.emptyView setData:@"Please Try Again" subtitle:@"" imageNamed:@""];
+//    self.emptyView.backgroundColor = [UIColor whiteColor];
+//    [self addSubview:self.emptyView];
     
     //Add others
     [self.mainCon addSubview:tabBar];
@@ -194,6 +195,7 @@
     
     //Load settings now
     [self loadSettings];
+    [self updateTable];
 }
 
 #pragma mark - API
@@ -202,7 +204,7 @@
     //Start spinner
     if(!self.isLoaded)
     {
-        [self.emptyView setMode:@"load"];
+//        [self.emptyView setMode:@"load"];
     }
     
     NSString *facebookId = [self.sharedData.userDict objectForKey:@"fb_id"];
@@ -221,7 +223,7 @@
          {
              NSLog(@"SETTINGS responseObject SAME");
              
-             [self.emptyView setMode:@"hide"];
+//             [self.emptyView setMode:@"hide"];
              return;
          }
          
@@ -229,7 +231,10 @@
          self.settingsData = [[NSMutableDictionary alloc] initWithDictionary:responseObject];
          
          //Load data
-         [self.sharedData loadSettingsResponse:responseObject];
+         [UserManager saveUserSetting:responseObject];
+         [UserManager updateLocalSetting];
+         
+//         [self.sharedData loadSettingsResponse:responseObject];
          
          //Reload table view
          self.isLoaded = YES;
@@ -238,11 +243,11 @@
          [self updateTable];
          
          //Hide spinner
-         [self.emptyView setMode:@"hide"];
+//         [self.emptyView setMode:@"hide"];
          
      } failure:^(AFHTTPRequestOperation *operation, NSError *error)
      {
-         [self.emptyView setMode:@"empty"];
+//         [self.emptyView setMode:@"empty"];
          
          NSLog(@"ERROR :: %@",error);
      }];
@@ -496,7 +501,7 @@
         UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
         
         //Settings
-        if(indexPath.row == 0)
+        if(indexPath.row == 0 && [UserManager updateLocalSetting])
         {
             self.settingsPage.hidden = NO;
             self.profilePage.hidden = YES;
@@ -536,6 +541,9 @@
         //Log Out
         else if(indexPath.row == 3)
         {
+            
+            [[UserManager sharedManager] clearAllUserData];
+            
             [[NSNotificationCenter defaultCenter]
              postNotificationName:@"SHOW_LOGIN"
              object:self];

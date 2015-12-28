@@ -24,7 +24,7 @@
 		DAABB0B91C1FD50E004DDCFA /* BookTableHostingComplete.m in Sources */ = {isa = PBXBuildFile; fileRef = DAABB0191C1FD50E004DDCFA /* BookTableHostingComplete.m */; };
 		DAABB0BA1C1FD50E004DDCFA /* BookTableOffering.m in Sources */ = {isa = PBXBuildFile; fileRef = DAABB01B1C1FD50E004DDCFA /* BookTableOffering.m */; };
 		DAABB0BB1C1FD50E004DDCFA /* BookTableOfferingCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DAABB01D1C1FD50E004DDCFA /* BookTableOfferingCell.m */; };
-		DAABB0BC1C1FD50E004DDCFA /* Chat.m in Sources */ = {isa = PBXBuildFile; fileRef = DAABB0201C1FD50E004DDCFA /* Chat.m */; };
+		DAABB0BC1C1FD50E004DDCFA /* Chats.m in Sources */ = {isa = PBXBuildFile; fileRef = DAABB0201C1FD50E004DDCFA /* Chats.m */; };
 		DAABB0BD1C1FD50E004DDCFA /* ConvoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DAABB0221C1FD50E004DDCFA /* ConvoCell.m */; };
 		DAABB0BE1C1FD50E004DDCFA /* MessageBubbleTriangle.m in Sources */ = {isa = PBXBuildFile; fileRef = DAABB0241C1FD50E004DDCFA /* MessageBubbleTriangle.m */; };
 		DAABB0BF1C1FD50E004DDCFA /* MessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DAABB0261C1FD50E004DDCFA /* MessageCell.m */; };
@@ -259,6 +259,8 @@
 		DAABB2FE1C200414004DDCFA /* Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = DAABB2FB1C200414004DDCFA /* Constants.m */; };
 		DAABB2FF1C200414004DDCFA /* SharedData.m in Sources */ = {isa = PBXBuildFile; fileRef = DAABB2FD1C200414004DDCFA /* SharedData.m */; };
 		DAB3AF951C27D66900AA7E25 /* EventDetail.m in Sources */ = {isa = PBXBuildFile; fileRef = DAB3AF931C27D66900AA7E25 /* EventDetail.m */; };
+		DAB3AFA11C29541E00AA7E25 /* Chat.m in Sources */ = {isa = PBXBuildFile; fileRef = DAB3AF9F1C29541E00AA7E25 /* Chat.m */; };
+		DAD2708D1C31110D00546106 /* UserManager.m in Sources */ = {isa = PBXBuildFile; fileRef = DAD2708C1C31110D00546106 /* UserManager.m */; };
 		FA3702B81A8F9E9000B2BD6A /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA3702B71A8F9E9000B2BD6A /* MapKit.framework */; };
 		FA3702BA1A8F9EC300B2BD6A /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA3702B91A8F9EC300B2BD6A /* CoreLocation.framework */; };
 		FA4D2EF21A4D9A77006828E7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = FA4D2EF11A4D9A77006828E7 /* main.m */; };
@@ -309,8 +311,8 @@
 		DAABB01B1C1FD50E004DDCFA /* BookTableOffering.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BookTableOffering.m; sourceTree = "<group>"; };
 		DAABB01C1C1FD50E004DDCFA /* BookTableOfferingCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BookTableOfferingCell.h; sourceTree = "<group>"; };
 		DAABB01D1C1FD50E004DDCFA /* BookTableOfferingCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BookTableOfferingCell.m; sourceTree = "<group>"; };
-		DAABB01F1C1FD50E004DDCFA /* Chat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Chat.h; sourceTree = "<group>"; };
-		DAABB0201C1FD50E004DDCFA /* Chat.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Chat.m; sourceTree = "<group>"; };
+		DAABB01F1C1FD50E004DDCFA /* Chats.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Chats.h; sourceTree = "<group>"; };
+		DAABB0201C1FD50E004DDCFA /* Chats.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Chats.m; sourceTree = "<group>"; };
 		DAABB0211C1FD50E004DDCFA /* ConvoCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConvoCell.h; sourceTree = "<group>"; };
 		DAABB0221C1FD50E004DDCFA /* ConvoCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConvoCell.m; sourceTree = "<group>"; };
 		DAABB0231C1FD50E004DDCFA /* MessageBubbleTriangle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageBubbleTriangle.h; sourceTree = "<group>"; };
@@ -746,6 +748,10 @@
 		DAABB2FD1C200414004DDCFA /* SharedData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SharedData.m; sourceTree = "<group>"; };
 		DAB3AF921C27D66900AA7E25 /* EventDetail.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventDetail.h; sourceTree = "<group>"; };
 		DAB3AF931C27D66900AA7E25 /* EventDetail.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventDetail.m; sourceTree = "<group>"; };
+		DAB3AF9E1C29541E00AA7E25 /* Chat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Chat.h; sourceTree = "<group>"; };
+		DAB3AF9F1C29541E00AA7E25 /* Chat.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Chat.m; sourceTree = "<group>"; };
+		DAD2708B1C31110D00546106 /* UserManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserManager.h; sourceTree = "<group>"; };
+		DAD2708C1C31110D00546106 /* UserManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserManager.m; sourceTree = "<group>"; };
 		FA3702B71A8F9E9000B2BD6A /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		FA3702B91A8F9EC300B2BD6A /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		FA4D2EEC1A4D9A77006828E7 /* Jiggie.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Jiggie.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -813,6 +819,8 @@
 				DA4305671C22916E00ED6C54 /* Event.m */,
 				DAB3AF921C27D66900AA7E25 /* EventDetail.h */,
 				DAB3AF931C27D66900AA7E25 /* EventDetail.m */,
+				DAB3AF9E1C29541E00AA7E25 /* Chat.h */,
+				DAB3AF9F1C29541E00AA7E25 /* Chat.m */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -820,6 +828,7 @@
 		DAABAFDD1C1EC994004DDCFA /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				DAD2708A1C31110200546106 /* User */,
 				DAABB1031C1FF0F3004DDCFA /* Analytics */,
 				DAABB1061C1FF0F3004DDCFA /* Extensions */,
 				DAABB10F1C1FF0F3004DDCFA /* PHImage.h */,
@@ -916,8 +925,8 @@
 		DAABB01E1C1FD50E004DDCFA /* Chat */ = {
 			isa = PBXGroup;
 			children = (
-				DAABB01F1C1FD50E004DDCFA /* Chat.h */,
-				DAABB0201C1FD50E004DDCFA /* Chat.m */,
+				DAABB01F1C1FD50E004DDCFA /* Chats.h */,
+				DAABB0201C1FD50E004DDCFA /* Chats.m */,
 				DAABB0211C1FD50E004DDCFA /* ConvoCell.h */,
 				DAABB0221C1FD50E004DDCFA /* ConvoCell.m */,
 				DAABB0231C1FD50E004DDCFA /* MessageBubbleTriangle.h */,
@@ -1647,6 +1656,15 @@
 			path = Fabric;
 			sourceTree = "<group>";
 		};
+		DAD2708A1C31110200546106 /* User */ = {
+			isa = PBXGroup;
+			children = (
+				DAD2708B1C31110D00546106 /* UserManager.h */,
+				DAD2708C1C31110D00546106 /* UserManager.m */,
+			);
+			path = User;
+			sourceTree = "<group>";
+		};
 		FA4D2EE31A4D9A77006828E7 = {
 			isa = PBXGroup;
 			children = (
@@ -1960,6 +1978,7 @@
 				DAABB26C1C1FF5AE004DDCFA /* UIPopoverController+FlatUI.m in Sources */,
 				DAABB29B1C1FF5AE004DDCFA /* MPEnumDescription.m in Sources */,
 				DAABB0C31C1FD50E004DDCFA /* Dashboard.m in Sources */,
+				DAD2708D1C31110D00546106 /* UserManager.m in Sources */,
 				DAABB0E61C1FD50E004DDCFA /* PhoneVerifyComplete.m in Sources */,
 				DAABB25E1C1FF5AE004DDCFA /* CMPopTipView.m in Sources */,
 				DAABB0D71C1FD50E004DDCFA /* MyHostings.m in Sources */,
@@ -1988,7 +2007,7 @@
 				DAABB2B31C1FF5AE004DDCFA /* MPTypeDescription.m in Sources */,
 				DAABB26E1C1FF5AE004DDCFA /* UISlider+FlatUI.m in Sources */,
 				DAABB2931C1FF5AE004DDCFA /* MPCGRectToNSDictionaryValueTransformer.m in Sources */,
-				DAABB0BC1C1FD50E004DDCFA /* Chat.m in Sources */,
+				DAABB0BC1C1FD50E004DDCFA /* Chats.m in Sources */,
 				DA43056C1C23E7D000ED6C54 /* BaseModel.m in Sources */,
 				DAABB2701C1FF5AE004DDCFA /* UITabBar+FlatUI.m in Sources */,
 				DAABB2791C1FF5AE004DDCFA /* MKMapView+ZoomLevel.m in Sources */,
@@ -2005,6 +2024,7 @@
 				DAABB2641C1FF5AE004DDCFA /* FUISwitch.m in Sources */,
 				DAABB2AF1C1FF5AE004DDCFA /* MPSwizzler.m in Sources */,
 				DAABB0DC1C1FD50E004DDCFA /* More.m in Sources */,
+				DAB3AFA11C29541E00AA7E25 /* Chat.m in Sources */,
 				DAABB1151C1FF0F3004DDCFA /* UIFont+PH.m in Sources */,
 				DAABB2CD1C1FF5AE004DDCFA /* TSHit.m in Sources */,
 				DAABB2CA1C1FF5AE004DDCFA /* TSCore.m in Sources */,

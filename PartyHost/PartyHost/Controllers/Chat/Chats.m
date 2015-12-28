@@ -6,10 +6,15 @@
 //  Copyright (c) 2014 Sunny Clark. All rights reserved.
 //
 
-#import "Chat.h"
+#import "Chats.h"
 #import "AnalyticManager.h"
+#import "AppDelegate.h"
+#import "BaseModel.h"
+#import "Chat.h"
 
-@implementation Chat
+@implementation Chats
+
+@synthesize fetchedResultsController, managedObjectContext;
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -21,6 +26,7 @@
     self.isLoading = NO;
     self.isInDeleteMode = NO;
     self.isInBlockMode = NO;
+    self.needUpdateContents = YES;
     
     UIView *tabBar = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.sharedData.screenWidth, 60)];
     tabBar.backgroundColor = [UIColor phPurpleColor];
@@ -33,7 +39,6 @@
     title.font = [UIFont phBold:18];
     [tabBar addSubview:title];
     
-    self.conversationsA = [[NSMutableArray alloc] init];
     self.conversationsList = [[UITableView alloc] initWithFrame:CGRectMake(0, 60, self.sharedData.screenWidth, self.sharedData.screenHeight - 60 - 50)];
     self.conversationsList.delegate = self;
     self.conversationsList.dataSource = self;
@@ -80,16 +85,6 @@
 
 -(void)initClass
 {
-    if(!self.isLoading)
-    {
-        //self.isLoading = YES;
-        dispatch_queue_t someQueue = dispatch_queue_create("com.partyhost.app.chat_section", nil);
-        dispatch_async(someQueue,
-                       ^{
-                           [self loadConvos];
-                       });
-    }
-    
     //Set a special message depending on account type
     if([self.sharedData isMember])
     {
@@ -101,6 +96,24 @@
         //self.labelEmpty.text = @"Post a hosting and start\nchatting with interested guests\nto secure party plans now!";
         [self.emptyView setData:@"No chats yet" subtitle:@"Book a table and start chatting with interested guests right now!" imageNamed:@"tab_chat"];
     }
+    
+    [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Conversations List" withDict:@{}];
+    
+    [self reloadFetch:nil];
+    [self loadConvos];
+    
+//    if(!self.isLoading)
+//    {
+//        //self.isLoading = YES;
+//        dispatch_queue_t someQueue = dispatch_queue_create("com.partyhost.app.chat_section", nil);
+//        dispatch_async(someQueue,
+//                       ^{
+//                           [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Conversations List" withDict:@{}];
+//                           
+//                           [self reloadFetch:nil];
+//                           [self loadConvos];
+//                       });
+//    }
 }
 
 #pragma mark - Button Action
@@ -115,7 +128,6 @@
     self.isLoading = NO;
     
     //Clear table
-    [self.conversationsA removeAllObjects];
     [self.conversationsList setContentOffset:CGPointZero animated:YES];
     [self.conversationsList reloadData];
     
@@ -128,6 +140,72 @@
     if(self.sharedData.cPageIndex == 1)
     {
         [self initClass];
+    }
+}
+
+#pragma mark - Fetch
+- (NSFetchedResultsController *)fetchedResultsController {
+    
+    if (fetchedResultsController != nil) {
+        return fetchedResultsController;
+    }
+    
+    AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    NSManagedObjectContext *globalManagedObjectContext = [appDelegate managedObjectContext];
+    self.managedObjectContext = [appDelegate managedObjectContext];
+    
+    NSEntityDescription *entityDescription =
+    [NSEntityDescription entityForName:NSStringFromClass([Chat class])
+                inManagedObjectContext:globalManagedObjectContext];
+    NSSortDescriptor *sortDescriptor =
+    [NSSortDescriptor sortDescriptorWithKey:@"lastUpdated"
+                                  ascending:NO];
+    NSArray *sortDescriptors = [NSArray arrayWithObjects:sortDescriptor, nil];
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    [fetchRequest setEntity:entityDescription];
+    [fetchRequest setSortDescriptors:sortDescriptors];
+    [fetchRequest setPredicate:nil];
+    
+    fetchedResultsController = nil;
+    fetchedResultsController = [[NSFetchedResultsController alloc]
+                                initWithFetchRequest:fetchRequest
+                                managedObjectContext:globalManagedObjectContext
+                                sectionNameKeyPath:nil
+                                cacheName:@"chatListCache"];
+    [fetchedResultsController setDelegate:self];
+    
+    return fetchedResultsController;
+}
+
+- (BOOL)reloadFetch:(NSError **)error {
+    //    NSLog(@"--- reloadAndPerformFetch");
+    // delete cache
+    [NSFetchedResultsController deleteCacheWithName:@"chatListCache"];
+    if(fetchedResultsController){
+        [fetchedResultsController setDelegate:nil];
+        fetchedResultsController = nil;
+    }
+    
+    BOOL performFetchResult = [[self fetchedResultsController] performFetch:error];
+    
+    if ([[self.fetchedResultsController fetchedObjects] count]>0) {
+        self.conversationsList.hidden = NO;
+        [self.emptyView setMode:@"hide"];
+        
+        self.isConvosLoaded = YES;
+        [self.conversationsList reloadData];
+    }
+    
+    return performFetchResult;
+}
+
+- (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
+    self.conversationsList.hidden = NO;
+    [self.emptyView setMode:@"hide"];
+    
+    if (self.needUpdateContents) {
+        self.isConvosLoaded = YES;
+        [self.conversationsList reloadData];
     }
 }
 
@@ -149,32 +227,28 @@
     
     
     NSString *url = [NSString stringWithFormat:@"%@/conversations",PHBaseURL];
-    //NSLog(@"CHAT_START_LOAD :: %@",url);
+    NSLog(@"CHAT_START_LOAD :: %@",url);
     
     
     [manager GET:url parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject)
      {
-         self.isConvosLoaded = YES;
          
-         if([self.conversationsA isEqualToArray:responseObject] && [self.conversationsA count] > 0)
-         {
-             NSLog(@"CHAT_SAME_DATA");
-         }
-         else
-         {
+         NSString *responseString = operation.responseString;
+         NSError *error;
+         
+         NSArray *json = (NSArray *)[NSJSONSerialization
+                                     JSONObjectWithData:[responseString dataUsingEncoding:NSUTF8StringEncoding]
+                                     options:kNilOptions
+                                     error:&error];
+         dispatch_async(dispatch_get_main_queue(), ^{
+             
+             self.isConvosLoaded = YES;
+             self.needUpdateContents = NO;
+             
              NSLog(@"CONVERSATIONS_responseObject :: %@",responseObject);
              
-             
-             [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Conversations List" withDict:@{}];
-             
-             [self.conversationsList setContentOffset:CGPointZero animated:YES];
-             [self.conversationsA removeAllObjects];
-             [self.conversationsA addObjectsFromArray:responseObject];
-             
-             [self.conversationsList reloadData];
-             
              //Show empty
-             if(self.conversationsA.count <= 0) {
+             if(json.count <= 0) {
                  self.conversationsList.hidden = YES;
                  [self.emptyView setMode:@"empty"];
              }
@@ -183,54 +257,127 @@
                  [self.emptyView setMode:@"hide"];
              }
              
-             //[self loadImages];
-             
              int unreadcount = 0;
-             for (int j = 0; j < [self.conversationsA count]; j++)
-             {
-                 NSDictionary *dict = [self.conversationsA objectAtIndex:j];
-                 if(![[dict objectForKey:@"unread"] isEqualToString:@"0"])
-                 {
-                     unreadcount++;
+             
+             @try {
+                 NSArray *fetchChats = [BaseModel fetchManagedObject:self.managedObjectContext
+                                                            inEntity:NSStringFromClass([Chat class])
+                                                        andPredicate:nil];
+
+                 for (NSDictionary *chatRow in json) {
+                     Chat *item = (Chat *)[NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([Chat class])
+                                                                        inManagedObjectContext:self.managedObjectContext];
+                     
+                     NSString *fb_id = [chatRow objectForKey:@"fb_id"];
+                     if (fb_id && ![fb_id isEqual:[NSNull null]]) {
+                         item.fb_id = fb_id;
+                     } else {
+                         item.fb_id = @"";
+                     }
+                     
+                     NSString *fromId = [chatRow objectForKey:@"fromId"];
+                     if (fromId && ![fromId isEqual:[NSNull null]]) {
+                         item.fromID = fromId;
+                     } else {
+                         item.fromID = @"";
+                     }
+                     
+                     NSString *fromName = [chatRow objectForKey:@"fromName"];
+                     if (fromName && ![fromName isEqual:[NSNull null]]) {
+                         item.fromName = fromName;
+                     } else {
+                         item.fromName = @"";
+                     }
+                     
+                     NSString *hasrepliedStr = [chatRow objectForKey:@"hasreplied"];
+                     if (hasrepliedStr && ![hasrepliedStr isEqual:[NSNull null]]) {
+                         NSNumber *hasreplied = [NSNumber numberWithInteger:[hasrepliedStr integerValue]];
+                         item.hasReplied = hasreplied;
+                     }
+                     
+                     NSString *last_message = [chatRow objectForKey:@"last_message"];
+                     if (last_message && ![last_message isEqual:[NSNull null]]) {
+                         item.lastMessage = last_message;
+                     } else {
+                         item.lastMessage = @"";
+                     }
+                     
+                     NSString *last_updated = [chatRow objectForKey:@"last_updated"];
+                     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+                     [formatter setDateFormat:PHDateFormatServer];
+                     NSDate *lastUpdated = [formatter dateFromString:last_updated];
+                     if (lastUpdated != nil) {
+                         item.lastUpdated = lastUpdated;
+                     }
+                     
+                     NSString *profile_image = [chatRow objectForKey:@"profile_image"];
+                     if (profile_image && ![profile_image isEqual:[NSNull null]]) {
+                         item.profileImage = profile_image;
+                     } else {
+                         item.profileImage = @"";
+                     }
+                     
+                     NSString *unreadStr = [chatRow objectForKey:@"unread"];
+                     if (unreadStr && ![unreadStr isEqual:[NSNull null]]) {
+                         NSNumber *unread = [NSNumber numberWithInteger:[unreadStr integerValue]];
+                         item.unread = unread;
+                         unreadcount += unread.integerValue;
+                     }
+                     
+                     item.modified = [NSDate date];
+                     
+                     for (Chat *fetchChat in fetchChats) {
+                         if ([fetchChat.fb_id isEqualToString:item.fb_id]) {
+                             [self.managedObjectContext deleteObject:fetchChat];
+                         }
+                     }
+                     
+                     NSError *error;
+                     if (![self.managedObjectContext save:&error]) NSLog(@"Error: %@", [error localizedDescription]);
+                     
                  }
              }
-             
+             @catch (NSException *exception) {
+                 
+             }
+             @finally {
+                 
+             }
+
              self.sharedData.unreadChatCount = unreadcount;
              
              //Update badges
              [self.sharedData.chatBadge updateValue:unreadcount];
              [self.sharedData updateBadgeIcon];
              
-             if(self.sharedData.hasMessageToLoad)
-             {
-                 self.sharedData.hasMessageToLoad = NO;
-                 /*
-                  int userIndex = 0;
-                  for (int i = 0; i < [self.conversationsA count]; i++)
-                  {
-                  NSDictionary *dict = [self.conversationsA objectAtIndex:i];
-                  if(![[dict objectForKey:@"fb_id"] isEqualToString:self.sharedData.fromMailId])
-                  {
-                  userIndex = i;
-                  }
-                  }
-                  
-                  NSIndexPath* selectedCellIndexPath= [NSIndexPath indexPathForRow:userIndex inSection:0];
-                  [self.conversationsList selectRowAtIndexPath:selectedCellIndexPath animated:false scrollPosition:UITableViewScrollPositionMiddle];
-                  */
-             }
+             [self.conversationsList reloadData];
+             self.needUpdateContents = YES;
+             self.isLoading = NO;
+             
+             [[NSNotificationCenter defaultCenter]
+              postNotificationName:@"HIDE_LOADING"
+              object:self];
+             
+         });
+         
+         if(self.sharedData.hasMessageToLoad)
+         {
+             self.sharedData.hasMessageToLoad = NO;
+             /*
+              int userIndex = 0;
+              for (int i = 0; i < [self.conversationsA count]; i++)
+              {
+              NSDictionary *dict = [self.conversationsA objectAtIndex:i];
+              if(![[dict objectForKey:@"fb_id"] isEqualToString:self.sharedData.fromMailId])
+              {
+              userIndex = i;
+              }
+              }
+              
+              NSIndexPath* selectedCellIndexPath= [NSIndexPath indexPathForRow:userIndex inSection:0];
+              [self.conversationsList selectRowAtIndexPath:selectedCellIndexPath animated:false scrollPosition:UITableViewScrollPositionMiddle];
+              */
          }
-         
-         //         [self.conversationsList beginUpdates];
-         //         [self.conversationsList endUpdates];
-         [self.conversationsList reloadData];
-         
-         self.isLoading = NO;
-         
-         [[NSNotificationCenter defaultCenter]
-          postNotificationName:@"HIDE_LOADING"
-          object:self];
-         
          
      } failure:^(AFHTTPRequestOperation *operation, NSError *error)
      {
@@ -241,10 +388,9 @@
 
 -(void)loadImages
 {
-    for (int i = 0; i < [self.conversationsA count]; i++)
-    {
-        NSDictionary *dict = [self.conversationsA objectAtIndex:i];
-        NSString *pic_url = [self.sharedData profileImg:[dict objectForKey:@"fb_id"]];
+    int count = 0;
+    for (Chat *chat in [self.fetchedResultsController fetchedObjects]) {
+        NSString *pic_url = [self.sharedData profileImg:chat.fb_id];
         [self.sharedData loadImageCue:pic_url];
     }
 }
@@ -261,13 +407,25 @@
     
     NSDictionary *params =@{
                             @"fromId" : self.sharedData.fb_id,
-                            @"toId":self.sharedData.member_fb_id,
+                            @"toId": self.sharedData.member_fb_id,
                             };
     NSString *urlToLoad = [NSString stringWithFormat:@"%@/blockuserwithfbid",PHBaseURL];
     [manager GET:urlToLoad parameters:params success:^
      (AFHTTPRequestOperation *operation, id resultObj)
      {
          NSLog(@"RESULT :: %@",resultObj);
+         
+         NSPredicate *chatPredicate = [NSPredicate predicateWithFormat:@"fb_id == %@", self.sharedData.member_fb_id];
+         NSArray *deletedChats = [BaseModel fetchManagedObject:self.managedObjectContext
+                                                      inEntity:NSStringFromClass([Chat class])
+                                                  andPredicate:chatPredicate];
+         
+         self.needUpdateContents = NO;
+         for (Chat *deletedChat in deletedChats) {
+             [self.managedObjectContext deleteObject:deletedChat];
+         }
+         self.needUpdateContents = YES;
+         
          [self initClass];
          [self showSuccess];
          [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Block User" withDict:@{@"origin":@"Chat"}];
@@ -326,6 +484,18 @@
      (AFHTTPRequestOperation *operation, id resultObj)
      {
          NSLog(@"RESULT :: %@",resultObj);
+         
+         NSPredicate *chatPredicate = [NSPredicate predicateWithFormat:@"fb_id == %@", self.sharedData.member_fb_id];
+         NSArray *deletedChats = [BaseModel fetchManagedObject:self.managedObjectContext
+                                                      inEntity:NSStringFromClass([Chat class])
+                                                  andPredicate:chatPredicate];
+         
+         self.needUpdateContents = NO;
+         for (Chat *deletedChat in deletedChats) {
+             [self.managedObjectContext deleteObject:deletedChat];
+         }
+         self.needUpdateContents = YES;
+         
          [self initClass];
          [self showSuccessDelete];
          [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Delete Messages" withDict:@{@"origin":@"Chat"}];
@@ -357,7 +527,10 @@
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return (self.isConvosLoaded == NO)?1:([self.conversationsA count] > 0)?[self.conversationsA count]:1;
+    if(self.fetchedResultsController && [[self.fetchedResultsController fetchedObjects] count]>0){
+        return [[self.fetchedResultsController fetchedObjects] count];
+    }
+    return 0;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -376,68 +549,14 @@
         cell = [[ConvoCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:simpleTableIdentifier];
     }
     
-    if(self.isConvosLoaded == NO)
+    if (self.sharedData.osVersion < 8)
     {
-        //cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        cell.delegate = self;
     }
-    else
-    {
-        if([self.conversationsA count] == 0)
-        {
-            //cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            cell.textLabel.text = @"";
-            cell.textLabel.textAlignment = NSTextAlignmentCenter;
-            cell.iconCon.hidden = YES;
-            cell.nameLabel.hidden = YES;
-            cell.lastLabel.hidden = YES;
-            cell.accessoryType = UITableViewCellAccessoryNone;
-            cell.textLabel.hidden = NO;
-            [cell.unreadBadge updateValue:0];
-            return cell;
-        }
-        
-        if (self.sharedData.osVersion < 8)
-        {
-            cell.delegate = self;
-        }
-        
-        //cell.selectionStyle = UITableViewCellSelectionStyleDefault;
-        cell.iconCon.hidden = NO;
-        cell.nameLabel.hidden = NO;
-        cell.lastLabel.hidden = NO;
-        cell.textLabel.text = @"";
-        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-        NSDictionary *dict = [self.conversationsA objectAtIndex:indexPath.row];
-        cell.nameLabel.text = [[dict objectForKey:@"fromName"] uppercaseString];
-        [cell.icon setName:dict[@"fromName"] lastName:nil];
-        
-        //Set last message
-        NSString *lastMessage = [dict objectForKey:@"last_message"];
-        if([lastMessage length]==0)
-        {
-            cell.lastLabel.text = @"";
-            //cell.lastLabel.textColor = [UIColor lightGrayColor];
-        }
-        else
-        {
-            cell.lastLabel.text = [dict objectForKey:@"last_message"];
-            //cell.lastLabel.textColor = [UIColor grayColor];
-        }
-        
-        cell.textLabel.hidden = YES;
-        cell.textLabel.text = [dict objectForKey:@"fb_id"];
-        
-        //Time ago
-        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-        [dateFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US"]];
-        [dateFormatter setDateFormat:PHDateFormatServer];
-        NSDate *date = [dateFormatter dateFromString:dict[@"last_updated"]];
-        cell.dateLabel.text = [date timeAgo];
-        
-        [cell.unreadBadge updateValue:[[dict objectForKey:@"unread"] intValue]];
-
-        [cell.icon loadFacebookImage:[dict objectForKey:@"fb_id"]];
-    }
+    
+    [cell clearData];
+    Chat *chat = [[self fetchedResultsController] objectAtIndexPath:indexPath];
+    [cell loadData:chat];
     
     return cell;
 }
@@ -445,25 +564,20 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if(!self.isConvosLoaded || [self.conversationsA count] == 0)
-    {
-        return;
-    }
+    
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    Chat *chat = [[self fetchedResultsController] objectAtIndexPath:indexPath];
+    
+    self.sharedData.messagesPage.toId = chat.fb_id;
+    self.sharedData.messagesPage.toLabel.text = chat.fromName;
+    self.sharedData.conversationId = chat.fb_id;
+    
+    self.sharedData.member_first_name = chat.fromName;
+    self.sharedData.member_fb_id = chat.fb_id;
+    self.sharedData.member_user_id = chat.fromID;
     
     ConvoCell *cell = (ConvoCell *)[tableView cellForRowAtIndexPath:indexPath];
-    //NSString *cellText = cell.textLabel.text;
-    [self.conversationsList deselectRowAtIndexPath:indexPath animated:YES];
-    self.sharedData.messagesPage.toId = cell.textLabel.text;
-    self.sharedData.messagesPage.toLabel.text = [cell.nameLabel.text uppercaseString];
-    self.sharedData.conversationId = cell.textLabel.text;
-    
-    NSDictionary *dict = [self.conversationsA objectAtIndex:indexPath.row];
-    self.sharedData.member_first_name = [dict objectForKey:@"fromName"];
-    self.sharedData.member_fb_id = [dict objectForKey:@"fb_id"];
-    self.sharedData.member_user_id = [dict objectForKey:@"fromId"];
-    
-    //NSDictionary *dict = [self.conversationsA objectAtIndex:indexPath.row];
-    
     UIImage *imageToCopy = (cell.icon.imageView.image);
     UIGraphicsBeginImageContext(imageToCopy.size);
     [imageToCopy drawInRect:CGRectMake(0, 0, imageToCopy.size.width, imageToCopy.size.height)];
@@ -471,7 +585,7 @@
     UIGraphicsEndImageContext();
     self.sharedData.messagesPage.toIcon.image = copiedImage;
     
-    self.sharedData.toImgURL = [self.sharedData profileImg:cell.textLabel.text];//[dict objectForKey:@"profile_image"];
+    self.sharedData.toImgURL = [self.sharedData profileImg:chat.fb_id];
     
     
     [[NSNotificationCenter defaultCenter]
@@ -506,7 +620,7 @@
         return UITableViewCellEditingStyleNone;
     }
     
-    if (!self.isConvosLoaded || [self.conversationsA count] == 0) {
+    if (!self.isConvosLoaded) {
         return UITableViewCellEditingStyleNone;
     } else {
         return UITableViewCellEditingStyleDelete;
@@ -533,9 +647,10 @@
                                     {
                                         NSLog(@"Action to perform with Button 1");
                                         self.isInBlockMode = YES;
-                                        NSDictionary *dict = [self.conversationsA objectAtIndex:indexPath.row];
-                                        self.sharedData.member_first_name = [dict objectForKey:@"fromName"];
-                                        self.sharedData.member_fb_id = [dict objectForKey:@"fb_id"];
+                                        
+                                        Chat *chat = [[self fetchedResultsController] objectAtIndexPath:indexPath];
+                                        self.sharedData.member_first_name = chat.fromName;
+                                        self.sharedData.member_fb_id = chat.fb_id;
                                         [self showAlertQuestion:@"Confirm" withMessage:@"Are you sure you want to block this user?"];
                                     }];
     button.backgroundColor = [UIColor grayColor];
@@ -543,9 +658,10 @@
                                      {
                                          //NSLog(@"Action to perform with Button2!");
                                          self.isInDeleteMode = YES;
-                                         NSDictionary *dict = [self.conversationsA objectAtIndex:indexPath.row];
-                                         self.sharedData.member_first_name = [dict objectForKey:@"fromName"];
-                                         self.sharedData.member_fb_id = [dict objectForKey:@"fb_id"];
+                                         
+                                         Chat *chat = [[self fetchedResultsController] objectAtIndexPath:indexPath];
+                                         self.sharedData.member_first_name = chat.fromName;
+                                         self.sharedData.member_fb_id = chat.fb_id;
                                          [self showAlertQuestion:@"Confirm" withMessage:@"Are you sure you want to delete chat messages from this user?"];
                                      }];
     button2.backgroundColor = [UIColor redColor]; //arbitrary color
@@ -594,9 +710,10 @@
             
             NSIndexPath * indexPath = [self.conversationsList indexPathForCell:sender];
             self.isInDeleteMode = YES;
-            NSDictionary *dict = [self.conversationsA objectAtIndex:indexPath.row];
-            self.sharedData.member_first_name = [dict objectForKey:@"fromName"];
-            self.sharedData.member_fb_id = [dict objectForKey:@"fb_id"];
+            
+            Chat *chat = [[self fetchedResultsController] objectAtIndexPath:indexPath];
+            self.sharedData.member_first_name = chat.fromName;
+            self.sharedData.member_fb_id = chat.fb_id;
             [self showAlertQuestion:@"Confirm" withMessage:@"Are you sure you want to delete chat messages from this user?"];
             return NO; //don't autohide to improve delete animation
         }];
@@ -613,9 +730,10 @@
             
             NSIndexPath * indexPath = [self.conversationsList indexPathForCell:sender];
             self.isInBlockMode = YES;
-            NSDictionary *dict = [self.conversationsA objectAtIndex:indexPath.row];
-            self.sharedData.member_first_name = [dict objectForKey:@"fromName"];
-            self.sharedData.member_fb_id = [dict objectForKey:@"fb_id"];
+            
+            Chat *chat = [[self fetchedResultsController] objectAtIndexPath:indexPath];
+            self.sharedData.member_first_name = chat.fromName;
+            self.sharedData.member_fb_id = chat.fb_id;
             [self showAlertQuestion:@"Confirm" withMessage:@"Are you sure you want to block this user?"];
             
             return NO; //avoid autohide swipe

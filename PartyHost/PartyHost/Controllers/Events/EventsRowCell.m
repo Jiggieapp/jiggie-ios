@@ -173,7 +173,7 @@
         [v removeFromSuperview];
     }
     
-    NSMutableArray *tags = [NSMutableArray arrayWithArray:[event.tags componentsSeparatedByString:@","]];
+    NSMutableArray *tags = [NSMutableArray arrayWithArray:(NSMutableArray *)[NSKeyedUnarchiver unarchiveObjectWithData:event.tags]];
     if (self.isFeaturedEvent) {
         [tags insertObject:@"Featured" atIndex:0];
     }

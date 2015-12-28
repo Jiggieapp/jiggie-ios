@@ -8,6 +8,7 @@
 
 #import "Settings.h"
 #import "Feed.h"
+#import "UserManager.h"
 
 @implementation Settings
 
@@ -76,7 +77,10 @@
          NSLog(@"SETTINGS responseObject :: %@",responseObject);
          
          //Load data
-         [self.sharedData loadSettingsResponse:responseObject];
+         [UserManager saveUserSetting:responseObject];
+         [UserManager updateLocalSetting];
+         
+//         [self.sharedData loadSettingsResponse:responseObject];
          
          //Reload table view
          self.isLoaded = YES;

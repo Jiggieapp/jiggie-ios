@@ -461,7 +461,7 @@
                          
                          NSArray *tags = [eventRow objectForKey:@"tags"];
                          if (tags && ![tags isEqual:[NSNull null]]) {
-                             item.tags = [tags componentsJoinedByString:@","];
+                             item.tags = [NSKeyedArchiver archivedDataWithRootObject:tags];
                          }
                          
                          NSArray *photos = [eventRow objectForKey:@"photos"];

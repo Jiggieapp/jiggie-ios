@@ -16,7 +16,7 @@
 @property (nonatomic, retain) NSString *eventID;
 @property (nonatomic, retain) NSString *photo;
 @property (nonatomic, retain) NSString *startDatetimeStr;
-@property (nonatomic, retain) NSString *tags;
+@property (nonatomic, retain) id tags;
 @property (nonatomic, retain) NSString *title;
 @property (nonatomic, retain) NSString *venue;
 @property (nonatomic, retain) NSDate *modified;

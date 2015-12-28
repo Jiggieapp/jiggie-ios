@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "Events.h"
-#import "Chat.h"
+#import "Chats.h"
 #import "Profile.h"
 #import "Messages.h"
 #import "More.h"
@@ -37,7 +37,7 @@
 @property(nonatomic,strong) NSMutableArray  *pagesA;
 
 @property(nonatomic,strong) Events          *eventsPage;
-@property(nonatomic,strong) Chat            *chatPage;
+@property(nonatomic,strong) Chats            *chatPage;
 @property(nonatomic,strong) Profile         *profilePage;
 @property(nonatomic,strong) More            *morePage;
 @property(nonatomic,strong) Hostings        *hostingsPage;

@@ -7,6 +7,7 @@
 //
 
 #import "ConvoCell.h"
+#import "Chat.h"
 
 @implementation ConvoCell
 
@@ -84,6 +85,42 @@
     [super setSelected:selected animated:animated];
 
     // Configure the view for the selected state
+}
+
+- (void)clearData {
+    self.textLabel.text = @"";
+    self.textLabel.textAlignment = NSTextAlignmentCenter;
+    self.iconCon.hidden = YES;
+    self.nameLabel.hidden = YES;
+    self.lastLabel.hidden = YES;
+    self.accessoryType = UITableViewCellAccessoryNone;
+    self.textLabel.hidden = NO;
+    [self.unreadBadge updateValue:0];
+}
+
+- (void)loadData:(Chat *)chat {
+    self.iconCon.hidden = NO;
+    self.nameLabel.hidden = NO;
+    self.lastLabel.hidden = NO;
+    self.textLabel.text = @"";
+    self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    
+    self.nameLabel.text = [chat.fromName uppercaseString];
+    [self.icon setName:chat.fromName lastName:nil];
+    
+    //Set last message
+    if([chat.lastMessage length]==0) {
+        self.lastLabel.text = @"";
+    } else {
+        self.lastLabel.text = chat.lastMessage;
+    }
+    
+    //Time ago
+    self.dateLabel.text = [chat.lastUpdated timeAgo];
+    
+    [self.unreadBadge updateValue:chat.unread.intValue];
+    
+    [self.icon loadFacebookImage:chat.fb_id];
 }
 
 @end
