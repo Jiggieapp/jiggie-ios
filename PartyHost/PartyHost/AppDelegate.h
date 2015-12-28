@@ -7,7 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <AdSupport/ASIdentifierManager.h>
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import <FBSDKLoginKit/FBSDKLoginKit.h>
 //#import <FacebookSDK/FacebookSDK.h>
@@ -21,21 +20,26 @@
 #import "RFRateMe.h"
 #import "SetupView.h"
 
-@interface AppDelegate : UIResponder <UIApplicationDelegate,AppsFlyerTrackerDelegate>
+@interface AppDelegate : UIResponder <UIApplicationDelegate,AppsFlyerTrackerDelegate> {
+    NSManagedObjectModel *managedObjectModel;
+    NSManagedObjectContext *managedObjectContext;
+    NSPersistentStoreCoordinator *persistentStoreCoordinator;
+}
 
 @property (strong, nonatomic) UIWindow *window;
 
 @property (strong, nonatomic) SharedData    *sharedData;
 
 @property (strong, nonatomic) NSString      *apnToken;
-@property (strong, nonatomic)    id<GAITracker>      tracker;
+@property (strong, nonatomic) id<GAITracker> tracker;
 @property (strong, nonatomic) UIButton      *btnNotify;
 
-
-
 @property (assign, nonatomic) BOOL      inAskingAPNMode;
-
 @property (assign, nonatomic) BOOL      isShowNotification;
+
+@property (readonly, strong, nonatomic) NSManagedObjectContext *managedObjectContext;
+@property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
+@property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 
 -(BOOL)notificationServicesEnabled;
 

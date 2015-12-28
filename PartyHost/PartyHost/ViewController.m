@@ -7,6 +7,7 @@
 //
 
 #import "ViewController.h"
+#import "AnalyticManager.h"
 
 @interface ViewController ()
 
@@ -29,14 +30,6 @@
     //[self.view addSubview:v];
     //return;
     ///TEST DISCONNECTED VIEWS
-    
-    
-    for (NSString *familyName in [UIFont familyNames]) {
-        for (NSString *fontName in [UIFont fontNamesForFamilyName:familyName]) {
-            NSLog(@"%@", fontName);
-        }
-    }
-
     
     // Do any additional setup after loading the view, typically from a nib.
     self.view.backgroundColor = [UIColor whiteColor];
@@ -210,7 +203,7 @@
 {
     self.sharedData.walkthroughOn = NO;
     self.canPoll = NO;
-    [self.sharedData trackMixPanel:@"display_login"];
+    [[AnalyticManager sharedManager] trackMixPanel:@"display_login"];
     [self showLoading];
     self.signupView.hidden = NO;
     [self.signupView initClass];
