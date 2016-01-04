@@ -465,7 +465,7 @@
                          }
                          
                          NSArray *photos = [eventRow objectForKey:@"photos"];
-                         if (photos && ![photos isEqual:[NSNull null]]) {
+                         if (photos && ![photos isEqual:[NSNull null]] && photos.count > 0) {
                              item.photo = [photos objectAtIndex:0];
                          }
                          
@@ -555,8 +555,10 @@
 {
     int count = 0;
     for (Event *event in [self.fetchedResultsController fetchedObjects]) {
-        NSString *picURL = [self.sharedData picURL:event.photo];
-        [self.sharedData loadTimeImage:picURL withTimeOut:count * .25];
+        if (event.photo && event.photo!=nil) {
+            NSString *picURL = [self.sharedData picURL:event.photo];
+            [self.sharedData loadTimeImage:picURL withTimeOut:count * .25];
+        }
         count++;
     }
 }
@@ -596,7 +598,7 @@
     [cell clearData];
     
     Event *event = [[self fetchedResultsController] objectAtIndexPath:indexPath];
-    cell.isFeaturedEvent = event.isFeatured;
+    cell.isFeaturedEvent = [event.isFeatured boolValue];
     [cell loadData:event];
     
     return cell;

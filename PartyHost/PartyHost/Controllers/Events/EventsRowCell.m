@@ -153,6 +153,7 @@
 
 -(void)loadData:(Event *)event
 {
+    
     self.title.text = [event.title uppercaseString];
     self.subtitle.text = [event.venue capitalizedString];
     
@@ -160,10 +161,15 @@
     
 //    self.picURL = [Constants eventImageURL:dict[@"_id"]];
     
-    self.picURL = [self.sharedData picURL:event.photo];
-    
-    //Load venue image
-    [self.mainImg loadImage:self.picURL defaultImageNamed:@"nightclub_default"]; //This will load and can be cancelled?
+    if (event.photo && event.photo != nil) {
+        self.picURL = [self.sharedData picURL:event.photo];
+        
+        //Load venue image
+        [self.mainImg loadImage:self.picURL defaultImageNamed:@"nightclub_default"]; //This will load and can be cancelled?
+
+    } else {
+        [self.mainImg setImage:[UIImage imageNamed:@"nightclub_default"]];
+    }
     
     NSLog(@"LOADING_IMG_URL :: %@ - %@",self.title.text, self.picURL);
     

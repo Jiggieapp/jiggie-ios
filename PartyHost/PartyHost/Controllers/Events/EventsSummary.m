@@ -327,7 +327,7 @@
 #pragma mark - Button Action
 -(void)goShareHandler
 {
-    NSLog(@">>> %@",self.sharedData.selectedHost);
+//    NSLog(@">>> %@",self.sharedData.selectedHost);
     /*
      //Everything needed for share link
      self.sharedData.shareHostingId = self.sharedData.selectedHost[@"hosting"][@"_id"];
@@ -351,6 +351,10 @@
         //[self.sharedData.mixPanelCEventDict setObject:responseObject[@"venue"][@"state"] forKey:@"Event Venue State"];
         [self.sharedData.mixPanelCEventDict setObject:self.sharedData.eventDict[@"venue"][@"description"] forKey:@"Event Venue Description"];
         [self.sharedData.mixPanelCEventDict setObject:self.sharedData.eventDict[@"venue"][@"zip"] forKey:@"Event Venue Zip"];
+        NSArray *mixpanelTags = self.sharedData.eventDict[@"tags"];
+        if (mixpanelTags && mixpanelTags != nil) {
+            [self.sharedData.mixPanelCEventDict setObject:mixpanelTags forKey:@"Event Tags"];
+        }
         
         
         NSMutableDictionary *tmpDict = [[NSMutableDictionary alloc] init];
@@ -634,6 +638,10 @@
                  //[self.sharedData.mixPanelCEventDict setObject:responseObject[@"venue"][@"state"] forKey:@"Event Venue State"];
                  [self.sharedData.mixPanelCEventDict setObject:responseObject[@"venue"][@"description"] forKey:@"Event Venue Description"];
                  [self.sharedData.mixPanelCEventDict setObject:responseObject[@"venue"][@"zip"] forKey:@"Event Venue Zip"];
+                 NSArray *mixpanelTags = [responseObject objectForKey:@"tags"];
+                 if (mixpanelTags && mixpanelTags != nil) {
+                    [self.sharedData.mixPanelCEventDict setObject:mixpanelTags forKey:@"Event Tags"];
+                 }
                  
                  [self.sharedData.eventDict removeAllObjects];
                  [self.sharedData.eventDict addEntriesFromDictionary:responseObject];

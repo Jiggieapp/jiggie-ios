@@ -23,9 +23,6 @@
     self.backgroundColor = [UIColor whiteColor];
     self.sharedData = [SharedData sharedInstance];
     
-    //Set up data
-    self.settingsData = [[NSMutableDictionary alloc] init];
-    
     self.mainCon = [[UIView alloc] initWithFrame:CGRectMake(0, 0, frame.size.width * SCREEN_LEVELS, frame.size.height)];
     //self.mainCon.layer.masksToBounds = YES;
     [self addSubview:self.mainCon];
@@ -216,25 +213,9 @@
      {
          NSLog(@"SETTINGS responseObject :: %@",responseObject);
          
-         [[AnalyticManager sharedManager] trackMixPanelWithDict:@"View Settings" withDict:@{}];
-         
-         //Check if already equal
-         if([self.settingsData isEqualToDictionary:responseObject])
-         {
-             NSLog(@"SETTINGS responseObject SAME");
-             
-//             [self.emptyView setMode:@"hide"];
-             return;
-         }
-         
-         //Clear table
-         self.settingsData = [[NSMutableDictionary alloc] initWithDictionary:responseObject];
-         
          //Load data
          [UserManager saveUserSetting:responseObject];
          [UserManager updateLocalSetting];
-         
-//         [self.sharedData loadSettingsResponse:responseObject];
          
          //Reload table view
          self.isLoaded = YES;
@@ -242,12 +223,8 @@
          //Update table
          [self updateTable];
          
-         //Hide spinner
-//         [self.emptyView setMode:@"hide"];
-         
      } failure:^(AFHTTPRequestOperation *operation, NSError *error)
      {
-//         [self.emptyView setMode:@"empty"];
          
          NSLog(@"ERROR :: %@",error);
      }];

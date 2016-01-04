@@ -138,16 +138,14 @@
                                                   }];
     
     
-    
-    
-   
-    [self showLoading];
+    if([FBSDKAccessToken currentAccessToken].tokenString.length > 20)
+    {
+        [self hideLoginWithNoAnimation];
+        [self enableTabBar:NO];
+    }
     
     [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
-    
-    
-    
-    
+
     NSArray *nibContents = [[NSBundle mainBundle] loadNibNamed:@"LaunchScreen" owner:nil options:nil];
     UIView *plainView = [nibContents lastObject];
     [plainView setFrame:self.view.frame];
@@ -229,6 +227,8 @@
 -(void)hideLogin
 {
     
+    [self enableTabBar:YES];
+    
     //Put WALKTHROUGH behind login screen
     if(self.sharedData.walkthroughOn == YES)
     {
@@ -252,6 +252,40 @@
               object:self];
          }
      }];
+}
+
+-(void)hideLoginWithNoAnimation
+{
+    
+    //Put WALKTHROUGH behind login screen
+    if(self.sharedData.walkthroughOn == YES)
+    {
+        [[NSNotificationCenter defaultCenter]
+         postNotificationName:@"SHOW_WALKTHROUGH"
+         object:self];
+    }
+    
+    [UIView animateWithDuration:0 animations:^(void)
+     {
+         self.signupView.frame = CGRectMake(0, self.view.frame.size.height+1, self.view.frame.size.width, self.view.frame.size.height);
+     } completion:^(BOOL finished)
+     {
+         [self hideLoading];
+         self.signupView.hidden = YES;
+         
+         if(self.sharedData.walkthroughOn == NO)
+         {
+             [[NSNotificationCenter defaultCenter]
+              postNotificationName:@"APP_LOADED"
+              object:self];
+         }
+     }];
+}
+
+-(void)enableTabBar:(BOOL)enable {
+    for (UIButton *navButton in self.dashboard.btnsA) {
+        [navButton setEnabled:enable];
+    }
 }
 
 -(void)checkIfPushIsEnabled

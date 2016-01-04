@@ -247,7 +247,7 @@
     [self.sharedData.feedBadge updateValue:0];
     [self.sharedData updateBadgeIcon];
      */
-    [[AnalyticManager sharedManager] trackMixPanelWithDict:@"View Social Feed" withDict:@{}];
+    
     //[self.sharedData trackMixPanel:@"feed_tab"];
     [self loadData];
     

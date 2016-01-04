@@ -362,21 +362,29 @@ static AnalyticManager *_sharedManager = nil;
 {
     if(PHMixPanelOn==NO) return;
     
-    Mixpanel *mixpanel = [Mixpanel sharedInstance];
-    [mixpanel identify:self.sharedData.fb_id];
-    NSString *media_source = self.sharedData.appsFlyerDict[@"media_source"];
-    NSString *campaign = self.sharedData.appsFlyerDict[@"campaign"];
-    NSString *installType = self.sharedData.appsFlyerDict[@"af_status"];
-    
-    
-    [mixpanel registerSuperPropertiesOnce:@{@"AFmedia_source": media_source}];
-    [mixpanel registerSuperPropertiesOnce:@{@"AFcampaign": campaign}];
-    [mixpanel registerSuperPropertiesOnce:@{@"AFinstall_type": installType}];
-    
-    
-    [mixpanel.people set:@{@"AFmedia_source": media_source}];
-    [mixpanel.people set:@{@"AFcampaign": campaign}];
-    [mixpanel.people set:@{@"AFinstall_type": installType}];
+    @try {
+        Mixpanel *mixpanel = [Mixpanel sharedInstance];
+        [mixpanel identify:self.sharedData.fb_id];
+        NSString *media_source = self.sharedData.appsFlyerDict[@"media_source"];
+        NSString *campaign = self.sharedData.appsFlyerDict[@"campaign"];
+        NSString *installType = self.sharedData.appsFlyerDict[@"af_status"];
+        
+        
+        [mixpanel registerSuperPropertiesOnce:@{@"AFmedia_source": media_source}];
+        [mixpanel registerSuperPropertiesOnce:@{@"AFcampaign": campaign}];
+        [mixpanel registerSuperPropertiesOnce:@{@"AFinstall_type": installType}];
+        
+        
+        [mixpanel.people set:@{@"AFmedia_source": media_source}];
+        [mixpanel.people set:@{@"AFcampaign": campaign}];
+        [mixpanel.people set:@{@"AFinstall_type": installType}];
+    }
+    @catch (NSException *exception) {
+        
+    }
+    @finally {
+        
+    }
 }
 
 -(void)trackMixPanelIncrementWithDict:(NSDictionary *)dict

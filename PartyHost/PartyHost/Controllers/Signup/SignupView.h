@@ -38,6 +38,8 @@
 @property(nonatomic, assign)    BOOL             didHerokuLogin;
 @property(nonatomic, assign)    BOOL             didAPNUpdate;
 
+@property(nonatomic, assign)    BOOL             isAutoLoginMode;
+
 @property(nonatomic,assign)     BOOL             didFBInitInfo;
 
 @property(nonatomic, strong)   NSMutableDictionary  *currentUser;

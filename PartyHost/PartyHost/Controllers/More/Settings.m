@@ -389,7 +389,14 @@
 {
     if(indexPath.section==0 && indexPath.row==2)
     {
-        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
+        if (&UIApplicationOpenSettingsURLString != NULL) {
+            NSURL *appSettings = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
+            [[UIApplication sharedApplication] openURL:appSettings];
+        } else {
+            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"prefs:root=General"]];
+        }
+        
+//        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
     }
     
     

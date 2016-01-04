@@ -93,6 +93,7 @@
         
 //        [self performSelector:@selector(skipLogin) withObject:nil afterDelay:0.1];
         
+//        [self checkIfHasLogin];
         [self performSelector:@selector(checkIfHasLogin) withObject:nil afterDelay:0.0];
     }
     return self;
@@ -101,7 +102,9 @@
 -(void)checkIfHasLogin
 {
     if([FBSDKAccessToken currentAccessToken].tokenString.length > 20)
-    {
+    {   
+        self.isAutoLoginMode = YES;
+        
         [self autoLogin];
     }else{
         [[NSNotificationCenter defaultCenter]
@@ -112,26 +115,47 @@
 
 -(void)autoLogin
 {
-    self.sharedData.fb_access_token = [FBSDKAccessToken currentAccessToken].tokenString;
-    [[[FBSDKGraphRequest alloc] initWithGraphPath:@"/me" parameters:@{@"fields":@"first_name,last_name,name,bio,gender,email,location,birthday,photos,albums"}]
-     startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error)
-     {
-         if (!error) {
-             NSLog(@"Fetched User Information:%@", result);
-             self.cAlbumId = [self getProfileAlbumId:result[@"albums"][@"data"]];
-             [self.currentUser removeAllObjects];
-             [self.currentUser addEntriesFromDictionary:result];
-             self.sharedData.fb_id = result[@"id"];
-             [self doubleCheckPermissions];
-         }
-         else {
-             NSLog(@"Error %@",error);
-             [[NSNotificationCenter defaultCenter]
-              postNotificationName:@"HIDE_LOADING"
-              object:self];
-
-         }
-     }];
+    [FBSDKAccessToken refreshCurrentAccessToken:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
+        if (!error) {
+            self.sharedData.fb_access_token = [FBSDKAccessToken currentAccessToken].tokenString;
+            [[[FBSDKGraphRequest alloc] initWithGraphPath:@"/me" parameters:@{@"fields":@"first_name,last_name,name,bio,gender,email,location,birthday,photos,albums"}]
+             startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error)
+             {
+                 if (!error) {
+                     NSLog(@"Fetched User Information:%@", result);
+                     self.cAlbumId = [self getProfileAlbumId:result[@"albums"][@"data"]];
+                     [self.currentUser removeAllObjects];
+                     [self.currentUser addEntriesFromDictionary:result];
+                     self.sharedData.fb_id = result[@"id"];
+                     [self doubleCheckPermissions];
+                 }
+                 else {
+                     NSLog(@"Error %@",error);
+                     
+                     if (self.isAutoLoginMode) {
+                         [[NSNotificationCenter defaultCenter]
+                          postNotificationName:@"SHOW_LOGIN"
+                          object:self];
+                     } else {
+                         [[NSNotificationCenter defaultCenter]
+                          postNotificationName:@"HIDE_LOADING"
+                          object:self];
+                     }
+                     
+                 }
+             }];
+        } else {
+            if (self.isAutoLoginMode) {
+                [[NSNotificationCenter defaultCenter]
+                 postNotificationName:@"SHOW_LOGIN"
+                 object:self];
+            } else {
+                [[NSNotificationCenter defaultCenter]
+                 postNotificationName:@"HIDE_LOADING"
+                 object:self];
+            }
+        }
+    }];
 }
 
 -(void)skipLogin
@@ -169,6 +193,7 @@
 
 -(void)initClass
 {
+    self.isAutoLoginMode = NO;
     [self.buttonFacebook setTitle:@"SIGN IN WITH FACEBOOK" forState:UIControlStateNormal];
 }
 
@@ -179,25 +204,6 @@
     
     FBSDKLoginManager *logMeOut = [[FBSDKLoginManager alloc] init];
     [logMeOut logOut];
-
-    /*
-    FBSDKLoginManager *login = [[FBSDKLoginManager alloc] init];
-    [login logInWithReadPermissions:@[@"public_profile", @"email",@"user_about_me",@"user_birthday",@"user_friends"] handler:^(FBSDKLoginManagerLoginResult *result, NSError *error) {
-        if (error) {
-            // Process error
-            NSLog(@"error %@",error);
-        } else if (result.isCancelled) {
-            // Handle cancellations
-            NSLog(@"Cancelled");
-        } else {
-            if ([result.grantedPermissions containsObject:@"email"])
-            {
-                // Do work
-                //[self fetchUserInfo];
-            }
-        }
-    }];
-    */
     
     /*
     [[[FBSDKGraphRequest alloc] initWithGraphPath:@"me" parameters:nil]
@@ -331,6 +337,12 @@
              FBSDKLoginManager *logMeOut = [[FBSDKLoginManager alloc] init];
              [logMeOut logOut];
              
+             if (self.isAutoLoginMode) {
+                 [[NSNotificationCenter defaultCenter]
+                  postNotificationName:@"SHOW_LOGIN"
+                  object:self];
+             }
+             
              //[FBSession.activeSession closeAndClearTokenInformation];
              self.didFBInitInfo = NO;
              UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Login Error" message:@"There was an issue logging in, please try again" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
@@ -377,6 +389,12 @@
           {
               self.didFBInitInfo = NO;
               [self clearLogin:self.currentUser[@"id"]];
+              
+              if (self.isAutoLoginMode) {
+                  [[NSNotificationCenter defaultCenter]
+                   postNotificationName:@"SHOW_LOGIN"
+                   object:self];
+              }
               
               errorMessage = [errorMessage substringToIndex:[errorMessage length] - 1];
               
@@ -742,6 +760,11 @@
 
 -(void)photosupdate:(NSMutableDictionary *)params
 {
+    
+    if (!params) {
+        return;
+    }
+    
     AFHTTPRequestOperationManager *manager = [self.sharedData getOperationManager];
     NSLog(@"START_PHOTO_UPLOAD");
     NSLog(@"%@",params);

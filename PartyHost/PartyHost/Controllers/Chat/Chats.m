@@ -97,8 +97,6 @@
         [self.emptyView setData:@"No chats yet" subtitle:@"Book a table and start chatting with interested guests right now!" imageNamed:@"tab_chat"];
     }
     
-    [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Conversations List" withDict:@{}];
-    
     [self reloadFetch:nil];
     [self loadConvos];
     
@@ -222,6 +220,10 @@
     
     
     //facebookId = @"1410449462602170"; //Harry
+    
+    if (facebookId == nil) {
+        return;
+    }
     
     NSDictionary *params = @{ @"fb_id" : facebookId };
     

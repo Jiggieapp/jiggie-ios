@@ -7,6 +7,7 @@
 //
 
 #import "Dashboard.h"
+#import "AnalyticManager.h"
 
 @implementation Dashboard
 
@@ -592,6 +593,8 @@
     
     self.cIndex = 1;
     [self updatePages];
+    
+    [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Conversations List" withDict:@{}];
 }
 
 -(void)showFeed
@@ -611,6 +614,8 @@
     {
         //[self.feedPage goBack];
     }
+    
+    [[AnalyticManager sharedManager] trackMixPanelWithDict:@"View Social Feed" withDict:@{}];
 }
 
 -(void)showMore
@@ -629,6 +634,8 @@
     {
 //        [self.morePage checkIfGoBack];
     }
+    
+    [[AnalyticManager sharedManager] trackMixPanelWithDict:@"View Settings" withDict:@{}];
 }
 
 -(void)showMoreAndGoToHosting
