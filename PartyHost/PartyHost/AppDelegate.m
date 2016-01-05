@@ -8,6 +8,7 @@
 
 #import "AppDelegate.h"
 #import "AnalyticManager.h"
+#import "AFNetworkActivityLogger.h"
 
 ///REMOVE THIS WHEN LIVE
 //#import "GSTouchesShowingWindow.h"
@@ -71,7 +72,9 @@ static NSString *const kAllowTracking = @"allowTracking";
     //Start Analytics
     [[AnalyticManager sharedManager] startAnalytics];
     
-    
+//    // AFNetworking Debug Setting:
+//    [[AFNetworkActivityLogger sharedLogger] startLogging];
+//    [[AFNetworkActivityLogger sharedLogger] setLevel:AFLoggerLevelDebug];
     
     
     
