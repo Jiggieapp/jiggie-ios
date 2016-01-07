@@ -97,6 +97,7 @@ static SharedData *sharedInstance = nil;
         self.phoneCountry       = @"";
         self.isInAskingNotification = NO;
         self.didAppsFlyerLoad   = NO;
+        self.feedMatchEvent     = @"";
         //int numLives = MPTweakValue(@"number of lives", 5);
         
         

@@ -810,6 +810,12 @@
         return;
     }
     
+    NSCharacterSet *whitespace = [NSCharacterSet whitespaceAndNewlineCharacterSet];
+    NSString *trimmed = [self.input.text stringByTrimmingCharactersInSet:whitespace];
+    if ([trimmed length] == 0) {
+        return;
+    }
+    
     
     if(sender.state == UIGestureRecognizerStateBegan)
     {

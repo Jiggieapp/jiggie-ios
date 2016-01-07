@@ -25,7 +25,6 @@
 @property(nonatomic,strong) UIImageView *hideIcon;
 
 
-
 //When there are no entries to see
 @property(nonatomic,strong) EmptyView *emptyView;
 

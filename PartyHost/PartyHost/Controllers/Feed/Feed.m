@@ -77,8 +77,6 @@
     self.feedTable.scrollEnabled = NO;
     [self.mainCon addSubview:self.feedTable];
     
-    NSLog(@"screen : %i FEED TABLE : %@",self.sharedData.screenHeight, NSStringFromCGRect(self.feedTable.frame));
-    
     [tabBar addSubview:self.title];
     [self.mainCon addSubview:tabBar];
     
@@ -426,6 +424,12 @@
     }
     
     return cell;
+}
+
+#pragma mark - Match Screen
+
+- (void)showMatchScreen {
+    
 }
 
 @end

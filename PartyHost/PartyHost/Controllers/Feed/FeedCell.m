@@ -613,6 +613,17 @@
     
     [manager GET:url parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject)
      {
+         NSLog(@"FEEDITEM-SAVE Response :: %@",responseObject);
+         
+         self.sharedData.conversationId = self.mainData[@"from_fb_id"];
+         self.sharedData.messagesPage.toId = self.mainData[@"from_fb_id"];
+         self.sharedData.messagesPage.toLabel.text = [self.mainData[@"from_first_name"] uppercaseString];
+         self.sharedData.feedMatchEvent = self.mainData[@"event_name"];
+         self.sharedData.toImgURL = [self.sharedData profileImg:self.sharedData.fromMailId];
+         
+         [[NSNotificationCenter defaultCenter]
+          postNotificationName:@"SHOW_FEED_MATCH"
+          object:self];
          
          [self.sharedData.feedPage loadData];
          

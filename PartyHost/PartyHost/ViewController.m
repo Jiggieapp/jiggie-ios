@@ -126,7 +126,6 @@
      selector:@selector(showMessage)
      name:@"SHOW_MAIL_MESSAGE"
      object:nil];
-
     
     
     [[NSNotificationCenter defaultCenter] addObserverForName:
