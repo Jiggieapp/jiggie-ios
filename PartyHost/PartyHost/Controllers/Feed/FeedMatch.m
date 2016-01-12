@@ -18,7 +18,9 @@
     
     self.sharedData = [SharedData sharedInstance];
     
-    if (!UIAccessibilityIsReduceTransparencyEnabled()) {
+
+    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 8.0 &&
+        !UIAccessibilityIsReduceTransparencyEnabled()) {
         self.backgroundColor = [UIColor clearColor];
         
         UIBlurEffect *blurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleDark];
@@ -27,8 +29,7 @@
         blurEffectView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         
         [self addSubview:blurEffectView];
-    }
-    else {
+    } else {
         self.backgroundColor = [UIColor blackColor];
     }
     
@@ -71,8 +72,8 @@
     
     self.continueButton = [[UIButton alloc] initWithFrame:CGRectZero];
     self.continueButton.backgroundColor = [UIColor clearColor];
-    [self.continueButton setTitle:@"Continue" forState:UIControlStateNormal];
-    [self.continueButton setTitleColor:[UIColor phBlueColor] forState:UIControlStateNormal];
+    [self.continueButton setTitle:@"Keep Browsing" forState:UIControlStateNormal];
+    [self.continueButton setTitleColor:[UIColor phPurpleColor] forState:UIControlStateNormal];
     [self.continueButton addTarget:self action:@selector(continueButtonDidTap) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:self.continueButton];
     
@@ -183,8 +184,8 @@
     [self.startChatButton setFrame:CGRectMake((self.bounds.size.width - 240)/2, CGRectGetMaxY(self.descriptionLabel.frame) + 1.5*lineSpacing, 240, 40)];
     self.startChatButton.titleLabel.font = [UIFont phBold:14 + OffsetFontLargeDevice];
     
-    [self.continueButton setFrame:CGRectMake((self.bounds.size.width - 100)/2, CGRectGetMaxY(self.startChatButton.frame) + lineSpacing/2, 100, 40)];
-    self.continueButton.titleLabel.font = [UIFont phBold:14 + OffsetFontLargeDevice];
+    [self.continueButton setFrame:CGRectMake((self.bounds.size.width - 240)/2, CGRectGetMaxY(self.startChatButton.frame) + lineSpacing/2, 240, 40)];
+    self.continueButton.titleLabel.font = [UIFont phBold:15 + OffsetFontLargeDevice];
 }
 
 @end

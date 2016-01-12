@@ -309,14 +309,14 @@
      */
 }
 
-- (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
-{
-    // Text Color
-    UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *)view;
-    header.textLabel.font = [UIFont phBlond:12];
-    header.backgroundView.backgroundColor = [UIColor phDarkTitleColor];
-    [header.textLabel setTextColor:[UIColor colorFromHexCode:@"5C5C5C"]];
-}
+//- (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
+//{
+//    // Text Color
+//    UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *)view;
+//    header.textLabel.font = [UIFont phBlond:12];
+//    header.backgroundView.backgroundColor = [UIColor phDarkTitleColor];
+//    [header.textLabel setTextColor:[UIColor colorFromHexCode:@"5C5C5C"]];
+//}
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField
 {

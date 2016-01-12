@@ -285,6 +285,7 @@
     for (UIButton *navButton in self.dashboard.btnsA) {
         [navButton setEnabled:enable];
     }
+    [self.dashboard.eventsPage.btnFilter setEnabled:enable];
 }
 
 -(void)checkIfPushIsEnabled

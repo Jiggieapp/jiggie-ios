@@ -12,6 +12,8 @@
 #import "Event.h"
 #import "AppDelegate.h"
 #import "BaseModel.h"
+#import "UserManager.h"
+
 
 #define SCREENS_DEEP 4
 
@@ -22,13 +24,9 @@
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
-    self.backgroundColor = [UIColor whiteColor];
+    self.backgroundColor = [UIColor phPurpleColor];
     
     self.sharedData = [SharedData sharedInstance];
-
-    UIView *tmpPurpleView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.sharedData.screenWidth, 40)];
-    tmpPurpleView.backgroundColor = [UIColor phPurpleColor];
-    [self addSubview:tmpPurpleView];
     
     self.cGuestListingIndexPath = nil;
     
@@ -36,6 +34,10 @@
     self.didLoadFromHostings = NO;
     self.didLoadFromInvite = NO;
     self.needUpdateContents = YES;
+    
+    UIView *tmpPurpleView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.sharedData.screenWidth, 40)];
+    tmpPurpleView.backgroundColor = [UIColor phPurpleColor];
+    [self addSubview:tmpPurpleView];
     
     self.mainCon = [[UIView alloc] initWithFrame:CGRectMake(0, 20, self.sharedData.screenWidth * SCREENS_DEEP, self.sharedData.screenHeight - PHTabHeight)];
 
@@ -70,6 +72,14 @@
     self.btnCity.userInteractionEnabled = NO;
     [self.tabBar addSubview:self.btnCity];
     
+    self.btnFilter = [UIButton buttonWithType:UIButtonTypeCustom];
+    self.btnFilter.frame = CGRectMake(frame.size.width - 50 + 4, 0, 40, 40);
+    [self.btnFilter setImage:[UIImage imageNamed:@"filter_icon"] forState:UIControlStateNormal];
+    [self.btnFilter setImageEdgeInsets:UIEdgeInsetsMake(10, 10, 10, 10)];
+    self.btnFilter.imageView.contentMode = UIViewContentModeScaleAspectFit;
+    [self.btnFilter addTarget:self action:@selector(showFilter) forControlEvents:UIControlEventTouchUpInside];
+    [self.tabBar addSubview:self.btnFilter];
+    
     self.eventsA = [[NSMutableArray alloc] init];
     self.eventsList = [[UITableView alloc] initWithFrame:CGRectMake(0, 40, frame.size.width, frame.size.height - self.tabBar.bounds.size.height - 20)];
     self.eventsList.backgroundColor = [UIColor clearColor];
@@ -83,24 +93,45 @@
     [self.mainCon addSubview:self.eventsList];
     
     //When there are no entries
-    self.emptyView = [[EmptyView alloc] initWithFrame:CGRectMake(0, 60, frame.size.width, frame.size.height - 60)];
-    [self.emptyView setData:@"Check back soon" subtitle:@"More exciting events are coming!" imageNamed:@"tab_events"];
+    self.emptyView = [[EmptyView alloc] initWithFrame:CGRectMake(0, 40, frame.size.width, frame.size.height - 60)];
+    [self.emptyView setData:@"Check back soon" subtitle:@"More exciting events are coming!" imageNamed:@""];
     [self.emptyView setMode:@"load"];
+    self.emptyView.backgroundColor = [UIColor whiteColor];
+    [self.mainCon addSubview:self.emptyView];
     
-    //Create second version of the tab bar (incase the list is empty)
-    UIView *tabBar = [[UIView alloc] initWithFrame:CGRectMake(0, - 60, frame.size.width, 60)];
-    tabBar.backgroundColor = [UIColor phPurpleColor];
-    [self.emptyView addSubview:tabBar];
+    self.filterView = [[UIView alloc] initWithFrame:CGRectMake(0, 30, frame.size.width, frame.size.height - 40)];
+    self.filterView.backgroundColor = [UIColor clearColor];
+    self.filterView.alpha = 0.0;
+    [self.mainCon addSubview:self.filterView];
+
+
+    UIView *filterBGView = [[UIView alloc] initWithFrame:CGRectMake(0, 10, self.filterView.bounds.size.width, self.filterView.bounds.size.height)];
+    filterBGView.backgroundColor = [UIColor blackColor];
+    filterBGView.alpha = 0.3;
+    UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showFilter)];
+    [filterBGView addGestureRecognizer:tapRecognizer];
+    [self.filterView addSubview:filterBGView];
     
-    //Create second version of the title (incase the list is empty)
-    UILabel *tabTitle = [[UILabel alloc] initWithFrame:CGRectMake(40, 20 - 60, frame.size.width-80, 40)];
-    tabTitle.text = @"THIS WEEK";
-    tabTitle.textAlignment = NSTextAlignmentCenter;
-    tabTitle.textColor = [UIColor whiteColor];
-    tabTitle.font = [UIFont phBold:18];
-    [self.emptyView addSubview:tabTitle];
     
-    [self addSubview:self.emptyView];
+    KTCenterFlowLayout *layout = [KTCenterFlowLayout new];
+    layout.minimumInteritemSpacing = 8.f;
+    layout.minimumLineSpacing = 8.f;
+    
+    UIImageView *arrowView = [[UIImageView alloc] initWithFrame:CGRectMake(frame.size.width - 40, 4, 22, 22)];
+    [arrowView setImage:[UIImage imageNamed:@"arrow_icon"]];
+    arrowView.backgroundColor = [UIColor clearColor];
+    [self.filterView addSubview:arrowView];
+    
+    self.filterTagCollection = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:layout];
+    self.filterTagCollection.frame = CGRectMake(6, 14, frame.size.width - 12, 120);
+    [self.filterTagCollection registerClass:[SetupPickViewCell class] forCellWithReuseIdentifier:@"EventsSummaryTagCell"];
+    self.filterTagCollection.delegate = self;
+    self.filterTagCollection.dataSource = self;
+    self.filterTagCollection.backgroundColor = [UIColor whiteColor];
+    self.filterTagCollection.layer.masksToBounds = YES;
+    self.filterTagCollection.layer.cornerRadius = 6;
+    self.filterTagCollection.allowsMultipleSelection = YES;
+    [self.filterView addSubview:self.filterTagCollection];
     
     //2nd screen
     self.eventsSummary = [[EventsSummary alloc] initWithFrame:CGRectMake(self.sharedData.screenWidth, -20, self.sharedData.screenWidth, self.mainCon.frame.size.height)];
@@ -138,7 +169,7 @@
     
     [[NSNotificationCenter defaultCenter]
      addObserver:self
-     selector:@selector(goHome)
+     selector:@selector(goHomeNoLoad)
      name:@"EVENTS_GO_HOME"
      object:nil];
     
@@ -243,6 +274,19 @@
         }
         [self removeOldEvent];
         [self loadData];
+        
+        NSArray *alltags = [UserManager allTags];
+        if (alltags && alltags != nil) {
+            self.tagArray = [NSMutableArray arrayWithArray:alltags];
+        }
+        [self.filterTagCollection reloadData];
+        self.filterTagCollection.frame = CGRectMake(6, 14, self.sharedData.screenWidth - 12, self.filterTagCollection.collectionViewLayout.collectionViewContentSize.height);
+        
+        for (int i = 0; i<self.tagArray.count; i++) {
+            if ([self.sharedData.experiences containsObject:[self.tagArray objectAtIndex:i]]) {
+                [self.filterTagCollection selectItemAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0] animated:NO scrollPosition:UICollectionViewScrollPositionNone];
+            }
+        }
         
         /*
          //SHOW HOST VENUE DETAIL FROM HARE AS A TEST
@@ -385,8 +429,7 @@
     AFHTTPRequestOperationManager *manager = [self.sharedData getOperationManager];
 
     NSString *url = [Constants eventsURL:@"host" fb_id:self.sharedData.fb_id];
-    
-    
+
     //events/list/
     url = [NSString stringWithFormat:@"%@/events/list/%@/%@",PHBaseURL,self.sharedData.fb_id,self.sharedData.gender_interest];
     
@@ -407,9 +450,15 @@
          dispatch_async(dispatch_get_main_queue(), ^{
              
              self.isEventsLoaded = YES;
-             self.backgroundColor = [UIColor phPurpleColor];
              self.whiteBK.hidden = NO;
              self.needUpdateContents = NO;
+             
+
+             if (json.count == 0 && [[self.fetchedResultsController fetchedObjects] count] == 0) {
+                 [self.emptyView setMode:@"empty"];
+                 self.needUpdateContents = YES;
+                 return;
+             }
              
 //             if(self.sharedData.isGuestListingsShowing)
 //             {
@@ -421,6 +470,9 @@
                  NSArray *fetchEvents = [BaseModel fetchManagedObject:self.managedObjectContext
                                                              inEntity:NSStringFromClass([Event class])
                                                          andPredicate:nil];
+                 for (Event *fetchEvent in fetchEvents) {
+                     [self.managedObjectContext deleteObject:fetchEvent];
+                 }
                  
                  for (NSDictionary *eventSection in json) {
                      BOOL isFeatured = NO;
@@ -486,12 +538,6 @@
                          }
                          
                          item.modified = [NSDate date];
-                         
-                         for (Event *fetchEvent in fetchEvents) {
-                             if ([fetchEvent.eventID isEqualToString:item.eventID]) {
-                                 [self.managedObjectContext deleteObject:fetchEvent];
-                             }
-                         }
                          
                          NSError *error;
                          if (![self.managedObjectContext save:&error]) NSLog(@"Error: %@", [error localizedDescription]);
@@ -646,6 +692,133 @@
 {
     EventsRowCell *eventsRowCell = (EventsRowCell*)cell;
     [eventsRowCell wentOffscreen];
+}
+
+#pragma mark - Filter
+-(void)showFilter {
+    
+    [UIView animateWithDuration:0.2 delay:0.0 options:UIViewAnimationOptionCurveEaseIn animations:^{
+        if (self.filterView.alpha == 1.0) {
+            self.filterView.alpha = 0.0;
+        } else {
+            self.filterView.alpha = 1.0;
+        }
+    } completion:^(BOOL finished) {
+        
+    }];
+}
+
+-(void)updateFilterSetting {
+    //Save settings
+    AFHTTPRequestOperationManager *manager = [self.sharedData getOperationManager];
+    
+    //Save settings URL
+    NSString *url = [Constants memberSettingsURL];
+    NSDictionary *params = [self.sharedData createSaveSettingsParams];
+    [manager POST:url parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject)
+     {
+         if(responseObject[@"success"]) {
+            [self loadData];
+         }
+         
+     } failure:^(AFHTTPRequestOperation *operation, NSError *error)
+     {
+         NSLog(@"ERROR :: %@",error);
+     }];
+}
+
+#pragma mark - UICollectionViewDataSource
+-(NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
+{
+    return 1;
+}
+
+-(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
+{
+    return [self.tagArray count];
+}
+
+-(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    static NSString *cellIdentifier = @"EventsSummaryTagCell";
+    SetupPickViewCell *cell = (SetupPickViewCell*)[collectionView dequeueReusableCellWithReuseIdentifier:cellIdentifier forIndexPath:indexPath];
+    
+    NSString *title = self.tagArray[indexPath.row];
+    [cell.button.button setTitle:title forState:UIControlStateNormal];
+    cell.button.button.titleLabel.font = [UIFont phBold:12];
+    cell.button.onTextColor = [UIColor whiteColor];
+    cell.button.onBorderColor = [UIColor clearColor];
+    cell.button.offTextColor = [UIColor whiteColor];
+    cell.button.offBorderColor = [UIColor clearColor];
+    cell.button.offBackgroundColor = [UIColor phGrayColor];
+    
+    if ([title isEqualToString:@"Featured"]) {
+        cell.button.onBackgroundColor = [UIColor colorFromHexCode:@"D9603E"];
+    } else if ([title isEqualToString:@"Music"]) {
+        cell.button.onBackgroundColor = [UIColor colorFromHexCode:@"5E3ED9"];
+    } else if ([title isEqualToString:@"Nightlife"]) {
+        cell.button.onBackgroundColor = [UIColor colorFromHexCode:@"4A555A"];
+    } else if ([title isEqualToString:@"Food & Drink"]) {
+        cell.button.onBackgroundColor = [UIColor colorFromHexCode:@"DDC54D"];
+    } else if ([title isEqualToString:@"Fashion"]) {
+        cell.button.onBackgroundColor = [UIColor colorFromHexCode:@"68CE49"];
+    } else {
+        cell.button.onBackgroundColor = [UIColor colorFromHexCode:@"ED4FC4"];
+    }
+    
+    [cell setNeedsLayout];
+    [cell layoutIfNeeded];
+    
+    //Get select state now
+    if ([self.sharedData.experiences containsObject:title])
+    {
+        [collectionView selectItemAtIndexPath:indexPath animated:NO scrollPosition:UICollectionViewScrollPositionNone];
+        [cell.button buttonSelect:YES checkmark:YES animated:NO];
+    }
+    else
+    {
+        [cell.button buttonSelect:NO checkmark:NO animated:NO];
+    }
+    
+    return cell;
+}
+
+-(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
+    
+    NSString *title = self.tagArray[indexPath.row];
+    NSDictionary *fontDict = @{NSFontAttributeName:[UIFont phBold:12]};
+    CGSize stringSize = [title sizeWithAttributes:fontDict];
+    
+    return CGSizeMake(stringSize.width + 50,32);
+}
+
+-(CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section {
+    return 8;
+}
+
+-(CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section {
+    return 8;
+}
+
+- (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout insetForSectionAtIndex:(NSInteger)section {
+    return UIEdgeInsetsMake(10, 10, 10, 10);
+}
+
+-(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    SetupPickViewCell *cell = (SetupPickViewCell*)[collectionView cellForItemAtIndexPath:indexPath];
+    if (![self.sharedData.experiences containsObject:cell.button.button.titleLabel.text])
+        [self.sharedData.experiences addObject:cell.button.button.titleLabel.text];
+    [cell.button buttonSelect:YES checkmark:YES animated:YES];
+    [self updateFilterSetting];
+}
+
+-(void)collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    SetupPickViewCell *cell = (SetupPickViewCell*)[collectionView cellForItemAtIndexPath:indexPath];
+    [self.sharedData.experiences removeObject:cell.button.button.titleLabel.text];
+    [cell.button buttonSelect:NO checkmark:NO animated:YES];
+    [self updateFilterSetting];
 }
 
 #pragma mark - Navigations

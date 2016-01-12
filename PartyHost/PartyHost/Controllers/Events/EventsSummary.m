@@ -231,6 +231,7 @@
                                                                 self.tabBar.bounds.size.height,
                                                                 self.sharedData.screenWidth,
                                                                 self.sharedData.screenHeight - self.tabBar.bounds.size.height - PHTabHeight)];
+    [self.emptyView setData:@"The event is no longer available" subtitle:@"" imageNamed:@""];
     self.emptyView.backgroundColor = [UIColor whiteColor];
     [self addSubview:self.emptyView];
     
@@ -619,7 +620,7 @@
                      
                      [self goBack];
                      
-                     [self.emptyView setMode:@"hide"];
+                     [self.emptyView setMode:@"empty"];
                      
                      return;
                  }

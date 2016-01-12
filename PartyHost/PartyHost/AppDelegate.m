@@ -9,6 +9,7 @@
 #import "AppDelegate.h"
 #import "AnalyticManager.h"
 #import "AFNetworkActivityLogger.h"
+#import "UserManager.h"
 
 ///REMOVE THIS WHEN LIVE
 //#import "GSTouchesShowingWindow.h"
@@ -72,7 +73,7 @@ static NSString *const kAllowTracking = @"allowTracking";
     //Start Analytics
     [[AnalyticManager sharedManager] startAnalytics];
     
-//    // AFNetworking Debug Setting:
+    // AFNetworking Debug Setting:
     [[AFNetworkActivityLogger sharedLogger] startLogging];
     [[AFNetworkActivityLogger sharedLogger] setLevel:AFLoggerLevelDebug];
     
@@ -306,6 +307,9 @@ static NSString *const kAllowTracking = @"allowTracking";
     
     
     [AppsFlyerTracker sharedTracker].delegate = self;
+    
+    // Load all Tags
+    [[UserManager sharedManager] loadAllTags];
     
     /*
     NSString *idfaString = [[[ASIdentifierManager sharedManager] advertisingIdentifier] UUIDString];
@@ -554,11 +558,12 @@ static NSString *const kAllowTracking = @"allowTracking";
                 [[NSNotificationCenter defaultCenter]
                  postNotificationName:@"UPDATE_CONVERSATION_LIST"
                  object:self];
-                
-                if(!self.isShowNotification)
-                {
-                    [self showChatNotification:[userInfo objectForKey:@"fromName"] withMessage:[userInfo objectForKey:@"message"] withImage:[self.sharedData profileImg:self.sharedData.fromMailId]];
-                }
+
+                //remove notifications when get matched
+//                if(!self.isShowNotification)
+//                {
+//                    [self showChatNotification:[userInfo objectForKey:@"fromName"] withMessage:[userInfo objectForKey:@"message"] withImage:[self.sharedData profileImg:self.sharedData.fromMailId]];
+//                }
             }
             
         }

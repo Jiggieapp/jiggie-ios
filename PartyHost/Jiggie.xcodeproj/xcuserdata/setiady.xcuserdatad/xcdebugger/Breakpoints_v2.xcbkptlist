@@ -25,13 +25,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "PartyHost/AppDelegate.m"
-            timestampString = "473662690.350387"
+            filePath = "PartyHost/Controllers/More/Profile.m"
+            timestampString = "473764744.909179"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "539"
-            endingLineNumber = "539"
-            landmarkName = "-application:didReceiveRemoteNotification:"
+            startingLineNumber = "405"
+            endingLineNumber = "405"
+            landmarkName = "-getAboutInfo"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -41,13 +41,29 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "PartyHost/Controllers/More/Profile.m"
-            timestampString = "473764744.909179"
+            filePath = "PartyHost/Controllers/Events/GuestList/EventsGuestListCell.m"
+            timestampString = "474266593.464226"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "405"
-            endingLineNumber = "405"
-            landmarkName = "-getAboutInfo"
+            startingLineNumber = "279"
+            endingLineNumber = "279"
+            landmarkName = "-sendInviteGuest"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "PartyHost/Controllers/Events/GuestList/EventsGuestListCell.m"
+            timestampString = "474266618.790983"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "192"
+            endingLineNumber = "192"
+            landmarkName = "-inviteGuestButtonClicked:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

@@ -302,33 +302,6 @@
     }
 }
 
-//- (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
-//{
-//    // Text Color
-//    UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *)view;
-//    header.textLabel.font = [UIFont phBold:10];
-//    header.backgroundView.backgroundColor = [UIColor clearColor];
-//    [header.textLabel setTextColor:[UIColor blackColor]];
-//}
-//
-//- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-//{
-//    NSString *sectionName;
-//    switch (section)
-//    {
-//        case 0:
-//            sectionName = @"Options";
-//            break;
-//        case 1:
-//            sectionName = @"";
-//            break;
-//        case 2:
-//            sectionName = @"Log Out";
-//            break;
-//    }
-//    return sectionName;
-//}
-//
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     return 60.0;

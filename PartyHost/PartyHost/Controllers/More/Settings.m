@@ -192,8 +192,11 @@
     return 0;
 }
 
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-{
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    return 40;
+}
+
+- (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     NSString *sectionName;
     switch (section)
     {
@@ -206,20 +209,20 @@
         case 2:
             sectionName = @"Documents";
             break;
-        case 3:
-            sectionName = @"Version 3.0.0";
-            break;
     }
-    return sectionName;
-}
-
-- (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
-{
-    // Text Color
-    UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *)view;
-    header.textLabel.font = [UIFont phBold:10];
-    header.backgroundView.backgroundColor = [UIColor clearColor];
-    [header.textLabel setTextColor:[UIColor blackColor]];
+    
+    
+    UIView* headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.bounds.size.width, 40.0)];
+    // Add the label
+    UILabel *headerLabel = [[UILabel alloc] initWithFrame:CGRectMake(16.0, 10.0, tableView.bounds.size.width - 20, 30.0)];
+    headerLabel.backgroundColor = [UIColor clearColor];
+    headerLabel.text = sectionName;
+    headerLabel.textColor = [UIColor blackColor];
+    headerLabel.font = [UIFont phBold:13];
+    [headerView addSubview: headerLabel];
+    
+    // Return the headerView
+    return headerView;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath

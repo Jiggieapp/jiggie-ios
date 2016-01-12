@@ -21,6 +21,7 @@
 
 @property(nonatomic,strong) UIView *hideView;
 @property(nonatomic,strong) UILabel *hideTitle;
+@property(nonatomic,strong) UILabel *hideSubtitle;
 @property(nonatomic,strong) UISwitch *hideToggle;
 @property(nonatomic,strong) UIImageView *hideIcon;
 
