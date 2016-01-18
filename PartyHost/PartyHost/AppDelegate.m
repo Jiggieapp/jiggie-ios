@@ -449,11 +449,10 @@ static NSString *const kAllowTracking = @"allowTracking";
 
 - (void)registerForNotifications
 {
-    
     self.inAskingAPNMode = NO;
     
-#ifdef __IPHONE_8_0
-    if(NSFoundationVersionNumber > NSFoundationVersionNumber_iOS_7_1) {
+    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 8.0 &&
+        [[UIApplication sharedApplication] respondsToSelector:@selector(registerUserNotificationSettings:)]) {
         UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:(UIRemoteNotificationTypeBadge
                                                                                              |UIRemoteNotificationTypeSound
                                                                                              |UIRemoteNotificationTypeAlert) categories:nil];
@@ -463,10 +462,7 @@ static NSString *const kAllowTracking = @"allowTracking";
         UIRemoteNotificationType myTypes = UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound;
         [[UIApplication sharedApplication] registerForRemoteNotificationTypes:myTypes];
     }
-#else
-    UIRemoteNotificationType myTypes = UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound;
-    [[UIApplication sharedApplication] registerForRemoteNotificationTypes:myTypes];
-#endif
+
 }
 
 - (void)application:(UIApplication*)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData*)deviceToken
@@ -509,8 +505,6 @@ static NSString *const kAllowTracking = @"allowTracking";
     */
 }
 
-
-#ifdef __IPHONE_8_0
 - (void)application:(UIApplication *)application didRegisterUserNotificationSettings:(UIUserNotificationSettings *)notificationSettings
 {
     //register to receive notifications
@@ -530,7 +524,6 @@ static NSString *const kAllowTracking = @"allowTracking";
         
     }
 }
-#endif
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
 {
@@ -559,11 +552,10 @@ static NSString *const kAllowTracking = @"allowTracking";
                  postNotificationName:@"UPDATE_CONVERSATION_LIST"
                  object:self];
 
-                //remove notifications when get matched
-//                if(!self.isShowNotification)
-//                {
-//                    [self showChatNotification:[userInfo objectForKey:@"fromName"] withMessage:[userInfo objectForKey:@"message"] withImage:[self.sharedData profileImg:self.sharedData.fromMailId]];
-//                }
+                if(!self.isShowNotification)
+                {
+                    [self showChatNotification:[userInfo objectForKey:@"fromName"] withMessage:[userInfo objectForKey:@"message"] withImage:[self.sharedData profileImg:self.sharedData.fromMailId]];
+                }
             }
             
         }

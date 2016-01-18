@@ -23,9 +23,10 @@ NSString *const AppsFlyerDevKey = @"D4Uux6HSu3aYjNHkCHsTiC";
 
 NSString *const JiggieItunesID = @"1047291489";
 
+
 //URLs with substitution
-NSString *const PHBaseURL = @"https://jiggie-dev.herokuapp.com/app/v3";
-NSString *const PHBaseDomain = @"https://jiggie-dev.herokuapp.com";
+NSString *const PHBaseURL = @"https://jiggie.herokuapp.com/app/v3";
+NSString *const PHBaseDomain = @"https://jiggie.herokuapp.com";
 
 
 //NSString *const PHBaseDomain = @"https://partyhostapp.herokuapp.com";

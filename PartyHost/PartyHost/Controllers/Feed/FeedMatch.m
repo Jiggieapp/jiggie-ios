@@ -73,7 +73,7 @@
     self.continueButton = [[UIButton alloc] initWithFrame:CGRectZero];
     self.continueButton.backgroundColor = [UIColor clearColor];
     [self.continueButton setTitle:@"Keep Browsing" forState:UIControlStateNormal];
-    [self.continueButton setTitleColor:[UIColor phPurpleColor] forState:UIControlStateNormal];
+    [self.continueButton setTitleColor:[UIColor phBlueColor] forState:UIControlStateNormal];
     [self.continueButton addTarget:self action:@selector(continueButtonDidTap) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:self.continueButton];
     
