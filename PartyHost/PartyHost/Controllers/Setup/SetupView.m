@@ -300,7 +300,8 @@ int totalPages;
     
     //Save settings URL
     NSString *url = [Constants memberSettingsURL];
-    [manager POST:url parameters:[self.sharedData createSaveSettingsParams] success:^(AFHTTPRequestOperation *operation, id responseObject)
+    NSDictionary *params = [self.sharedData createSaveSettingsParams];
+    [manager POST:url parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject)
      {
          NSLog(@"WALKTHROUGH_SAVE_RESPONSE :: %@",responseObject);
          

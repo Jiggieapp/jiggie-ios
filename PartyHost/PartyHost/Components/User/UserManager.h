@@ -16,5 +16,7 @@
 + (BOOL)updateLocalSetting;
 
 - (void)clearAllUserData;
+- (void)loadAllTags;
++ (NSArray *)allTags;
 
 @end

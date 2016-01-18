@@ -217,6 +217,9 @@
     
     self.sharedData.overlayView = [[OverlayView alloc] initWithFrame:CGRectMake(0, 0, self.sharedData.screenWidth, self.sharedData.screenHeight)];
     
+    self.feedMatch = [[FeedMatch alloc] initWithFrame:CGRectMake(0, 0, self.sharedData.screenWidth, self.sharedData.screenHeight)];
+    self.feedMatch.hidden = YES;
+    
     self.sharedData.messagesPage = self.messagesPage;
     self.sharedData.hostVenueDetailPage = self.hostVenueDetailPage;
     self.sharedData.memberProfile = self.memberProfile;
@@ -237,6 +240,7 @@
     [self.outsideCon addSubview:self.messagesPage];
     [self.mainCon addSubview:self.outsideCon];
     [self.mainCon addSubview:self.tabBar];
+    [self addSubview:self.feedMatch];
     [self addSubview:self.memberProfile];
     [self addSubview:self.memberReviews];
     [self addSubview:self.writeReview];
@@ -428,11 +432,24 @@
      object:nil];
     
     
-    
     [[NSNotificationCenter defaultCenter]
      addObserver:self
      selector:@selector(showFeed)
      name:@"SHOW_PARTYFEED"
+     object:nil];
+    
+    
+    [[NSNotificationCenter defaultCenter]
+     addObserver:self
+     selector:@selector(showFeedMatch)
+     name:@"SHOW_FEED_MATCH"
+     object:nil];
+    
+    
+    [[NSNotificationCenter defaultCenter]
+     addObserver:self
+     selector:@selector(exitFeedMatch)
+     name:@"EXIT_FEED_MATCH"
      object:nil];
     
     
@@ -616,6 +633,30 @@
     }
     
     [[AnalyticManager sharedManager] trackMixPanelWithDict:@"View Social Feed" withDict:@{}];
+}
+
+-(void)showFeedMatch
+{
+    self.feedMatch.frame = CGRectMake(0, self.sharedData.screenHeight, self.sharedData.screenWidth, self.sharedData.screenHeight);
+    self.feedMatch.hidden = NO;
+    [self.feedMatch reset];
+    [self.feedMatch initClass];
+    
+    [UIView animateWithDuration:0.30 animations:^(void)
+     {
+         self.feedMatch.frame = CGRectMake(0, 0, self.sharedData.screenWidth, self.sharedData.screenHeight);
+     }];
+}
+
+-(void)exitFeedMatch
+{
+    [UIView animateWithDuration:0.30 animations:^()
+     {
+         self.feedMatch.frame = CGRectMake(0, self.sharedData.screenHeight, self.sharedData.screenWidth, self.sharedData.screenHeight);
+     } completion:^(BOOL finished)
+     {
+         self.feedMatch.hidden = YES;
+     }];
 }
 
 -(void)showMore

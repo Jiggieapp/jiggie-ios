@@ -50,6 +50,7 @@
     
     //Create empty view
     self.emptyView = [[EmptyView alloc] initWithFrame:CGRectMake(0, 60, frame.size.width, frame.size.height - 60)];
+    [self.emptyView setData:@"You don't have new messages" subtitle:@"" imageNamed:@""];
     [self.emptyView setMode:@"load"];
     [self addSubview:self.emptyView];
     

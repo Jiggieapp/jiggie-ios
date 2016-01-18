@@ -9,6 +9,7 @@
 #import "AppDelegate.h"
 #import "AnalyticManager.h"
 #import "AFNetworkActivityLogger.h"
+#import "UserManager.h"
 
 ///REMOVE THIS WHEN LIVE
 //#import "GSTouchesShowingWindow.h"
@@ -72,9 +73,9 @@ static NSString *const kAllowTracking = @"allowTracking";
     //Start Analytics
     [[AnalyticManager sharedManager] startAnalytics];
     
-//    // AFNetworking Debug Setting:
-//    [[AFNetworkActivityLogger sharedLogger] startLogging];
-//    [[AFNetworkActivityLogger sharedLogger] setLevel:AFLoggerLevelDebug];
+    // AFNetworking Debug Setting:
+    [[AFNetworkActivityLogger sharedLogger] startLogging];
+    [[AFNetworkActivityLogger sharedLogger] setLevel:AFLoggerLevelDebug];
     
     
     
@@ -307,6 +308,9 @@ static NSString *const kAllowTracking = @"allowTracking";
     
     [AppsFlyerTracker sharedTracker].delegate = self;
     
+    // Load all Tags
+    [[UserManager sharedManager] loadAllTags];
+    
     /*
     NSString *idfaString = [[[ASIdentifierManager sharedManager] advertisingIdentifier] UUIDString];
     [AppsFlyerTracker sharedTracker].appsFlyerDevKey = @"Rkuw6TCpCtAMpUicmEUz27";
@@ -445,11 +449,10 @@ static NSString *const kAllowTracking = @"allowTracking";
 
 - (void)registerForNotifications
 {
-    
     self.inAskingAPNMode = NO;
     
-#ifdef __IPHONE_8_0
-    if(NSFoundationVersionNumber > NSFoundationVersionNumber_iOS_7_1) {
+    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 8.0 &&
+        [[UIApplication sharedApplication] respondsToSelector:@selector(registerUserNotificationSettings:)]) {
         UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:(UIRemoteNotificationTypeBadge
                                                                                              |UIRemoteNotificationTypeSound
                                                                                              |UIRemoteNotificationTypeAlert) categories:nil];
@@ -459,10 +462,7 @@ static NSString *const kAllowTracking = @"allowTracking";
         UIRemoteNotificationType myTypes = UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound;
         [[UIApplication sharedApplication] registerForRemoteNotificationTypes:myTypes];
     }
-#else
-    UIRemoteNotificationType myTypes = UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound;
-    [[UIApplication sharedApplication] registerForRemoteNotificationTypes:myTypes];
-#endif
+
 }
 
 - (void)application:(UIApplication*)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData*)deviceToken
@@ -505,8 +505,6 @@ static NSString *const kAllowTracking = @"allowTracking";
     */
 }
 
-
-#ifdef __IPHONE_8_0
 - (void)application:(UIApplication *)application didRegisterUserNotificationSettings:(UIUserNotificationSettings *)notificationSettings
 {
     //register to receive notifications
@@ -526,7 +524,6 @@ static NSString *const kAllowTracking = @"allowTracking";
         
     }
 }
-#endif
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
 {
@@ -544,10 +541,7 @@ static NSString *const kAllowTracking = @"allowTracking";
             
             self.sharedData.fromMailId = [userInfo objectForKey:@"fromFBId"];
             self.sharedData.fromMailName = [userInfo objectForKey:@"fromName"];
-            
-            
-            
-            
+
             if(self.sharedData.isInConversation && [self.sharedData.conversationId isEqualToString:self.sharedData.fromMailId])
             {
                 [[NSNotificationCenter defaultCenter]
@@ -557,7 +551,7 @@ static NSString *const kAllowTracking = @"allowTracking";
                 [[NSNotificationCenter defaultCenter]
                  postNotificationName:@"UPDATE_CONVERSATION_LIST"
                  object:self];
-                
+
                 if(!self.isShowNotification)
                 {
                     [self showChatNotification:[userInfo objectForKey:@"fromName"] withMessage:[userInfo objectForKey:@"message"] withImage:[self.sharedData profileImg:self.sharedData.fromMailId]];

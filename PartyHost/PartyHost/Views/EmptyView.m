@@ -35,9 +35,9 @@
     //self.title.layer.borderColor = [UIColor whiteColor].CGColor;
     //self.title.layer.borderWidth = 1.0;
     
-    self.title.layer.shadowColor = [[UIColor whiteColor] CGColor];
-    self.title.layer.shadowRadius = 1;
-    self.title.layer.shadowOpacity = 1;
+//    self.title.layer.shadowColor = [[UIColor whiteColor] CGColor];
+//    self.title.layer.shadowRadius = 1;
+//    self.title.layer.shadowOpacity = 1;
     //self.title.layer.shadowOffset = CGSizeMake(3, 3);
     
     //self.title.shadowColor = [UIColor whiteColor];
