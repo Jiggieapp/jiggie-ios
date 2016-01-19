@@ -24,6 +24,7 @@ extern NSString *const JiggieItunesID;
 
 //URL
 extern NSString *const PHBaseURL;
+extern NSString *const PHBaseNewURL;
 extern NSString *const PHBaseDomain;
 extern NSString *const PHGuestListingsURL;
 extern NSString *const PHHostListingsURL;

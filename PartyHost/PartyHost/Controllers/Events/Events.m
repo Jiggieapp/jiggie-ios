@@ -886,6 +886,7 @@
     self.eventsHostingsList.hidden = YES;
     self.eventsGuestList.hidden = NO;
     [self.eventsGuestList initClass];
+    self.eventsGuestList.mainDict = self.sharedData.eventDict;
     [self.eventsGuestList loadData:self.sharedData.eventDict[@"_id"]];
     [UIView animateWithDuration:0.25 animations:^()
      {

@@ -306,7 +306,7 @@
         self.pControl.numberOfPages = 1;
         [[self.sharedData.photosDict objectForKey:@"photos"] addObject:[self.sharedData profileImgLarge:self.sharedData.fb_id]];
     }
-    
+    NSLog(@"%@", [self.sharedData.photosDict objectForKey:@"photos"]);
     for (int i = 0; i < [[self.sharedData.photosDict objectForKey:@"photos"] count]; i++)
     {
         UIView *picCon = [[UIView alloc] initWithFrame:CGRectMake(self.frame.size.width * i, 0, self.frame.size.width, self.picScroll.frame.size.height)];

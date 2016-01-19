@@ -555,7 +555,7 @@
     NSLog(@"START_LOGIN");
     NSLog(@"%@",params);
     
-    NSString *urlToLoad = [NSString stringWithFormat:@"%@/login",PHBaseURL];
+    NSString *urlToLoad = [NSString stringWithFormat:@"%@/login",PHBaseNewURL];
     
     [manager POST:urlToLoad parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject)
      {

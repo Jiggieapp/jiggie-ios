@@ -62,16 +62,6 @@
     self.hostersList.hidden = YES;
     [self addSubview:self.hostersList];
     
-    //Create big HOST HERE button
-    self.btnHostHere = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    self.btnHostHere.frame = CGRectMake(0, self.hostersList.frame.size.height + self.hostersList.frame.origin.y+1, self.sharedData.screenWidth, 44);
-    self.btnHostHere.titleLabel.font = [UIFont phBold:18];
-    [self.btnHostHere setTitle:@"BOOK TABLE" forState:UIControlStateNormal];
-    [self.btnHostHere setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [self.btnHostHere setBackgroundColor:[UIColor phLightTitleColor]];
-    [self.btnHostHere addTarget:self action:@selector(hostHereButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
-    //[self addSubview:self.btnHostHere];
-    
     //Create empty label
     self.labelEmpty = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.sharedData.screenWidth, self.sharedData.screenHeight)];
     self.labelEmpty.text = @"No guests interested yet.";
@@ -98,44 +88,12 @@
     return self;
 }
 
-//Go to the ADD HOSTING screen
--(void)hostHereButtonClicked:(UIButton *)button
-{
-    self.sharedData.cEventId_toLoad = self.mainDict[@"_id"];
-    
-    [self.sharedData.cAddEventDict removeAllObjects];
-    [self.sharedData.cAddEventDict addEntriesFromDictionary:self.mainDict];
-    
-    [[AnalyticManager sharedManager] trackMixPanelIncrementWithDict:@{@"host_here":@1}];
-    
-    [[NSNotificationCenter defaultCenter]
-     postNotificationName:@"SHOW_BOOKTABLE"
-     object:self];
-}
-
 -(void)initClass
 {
     self.sharedData.isGuestListingsShowing = YES;
     self.hostersList.contentOffset = CGPointMake(0, 0);
     self.hasMemberToLoad = (self.sharedData.cHost_index != -1);
     self.sharedData.cHost_fb_id = @"";
-}
-
--(void)recalculateHostHere:(BOOL)on
-{
-    //If not hosting then show big "HOST HERE" button
-    if(on==NO) //Host here!
-    {
-        self.btnHostHere.userInteractionEnabled = YES;
-        self.btnHostHere.backgroundColor = [UIColor phPurpleColor];
-        [self.btnHostHere setTitle:@"BOOK TABLE" forState:UIControlStateNormal];
-    }
-    else
-    {
-        self.btnHostHere.userInteractionEnabled = NO;
-        self.btnHostHere.backgroundColor = [UIColor phLightTitleColor];
-        [self.btnHostHere setTitle:@"YOU ARE HOSTING HERE" forState:UIControlStateNormal];
-    }
 }
 
 -(void)hostingLocTapHandler:(UILongPressGestureRecognizer *)sender
@@ -229,7 +187,7 @@
     
     AFHTTPRequestOperationManager *manager = [self.sharedData getOperationManager];
     NSString *url = [Constants guestListingsURL:event_id fb_id:self.sharedData.fb_id];
-    url = [NSString stringWithFormat:@"%@/event/details/%@/%@/%@",PHBaseURL,event_id,self.sharedData.fb_id,self.sharedData.gender_interest];
+    url = [NSString stringWithFormat:@"%@/event/interest/%@/%@/%@",PHBaseNewURL,event_id,self.sharedData.fb_id,self.sharedData.gender_interest];
     
     NSLog(@"EVENTS_GUEST_LIST_URL :: %@",url);
     
@@ -244,18 +202,11 @@
      }];
 }
 
--(void)populateData:(NSMutableDictionary *)dict
+-(void)populateData:(NSMutableArray *)array
 {
-    //Store this for later use
-    [self.mainDict removeAllObjects];
-    [self.mainDict addEntriesFromDictionary:dict];
-    
-    //Set current ID
-    self.event_id = [NSString stringWithString:dict[@"_id"]];
-    
     //Save list
     [self.hostersA removeAllObjects];
-    [self.hostersA addObjectsFromArray:[dict objectForKey:@"guests_viewed"]];
+    [self.hostersA addObjectsFromArray:array];
     if([self.hostersA count] == 0) {
         self.labelEmpty.hidden = NO;
         self.hostersList.hidden = YES;
@@ -273,10 +224,6 @@
         }
     }
     
-    //If not hosting then show big "HOST HERE" button
-    //[self recalculateHostHere:[dict[@"has_hostings"] boolValue]];
-    [self recalculateHostHere:NO];
-    
     [self.hostersList reloadData];
     
     //Load member
@@ -291,13 +238,6 @@
             self.sharedData.cHost_index = -1;
         });
     }
-    
-    //Prepare venue data
-    [self.sharedData.eventsPage.eventsVenueDetail loadData:dict];
-    
-//    [[NSNotificationCenter defaultCenter]
-//     postNotificationName:@"HIDE_LOADING"
-//     object:self];
     
     self.spinner.hidden = YES;
     [self.spinner stopAnimating];

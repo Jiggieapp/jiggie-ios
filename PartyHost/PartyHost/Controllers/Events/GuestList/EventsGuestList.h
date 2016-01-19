@@ -26,7 +26,6 @@
 @property(nonatomic,strong) UILabel *labelEmpty;
 @property(nonatomic,strong) UIActivityIndicatorView *spinner;
 
-@property(nonatomic,strong) UIButton        *btnHostHere;
 @property(nonatomic,strong) NSString        *event_id;
 @property(nonatomic,strong) NSMutableArray  *hostersA;
 @property(nonatomic,strong) UITableView     *hostersList;
@@ -37,8 +36,7 @@
 -(void)initClass;
 -(void)reset;
 -(void)loadData:(NSString*)event_id;
--(void)populateData:(NSDictionary*)dict;
--(void)recalculateHostHere:(BOOL)on;
+-(void)populateData:(NSMutableArray *)array;
 -(void)refreshFeed;
 
 @end
