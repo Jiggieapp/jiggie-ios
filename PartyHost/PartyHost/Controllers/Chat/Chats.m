@@ -266,6 +266,13 @@
                  NSArray *fetchChats = [BaseModel fetchManagedObject:self.managedObjectContext
                                                             inEntity:NSStringFromClass([Chat class])
                                                         andPredicate:nil];
+                 
+                 for (Chat *fetchChat in fetchChats) {
+                     [self.managedObjectContext deleteObject:fetchChat];
+                     
+                     NSError *error;
+                     if (![self.managedObjectContext save:&error]) NSLog(@"Error: %@", [error localizedDescription]);
+                 }
 
                  for (NSDictionary *chatRow in json) {
                      Chat *item = (Chat *)[NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([Chat class])
@@ -328,12 +335,6 @@
                      }
                      
                      item.modified = [NSDate date];
-                     
-                     for (Chat *fetchChat in fetchChats) {
-                         if ([fetchChat.fb_id isEqualToString:item.fb_id]) {
-                             [self.managedObjectContext deleteObject:fetchChat];
-                         }
-                     }
                      
                      NSError *error;
                      if (![self.managedObjectContext save:&error]) NSLog(@"Error: %@", [error localizedDescription]);

@@ -1382,7 +1382,7 @@
                             @"key":self.sharedData.appKey,
                             @"hosting_id":@""};
     
-    NSString *url = [NSString stringWithFormat:@"%@/messages/add",PHBaseURL];
+    NSString *url = [NSString stringWithFormat:@"%@/messages/add",PHBaseNewURL];
     
     NSLog(@"MESSAGE_PARAMS");
     

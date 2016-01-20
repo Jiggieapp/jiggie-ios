@@ -532,6 +532,7 @@ static NSString *const kAllowTracking = @"allowTracking";
         return;
     }
     
+    NSLog(@"APS PAYLOAD : %@", userInfo);
     
     if ( application.applicationState == UIApplicationStateActive ) {
         // app was already in the foreground
