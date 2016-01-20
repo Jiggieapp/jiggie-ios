@@ -276,9 +276,7 @@
 {
     AFHTTPRequestOperationManager *manager = [self.sharedData getOperationManager];
     
-    NSString *url = [NSString stringWithFormat:@"%@/feed/%@/%@",PHBaseURL,self.sharedData.account_type,self.sharedData.fb_id];
-    
-    url = [NSString stringWithFormat:@"%@/partyfeed/list/%@/%@",PHBaseURL,self.sharedData.fb_id,self.sharedData.gender_interest];
+    NSString *url = [NSString stringWithFormat:@"%@/partyfeed/list/%@/%@",PHBaseNewURL,self.sharedData.fb_id,self.sharedData.gender_interest];
     
     
     NSLog(@"FEED START LOAD :: %@",url);

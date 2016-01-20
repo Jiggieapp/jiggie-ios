@@ -236,7 +236,7 @@
     
     //NSLog(@"GET_MESSAGES :: %@",params);
     //NSString *urlToLoad = [NSString stringWithFormat:@"%@/%@/conversation/%@/%@",PHBaseURL,self.sharedData.account_type,self.sharedData.fb_id,self.toId];
-    NSString *urlToLoad = [NSString stringWithFormat:@"%@/chat/conversation/%@/%@",PHBaseURL,self.sharedData.fb_id,self.toId];
+    NSString *urlToLoad = [NSString stringWithFormat:@"%@/chat/conversation/%@/%@",PHBaseNewURL,self.sharedData.fb_id,self.toId];
     //chat/conversation/
     
     NSLog(@"MESSAGES_URL :: %@",urlToLoad);

@@ -229,7 +229,7 @@
     NSDictionary *params = @{ @"fb_id" : facebookId };
     
     
-    NSString *url = [NSString stringWithFormat:@"%@/conversations",PHBaseURL];
+    NSString *url = [NSString stringWithFormat:@"%@/conversations",PHBaseNewURL];
     NSLog(@"CHAT_START_LOAD :: %@",url);
     
     
@@ -412,7 +412,7 @@
                             @"fromId" : self.sharedData.fb_id,
                             @"toId": self.sharedData.member_fb_id,
                             };
-    NSString *urlToLoad = [NSString stringWithFormat:@"%@/blockuserwithfbid",PHBaseURL];
+    NSString *urlToLoad = [NSString stringWithFormat:@"%@/blockuserwithfbid",PHBaseNewURL];
     [manager GET:urlToLoad parameters:params success:^
      (AFHTTPRequestOperation *operation, id resultObj)
      {
@@ -481,7 +481,7 @@
                             @"fromId" : self.sharedData.fb_id,
                             @"toId":self.sharedData.member_fb_id,
                             };
-    NSString *urlToLoad = [NSString stringWithFormat:@"%@/deletemessageswithfbid",PHBaseURL];
+    NSString *urlToLoad = [NSString stringWithFormat:@"%@/deletemessageswithfbid",PHBaseNewURL];
     
     [manager GET:urlToLoad parameters:params success:^
      (AFHTTPRequestOperation *operation, id resultObj)
