@@ -184,7 +184,7 @@
     NSLog(@"FEEDITEM-SAVE Started :: %@",self.userDict);
     NSLog(@"FEEDITEM-SAVE Params Sent :: %@",params);
     
-    NSString *url = [NSString stringWithFormat:@"%@/partyfeed/match/%@/%@/%@",PHBaseURL,self.sharedData.fb_id,self.userDict[@"fb_id"],@"approved"];
+    NSString *url = [NSString stringWithFormat:@"%@/partyfeed/match/%@/%@/%@",PHBaseNewURL,self.sharedData.fb_id,self.userDict[@"fb_id"],@"approved"];
     NSLog(@"FEEDITEM-SAVE URL :: %@",url);
     
     [manager GET:url parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject)

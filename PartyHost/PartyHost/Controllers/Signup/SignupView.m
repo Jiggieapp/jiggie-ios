@@ -631,15 +631,9 @@
 
 -(void)getUserImages
 {
-    
-    
     NSMutableDictionary *infoToSend = [[NSMutableDictionary alloc] init];
     
     [infoToSend setObject:[self.sharedData.userDict objectForKey:@"fb_id"] forKey:@"fb_id"];
-    [infoToSend setObject:@"" forKey:@"photo1"];
-    [infoToSend setObject:@"" forKey:@"photo2"];
-    [infoToSend setObject:@"" forKey:@"photo3"];
-    [infoToSend setObject:@"" forKey:@"photo4"];
 
   
     NSLog(@"START_PHOTO");
@@ -658,97 +652,22 @@
                    for (int i = 0; i < total; i++)
                    {
                        NSDictionary *dict = [[result[@"data"] objectAtIndex:i][@"images"] objectAtIndex:0];
-                       
-                       if(i == 0)
-                       {
-                           [infoToSend setObject:[dict objectForKey:@"source"] forKey:@"photo1"];
-                           [tmpA addObject:[dict objectForKey:@"source"]];
-                       }
-                       if(i == 1)
-                       {
-                           [infoToSend setObject:[dict objectForKey:@"source"] forKey:@"photo2"];
-                           [tmpA addObject:[dict objectForKey:@"source"]];
-                       }
-                       if(i == 2)
-                       {
-                           [infoToSend setObject:[dict objectForKey:@"source"] forKey:@"photo3"];
-                           [tmpA addObject:[dict objectForKey:@"source"]];
-                       }
-                       if(i == 3)
-                       {
-                           [infoToSend setObject:[dict objectForKey:@"source"] forKey:@"photo4"];
-                           [tmpA addObject:[dict objectForKey:@"source"]];
-                       }
+                       [tmpA addObject:[dict objectForKey:@"source"]];
                    }
                    
                    
-                   if(total == 0)
+                   if(total > 0)
                    {
-                       //[infoToSend setObject:PHBlankImgURL forKey:@"photo1"];
-                       //[tmpA addObject:PHBlankImgURL];
+                       [infoToSend setObject:tmpA forKey:@"photos"];
                        
                    }
-                   
                    
                    [self.sharedData.photosDict setObject:tmpA forKey:@"photos"];
                    [self photosupdate:infoToSend];
                    NSLog(@"PHOTOS_DICT :: %@",self.sharedData.photosDict);
                    [self loadProfilePhotos];
                    
-                   /*
-              int total = ([result[@"data"] count] >= self.sharedData.maxProfilePics)?self.sharedData.maxProfilePics:(int)[result[@"data"] count];
-              NSLog(@"total :: %d",total);
-              total = (total < 0)?0:total;
-              
-              
-              [self.sharedData.photosDict removeAllObjects];
-              
-              NSMutableArray *tmpA = [[NSMutableArray alloc] init];
-              
-              NSLog(@"%@",result[@"data"]);
-              for (int i = 0; i < total; i++)
-              {
-                  NSDictionary *dict = [[result[@"data"] objectAtIndex:i][@"images"] objectAtIndex:0];
-                  
-                  if(i == 0)
-                  {
-                      [infoToSend setObject:[dict objectForKey:@"source"] forKey:@"photo1"];
-                      [tmpA addObject:[dict objectForKey:@"source"]];
-                  }
-                  if(i == 1)
-                  {
-                      [infoToSend setObject:[dict objectForKey:@"source"] forKey:@"photo2"];
-                      [tmpA addObject:[dict objectForKey:@"source"]];
-                  }
-                  if(i == 2)
-                  {
-                      [infoToSend setObject:[dict objectForKey:@"source"] forKey:@"photo3"];
-                      [tmpA addObject:[dict objectForKey:@"source"]];
-                  }
-                  if(i == 3)
-                  {
-                      [infoToSend setObject:[dict objectForKey:@"source"] forKey:@"photo4"];
-                      [tmpA addObject:[dict objectForKey:@"source"]];
-                  }
-                  
-              }
-              
-              if(total == 0)
-              {
-                  [infoToSend setObject:PHBlankImgURL forKey:@"photo4"];
-                  [tmpA addObject:PHBlankImgURL];
-                  
-              }
-              
-              [self.sharedData.photosDict setObject:tmpA forKey:@"photos"];
-              [self photosupdate:infoToSend];
-              NSLog(@"PHOTOS_DICT :: %@",self.sharedData.photosDict);
-              [self loadProfilePhotos];
-              //[self performSelector:@selector(loadProfilePhotos) withObject:nil afterDelay:4.0];
-                   
-                   */
-          }];
-    
+        }];
 }
 
 
@@ -759,20 +678,15 @@
      object:self];
 }
 
-
-
--(void)photosupdate:(NSMutableDictionary *)params
-{
-    
+-(void)photosupdate:(NSMutableDictionary *)params {
     if (!params) {
         return;
     }
     
     AFHTTPRequestOperationManager *manager = [self.sharedData getOperationManager];
     NSLog(@"START_PHOTO_UPLOAD");
-    NSLog(@"%@",params);
-    NSString *urlToLoad = [NSString stringWithFormat:@"%@/updatephotos",PHBaseURL];
-    [manager POST:urlToLoad parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject)
+    NSString *url = [Constants memberSettingsURL];
+    [manager POST:url parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject)
      {
          NSLog(@"PHOTO_UPDATE_responseObject :: %@",responseObject);
          if(responseObject[@"success"])

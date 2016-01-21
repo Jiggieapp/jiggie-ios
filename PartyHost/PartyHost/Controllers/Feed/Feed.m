@@ -332,9 +332,16 @@
          //Reload table view
          [self.feedTable reloadData];
          
+         int count = 0;
+         for (NSDictionary *feed in self.feedData) {
+             if ([[feed objectForKey:@"type"] isEqualToString:@"approved"]) {
+                 count++;
+             }
+         }
+         
          //Mark that its loaded
          self.isFeedLoaded = YES;
-         self.sharedData.unreadFeedCount = (int)[self.feedData count];
+         self.sharedData.unreadFeedCount = count;
          [self.sharedData.feedBadge updateValue:self.sharedData.unreadFeedCount];
          self.sharedData.feedBadge.hidden = !(self.sharedData.matchMe);
          self.sharedData.feedBadge.canShow = self.sharedData.matchMe;

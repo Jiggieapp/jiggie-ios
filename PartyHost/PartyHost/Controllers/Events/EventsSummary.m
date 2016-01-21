@@ -520,7 +520,7 @@
     
     //Title
     self.title.text = [self.cEvent.title uppercaseString];
-    self.eventDate.text = self.cEvent.startDatetimeStr;
+    self.eventDate.text = [Constants toTitleDate:self.cEvent.startDatetime dbEndDate:self.cEvent.endDatetime];
     
     //Venue
     self.venueName.text = [self.cEvent.venue uppercaseString];
@@ -588,7 +588,7 @@
     else url = [Constants guestListingsURL:event_id fb_id:self.sharedData.fb_id];
     
     
-    url = [NSString stringWithFormat:@"%@/event/details/%@/%@/%@",PHBaseURL,event_id,self.sharedData.fb_id,self.sharedData.gender_interest];
+    url = [NSString stringWithFormat:@"%@/event/details/%@/%@/%@",PHBaseNewURL,event_id,self.sharedData.fb_id,self.sharedData.gender_interest];
     
     NSLog(@"EVENTS_SUMMARY_URL (%@) :: %@",self.sharedData.account_type,url);
     //event/details
@@ -798,7 +798,7 @@
     
     //Title
     self.title.text = [eventDetail.title uppercaseString];
-    self.eventDate.text = [Constants toTitleDateRange:eventDetail.startDatetimeStr dbEndDateString:eventDetail.endDatetimeStr];
+    self.eventDate.text = [Constants toTitleDate:eventDetail.startDatetime dbEndDate:eventDetail.endDatetime];
     
     //Venue
     self.venueName.text = [eventDetail.venueName uppercaseString];

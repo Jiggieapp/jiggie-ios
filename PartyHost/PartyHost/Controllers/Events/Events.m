@@ -94,7 +94,7 @@
     
     //When there are no entries
     self.emptyView = [[EmptyView alloc] initWithFrame:CGRectMake(0, 40, frame.size.width, frame.size.height - 60)];
-    [self.emptyView setData:@"Check back soon" subtitle:@"More exciting events are coming!" imageNamed:@""];
+    [self.emptyView setData:@"Oops there is a problem" subtitle:@"Sorry we're having some server issues, please check back in a few minutes." imageNamed:@""];
     [self.emptyView setMode:@"load"];
     self.emptyView.backgroundColor = [UIColor whiteColor];
     [self.mainCon addSubview:self.emptyView];
@@ -364,7 +364,7 @@
     NSSortDescriptor *sortDescriptor =
     [NSSortDescriptor sortDescriptorWithKey:@"modified"
                                   ascending:YES];
-    NSPredicate *eventPredicate = [NSPredicate predicateWithFormat:@"startDatetime > %@", [NSDate date]];
+    NSPredicate *eventPredicate = [NSPredicate predicateWithFormat:@"endDatetime > %@", [NSDate date]];
     NSArray *sortDescriptors = [NSArray arrayWithObjects:sortDescriptor, nil];
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     [fetchRequest setEntity:entityDescription];
@@ -417,7 +417,7 @@
 }
 
 - (void)removeOldEvent {
-    NSPredicate *eventPredicate = [NSPredicate predicateWithFormat:@"startDatetime < %@", [NSDate date]];
+    NSPredicate *eventPredicate = [NSPredicate predicateWithFormat:@"endDatetime < %@", [NSDate date]];
     NSArray *oldEvents = [BaseModel fetchManagedObject:self.managedObjectContext
                                               inEntity:NSStringFromClass([Event class])
                                           andPredicate:eventPredicate];
@@ -435,7 +435,7 @@
     NSString *url = [Constants eventsURL:@"host" fb_id:self.sharedData.fb_id];
 
     //events/list/
-    url = [NSString stringWithFormat:@"%@/events/list/%@/%@",PHBaseURL,self.sharedData.fb_id,self.sharedData.gender_interest];
+    url = [NSString stringWithFormat:@"%@/events/list/%@/%@",PHBaseNewURL,self.sharedData.fb_id,self.sharedData.gender_interest];
     
     NSLog(@"EVENTS_URL :: %@", url);
     
@@ -447,10 +447,10 @@
          NSString *responseString = operation.responseString;
          NSError *error;
          
-         NSArray *json = (NSArray *)[NSJSONSerialization
-                                     JSONObjectWithData:[responseString dataUsingEncoding:NSUTF8StringEncoding]
-                                                options:kNilOptions
-                                                    error:&error];
+         NSDictionary *json = (NSDictionary *)[NSJSONSerialization
+                                               JSONObjectWithData:[responseString dataUsingEncoding:NSUTF8StringEncoding]
+                                                            options:kNilOptions
+                                                            error:&error];
          dispatch_async(dispatch_get_main_queue(), ^{
              
              if (json && json != nil) {
@@ -474,16 +474,21 @@
                          if (![self.managedObjectContext save:&error]) NSLog(@"Error: %@", [error localizedDescription]);
                      }
                      
-                     for (NSDictionary *eventSection in json) {
-                         if (self.sharedData.experiences.count == 0) {
-                             break;
-                         }
-
-                         BOOL isFeatured = NO;
-                         if ([[eventSection objectForKey:@"date_day"] isEqualToString:@"Featured Events"]) {
-                             isFeatured = YES;
-                         }
-                         for (NSDictionary *eventRow in eventSection[@"events"]) {
+                     NSDictionary *data = [json objectForKey:@"data"];
+                     if (data && data != nil) {
+                         NSArray *events = [data objectForKey:@"events"];
+                         
+                         for (NSDictionary *eventRow in events) {
+                             
+                             BOOL isFeatured = NO;
+                             if ([[eventRow objectForKey:@"date_day"] isEqualToString:@"Featured Events"]) {
+                                 isFeatured = YES;
+                             }
+                             
+                             if (self.sharedData.experiences.count == 0) {
+                                 break;
+                             }
+                             
                              Event *item = (Event *)[NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([Event class])
                                                                                   inManagedObjectContext:self.managedObjectContext];
                              
@@ -548,6 +553,7 @@
                              
                          }
                      }
+
                  }
                  @catch (NSException *exception) {
                      
