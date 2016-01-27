@@ -13,6 +13,7 @@
 #import "AppDelegate.h"
 #import "BaseModel.h"
 #import "UserManager.h"
+#import "SVProgressHUD.h"
 
 
 #define SCREENS_DEEP 4
@@ -435,17 +436,24 @@
     NSString *url = [Constants eventsURL:@"host" fb_id:self.sharedData.fb_id];
 
     //events/list/
-    url = [NSString stringWithFormat:@"%@/events/list/%@/%@",PHBaseNewURL,self.sharedData.fb_id,self.sharedData.gender_interest];
-    
-    NSLog(@"EVENTS_URL :: %@", url);
+    url = [NSString stringWithFormat:@"%@/events/list/%@",PHBaseNewURL,self.sharedData.fb_id];
     
     [manager GET:url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject)
      {
-         
-         NSLog(@"EVENTS_RESPONSE :: %@",responseObject);
-         
          NSString *responseString = operation.responseString;
          NSError *error;
+         
+         NSInteger responseStatusCode = operation.response.statusCode;
+         if (responseStatusCode != 200) {
+             NSArray *fetchEvents = [BaseModel fetchManagedObject:self.managedObjectContext
+                                                         inEntity:NSStringFromClass([Event class])
+                                                     andPredicate:nil];
+             if (fetchEvents.count == 0) {
+                 [self.emptyView setMode:@"empty"];
+             }
+             return;
+         }
+         
          
          NSDictionary *json = (NSDictionary *)[NSJSONSerialization
                                                JSONObjectWithData:[responseString dataUsingEncoding:NSUTF8StringEncoding]
@@ -457,11 +465,6 @@
                  self.isEventsLoaded = YES;
                  self.whiteBK.hidden = NO;
                  self.needUpdateContents = NO;
-                 
-                 
-                 if (json.count == 0) {
-                     [self.emptyView setMode:@"empty"];
-                 }
                  
                  @try {
                      NSArray *fetchEvents = [BaseModel fetchManagedObject:self.managedObjectContext
@@ -478,16 +481,21 @@
                      if (data && data != nil) {
                          NSArray *events = [data objectForKey:@"events"];
                          
+                         if (!events || events.count == 0) {
+                             [self.emptyView setMode:@"empty"];
+                         }
+                         
                          for (NSDictionary *eventRow in events) {
                              
                              BOOL isFeatured = NO;
                              if ([[eventRow objectForKey:@"date_day"] isEqualToString:@"Featured Events"]) {
                                  isFeatured = YES;
                              }
-                             
-                             if (self.sharedData.experiences.count == 0) {
-                                 break;
-                             }
+//                             
+//                             if (self.sharedData.experiences.count == 0) {
+//                                 [self.emptyView setMode:@"empty"];
+//                                 break;
+//                             }
                              
                              Event *item = (Event *)[NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([Event class])
                                                                                   inManagedObjectContext:self.managedObjectContext];
@@ -535,6 +543,8 @@
                              NSString *start_datetime = [eventRow objectForKey:@"start_datetime"];
                              NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
                              [formatter setDateFormat:PHDateFormatServer];
+                             [formatter setLocale:[NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"]];
+                             [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
                              NSDate *startDatetime = [formatter dateFromString:start_datetime];
                              if (startDatetime != nil) {
                                  item.startDatetime = startDatetime;
@@ -574,7 +584,21 @@
          
      } failure:^(AFHTTPRequestOperation *operation, NSError *error)
      {
-         NSLog(@"ERROR :: %@",error);
+         if (error.code == -1009 || error.code == -1005) {
+             [SVProgressHUD showInfoWithStatus:@"Please check your internet connection"];
+             return;
+         }
+         
+         NSInteger responseStatusCode = operation.response.statusCode;
+         if (responseStatusCode != 200) {
+             NSArray *fetchEvents = [BaseModel fetchManagedObject:self.managedObjectContext
+                                                         inEntity:NSStringFromClass([Event class])
+                                                     andPredicate:nil];
+             if (fetchEvents.count == 0) {
+                 [self.emptyView setMode:@"empty"];
+             }
+             return;
+         }
      }];
 }
 
@@ -826,6 +850,14 @@
     [self updateFilterSetting];
 }
 
+- (BOOL)collectionView:(UICollectionView *)collectionView
+shouldDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
+    if (self.sharedData.experiences.count > 1) {
+        return YES;
+    }
+    return NO;
+}
+
 -(void)collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     SetupPickViewCell *cell = (SetupPickViewCell*)[collectionView cellForItemAtIndexPath:indexPath];
@@ -892,7 +924,7 @@
     self.eventsHostingsList.hidden = YES;
     self.eventsGuestList.hidden = NO;
     [self.eventsGuestList initClass];
-    self.eventsGuestList.mainDict = self.sharedData.eventDict;
+    self.eventsGuestList.mainDict = [NSMutableDictionary dictionaryWithDictionary:self.sharedData.eventDict];
     [self.eventsGuestList loadData:self.sharedData.eventDict[@"_id"]];
     [UIView animateWithDuration:0.25 animations:^()
      {

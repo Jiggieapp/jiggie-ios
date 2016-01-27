@@ -503,10 +503,19 @@
          
          //[self shareText:responseObject[@"message"] andImage:newImage andUrl:[[NSURL alloc] initWithString:responseObject[@"url"]]];
          
+         UIImage *shareImage = [UIImage imageNamed:@"splashLogoWhite"];
+         NSArray *photos = [self.sharedData.eventDict objectForKey:@"photos"];
+         if (photos && photos.count > 0) {
+             NSString *photoURL = [photos objectAtIndex:0];
+             if (photoURL && photoURL != nil && photoURL.length > 0) {
+                 if([self.sharedData.imagesDict objectForKey:photoURL] && [[self.sharedData.imagesDict objectForKey:photoURL] isKindOfClass:[UIImage  class]]) {
+                     shareImage = [self.sharedData.imagesDict objectForKey:photoURL];
+                 }
+             }
+         }
          
-         [self shareText:responseObject[@"message"] andImage:[UIImage imageNamed:@"splashLogoWhite"] andUrl:[[NSURL alloc] initWithString:responseObject[@"url"]]];
-         
-         
+         [self shareText:responseObject[@"message"] andImage:shareImage andUrl:[[NSURL alloc] initWithString:responseObject[@"url"]]];
+
          //
          
      } failure:^(AFHTTPRequestOperation *operation, NSError *error)

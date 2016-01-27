@@ -625,16 +625,27 @@ static SharedData *sharedInstance = nil;
 
 -(NSDictionary*)createSaveSettingsParams
 {
-    return @{
-         @"fb_id" : self.fb_id,
-         @"account_type": self.account_type,
-         @"gender": self.gender,
-         @"gender_interest": self.gender_interest,
-         @"feed": [NSNumber numberWithInt:(self.notification_feed)?1:0],
-         @"chat": [NSNumber numberWithInt:(self.notification_messages)?1:0],
-         @"location": [NSNumber numberWithInt:(self.location_on)?1:0],
-         @"experiences": [self.experiences componentsJoinedByString:@","]
-         };
+    NSDictionary *settingsParams = nil;
+    @try {
+        settingsParams = @{
+                         @"fb_id" : self.fb_id,
+                         @"account_type": self.account_type,
+                         @"gender": self.gender,
+                         @"gender_interest": self.gender_interest,
+                         @"feed": [NSNumber numberWithInt:(self.notification_feed)?1:0],
+                         @"chat": [NSNumber numberWithInt:(self.notification_messages)?1:0],
+                         @"location": [NSNumber numberWithInt:(self.location_on)?1:0],
+                         @"experiences": [self.experiences componentsJoinedByString:@","]
+                         };
+    }
+    @catch (NSException *exception) {
+        
+    }
+    @finally {
+        
+    }
+
+    return settingsParams;
 }
 
 

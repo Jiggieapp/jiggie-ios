@@ -244,119 +244,72 @@
      {
          NSLog(@"MESSAGES :: %@",responseObject);
          
-         if(responseObject[@"success"])
-         {
-             if(![responseObject[@"success"] boolValue])
-             {
-                 return;
-             }
-         }
          
-         [self.dataDict removeAllObjects];
-         [self.dataDict addEntriesFromDictionary:responseObject];
-         
-         
-         self.confirmMode = 0;
-         /*
-         if(![responseObject[@"has_hostings"] boolValue])
-         {
-             self.confirmMode = 0;
-         }else{
-             if(![responseObject[@"has_confirmation"] boolValue])
-             {
-                 self.confirmMode = 1;
-             }else{
-                 if(![responseObject[@"both_confirmed"] boolValue])
-                 {
-                     if(([responseObject[@"is_host_confirmed"] boolValue] && [responseObject[@"is_from_host"] boolValue]) || ([responseObject[@"is_guest_confirmed"] boolValue] && [responseObject[@"is_from_guest"] boolValue]))
-                     {
-                         self.confirmMode = 2;
-                     }else{
-                         self.confirmMode = 3;
-                     }
-                 }else{
-                     self.confirmMode = 6;
-                 }
-             }
-         }
-         
-         if(self.confirmMode==0)
-         {
-             [self setConfirmArea:[UIColor lightGrayColor] title:@"" description:@"No one has a hosting coming up"];
-         }
-         else if(self.confirmMode==1)
-         {
-             [self setConfirmArea:[UIColor grayColor] title:@"Confirm" description:@"No one has confirmed the hosting"];
-         }
-         else if(self.confirmMode==2)
-         {
-            [self setConfirmArea:[UIColor orangeColor] title:@"Cancel" description:@"Waiting for member to confirm"];
-         }
-         else if(self.confirmMode==3)
-         {
-             [self setConfirmArea:[UIColor orangeColor] title:@"Confirm" description:@"Member has confirmed you"];
-         }
-         else if(self.confirmMode==4)
-         {
-             [self setConfirmArea:[UIColor redColor] title:@"Confirm" description:@"Member has cancelled the hosting"];
-         }
-         else if(self.confirmMode==5)
-         {
-             [self setConfirmArea:[UIColor redColor] title:@"Re-Confirm" description:@"You have cancelled this hosting"];
-         }
-         else if(self.confirmMode==6)
-         {
-             [self setConfirmArea:[UIColor colorFromHexCode:@"409040"] title:@"Cancel" description:@"You have both confirmed"];
-         }
-         else if(self.confirmMode==7)
-         {
-             [self setConfirmArea:[UIColor grayColor] title:@"Confirm" description:@"Tap to confirm this hosting"];
-         }
-         */
-         
-         if(self.isMessagesLoaded && [responseObject[@"messages"] isEqualToArray:self.messagesA])
-         {
-             NSLog(@"SAME_MESSAGES");
-             [self pollMessages];
+         NSInteger responseStatusCode = operation.response.statusCode;
+         if (responseStatusCode != 200) {
              return;
          }
          
-         self.isMessagesLoaded = YES;
-         
-         [self.messagesA removeAllObjects];
-         [self.messagesA addObjectsFromArray:responseObject[@"messages"]];
-         
-         [self sanitizeData];
-         
-         [self.messagesList reloadData];
-         
-         [self scrollToBottom:NO];
-         
-         /*
-          int numSections = (int)self.messagesList.numberOfSections;
-          if(numSections > 0)
-          {
-          int row_count = (int)[self.messagesList numberOfRowsInSection:numSections - 1];
-          [self.messagesList scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:row_count - 1  inSection:numSections - 1] atScrollPosition:UITableViewScrollPositionBottom animated:NO];
-          }
-          */
-         
-         //Modify button
-         
-         [UIView animateWithDuration:0.15 animations:^(void)
-          {
-              self.loadingView.alpha = 0;
-          } completion:^(BOOL finished)
-          {
-              self.loadingView.hidden = YES;
-          }];
-         
-         
-         [[NSNotificationCenter defaultCenter]
-          postNotificationName:@"UPDATE_CONVERSATION_LIST"
-          object:self];
-         
-         [self pollMessages];
+         NSString *responseString = operation.responseString;
+         NSError *error;
+         NSDictionary *json = (NSDictionary *)[NSJSONSerialization
+                                               JSONObjectWithData:[responseString dataUsingEncoding:NSUTF8StringEncoding]
+                                               options:kNilOptions
+                                               error:&error];
+         dispatch_async(dispatch_get_main_queue(), ^{
+             @try {
+                 NSDictionary *data = [json objectForKey:@"data"];
+                 if (data && data != nil) {
+                     NSDictionary *chat_conversations = [data objectForKey:@"chat_conversations"];
+                     
+                     [self.dataDict removeAllObjects];
+                     [self.dataDict addEntriesFromDictionary:chat_conversations];
+                     
+                     self.confirmMode = 0;
+                     
+                     if(self.isMessagesLoaded && [chat_conversations[@"messages"] isEqualToArray:self.messagesA])
+                     {
+                         NSLog(@"SAME_MESSAGES");
+                         [self pollMessages];
+                         return;
+                     }
+                     
+                     self.isMessagesLoaded = YES;
+                     
+                     [self.messagesA removeAllObjects];
+                     [self.messagesA addObjectsFromArray:chat_conversations[@"messages"]];
+                     
+                     [self sanitizeData];
+                     
+                     [self.messagesList reloadData];
+                     
+                     [self scrollToBottom:NO];
+                     
+                     //Modify button
+                     
+                     [UIView animateWithDuration:0.15 animations:^(void)
+                      {
+                          self.loadingView.alpha = 0;
+                      } completion:^(BOOL finished)
+                      {
+                          self.loadingView.hidden = YES;
+                      }];
+                     
+                     
+                     [[NSNotificationCenter defaultCenter]
+                      postNotificationName:@"UPDATE_CONVERSATION_LIST"
+                      object:self];
+                     
+                     [self pollMessages];
+                 }
+             }
+             @catch (NSException *exception) {
+                 
+             }
+             @finally {
+                 
+             }
+         });
          
      } failure:^(AFHTTPRequestOperation *operation, NSError *error)
      {

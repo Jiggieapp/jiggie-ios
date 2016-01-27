@@ -11,6 +11,7 @@
 #import "AppDelegate.h"
 #import "EventDetail.h"
 #import "BaseModel.h"
+#import "SVProgressHUD.h"
 
 #define PROFILE_PICS 4 //If more than 4 then last is +MORE
 #define PROFILE_SIZE 40
@@ -349,14 +350,12 @@
         [self.sharedData.mixPanelCEventDict setObject:self.sharedData.eventDict[@"venue_name"] forKey:@"Event Venue Name"];
         [self.sharedData.mixPanelCEventDict setObject:self.sharedData.eventDict[@"venue"][@"neighborhood"] forKey:@"Event Venue Neighborhood"];
         [self.sharedData.mixPanelCEventDict setObject:self.sharedData.eventDict[@"venue"][@"city"] forKey:@"Event Venue City"];
-        //[self.sharedData.mixPanelCEventDict setObject:responseObject[@"venue"][@"state"] forKey:@"Event Venue State"];
         [self.sharedData.mixPanelCEventDict setObject:self.sharedData.eventDict[@"venue"][@"description"] forKey:@"Event Venue Description"];
         [self.sharedData.mixPanelCEventDict setObject:self.sharedData.eventDict[@"venue"][@"zip"] forKey:@"Event Venue Zip"];
         NSArray *mixpanelTags = self.sharedData.eventDict[@"tags"];
         if (mixpanelTags && mixpanelTags != nil) {
             [self.sharedData.mixPanelCEventDict setObject:mixpanelTags forKey:@"Event Tags"];
         }
-        
         
         NSMutableDictionary *tmpDict = [[NSMutableDictionary alloc] init];
         [tmpDict setObject:self.sharedData.userDict[@"first_name"] forKey:@"Inviter First Name"];
@@ -587,18 +586,24 @@
     if(self.sharedData.isGuest && ![self.sharedData isMember]) url = [Constants hostListingsURL:event_id fb_id:self.sharedData.fb_id];
     else url = [Constants guestListingsURL:event_id fb_id:self.sharedData.fb_id];
     
-    
     url = [NSString stringWithFormat:@"%@/event/details/%@/%@/%@",PHBaseNewURL,event_id,self.sharedData.fb_id,self.sharedData.gender_interest];
-    
-    NSLog(@"EVENTS_SUMMARY_URL (%@) :: %@",self.sharedData.account_type,url);
-    //event/details
-    
     
     [manager GET:url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject)
      {
-         NSLog(@"EVENTS_SUMMARY_RESPONSE (%@) :: %@",self.sharedData.account_type,responseObject);
-         
          //[self.sharedData trackMixPanelWithDict:@"View Host Listings" withDict:@{}];
+         
+         NSInteger responseStatusCode = operation.response.statusCode;
+         if (responseStatusCode == 204) {
+             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Event Removed" message:@"The event is no longer available." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+             alert.tag = 1;
+             [alert show];
+             
+             [self goBack];
+             
+             [self.emptyView setMode:@"empty"];
+             
+             return;
+         }
          
          NSString *responseString = operation.responseString;
          NSError *error;
@@ -609,161 +614,154 @@
                                                             error:&error];
          
          dispatch_async(dispatch_get_main_queue(), ^{
-             
-             //Check if valid
-             if(responseObject[@"success"]) {
-                 if(![responseObject[@"success"] boolValue]) {
-                     
-                     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Event Removed" message:@"The event is no longer available." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-                     alert.tag = 1;
-                     [alert show];
-                     
-                     [self goBack];
-                     
-                     [self.emptyView setMode:@"empty"];
-                     
-                     return;
-                 }
-             }
-             
+
              @try {
-                 //Store this object for further pages
-                 [self.sharedData.mixPanelCEventDict removeAllObjects];
-                 [self.sharedData.mixPanelCEventDict setObject:responseObject[@"title"] forKey:@"Event Name"];
-                 [self.sharedData.mixPanelCEventDict setObject:responseObject[@"start_datetime_str"] forKey:@"Event Start Time"];
-                 [self.sharedData.mixPanelCEventDict setObject:responseObject[@"end_datetime_str"] forKey:@"Event End Time"];
-                 [self.sharedData.mixPanelCEventDict setObject:responseObject[@"description"] forKey:@"Event Description"];
-                 [self.sharedData.mixPanelCEventDict setObject:responseObject[@"venue_name"] forKey:@"Event Venue Name"];
-                 [self.sharedData.mixPanelCEventDict setObject:responseObject[@"venue"][@"neighborhood"] forKey:@"Event Venue Neighborhood"];
-                 [self.sharedData.mixPanelCEventDict setObject:responseObject[@"venue"][@"city"] forKey:@"Event Venue City"];
-                 //[self.sharedData.mixPanelCEventDict setObject:responseObject[@"venue"][@"state"] forKey:@"Event Venue State"];
-                 [self.sharedData.mixPanelCEventDict setObject:responseObject[@"venue"][@"description"] forKey:@"Event Venue Description"];
-                 [self.sharedData.mixPanelCEventDict setObject:responseObject[@"venue"][@"zip"] forKey:@"Event Venue Zip"];
-                 NSArray *mixpanelTags = [responseObject objectForKey:@"tags"];
-                 if (mixpanelTags && mixpanelTags != nil) {
-                    [self.sharedData.mixPanelCEventDict setObject:mixpanelTags forKey:@"Event Tags"];
-                 }
                  
-                 [self.sharedData.eventDict removeAllObjects];
-                 [self.sharedData.eventDict addEntriesFromDictionary:responseObject];
-                 
-                 [[AnalyticManager sharedManager] trackMixPanelWithDict:@"View Event Details" withDict:self.sharedData.mixPanelCEventDict];
-                 
-                 NSPredicate *eventPredicate = [NSPredicate predicateWithFormat:@"eventID = %@", [json objectForKey:@"_id"]];
-                 NSArray *fetchEventDetail = [BaseModel fetchManagedObject:self.managedObjectContext
-                                                                  inEntity:NSStringFromClass([EventDetail class])
-                                                              andPredicate:eventPredicate];
-                 
-                 for (Event *fetchEvent in fetchEventDetail) {
-                     if ([fetchEvent.eventID isEqualToString:[json objectForKey:@"_id"]]) {
-                         [self.managedObjectContext deleteObject:fetchEvent];
+                 NSDictionary *data = [json objectForKey:@"data"];
+                 if (data && data != nil) {
+                     NSDictionary *eventDetail = [data objectForKey:@"event_detail"];
+                     if (!eventDetail || eventDetail.count == 0) {
+                         return;
                      }
+                    
+                     //Store this object for further pages
+                     [self.sharedData.mixPanelCEventDict removeAllObjects];
+                     [self.sharedData.mixPanelCEventDict setObject:eventDetail[@"title"] forKey:@"Event Name"];
+                     [self.sharedData.mixPanelCEventDict setObject:eventDetail[@"start_datetime_str"] forKey:@"Event Start Time"];
+                     [self.sharedData.mixPanelCEventDict setObject:eventDetail[@"end_datetime_str"] forKey:@"Event End Time"];
+                     [self.sharedData.mixPanelCEventDict setObject:eventDetail[@"description"] forKey:@"Event Description"];
+                     [self.sharedData.mixPanelCEventDict setObject:eventDetail[@"venue_name"] forKey:@"Event Venue Name"];
+                     [self.sharedData.mixPanelCEventDict setObject:eventDetail[@"venue"][@"neighborhood"] forKey:@"Event Venue Neighborhood"];
+                     [self.sharedData.mixPanelCEventDict setObject:eventDetail[@"venue"][@"city"] forKey:@"Event Venue City"];
+                     [self.sharedData.mixPanelCEventDict setObject:eventDetail[@"venue"][@"description"] forKey:@"Event Venue Description"];
+                     [self.sharedData.mixPanelCEventDict setObject:eventDetail[@"venue"][@"zip"] forKey:@"Event Venue Zip"];
+                     NSArray *mixpanelTags = [eventDetail objectForKey:@"tags"];
+                     if (mixpanelTags && mixpanelTags != nil) {
+                         [self.sharedData.mixPanelCEventDict setObject:mixpanelTags forKey:@"Event Tags"];
+                     }
+                     
+                     [self.sharedData.eventDict removeAllObjects];
+                     [self.sharedData.eventDict addEntriesFromDictionary:eventDetail];
+                     
+                     [[AnalyticManager sharedManager] trackMixPanelWithDict:@"View Event Details" withDict:self.sharedData.mixPanelCEventDict];
+                     
+                     NSPredicate *eventPredicate = [NSPredicate predicateWithFormat:@"eventID = %@", [eventDetail objectForKey:@"_id"]];
+                     NSArray *fetchEventDetail = [BaseModel fetchManagedObject:self.managedObjectContext
+                                                                      inEntity:NSStringFromClass([EventDetail class])
+                                                                  andPredicate:eventPredicate];
+                     
+                     for (EventDetail *fetchEvent in fetchEventDetail) {
+                         if ([fetchEvent.eventID isEqualToString:[eventDetail objectForKey:@"_id"]]) {
+                             [self.managedObjectContext deleteObject:fetchEvent];
+                         }
+                     }
+                     
+                     EventDetail *item = (EventDetail *)[NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([EventDetail class])
+                                                                                      inManagedObjectContext:self.managedObjectContext];
+                     
+                     NSString *title = [eventDetail objectForKey:@"title"];
+                     if (title && ![title isEqual:[NSNull null]]) {
+                         item.title = title;
+                     } else {
+                         item.title = @"";
+                     }
+                     
+                     NSString *_id = [eventDetail objectForKey:@"_id"];
+                     if (_id && ![_id isEqual:[NSNull null]]) {
+                         item.eventID = _id;
+                     } else {
+                         item.eventID = @"";
+                     }
+                     
+                     NSString *start_datetime_str = [eventDetail objectForKey:@"start_datetime_str"];
+                     if (start_datetime_str && ![start_datetime_str isEqual:[NSNull null]]) {
+                         item.startDatetimeStr = start_datetime_str;
+                     } else {
+                         item.startDatetimeStr = @"";
+                     }
+                     
+                     NSString *end_datetime_str = [eventDetail objectForKey:@"end_datetime_str"];
+                     if (end_datetime_str && ![end_datetime_str isEqual:[NSNull null]]) {
+                         item.endDatetimeStr = end_datetime_str;
+                     } else {
+                         item.endDatetimeStr = @"";
+                     }
+                     
+                     NSString *venue_id = [eventDetail objectForKey:@"venue_id"];
+                     if (venue_id && ![venue_id isEqual:[NSNull null]]) {
+                         item.venueID = venue_id;
+                     } else {
+                         item.venueID = @"";
+                     }
+                     
+                     NSString *venue_name = [eventDetail objectForKey:@"venue_name"];
+                     if (venue_name && ![venue_name isEqual:[NSNull null]]) {
+                         item.venueName = venue_name;
+                     } else {
+                         item.venueName = @"";
+                     }
+                     
+                     NSString *fullfillment_type = [eventDetail objectForKey:@"fullfillment_type"];
+                     if (fullfillment_type && ![fullfillment_type isEqual:[NSNull null]]) {
+                         item.fullfillmentType = fullfillment_type;
+                     } else {
+                         item.fullfillmentType = @"";
+                     }
+                     
+                     NSString *fullfillment_value = [eventDetail objectForKey:@"fullfillment_value"];
+                     if (fullfillment_value && ![fullfillment_value isEqual:[NSNull null]]) {
+                         item.fullfillmentValue = fullfillment_value;
+                     } else {
+                         item.fullfillmentValue = @"";
+                     }
+                     
+                     NSString *description = [eventDetail objectForKey:@"description"];
+                     if (description && ![description isEqual:[NSNull null]]) {
+                         item.eventDescription = description;
+                     } else {
+                         item.eventDescription = @"";
+                     }
+                     
+                     NSArray *tags = [eventDetail objectForKey:@"tags"];
+                     if (tags && ![tags isEqual:[NSNull null]]) {
+                         item.tags = [NSKeyedArchiver archivedDataWithRootObject:tags];
+                     }
+                     
+                     NSArray *photos = [eventDetail objectForKey:@"photos"];
+                     if (photos && ![photos isEqual:[NSNull null]]) {
+                         item.photos = [NSKeyedArchiver archivedDataWithRootObject:photos];
+                     }
+                     
+                     NSArray *guests_viewed = [eventDetail objectForKey:@"guests_viewed"];
+                     if (guests_viewed && ![guests_viewed isEqual:[NSNull null]]) {
+                         item.guestViewed = [NSKeyedArchiver archivedDataWithRootObject:guests_viewed];
+                     }
+                     
+                     NSArray *venue = [eventDetail objectForKey:@"venue"];
+                     if (venue && ![venue isEqual:[NSNull null]]) {
+                         item.venue = [NSKeyedArchiver archivedDataWithRootObject:venue];
+                     }
+                     
+                     NSString *start_datetime = [eventDetail objectForKey:@"start_datetime"];
+                     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+                     [formatter setDateFormat:PHDateFormatServer];
+                     NSDate *startDatetime = [formatter dateFromString:start_datetime];
+                     if (startDatetime != nil) {
+                         item.startDatetime = startDatetime;
+                     }
+                     
+                     NSString *end_datetime = [eventDetail objectForKey:@"end_datetime"];
+                     NSDate *endDatetime = [formatter dateFromString:end_datetime];
+                     if (endDatetime != nil) {
+                         item.endDatetime = endDatetime;
+                     }
+                     
+                     item.modified = [NSDate date];
+                     
+                     NSError *error;
+                     if (![self.managedObjectContext save:&error]) NSLog(@"Error: %@", [error localizedDescription]);
+
                  }
-                 
-                 EventDetail *item = (EventDetail *)[NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([EventDetail class])
-                                                                                  inManagedObjectContext:self.managedObjectContext];
-                 
-                 NSString *title = [json objectForKey:@"title"];
-                 if (title && ![title isEqual:[NSNull null]]) {
-                     item.title = title;
-                 } else {
-                     item.title = @"";
-                 }
-                 
-                 NSString *_id = [json objectForKey:@"_id"];
-                 if (_id && ![_id isEqual:[NSNull null]]) {
-                     item.eventID = _id;
-                 } else {
-                     item.eventID = @"";
-                 }
-                 
-                 NSString *start_datetime_str = [json objectForKey:@"start_datetime_str"];
-                 if (start_datetime_str && ![start_datetime_str isEqual:[NSNull null]]) {
-                     item.startDatetimeStr = start_datetime_str;
-                 } else {
-                     item.startDatetimeStr = @"";
-                 }
-                 
-                 NSString *end_datetime_str = [json objectForKey:@"end_datetime_str"];
-                 if (end_datetime_str && ![end_datetime_str isEqual:[NSNull null]]) {
-                     item.endDatetimeStr = end_datetime_str;
-                 } else {
-                     item.endDatetimeStr = @"";
-                 }
-                 
-                 NSString *venue_id = [json objectForKey:@"venue_id"];
-                 if (venue_id && ![venue_id isEqual:[NSNull null]]) {
-                     item.venueID = venue_id;
-                 } else {
-                     item.venueID = @"";
-                 }
-                 
-                 NSString *venue_name = [json objectForKey:@"venue_name"];
-                 if (venue_name && ![venue_name isEqual:[NSNull null]]) {
-                     item.venueName = venue_name;
-                 } else {
-                     item.venueName = @"";
-                 }
-                 
-                 NSString *fullfillment_type = [json objectForKey:@"fullfillment_type"];
-                 if (fullfillment_type && ![fullfillment_type isEqual:[NSNull null]]) {
-                     item.fullfillmentType = fullfillment_type;
-                 } else {
-                     item.fullfillmentType = @"";
-                 }
-                 
-                 NSString *fullfillment_value = [json objectForKey:@"fullfillment_value"];
-                 if (fullfillment_value && ![fullfillment_value isEqual:[NSNull null]]) {
-                     item.fullfillmentValue = fullfillment_value;
-                 } else {
-                     item.fullfillmentValue = @"";
-                 }
-                 
-                 NSString *description = [json objectForKey:@"description"];
-                 if (description && ![description isEqual:[NSNull null]]) {
-                     item.eventDescription = description;
-                 } else {
-                     item.eventDescription = @"";
-                 }
-                 
-                 NSArray *tags = [json objectForKey:@"tags"];
-                 if (tags && ![tags isEqual:[NSNull null]]) {
-                     item.tags = [NSKeyedArchiver archivedDataWithRootObject:tags];
-                 }
-                 
-                 NSArray *photos = [json objectForKey:@"photos"];
-                 if (photos && ![photos isEqual:[NSNull null]]) {
-                     item.photos = [NSKeyedArchiver archivedDataWithRootObject:photos];
-                 }
-                 
-                 NSArray *guests_viewed = [json objectForKey:@"guests_viewed"];
-                 if (guests_viewed && ![guests_viewed isEqual:[NSNull null]]) {
-                     item.guestViewed = [NSKeyedArchiver archivedDataWithRootObject:guests_viewed];
-                 }
-                 
-                 NSArray *venue = [json objectForKey:@"venue"];
-                 if (venue && ![venue isEqual:[NSNull null]]) {
-                     item.venue = [NSKeyedArchiver archivedDataWithRootObject:venue];
-                 }
-                 
-                 NSString *start_datetime = [json objectForKey:@"start_datetime"];
-                 NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-                 [formatter setDateFormat:PHDateFormatServer];
-                 NSDate *startDatetime = [formatter dateFromString:start_datetime];
-                 if (startDatetime != nil) {
-                     item.startDatetime = startDatetime;
-                 }
-                 
-                 NSString *end_datetime = [json objectForKey:@"end_datetime"];
-                 NSDate *endDatetime = [formatter dateFromString:end_datetime];
-                 if (endDatetime != nil) {
-                     item.endDatetime = endDatetime;
-                 }
-                 
-                 item.modified = [NSDate date];
-                 
-                 NSError *error;
-                 if (![self.managedObjectContext save:&error]) NSLog(@"Error: %@", [error localizedDescription]);
              }
              @catch (NSException *exception) {
                  
@@ -778,8 +776,9 @@
          
      } failure:^(AFHTTPRequestOperation *operation, NSError *error)
      {
-         NSLog(@"EVENTS_SUMMARY_LIST_ERROR (%@) :: %@",self.sharedData.account_type,error);
-         
+         if (error.code == -1009 || error.code == -1005) {
+             [SVProgressHUD showInfoWithStatus:@"Please check your internet connection"];
+         }
          [self.emptyView setMode:@"hide"];
      }];
 }
@@ -804,10 +803,10 @@
     self.venueName.text = [eventDetail.venueName uppercaseString];
     
     //Get list of users
-    NSMutableArray *userList;
+    NSArray *userList;
     if([self.sharedData isHost] || [self.sharedData isMember])
     {
-        userList = (NSMutableArray *)[NSKeyedUnarchiver unarchiveObjectWithData:eventDetail.guestViewed];
+        userList = (NSArray *)[NSKeyedUnarchiver unarchiveObjectWithData:eventDetail.guestViewed];
     }
     
     //Get tags
