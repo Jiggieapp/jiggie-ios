@@ -8,6 +8,7 @@
 
 #import "SignupView.h"
 #import "AnalyticManager.h"
+#import "UserManager.h"
 
 #define SET_IF_NOT_NULL(TARGET, VAL) if(VAL && VAL != [NSNull null]) { TARGET = VAL; } else {TARGET = @"";}
 
@@ -566,7 +567,9 @@
              
              self.sharedData.isLoggedIn = YES;
              
-             [self.sharedData loadSettingsResponse:responseObject];
+             //Load data
+             [UserManager saveUserSetting:responseObject];
+             [UserManager updateLocalSetting];
 
              self.sharedData.help_phone = responseObject[@"help_phone"];
              

@@ -17,7 +17,7 @@
 #import "PHImage.h"
 
 @interface Events : UIView
-<UITableViewDelegate,UITableViewDataSource,UITextViewDelegate,UIAlertViewDelegate,NSFetchedResultsControllerDelegate> {
+<UITableViewDelegate,UITableViewDataSource,UITextViewDelegate,UIAlertViewDelegate,NSFetchedResultsControllerDelegate,UICollectionViewDataSource,UICollectionViewDelegate,UICollectionViewDelegateFlowLayout> {
     NSFetchedResultsController *fetchedResultsController;
     NSManagedObjectContext *managedObjectContext;
 }
@@ -50,6 +50,12 @@
 @property(nonatomic,strong) EmptyView *emptyView;
 
 @property (strong, nonatomic) UIButton *btnCity;
+@property (strong, nonatomic) UIButton *btnFilter;
+
+@property (strong, nonatomic) UIView   *filterView;
+@property (strong, nonatomic) UIView   *filterPopUpView;
+@property (nonatomic, strong) UICollectionView *filterTagCollection;
+@property (nonatomic, strong) NSMutableArray *tagArray;
 
 @property (nonatomic, retain) NSFetchedResultsController *fetchedResultsController;
 @property (nonatomic, retain) NSManagedObjectContext *managedObjectContext;

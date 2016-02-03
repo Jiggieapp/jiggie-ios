@@ -57,6 +57,19 @@
     self.hideTitle.font = [UIFont phBlond:17];
     [self.hideView addSubview:self.hideTitle];
     
+    self.hideSubtitle = [[UILabel alloc] initWithFrame:CGRectMake(18, 50, frame.size.width-36, 20)];
+    self.hideSubtitle.text = @"Turn off if you do not wish to be seen by others";
+    self.hideSubtitle.textColor = [self.sharedData colorWithHexString:@"5c5c5c"];
+    self.hideSubtitle.font = [UIFont phBlond:15];
+    [self.hideSubtitle setAdjustsFontSizeToFitWidth:YES];
+    [self.hideView addSubview:self.hideSubtitle];
+    
+    // hide if iphone 4 due to screen limitation
+    if(self.sharedData.isIphone4)
+    {
+        self.hideSubtitle.hidden = YES;
+    }
+    
     self.hideToggle = [[UISwitch alloc] initWithFrame:CGRectZero];
     self.hideToggle.frame = CGRectMake(self.sharedData.screenWidth - self.hideToggle.bounds.size.width - 14,
                                        8,
@@ -67,7 +80,7 @@
     [self.hideView addSubview:self.hideToggle];
     
     //Create table
-    self.feedTable = [[UITableView alloc] initWithFrame:CGRectMake(0, self.sharedData.screenHeight - self.sharedData.feedCellHeightLong - 70 - 3, frame.size.width, frame.size.height - 60 - self.hideView.frame.size.height)];
+    self.feedTable = [[UITableView alloc] initWithFrame:CGRectMake(0, self.sharedData.screenHeight - self.sharedData.feedCellHeightLong - 60 - 3, frame.size.width, frame.size.height - 50 - self.hideView.frame.size.height)];
     self.feedTable.delegate = self;
     self.feedTable.dataSource = self;
     self.feedTable.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -76,8 +89,6 @@
     self.feedTable.hidden = YES;
     self.feedTable.scrollEnabled = NO;
     [self.mainCon addSubview:self.feedTable];
-    
-    NSLog(@"screen : %i FEED TABLE : %@",self.sharedData.screenHeight, NSStringFromCGRect(self.feedTable.frame));
     
     [tabBar addSubview:self.title];
     [self.mainCon addSubview:tabBar];
@@ -135,8 +146,10 @@
         [self.hideToggle setOn:self.sharedData.matchMe];
         if (self.sharedData.matchMe) {
             self.hideIcon.image = [UIImage imageNamed:@"discover_on.png"];
+            self.hideSubtitle.text = @"Turn off if you do not wish to be seen by others";
         } else {
             self.hideIcon.image = [UIImage imageNamed:@"discover_off.png"];
+            self.hideSubtitle.text = @"Turn on if you wish to be seen by others";
         }
     }
 }
@@ -161,8 +174,10 @@
          [self.hideToggle setOn:self.sharedData.matchMe];
          if (self.sharedData.matchMe) {
              self.hideIcon.image = [UIImage imageNamed:@"discover_on.png"];
+             self.hideSubtitle.text = @"Turn off if you do not wish to be seen by others";
          } else {
              self.hideIcon.image = [UIImage imageNamed:@"discover_off.png"];
+             self.hideSubtitle.text = @"Turn on if you wish to be seen by others";
          }
          
          self.feedTable.hidden = !(self.sharedData.matchMe);
@@ -235,8 +250,10 @@
     [self.hideToggle setOn:self.sharedData.matchMe];
     if (self.sharedData.matchMe) {
         self.hideIcon.image = [UIImage imageNamed:@"discover_on.png"];
+        self.hideSubtitle.text = @"Turn off if you do not wish to be seen by others";
     } else {
         self.hideIcon.image = [UIImage imageNamed:@"discover_off.png"];
+        self.hideSubtitle.text = @"Turn on if you wish to be seen by others";
     }
     
     self.feedTable.hidden = !(self.sharedData.matchMe);
@@ -260,8 +277,6 @@
     AFHTTPRequestOperationManager *manager = [self.sharedData getOperationManager];
     
     NSString *url = [NSString stringWithFormat:@"%@/feed/%@/%@",PHBaseURL,self.sharedData.account_type,self.sharedData.fb_id];
-    
-    
     
     url = [NSString stringWithFormat:@"%@/partyfeed/list/%@/%@",PHBaseURL,self.sharedData.fb_id,self.sharedData.gender_interest];
     
@@ -287,8 +302,7 @@
              [self performSelector:@selector(startPolling) withObject:nil afterDelay:POLL_SECONDS];
              return;
          }
-         
-         NSLog(@"FEED responseObject :: %@",responseObject);
+        
          if(self.sharedData.isInFeed)
          {
              
@@ -306,16 +320,12 @@
              if([self.feedData count] > 0)
              {
                  [paramsToSend setObject:[self.feedData objectAtIndex:0][@"type"] forKey:@"feed_item_type"];
+                 [[AnalyticManager sharedManager] trackMixPanelWithDict:@"View Feed Item" withDict:paramsToSend];
              }
              
-             
-             [[AnalyticManager sharedManager] trackMixPanelWithDict:@"View Feed Item" withDict:paramsToSend];
          }else{
              NSLog(@"WTFWTFWTWFWT");
          }
-         
-         
-         [[AnalyticManager sharedManager] trackMixPanelWithDict:@"New Feed Item" withDict:@{}];
          
          //Clear table
          [self.feedData removeAllObjects];
@@ -337,8 +347,9 @@
              self.hideView.hidden = YES;
              self.feedTable.hidden = YES;
              [self.emptyView setMode:@"empty"];
-         }
-         else {
+         } else {
+             [[AnalyticManager sharedManager] trackMixPanelWithDict:@"New Feed Item" withDict:@{}];
+             
              self.hideView.hidden = NO;
              self.feedTable.hidden = !(self.sharedData.matchMe);;
              [self.emptyView setMode:@"hide"];
@@ -426,6 +437,12 @@
     }
     
     return cell;
+}
+
+#pragma mark - Match Screen
+
+- (void)showMatchScreen {
+    
 }
 
 @end

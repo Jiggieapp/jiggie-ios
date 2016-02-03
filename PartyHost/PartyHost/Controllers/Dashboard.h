@@ -24,6 +24,7 @@
 #import "PhoneVerify.h"
 #import "CreditCard.h"
 #import "EventsSummaryModal.h"
+#import "FeedMatch.h"
 
 
 @interface Dashboard : UIView
@@ -71,6 +72,8 @@
 @property(nonatomic,strong) PhoneVerify     *phoneVerify;
 @property(nonatomic,strong) CreditCard      *creditCard;
 @property(nonatomic,strong) EventsSummaryModal *eventModal;
+
+@property(nonatomic,strong) FeedMatch *feedMatch;
 
 
 

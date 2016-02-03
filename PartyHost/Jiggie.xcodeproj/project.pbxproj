@@ -13,6 +13,8 @@
 		DA4305611C22823700ED6C54 /* Jiggie.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = DA43055F1C22823700ED6C54 /* Jiggie.xcdatamodeld */; };
 		DA4305691C22916E00ED6C54 /* Event.m in Sources */ = {isa = PBXBuildFile; fileRef = DA4305671C22916E00ED6C54 /* Event.m */; };
 		DA43056C1C23E7D000ED6C54 /* BaseModel.m in Sources */ = {isa = PBXBuildFile; fileRef = DA43056B1C23E7D000ED6C54 /* BaseModel.m */; };
+		DA47B22A1C3A8553001B4476 /* AFNetworkActivityLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = DA47B2291C3A8553001B4476 /* AFNetworkActivityLogger.m */; };
+		DA47B23B1C3BA492001B4476 /* FeedMatch.m in Sources */ = {isa = PBXBuildFile; fileRef = DA47B23A1C3BA492001B4476 /* FeedMatch.m */; };
 		DAABB0B11C1FD50E004DDCFA /* BookTable.m in Sources */ = {isa = PBXBuildFile; fileRef = DAABB0091C1FD50E004DDCFA /* BookTable.m */; };
 		DAABB0B21C1FD50E004DDCFA /* BookTableAbout.m in Sources */ = {isa = PBXBuildFile; fileRef = DAABB00B1C1FD50E004DDCFA /* BookTableAbout.m */; };
 		DAABB0B31C1FD50E004DDCFA /* BookTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DAABB00D1C1FD50E004DDCFA /* BookTableCell.m */; };
@@ -289,6 +291,10 @@
 		DA4305671C22916E00ED6C54 /* Event.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Event.m; sourceTree = "<group>"; };
 		DA43056A1C23E7D000ED6C54 /* BaseModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseModel.h; sourceTree = "<group>"; };
 		DA43056B1C23E7D000ED6C54 /* BaseModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseModel.m; sourceTree = "<group>"; };
+		DA47B2281C3A8553001B4476 /* AFNetworkActivityLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFNetworkActivityLogger.h; sourceTree = "<group>"; };
+		DA47B2291C3A8553001B4476 /* AFNetworkActivityLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFNetworkActivityLogger.m; sourceTree = "<group>"; };
+		DA47B2391C3BA492001B4476 /* FeedMatch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FeedMatch.h; sourceTree = "<group>"; };
+		DA47B23A1C3BA492001B4476 /* FeedMatch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FeedMatch.m; sourceTree = "<group>"; };
 		DAABB0081C1FD50E004DDCFA /* BookTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BookTable.h; sourceTree = "<group>"; };
 		DAABB0091C1FD50E004DDCFA /* BookTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BookTable.m; sourceTree = "<group>"; };
 		DAABB00A1C1FD50E004DDCFA /* BookTableAbout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BookTableAbout.h; sourceTree = "<group>"; };
@@ -825,6 +831,15 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
+		DA47B2271C3A8553001B4476 /* AFNetworkActivityLogger */ = {
+			isa = PBXGroup;
+			children = (
+				DA47B2281C3A8553001B4476 /* AFNetworkActivityLogger.h */,
+				DA47B2291C3A8553001B4476 /* AFNetworkActivityLogger.m */,
+			);
+			path = AFNetworkActivityLogger;
+			sourceTree = "<group>";
+		};
 		DAABAFDD1C1EC994004DDCFA /* Components */ = {
 			isa = PBXGroup;
 			children = (
@@ -843,6 +858,7 @@
 		DAABAFE81C1FC6F8004DDCFA /* ExtraLibraries */ = {
 			isa = PBXGroup;
 			children = (
+				DA47B2271C3A8553001B4476 /* AFNetworkActivityLogger */,
 				DAABB2F51C200227004DDCFA /* Fabric */,
 				DAABB2EC1C1FFDF4004DDCFA /* FacebookSDK */,
 				DAABB1401C1FF5AE004DDCFA /* AF-iOS-SDK-v3.3.0 */,
@@ -1005,6 +1021,8 @@
 				DAABB04E1C1FD50E004DDCFA /* Feed.m */,
 				DAABB04F1C1FD50E004DDCFA /* FeedCell.h */,
 				DAABB0501C1FD50E004DDCFA /* FeedCell.m */,
+				DA47B2391C3BA492001B4476 /* FeedMatch.h */,
+				DA47B23A1C3BA492001B4476 /* FeedMatch.m */,
 			);
 			path = Feed;
 			sourceTree = "<group>";
@@ -1897,6 +1915,7 @@
 				DAABB1171C1FF0F3004DDCFA /* PHImage.m in Sources */,
 				DAABB2C31C1FF5AE004DDCFA /* NSDate+TimeAgo.m in Sources */,
 				DAABB1131C1FF0F3004DDCFA /* NSDate+Calculators.m in Sources */,
+				DA47B23B1C3BA492001B4476 /* FeedMatch.m in Sources */,
 				DAABB0E51C1FD50E004DDCFA /* PhoneVerify.m in Sources */,
 				DAABB0C61C1FD50E004DDCFA /* EventsRowCell.m in Sources */,
 				DAABB2A21C1FF5AE004DDCFA /* MPObjectIdentityProvider.m in Sources */,
@@ -2016,6 +2035,7 @@
 				DAABB0D31C1FD50E004DDCFA /* HostVenueDetail.m in Sources */,
 				DAABB0D61C1FD50E004DDCFA /* MyConfirmationsCell.m in Sources */,
 				DAABB2B91C1FF5AE004DDCFA /* MPUITableViewBinding.m in Sources */,
+				DA47B22A1C3A8553001B4476 /* AFNetworkActivityLogger.m in Sources */,
 				DAABB0E11C1FD50E004DDCFA /* Settings.m in Sources */,
 				DAABB2561C1FF5AE004DDCFA /* AFHTTPSessionManager.m in Sources */,
 				DAABB2A41C1FF5AE004DDCFA /* MPObjectSerializer.m in Sources */,
@@ -2161,7 +2181,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				BUNDLE_APP_NAME = "PH [DEV]";
-				CODE_SIGN_IDENTITY = "iPhone Developer: Han Kao (E6FU8YA6RY)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2236,6 +2256,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				BUNDLE_APP_NAME = "PH [DEV]";
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2352,7 +2373,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				BUNDLE_APP_NAME = Jiggie;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Han Kao (E6FU8YA6RY)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2390,6 +2411,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				BUNDLE_APP_NAME = Jiggie;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",

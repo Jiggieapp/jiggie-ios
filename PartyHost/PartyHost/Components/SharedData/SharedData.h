@@ -228,6 +228,8 @@
 @property(nonatomic,strong) NSString            *shareHostingVenueName; //venue_name
 @property(nonatomic,strong) NSString            *shareHostingHostDate; //hosting date
 
+//feed match
+@property(nonatomic,strong) NSString            *feedMatchEvent;
 
 -(NSString*)capitalizeFirstLetter:(NSString *)strg;
 

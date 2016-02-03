@@ -84,4 +84,46 @@ static UserManager *_sharedManager = nil;
     if (![globalManagedObjectContext save:&error]) NSLog(@"Error: %@", [error localizedDescription]);
 }
 
+#pragma mark - Tags
+- (void)loadAllTags {
+    SharedData *sharedData = [SharedData sharedInstance];
+    AFHTTPRequestOperationManager *manager = [sharedData getOperationManager];
+    NSString *url = [Constants userTagListURL];
+    [manager GET:url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject)
+     {
+         NSString *responseString = operation.responseString;
+         NSError *error;
+         
+         NSArray *json = (NSArray *)[NSJSONSerialization
+                                     JSONObjectWithData:[responseString dataUsingEncoding:NSUTF8StringEncoding]
+                                     options:kNilOptions
+                                     error:&error];
+         dispatch_async(dispatch_get_main_queue(), ^{
+             @try {
+                 if (json && json != nil && json.count > 0) {
+                     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+                     [prefs setObject:json forKey:@"all_tags"];
+                     [prefs synchronize];
+                 }
+             }
+             @catch (NSException *exception) {
+                 
+             }
+             @finally {
+                 
+             }
+         });
+
+     } failure:^(AFHTTPRequestOperation *operation, NSError *error)
+     {
+         NSLog(@"ERROR :: %@",error);
+     }];
+}
+
++ (NSArray *)allTags {
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    NSArray *userSetting = [prefs objectForKey:@"all_tags"];
+    return userSetting;
+}
+
 @end

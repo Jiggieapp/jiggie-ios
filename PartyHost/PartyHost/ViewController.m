@@ -126,7 +126,6 @@
      selector:@selector(showMessage)
      name:@"SHOW_MAIL_MESSAGE"
      object:nil];
-
     
     
     [[NSNotificationCenter defaultCenter] addObserverForName:
@@ -286,6 +285,7 @@
     for (UIButton *navButton in self.dashboard.btnsA) {
         [navButton setEnabled:enable];
     }
+    [self.dashboard.eventsPage.btnFilter setEnabled:enable];
 }
 
 -(void)checkIfPushIsEnabled
