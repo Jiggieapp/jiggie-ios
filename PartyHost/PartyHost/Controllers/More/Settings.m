@@ -101,6 +101,7 @@
 {
     UISwitch* switchControl = sender;
     self.sharedData.notification_feed = switchControl.on;
+    [self.sharedData saveSettingsResponse];
     [self saveSettings];
 }
 
@@ -109,6 +110,7 @@
 {
     UISwitch* switchControl = sender;
     self.sharedData.notification_messages = switchControl.on;
+    [self.sharedData saveSettingsResponse];
     [self saveSettings];
 }
 
@@ -447,6 +449,7 @@
             }
         }
         
+        [self.sharedData saveSettingsResponse];
         [self.settingsList reloadData];
         [self.sharedData.eventsPage resetApp];
         [self.sharedData.feedPage forceReload];

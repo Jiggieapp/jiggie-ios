@@ -257,6 +257,7 @@
     self.isEventsLoaded = NO;
     self.whiteBK.hidden = YES;
     self.backgroundColor = [UIColor whiteColor];
+    [self.emptyView setMode:@"load"];
 }
 
 
@@ -444,11 +445,26 @@
          NSError *error;
          
          NSInteger responseStatusCode = operation.response.statusCode;
-         if (responseStatusCode != 200) {
+         if (responseStatusCode == 204) {
+             NSArray *fetchEvents = [BaseModel fetchManagedObject:self.managedObjectContext
+                                                         inEntity:NSStringFromClass([Event class])
+                                                     andPredicate:nil];
+             for (Event *fetchEvent in fetchEvents) {
+                 [self.managedObjectContext deleteObject:fetchEvent];
+                 
+                 NSError *error;
+                 if (![self.managedObjectContext save:&error]) NSLog(@"Error: %@", [error localizedDescription]);
+             }
+             [self.emptyView setData:@"No events found" subtitle:@"Try to add more categories to see more events." imageNamed:@""];
+             [self.emptyView setMode:@"empty"];
+             
+             return;
+         } else if (responseStatusCode != 200) {
              NSArray *fetchEvents = [BaseModel fetchManagedObject:self.managedObjectContext
                                                          inEntity:NSStringFromClass([Event class])
                                                      andPredicate:nil];
              if (fetchEvents.count == 0) {
+                 [self.emptyView setData:@"No events found" subtitle:@"Try to add more categories to see more events." imageNamed:@""];
                  [self.emptyView setMode:@"empty"];
              }
              return;
@@ -595,6 +611,7 @@
                                                          inEntity:NSStringFromClass([Event class])
                                                      andPredicate:nil];
              if (fetchEvents.count == 0) {
+                 [self.emptyView setData:@"Oops there is a problem" subtitle:@"Sorry we're having some server issues, please check back in a few minutes." imageNamed:@""];
                  [self.emptyView setMode:@"empty"];
              }
              return;
@@ -909,7 +926,7 @@ shouldDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
     self.eventsGuestList.hidden = YES;
     self.eventsHostingsList.hidden = NO;
     [self.eventsHostingsList initClass];
-    [self.self.eventsHostingsList loadData:self.sharedData.eventDict[@"_id"]];
+    [self.self.eventsHostingsList loadData:self.sharedData.cEventId_Summary];
     [UIView animateWithDuration:0.25 animations:^()
      {
          self.mainCon.frame = CGRectMake(-self.sharedData.screenWidth * 2, 20, self.sharedData.screenWidth * SCREENS_DEEP, self.sharedData.screenHeight - 20);
@@ -925,7 +942,7 @@ shouldDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
     self.eventsGuestList.hidden = NO;
     [self.eventsGuestList initClass];
     self.eventsGuestList.mainDict = [NSMutableDictionary dictionaryWithDictionary:self.sharedData.eventDict];
-    [self.eventsGuestList loadData:self.sharedData.eventDict[@"_id"]];
+    [self.eventsGuestList loadData:self.sharedData.cEventId_Summary];
     [UIView animateWithDuration:0.25 animations:^()
      {
          self.mainCon.frame = CGRectMake(-self.sharedData.screenWidth * 2, 20, self.sharedData.screenWidth * SCREENS_DEEP, self.sharedData.screenHeight - 20);

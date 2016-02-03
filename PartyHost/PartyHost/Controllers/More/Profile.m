@@ -360,7 +360,7 @@
      object:self];
     
     AFHTTPRequestOperationManager *manager = [self.sharedData getOperationManager];
-    NSString *url = [NSString stringWithFormat:@"%@/updateuserabout",PHBaseURL];
+    NSString *url = [NSString stringWithFormat:@"%@/updateuserabout",PHBaseNewURL];
     [manager POST:url parameters:@{
                                    //@"time" : dateWithNewFormat,
                                    @"fb_id" : self.sharedData.fb_id,
@@ -398,9 +398,8 @@
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     manager.requestSerializer = [AFJSONRequestSerializer serializer];
     manager.responseSerializer = [AFJSONResponseSerializer serializer];
-    NSDictionary *params = @{ @"fb_id" : self.sharedData.fb_id };
-    NSString *urlToLoad = [NSString stringWithFormat:@"%@/getuserinfobyfbid",PHBaseURL];
-    [manager GET:urlToLoad parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject)
+    NSString *urlToLoad = [NSString stringWithFormat:@"%@/memberinfo/%@/%@/%@",PHBaseURL,self.sharedData.account_type,self.sharedData.fb_id,self.sharedData.fb_id];
+    [manager GET:urlToLoad parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject)
      {
          self.aboutBody.text = [self.sharedData clipSpace:responseObject[@"about"]];
          [self.sharedData.userDict setValue:responseObject[@"about"] forKey:@"about"];

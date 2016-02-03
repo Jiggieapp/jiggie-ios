@@ -110,6 +110,8 @@
 
 @property(nonatomic,strong) NSString            *cEventId_Modal;
 
+@property(nonatomic,strong) NSString            *cEventId_Summary;
+
 
 
 @property(nonatomic,strong) NSString            *btnYesTxt;
@@ -271,6 +273,7 @@
 @property(nonatomic,strong) NSString *ccName;
 -(NSDictionary*)createSaveSettingsParams;
 -(void)loadSettingsResponse:(NSDictionary *)dict;
+-(void)saveSettingsResponse;
 
 //===================================================================================================//
 //GENDER

@@ -319,7 +319,7 @@
                              @"fb_token" : self.sharedData.fb_access_token
                              };
     
-    NSString *urlToLoad = [NSString stringWithFormat:@"%@/app/userlogin",PHBaseDomain];
+    NSString *urlToLoad = [NSString stringWithFormat:@"%@/userlogin",PHBaseNewURL];
     
     NSLog(@"urlToLoad :: %@",urlToLoad);
     
@@ -549,7 +549,8 @@
                              @"birthday": birthday,
                              @"location": location,
                              @"about":about,
-                             @"version":PHVersion
+                             @"version":PHVersion,
+                             @"device_type":@"1" // 1 for iOS
                              };
     
     NSLog(@"START_LOGIN");

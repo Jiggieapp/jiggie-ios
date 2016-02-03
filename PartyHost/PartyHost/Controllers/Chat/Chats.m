@@ -321,6 +321,8 @@
                          NSString *last_updated = [chatRow objectForKey:@"last_updated"];
                          NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
                          [formatter setDateFormat:PHDateFormatServer];
+                         [formatter setLocale:[NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"]];
+                         [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
                          NSDate *lastUpdated = [formatter dateFromString:last_updated];
                          if (lastUpdated != nil) {
                              item.lastUpdated = lastUpdated;

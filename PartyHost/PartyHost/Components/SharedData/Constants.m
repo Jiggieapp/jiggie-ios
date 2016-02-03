@@ -26,7 +26,7 @@ NSString *const JiggieItunesID = @"1047291489";
 
 //URLs with substitution
 NSString *const PHBaseURL = @"https://jiggie-dev.herokuapp.com/app/v3";
-NSString *const PHBaseNewURL = @"http://52.76.76.3/app/v3";
+NSString *const PHBaseNewURL = @"http://api-dev.jiggieapp.com/app/v3";
 NSString *const PHBaseDomain = @"https://jiggie-dev.herokuapp.com";
 
 
@@ -339,7 +339,7 @@ int const PHButtonHeight = 50; //This is the button at bottom of screen
 {
     NSDateFormatter *format = [[NSDateFormatter alloc] init];
     [format setLocale:[NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"]];
-    [format setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
+    [format setTimeZone:[NSTimeZone localTimeZone]];
     
     //Switch to nicer fate format
     NSCalendar *calendar = [NSCalendar currentCalendar];

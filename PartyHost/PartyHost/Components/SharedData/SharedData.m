@@ -88,11 +88,12 @@ static SharedData *sharedInstance = nil;
         self.mixPanelCEventDict = [[NSMutableDictionary alloc] init]; // mixpanel data
         self.cEventId_Feed      = @""; // current feed id
         self.cEventId_Modal     = @""; // current modal id
+        self.cEventId_Summary   = @""; // current summary id
         self.matchMe            = YES; // use in feed
         self.isInFeed           = NO;
         self.cFillType          = @"";
-        self.cFillValue          = @"";
-        self.btnYesTxt           = @""; // on matching button
+        self.cFillValue         = @"";
+        self.btnYesTxt          = @""; // on matching button
         self.btnNOTxt           = @""; // on matching
         self.phoneCountry       = @"";
         self.isInAskingNotification = NO;
@@ -671,33 +672,76 @@ static SharedData *sharedInstance = nil;
 //Copy over data
 -(void)loadSettingsResponse:(NSDictionary *)dict
 {
-    self.account_type = dict[@"data"][@"account_type"];
-    
-    self.gender = dict[@"data"][@"gender"];
-    self.gender_interest =dict[@"data"][@"gender_interest"];
-    
-    if(self.gender_interest==nil)
-    {
-        self.gender_interest = ([self.gender isEqualToString:@"female"])?@"male":@"female";
-    };
-    
-    self.notification_feed = [dict[@"data"][@"notifications"][@"feed"] boolValue];
-    self.notification_messages = [dict[@"data"][@"notifications"][@"chat"] boolValue];
-    
-    self.location_on = [dict[@"data"][@"location_on"] boolValue];
-    
-    [self.experiences removeAllObjects];
-    [self.experiences addObjectsFromArray:dict[@"data"][@"experiences"]];
-    
-    self.phone = dict[@"data"][@"phone"];
-    if(self.phone==nil) self.phone = @"";
-    
-    self.ccName = dict[@"data"][@"payment"][@"creditCard"][@"cardholderName"];
-    self.ccType = dict[@"data"][@"payment"][@"creditCard"][@"cardType"];
-    self.ccLast4 = dict[@"data"][@"payment"][@"creditCard"][@"last4"];
-    if(self.ccLast4==nil) self.ccLast4 = @"";
-    
-    self.has_phone = [dict[@"has_phone"] boolValue];
+    @try {
+        self.account_type = dict[@"data"][@"account_type"];
+        
+        self.gender = dict[@"data"][@"gender"];
+        self.gender_interest =dict[@"data"][@"gender_interest"];
+        
+        if(self.gender_interest==nil)
+        {
+            self.gender_interest = ([self.gender isEqualToString:@"female"])?@"male":@"female";
+        };
+        
+        self.notification_feed = [dict[@"data"][@"notifications"][@"feed"] boolValue];
+        self.notification_messages = [dict[@"data"][@"notifications"][@"chat"] boolValue];
+        
+        self.location_on = [dict[@"data"][@"location_on"] boolValue];
+        
+        [self.experiences removeAllObjects];
+        [self.experiences addObjectsFromArray:dict[@"data"][@"experiences"]];
+        
+        self.phone = dict[@"data"][@"phone"];
+        if(self.phone==nil) self.phone = @"";
+        
+        self.ccName = dict[@"data"][@"payment"][@"creditCard"][@"cardholderName"];
+        self.ccType = dict[@"data"][@"payment"][@"creditCard"][@"cardType"];
+        self.ccLast4 = dict[@"data"][@"payment"][@"creditCard"][@"last4"];
+        if(self.ccLast4==nil) self.ccLast4 = @"";
+        
+        self.has_phone = [dict[@"has_phone"] boolValue];
+    }
+    @catch (NSException *exception) {
+        
+    }
+    @finally {
+        
+    }
+}
+
+//Copy over data
+-(void)saveSettingsResponse
+{
+    @try {
+        NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+        NSDictionary *dict = [prefs objectForKey:@"user.setting"];
+        
+        NSDictionary *newDict = @{@"data":@{@"_id":dict[@"data"][@"_id"],
+                                            @"account_type":dict[@"data"][@"account_type"],
+                                            @"experiences":self.experiences,
+                                            @"fb_id":dict[@"data"][@"fb_id"],
+                                            @"gender":dict[@"data"][@"gender"],
+                                            @"gender_interest":self.gender_interest,
+                                            @"matchme":dict[@"data"][@"matchme"],
+                                            @"notifications":@{
+                                                    @"chat":[NSNumber numberWithBool:self.notification_messages],
+                                                    @"feed":[NSNumber numberWithBool:self.notification_feed],
+                                                    @"location":[NSNumber numberWithBool:self.location_on]},
+                                            @"payment":dict[@"data"][@"payment"],
+                                            @"phone":self.phone,
+                                            @"updated_at":dict[@"data"][@"updated_at"]
+                                          }
+                                  };
+        
+        [prefs setObject:newDict forKey:@"user.setting"];
+        [prefs synchronize];
+    }
+    @catch (NSException *exception) {
+        NSLog(@"%@", exception.description);
+    }
+    @finally {
+        
+    }
 }
 //===================================================================================================//
 

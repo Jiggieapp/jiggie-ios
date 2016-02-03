@@ -285,6 +285,9 @@
     self.seeMapCaret.hidden = YES;
     self.seeMapLabel.text = @"";
     
+    //Clear ID
+    self.sharedData.cEventId_Summary = @"";
+    
     //Rescroll
     self.mainScroll.contentOffset = CGPointMake(0, 0);
     [self.mainScroll setFrame:CGRectMake(0,
@@ -371,9 +374,16 @@
         
         self.sharedData.shareHostingId = self.event_id;
         
-        self.sharedData.shareHostingVenueName = self.sharedData.eventDict[@"venue_name"];
-        
-        self.sharedData.cHostVenuePicURL = self.sharedData.eventDict[@"photos"][0];
+        if (self.cEvent != nil) {
+            self.sharedData.shareHostingVenueName = self.cEvent.title;
+            
+            self.sharedData.cHostVenuePicURL = self.cEvent.photo;
+            NSLog(@"AAAAA : %@", self.sharedData.cHostVenuePicURL);
+        } else {
+            self.sharedData.shareHostingVenueName = self.sharedData.eventDict[@"venue_name"];
+            
+            self.sharedData.cHostVenuePicURL = self.sharedData.eventDict[@"photos"][0];
+        }
         
         [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Share Event" withDict:self.sharedData.mixPanelCEventDict];
         
@@ -517,6 +527,9 @@
                                          self.sharedData.screenWidth,
                                          self.sharedData.screenHeight - self.tabBar.bounds.size.height - PHTabHeight)];
     
+    //ID
+    self.sharedData.cEventId_Summary = self.cEvent.eventID;
+    
     //Title
     self.title.text = [self.cEvent.title uppercaseString];
     self.eventDate.text = [Constants toTitleDate:self.cEvent.startDatetime dbEndDate:self.cEvent.endDatetime];
@@ -579,6 +592,7 @@
 -(void)loadData:(NSString*)event_id
 {
     self.event_id = event_id;
+    self.sharedData.cEventId_Summary = event_id;
     
     AFHTTPRequestOperationManager *manager = [self.sharedData getOperationManager];
     

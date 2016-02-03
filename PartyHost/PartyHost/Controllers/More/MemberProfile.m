@@ -477,6 +477,8 @@
     AFHTTPRequestOperationManager *manager = [self.sharedData getOperationManager];
     
     NSString *url = [NSString stringWithFormat:@"%@/memberinfo/%@/%@/%@",PHBaseURL,self.sharedData.account_type,self.sharedData.member_fb_id,self.sharedData.fb_id];
+
+//    NSString *url = [NSString stringWithFormat:@"%@/memberinfo/%@",PHBaseNewURL,self.sharedData.member_fb_id];
     
     [manager GET:url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject)
      {

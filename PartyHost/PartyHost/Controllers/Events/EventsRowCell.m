@@ -160,7 +160,7 @@
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     [formatter setDateFormat:PHDateFormatApp];
     [formatter setLocale:[NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"]];
-    [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
+    [formatter setTimeZone:[NSTimeZone localTimeZone]];
     self.date.text = [formatter stringFromDate:event.startDatetime];
     
 //    self.picURL = [Constants eventImageURL:dict[@"_id"]];

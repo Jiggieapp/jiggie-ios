@@ -474,7 +474,7 @@
     */
     
     
-    
+    /*
     NSMutableDictionary *tmpDict = [[NSMutableDictionary alloc] init];
     [tmpDict setObject:self.sharedData.userDict[@"first_name"] forKey:@"Inviter First Name"];
     [tmpDict setObject:self.sharedData.userDict[@"last_name"] forKey:@"Inviter Last Name"];
@@ -484,7 +484,7 @@
     [tmpDict setObject:self.sharedData.userDict[@"gender"] forKey:@"Inviter Gender"];
     [tmpDict setObject:self.sharedData.userDict[@"birthday"] forKey:@"Inviter Birthday"];
     [tmpDict setObject:@"event" forKey:@"type"];
-    
+    */
     
     
     
@@ -504,13 +504,11 @@
          //[self shareText:responseObject[@"message"] andImage:newImage andUrl:[[NSURL alloc] initWithString:responseObject[@"url"]]];
          
          UIImage *shareImage = [UIImage imageNamed:@"splashLogoWhite"];
-         NSArray *photos = [self.sharedData.eventDict objectForKey:@"photos"];
-         if (photos && photos.count > 0) {
-             NSString *photoURL = [photos objectAtIndex:0];
-             if (photoURL && photoURL != nil && photoURL.length > 0) {
-                 if([self.sharedData.imagesDict objectForKey:photoURL] && [[self.sharedData.imagesDict objectForKey:photoURL] isKindOfClass:[UIImage  class]]) {
-                     shareImage = [self.sharedData.imagesDict objectForKey:photoURL];
-                 }
+         if (self.sharedData.cHostVenuePicURL && self.sharedData.cHostVenuePicURL.length > 0) {
+             NSString *picURL = self.sharedData.cHostVenuePicURL;
+             picURL = [self.sharedData picURL:picURL];
+             if([self.sharedData.imagesDict objectForKey:picURL] && [[self.sharedData.imagesDict objectForKey:picURL] isKindOfClass:[UIImage class]]) {
+                 shareImage = [self.sharedData.imagesDict objectForKey:picURL];
              }
          }
          
