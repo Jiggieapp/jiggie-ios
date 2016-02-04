@@ -8,6 +8,8 @@
 
 #import "ViewController.h"
 #import "AnalyticManager.h"
+#import "Event.h"
+#import "TicketListViewController.h"
 
 @interface ViewController ()
 
@@ -125,6 +127,12 @@
      addObserver:self
      selector:@selector(showMessage)
      name:@"SHOW_MAIL_MESSAGE"
+     object:nil];
+    
+    [[NSNotificationCenter defaultCenter]
+     addObserver:self
+     selector:@selector(showTicketList:)
+     name:@"SHOW_TICKET_LIST"
      object:nil];
     
     
@@ -607,6 +615,15 @@
     UIActivityViewController *activityController = [[UIActivityViewController alloc] initWithActivityItems:activityItems applicationActivities:nil];
     [activityController setValue:@"Lets go out with Jiggie" forKey:@"subject"];
     [self.view.window.rootViewController presentViewController:activityController animated:YES completion:nil];
+}
+
+#pragma mark - Ticket Notification 
+- (void)showTicketList:(NSNotification *)notification {
+    Event *cEvent = (Event *)[notification object];
+    TicketListViewController *ticketListVC = [[TicketListViewController alloc] init];
+    ticketListVC.cEvent = cEvent;
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:ticketListVC];
+    [self presentViewController:navigationController animated:YES completion:nil];
 }
 
 - (void)didReceiveMemoryWarning

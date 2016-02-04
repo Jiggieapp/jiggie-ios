@@ -19,6 +19,8 @@
 		DA43056C1C23E7D000ED6C54 /* BaseModel.m in Sources */ = {isa = PBXBuildFile; fileRef = DA43056B1C23E7D000ED6C54 /* BaseModel.m */; };
 		DA47B22A1C3A8553001B4476 /* AFNetworkActivityLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = DA47B2291C3A8553001B4476 /* AFNetworkActivityLogger.m */; };
 		DA47B23B1C3BA492001B4476 /* FeedMatch.m in Sources */ = {isa = PBXBuildFile; fileRef = DA47B23A1C3BA492001B4476 /* FeedMatch.m */; };
+		DA9E0CF71C61F75000966F16 /* BaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA9E0CF61C61F75000966F16 /* BaseViewController.m */; };
+		DA9E0CFA1C61F76300966F16 /* TicketListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA9E0CF91C61F76300966F16 /* TicketListViewController.m */; };
 		DAABB0B11C1FD50E004DDCFA /* BookTable.m in Sources */ = {isa = PBXBuildFile; fileRef = DAABB0091C1FD50E004DDCFA /* BookTable.m */; };
 		DAABB0B21C1FD50E004DDCFA /* BookTableAbout.m in Sources */ = {isa = PBXBuildFile; fileRef = DAABB00B1C1FD50E004DDCFA /* BookTableAbout.m */; };
 		DAABB0B31C1FD50E004DDCFA /* BookTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DAABB00D1C1FD50E004DDCFA /* BookTableCell.m */; };
@@ -307,6 +309,10 @@
 		DA47B2291C3A8553001B4476 /* AFNetworkActivityLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFNetworkActivityLogger.m; sourceTree = "<group>"; };
 		DA47B2391C3BA492001B4476 /* FeedMatch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FeedMatch.h; sourceTree = "<group>"; };
 		DA47B23A1C3BA492001B4476 /* FeedMatch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FeedMatch.m; sourceTree = "<group>"; };
+		DA9E0CF51C61F75000966F16 /* BaseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseViewController.h; sourceTree = "<group>"; };
+		DA9E0CF61C61F75000966F16 /* BaseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseViewController.m; sourceTree = "<group>"; };
+		DA9E0CF81C61F76300966F16 /* TicketListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TicketListViewController.h; sourceTree = "<group>"; };
+		DA9E0CF91C61F76300966F16 /* TicketListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TicketListViewController.m; sourceTree = "<group>"; };
 		DAABB0081C1FD50E004DDCFA /* BookTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BookTable.h; sourceTree = "<group>"; };
 		DAABB0091C1FD50E004DDCFA /* BookTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BookTable.m; sourceTree = "<group>"; };
 		DAABB00A1C1FD50E004DDCFA /* BookTableAbout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BookTableAbout.h; sourceTree = "<group>"; };
@@ -867,6 +873,15 @@
 			path = AFNetworkActivityLogger;
 			sourceTree = "<group>";
 		};
+		DA9E0CF41C61ED7100966F16 /* Tickets */ = {
+			isa = PBXGroup;
+			children = (
+				DA9E0CF81C61F76300966F16 /* TicketListViewController.h */,
+				DA9E0CF91C61F76300966F16 /* TicketListViewController.m */,
+			);
+			path = Tickets;
+			sourceTree = "<group>";
+		};
 		DAABAFDD1C1EC994004DDCFA /* Components */ = {
 			isa = PBXGroup;
 			children = (
@@ -913,6 +928,7 @@
 		DAABB0061C1FD50E004DDCFA /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				DA9E0CF41C61ED7100966F16 /* Tickets */,
 				DAABB0071C1FD50E004DDCFA /* BookTable */,
 				DAABB01E1C1FD50E004DDCFA /* Chat */,
 				DAABB0291C1FD50E004DDCFA /* CreditCard */,
@@ -933,6 +949,8 @@
 				DAABB0521C1FD50E004DDCFA /* HostVenueDetail.m */,
 				DAABB0531C1FD50E004DDCFA /* HostVenueDetailFromShare.h */,
 				DAABB0541C1FD50E004DDCFA /* HostVenueDetailFromShare.m */,
+				DA9E0CF51C61F75000966F16 /* BaseViewController.h */,
+				DA9E0CF61C61F75000966F16 /* BaseViewController.m */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -2034,6 +2052,7 @@
 				DAABB2911C1FF5AE004DDCFA /* MPCGColorRefToNSStringValueTransformer.m in Sources */,
 				DAABB12A1C1FF13A004DDCFA /* EmptyView.m in Sources */,
 				DAABB2751C1FF5AE004DDCFA /* GSTouchesShowingWindow.m in Sources */,
+				DA9E0CF71C61F75000966F16 /* BaseViewController.m in Sources */,
 				DAABB1301C1FF13A004DDCFA /* UserBubble.m in Sources */,
 				DAABB28E1C1FF5AE004DDCFA /* MPBOOLToNSNumberValueTransformer.m in Sources */,
 				DAABB0DA1C1FD50E004DDCFA /* VenuesList.m in Sources */,
@@ -2072,6 +2091,7 @@
 				DAABB12C1C1FF13A004DDCFA /* RatingView.m in Sources */,
 				DAABB1011C1FD50E004DDCFA /* SignupView.m in Sources */,
 				DAABB2641C1FF5AE004DDCFA /* FUISwitch.m in Sources */,
+				DA9E0CFA1C61F76300966F16 /* TicketListViewController.m in Sources */,
 				DAABB2AF1C1FF5AE004DDCFA /* MPSwizzler.m in Sources */,
 				DAABB0DC1C1FD50E004DDCFA /* More.m in Sources */,
 				DAB3AFA11C29541E00AA7E25 /* Chat.m in Sources */,
