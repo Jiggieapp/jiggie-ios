@@ -9,9 +9,12 @@
 #import "BaseViewController.h"
 #import "Event.h"
 
-@interface TicketListViewController : BaseViewController
+@interface TicketListViewController : BaseViewController <UITableViewDataSource, UITableViewDelegate>
+
+@property (nonatomic, strong) UITableView *tableView;
 
 @property (nonatomic, strong) Event *cEvent;
-@property (strong, nonatomic) SharedData *sharedData;
+@property (nonatomic, strong) SharedData *sharedData;
+@property (nonatomic, strong) NSArray *products;
 
 @end
