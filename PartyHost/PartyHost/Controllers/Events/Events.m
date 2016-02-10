@@ -446,12 +446,14 @@
              NSArray *fetchEvents = [BaseModel fetchManagedObject:self.managedObjectContext
                                                          inEntity:NSStringFromClass([Event class])
                                                      andPredicate:nil];
+             self.needUpdateContents = NO;
              for (Event *fetchEvent in fetchEvents) {
                  [self.managedObjectContext deleteObject:fetchEvent];
                  
                  NSError *error;
                  if (![self.managedObjectContext save:&error]) NSLog(@"Error: %@", [error localizedDescription]);
              }
+             self.needUpdateContents = YES;
              [self.emptyView setData:@"No events found" subtitle:@"Try to add more categories to see more events." imageNamed:@""];
              [self.emptyView setMode:@"empty"];
              

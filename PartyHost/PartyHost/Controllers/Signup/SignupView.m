@@ -576,11 +576,6 @@
              
              self.didHerokuLogin = YES;
              
-             //This should be after settings are set!
-             [[NSNotificationCenter defaultCenter]
-              postNotificationName:@"HIDE_LOGIN"
-              object:self];
-             
              
              self.sharedData.matchMe = [responseObject[@"matchme"] boolValue];
              self.sharedData.feedBadge.hidden = !(self.sharedData.matchMe);
@@ -594,6 +589,13 @@
                  [analyticManager setMixPanelOnSignUp];
                  [analyticManager trackMixPanelWithDict:@"Sign Up" withDict:@{}];
                  [analyticManager setMixPanelOnceParams];
+                 
+                 NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+                 [defaults removeObjectForKey:@"SHOWED_WALKTHROUGH"];
+                 [defaults synchronize];
+                 
+                 self.sharedData.walkthroughOn = YES;
+                 
              }else{
                  // tech debt : set dummy profile!!
                  [analyticManager createMixPanelDummyProfile];
@@ -606,6 +608,12 @@
              }
              [analyticManager setMixPanelUserProfile];
              [analyticManager setMixPanelSuperProperties];
+             
+             //This should be after settings are set!
+             [[NSNotificationCenter defaultCenter]
+              postNotificationName:@"HIDE_LOGIN"
+              object:self];
+             
              [self checkAppsFlyerData];
              [self performSelector:@selector(getUserImages) withObject:nil afterDelay:2.0];
              

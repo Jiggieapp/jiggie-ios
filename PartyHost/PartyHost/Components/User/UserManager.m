@@ -91,18 +91,27 @@ static UserManager *_sharedManager = nil;
     NSString *url = [Constants userTagListURL];
     [manager GET:url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject)
      {
+         NSInteger responseStatusCode = operation.response.statusCode;
+         if (responseStatusCode != 200) {
+             return;
+         }
+         
          NSString *responseString = operation.responseString;
          NSError *error;
          
-         NSArray *json = (NSArray *)[NSJSONSerialization
-                                     JSONObjectWithData:[responseString dataUsingEncoding:NSUTF8StringEncoding]
-                                     options:kNilOptions
-                                     error:&error];
+         NSDictionary *json = (NSDictionary *)[NSJSONSerialization
+                                               JSONObjectWithData:[responseString dataUsingEncoding:NSUTF8StringEncoding]
+                                               options:kNilOptions
+                                               error:&error];
          dispatch_async(dispatch_get_main_queue(), ^{
              @try {
-                 if (json && json != nil && json.count > 0) {
+                 
+                 NSDictionary *data = [json objectForKey:@"data"];
+                 NSArray *tagslist = [data objectForKey:@"tagslist"];
+
+                 if (tagslist && tagslist != nil && tagslist.count > 0) {
                      NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-                     [prefs setObject:json forKey:@"all_tags"];
+                     [prefs setObject:tagslist forKey:@"all_tags"];
                      [prefs synchronize];
                  }
              }

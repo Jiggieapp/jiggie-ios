@@ -108,7 +108,7 @@ int const PHButtonHeight = 50; //This is the button at bottom of screen
 +(NSString*)userTagListURL
 {
     NSString *url = [NSString stringWithString:PHUserTagListURL];
-    return [NSString stringWithFormat:@"%@%@",PHBaseURL,url];
+    return [NSString stringWithFormat:@"%@%@",PHBaseNewURL,url];
 }
 
 +(NSString*)ordersAllURL:(NSString*)fb_id
