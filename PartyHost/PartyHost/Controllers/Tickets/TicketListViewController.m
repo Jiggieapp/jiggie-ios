@@ -7,12 +7,21 @@
 //
 
 #import "TicketListViewController.h"
+#import "SharedData.h"
 
 @interface TicketListViewController ()
 
 @end
 
 @implementation TicketListViewController
+
+- (id)init {
+    if ((self = [super init])) {
+        self.sharedData = [SharedData sharedInstance];
+    }
+    
+    return self;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -26,10 +35,10 @@
     
     [[self navigationItem] setLeftBarButtonItem:closeBarButtonItem];
     
-    
     UIView *titleView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 300, 40)];
     [titleView setBackgroundColor:[UIColor clearColor]];
     
+    [self loadData];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -40,6 +49,18 @@
 #pragma mark - Navigation
 - (void)closeButtonDidTap:(id)sender {
     [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+#pragma mark - Data 
+- (void)loadData {
+    AFHTTPRequestOperationManager *manager = [self.sharedData getOperationManager];
+    //events/list/
+    NSString *url = [NSString stringWithFormat:@"%@/product/list/%@",PHBaseNewURL,self.cEvent.eventID];
+    [manager GET:url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSLog(@"BERHASIL");
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        
+    }];
 }
 
 

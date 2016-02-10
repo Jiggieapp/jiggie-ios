@@ -12,5 +12,6 @@
 @interface TicketListViewController : BaseViewController
 
 @property (nonatomic, strong) Event *cEvent;
+@property (strong, nonatomic) SharedData *sharedData;
 
 @end

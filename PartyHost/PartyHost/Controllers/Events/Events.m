@@ -433,11 +433,8 @@
 -(void)loadData
 {
     AFHTTPRequestOperationManager *manager = [self.sharedData getOperationManager];
-
-    NSString *url = [Constants eventsURL:@"host" fb_id:self.sharedData.fb_id];
-
     //events/list/
-    url = [NSString stringWithFormat:@"%@/events/list/%@",PHBaseNewURL,self.sharedData.fb_id];
+    NSString *url = [NSString stringWithFormat:@"%@/events/list/%@",PHBaseNewURL,self.sharedData.fb_id];
     
     [manager GET:url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject)
      {
