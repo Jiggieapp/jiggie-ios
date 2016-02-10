@@ -260,6 +260,8 @@
     self.pControl.hidden = YES;
     self.startPhotosLoad = NO;
     [self.mainScroll setContentOffset:CGPointMake(0, 0) animated:NO];
+    
+    self.aboutBody.backgroundColor = [UIColor whiteColor];
 }
 
 -(void)loadProfile
@@ -398,13 +400,34 @@
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     manager.requestSerializer = [AFJSONRequestSerializer serializer];
     manager.responseSerializer = [AFJSONResponseSerializer serializer];
-    NSString *urlToLoad = [NSString stringWithFormat:@"%@/memberinfo/%@/%@/%@",PHBaseURL,self.sharedData.account_type,self.sharedData.fb_id,self.sharedData.fb_id];
+    NSString *urlToLoad = [NSString stringWithFormat:@"%@/memberinfo/%@",PHBaseNewURL,self.sharedData.fb_id];
     [manager GET:urlToLoad parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject)
      {
-         self.aboutBody.text = [self.sharedData clipSpace:responseObject[@"about"]];
-         [self.sharedData.userDict setValue:responseObject[@"about"] forKey:@"about"];
+         NSInteger responseStatusCode = operation.response.statusCode;
+         if (responseStatusCode != 200) {
+             return;
+         }
          
-         [self updateAboutPanel];
+         NSString *responseString = operation.responseString;
+         NSError *error;
+         NSDictionary *json = (NSDictionary *)[NSJSONSerialization
+                                               JSONObjectWithData:[responseString dataUsingEncoding:NSUTF8StringEncoding]
+                                               options:kNilOptions
+                                               error:&error];
+         dispatch_async(dispatch_get_main_queue(), ^{
+             if (json && json != nil) {
+                 NSDictionary *data = [json objectForKey:@"data"];
+                 if (data && data != nil) {
+                     NSDictionary *memberinfo = [data objectForKey:@"memberinfo"];
+                     if (memberinfo && memberinfo != nil) {
+                         self.aboutBody.text = [self.sharedData clipSpace:memberinfo[@"about"]];
+                         [self.sharedData.userDict setValue:memberinfo[@"about"] forKey:@"about"];
+                         
+                         [self updateAboutPanel];
+                     }
+                 }
+             }
+         });
          
      } failure:^(AFHTTPRequestOperation *operation, NSError *error)
      {

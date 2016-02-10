@@ -366,6 +366,32 @@ static NSString *const kAllowTracking = @"allowTracking";
 }
 
 - (BOOL)application:(UIApplication *)application
+continueUserActivity:(NSUserActivity *)userActivity
+ restorationHandler:(void (^)(NSArray *restorableObjects))restorationHandler {
+
+    if (userActivity.activityType == NSUserActivityTypeBrowsingWeb) {
+        NSURL *url = userActivity.webpageURL;
+        if(contains(url.absoluteString,@"jiggie://"))
+        {
+            if(self.sharedData.isLoggedIn)
+            {
+                NSDictionary *dict = [self.sharedData parseQueryString:[url query]];
+                if(dict[@"af_sub2"])
+                {
+                    self.sharedData.cEventId_Feed = dict[@"af_sub2"];
+                    self.sharedData.cEventId_Modal = dict[@"af_sub2"];
+                    
+                    [[NSNotificationCenter defaultCenter]
+                     postNotificationName:@"SHOW_EVENT_MODAL"
+                     object:self];
+                }
+            }
+        }
+    }
+    return YES;
+}
+
+- (BOOL)application:(UIApplication *)application
             openURL:(NSURL *)url
   sourceApplication:(NSString *)sourceApplication
          annotation:(id)annotation

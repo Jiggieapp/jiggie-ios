@@ -1374,7 +1374,7 @@
                             };
     NSLog(@"PARAMS :: %@",params);
     
-    NSString *urlToLoad = [NSString stringWithFormat:@"%@/blockuserwithfbid",PHBaseURL];
+    NSString *urlToLoad = [NSString stringWithFormat:@"%@/blockuserwithfbid",PHBaseNewURL];
     [manager GET:urlToLoad parameters:params success:^
      (AFHTTPRequestOperation *operation, id resultObj)
      {

@@ -271,7 +271,7 @@
     [self loadData];
     
     //Special messages for guest and host
-    [self.emptyView setData:@"Check back soon" subtitle:@"Browse some events and your social feed will show members who like the same events you do." imageNamed:@"PickIcon"];
+    [self.emptyView setData:@"Check back soon" subtitle:@"Browse some events and your social feed will show members who like the same events." imageNamed:@"PickIcon"];
 }
 
 -(void)loadData

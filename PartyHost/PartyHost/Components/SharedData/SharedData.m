@@ -525,6 +525,13 @@ static SharedData *sharedInstance = nil;
     manager.responseSerializer = [AFJSONResponseSerializer serializer];
     [manager.requestSerializer setValue:self.ph_token forHTTPHeaderField:@"ph_token"];
     
+//    AFSecurityPolicy *policy = [AFSecurityPolicy policyWithPinningMode:AFSSLPinningModeCertificate];
+//    policy.validatesDomainName = NO;
+//    policy.allowInvalidCertificates = YES;
+//    manager.securityPolicy = policy;
+    
+    manager.securityPolicy.allowInvalidCertificates = YES;
+    
     return manager;
 }
 

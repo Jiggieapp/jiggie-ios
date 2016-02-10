@@ -26,7 +26,7 @@ NSString *const JiggieItunesID = @"1047291489";
 
 //URLs with substitution
 NSString *const PHBaseURL = @"https://jiggie-dev.herokuapp.com/app/v3";
-NSString *const PHBaseNewURL = @"http://api-dev.jiggieapp.com/app/v3";
+NSString *const PHBaseNewURL = @"https://api-dev.jiggieapp.com/app/v3";
 NSString *const PHBaseDomain = @"https://jiggie-dev.herokuapp.com";
 
 
@@ -108,7 +108,7 @@ int const PHButtonHeight = 50; //This is the button at bottom of screen
 +(NSString*)userTagListURL
 {
     NSString *url = [NSString stringWithString:PHUserTagListURL];
-    return [NSString stringWithFormat:@"%@%@",PHBaseURL,url];
+    return [NSString stringWithFormat:@"%@%@",PHBaseNewURL,url];
 }
 
 +(NSString*)ordersAllURL:(NSString*)fb_id
