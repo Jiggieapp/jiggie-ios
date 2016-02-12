@@ -20,9 +20,9 @@
 		DA43056C1C23E7D000ED6C54 /* BaseModel.m in Sources */ = {isa = PBXBuildFile; fileRef = DA43056B1C23E7D000ED6C54 /* BaseModel.m */; };
 		DA47B22A1C3A8553001B4476 /* AFNetworkActivityLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = DA47B2291C3A8553001B4476 /* AFNetworkActivityLogger.m */; };
 		DA47B23B1C3BA492001B4476 /* FeedMatch.m in Sources */ = {isa = PBXBuildFile; fileRef = DA47B23A1C3BA492001B4476 /* FeedMatch.m */; };
+		DA700E0E1C63561300E5D945 /* Jiggie.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = DA700E0D1C63515D00E5D945 /* Jiggie.entitlements */; };
 		DA9E0CF71C61F75000966F16 /* BaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA9E0CF61C61F75000966F16 /* BaseViewController.m */; };
 		DA9E0CFA1C61F76300966F16 /* TicketListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA9E0CF91C61F76300966F16 /* TicketListViewController.m */; };
-		DA700E0E1C63561300E5D945 /* Jiggie.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = DA700E0D1C63515D00E5D945 /* Jiggie.entitlements */; };
 		DAABB0B11C1FD50E004DDCFA /* BookTable.m in Sources */ = {isa = PBXBuildFile; fileRef = DAABB0091C1FD50E004DDCFA /* BookTable.m */; };
 		DAABB0B21C1FD50E004DDCFA /* BookTableAbout.m in Sources */ = {isa = PBXBuildFile; fileRef = DAABB00B1C1FD50E004DDCFA /* BookTableAbout.m */; };
 		DAABB0B31C1FD50E004DDCFA /* BookTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DAABB00D1C1FD50E004DDCFA /* BookTableCell.m */; };
@@ -271,6 +271,7 @@
 		DAB3AF951C27D66900AA7E25 /* EventDetail.m in Sources */ = {isa = PBXBuildFile; fileRef = DAB3AF931C27D66900AA7E25 /* EventDetail.m */; };
 		DAB3AFA11C29541E00AA7E25 /* Chat.m in Sources */ = {isa = PBXBuildFile; fileRef = DAB3AF9F1C29541E00AA7E25 /* Chat.m */; };
 		DAD2708D1C31110D00546106 /* UserManager.m in Sources */ = {isa = PBXBuildFile; fileRef = DAD2708C1C31110D00546106 /* UserManager.m */; };
+		DAE02EA51C6C812200EBAAF0 /* TicketSummaryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DAE02EA41C6C812200EBAAF0 /* TicketSummaryViewController.m */; };
 		FA3702B81A8F9E9000B2BD6A /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA3702B71A8F9E9000B2BD6A /* MapKit.framework */; };
 		FA3702BA1A8F9EC300B2BD6A /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA3702B91A8F9EC300B2BD6A /* CoreLocation.framework */; };
 		FA4D2EF21A4D9A77006828E7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = FA4D2EF11A4D9A77006828E7 /* main.m */; };
@@ -312,11 +313,11 @@
 		DA47B2291C3A8553001B4476 /* AFNetworkActivityLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFNetworkActivityLogger.m; sourceTree = "<group>"; };
 		DA47B2391C3BA492001B4476 /* FeedMatch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FeedMatch.h; sourceTree = "<group>"; };
 		DA47B23A1C3BA492001B4476 /* FeedMatch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FeedMatch.m; sourceTree = "<group>"; };
+		DA700E0D1C63515D00E5D945 /* Jiggie.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Jiggie.entitlements; sourceTree = SOURCE_ROOT; };
 		DA9E0CF51C61F75000966F16 /* BaseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseViewController.h; sourceTree = "<group>"; };
 		DA9E0CF61C61F75000966F16 /* BaseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseViewController.m; sourceTree = "<group>"; };
 		DA9E0CF81C61F76300966F16 /* TicketListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TicketListViewController.h; sourceTree = "<group>"; };
 		DA9E0CF91C61F76300966F16 /* TicketListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TicketListViewController.m; sourceTree = "<group>"; };
-		DA700E0D1C63515D00E5D945 /* Jiggie.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Jiggie.entitlements; sourceTree = SOURCE_ROOT; };
 		DAABB0081C1FD50E004DDCFA /* BookTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BookTable.h; sourceTree = "<group>"; };
 		DAABB0091C1FD50E004DDCFA /* BookTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BookTable.m; sourceTree = "<group>"; };
 		DAABB00A1C1FD50E004DDCFA /* BookTableAbout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BookTableAbout.h; sourceTree = "<group>"; };
@@ -780,6 +781,8 @@
 		DAB3AF9F1C29541E00AA7E25 /* Chat.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Chat.m; sourceTree = "<group>"; };
 		DAD2708B1C31110D00546106 /* UserManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserManager.h; sourceTree = "<group>"; };
 		DAD2708C1C31110D00546106 /* UserManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserManager.m; sourceTree = "<group>"; };
+		DAE02EA31C6C812200EBAAF0 /* TicketSummaryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TicketSummaryViewController.h; sourceTree = "<group>"; };
+		DAE02EA41C6C812200EBAAF0 /* TicketSummaryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TicketSummaryViewController.m; sourceTree = "<group>"; };
 		FA3702B71A8F9E9000B2BD6A /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		FA3702B91A8F9EC300B2BD6A /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		FA4D2EEC1A4D9A77006828E7 /* Jiggie.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Jiggie.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -882,6 +885,8 @@
 			children = (
 				DA9E0CF81C61F76300966F16 /* TicketListViewController.h */,
 				DA9E0CF91C61F76300966F16 /* TicketListViewController.m */,
+				DAE02EA31C6C812200EBAAF0 /* TicketSummaryViewController.h */,
+				DAE02EA41C6C812200EBAAF0 /* TicketSummaryViewController.m */,
 			);
 			path = Tickets;
 			sourceTree = "<group>";
@@ -2022,6 +2027,7 @@
 				DAABB0F41C1FD50E004DDCFA /* WriteReview.m in Sources */,
 				DAABB2861C1FF5AE004DDCFA /* MPABTestDesignerDeviceInfoRequestMessage.m in Sources */,
 				DAABB26B1C1FF5AE004DDCFA /* UINavigationBar+FlatUI.m in Sources */,
+				DAE02EA51C6C812200EBAAF0 /* TicketSummaryViewController.m in Sources */,
 				DAABB2B71C1FF5AE004DDCFA /* MPUIFontToNSDictionaryValueTransformer.m in Sources */,
 				DAABB25A1C1FF5AE004DDCFA /* AFURLRequestSerialization.m in Sources */,
 				DAABB2BD1C1FF5AE004DDCFA /* NSInvocation+MPHelpers.m in Sources */,

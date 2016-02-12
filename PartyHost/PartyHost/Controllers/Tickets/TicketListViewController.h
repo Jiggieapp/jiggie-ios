@@ -12,9 +12,11 @@
 @interface TicketListViewController : BaseViewController <UITableViewDataSource, UITableViewDelegate>
 
 @property (nonatomic, strong) UITableView *tableView;
+@property (nonatomic, strong) EmptyView *emptyView;
 
 @property (nonatomic, strong) Event *cEvent;
 @property (nonatomic, strong) SharedData *sharedData;
-@property (nonatomic, strong) NSArray *products;
+@property (nonatomic, strong) NSArray *purchases;
+@property (nonatomic, strong) NSArray *reservations;
 
 @end
