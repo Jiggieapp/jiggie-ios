@@ -78,9 +78,6 @@
 
 - (void)continueButtonDidTap:(id)sender {
     [self postSummary];
-    
-//    TicketSummaryViewController *ticketSummaryViewController = [[TicketSummaryViewController alloc] init];
-//    [self.navigationController pushViewController:ticketSummaryViewController animated:YES];
 }
 
 #pragma mark - Data 
@@ -149,6 +146,12 @@
                                   @"name":[product objectForKey:@"name"],
                                   @"ticket_type":[product objectForKey:@"ticket_type"],
                                   @"quantity":[product objectForKey:@"quantity"],
+                                  @"admin_fee":[product objectForKey:@"admin_fee"],
+                                  @"tax_percent":[product objectForKey:@"tax_percent"],
+                                  @"tax_amount":[product objectForKey:@"tax_amount"],
+                                  @"tip_percent":[product objectForKey:@"tip_percent"],
+                                  @"tip_amount":[product objectForKey:@"tip_amount"],
+                                  @"price":[product objectForKey:@"price"],
                                   @"total_price":[product objectForKey:@"total_price"],
                                   @"num_buy":@2};
         [summaryList addObject:summary];
@@ -175,7 +178,19 @@
         dispatch_async(dispatch_get_main_queue(), ^{
             if (json && json != nil) {
                 @try {
-                   
+                    NSDictionary *data = [json objectForKey:@"data"];
+                    if (data && data != nil) {
+                        NSDictionary *product_summary = [data objectForKey:@"product_summary"];
+                        if (product_summary && product_summary != nil) {
+                            NSArray *product_list = [product_summary objectForKey:@"product_list"];
+                            if (product_list && product_list != nil) {
+                                TicketSummaryViewController *ticketSummaryViewController = [[TicketSummaryViewController alloc] init];
+                                ticketSummaryViewController.productSummary = product_summary;
+                                ticketSummaryViewController.productList = product_list;
+                                [self.navigationController pushViewController:ticketSummaryViewController animated:YES];
+                            }
+                        }
+                    }
                 }
                 @catch (NSException *exception) {
                     

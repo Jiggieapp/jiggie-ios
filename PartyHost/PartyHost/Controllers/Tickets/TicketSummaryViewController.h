@@ -8,8 +8,11 @@
 
 #import "BaseViewController.h"
 
-@interface TicketSummaryViewController : BaseViewController
+@interface TicketSummaryViewController : BaseViewController <UITableViewDataSource, UITableViewDelegate>
 
+@property (nonatomic, strong) UITableView *tableView;
+
+@property (nonatomic, strong) NSArray *productList;
 @property (nonatomic, strong) NSDictionary *productSummary;
 
 @end
