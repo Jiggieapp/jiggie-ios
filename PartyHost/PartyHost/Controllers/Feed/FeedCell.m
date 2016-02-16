@@ -82,7 +82,7 @@
         textIcon.image = [UIImage imageNamed:@"text-icon"];
         [self.greenCircle addSubview:textIcon];
 
-        self.nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 215 - OffSet/2 + OffSetLargeDevice * 0.7, self.mainCon.bounds.size.width, 30)];
+        self.nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 205 - OffSet/2 + OffSetLargeDevice * 0.7, self.mainCon.bounds.size.width, 30)];
         self.nameLabel.textColor = [self.sharedData colorWithHexString:@"5c5c5c"];
         self.nameLabel.font = [UIFont phBlond:15 + OffsetFontLargeDevice];
         self.nameLabel.textAlignment = NSTextAlignmentCenter;

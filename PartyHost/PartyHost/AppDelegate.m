@@ -155,7 +155,7 @@ static NSString *const kAllowTracking = @"allowTracking";
         }
     }
     
-
+    NSLog(@"%@", self.sharedData.apnToken);
     //For debug mode clear out all ONE-TIME popups
     if(PHDebugOn==YES) {
         NSLog(@">>> PhDebugOn==YES: Clearing all ONE-TIME helpers.");
@@ -177,7 +177,6 @@ static NSString *const kAllowTracking = @"allowTracking";
      selector:@selector(registerForNotifications)
      name:@"ASK_APN_PERMISSION"
      object:nil];
-    
     
     [self performSelector:@selector(checkApnAgain) withObject:nil afterDelay:4.0];
     
@@ -221,7 +220,6 @@ static NSString *const kAllowTracking = @"allowTracking";
     {
         return;
     }
-    
  
         self.sharedData.apnToken = @"empty";
         [[NSNotificationCenter defaultCenter]
@@ -452,9 +450,7 @@ continueUserActivity:(NSUserActivity *)userActivity
     
     AFHTTPRequestOperationManager *manager = [self.sharedData getOperationManager];
     
-    NSString *urlToLoad = [NSString stringWithFormat:@"%@/user/hostings/details/%@",PHBaseURL,self.sharedData.cHostingIdFromInvite];
-    
-    urlToLoad = [NSString stringWithFormat:@"%@/apntoken/%@/%@",PHBaseURL,self.sharedData.fb_id,self.sharedData.apnToken];
+    NSString *urlToLoad = [NSString stringWithFormat:@"%@/apntoken/%@/%@",PHBaseNewURL,self.sharedData.fb_id,self.sharedData.apnToken];
     
     NSLog(@"APN_TOKEN_SYNC URL :: %@",urlToLoad);
     

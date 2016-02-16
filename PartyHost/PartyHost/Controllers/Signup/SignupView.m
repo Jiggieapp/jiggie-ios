@@ -600,6 +600,14 @@
                  // tech debt : set dummy profile!!
                  [analyticManager createMixPanelDummyProfile];
                  [analyticManager setMixPanelOnLogin];
+                 
+                 if([defaults objectForKey:@"SHOWED_WALKTHROUGH"])
+                 {
+                     self.sharedData.isInAskingNotification = YES;
+                     [[NSNotificationCenter defaultCenter]
+                      postNotificationName:@"ASK_APN_PERMISSION"
+                      object:self];
+                 }
                 
                  NSString *isFirst = ([defaults objectForKey:@"FIRST_RUN"])?@"NO":@"YES";
                  
