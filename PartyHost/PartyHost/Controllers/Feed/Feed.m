@@ -9,6 +9,8 @@
 #import "Feed.h"
 #import "FeedCell.h"
 #import "AnalyticManager.h"
+#import "SVProgressHUD.h"
+
 
 #define POLL_SECONDS 25
 
@@ -269,102 +271,128 @@
     [self loadData];
     
     //Special messages for guest and host
-    [self.emptyView setData:@"Check back soon" subtitle:@"Browse some events and your social feed will show members who like the same events you do." imageNamed:@"PickIcon"];
+    [self.emptyView setData:@"Check back soon" subtitle:@"Browse some events and your social feed will show members who like the same events." imageNamed:@"PickIcon"];
 }
 
 -(void)loadData
 {
+    if (self.sharedData.fb_id == nil || [self.sharedData.fb_id isEqualToString:@""]) {
+        return;
+    }
+    
     AFHTTPRequestOperationManager *manager = [self.sharedData getOperationManager];
     
-    NSString *url = [NSString stringWithFormat:@"%@/feed/%@/%@",PHBaseURL,self.sharedData.account_type,self.sharedData.fb_id];
-    
-    url = [NSString stringWithFormat:@"%@/partyfeed/list/%@/%@",PHBaseURL,self.sharedData.fb_id,self.sharedData.gender_interest];
+    NSString *url = [NSString stringWithFormat:@"%@/partyfeed/list/%@/%@",PHBaseNewURL,self.sharedData.fb_id,self.sharedData.gender_interest];
     
     
     NSLog(@"FEED START LOAD :: %@",url);
     
     [manager GET:url parameters:@{} success:^(AFHTTPRequestOperation *operation, id responseObject)
      {
-         //This checks for failure!!
-         if(![responseObject isKindOfClass:[NSArray class]])
-         {
-             NSLog(@"FEED FAILED! >>> %@",responseObject);
+         
+         NSInteger responseStatusCode = operation.response.statusCode;
+         if (responseStatusCode != 200) {
              self.startedPolling = NO;
              [self performSelector:@selector(startPolling) withObject:nil afterDelay:POLL_SECONDS];
              return;
          }
          
-         //Check if already equal
-         if([self.feedData isEqualToArray:responseObject] && self.isFeedLoaded == YES && !self.sharedData.isInFeed)
-         {
-             NSLog(@"FEED_SAME_DATA");
-             self.startedPolling = NO;
-             [self performSelector:@selector(startPolling) withObject:nil afterDelay:POLL_SECONDS];
-             return;
-         }
-        
-         if(self.sharedData.isInFeed)
-         {
+         @try {
              
-             NSString *val = @"";
-             if([self.sharedData.ABTestChat isEqualToString:@"YES"])
-             {
-                 val = @"Connect";
-             }else{
-                 val = @"Chat";
+             NSDictionary *data = [responseObject objectForKey:@"data"];
+             if (data && data != nil) {
+                 NSArray *social_feeds = [data objectForKey:@"social_feeds"];
+                 
+                 if (!social_feeds || social_feeds == 0) {
+                     NSLog(@"FEED FAILED! >>> %@",responseObject);
+                     self.startedPolling = NO;
+                     [self performSelector:@selector(startPolling) withObject:nil afterDelay:POLL_SECONDS];
+                     return;
+                 }
+                 
+                 //Check if already equal
+                 if([self.feedData isEqualToArray:social_feeds] && self.isFeedLoaded == YES && !self.sharedData.isInFeed)
+                 {
+                     NSLog(@"FEED_SAME_DATA");
+                     self.startedPolling = NO;
+                     [self performSelector:@selector(startPolling) withObject:nil afterDelay:POLL_SECONDS];
+                     return;
+                 }
+                 
+                 if(self.sharedData.isInFeed)
+                 {
+                     
+                     NSString *val = @"";
+                     if([self.sharedData.ABTestChat isEqualToString:@"YES"])
+                     {
+                         val = @"Connect";
+                     }else{
+                         val = @"Chat";
+                     }
+                     
+                     NSMutableDictionary *paramsToSend = [[NSMutableDictionary alloc] init];
+                     [paramsToSend setObject:val forKey:@"ABTestChat"];
+                     
+                     if([self.feedData count] > 0)
+                     {
+                         [paramsToSend setObject:[self.feedData objectAtIndex:0][@"type"] forKey:@"feed_item_type"];
+                         [[AnalyticManager sharedManager] trackMixPanelWithDict:@"View Feed Item" withDict:paramsToSend];
+                     }
+                 }
+                 
+                 //Clear table
+                 [self.feedData removeAllObjects];
+                 [self.feedData addObjectsFromArray:social_feeds];
+                 
+                 //Reload table view
+                 [self.feedTable reloadData];
+                 
+                 int count = 0;
+                 for (NSDictionary *feed in self.feedData) {
+                     if ([[feed objectForKey:@"type"] isEqualToString:@"approved"]) {
+                         count++;
+                     }
+                 }
+                 
+                 //Mark that its loaded
+                 self.isFeedLoaded = YES;
+                 self.sharedData.unreadFeedCount = count;
+                 [self.sharedData.feedBadge updateValue:self.sharedData.unreadFeedCount];
+                 self.sharedData.feedBadge.hidden = !(self.sharedData.matchMe);
+                 self.sharedData.feedBadge.canShow = self.sharedData.matchMe;
+                 
+                 
+                 //Show empty
+                 if(self.feedData.count == 0) {
+                     self.hideView.hidden = YES;
+                     self.feedTable.hidden = YES;
+                     [self.emptyView setMode:@"empty"];
+                 } else {
+                     [[AnalyticManager sharedManager] trackMixPanelWithDict:@"New Feed Item" withDict:@{}];
+                     
+                     self.hideView.hidden = NO;
+                     self.feedTable.hidden = !(self.sharedData.matchMe);;
+                     [self.emptyView setMode:@"hide"];
+                 }
+                 
+                 /*
+                  //If we are on the page then clear out badge
+                  if(self.sharedData.cPageIndex==2)
+                  {
+                  self.sharedData.unreadFeedCount = 0;
+                  [self.sharedData.feedBadge updateValue:0];
+                  }
+                  */
+                 
+                 [self.sharedData updateBadgeIcon];
              }
-             
-             NSMutableDictionary *paramsToSend = [[NSMutableDictionary alloc] init];
-             [paramsToSend setObject:val forKey:@"ABTestChat"];
-             
-             if([self.feedData count] > 0)
-             {
-                 [paramsToSend setObject:[self.feedData objectAtIndex:0][@"type"] forKey:@"feed_item_type"];
-                 [[AnalyticManager sharedManager] trackMixPanelWithDict:@"View Feed Item" withDict:paramsToSend];
-             }
-             
-         }else{
-             NSLog(@"WTFWTFWTWFWT");
          }
-         
-         //Clear table
-         [self.feedData removeAllObjects];
-         [self.feedData addObjectsFromArray:responseObject];
-         
-         //Reload table view
-         [self.feedTable reloadData];
-         
-         //Mark that its loaded
-         self.isFeedLoaded = YES;
-         self.sharedData.unreadFeedCount = (int)[self.feedData count];
-         [self.sharedData.feedBadge updateValue:self.sharedData.unreadFeedCount];
-         self.sharedData.feedBadge.hidden = !(self.sharedData.matchMe);
-         self.sharedData.feedBadge.canShow = self.sharedData.matchMe;
-         
-         
-         //Show empty
-         if(self.feedData.count == 0) {
-             self.hideView.hidden = YES;
-             self.feedTable.hidden = YES;
-             [self.emptyView setMode:@"empty"];
-         } else {
-             [[AnalyticManager sharedManager] trackMixPanelWithDict:@"New Feed Item" withDict:@{}];
+         @catch (NSException *exception) {
              
-             self.hideView.hidden = NO;
-             self.feedTable.hidden = !(self.sharedData.matchMe);;
-             [self.emptyView setMode:@"hide"];
          }
-         
-         /*
-         //If we are on the page then clear out badge
-         if(self.sharedData.cPageIndex==2)
-         {
-            self.sharedData.unreadFeedCount = 0;
-            [self.sharedData.feedBadge updateValue:0];
+         @finally {
+             
          }
-         */
-         
-         [self.sharedData updateBadgeIcon];
          
          //Hide spinner
          [[NSNotificationCenter defaultCenter]
@@ -377,6 +405,10 @@
      } failure:^(AFHTTPRequestOperation *operation, NSError *error)
      {
          NSLog(@"ERROR :: %@",error);
+         
+         if (self.sharedData.isInFeed && (error.code == -1009 || error.code == - 1005)) {
+             [SVProgressHUD showInfoWithStatus:@"Please check your internet connection"];
+         }
          
          self.startedPolling = NO;
          //[self performSelector:@selector(startPolling) withObject:nil afterDelay:POLL_SECONDS];

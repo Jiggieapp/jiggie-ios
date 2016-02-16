@@ -265,7 +265,7 @@
     {
         self.sharedData.walkthroughOn = YES;
         
-        [self addSubview:self.walkthroughPage];
+//        [self addSubview:self.walkthroughPage];
     }
     else{
         self.sharedData.walkthroughOn = NO;
@@ -956,6 +956,11 @@
     self.sharedData.walkthroughOn = YES;
     self.walkthroughPage.hidden = NO;
     [self.walkthroughPage initClass];
+    
+    if (self.walkthroughPage) {
+        [self.walkthroughPage setFrame:CGRectMake(0, 0, self.sharedData.screenWidth, self.sharedData.screenHeight)];
+        [self addSubview:self.walkthroughPage];
+    }
 }
 
 -(void)exitWalkthrough

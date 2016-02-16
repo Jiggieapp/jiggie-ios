@@ -92,14 +92,14 @@
     self.venueName = [[UILabel alloc] initWithFrame:CGRectMake(30, self.title.frame.origin.y + self.title.frame.size.height, self.sharedData.screenWidth - 60, 20)];
     self.venueName.font = [UIFont phBold:12];
     self.venueName.textAlignment = NSTextAlignmentCenter;
-    self.venueName.textColor = [UIColor colorWithWhite:0 alpha:0.25];
+    self.venueName.textColor = [UIColor darkGrayColor];
     self.venueName.userInteractionEnabled = NO;
     self.venueName.backgroundColor = [UIColor clearColor];
     self.venueName.adjustsFontSizeToFitWidth = YES;
     [self.mainScroll addSubview:self.venueName];
     
     self.separator1 = [[UIView alloc] init];
-    self.separator1.backgroundColor = [UIColor colorWithWhite:0 alpha:0.05];
+    self.separator1.backgroundColor = [UIColor phDarkGrayColor];
     [self.mainScroll addSubview:self.separator1];
     
     self.listingContainer = [[UIView alloc] init];
@@ -138,7 +138,7 @@
     [self.listingContainer addSubview:self.seeAllCaret];
     
     self.separator2 = [[UIView alloc] init];
-    self.separator2.backgroundColor = [UIColor colorWithWhite:0 alpha:0.05];
+    self.separator2.backgroundColor = [UIColor phDarkGrayColor];
     [self.mainScroll addSubview:self.separator2];
     
     KTCenterFlowLayout *layout = [KTCenterFlowLayout new];
@@ -157,18 +157,18 @@
     self.eventDate = [[UILabel alloc] init];
     self.eventDate.font = [UIFont phBold:12];
     self.eventDate.textAlignment = NSTextAlignmentCenter;
-    self.eventDate.textColor = [UIColor colorWithWhite:0 alpha:0.25];
+    self.eventDate.textColor = [UIColor darkGrayColor];
     self.eventDate.userInteractionEnabled = NO;
     self.eventDate.backgroundColor = [UIColor clearColor];
     self.eventDate.adjustsFontSizeToFitWidth = YES;
     [self.mainScroll addSubview:self.eventDate];
     
     self.separator3 = [[UIView alloc] init];
-    self.separator3.backgroundColor = [UIColor colorWithWhite:0 alpha:0.05];
+    self.separator3.backgroundColor = [UIColor phDarkGrayColor];
     [self.mainScroll addSubview:self.separator3];
     
     self.aboutBody = [[UITextView alloc] init];
-    self.aboutBody.font = [UIFont phBlond:15];
+    self.aboutBody.font = [UIFont phBlond:12];
     self.aboutBody.textColor = [UIColor blackColor];
     self.aboutBody.textAlignment = NSTextAlignmentLeft;
     self.aboutBody.userInteractionEnabled = NO;
@@ -184,12 +184,13 @@
     [self.mainScroll addSubview:self.seeMapView];
     
     self.seeMapLabel = [[UILabel alloc] init];
-    self.seeMapLabel.font = [UIFont phBold:14];
+    self.seeMapLabel.font = [UIFont phBold:11];
     self.seeMapLabel.textAlignment = NSTextAlignmentCenter;
     self.seeMapLabel.textColor = [UIColor blackColor];
     self.seeMapLabel.userInteractionEnabled = NO;
     self.seeMapLabel.backgroundColor = [UIColor clearColor];
     self.seeMapLabel.adjustsFontSizeToFitWidth = YES;
+    self.seeMapLabel.numberOfLines = 2;
     [self.mainScroll addSubview:self.seeMapLabel];
     
     self.seeMapCaret = [[UIImageView alloc] init];
@@ -291,7 +292,7 @@
     else url = [Constants guestListingsURL:event_id fb_id:self.sharedData.fb_id];
     
     
-    url = [NSString stringWithFormat:@"%@/event/details/%@/%@/%@",PHBaseURL,event_id,self.sharedData.fb_id,self.sharedData.gender];
+    url = [NSString stringWithFormat:@"%@/event/details/%@/%@/%@",PHBaseNewURL,event_id,self.sharedData.fb_id,self.sharedData.gender];
     
     NSLog(@"EVENTS_SUMMARY_URL (%@) :: %@",self.sharedData.account_type,url);
     //event/details
@@ -303,45 +304,53 @@
          
          //[self.sharedData trackMixPanelWithDict:@"View Host Listings" withDict:@{}];
          
-         //Check if valid
-         if(responseObject[@"success"]) {
-             if(![responseObject[@"success"] boolValue]) {
-                 
-                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Event Removed" message:@"The event is no longer available." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-                 alert.tag = 1;
-                 [alert show];
-                 
-                 [self goBack];
-                 
-                 [[NSNotificationCenter defaultCenter]
-                  postNotificationName:@"HIDE_LOADING"
-                  object:self];
-                 
-                 return;
-             }
+         NSInteger responseStatusCode = operation.response.statusCode;
+         if (responseStatusCode == 204) {
+             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Event Removed" message:@"The event is no longer available." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+             alert.tag = 1;
+             [alert show];
+             
+             [self goBack];
+             
+             [[NSNotificationCenter defaultCenter]
+              postNotificationName:@"HIDE_LOADING"
+              object:self];
+             
+             return;
          }
          
-         //Store this object for further pages
-         [self.sharedData.mixPanelCEventDict removeAllObjects];
-         [self.sharedData.mixPanelCEventDict setObject:responseObject[@"title"] forKey:@"Event Name"];
-         [self.sharedData.mixPanelCEventDict setObject:responseObject[@"start_datetime_str"] forKey:@"Event Start Time"];
-         [self.sharedData.mixPanelCEventDict setObject:responseObject[@"end_datetime_str"] forKey:@"Event End Time"];
-         [self.sharedData.mixPanelCEventDict setObject:responseObject[@"description"] forKey:@"Event Description"];
-         [self.sharedData.mixPanelCEventDict setObject:responseObject[@"venue_name"] forKey:@"Event Venue Name"];
-         [self.sharedData.mixPanelCEventDict setObject:responseObject[@"venue"][@"neighborhood"] forKey:@"Event Venue Neighborhood"];
-         [self.sharedData.mixPanelCEventDict setObject:responseObject[@"venue"][@"city"] forKey:@"Event Venue City"];
-         //[self.sharedData.mixPanelCEventDict setObject:responseObject[@"venue"][@"state"] forKey:@"Event Venue State"];
-         [self.sharedData.mixPanelCEventDict setObject:responseObject[@"venue"][@"description"] forKey:@"Event Venue Description"];
-         [self.sharedData.mixPanelCEventDict setObject:responseObject[@"venue"][@"zip"] forKey:@"Event Venue Zip"];
-         
-         [self.sharedData.eventDict removeAllObjects];
-         [self.sharedData.eventDict addEntriesFromDictionary:responseObject];
-         [self populateData:self.sharedData.eventDict];
-         
-         
-         
-         
-         
+         @try {
+             NSDictionary *data = [responseObject objectForKey:@"data"];
+             if (data && data != nil) {
+                 NSDictionary *eventDetail = [data objectForKey:@"event_detail"];
+                 if (!eventDetail || eventDetail.count == 0) {
+                     return;
+                 }
+                 
+                 //Store this object for further pages
+                 [self.sharedData.mixPanelCEventDict removeAllObjects];
+                 [self.sharedData.mixPanelCEventDict setObject:eventDetail[@"title"] forKey:@"Event Name"];
+                 [self.sharedData.mixPanelCEventDict setObject:eventDetail[@"start_datetime_str"] forKey:@"Event Start Time"];
+                 [self.sharedData.mixPanelCEventDict setObject:eventDetail[@"end_datetime_str"] forKey:@"Event End Time"];
+                 [self.sharedData.mixPanelCEventDict setObject:eventDetail[@"description"] forKey:@"Event Description"];
+                 [self.sharedData.mixPanelCEventDict setObject:eventDetail[@"venue_name"] forKey:@"Event Venue Name"];
+                 [self.sharedData.mixPanelCEventDict setObject:eventDetail[@"venue"][@"neighborhood"] forKey:@"Event Venue Neighborhood"];
+                 [self.sharedData.mixPanelCEventDict setObject:eventDetail[@"venue"][@"city"] forKey:@"Event Venue City"];
+                 [self.sharedData.mixPanelCEventDict setObject:eventDetail[@"venue"][@"description"] forKey:@"Event Venue Description"];
+                 [self.sharedData.mixPanelCEventDict setObject:eventDetail[@"venue"][@"zip"] forKey:@"Event Venue Zip"];
+                 
+                 [self.sharedData.eventDict removeAllObjects];
+                 [self.sharedData.eventDict addEntriesFromDictionary:eventDetail];
+                 [self populateData:self.sharedData.eventDict];
+             }
+         }
+         @catch (NSException *exception) {
+             
+         }
+         @finally {
+             
+         }
+
          [[NSNotificationCenter defaultCenter]
           postNotificationName:@"HIDE_LOADING"
           object:self];
@@ -518,7 +527,7 @@
     self.separator3.frame = CGRectMake(20,self.eventDate.frame.size.height + self.eventDate.frame.origin.y + 14, self.sharedData.screenWidth - 40, 1);
     
     //About body
-    self.aboutBody.frame = CGRectMake(30, self.separator3.frame.size.height + self.separator3.frame.origin.y + 10, self.sharedData.screenWidth - 60, 0);
+    self.aboutBody.frame = CGRectMake(16, self.separator3.frame.size.height + self.separator3.frame.origin.y + 10, self.sharedData.screenWidth - 32, 0);
     self.aboutBody.text = dict[@"description"];
     [self.aboutBody sizeToFit];
     
@@ -529,7 +538,7 @@
     self.seeMapView.frame = CGRectMake(-4,self.aboutBody.frame.size.height + self.aboutBody.frame.origin.y + 16, self.sharedData.screenWidth + 8, 56);
     
     //See all label
-    self.seeMapLabel.frame = CGRectMake(-4,self.aboutBody.frame.size.height + self.aboutBody.frame.origin.y + 17, self.seeMapView.frame.size.width, self.seeMapView.frame.size.height);
+    self.seeMapLabel.frame = CGRectMake(52,self.aboutBody.frame.size.height + self.aboutBody.frame.origin.y + 17, self.seeMapView.frame.size.width-40-64, self.seeMapView.frame.size.height);
     self.seeMapLabel.text = [dict[@"venue"][@"address"] uppercaseString];
     
     //See all caret
@@ -570,9 +579,11 @@
     self.picScroll.contentSize = CGSizeMake([photos count] * self.sharedData.screenWidth, 300);
     
     //Map
+    CLLocationDegrees latitude = [dict[@"venue"][@"lat"] doubleValue];
+    CLLocationDegrees longitude = [dict[@"venue"][@"long"] doubleValue];
+    CLLocation *location = [[CLLocation alloc] initWithLatitude:latitude longitude:longitude];
     CLGeocoder *geocoder = [[CLGeocoder alloc] init];
-    NSString *fullAddress = [NSString stringWithFormat:@"%@,%@ %@",dict[@"venue"][@"address"],dict[@"venue"][@"city"],dict[@"venue"][@"zip"]];
-    [geocoder geocodeAddressString:fullAddress completionHandler:^(NSArray *placemarks, NSError *error) {
+    [geocoder reverseGeocodeLocation:location completionHandler:^(NSArray *placemarks, NSError *error) {
         if (placemarks) {
             if([placemarks count] == 0)
             {
@@ -761,9 +772,23 @@
     NSString *title = self.tagArray[indexPath.row];
     [cell.button.button setTitle:[title uppercaseString] forState:UIControlStateNormal];
     cell.button.button.titleLabel.font = [UIFont phBold:12];
-    cell.button.offBorderColor = [UIColor colorFromHexCode:@"D7D7D7"];
-    cell.button.offTextColor = [UIColor colorFromHexCode:@"D7D7D7"];
+    cell.button.offTextColor = [UIColor whiteColor];
     cell.button.offBackgroundColor = [UIColor clearColor];
+    
+    if ([title isEqualToString:@"Featured"]) {
+        cell.button.offBackgroundColor = [UIColor colorFromHexCode:@"D9603E"];
+    } else if ([title isEqualToString:@"Music"]) {
+        cell.button.offBackgroundColor = [UIColor colorFromHexCode:@"5E3ED9"];
+    } else if ([title isEqualToString:@"Nightlife"]) {
+        cell.button.offBackgroundColor = [UIColor colorFromHexCode:@"4A555A"];
+    } else if ([title isEqualToString:@"Food & Drink"]) {
+        cell.button.offBackgroundColor = [UIColor colorFromHexCode:@"DDC54D"];
+    } else if ([title isEqualToString:@"Fashion"]) {
+        cell.button.offBackgroundColor = [UIColor colorFromHexCode:@"68CE49"];
+    } else {
+        cell.button.offBackgroundColor = [UIColor colorFromHexCode:@"ED4FC4"];
+    }
+    
     [cell setNeedsLayout];
     [cell layoutIfNeeded];
     

@@ -13,6 +13,7 @@
 #import "AppDelegate.h"
 #import "BaseModel.h"
 #import "UserManager.h"
+#import "SVProgressHUD.h"
 
 
 #define SCREENS_DEEP 4
@@ -94,7 +95,7 @@
     
     //When there are no entries
     self.emptyView = [[EmptyView alloc] initWithFrame:CGRectMake(0, 40, frame.size.width, frame.size.height - 60)];
-    [self.emptyView setData:@"Check back soon" subtitle:@"More exciting events are coming!" imageNamed:@""];
+    [self.emptyView setData:@"Oops there is a problem" subtitle:@"Sorry we're having some server issues, please check back in a few minutes." imageNamed:@""];
     [self.emptyView setMode:@"load"];
     self.emptyView.backgroundColor = [UIColor whiteColor];
     [self.mainCon addSubview:self.emptyView];
@@ -256,6 +257,7 @@
     self.isEventsLoaded = NO;
     self.whiteBK.hidden = YES;
     self.backgroundColor = [UIColor whiteColor];
+    [self.emptyView setMode:@"load"];
 }
 
 
@@ -364,7 +366,7 @@
     NSSortDescriptor *sortDescriptor =
     [NSSortDescriptor sortDescriptorWithKey:@"modified"
                                   ascending:YES];
-    NSPredicate *eventPredicate = [NSPredicate predicateWithFormat:@"startDatetime > %@", [NSDate date]];
+    NSPredicate *eventPredicate = [NSPredicate predicateWithFormat:@"endDatetime > %@", [NSDate date]];
     NSArray *sortDescriptors = [NSArray arrayWithObjects:sortDescriptor, nil];
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     [fetchRequest setEntity:entityDescription];
@@ -417,7 +419,7 @@
 }
 
 - (void)removeOldEvent {
-    NSPredicate *eventPredicate = [NSPredicate predicateWithFormat:@"startDatetime < %@", [NSDate date]];
+    NSPredicate *eventPredicate = [NSPredicate predicateWithFormat:@"endDatetime < %@", [NSDate date]];
     NSArray *oldEvents = [BaseModel fetchManagedObject:self.managedObjectContext
                                               inEntity:NSStringFromClass([Event class])
                                           andPredicate:eventPredicate];
@@ -435,33 +437,52 @@
     NSString *url = [Constants eventsURL:@"host" fb_id:self.sharedData.fb_id];
 
     //events/list/
-    url = [NSString stringWithFormat:@"%@/events/list/%@/%@",PHBaseURL,self.sharedData.fb_id,self.sharedData.gender_interest];
-    
-    NSLog(@"EVENTS_URL :: %@", url);
+    url = [NSString stringWithFormat:@"%@/events/list/%@",PHBaseNewURL,self.sharedData.fb_id];
     
     [manager GET:url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject)
      {
-         
-         NSLog(@"EVENTS_RESPONSE :: %@",responseObject);
-         
          NSString *responseString = operation.responseString;
          NSError *error;
          
-         NSArray *json = (NSArray *)[NSJSONSerialization
-                                     JSONObjectWithData:[responseString dataUsingEncoding:NSUTF8StringEncoding]
-                                                options:kNilOptions
-                                                    error:&error];
+         NSInteger responseStatusCode = operation.response.statusCode;
+         if (responseStatusCode == 204) {
+             NSArray *fetchEvents = [BaseModel fetchManagedObject:self.managedObjectContext
+                                                         inEntity:NSStringFromClass([Event class])
+                                                     andPredicate:nil];
+             self.needUpdateContents = NO;
+             for (Event *fetchEvent in fetchEvents) {
+                 [self.managedObjectContext deleteObject:fetchEvent];
+                 
+                 NSError *error;
+                 if (![self.managedObjectContext save:&error]) NSLog(@"Error: %@", [error localizedDescription]);
+             }
+             self.needUpdateContents = YES;
+             [self.emptyView setData:@"No events found" subtitle:@"Try to add more categories to see more events." imageNamed:@""];
+             [self.emptyView setMode:@"empty"];
+             
+             return;
+         } else if (responseStatusCode != 200) {
+             NSArray *fetchEvents = [BaseModel fetchManagedObject:self.managedObjectContext
+                                                         inEntity:NSStringFromClass([Event class])
+                                                     andPredicate:nil];
+             if (fetchEvents.count == 0) {
+                 [self.emptyView setData:@"No events found" subtitle:@"Try to add more categories to see more events." imageNamed:@""];
+                 [self.emptyView setMode:@"empty"];
+             }
+             return;
+         }
+         
+         
+         NSDictionary *json = (NSDictionary *)[NSJSONSerialization
+                                               JSONObjectWithData:[responseString dataUsingEncoding:NSUTF8StringEncoding]
+                                                            options:kNilOptions
+                                                            error:&error];
          dispatch_async(dispatch_get_main_queue(), ^{
              
              if (json && json != nil) {
                  self.isEventsLoaded = YES;
                  self.whiteBK.hidden = NO;
                  self.needUpdateContents = NO;
-                 
-                 
-                 if (json.count == 0) {
-                     [self.emptyView setMode:@"empty"];
-                 }
                  
                  @try {
                      NSArray *fetchEvents = [BaseModel fetchManagedObject:self.managedObjectContext
@@ -474,16 +495,26 @@
                          if (![self.managedObjectContext save:&error]) NSLog(@"Error: %@", [error localizedDescription]);
                      }
                      
-                     for (NSDictionary *eventSection in json) {
-                         if (self.sharedData.experiences.count == 0) {
-                             break;
+                     NSDictionary *data = [json objectForKey:@"data"];
+                     if (data && data != nil) {
+                         NSArray *events = [data objectForKey:@"events"];
+                         
+                         if (!events || events.count == 0) {
+                             [self.emptyView setMode:@"empty"];
                          }
-
-                         BOOL isFeatured = NO;
-                         if ([[eventSection objectForKey:@"date_day"] isEqualToString:@"Featured Events"]) {
-                             isFeatured = YES;
-                         }
-                         for (NSDictionary *eventRow in eventSection[@"events"]) {
+                         
+                         for (NSDictionary *eventRow in events) {
+                             
+                             BOOL isFeatured = NO;
+                             if ([[eventRow objectForKey:@"date_day"] isEqualToString:@"Featured Events"]) {
+                                 isFeatured = YES;
+                             }
+//                             
+//                             if (self.sharedData.experiences.count == 0) {
+//                                 [self.emptyView setMode:@"empty"];
+//                                 break;
+//                             }
+                             
                              Event *item = (Event *)[NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([Event class])
                                                                                   inManagedObjectContext:self.managedObjectContext];
                              
@@ -530,6 +561,8 @@
                              NSString *start_datetime = [eventRow objectForKey:@"start_datetime"];
                              NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
                              [formatter setDateFormat:PHDateFormatServer];
+                             [formatter setLocale:[NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"]];
+                             [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
                              NSDate *startDatetime = [formatter dateFromString:start_datetime];
                              if (startDatetime != nil) {
                                  item.startDatetime = startDatetime;
@@ -548,6 +581,7 @@
                              
                          }
                      }
+
                  }
                  @catch (NSException *exception) {
                      
@@ -568,7 +602,22 @@
          
      } failure:^(AFHTTPRequestOperation *operation, NSError *error)
      {
-         NSLog(@"ERROR :: %@",error);
+         if (error.code == -1009 || error.code == -1005) {
+             [SVProgressHUD showInfoWithStatus:@"Please check your internet connection"];
+             return;
+         }
+         
+         NSInteger responseStatusCode = operation.response.statusCode;
+         if (responseStatusCode != 200) {
+             NSArray *fetchEvents = [BaseModel fetchManagedObject:self.managedObjectContext
+                                                         inEntity:NSStringFromClass([Event class])
+                                                     andPredicate:nil];
+             if (fetchEvents.count == 0) {
+                 [self.emptyView setData:@"Oops there is a problem" subtitle:@"Sorry we're having some server issues, please check back in a few minutes." imageNamed:@""];
+                 [self.emptyView setMode:@"empty"];
+             }
+             return;
+         }
      }];
 }
 
@@ -820,6 +869,14 @@
     [self updateFilterSetting];
 }
 
+- (BOOL)collectionView:(UICollectionView *)collectionView
+shouldDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
+    if (self.sharedData.experiences.count > 1) {
+        return YES;
+    }
+    return NO;
+}
+
 -(void)collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     SetupPickViewCell *cell = (SetupPickViewCell*)[collectionView cellForItemAtIndexPath:indexPath];
@@ -871,7 +928,7 @@
     self.eventsGuestList.hidden = YES;
     self.eventsHostingsList.hidden = NO;
     [self.eventsHostingsList initClass];
-    [self.self.eventsHostingsList loadData:self.sharedData.eventDict[@"_id"]];
+    [self.self.eventsHostingsList loadData:self.sharedData.cEventId_Summary];
     [UIView animateWithDuration:0.25 animations:^()
      {
          self.mainCon.frame = CGRectMake(-self.sharedData.screenWidth * 2, 20, self.sharedData.screenWidth * SCREENS_DEEP, self.sharedData.screenHeight - 20);
@@ -886,8 +943,8 @@
     self.eventsHostingsList.hidden = YES;
     self.eventsGuestList.hidden = NO;
     [self.eventsGuestList initClass];
-    self.eventsGuestList.mainDict = self.sharedData.eventDict;
-    [self.eventsGuestList loadData:self.sharedData.eventDict[@"_id"]];
+    self.eventsGuestList.mainDict = [NSMutableDictionary dictionaryWithDictionary:self.sharedData.eventDict];
+    [self.eventsGuestList loadData:self.sharedData.cEventId_Summary];
     [UIView animateWithDuration:0.25 animations:^()
      {
          self.mainCon.frame = CGRectMake(-self.sharedData.screenWidth * 2, 20, self.sharedData.screenWidth * SCREENS_DEEP, self.sharedData.screenHeight - 20);

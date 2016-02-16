@@ -78,6 +78,15 @@
     [cell.button buttonSelect:YES checkmark:YES animated:YES];
 }
 
+- (BOOL)collectionView:(UICollectionView *)collectionView
+shouldDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
+    SharedData *sharedData = [SharedData sharedInstance];
+    if (sharedData.experiences.count > 1) {
+        return YES;
+    }
+    return NO;
+}
+
 -(void)collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
     SetupPickViewCell *cell = (SetupPickViewCell*)[collectionView cellForItemAtIndexPath:indexPath];
     SharedData *sharedData = [SharedData sharedInstance];

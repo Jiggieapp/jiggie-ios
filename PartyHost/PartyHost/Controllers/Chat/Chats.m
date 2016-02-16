@@ -11,6 +11,7 @@
 #import "AppDelegate.h"
 #import "BaseModel.h"
 #import "Chat.h"
+#import "SVProgressHUD.h"
 
 @implementation Chats
 
@@ -229,7 +230,7 @@
     NSDictionary *params = @{ @"fb_id" : facebookId };
     
     
-    NSString *url = [NSString stringWithFormat:@"%@/conversations",PHBaseURL];
+    NSString *url = [NSString stringWithFormat:@"%@/conversations",PHBaseNewURL];
     NSLog(@"CHAT_START_LOAD :: %@",url);
     
     
@@ -239,16 +240,14 @@
          NSString *responseString = operation.responseString;
          NSError *error;
          
-         NSArray *json = (NSArray *)[NSJSONSerialization
-                                     JSONObjectWithData:[responseString dataUsingEncoding:NSUTF8StringEncoding]
-                                     options:kNilOptions
-                                     error:&error];
+         NSDictionary *json = (NSDictionary *)[NSJSONSerialization
+                                               JSONObjectWithData:[responseString dataUsingEncoding:NSUTF8StringEncoding]
+                                               options:kNilOptions
+                                               error:&error];
          dispatch_async(dispatch_get_main_queue(), ^{
              
              self.isConvosLoaded = YES;
              self.needUpdateContents = NO;
-             
-             NSLog(@"CONVERSATIONS_responseObject :: %@",responseObject);
              
              //Show empty
              if(json.count <= 0) {
@@ -266,78 +265,87 @@
                  NSArray *fetchChats = [BaseModel fetchManagedObject:self.managedObjectContext
                                                             inEntity:NSStringFromClass([Chat class])
                                                         andPredicate:nil];
-
-                 for (NSDictionary *chatRow in json) {
-                     Chat *item = (Chat *)[NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([Chat class])
-                                                                        inManagedObjectContext:self.managedObjectContext];
-                     
-                     NSString *fb_id = [chatRow objectForKey:@"fb_id"];
-                     if (fb_id && ![fb_id isEqual:[NSNull null]]) {
-                         item.fb_id = fb_id;
-                     } else {
-                         item.fb_id = @"";
-                     }
-                     
-                     NSString *fromId = [chatRow objectForKey:@"fromId"];
-                     if (fromId && ![fromId isEqual:[NSNull null]]) {
-                         item.fromID = fromId;
-                     } else {
-                         item.fromID = @"";
-                     }
-                     
-                     NSString *fromName = [chatRow objectForKey:@"fromName"];
-                     if (fromName && ![fromName isEqual:[NSNull null]]) {
-                         item.fromName = fromName;
-                     } else {
-                         item.fromName = @"";
-                     }
-                     
-                     NSString *hasrepliedStr = [chatRow objectForKey:@"hasreplied"];
-                     if (hasrepliedStr && ![hasrepliedStr isEqual:[NSNull null]]) {
-                         NSNumber *hasreplied = [NSNumber numberWithInteger:[hasrepliedStr integerValue]];
-                         item.hasReplied = hasreplied;
-                     }
-                     
-                     NSString *last_message = [chatRow objectForKey:@"last_message"];
-                     if (last_message && ![last_message isEqual:[NSNull null]]) {
-                         item.lastMessage = last_message;
-                     } else {
-                         item.lastMessage = @"";
-                     }
-                     
-                     NSString *last_updated = [chatRow objectForKey:@"last_updated"];
-                     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-                     [formatter setDateFormat:PHDateFormatServer];
-                     NSDate *lastUpdated = [formatter dateFromString:last_updated];
-                     if (lastUpdated != nil) {
-                         item.lastUpdated = lastUpdated;
-                     }
-                     
-                     NSString *profile_image = [chatRow objectForKey:@"profile_image"];
-                     if (profile_image && ![profile_image isEqual:[NSNull null]]) {
-                         item.profileImage = profile_image;
-                     } else {
-                         item.profileImage = @"";
-                     }
-                     
-                     NSString *unreadStr = [chatRow objectForKey:@"unread"];
-                     if (unreadStr && ![unreadStr isEqual:[NSNull null]]) {
-                         NSNumber *unread = [NSNumber numberWithInteger:[unreadStr integerValue]];
-                         item.unread = unread;
-                         unreadcount += unread.integerValue;
-                     }
-                     
-                     item.modified = [NSDate date];
-                     
-                     for (Chat *fetchChat in fetchChats) {
-                         if ([fetchChat.fb_id isEqualToString:item.fb_id]) {
-                             [self.managedObjectContext deleteObject:fetchChat];
-                         }
-                     }
+                 
+                 for (Chat *fetchChat in fetchChats) {
+                     [self.managedObjectContext deleteObject:fetchChat];
                      
                      NSError *error;
                      if (![self.managedObjectContext save:&error]) NSLog(@"Error: %@", [error localizedDescription]);
+                 }
+                 
+                 NSDictionary *data = [json objectForKey:@"data"];
+                 if (data && data != nil) {
+                     NSArray *chat_lists = [data objectForKey:@"chat_lists"];
+                     if(!chat_lists || chat_lists.count <= 0) {
+                         self.conversationsList.hidden = YES;
+                         [self.emptyView setMode:@"empty"];
+                     }
                      
+                     for (NSDictionary *chatRow in chat_lists) {
+                         Chat *item = (Chat *)[NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([Chat class])
+                                                                            inManagedObjectContext:self.managedObjectContext];
+                         
+                         NSString *fb_id = [chatRow objectForKey:@"fb_id"];
+                         if (fb_id && ![fb_id isEqual:[NSNull null]]) {
+                             item.fb_id = fb_id;
+                         } else {
+                             item.fb_id = @"";
+                         }
+                         
+                         NSString *fromId = [chatRow objectForKey:@"fromId"];
+                         if (fromId && ![fromId isEqual:[NSNull null]]) {
+                             item.fromID = fromId;
+                         } else {
+                             item.fromID = @"";
+                         }
+                         
+                         NSString *fromName = [chatRow objectForKey:@"fromName"];
+                         if (fromName && ![fromName isEqual:[NSNull null]]) {
+                             item.fromName = fromName;
+                         } else {
+                             item.fromName = @"";
+                         }
+                         
+                         NSNumber *hasreplied = [chatRow objectForKey:@"hasreplied"];
+                         if (hasreplied && ![hasreplied isEqual:[NSNull null]]) {
+                             item.hasReplied = hasreplied;
+                         }
+                         
+                         NSString *last_message = [chatRow objectForKey:@"last_message"];
+                         if (last_message && ![last_message isEqual:[NSNull null]]) {
+                             item.lastMessage = last_message;
+                         } else {
+                             item.lastMessage = @"";
+                         }
+                         
+                         NSString *last_updated = [chatRow objectForKey:@"last_updated"];
+                         NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+                         [formatter setDateFormat:PHDateFormatServer];
+                         [formatter setLocale:[NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"]];
+                         [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
+                         NSDate *lastUpdated = [formatter dateFromString:last_updated];
+                         if (lastUpdated != nil) {
+                             item.lastUpdated = lastUpdated;
+                         }
+                         
+                         NSString *profile_image = [chatRow objectForKey:@"profile_image"];
+                         if (profile_image && ![profile_image isEqual:[NSNull null]]) {
+                             item.profileImage = profile_image;
+                         } else {
+                             item.profileImage = @"";
+                         }
+                         
+                         NSNumber *unread = [chatRow objectForKey:@"unread"];
+                         if (unread && ![unread isEqual:[NSNull null]]) {
+                             item.unread = unread;
+                             unreadcount += unread.integerValue;
+                         }
+                         
+                         item.modified = [NSDate date];
+                         
+                         NSError *error;
+                         if (![self.managedObjectContext save:&error]) NSLog(@"Error: %@", [error localizedDescription]);
+                     }
                  }
              }
              @catch (NSException *exception) {
@@ -385,13 +393,16 @@
      } failure:^(AFHTTPRequestOperation *operation, NSError *error)
      {
          NSLog(@"ERROR :: %@",error);
+         
+         if (error.code == -1009 || error.code == -1005) {
+             [SVProgressHUD showInfoWithStatus:@"Please check your internet connection"];
+         }
      }];
 }
 
 
 -(void)loadImages
 {
-    int count = 0;
     for (Chat *chat in [self.fetchedResultsController fetchedObjects]) {
         NSString *pic_url = [self.sharedData profileImg:chat.fb_id];
         [self.sharedData loadImageCue:pic_url];
@@ -412,7 +423,7 @@
                             @"fromId" : self.sharedData.fb_id,
                             @"toId": self.sharedData.member_fb_id,
                             };
-    NSString *urlToLoad = [NSString stringWithFormat:@"%@/blockuserwithfbid",PHBaseURL];
+    NSString *urlToLoad = [NSString stringWithFormat:@"%@/blockuserwithfbid",PHBaseNewURL];
     [manager GET:urlToLoad parameters:params success:^
      (AFHTTPRequestOperation *operation, id resultObj)
      {
@@ -481,7 +492,7 @@
                             @"fromId" : self.sharedData.fb_id,
                             @"toId":self.sharedData.member_fb_id,
                             };
-    NSString *urlToLoad = [NSString stringWithFormat:@"%@/deletemessageswithfbid",PHBaseURL];
+    NSString *urlToLoad = [NSString stringWithFormat:@"%@/deletemessageswithfbid",PHBaseNewURL];
     
     [manager GET:urlToLoad parameters:params success:^
      (AFHTTPRequestOperation *operation, id resultObj)

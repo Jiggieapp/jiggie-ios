@@ -182,6 +182,10 @@
 
 -(void)loadData:(NSString*)event_id
 {
+    if (!event_id || event_id == nil) {
+        return;
+    }
+    
     self.event_id = [NSString stringWithString:event_id];
     [self reset];
     
@@ -189,58 +193,75 @@
     NSString *url = [Constants guestListingsURL:event_id fb_id:self.sharedData.fb_id];
     url = [NSString stringWithFormat:@"%@/event/interest/%@/%@/%@",PHBaseNewURL,event_id,self.sharedData.fb_id,self.sharedData.gender_interest];
     
-    NSLog(@"EVENTS_GUEST_LIST_URL :: %@",url);
-    
     [manager GET:url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject)
      {
-         NSLog(@"EVENTS_GUEST_LIST_RESPONSE :: %@",responseObject);
+         NSInteger responseStatusCode = operation.response.statusCode;
+         if (responseStatusCode != 200) {
+             return;
+         }
+         
          [[AnalyticManager sharedManager] trackMixPanelWithDict:@"View Guest Listings" withDict:self.sharedData.mixPanelCEventDict];
-         [self populateData:responseObject];
+         NSDictionary *data = [responseObject objectForKey:@"data"];
+         if (data && data != nil) {
+             NSMutableArray *guestsInterests = [data objectForKey:@"guest_interests"];
+             if (guestsInterests && guestsInterests.count > 0) {
+                 [self populateData:guestsInterests];
+             }
+         }
      } failure:^(AFHTTPRequestOperation *operation, NSError *error)
      {
-         NSLog(@"EVENTS_GUEST_LIST_ERROR :: %@",error);
+         
      }];
 }
 
 -(void)populateData:(NSMutableArray *)array
 {
-    //Save list
-    [self.hostersA removeAllObjects];
-    [self.hostersA addObjectsFromArray:array];
-    if([self.hostersA count] == 0) {
-        self.labelEmpty.hidden = NO;
-        self.hostersList.hidden = YES;
-    }
-    else {
-        self.labelEmpty.hidden = YES;
-        self.hostersList.hidden = NO;
-        
-        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-        if(![defaults objectForKey:@"SHOWED_EVENTS_GUEST_LIST_OVERLAY"])
-        {
-            [defaults setValue:@"YES" forKey:@"SHOWED_EVENTS_GUEST_LIST_OVERLAY"];
-            [defaults synchronize];
-            //[self.sharedData.overlayView popup:@"Meet people" subtitle: @"Connect with guests to start chatting!" x:0 y:self.sharedData.screenHeight - 100];
+    
+    @try {
+        //Save list
+        [self.hostersA removeAllObjects];
+        [self.hostersA addObjectsFromArray:array];
+        if([self.hostersA count] == 0) {
+            self.labelEmpty.hidden = NO;
+            self.hostersList.hidden = YES;
         }
-    }
-    
-    [self.hostersList reloadData];
-    
-    //Load member
-    if(self.hasMemberToLoad)
-    {
-        self.hasMemberToLoad = NO;
+        else {
+            self.labelEmpty.hidden = YES;
+            self.hostersList.hidden = NO;
+            
+            NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+            if(![defaults objectForKey:@"SHOWED_EVENTS_GUEST_LIST_OVERLAY"])
+            {
+                [defaults setValue:@"YES" forKey:@"SHOWED_EVENTS_GUEST_LIST_OVERLAY"];
+                [defaults synchronize];
+                //[self.sharedData.overlayView popup:@"Meet people" subtitle: @"Connect with guests to start chatting!" x:0 y:self.sharedData.screenHeight - 100];
+            }
+        }
         
-        dispatch_time_t delay = dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC * 0.5);
-        dispatch_after(delay, dispatch_get_main_queue(), ^(void){
-            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:self.sharedData.cHost_index inSection:0];
-            [self tableView:self.hostersList didSelectRowAtIndexPath:indexPath];
-            self.sharedData.cHost_index = -1;
-        });
+        [self.hostersList reloadData];
+        
+        //Load member
+        if(self.hasMemberToLoad)
+        {
+            self.hasMemberToLoad = NO;
+            
+            dispatch_time_t delay = dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC * 0.5);
+            dispatch_after(delay, dispatch_get_main_queue(), ^(void){
+                NSIndexPath *indexPath = [NSIndexPath indexPathForRow:self.sharedData.cHost_index inSection:0];
+                [self tableView:self.hostersList didSelectRowAtIndexPath:indexPath];
+                self.sharedData.cHost_index = -1;
+            });
+        }
+        
+        self.spinner.hidden = YES;
+        [self.spinner stopAnimating];
     }
-    
-    self.spinner.hidden = YES;
-    [self.spinner stopAnimating];
+    @catch (NSException *exception) {
+        
+    }
+    @finally {
+        
+    }
 }
 
 @end
