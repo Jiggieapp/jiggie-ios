@@ -291,7 +291,12 @@
      {
          
          NSInteger responseStatusCode = operation.response.statusCode;
-         if (responseStatusCode != 200) {
+         if (responseStatusCode == 204) {
+             self.startedPolling = NO;
+             [self performSelector:@selector(startPolling) withObject:nil afterDelay:POLL_SECONDS];
+             return;
+             
+         } else if (responseStatusCode != 200) {
              self.startedPolling = NO;
              [self performSelector:@selector(startPolling) withObject:nil afterDelay:POLL_SECONDS];
              return;

@@ -773,7 +773,7 @@
     NSDictionary *params = [self.sharedData createSaveSettingsParams];
     [manager POST:url parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject)
      {
-         if(responseObject[@"success"]) {
+         if(responseObject[@"response"]) {
             [self loadData];
          }
          

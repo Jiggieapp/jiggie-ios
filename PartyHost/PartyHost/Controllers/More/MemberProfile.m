@@ -888,7 +888,7 @@
      {
          NSLog(@"MUTUALS_FRIENDS_RESPONSE :: %@",responseObject);
          
-         if([responseObject[@"success"] boolValue]) {
+         if([responseObject[@"response"] boolValue]) {
              [self.mutualFriends addObjectsFromArray:responseObject[@"friends"]];
              [self updateAboutPanel];
          }

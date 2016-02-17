@@ -76,15 +76,35 @@
      {
          NSLog(@"SETTINGS responseObject :: %@",responseObject);
          
-         //Load data
-         [UserManager saveUserSetting:responseObject];
-         [UserManager updateLocalSetting];
-         
-//         [self.sharedData loadSettingsResponse:responseObject];
-         
-         //Reload table view
-         self.isLoaded = YES;
-         [self.settingsList reloadData];
+         NSString *responseString = operation.responseString;
+         NSError *error;
+         NSDictionary *json = (NSDictionary *)[NSJSONSerialization
+                                               JSONObjectWithData:[responseString dataUsingEncoding:NSUTF8StringEncoding]
+                                               options:kNilOptions
+                                               error:&error];
+         dispatch_async(dispatch_get_main_queue(), ^{
+             @try {
+                 NSDictionary *data = [json objectForKey:@"data"];
+                 if (data && data != nil) {
+                     NSDictionary *membersettings = [data objectForKey:@"membersettings"];
+                     if (membersettings && membersettings != nil) {
+                         [UserManager saveUserSetting:membersettings];
+                         [UserManager updateLocalSetting];
+                     }
+                 }
+                 
+                 //Reload table view
+                 self.isLoaded = YES;
+                 [self.settingsList reloadData];
+
+             }
+             @catch (NSException *exception) {
+                 
+             }
+             @finally {
+                 
+             }
+         });
          
          //Hide spinner
          [[NSNotificationCenter defaultCenter]
