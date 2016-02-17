@@ -29,6 +29,7 @@
 @property(nonatomic,strong) UILabel             *title;
 @property(nonatomic,strong) UIView              *mainCon;
 @property(nonatomic,strong) NSMutableArray      *eventsA;
+@property(nonatomic,strong) UIView              *segmentationView;
 @property(nonatomic,strong) UITableView         *eventsList;
 @property(nonatomic,assign) BOOL                needUpdateContents;
 @property(nonatomic,assign) BOOL                isEventsLoaded;

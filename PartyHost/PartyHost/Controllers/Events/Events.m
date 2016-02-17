@@ -81,8 +81,12 @@
     [self.btnFilter addTarget:self action:@selector(showFilter) forControlEvents:UIControlEventTouchUpInside];
     [self.tabBar addSubview:self.btnFilter];
     
+    self.segmentationView = [[UIView alloc] initWithFrame:CGRectMake(0, 40, frame.size.width, 34)];
+    [self.segmentationView setBackgroundColor:[UIColor redColor]];
+    [self.mainCon addSubview:self.segmentationView];
+    
     self.eventsA = [[NSMutableArray alloc] init];
-    self.eventsList = [[UITableView alloc] initWithFrame:CGRectMake(0, 40, frame.size.width, frame.size.height - self.tabBar.bounds.size.height - 20)];
+    self.eventsList = [[UITableView alloc] initWithFrame:CGRectMake(0, 40, frame.size.width, frame.size.height - self.tabBar.bounds.size.height - 34 - 20)];
     self.eventsList.backgroundColor = [UIColor clearColor];
     self.eventsList.delegate = self;
     self.eventsList.dataSource = self;
