@@ -246,6 +246,34 @@
                                                error:&error];
          dispatch_async(dispatch_get_main_queue(), ^{
              
+             NSInteger responseStatusCode = operation.response.statusCode;
+             if (responseStatusCode == 204) {
+                 NSArray *fetchChats = [BaseModel fetchManagedObject:self.managedObjectContext
+                                                            inEntity:NSStringFromClass([Chat class])
+                                                        andPredicate:nil];
+                 self.needUpdateContents = NO;
+                 for (Chat *fetchChat in fetchChats) {
+                     [self.managedObjectContext deleteObject:fetchChat];
+                     
+                     NSError *error;
+                     if (![self.managedObjectContext save:&error]) NSLog(@"Error: %@", [error localizedDescription]);
+                 }
+                 self.needUpdateContents = YES;
+                 self.conversationsList.hidden = YES;
+                 [self.emptyView setMode:@"empty"];
+                 
+                 return;
+             } else if (responseStatusCode != 200) {
+                 NSArray *fetchChats = [BaseModel fetchManagedObject:self.managedObjectContext
+                                                            inEntity:NSStringFromClass([Chat class])
+                                                        andPredicate:nil];
+                 if (fetchChats.count == 0) {
+                     self.conversationsList.hidden = YES;
+                     [self.emptyView setMode:@"empty"];
+                 }
+                 return;
+             }
+             
              self.isConvosLoaded = YES;
              self.needUpdateContents = NO;
              

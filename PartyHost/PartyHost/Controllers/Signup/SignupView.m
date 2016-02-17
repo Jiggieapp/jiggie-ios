@@ -326,7 +326,7 @@
     [manager POST:urlToLoad parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject)
      {
          NSLog(@"TOKEN_responseObject :: %@",responseObject);
-         if([responseObject[@"success"] boolValue])
+         if([responseObject[@"response"] boolValue])
          {
              self.didFBLogin = YES;
              self.sharedData.ph_token = responseObject[@"token"];
@@ -558,69 +558,96 @@
     
     NSString *urlToLoad = [NSString stringWithFormat:@"%@/login",PHBaseNewURL];
     
-    [manager POST:urlToLoad parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject)
-     {
-         NSLog(@"START_LOGIN_RESPONSE :: %@",operation.responseString);
-         NSLog(@"APN_responseObject :: %@",responseObject);
-         if([responseObject[@"success"] boolValue])
-         {
-             NSLog(@"APN_SUCCESS!!!!");
-             
-             self.sharedData.isLoggedIn = YES;
-             
-             //Load data
-             [UserManager saveUserSetting:responseObject];
-             [UserManager updateLocalSetting];
-
-             self.sharedData.help_phone = responseObject[@"help_phone"];
-             
-             self.didHerokuLogin = YES;
-             
-             
-             self.sharedData.matchMe = [responseObject[@"matchme"] boolValue];
-             self.sharedData.feedBadge.hidden = !(self.sharedData.matchMe);
-             self.sharedData.feedBadge.canShow = self.sharedData.matchMe;
-             NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-             
-             
-             AnalyticManager *analyticManager = [AnalyticManager sharedManager];
-             if([responseObject[@"is_new_user"] boolValue])
-             {
-                 [analyticManager setMixPanelOnSignUp];
-                 [analyticManager trackMixPanelWithDict:@"Sign Up" withDict:@{}];
-                 [analyticManager setMixPanelOnceParams];
+    [manager POST:urlToLoad parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        
+         NSString *responseString = operation.responseString;
+         NSError *error;
+         NSDictionary *json = (NSDictionary *)[NSJSONSerialization
+                                               JSONObjectWithData:[responseString dataUsingEncoding:NSUTF8StringEncoding]
+                                               options:kNilOptions
+                                               error:&error];
+         dispatch_async(dispatch_get_main_queue(), ^{
+             @try {
+                 if(![json[@"response"] boolValue])
+                 {
+                     [self showUpgrade];
+                     return;
+                 }
                  
-                 NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-                 [defaults removeObjectForKey:@"SHOWED_WALKTHROUGH"];
-                 [defaults synchronize];
-                 
-                 self.sharedData.walkthroughOn = YES;
-                 
-             }else{
-                 // tech debt : set dummy profile!!
-                 [analyticManager createMixPanelDummyProfile];
-                 [analyticManager setMixPanelOnLogin];
-                
-                 NSString *isFirst = ([defaults objectForKey:@"FIRST_RUN"])?@"NO":@"YES";
-                 
-                 [analyticManager trackMixPanelWithDict:@"Log In" withDict:@{@"new_device":isFirst}];
-                 [analyticManager trackMixPanelIncrementWithDict:@{@"login_count":@1}];
+                 NSDictionary *data = [json objectForKey:@"data"];
+                 if (data && data != nil) {
+                     NSDictionary *login = [data objectForKey:@"login"];
+                     if (login && login != nil) {
+                         
+                         self.sharedData.isLoggedIn = YES;
+                         
+                         //Load data
+                         [UserManager saveUserSetting:login];
+                         [UserManager updateLocalSetting];
+                         
+                         self.sharedData.help_phone = login[@"help_phone"];
+                         
+                         self.didHerokuLogin = YES;
+                         
+                         
+                         self.sharedData.matchMe = [login[@"matchme"] boolValue];
+                         self.sharedData.feedBadge.hidden = !(self.sharedData.matchMe);
+                         self.sharedData.feedBadge.canShow = self.sharedData.matchMe;
+                         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+                         
+                         
+                         AnalyticManager *analyticManager = [AnalyticManager sharedManager];
+                         if([login[@"is_new_user"] boolValue])
+                         {
+                             [analyticManager setMixPanelOnSignUp];
+                             [analyticManager trackMixPanelWithDict:@"Sign Up" withDict:@{}];
+                             [analyticManager setMixPanelOnceParams];
+                             
+                             NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+                             [defaults removeObjectForKey:@"SHOWED_WALKTHROUGH"];
+                             [defaults synchronize];
+                             
+                             self.sharedData.walkthroughOn = YES;
+                             
+                         }else{
+                             // tech debt : set dummy profile!!
+                             [analyticManager createMixPanelDummyProfile];
+                             [analyticManager setMixPanelOnLogin];
+                             
+                             if([defaults objectForKey:@"SHOWED_WALKTHROUGH"])
+                             {
+                                 self.sharedData.isInAskingNotification = YES;
+                                 [[NSNotificationCenter defaultCenter]
+                                  postNotificationName:@"ASK_APN_PERMISSION"
+                                  object:self];
+                             }
+                             
+                             NSString *isFirst = ([defaults objectForKey:@"FIRST_RUN"])?@"NO":@"YES";
+                             
+                             [analyticManager trackMixPanelWithDict:@"Log In" withDict:@{@"new_device":isFirst}];
+                             [analyticManager trackMixPanelIncrementWithDict:@{@"login_count":@1}];
+                         }
+                         [analyticManager setMixPanelUserProfile];
+                         [analyticManager setMixPanelSuperProperties];
+                         
+                         //This should be after settings are set!
+                         [[NSNotificationCenter defaultCenter]
+                          postNotificationName:@"HIDE_LOGIN"
+                          object:self];
+                         
+                         [self checkAppsFlyerData];
+                         [self performSelector:@selector(getUserImages) withObject:nil afterDelay:2.0];
+                         
+                     }
+                 }
              }
-             [analyticManager setMixPanelUserProfile];
-             [analyticManager setMixPanelSuperProperties];
-             
-             //This should be after settings are set!
-             [[NSNotificationCenter defaultCenter]
-              postNotificationName:@"HIDE_LOGIN"
-              object:self];
-             
-             [self checkAppsFlyerData];
-             [self performSelector:@selector(getUserImages) withObject:nil afterDelay:2.0];
-             
-         }else{
-             NSLog(@"APN_NOT_SUCCESS!!!!");
-             [self showUpgrade];
-         }
+             @catch (NSException *exception) {
+                 
+             }
+             @finally {
+                 
+             }
+         });
          
      } failure:^(AFHTTPRequestOperation *operation, NSError *error)
      {
@@ -698,7 +725,7 @@
     [manager POST:url parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject)
      {
          NSLog(@"PHOTO_UPDATE_responseObject :: %@",responseObject);
-         if(responseObject[@"success"])
+         if(responseObject[@"response"])
          {
              NSLog(@"PHOTO_UPDATE_SUCCESS!!!!");
              

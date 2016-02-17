@@ -25,9 +25,9 @@ NSString *const JiggieItunesID = @"1047291489";
 
 
 //URLs with substitution
-NSString *const PHBaseURL = @"https://jiggie-dev.herokuapp.com/app/v3";
-NSString *const PHBaseNewURL = @"https://api-dev.jiggieapp.com/app/v3";
-NSString *const PHBaseDomain = @"https://jiggie-dev.herokuapp.com";
+NSString *const PHBaseURL = @"https://jiggie.herokuapp.com/app/v3";
+NSString *const PHBaseNewURL = @"https://api.jiggieapp.com/app/v3";
+NSString *const PHBaseDomain = @"https://jiggie.herokuapp.com";
 
 
 //NSString *const PHBaseDomain = @"https://partyhostapp.herokuapp.com";
@@ -131,7 +131,7 @@ int const PHButtonHeight = 50; //This is the button at bottom of screen
     NSString *url = [NSString stringWithString:PHPhoneVerifySendURL];
     url = [url stringByReplacingOccurrencesOfString:@":phone" withString:phone];
     url = [url stringByReplacingOccurrencesOfString:@":fb_id" withString:fb_id];
-    return [NSString stringWithFormat:@"%@%@",PHBaseURL,url];
+    return [NSString stringWithFormat:@"%@%@",PHBaseNewURL,url];
 }
 
 +(NSString*)phoneVerifyValidateURL:(NSString*)fb_id token:(NSString*)token
@@ -139,7 +139,7 @@ int const PHButtonHeight = 50; //This is the button at bottom of screen
     NSString *url = [NSString stringWithString:PHPhoneVerifyValidateURL];
     url = [url stringByReplacingOccurrencesOfString:@":token" withString:token];
     url = [url stringByReplacingOccurrencesOfString:@":fb_id" withString:fb_id];
-    return [NSString stringWithFormat:@"%@%@",PHBaseURL,url];
+    return [NSString stringWithFormat:@"%@%@",PHBaseNewURL,url];
 }
 
 +(NSString*)guestListingsURL:(NSString*)event_id fb_id:(NSString*)fb_id

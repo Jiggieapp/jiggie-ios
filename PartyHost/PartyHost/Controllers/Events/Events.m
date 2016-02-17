@@ -85,8 +85,45 @@
     [self.segmentationView setBackgroundColor:[UIColor redColor]];
     [self.mainCon addSubview:self.segmentationView];
     
+    CGFloat buttonSegmentationWidth = frame.size.width/3;
+    UIButton *todayButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [todayButton setFrame:CGRectMake(0, 0, buttonSegmentationWidth, 32)];
+    [todayButton setBackgroundColor:[UIColor clearColor]];
+    [todayButton setTitle:@"Today" forState:UIControlStateNormal];
+    [todayButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [[todayButton titleLabel] setFont:[UIFont phBlond:14]];
+    [todayButton setTag:1];
+    [todayButton addTarget:self action:@selector(segmentationButtonDidTap:) forControlEvents:UIControlEventTouchUpInside];
+    [self.segmentationView addSubview:todayButton];
+    
+    UIButton *tomorrowButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [tomorrowButton setFrame:CGRectMake(buttonSegmentationWidth, 0, buttonSegmentationWidth, 32)];
+    [tomorrowButton setBackgroundColor:[UIColor clearColor]];
+    [tomorrowButton setTitle:@"Tomorrow" forState:UIControlStateNormal];
+    [tomorrowButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [[tomorrowButton titleLabel] setFont:[UIFont phBlond:14]];
+    [tomorrowButton setTag:2];
+    [tomorrowButton addTarget:self action:@selector(segmentationButtonDidTap:) forControlEvents:UIControlEventTouchUpInside];
+    [self.segmentationView addSubview:tomorrowButton];
+    
+    UIButton *upcomingButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [upcomingButton setFrame:CGRectMake(buttonSegmentationWidth * 2, 0, buttonSegmentationWidth, 32)];
+    [upcomingButton setBackgroundColor:[UIColor clearColor]];
+    [upcomingButton setTitle:@"Upcoming" forState:UIControlStateNormal];
+    [upcomingButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [[upcomingButton titleLabel] setFont:[UIFont phBlond:14]];
+    [upcomingButton setTag:2];
+    [upcomingButton addTarget:self action:@selector(segmentationButtonDidTap:) forControlEvents:UIControlEventTouchUpInside];
+    [self.segmentationView addSubview:upcomingButton];
+    
+    self.segmentationIndicator = [[UIView alloc] initWithFrame:CGRectMake(0, 32, buttonSegmentationWidth, 2)];
+    [self.segmentationIndicator setBackgroundColor:[UIColor whiteColor]];
+    [self.segmentationView addSubview:self.segmentationIndicator];
+    
+    self.currentSegmentationIndex = 1;
+    
     self.eventsA = [[NSMutableArray alloc] init];
-    self.eventsList = [[UITableView alloc] initWithFrame:CGRectMake(0, 40, frame.size.width, frame.size.height - self.tabBar.bounds.size.height - 34 - 20)];
+    self.eventsList = [[UITableView alloc] initWithFrame:CGRectMake(0, 40 + 34, frame.size.width, frame.size.height - self.tabBar.bounds.size.height - 20)];
     self.eventsList.backgroundColor = [UIColor clearColor];
     self.eventsList.delegate = self;
     self.eventsList.dataSource = self;
@@ -751,6 +788,11 @@
     [eventsRowCell wentOffscreen];
 }
 
+#pragma mark - Segmentation
+-(void)segmentationButtonDidTap:(id)sender {
+    
+}
+
 #pragma mark - Filter
 -(void)showFilter {
     
@@ -774,7 +816,7 @@
     NSDictionary *params = [self.sharedData createSaveSettingsParams];
     [manager POST:url parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject)
      {
-         if(responseObject[@"success"]) {
+         if(responseObject[@"response"]) {
             [self loadData];
          }
          

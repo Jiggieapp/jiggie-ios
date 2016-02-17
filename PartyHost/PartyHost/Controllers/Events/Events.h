@@ -24,12 +24,12 @@
 
 @property (strong, nonatomic) SharedData    *sharedData;
 
-
 @property(nonatomic,strong) UIView              *tabBar;
 @property(nonatomic,strong) UILabel             *title;
 @property(nonatomic,strong) UIView              *mainCon;
 @property(nonatomic,strong) NSMutableArray      *eventsA;
 @property(nonatomic,strong) UIView              *segmentationView;
+@property(nonatomic,strong) UIView              *segmentationIndicator;
 @property(nonatomic,strong) UITableView         *eventsList;
 @property(nonatomic,assign) BOOL                needUpdateContents;
 @property(nonatomic,assign) BOOL                isEventsLoaded;
@@ -58,10 +58,13 @@
 @property (nonatomic, strong) UICollectionView *filterTagCollection;
 @property (nonatomic, strong) NSMutableArray *tagArray;
 
+@property (nonatomic, assign) NSInteger         currentSegmentationIndex;
+
 @property (nonatomic, retain) NSFetchedResultsController *fetchedResultsController;
 @property (nonatomic, retain) NSManagedObjectContext *managedObjectContext;
 
 -(void)initClass;
 -(void)resetApp;
 -(void)eventsPreSelectHandler;
+
 @end
