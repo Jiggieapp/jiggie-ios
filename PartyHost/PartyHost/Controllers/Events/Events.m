@@ -790,6 +790,12 @@
 
 #pragma mark - Segmentation
 -(void)segmentationButtonDidTap:(id)sender {
+    NSInteger senderTag = (NSInteger)[sender tag];
+    
+    if (senderTag == self.currentSegmentationIndex) {
+        return;
+    }
+    
     
 }
 
