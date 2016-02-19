@@ -112,7 +112,7 @@
     [upcomingButton setTitle:@"Upcoming" forState:UIControlStateNormal];
     [upcomingButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [[upcomingButton titleLabel] setFont:[UIFont phBlond:14]];
-    [upcomingButton setTag:2];
+    [upcomingButton setTag:3];
     [upcomingButton addTarget:self action:@selector(segmentationButtonDidTap:) forControlEvents:UIControlEventTouchUpInside];
     [self.segmentationView addSubview:upcomingButton];
     
@@ -133,6 +133,45 @@
     self.eventsList.showsVerticalScrollIndicator = NO;
     self.eventsList.hidden = YES;
     [self.mainCon addSubview:self.eventsList];
+    
+    self.tableScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 40 + 34, frame.size.width, frame.size.height - self.tabBar.bounds.size.height - 20)];
+    [self.tableScrollView setBackgroundColor:[UIColor clearColor]];
+    [self.tableScrollView setContentSize:CGSizeMake(self.tableScrollView.bounds.size.width * 3, self.tableScrollView.bounds.size.height)];
+    [self.tableScrollView setPagingEnabled:YES];
+    [self.tableScrollView setShowsHorizontalScrollIndicator:NO];
+    [self.tableScrollView setBounces:NO];
+    [self.tableScrollView setDelegate:self];
+    [self.mainCon addSubview:self.tableScrollView];
+    
+    self.events1List = [[UITableView alloc] initWithFrame:CGRectMake(self.tableScrollView.bounds.size.width * 0, 0, self.tableScrollView.bounds.size.width, self.tableScrollView.bounds.size.height)];
+    self.events1List.backgroundColor = [UIColor redColor];
+    self.events1List.delegate = self;
+    self.events1List.dataSource = self;
+    self.events1List.separatorColor = [UIColor clearColor];
+    self.events1List.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.events1List.allowsMultipleSelectionDuringEditing = NO;
+    self.events1List.showsVerticalScrollIndicator = NO;
+    [self.tableScrollView addSubview:self.events1List];
+    
+    self.events2List = [[UITableView alloc] initWithFrame:CGRectMake(self.tableScrollView.bounds.size.width * 1, 0, self.tableScrollView.bounds.size.width, self.tableScrollView.bounds.size.height)];
+    self.events2List.backgroundColor = [UIColor blueColor];
+    self.events2List.delegate = self;
+    self.events2List.dataSource = self;
+    self.events2List.separatorColor = [UIColor clearColor];
+    self.events2List.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.events2List.allowsMultipleSelectionDuringEditing = NO;
+    self.events2List.showsVerticalScrollIndicator = NO;
+    [self.tableScrollView addSubview:self.events2List];
+    
+    self.events3List = [[UITableView alloc] initWithFrame:CGRectMake(self.tableScrollView.bounds.size.width * 2, 0, self.tableScrollView.bounds.size.width, self.tableScrollView.bounds.size.height)];
+    self.events3List.backgroundColor = [UIColor yellowColor];
+    self.events3List.delegate = self;
+    self.events3List.dataSource = self;
+    self.events3List.separatorColor = [UIColor clearColor];
+    self.events3List.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.events3List.allowsMultipleSelectionDuringEditing = NO;
+    self.events3List.showsVerticalScrollIndicator = NO;
+    [self.tableScrollView addSubview:self.events3List];
     
     //When there are no entries
     self.emptyView = [[EmptyView alloc] initWithFrame:CGRectMake(0, 40, frame.size.width, frame.size.height - 60)];
@@ -195,20 +234,6 @@
     self.eventsHostDetail = [[EventsHostDetail alloc] initWithFrame:CGRectMake(self.sharedData.screenWidth * 3, -20, self.sharedData.screenWidth, self.mainCon.frame.size.height)];
     [self.mainCon addSubview:self.eventsHostDetail];
     
-    
-    
-    [[NSNotificationCenter defaultCenter]
-     addObserver:self
-     selector:@selector(goToNextSection)
-     name:@"EVENTS_GO_DOWN"
-     object:nil];
-    
-    [[NSNotificationCenter defaultCenter]
-     addObserver:self
-     selector:@selector(goToPrevSection)
-     name:@"EVENTS_GO_UP"
-     object:nil];
-    
     [[NSNotificationCenter defaultCenter]
      addObserver:self
      selector:@selector(goHomeNoLoad)
@@ -270,17 +295,17 @@
      name:@"EVENTS_TAPPED"
      object:nil];
     
-    [[NSNotificationCenter defaultCenter]
-     addObserver:self
-     selector:@selector(eventsPreSelectHandler)
-     name:@"EVENTS_PRESELECT"
-     object:nil];
+//    [[NSNotificationCenter defaultCenter]
+//     addObserver:self
+//     selector:@selector(eventsPreSelectHandler)
+//     name:@"EVENTS_PRESELECT"
+//     object:nil];
     
-    [[NSNotificationCenter defaultCenter]
-     addObserver:self
-     selector:@selector(goToInitHosting)
-     name:@"GO_TO_INIT_HOSTING"
-     object:nil];
+//    [[NSNotificationCenter defaultCenter]
+//     addObserver:self
+//     selector:@selector(goToInitHosting)
+//     name:@"GO_TO_INIT_HOSTING"
+//     object:nil];
     
     [[NSNotificationCenter defaultCenter]
      addObserver:self
@@ -355,11 +380,6 @@
     }
 }
 
--(void)eventsPreSelectHandler
-{
-    [self tableView:self.eventsList didSelectRowAtIndexPath:self.sharedData.cHost_index_path];
-}
-
 -(void)eventsTappedHandler
 {
     if(self.mainCon.frame.origin.x < 0) //Not on events page
@@ -368,26 +388,6 @@
     }else{ //Scroll to top
         [self.eventsList setContentOffset:CGPointZero animated:YES];
     }
-}
-
--(void)goToNextSection
-{
-    NSUInteger sectionNumber = [[self.eventsList indexPathForCell:[[self.eventsList visibleCells] objectAtIndex:0]] section];
-    sectionNumber = (sectionNumber + 1 < [self.eventsA count])?sectionNumber + 1:sectionNumber;
-    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:sectionNumber];
-    [self.eventsList scrollToRowAtIndexPath:indexPath
-                         atScrollPosition:UITableViewScrollPositionTop
-                                 animated:YES];
-}
-
--(void)goToPrevSection
-{
-    //NSUInteger sectionNumber = [[self.eventsList indexPathForCell:[[self.eventsList visibleCells] objectAtIndex:0]] section];
-    //sectionNumber = (sectionNumber - 2 > -1)?sectionNumber - 2:sectionNumber;
-    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
-    [self.eventsList scrollToRowAtIndexPath:indexPath
-                           atScrollPosition:UITableViewScrollPositionTop
-                                   animated:YES];
 }
 
 #pragma mark - Fetch
@@ -659,38 +659,6 @@
      }];
 }
 
--(void)goToInitHosting
-{
-    for (int k = 0; k < [self.eventsA count]; k++)
-    {
-        for (int l = 0; l < [[self.eventsA objectAtIndex:k][@"events"] count]; l++)
-        {
-            NSDictionary *dict = [[self.eventsA objectAtIndex:k][@"events"] objectAtIndex:l];
-            
-            for (int m = 0; m < [[dict objectForKey:@"hostings"] count]; m++)
-            {
-                NSDictionary *hosting = [[dict objectForKey:@"hostings"] objectAtIndex:m];
-                if([hosting[@"_id"] isEqualToString:self.sharedData.cInitHosting_id])
-                {
-                    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:l inSection:k];
-                    [self.eventsList scrollToRowAtIndexPath:indexPath
-                                           atScrollPosition:UITableViewScrollPositionTop
-                                                   animated:YES];
-                    self.sharedData.cHost_index_path = indexPath;
-                    self.sharedData.cHost_index = m;
-                    [[NSNotificationCenter defaultCenter]
-                     postNotificationName:@"EVENTS_PRESELECT"
-                     object:self];
-                    
-                    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-                    [defaults setObject:@"YES" forKey:@"init_hosting"];
-                    [defaults synchronize];
-                }
-            }
-        }
-    }
-}
-
 -(void)loadImages
 {
     int count = 0;
@@ -796,7 +764,46 @@
         return;
     }
     
+    self.currentSegmentationIndex = senderTag;
     
+    CGFloat buttonSegmentationWidth = self.frame.size.width/3;
+    
+    [UIView animateWithDuration:0.25 animations:^()
+     {
+         self.segmentationIndicator.frame = CGRectMake((senderTag - 1) * buttonSegmentationWidth,
+                                                       self.segmentationIndicator.frame.origin.y,
+                                                       self.segmentationIndicator.bounds.size.width,
+                                                       self.segmentationIndicator.bounds.size.height);
+         
+     } completion:^(BOOL finished){
+         
+     }];
+    
+    [UIView animateWithDuration:0.5 animations:^()
+     {
+         [self.tableScrollView setContentOffset:CGPointMake((senderTag - 1) * self.tableScrollView.bounds.size.width, 0)];
+         
+     } completion:^(BOOL finished){
+         
+     }];
+}
+
+#pragma mark UIScrollViewDelegate
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView
+                  willDecelerate:(BOOL)decelerate {
+    CGPoint offset = scrollView.contentOffset;
+    NSInteger currentPage = offset.x / scrollView.bounds.size.width;
+    CGFloat buttonSegmentationWidth = self.frame.size.width/3;
+    
+    [UIView animateWithDuration:0.25 animations:^()
+     {
+         self.segmentationIndicator.frame = CGRectMake(currentPage * buttonSegmentationWidth,
+                                                       self.segmentationIndicator.frame.origin.y,
+                                                       self.segmentationIndicator.bounds.size.width,
+                                                       self.segmentationIndicator.bounds.size.height);
+     } completion:^(BOOL finished) {
+         
+     }];
 }
 
 #pragma mark - Filter

@@ -17,7 +17,7 @@
 #import "PHImage.h"
 
 @interface Events : UIView
-<UITableViewDelegate,UITableViewDataSource,UITextViewDelegate,UIAlertViewDelegate,NSFetchedResultsControllerDelegate,UICollectionViewDataSource,UICollectionViewDelegate,UICollectionViewDelegateFlowLayout> {
+<UITableViewDelegate,UITableViewDataSource,UITextViewDelegate,UIAlertViewDelegate,NSFetchedResultsControllerDelegate,UICollectionViewDataSource,UICollectionViewDelegate,UICollectionViewDelegateFlowLayout, UIScrollViewDelegate> {
     NSFetchedResultsController *fetchedResultsController;
     NSManagedObjectContext *managedObjectContext;
 }
@@ -30,6 +30,10 @@
 @property(nonatomic,strong) NSMutableArray      *eventsA;
 @property(nonatomic,strong) UIView              *segmentationView;
 @property(nonatomic,strong) UIView              *segmentationIndicator;
+@property(nonatomic,strong) UIScrollView        *tableScrollView;
+@property(nonatomic,strong) UITableView         *events1List;
+@property(nonatomic,strong) UITableView         *events2List;
+@property(nonatomic,strong) UITableView         *events3List;
 @property(nonatomic,strong) UITableView         *eventsList;
 @property(nonatomic,assign) BOOL                needUpdateContents;
 @property(nonatomic,assign) BOOL                isEventsLoaded;
@@ -65,6 +69,5 @@
 
 -(void)initClass;
 -(void)resetApp;
--(void)eventsPreSelectHandler;
 
 @end
