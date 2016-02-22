@@ -27,14 +27,15 @@
 @property(nonatomic,strong) UIView              *tabBar;
 @property(nonatomic,strong) UILabel             *title;
 @property(nonatomic,strong) UIView              *mainCon;
-@property(nonatomic,strong) NSMutableArray      *eventsA;
+@property(nonatomic,strong) NSMutableArray      *eventsToday;
+@property(nonatomic,strong) NSMutableArray      *eventsTomorrow;
+@property(nonatomic,strong) NSMutableArray      *eventsUpcoming;
 @property(nonatomic,strong) UIView              *segmentationView;
 @property(nonatomic,strong) UIView              *segmentationIndicator;
 @property(nonatomic,strong) UIScrollView        *tableScrollView;
 @property(nonatomic,strong) UITableView         *events1List;
 @property(nonatomic,strong) UITableView         *events2List;
 @property(nonatomic,strong) UITableView         *events3List;
-@property(nonatomic,strong) UITableView         *eventsList;
 @property(nonatomic,assign) BOOL                needUpdateContents;
 @property(nonatomic,assign) BOOL                isEventsLoaded;
 @property(nonatomic,assign) BOOL                didLoadFromHostings;
@@ -46,10 +47,7 @@
 @property(nonatomic,strong) EventsHostDetail    *eventsHostDetail;
 @property(nonatomic,strong) NSString            *cName;
 
-
 @property(nonatomic,strong) UIView              *whiteBK;
-
-@property(nonatomic,strong) NSIndexPath         *cGuestListingIndexPath;
 
 //When there are no entries to see
 @property(nonatomic,strong) EmptyView *emptyView;
