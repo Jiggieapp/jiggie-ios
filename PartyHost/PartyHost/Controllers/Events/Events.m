@@ -664,7 +664,7 @@
     NSDate *tomorrow = [cal dateFromComponents:components];
     
     for (Event *event in [self.fetchedResultsController fetchedObjects]) {
-        components = [cal components:(NSCalendarUnitEra | NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay) fromDate:event.endDatetime];
+        components = [cal components:(NSCalendarUnitEra | NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay) fromDate:event.startDatetime];
         NSDate *otherDate = [cal dateFromComponents:components];
         
         if([today isEqualToDate:otherDate]) {
