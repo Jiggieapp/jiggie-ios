@@ -723,21 +723,20 @@ static SharedData *sharedInstance = nil;
         NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
         NSDictionary *dict = [prefs objectForKey:@"user.setting"];
         
-        NSDictionary *newDict = @{@"data":@{@"_id":dict[@"data"][@"_id"],
-                                            @"account_type":dict[@"data"][@"account_type"],
-                                            @"experiences":self.experiences,
-                                            @"fb_id":dict[@"data"][@"fb_id"],
-                                            @"gender":dict[@"data"][@"gender"],
-                                            @"gender_interest":self.gender_interest,
-                                            @"matchme":dict[@"data"][@"matchme"],
-                                            @"notifications":@{
-                                                    @"chat":[NSNumber numberWithBool:self.notification_messages],
-                                                    @"feed":[NSNumber numberWithBool:self.notification_feed],
-                                                    @"location":[NSNumber numberWithBool:self.location_on]},
-                                            @"payment":dict[@"data"][@"payment"],
-                                            @"phone":self.phone,
-                                            @"updated_at":dict[@"data"][@"updated_at"]
-                                          }
+        NSDictionary *newDict = @{@"_id":dict[@"_id"],
+                                    @"account_type":dict[@"account_type"],
+                                    @"experiences":self.experiences,
+                                    @"fb_id":dict[@"fb_id"],
+                                    @"gender":dict[@"gender"],
+                                    @"gender_interest":self.gender_interest,
+                                    @"matchme":dict[@"matchme"],
+                                    @"notifications":@{
+                                            @"chat":[NSNumber numberWithBool:self.notification_messages],
+                                            @"feed":[NSNumber numberWithBool:self.notification_feed],
+                                            @"location":[NSNumber numberWithBool:self.location_on]},
+                                    @"payment":dict[@"payment"],
+                                    @"phone":self.phone,
+                                    @"updated_at":dict[@"updated_at"]
                                   };
         
         [prefs setObject:newDict forKey:@"user.setting"];
