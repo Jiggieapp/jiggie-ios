@@ -290,8 +290,26 @@
     [manager GET:url parameters:@{} success:^(AFHTTPRequestOperation *operation, id responseObject)
      {
          
+         //Hide spinner
+         [[NSNotificationCenter defaultCenter]
+          postNotificationName:@"HIDE_LOADING"
+          object:self];
+         
          NSInteger responseStatusCode = operation.response.statusCode;
-         if (responseStatusCode != 200) {
+         if (responseStatusCode == 204) {
+             self.hideView.hidden = YES;
+             self.feedTable.hidden = YES;
+             [self.emptyView setMode:@"empty"];
+             
+             //Clear table
+             [self.feedData removeAllObjects];
+             [self.feedTable reloadData];
+             
+             self.startedPolling = NO;
+             [self performSelector:@selector(startPolling) withObject:nil afterDelay:POLL_SECONDS];
+             return;
+             
+         } else if (responseStatusCode != 200) {
              self.startedPolling = NO;
              [self performSelector:@selector(startPolling) withObject:nil afterDelay:POLL_SECONDS];
              return;
@@ -394,11 +412,6 @@
              
          }
          
-         //Hide spinner
-         [[NSNotificationCenter defaultCenter]
-          postNotificationName:@"HIDE_LOADING"
-          object:self];
-         
          self.startedPolling = NO;
          [self performSelector:@selector(startPolling) withObject:nil afterDelay:POLL_SECONDS];
          
@@ -407,6 +420,11 @@
          NSLog(@"ERROR :: %@",error);
          
          if (self.sharedData.isInFeed && (error.code == -1009 || error.code == - 1005)) {
+             if(self.feedData.count == 0) {
+                 self.hideView.hidden = YES;
+                 self.feedTable.hidden = YES;
+                 [self.emptyView setMode:@"empty"];
+             }
              [SVProgressHUD showInfoWithStatus:@"Please check your internet connection"];
          }
          

@@ -312,7 +312,7 @@
           postNotificationName:@"HIDE_LOADING"
           object:self];
          
-         if(![responseObject[@"success"] boolValue])
+         if(![responseObject[@"response"] boolValue])
          {
              
              UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Could Not Verify" message:responseObject[@"reason"] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];

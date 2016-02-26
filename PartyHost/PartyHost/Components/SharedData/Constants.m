@@ -131,7 +131,7 @@ int const PHButtonHeight = 50; //This is the button at bottom of screen
     NSString *url = [NSString stringWithString:PHPhoneVerifySendURL];
     url = [url stringByReplacingOccurrencesOfString:@":phone" withString:phone];
     url = [url stringByReplacingOccurrencesOfString:@":fb_id" withString:fb_id];
-    return [NSString stringWithFormat:@"%@%@",PHBaseURL,url];
+    return [NSString stringWithFormat:@"%@%@",PHBaseNewURL,url];
 }
 
 +(NSString*)phoneVerifyValidateURL:(NSString*)fb_id token:(NSString*)token
@@ -139,7 +139,7 @@ int const PHButtonHeight = 50; //This is the button at bottom of screen
     NSString *url = [NSString stringWithString:PHPhoneVerifyValidateURL];
     url = [url stringByReplacingOccurrencesOfString:@":token" withString:token];
     url = [url stringByReplacingOccurrencesOfString:@":fb_id" withString:fb_id];
-    return [NSString stringWithFormat:@"%@%@",PHBaseURL,url];
+    return [NSString stringWithFormat:@"%@%@",PHBaseNewURL,url];
 }
 
 +(NSString*)guestListingsURL:(NSString*)event_id fb_id:(NSString*)fb_id
