@@ -74,6 +74,9 @@ int totalPages;
 - (void)initClass {
     self.sharedData = [SharedData sharedInstance];
     
+    pageIndex = 0;
+    [self buttonClicked:nil];
+    
     //Set gender choice
     if([self.sharedData.gender isEqual:@"male"]) {[self.genderView maleSet];}
     else {[self.genderView femaleSet];}
@@ -102,35 +105,35 @@ int totalPages;
     NSString *url = [Constants userTagListURL];
     [manager GET:url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject)
      {
-         //Get choices and uppercase
-         NSMutableArray *arr = [[NSMutableArray alloc] init];
-         [self.sharedData.experiences removeAllObjects];
-         for(int i=0;i<[responseObject count];i++) {
-             NSString *str = responseObject[i];
-             [arr addObject:str];
-             [self.sharedData.experiences addObject:str];
-         }
-         
-         
-         
-         //Select all those picks now if exists
-         self.pickView.choiceArray = arr;
-         [self.pickView.collectionView reloadData];
-         for(int i=0;i<[self.pickView.choiceArray count];i++)
-         {
-             [self.pickView.collectionView selectItemAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0] animated:NO scrollPosition:UICollectionViewScrollPositionNone];
+         NSInteger responseStatusCode = operation.response.statusCode;
+         if (responseStatusCode == 200) {
              
-             /*
-             for(int j=0;j<[self.sharedData.experiences count];j++)
-             {
-                if([self.pickView.choiceArray[i] isEqualToString:self.sharedData.experiences[j]])
-                {
-                    [self.pickView.collectionView selectItemAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0] animated:NO scrollPosition:UICollectionViewScrollPositionNone];
-                    NSLog(@"PICKED");
-                    break;
-                }
+             @try {
+                 NSDictionary *data = [responseObject objectForKey:@"data"];
+                 NSArray *tagslist = [data objectForKey:@"tagslist"];
+                 //Get choices and uppercase
+                 NSMutableArray *arr = [[NSMutableArray alloc] init];
+                 [self.sharedData.experiences removeAllObjects];
+                 for (NSString *tag in tagslist) {
+                     [arr addObject:tag];
+                     [self.sharedData.experiences addObject:tag];
+                 }
+                 
+                 //Select all those picks now if exists
+                 self.pickView.choiceArray = arr;
+                 [self.pickView.collectionView reloadData];
+                 for(int i=0;i<[self.pickView.choiceArray count];i++)
+                 {
+                     [self.pickView.collectionView selectItemAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0] animated:NO scrollPosition:UICollectionViewScrollPositionNone];
+                 }
+
              }
-             */
+             @catch (NSException *exception) {
+                 
+             }
+             @finally {
+                 
+             }
          }
          
          [[NSNotificationCenter defaultCenter] postNotificationName:@"HIDE_LOADING" object:self];

@@ -476,7 +476,7 @@
     
     AFHTTPRequestOperationManager *manager = [self.sharedData getOperationManager];
     
-    NSString *url = [NSString stringWithFormat:@"%@/memberinfo/%@/%@/%@",PHBaseURL,self.sharedData.account_type,self.sharedData.member_fb_id,self.sharedData.fb_id];
+    NSString *url = [NSString stringWithFormat:@"%@/memberinfo/%@",PHBaseNewURL,self.sharedData.member_fb_id];
     
     [manager GET:url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject)
      {
@@ -484,123 +484,147 @@
          
          [[AnalyticManager sharedManager] trackMixPanelWithDict:@"View Member Profile" withDict:@{}];
          
-         [self loadMutualFriends];
          
-         if(!responseObject[@"about"])
-         {
-             [self loadDataFromRuby];
+         NSInteger responseStatusCode = operation.response.statusCode;
+         if (responseStatusCode != 200) {
+             [[NSNotificationCenter defaultCenter]
+              postNotificationName:@"HIDE_LOADING"
+              object:self];
              return;
          }
          
-         //Store the dictionary for later use, like in writing reviews
-         [self.sharedData.memberProfileDict removeAllObjects];
-         [self.sharedData.memberProfileDict addEntriesFromDictionary:responseObject];
-         
-        self.pControl.currentPage = 0;
-        for (int j = 0; j < [responseObject[@"photos"] count]; j++)
-        {
-            [dict[@"photos"] addObject:responseObject[@"photos"][j]];
-        }
-         self.pControl.numberOfPages = [responseObject[@"photos"] count];
-         self.pControl.hidden = NO;
-         
-         if([responseObject[@"photos"] count] == 0)
-         {
-             [dict[@"photos"] addObject:PHBlankImgURL];
-             self.pControl.numberOfPages = 1;
-             self.pControl.hidden = YES;
-         }
-         
-         self.toLabel.text = [responseObject[@"user_first_name"] uppercaseString];
-         
-         self.nameLabel.text = [responseObject[@"user_first_name"] uppercaseString];
-         
-         if([responseObject[@"location"] length]==0) //No location?
-         {
-             self.cityLabel.text = @"JIGGIE MEMBER";
-         }
-         else
-         {
-             self.cityLabel.text = [responseObject[@"location"] uppercaseString];
-         }
-         
-         //self.aboutLabel.text = [NSString stringWithFormat:@"About %@:",self.nameLabel.text];
-         
-         NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-         [formatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US"]];
-         [formatter setDateFormat:@"MM/dd/yyyy"];
-         NSDate *birthday_date = [formatter dateFromString:responseObject[@"birthday"]];
-         
-         if(birthday_date)
-         {
-             NSDate* now = [NSDate date];
-             NSDateComponents* ageComponents = [[NSCalendar currentCalendar]
-                                                components:NSYearCalendarUnit
-                                                fromDate:birthday_date
-                                                toDate:now
-                                                options:0];
-             NSInteger age = [ageComponents year];
+         NSString *responseString = operation.responseString;
+         NSError *error;
+         NSDictionary *json = (NSDictionary *)[NSJSONSerialization
+                                               JSONObjectWithData:[responseString dataUsingEncoding:NSUTF8StringEncoding]
+                                               options:kNilOptions
+                                               error:&error];
+         dispatch_async(dispatch_get_main_queue(), ^{
              
+             if (json && json != nil) {
+                 NSDictionary *data = [json objectForKey:@"data"];
+                 if (data && data != nil) {
+                     NSDictionary *memberinfo = [data objectForKey:@"memberinfo"];
+                     if (memberinfo && memberinfo != nil) {
+                         [self loadMutualFriends];
+                         
+                         if(!memberinfo[@"about"])
+                         {
+                             [self loadDataFromRuby];
+                             return;
+                         }
+                         
+                         //Store the dictionary for later use, like in writing reviews
+                         [self.sharedData.memberProfileDict removeAllObjects];
+                         [self.sharedData.memberProfileDict addEntriesFromDictionary:memberinfo];
+                         
+                         self.pControl.currentPage = 0;
+                         for (int j = 0; j < [memberinfo[@"photos"] count]; j++)
+                         {
+                             [dict[@"photos"] addObject:memberinfo[@"photos"][j]];
+                         }
+                         self.pControl.numberOfPages = [memberinfo[@"photos"] count];
+                         self.pControl.hidden = NO;
+                         
+                         if([memberinfo[@"photos"] count] == 0)
+                         {
+                             [dict[@"photos"] addObject:PHBlankImgURL];
+                             self.pControl.numberOfPages = 1;
+                             self.pControl.hidden = YES;
+                         }
+                         
+                         self.toLabel.text = [memberinfo[@"user_first_name"] uppercaseString];
+                         
+                         self.nameLabel.text = [memberinfo[@"user_first_name"] uppercaseString];
+                         
+                         if([memberinfo[@"location"] length]==0) //No location?
+                         {
+                             self.cityLabel.text = @"JIGGIE MEMBER";
+                         }
+                         else
+                         {
+                             self.cityLabel.text = [memberinfo[@"location"] uppercaseString];
+                         }
+                         
+                         //self.aboutLabel.text = [NSString stringWithFormat:@"About %@:",self.nameLabel.text];
+                         
+                         NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+                         [formatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US"]];
+                         [formatter setDateFormat:@"MM/dd/yyyy"];
+                         NSDate *birthday_date = [formatter dateFromString:memberinfo[@"birthday"]];
+                         
+                         if(birthday_date)
+                         {
+                             NSDate* now = [NSDate date];
+                             NSDateComponents* ageComponents = [[NSCalendar currentCalendar]
+                                                                components:NSYearCalendarUnit
+                                                                fromDate:birthday_date
+                                                                toDate:now
+                                                                options:0];
+                             NSInteger age = [ageComponents year];
+                             
+                             if(age > 0)
+                             {
+                                 self.nameLabel.text = [NSString stringWithFormat:@"%@, %d",self.nameLabel.text,(int)age];
+                             }
+                         }
+                         
+                         self.picScroll.contentOffset = CGPointMake(0, 0);
+                         for (int i = 0; i < [dict[@"photos"] count]; i++)
+                         {
+                             UIView *picCon = [[UIView alloc] initWithFrame:CGRectMake(self.frame.size.width * i, 0, self.frame.size.width, self.picScroll.frame.size.height)];
+                             picCon.layer.masksToBounds = YES;
+                             PHImage *pic = [[PHImage alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.picScroll.frame.size.height)];
+                             pic.showLoading = YES;
+                             pic.backgroundColor = [UIColor lightGrayColor];
+                             pic.contentMode = UIViewContentModeScaleAspectFill;
+                             pic.alignTop = true;
+                             [pic loadImage:[dict[@"photos"] objectAtIndex:i] defaultImageNamed:nil];
+                             [picCon addSubview:pic];
+                             [self.picScroll addSubview:picCon];
+                             self.picScroll.contentSize = CGSizeMake(self.frame.size.width * (i + 1), self.picScroll.frame.size.height);
+                         }
+                         
+                         self.aboutBody.text = [memberinfo[@"about"] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+                         
+                         /*
+                          //Ratings & Reviews
+                          if([self.sharedData isGuest] && 1== 2) //Only guests can see reviews
+                          {
+                          int reviewCount = [responseObject[@"review_count"] intValue];
+                          if(reviewCount>0)
+                          {
+                          self.reviewLabel.text = [NSString stringWithFormat:@"%i Review%@",reviewCount,(reviewCount==1)?@"":@"s"];
+                          float rating = [responseObject[@"rating"] floatValue];
+                          [self.reviewRatingView updateRating:nil stars:rating];
+                          }
+                          else
+                          {
+                          self.reviewLabel.text = @"No Reviews";
+                          [self.reviewRatingView updateRating:nil stars:0];
+                          }
+                          }
+                          
+                          self.aboutBody.text = [responseObject[@"about"] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+                          
+                          self.hostingsBody.text = @"";
+                          for (int i = 0; i < [responseObject[@"hostings"] count]; i++)
+                          {
+                          NSDictionary *hosting = responseObject[@"hostings"][i];
+                          NSString *dateString = [Constants toDisplayDate:hosting[@"start_datetime_str"]];
+                          NSString *ln = [NSString stringWithFormat:@"%@ at %@\n",dateString,hosting[@"event"][@"venue"][@"name"]];
+                          self.hostingsBody.text = [self.hostingsBody.text stringByAppendingString:ln];
+                          }
+                          self.hostingsBody.text = [self.hostingsBody.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+                          */
+                         [self updateAboutPanel];
+                         
+                         self.aboutPanel.hidden = NO;
+                     }
+                 }
+             }
              
-             NSLog(@"AGE :: %d",(int)age);
-             
-             if(age > 0)
-             {
-                 self.nameLabel.text = [NSString stringWithFormat:@"%@, %d",self.nameLabel.text,(int)age];
-             }
-         }
-         
-         self.picScroll.contentOffset = CGPointMake(0, 0);
-         for (int i = 0; i < [dict[@"photos"] count]; i++)
-         {
-             UIView *picCon = [[UIView alloc] initWithFrame:CGRectMake(self.frame.size.width * i, 0, self.frame.size.width, self.picScroll.frame.size.height)];
-             picCon.layer.masksToBounds = YES;
-             PHImage *pic = [[PHImage alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.picScroll.frame.size.height)];
-             pic.showLoading = YES;
-             pic.backgroundColor = [UIColor lightGrayColor];
-             pic.contentMode = UIViewContentModeScaleAspectFill;
-             pic.alignTop = true;
-             [pic loadImage:[dict[@"photos"] objectAtIndex:i] defaultImageNamed:nil];
-             [picCon addSubview:pic];
-             [self.picScroll addSubview:picCon];
-             self.picScroll.contentSize = CGSizeMake(self.frame.size.width * (i + 1), self.picScroll.frame.size.height);
-         }
-         
-         self.aboutBody.text = [responseObject[@"about"] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-         
-         /*
-         //Ratings & Reviews
-         if([self.sharedData isGuest] && 1== 2) //Only guests can see reviews
-         {
-             int reviewCount = [responseObject[@"review_count"] intValue];
-             if(reviewCount>0)
-             {
-                 self.reviewLabel.text = [NSString stringWithFormat:@"%i Review%@",reviewCount,(reviewCount==1)?@"":@"s"];
-                 float rating = [responseObject[@"rating"] floatValue];
-                 [self.reviewRatingView updateRating:nil stars:rating];
-             }
-             else
-             {
-                 self.reviewLabel.text = @"No Reviews";
-                 [self.reviewRatingView updateRating:nil stars:0];
-             }
-         }
-         
-         self.aboutBody.text = [responseObject[@"about"] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-         
-         self.hostingsBody.text = @"";
-         for (int i = 0; i < [responseObject[@"hostings"] count]; i++)
-         {
-             NSDictionary *hosting = responseObject[@"hostings"][i];
-             NSString *dateString = [Constants toDisplayDate:hosting[@"start_datetime_str"]];
-             NSString *ln = [NSString stringWithFormat:@"%@ at %@\n",dateString,hosting[@"event"][@"venue"][@"name"]];
-             self.hostingsBody.text = [self.hostingsBody.text stringByAppendingString:ln];
-         }
-         self.hostingsBody.text = [self.hostingsBody.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-         */
-         [self updateAboutPanel];
-         
-         self.aboutPanel.hidden = NO;
+         });
          
          [[NSNotificationCenter defaultCenter]
           postNotificationName:@"HIDE_LOADING"
@@ -864,7 +888,7 @@
      {
          NSLog(@"MUTUALS_FRIENDS_RESPONSE :: %@",responseObject);
          
-         if([responseObject[@"success"] boolValue]) {
+         if([responseObject[@"response"] boolValue]) {
              [self.mutualFriends addObjectsFromArray:responseObject[@"friends"]];
              [self updateAboutPanel];
          }

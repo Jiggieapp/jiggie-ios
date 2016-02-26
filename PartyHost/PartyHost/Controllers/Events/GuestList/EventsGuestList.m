@@ -62,16 +62,6 @@
     self.hostersList.hidden = YES;
     [self addSubview:self.hostersList];
     
-    //Create big HOST HERE button
-    self.btnHostHere = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    self.btnHostHere.frame = CGRectMake(0, self.hostersList.frame.size.height + self.hostersList.frame.origin.y+1, self.sharedData.screenWidth, 44);
-    self.btnHostHere.titleLabel.font = [UIFont phBold:18];
-    [self.btnHostHere setTitle:@"BOOK TABLE" forState:UIControlStateNormal];
-    [self.btnHostHere setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [self.btnHostHere setBackgroundColor:[UIColor phLightTitleColor]];
-    [self.btnHostHere addTarget:self action:@selector(hostHereButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
-    //[self addSubview:self.btnHostHere];
-    
     //Create empty label
     self.labelEmpty = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.sharedData.screenWidth, self.sharedData.screenHeight)];
     self.labelEmpty.text = @"No guests interested yet.";
@@ -98,44 +88,12 @@
     return self;
 }
 
-//Go to the ADD HOSTING screen
--(void)hostHereButtonClicked:(UIButton *)button
-{
-    self.sharedData.cEventId_toLoad = self.mainDict[@"_id"];
-    
-    [self.sharedData.cAddEventDict removeAllObjects];
-    [self.sharedData.cAddEventDict addEntriesFromDictionary:self.mainDict];
-    
-    [[AnalyticManager sharedManager] trackMixPanelIncrementWithDict:@{@"host_here":@1}];
-    
-    [[NSNotificationCenter defaultCenter]
-     postNotificationName:@"SHOW_BOOKTABLE"
-     object:self];
-}
-
 -(void)initClass
 {
     self.sharedData.isGuestListingsShowing = YES;
     self.hostersList.contentOffset = CGPointMake(0, 0);
     self.hasMemberToLoad = (self.sharedData.cHost_index != -1);
     self.sharedData.cHost_fb_id = @"";
-}
-
--(void)recalculateHostHere:(BOOL)on
-{
-    //If not hosting then show big "HOST HERE" button
-    if(on==NO) //Host here!
-    {
-        self.btnHostHere.userInteractionEnabled = YES;
-        self.btnHostHere.backgroundColor = [UIColor phPurpleColor];
-        [self.btnHostHere setTitle:@"BOOK TABLE" forState:UIControlStateNormal];
-    }
-    else
-    {
-        self.btnHostHere.userInteractionEnabled = NO;
-        self.btnHostHere.backgroundColor = [UIColor phLightTitleColor];
-        [self.btnHostHere setTitle:@"YOU ARE HOSTING HERE" forState:UIControlStateNormal];
-    }
 }
 
 -(void)hostingLocTapHandler:(UILongPressGestureRecognizer *)sender
@@ -224,83 +182,86 @@
 
 -(void)loadData:(NSString*)event_id
 {
+    if (!event_id || event_id == nil) {
+        return;
+    }
+    
     self.event_id = [NSString stringWithString:event_id];
     [self reset];
     
     AFHTTPRequestOperationManager *manager = [self.sharedData getOperationManager];
     NSString *url = [Constants guestListingsURL:event_id fb_id:self.sharedData.fb_id];
-    url = [NSString stringWithFormat:@"%@/event/details/%@/%@/%@",PHBaseURL,event_id,self.sharedData.fb_id,self.sharedData.gender_interest];
-    
-    NSLog(@"EVENTS_GUEST_LIST_URL :: %@",url);
+    url = [NSString stringWithFormat:@"%@/event/interest/%@/%@/%@",PHBaseNewURL,event_id,self.sharedData.fb_id,self.sharedData.gender_interest];
     
     [manager GET:url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject)
      {
-         NSLog(@"EVENTS_GUEST_LIST_RESPONSE :: %@",responseObject);
+         NSInteger responseStatusCode = operation.response.statusCode;
+         if (responseStatusCode != 200) {
+             return;
+         }
+         
          [[AnalyticManager sharedManager] trackMixPanelWithDict:@"View Guest Listings" withDict:self.sharedData.mixPanelCEventDict];
-         [self populateData:responseObject];
+         NSDictionary *data = [responseObject objectForKey:@"data"];
+         if (data && data != nil) {
+             NSMutableArray *guestsInterests = [data objectForKey:@"guest_interests"];
+             if (guestsInterests && guestsInterests.count > 0) {
+                 [self populateData:guestsInterests];
+             }
+         }
      } failure:^(AFHTTPRequestOperation *operation, NSError *error)
      {
-         NSLog(@"EVENTS_GUEST_LIST_ERROR :: %@",error);
+         
      }];
 }
 
--(void)populateData:(NSMutableDictionary *)dict
+-(void)populateData:(NSMutableArray *)array
 {
-    //Store this for later use
-    [self.mainDict removeAllObjects];
-    [self.mainDict addEntriesFromDictionary:dict];
     
-    //Set current ID
-    self.event_id = [NSString stringWithString:dict[@"_id"]];
-    
-    //Save list
-    [self.hostersA removeAllObjects];
-    [self.hostersA addObjectsFromArray:[dict objectForKey:@"guests_viewed"]];
-    if([self.hostersA count] == 0) {
-        self.labelEmpty.hidden = NO;
-        self.hostersList.hidden = YES;
-    }
-    else {
-        self.labelEmpty.hidden = YES;
-        self.hostersList.hidden = NO;
-        
-        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-        if(![defaults objectForKey:@"SHOWED_EVENTS_GUEST_LIST_OVERLAY"])
-        {
-            [defaults setValue:@"YES" forKey:@"SHOWED_EVENTS_GUEST_LIST_OVERLAY"];
-            [defaults synchronize];
-            //[self.sharedData.overlayView popup:@"Meet people" subtitle: @"Connect with guests to start chatting!" x:0 y:self.sharedData.screenHeight - 100];
+    @try {
+        //Save list
+        [self.hostersA removeAllObjects];
+        [self.hostersA addObjectsFromArray:array];
+        if([self.hostersA count] == 0) {
+            self.labelEmpty.hidden = NO;
+            self.hostersList.hidden = YES;
         }
-    }
-    
-    //If not hosting then show big "HOST HERE" button
-    //[self recalculateHostHere:[dict[@"has_hostings"] boolValue]];
-    [self recalculateHostHere:NO];
-    
-    [self.hostersList reloadData];
-    
-    //Load member
-    if(self.hasMemberToLoad)
-    {
-        self.hasMemberToLoad = NO;
+        else {
+            self.labelEmpty.hidden = YES;
+            self.hostersList.hidden = NO;
+            
+            NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+            if(![defaults objectForKey:@"SHOWED_EVENTS_GUEST_LIST_OVERLAY"])
+            {
+                [defaults setValue:@"YES" forKey:@"SHOWED_EVENTS_GUEST_LIST_OVERLAY"];
+                [defaults synchronize];
+                //[self.sharedData.overlayView popup:@"Meet people" subtitle: @"Connect with guests to start chatting!" x:0 y:self.sharedData.screenHeight - 100];
+            }
+        }
         
-        dispatch_time_t delay = dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC * 0.5);
-        dispatch_after(delay, dispatch_get_main_queue(), ^(void){
-            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:self.sharedData.cHost_index inSection:0];
-            [self tableView:self.hostersList didSelectRowAtIndexPath:indexPath];
-            self.sharedData.cHost_index = -1;
-        });
+        [self.hostersList reloadData];
+        
+        //Load member
+        if(self.hasMemberToLoad)
+        {
+            self.hasMemberToLoad = NO;
+            
+            dispatch_time_t delay = dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC * 0.5);
+            dispatch_after(delay, dispatch_get_main_queue(), ^(void){
+                NSIndexPath *indexPath = [NSIndexPath indexPathForRow:self.sharedData.cHost_index inSection:0];
+                [self tableView:self.hostersList didSelectRowAtIndexPath:indexPath];
+                self.sharedData.cHost_index = -1;
+            });
+        }
+        
+        self.spinner.hidden = YES;
+        [self.spinner stopAnimating];
     }
-    
-    //Prepare venue data
-    [self.sharedData.eventsPage.eventsVenueDetail loadData:dict];
-    
-//    [[NSNotificationCenter defaultCenter]
-//     postNotificationName:@"HIDE_LOADING"
-//     object:self];
-    
-    self.spinner.hidden = YES;
-    [self.spinner stopAnimating];
+    @catch (NSException *exception) {
+        
+    }
+    @finally {
+        
+    }
 }
 
 @end

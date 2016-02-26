@@ -26,6 +26,7 @@ NSString *const JiggieItunesID = @"1047291489";
 
 //URLs with substitution
 NSString *const PHBaseURL = @"https://jiggie.herokuapp.com/app/v3";
+NSString *const PHBaseNewURL = @"https://api.jiggieapp.com/app/v3";
 NSString *const PHBaseDomain = @"https://jiggie.herokuapp.com";
 
 
@@ -55,6 +56,7 @@ NSString *const PHBlankImgURL = @"https://partyhostapp.herokuapp.com/img/fbperso
 //Date formats
 NSString *const PHDateFormatShort = @"MMM d, yyyy h:mm a"; //This is the format for date_str from API
 NSString *const PHDateFormatServer = @"yyyy-MM-dd'T'HH:mm:ss.SSSZ"; //Native server usually sends this
+NSString *const PHDateFormatApp = @"EEEE MMM dd, yyyy hh:mm a"; //Native server usually sends this
 
 
 int const PHTabHeight = 50; //Tabs at bottom of screen
@@ -100,13 +102,13 @@ int const PHButtonHeight = 50; //This is the button at bottom of screen
 +(NSString*)memberSettingsURL
 {
     NSString *url = [NSString stringWithString:PHMemberSettingsURL];
-    return [NSString stringWithFormat:@"%@%@",PHBaseURL,url];
+    return [NSString stringWithFormat:@"%@%@",PHBaseNewURL,url];
 }
 
 +(NSString*)userTagListURL
 {
     NSString *url = [NSString stringWithString:PHUserTagListURL];
-    return [NSString stringWithFormat:@"%@%@",PHBaseURL,url];
+    return [NSString stringWithFormat:@"%@%@",PHBaseNewURL,url];
 }
 
 +(NSString*)ordersAllURL:(NSString*)fb_id
@@ -129,7 +131,7 @@ int const PHButtonHeight = 50; //This is the button at bottom of screen
     NSString *url = [NSString stringWithString:PHPhoneVerifySendURL];
     url = [url stringByReplacingOccurrencesOfString:@":phone" withString:phone];
     url = [url stringByReplacingOccurrencesOfString:@":fb_id" withString:fb_id];
-    return [NSString stringWithFormat:@"%@%@",PHBaseURL,url];
+    return [NSString stringWithFormat:@"%@%@",PHBaseNewURL,url];
 }
 
 +(NSString*)phoneVerifyValidateURL:(NSString*)fb_id token:(NSString*)token
@@ -137,7 +139,7 @@ int const PHButtonHeight = 50; //This is the button at bottom of screen
     NSString *url = [NSString stringWithString:PHPhoneVerifyValidateURL];
     url = [url stringByReplacingOccurrencesOfString:@":token" withString:token];
     url = [url stringByReplacingOccurrencesOfString:@":fb_id" withString:fb_id];
-    return [NSString stringWithFormat:@"%@%@",PHBaseURL,url];
+    return [NSString stringWithFormat:@"%@%@",PHBaseNewURL,url];
 }
 
 +(NSString*)guestListingsURL:(NSString*)event_id fb_id:(NSString*)fb_id
@@ -328,6 +330,51 @@ int const PHButtonHeight = 50; //This is the button at bottom of screen
         endDatePart2 = [format stringFromDate:endDate];
     }
     
+    
+    return [NSString stringWithFormat:@"%@ At %@ to %@",startDatePart1,startDatePart2,endDatePart2];
+}
+
+//Convert dates from the server to a nicer display string
++(NSString*)toTitleDate:(NSDate *)dbStartDate dbEndDate:(NSDate *)dbEndDate
+{
+    NSDateFormatter *format = [[NSDateFormatter alloc] init];
+    [format setLocale:[NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"]];
+    [format setTimeZone:[NSTimeZone localTimeZone]];
+    
+    //Switch to nicer fate format
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+    
+    //Do start date
+    [format setDateFormat:@"EEEE, MMMM d"];
+    NSString *startDatePart1 = [format stringFromDate:dbStartDate];
+    NSDateComponents *startComponents = [calendar components:(NSCalendarUnitHour | NSCalendarUnitMinute) fromDate:dbStartDate];
+    NSString *startDatePart2;
+    if ([startComponents minute]>0)
+    {
+        [format setDateFormat:@"h:mma"];
+        startDatePart2 = [format stringFromDate:dbStartDate];
+    }
+    else
+    {
+        [format setDateFormat:@"ha"];
+        startDatePart2 = [format stringFromDate:dbStartDate];
+    }
+    
+    //Do end date
+    //[format setDateFormat:@"EEEE MMMM d"];
+    //NSString *endDatePart1 = [format stringFromDate:endDate];
+    NSDateComponents *endComponents = [calendar components:(NSCalendarUnitHour | NSCalendarUnitMinute) fromDate:dbEndDate];
+    NSString *endDatePart2;
+    if ([endComponents minute]>0)
+    {
+        [format setDateFormat:@"h:mma"];
+        endDatePart2 = [format stringFromDate:dbEndDate];
+    }
+    else
+    {
+        [format setDateFormat:@"ha"];
+        endDatePart2 = [format stringFromDate:dbEndDate];
+    }
     
     return [NSString stringWithFormat:@"%@ At %@ to %@",startDatePart1,startDatePart2,endDatePart2];
 }

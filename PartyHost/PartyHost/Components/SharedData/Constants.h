@@ -24,6 +24,7 @@ extern NSString *const JiggieItunesID;
 
 //URL
 extern NSString *const PHBaseURL;
+extern NSString *const PHBaseNewURL;
 extern NSString *const PHBaseDomain;
 extern NSString *const PHGuestListingsURL;
 extern NSString *const PHHostListingsURL;
@@ -37,6 +38,7 @@ extern NSString *const PHMemberInfoURL;
 extern NSString *const PHUserTagListURL;
 extern NSString *const PHOrdersAllURL;
 extern NSString *const PHDateFormatServer;
+extern NSString *const PHDateFormatApp;
 extern NSString *const PHPhoneVerifySendURL;
 extern NSString *const PHPhoneVerifyValidateURL;
 extern NSString *const PHUserPaymentURL;
@@ -60,6 +62,7 @@ extern NSString *const PHBlankImgURL;
 +(NSString*)toDisplayTime:(NSString*)dbStartDateString;
 +(NSString*)toTitleDate:(NSString*)dbStartDateString;
 +(NSString*)toTitleDateRange:(NSString*)dbStartDateString dbEndDateString:(NSString*)dbEndDateString;
++(NSString*)toTitleDate:(NSDate *)dbStartDate dbEndDate:(NSDate *)dbEndDate;
 +(NSString*)userTagListURL;
 +(NSString*)memberSettingsURL;
 +(NSString*)memberInfoURL:(NSString*)account_type member_fb_id:(NSString*)member_fb_id fb_id:(NSString*)fb_id;

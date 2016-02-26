@@ -54,7 +54,7 @@
             [self.contentView setTitle:[NSString stringWithFormat:@"%i",newValue] forState:UIControlStateNormal];
         }
         else { //Too many
-            [self.contentView setTitle:@"!" forState:UIControlStateNormal];
+            [self.contentView setTitle:@"99" forState:UIControlStateNormal];
         }
     }
     self.contentView.hidden = self.hidden;

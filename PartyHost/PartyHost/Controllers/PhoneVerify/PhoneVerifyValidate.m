@@ -145,7 +145,7 @@
           postNotificationName:@"HIDE_LOADING"
           object:self];
          
-         if(![responseObject[@"success"] boolValue]) {
+         if(![responseObject[@"response"] boolValue]) {
              
              [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Phone Verification Fail" withDict:@{}];
              UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Validation Incorrect" message:@"Please check the number and try again." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];

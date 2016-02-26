@@ -155,7 +155,7 @@ static NSString *const kAllowTracking = @"allowTracking";
         }
     }
     
-
+    NSLog(@"%@", self.sharedData.apnToken);
     //For debug mode clear out all ONE-TIME popups
     if(PHDebugOn==YES) {
         NSLog(@">>> PhDebugOn==YES: Clearing all ONE-TIME helpers.");
@@ -177,7 +177,6 @@ static NSString *const kAllowTracking = @"allowTracking";
      selector:@selector(registerForNotifications)
      name:@"ASK_APN_PERMISSION"
      object:nil];
-    
     
     [self performSelector:@selector(checkApnAgain) withObject:nil afterDelay:4.0];
     
@@ -221,7 +220,6 @@ static NSString *const kAllowTracking = @"allowTracking";
     {
         return;
     }
-    
  
         self.sharedData.apnToken = @"empty";
         [[NSNotificationCenter defaultCenter]
@@ -366,6 +364,32 @@ static NSString *const kAllowTracking = @"allowTracking";
 }
 
 - (BOOL)application:(UIApplication *)application
+continueUserActivity:(NSUserActivity *)userActivity
+ restorationHandler:(void (^)(NSArray *restorableObjects))restorationHandler {
+
+    if (userActivity.activityType == NSUserActivityTypeBrowsingWeb) {
+        NSURL *url = userActivity.webpageURL;
+        if(contains(url.absoluteString,@"jiggie://"))
+        {
+            if(self.sharedData.isLoggedIn)
+            {
+                NSDictionary *dict = [self.sharedData parseQueryString:[url query]];
+                if(dict[@"af_sub2"])
+                {
+                    self.sharedData.cEventId_Feed = dict[@"af_sub2"];
+                    self.sharedData.cEventId_Modal = dict[@"af_sub2"];
+                    
+                    [[NSNotificationCenter defaultCenter]
+                     postNotificationName:@"SHOW_EVENT_MODAL"
+                     object:self];
+                }
+            }
+        }
+    }
+    return YES;
+}
+
+- (BOOL)application:(UIApplication *)application
             openURL:(NSURL *)url
   sourceApplication:(NSString *)sourceApplication
          annotation:(id)annotation
@@ -426,9 +450,7 @@ static NSString *const kAllowTracking = @"allowTracking";
     
     AFHTTPRequestOperationManager *manager = [self.sharedData getOperationManager];
     
-    NSString *urlToLoad = [NSString stringWithFormat:@"%@/user/hostings/details/%@",PHBaseURL,self.sharedData.cHostingIdFromInvite];
-    
-    urlToLoad = [NSString stringWithFormat:@"%@/apntoken/%@/%@",PHBaseURL,self.sharedData.fb_id,self.sharedData.apnToken];
+    NSString *urlToLoad = [NSString stringWithFormat:@"%@/apntoken/%@/%@",PHBaseNewURL,self.sharedData.fb_id,self.sharedData.apnToken];
     
     NSLog(@"APN_TOKEN_SYNC URL :: %@",urlToLoad);
     
@@ -532,6 +554,7 @@ static NSString *const kAllowTracking = @"allowTracking";
         return;
     }
     
+    NSLog(@"APS PAYLOAD : %@", userInfo);
     
     if ( application.applicationState == UIApplicationStateActive ) {
         // app was already in the foreground

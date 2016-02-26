@@ -247,114 +247,130 @@ static AnalyticManager *_sharedManager = nil;
 {
     if(PHMixPanelOn==NO) return;
     
-    Mixpanel *mixpanel = [Mixpanel sharedInstance];
-    [mixpanel identify:self.sharedData.fb_id];
-    NSString *location = [self.sharedData.userDict[@"location"] lowercaseString];
-    NSString *birthday = self.sharedData.userDict[@"birthday"];
-    NSString *age = @"";
-    NSString *first_name = [self.sharedData.userDict objectForKey:@"first_name"];
-    NSString *last_name = [self.sharedData.userDict objectForKey:@"last_name"];
-    NSString *email = [self.sharedData.userDict objectForKey:@"email"];
-    
-    
-    if([birthday length]==10)
-    {
-        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-        [formatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US"]];
-        [formatter setDateFormat:@"MM/dd/yyyy"];
-        NSDateComponents* ageComponents = [[NSCalendar currentCalendar]
-                                           components:NSCalendarUnitYear
-                                           fromDate:[formatter dateFromString:birthday]
-                                           toDate:[NSDate date]
-                                           options:0];
-        int num_age = (int)[ageComponents year];
-        if(num_age>0) {age = [NSString stringWithFormat: @"%d", num_age];} //Sanity check
+    @try {
+        Mixpanel *mixpanel = [Mixpanel sharedInstance];
+        [mixpanel identify:self.sharedData.fb_id];
+        NSString *location = [self.sharedData.userDict[@"location"] lowercaseString];
+        NSString *birthday = self.sharedData.userDict[@"birthday"];
+        NSString *age = @"";
+        NSString *first_name = [self.sharedData.userDict objectForKey:@"first_name"];
+        NSString *last_name = [self.sharedData.userDict objectForKey:@"last_name"];
+        NSString *email = [self.sharedData.userDict objectForKey:@"email"];
+        
+        
+        if([birthday length]==10)
+        {
+            NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+            [formatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US"]];
+            [formatter setDateFormat:@"MM/dd/yyyy"];
+            NSDateComponents* ageComponents = [[NSCalendar currentCalendar]
+                                               components:NSCalendarUnitYear
+                                               fromDate:[formatter dateFromString:birthday]
+                                               toDate:[NSDate date]
+                                               options:0];
+            int num_age = (int)[ageComponents year];
+            if(num_age>0) {age = [NSString stringWithFormat: @"%d", num_age];} //Sanity check
+        }
+        
+        [mixpanel registerSuperProperties:@{@"age": age}];
+        //[mixpanel registerSuperProperties:@{@"account_type": self.account_type}];
+        [mixpanel registerSuperProperties:@{@"gender": [SharedData sharedInstance].gender}];
+        [mixpanel registerSuperProperties:@{@"gender_interest": [SharedData sharedInstance].gender_interest}];
+        [mixpanel registerSuperProperties:@{@"os_version": [UIDevice currentDevice].systemVersion}];
+        [mixpanel registerSuperProperties:@{@"device_type": [SharedData sharedInstance].deviceType}];
+        [mixpanel registerSuperProperties:@{@"location": location}];
+        [mixpanel registerSuperProperties:@{@"app_version":PHVersion}];
+        [mixpanel registerSuperProperties:@{@"email":email}];
+        
+        
+        [mixpanel registerSuperProperties:@{@"first_name": first_name}];
+        [mixpanel registerSuperProperties:@{@"last_name": last_name}];
+        [mixpanel registerSuperProperties:@{@"birthday": birthday}];
+        
+        
+        NSString *facebookId = [self.sharedData.userDict objectForKey:@"fb_id"];
+        
+        [mixpanel registerSuperProperties:
+         @{@"name_and_fb_id": [NSString stringWithFormat:@"%@_%@_%@",first_name,last_name,facebookId]}];
+        
+        NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+        //[dict setObject:self.account_type forKey:@"account_type"];
+        [dict setObject:[SharedData sharedInstance].gender forKey:@"gender"];
+        [dict setObject:[SharedData sharedInstance].gender_interest forKey:@"gender_interest"];
+        [dict setObject:[UIDevice currentDevice].systemVersion forKey:@"os_version"];
+        [dict setObject:[SharedData sharedInstance].deviceType forKey:@"device_type"];
+        [dict setObject:location forKey:@"location"];
+        [dict setObject:PHVersion forKey:@"app_version"];
+        
+        
+        
+        [dict setObject:first_name forKey:@"first_name"];
+        [dict setObject:last_name forKey:@"last_name"];
+        [dict setObject:birthday forKey:@"birthday"];
+        [dict setObject:email forKey:@"email"];
+        [dict setObject:location forKey:@"location"];
+        [dict setObject:age forKey:@"age"];
+        [dict setObject:facebookId forKey:@"fb_id"];
+        [dict setObject:PHVersion forKey:@"app_version"];
+        [dict setObject:[NSString stringWithFormat:@"%@_%@_%@",first_name,last_name,facebookId] forKey:@"name_and_fb_id"];
+        
+        [self.sharedData syncSuperPropertiesOnServer:dict];
     }
-    
-    [mixpanel registerSuperProperties:@{@"age": age}];
-    //[mixpanel registerSuperProperties:@{@"account_type": self.account_type}];
-    [mixpanel registerSuperProperties:@{@"gender": [SharedData sharedInstance].gender}];
-    [mixpanel registerSuperProperties:@{@"gender_interest": [SharedData sharedInstance].gender_interest}];
-    [mixpanel registerSuperProperties:@{@"os_version": [UIDevice currentDevice].systemVersion}];
-    [mixpanel registerSuperProperties:@{@"device_type": [SharedData sharedInstance].deviceType}];
-    [mixpanel registerSuperProperties:@{@"location": location}];
-    [mixpanel registerSuperProperties:@{@"app_version":PHVersion}];
-    [mixpanel registerSuperProperties:@{@"email":email}];
-    
-    
-    [mixpanel registerSuperProperties:@{@"first_name": first_name}];
-    [mixpanel registerSuperProperties:@{@"last_name": last_name}];
-    [mixpanel registerSuperProperties:@{@"birthday": birthday}];
-    
-    
-    NSString *facebookId = [self.sharedData.userDict objectForKey:@"fb_id"];
-    
-    [mixpanel registerSuperProperties:
-     @{@"name_and_fb_id": [NSString stringWithFormat:@"%@_%@_%@",first_name,last_name,facebookId]}];
-    
-    NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
-    //[dict setObject:self.account_type forKey:@"account_type"];
-    [dict setObject:[SharedData sharedInstance].gender forKey:@"gender"];
-    [dict setObject:[SharedData sharedInstance].gender_interest forKey:@"gender_interest"];
-    [dict setObject:[UIDevice currentDevice].systemVersion forKey:@"os_version"];
-    [dict setObject:[SharedData sharedInstance].deviceType forKey:@"device_type"];
-    [dict setObject:location forKey:@"location"];
-    [dict setObject:PHVersion forKey:@"app_version"];
-    
-    
-    
-    [dict setObject:first_name forKey:@"first_name"];
-    [dict setObject:last_name forKey:@"last_name"];
-    [dict setObject:birthday forKey:@"birthday"];
-    [dict setObject:email forKey:@"email"];
-    [dict setObject:location forKey:@"location"];
-    [dict setObject:age forKey:@"age"];
-    [dict setObject:facebookId forKey:@"fb_id"];
-    [dict setObject:PHVersion forKey:@"app_version"];
-    [dict setObject:[NSString stringWithFormat:@"%@_%@_%@",first_name,last_name,facebookId] forKey:@"name_and_fb_id"];
-    
-    [self.sharedData syncSuperPropertiesOnServer:dict];
+    @catch (NSException *exception) {
+        
+    }
+    @finally {
+        
+    }
 }
 
 -(void)setMixPanelUserProfile
 {
     if(PHMixPanelOn==NO) return;
     
-    Mixpanel *mixpanel = [Mixpanel sharedInstance];
-    [mixpanel identify:[SharedData sharedInstance].fb_id];
-    
-    NSString *first_name = [self.sharedData.userDict objectForKey:@"first_name"];
-    NSString *last_name = [self.sharedData.userDict objectForKey:@"last_name"];
-    NSString *birthday = self.sharedData.userDict[@"birthday"];
-    NSString *age = @"";
-    NSString *email = [self.sharedData.userDict objectForKey:@"email"];
-    
-    NSString *facebookId = [self.sharedData.userDict objectForKey:@"fb_id"];
-    
-    if([birthday length]==10)
-    {
-        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-        [formatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US"]];
-        [formatter setDateFormat:@"MM/dd/yyyy"];
-        NSDateComponents* ageComponents = [[NSCalendar currentCalendar]
-                                           components:NSCalendarUnitYear
-                                           fromDate:[formatter dateFromString:birthday]
-                                           toDate:[NSDate date]
-                                           options:0];
-        int num_age = (int)[ageComponents year];
-        if(num_age>0) {age = [NSString stringWithFormat: @"%d", num_age];} //Sanity check
+    @try {
+        Mixpanel *mixpanel = [Mixpanel sharedInstance];
+        [mixpanel identify:[SharedData sharedInstance].fb_id];
+        
+        NSString *first_name = [self.sharedData.userDict objectForKey:@"first_name"];
+        NSString *last_name = [self.sharedData.userDict objectForKey:@"last_name"];
+        NSString *birthday = self.sharedData.userDict[@"birthday"];
+        NSString *age = @"";
+        NSString *email = [self.sharedData.userDict objectForKey:@"email"];
+        
+        NSString *facebookId = [self.sharedData.userDict objectForKey:@"fb_id"];
+        
+        if([birthday length]==10)
+        {
+            NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+            [formatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US"]];
+            [formatter setDateFormat:@"MM/dd/yyyy"];
+            NSDateComponents* ageComponents = [[NSCalendar currentCalendar]
+                                               components:NSCalendarUnitYear
+                                               fromDate:[formatter dateFromString:birthday]
+                                               toDate:[NSDate date]
+                                               options:0];
+            int num_age = (int)[ageComponents year];
+            if(num_age>0) {age = [NSString stringWithFormat: @"%d", num_age];} //Sanity check
+        }
+        
+        [mixpanel.people set:@{@"first_name": first_name}];
+        [mixpanel.people set:@{@"last_name": last_name}];
+        [mixpanel.people set:@{@"birthday": birthday}];
+        [mixpanel.people set:@{@"age": age}];
+        [mixpanel.people set:@{@"email": email}];
+        [mixpanel.people set:@{@"fb_id": facebookId}];
+        [mixpanel.people set:@{@"gender": self.sharedData.gender}];
+        [mixpanel.people set:@{@"gender_interest": self.sharedData.gender_interest}];
+        [mixpanel.people set:@{@"app_version": PHVersion}];
+        [mixpanel.people set:@{@"name_and_fb_id": [NSString stringWithFormat:@"%@_%@_%@",first_name,last_name,facebookId]}];
     }
-    
-    [mixpanel.people set:@{@"first_name": first_name}];
-    [mixpanel.people set:@{@"last_name": last_name}];
-    [mixpanel.people set:@{@"birthday": birthday}];
-    [mixpanel.people set:@{@"age": age}];
-    [mixpanel.people set:@{@"email": email}];
-    [mixpanel.people set:@{@"fb_id": facebookId}];
-    [mixpanel.people set:@{@"gender": self.sharedData.gender}];
-    [mixpanel.people set:@{@"gender_interest": self.sharedData.gender_interest}];
-    [mixpanel.people set:@{@"app_version": PHVersion}];
-    [mixpanel.people set:@{@"name_and_fb_id": [NSString stringWithFormat:@"%@_%@_%@",first_name,last_name,facebookId]}];
+    @catch (NSException *exception) {
+        
+    }
+    @finally {
+        
+    }
 }
 
 
