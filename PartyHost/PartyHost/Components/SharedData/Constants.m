@@ -25,9 +25,9 @@ NSString *const JiggieItunesID = @"1047291489";
 
 
 //URLs with substitution
-NSString *const PHBaseURL = @"https://jiggie-dev.herokuapp.com/app/v3";
-NSString *const PHBaseNewURL = @"https://api-dev.jiggieapp.com/app/v3";
-NSString *const PHBaseDomain = @"https://jiggie-dev.herokuapp.com";
+NSString *const PHBaseURL = @"https://jiggie.herokuapp.com/app/v3";
+NSString *const PHBaseNewURL = @"https://api.jiggieapp.com/app/v3";
+NSString *const PHBaseDomain = @"https://jiggie.herokuapp.com";
 
 
 //NSString *const PHBaseDomain = @"https://partyhostapp.herokuapp.com";

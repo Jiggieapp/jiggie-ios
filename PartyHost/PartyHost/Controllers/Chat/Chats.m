@@ -236,6 +236,9 @@
     
     [manager GET:url parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject)
      {
+         [[NSNotificationCenter defaultCenter]
+          postNotificationName:@"HIDE_LOADING"
+          object:self];
          
          NSString *responseString = operation.responseString;
          NSError *error;
@@ -261,6 +264,10 @@
                  self.needUpdateContents = YES;
                  self.conversationsList.hidden = YES;
                  [self.emptyView setMode:@"empty"];
+                 
+                 //Update badges
+                 [self.sharedData.chatBadge updateValue:0];
+                 [self.sharedData updateBadgeIcon];
                  
                  return;
              } else if (responseStatusCode != 200) {
@@ -393,10 +400,6 @@
              self.needUpdateContents = YES;
              self.isLoading = NO;
              
-             [[NSNotificationCenter defaultCenter]
-              postNotificationName:@"HIDE_LOADING"
-              object:self];
-             
          });
          
          if(self.sharedData.hasMessageToLoad)
@@ -421,6 +424,10 @@
      } failure:^(AFHTTPRequestOperation *operation, NSError *error)
      {
          NSLog(@"ERROR :: %@",error);
+         
+         [[NSNotificationCenter defaultCenter]
+          postNotificationName:@"HIDE_LOADING"
+          object:self];
          
          if (error.code == -1009 || error.code == -1005) {
              [SVProgressHUD showInfoWithStatus:@"Please check your internet connection"];

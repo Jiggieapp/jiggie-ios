@@ -125,12 +125,12 @@ static NSString *const kAllowTracking = @"allowTracking";
         }
     }];
     */
-    NSDictionary *localNotif = [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
-    if (localNotif)
-    {
-        self.sharedData.fromMailId = [localNotif objectForKey:@"fromFBId"];
-        self.sharedData.hasMessageToLoad = YES;
-    }
+//    NSDictionary *localNotif = [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
+//    if (localNotif)
+//    {
+//        self.sharedData.fromMailId = [localNotif objectForKey:@"fromFBId"];
+//        self.sharedData.hasMessageToLoad = YES;
+//    }
     //[self.sharedData trackMixPanel:@"APP_LOADED"];
     //Mixpanel *mixpanel = [Mixpanel sharedInstance];
     //[mixpanel track:@"APP_LOADED" properties:@{@"Prop": @"Value",}];
@@ -152,6 +152,44 @@ static NSString *const kAllowTracking = @"allowTracking";
                 self.sharedData.cEventId_Feed = dict[@"af_sub2"];
                 self.sharedData.cEventId_Modal = dict[@"af_sub2"];
             }
+        }
+    }
+    
+    NSDictionary *userInfo = [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
+//    NSDictionary *userInfo = @{@"type":@"match", @"event_id":@"56cd3a2cf96cf103001ecd81", @"fromFBId":@"10153311635578981", @"fromName":@"Setiady"};
+    if (userInfo && userInfo != nil) {
+        NSLog(@"USER INFO : %@", userInfo);
+        if([[userInfo objectForKey:@"type"]  isEqualToString:@"general"])
+        {
+            // app was just brought from background to foreground
+            [[NSNotificationCenter defaultCenter]
+             postNotificationName:@"SHOW_EVENTS"
+             object:self];
+            
+        } else if([[userInfo objectForKey:@"type"]  isEqualToString:@"event"])
+        {
+            self.sharedData.cEventId_Feed = [userInfo objectForKey:@"event_id"];
+            self.sharedData.cEventId_Modal = [userInfo objectForKey:@"event_id"];
+            self.sharedData.hasInitEventSelection = YES;
+            
+            [[NSNotificationCenter defaultCenter]
+             postNotificationName:@"SHOW_EVENT_MODAL"
+             object:self];
+            
+        } else if([[userInfo objectForKey:@"type"]  isEqualToString:@"match"])
+        {
+            // app was just brought from background to foreground
+            self.sharedData.fromMailId = [userInfo objectForKey:@"fromFBId"];
+            self.sharedData.fromMailName = [userInfo objectForKey:@"fromName"];
+            self.sharedData.hasMessageToLoad = YES;
+            
+        } else if([[userInfo objectForKey:@"type"]  isEqualToString:@"message"])
+        {
+            // app was just brought from background to foreground
+            self.sharedData.fromMailId = [userInfo objectForKey:@"fromFBId"];
+            self.sharedData.fromMailName = [userInfo objectForKey:@"fromName"];
+            self.sharedData.hasMessageToLoad = YES;
+
         }
     }
     
@@ -585,7 +623,30 @@ continueUserActivity:(NSUserActivity *)userActivity
     }
     else {
         
-        if([[userInfo objectForKey:@"type"]  isEqualToString:@"message"])
+        if([[userInfo objectForKey:@"type"]  isEqualToString:@"general"])
+        {
+            // app was just brought from background to foreground
+            [[NSNotificationCenter defaultCenter]
+             postNotificationName:@"SHOW_EVENTS"
+             object:self];
+            
+        } else if([[userInfo objectForKey:@"type"]  isEqualToString:@"event"])
+        {
+            self.sharedData.cEventId_Feed = [userInfo objectForKey:@"event_id"];
+            self.sharedData.cEventId_Modal = [userInfo objectForKey:@"event_id"];
+            
+            [[NSNotificationCenter defaultCenter]
+             postNotificationName:@"SHOW_EVENT_MODAL"
+             object:self];
+         
+        } else if([[userInfo objectForKey:@"type"]  isEqualToString:@"match"])
+        {
+            // app was just brought from background to foreground
+            self.sharedData.fromMailId = [userInfo objectForKey:@"fromFBId"];
+            self.sharedData.fromMailName = [userInfo objectForKey:@"fromName"];
+            [self goToMessages];
+            
+        } else if([[userInfo objectForKey:@"type"]  isEqualToString:@"message"])
         {
             // app was just brought from background to foreground
             self.sharedData.fromMailId = [userInfo objectForKey:@"fromFBId"];
@@ -593,14 +654,12 @@ continueUserActivity:(NSUserActivity *)userActivity
             [self goToMessages];
             
         }
-        
-        if([[userInfo objectForKey:@"type"]  isEqualToString:@"notification"])
-        {
-            
-            [[NSNotificationCenter defaultCenter]
-             postNotificationName:@"SHOW_PARTYFEED"
-             object:self];
-        }
+//        else if([[userInfo objectForKey:@"type"]  isEqualToString:@"notification"])
+//        {
+//            [[NSNotificationCenter defaultCenter]
+//             postNotificationName:@"SHOW_PARTYFEED"
+//             object:self];
+//        }
         
     }
     
@@ -859,9 +918,6 @@ continueUserActivity:(NSUserActivity *)userActivity
         [self.sharedData.appsFlyerDict setObject:@"organic" forKey:@"campaign"];
         [self.sharedData.appsFlyerDict setObject:@"organic" forKey:@"af_status"];
     }
-    
-    
-    
 }
 
 - (void) onConversionDataRequestFailure:(NSError *)error{

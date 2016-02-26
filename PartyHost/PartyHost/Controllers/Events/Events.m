@@ -124,7 +124,7 @@
     self.eventsTomorrow = [[NSMutableArray alloc] init];
     self.eventsUpcoming = [[NSMutableArray alloc] init];
     
-    self.tableScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 40 + 34, frame.size.width, frame.size.height - self.tabBar.bounds.size.height - 20)];
+    self.tableScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 40 + 34, frame.size.width, frame.size.height - self.tabBar.bounds.size.height - self.segmentationView.bounds.size.height - 20)];
     [self.tableScrollView setBackgroundColor:[UIColor clearColor]];
     [self.tableScrollView setContentSize:CGSizeMake(self.tableScrollView.bounds.size.width * 3, self.tableScrollView.bounds.size.height)];
     [self.tableScrollView setPagingEnabled:YES];
@@ -801,7 +801,7 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:emptyTableIdentifier];
     }
     
-    [[cell textLabel] setText:@"No Event Found"];
+    [[cell textLabel] setText:@"No Events Found"];
     [[cell textLabel] setFont:[UIFont phBlond:20]];
     [[cell textLabel] setTextAlignment:NSTextAlignmentCenter];
     
