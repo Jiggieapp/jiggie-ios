@@ -288,6 +288,12 @@
     
     [[NSNotificationCenter defaultCenter]
      addObserver:self
+     selector:@selector(showEvents)
+     name:@"SHOW_EVENTS"
+     object:nil];
+    
+    [[NSNotificationCenter defaultCenter]
+     addObserver:self
      selector:@selector(showMessages)
      name:@"SHOW_MESSAGES"
      object:nil];
@@ -526,10 +532,15 @@
 {
     if(self.sharedData.hasMessageToLoad)
     {
-        [self showChat];
+        self.sharedData.hasMessageToLoad = NO;
+        
+        self.sharedData.conversationId = self.sharedData.fromMailId;
+        self.sharedData.messagesPage.toId = self.sharedData.fromMailId;
+        self.sharedData.messagesPage.toLabel.text = [self.sharedData.fromMailName uppercaseString];
+        self.sharedData.toImgURL = [self.sharedData profileImg:self.sharedData.fromMailId];
+        [self performSelector:@selector(showMessages) withObject:nil afterDelay:2.0];
     }else{
         [self showEvents];
-//        [self showFeed];
         
         if(self.sharedData.isLoggedIn && self.sharedData.hasInitEventSelection)
         {
@@ -540,7 +551,6 @@
              object:self];
         }
     }
-    
     
     self.sharedData.btnYesTxt = MPTweakValue(@"PartyFeedButtonYesText", @"YES");
     self.sharedData.btnNOTxt = MPTweakValue(@"PartyFeedButtonNoText", @"NO");
