@@ -125,12 +125,6 @@ static NSString *const kAllowTracking = @"allowTracking";
         }
     }];
     */
-//    NSDictionary *localNotif = [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
-//    if (localNotif)
-//    {
-//        self.sharedData.fromMailId = [localNotif objectForKey:@"fromFBId"];
-//        self.sharedData.hasMessageToLoad = YES;
-//    }
     //[self.sharedData trackMixPanel:@"APP_LOADED"];
     //Mixpanel *mixpanel = [Mixpanel sharedInstance];
     //[mixpanel track:@"APP_LOADED" properties:@{@"Prop": @"Value",}];
@@ -156,7 +150,7 @@ static NSString *const kAllowTracking = @"allowTracking";
     }
     
     NSDictionary *userInfo = [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
-//    NSDictionary *userInfo = @{@"type":@"match", @"event_id":@"56cd3a2cf96cf103001ecd81", @"fromFBId":@"10153311635578981", @"fromName":@"Setiady"};
+//    NSDictionary *userInfo = @{@"type":@"social", @"event_id":@"56cd3a2cf96cf103001ecd81", @"fromFBId":@"10153311635578981", @"fromName":@"Setiady"};
     if (userInfo && userInfo != nil) {
         NSLog(@"USER INFO : %@", userInfo);
         if([[userInfo objectForKey:@"type"]  isEqualToString:@"general"])
@@ -190,6 +184,15 @@ static NSString *const kAllowTracking = @"allowTracking";
             self.sharedData.fromMailName = [userInfo objectForKey:@"fromName"];
             self.sharedData.hasMessageToLoad = YES;
 
+        } else if([[userInfo objectForKey:@"type"]  isEqualToString:@"social"])
+        {
+            self.sharedData.hasFeedToLoad = YES;
+            
+        } else if([[userInfo objectForKey:@"type"]  isEqualToString:@"chat"])
+        {
+            self.sharedData.fromMailId = @"";
+            self.sharedData.fromMailName = @"";
+            self.sharedData.hasMessageToLoad = YES;
         }
     }
     
@@ -622,7 +625,6 @@ continueUserActivity:(NSUserActivity *)userActivity
         }
     }
     else {
-        
         if([[userInfo objectForKey:@"type"]  isEqualToString:@"general"])
         {
             // app was just brought from background to foreground
@@ -653,20 +655,19 @@ continueUserActivity:(NSUserActivity *)userActivity
             self.sharedData.fromMailName = [userInfo objectForKey:@"fromName"];
             [self goToMessages];
             
+        } else if([[userInfo objectForKey:@"type"]  isEqualToString:@"social"])
+        {
+            [[NSNotificationCenter defaultCenter]
+             postNotificationName:@"SHOW_FEED"
+             object:self];
+            
+        } else if([[userInfo objectForKey:@"type"]  isEqualToString:@"chat"])
+        {
+            [[NSNotificationCenter defaultCenter]
+             postNotificationName:@"SHOW_CHAT"
+             object:self];
         }
-//        else if([[userInfo objectForKey:@"type"]  isEqualToString:@"notification"])
-//        {
-//            [[NSNotificationCenter defaultCenter]
-//             postNotificationName:@"SHOW_PARTYFEED"
-//             object:self];
-//        }
-        
     }
-    
-    //UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"YES" message:@"" delegate:nil cancelButtonTitle:@"Cancel" otherButtonTitles:@"Okay", nil];
-    //[alert show];
-    
-    
 }
 
 

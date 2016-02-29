@@ -280,12 +280,12 @@
          [self hideLoading];
          self.signupView.hidden = YES;
          
-         if(self.sharedData.walkthroughOn == NO)
-         {
-             [[NSNotificationCenter defaultCenter]
-              postNotificationName:@"APP_LOADED"
-              object:self];
-         }
+//         if(self.sharedData.walkthroughOn == NO)
+//         {
+//             [[NSNotificationCenter defaultCenter]
+//              postNotificationName:@"APP_LOADED"
+//              object:self];
+//         }
      }];
 }
 

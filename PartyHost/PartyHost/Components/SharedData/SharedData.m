@@ -53,6 +53,7 @@ static SharedData *sharedInstance = nil;
         self.isInConversation = NO; // if in the user conversation
         self.cPageIndex     = 0;
         self.hasMessageToLoad = NO; // boolean to open the message when going to the app
+        self.hasFeedToLoad = NO; // boolean to open the social feed when going to the app
         self.ph_token       = @""; // not use
         self.user_id        = @""; //
         self.cVenueListIndex = 0; // not use

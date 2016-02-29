@@ -294,6 +294,18 @@
     
     [[NSNotificationCenter defaultCenter]
      addObserver:self
+     selector:@selector(showFeed)
+     name:@"SHOW_FEED"
+     object:nil];
+    
+    [[NSNotificationCenter defaultCenter]
+     addObserver:self
+     selector:@selector(showChat)
+     name:@"SHOW_CHAT"
+     object:nil];
+    
+    [[NSNotificationCenter defaultCenter]
+     addObserver:self
      selector:@selector(showMessages)
      name:@"SHOW_MESSAGES"
      object:nil];
@@ -530,16 +542,23 @@
 
 -(void)checkIfHadAPNOnLogin
 {
-    if(self.sharedData.hasMessageToLoad)
-    {
+    if(self.sharedData.hasMessageToLoad) {
         self.sharedData.hasMessageToLoad = NO;
+     
+        if ([self.sharedData.fromMailId isEqualToString:@""]) {
+            [self showChat];
+        } else {
+            self.sharedData.conversationId = self.sharedData.fromMailId;
+            self.sharedData.messagesPage.toId = self.sharedData.fromMailId;
+            self.sharedData.messagesPage.toLabel.text = [self.sharedData.fromMailName uppercaseString];
+            self.sharedData.toImgURL = [self.sharedData profileImg:self.sharedData.fromMailId];
+            [self performSelector:@selector(showMessages) withObject:nil afterDelay:2.0];
+        }
         
-        self.sharedData.conversationId = self.sharedData.fromMailId;
-        self.sharedData.messagesPage.toId = self.sharedData.fromMailId;
-        self.sharedData.messagesPage.toLabel.text = [self.sharedData.fromMailName uppercaseString];
-        self.sharedData.toImgURL = [self.sharedData profileImg:self.sharedData.fromMailId];
-        [self performSelector:@selector(showMessages) withObject:nil afterDelay:2.0];
-    }else{
+    } else if (self.sharedData.hasFeedToLoad) {
+        [self showFeed];
+        
+    } else {
         [self showEvents];
         
         if(self.sharedData.isLoggedIn && self.sharedData.hasInitEventSelection)
@@ -555,12 +574,6 @@
     self.sharedData.btnYesTxt = MPTweakValue(@"PartyFeedButtonYesText", @"YES");
     self.sharedData.btnNOTxt = MPTweakValue(@"PartyFeedButtonNoText", @"NO");
     self.sharedData.ABTestChat = MPTweakValue(@"PartyFeedABTestChat", @"YES");
-    
-    
-//    [[NSNotificationCenter defaultCenter]
-//     postNotificationName:@"ASK_APN_PERMISSION"
-//     object:self];
-    
 }
 
 
