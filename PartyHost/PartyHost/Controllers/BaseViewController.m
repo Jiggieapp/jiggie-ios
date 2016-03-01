@@ -22,7 +22,7 @@
     [navigationBar setBarTintColor:[UIColor phPurpleColor]];
     [navigationBar setTintColor:[UIColor whiteColor]];
     [navigationBar setTranslucent:NO];
-    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     
     [self loadVisibleSize];
 }

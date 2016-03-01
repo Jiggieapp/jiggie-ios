@@ -40,10 +40,22 @@
     
     [[self navigationItem] setLeftBarButtonItem:closeBarButtonItem];
     
-    [self setTitle:@"Choose Experience"];
-    
-    UIView *titleView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 300, 40)];
+    UIView *titleView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 200, 40)];
     [titleView setBackgroundColor:[UIColor clearColor]];
+    
+    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 200, 20)];
+    [titleLabel setTextAlignment:NSTextAlignmentCenter];
+    [titleLabel setText:@"CHOOSE ADMISSION"];
+    [titleLabel setFont:[UIFont phBlond:14]];
+    [titleLabel setTextColor:[UIColor whiteColor]];
+    [titleLabel setBackgroundColor:[UIColor clearColor]];
+    [titleView addSubview:titleLabel];
+    
+    UIImageView *titleIcon = [[UIImageView alloc] initWithFrame:CGRectMake(65, 28, 71, 5)];
+    [titleIcon setImage:[UIImage imageNamed:@"icon_step_1"]];
+    [titleView addSubview:titleIcon];
+    
+    [self.navigationItem setTitleView:titleView];
 
     self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.visibleSize.width, self.visibleSize.height - 44)];
     [self.tableView setDelegate:self];
@@ -211,6 +223,19 @@
 #pragma mark - UITableViewDataSource
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 2;
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    
+    UILabel *myLabel = [[UILabel alloc] init];
+    myLabel.frame = CGRectMake(20, 8, 320, 20);
+    myLabel.font = [UIFont boldSystemFontOfSize:18];
+    myLabel.text = [self tableView:tableView titleForHeaderInSection:section];
+    
+    UIView *headerView = [[UIView alloc] init];
+    [headerView addSubview:myLabel];
+    
+    return headerView;
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
