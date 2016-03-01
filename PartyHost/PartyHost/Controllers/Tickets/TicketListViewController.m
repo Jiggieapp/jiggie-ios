@@ -225,24 +225,37 @@
     return 2;
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    return 30;
+}
+
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     
+    UIView *topLine = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.bounds.size.width, 1)];
+    [topLine setBackgroundColor:[UIColor phLightGrayColor]];
+    
+    UIView *bottomLine = [[UIView alloc] initWithFrame:CGRectMake(0, 26, tableView.bounds.size.width, 1)];
+    [bottomLine setBackgroundColor:[UIColor phLightGrayColor]];
+    
     UILabel *myLabel = [[UILabel alloc] init];
-    myLabel.frame = CGRectMake(20, 8, 320, 20);
-    myLabel.font = [UIFont boldSystemFontOfSize:18];
+    myLabel.frame = CGRectMake(14, 0, 320, 26);
+    myLabel.font = [UIFont phBlond:12];
+    myLabel.textColor = [UIColor lightGrayColor];
     myLabel.text = [self tableView:tableView titleForHeaderInSection:section];
     
-    UIView *headerView = [[UIView alloc] init];
+    UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.bounds.size.width, 26)];
     [headerView addSubview:myLabel];
+    [headerView addSubview:topLine];
+    [headerView addSubview:bottomLine];
     
     return headerView;
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     if (section == 0) {
-        return @"Purchase";
+        return @"TICKETS";
     }
-    return @"Reservation";
+    return @"RESERVE TABLE";
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {

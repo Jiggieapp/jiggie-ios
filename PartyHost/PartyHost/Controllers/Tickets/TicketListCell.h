@@ -10,4 +10,9 @@
 
 @interface TicketListCell : UITableViewCell
 
+@property (nonatomic, strong) UILabel *ticketTitle;
+@property (nonatomic, strong) UILabel *ticketDescription;
+@property (nonatomic, strong) UILabel *ticketPrice;
+@property (nonatomic, strong) UILabel *ticketPerson;
+
 @end
