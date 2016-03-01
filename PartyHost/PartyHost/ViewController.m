@@ -436,7 +436,7 @@
     
     //[self.sharedData trackMixPanel:@"display_login"];
     
-    NSString *url = [NSString stringWithFormat:@"%@/invitelink",PHBaseURL];
+    NSString *url = [NSString stringWithFormat:@"%@/invitelink",PHBaseNewURL];
     [manager GET:url parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject)
      {
          NSLog(@"INVITE_LINK_RESPONSE :: %@",responseObject);
@@ -500,7 +500,7 @@
     
     NSLog(@"INVITE_LINK_PARAMS :: %@",params);
     
-    NSString *url = [NSString stringWithFormat:@"%@/invitelink",PHBaseURL];
+    NSString *url = [NSString stringWithFormat:@"%@/invitelink",PHBaseNewURL];
     [manager GET:url parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject)
      {
          NSLog(@"INVITE_LINK_RESPONSE :: %@",responseObject);
