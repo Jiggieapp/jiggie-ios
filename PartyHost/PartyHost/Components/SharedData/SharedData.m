@@ -663,7 +663,7 @@ static SharedData *sharedInstance = nil;
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     manager.requestSerializer = [AFJSONRequestSerializer serializer];
     manager.responseSerializer = [AFJSONResponseSerializer serializer];
-    NSString *urlToLoad = [NSString stringWithFormat:@"%@/user/sync/superproperties/%@",PHBaseURL,self.fb_id];
+    NSString *urlToLoad = [NSString stringWithFormat:@"%@/user/sync/superproperties/%@",PHBaseNewURL,self.fb_id];
     
     NSLog(@"MIXPANEL_URL :: %@",urlToLoad);
     NSLog(@"DATA_ :: %@",dict);
