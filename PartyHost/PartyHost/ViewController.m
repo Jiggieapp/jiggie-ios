@@ -8,6 +8,8 @@
 
 #import "ViewController.h"
 #import "AnalyticManager.h"
+#import "Event.h"
+#import "TicketListViewController.h"
 
 @interface ViewController ()
 
@@ -125,6 +127,12 @@
      addObserver:self
      selector:@selector(showMessage)
      name:@"SHOW_MAIL_MESSAGE"
+     object:nil];
+    
+    [[NSNotificationCenter defaultCenter]
+     addObserver:self
+     selector:@selector(showTicketList:)
+     name:@"SHOW_TICKET_LIST"
      object:nil];
     
     
@@ -272,12 +280,12 @@
          [self hideLoading];
          self.signupView.hidden = YES;
          
-         if(self.sharedData.walkthroughOn == NO)
-         {
-             [[NSNotificationCenter defaultCenter]
-              postNotificationName:@"APP_LOADED"
-              object:self];
-         }
+//         if(self.sharedData.walkthroughOn == NO)
+//         {
+//             [[NSNotificationCenter defaultCenter]
+//              postNotificationName:@"APP_LOADED"
+//              object:self];
+//         }
      }];
 }
 
@@ -428,7 +436,7 @@
     
     //[self.sharedData trackMixPanel:@"display_login"];
     
-    NSString *url = [NSString stringWithFormat:@"%@/invitelink",PHBaseURL];
+    NSString *url = [NSString stringWithFormat:@"%@/invitelink",PHBaseNewURL];
     [manager GET:url parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject)
      {
          NSLog(@"INVITE_LINK_RESPONSE :: %@",responseObject);
@@ -492,7 +500,7 @@
     
     NSLog(@"INVITE_LINK_PARAMS :: %@",params);
     
-    NSString *url = [NSString stringWithFormat:@"%@/invitelink",PHBaseURL];
+    NSString *url = [NSString stringWithFormat:@"%@/invitelink",PHBaseNewURL];
     [manager GET:url parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject)
      {
          NSLog(@"INVITE_LINK_RESPONSE :: %@",responseObject);
@@ -607,6 +615,15 @@
     UIActivityViewController *activityController = [[UIActivityViewController alloc] initWithActivityItems:activityItems applicationActivities:nil];
     [activityController setValue:@"Lets go out with Jiggie" forKey:@"subject"];
     [self.view.window.rootViewController presentViewController:activityController animated:YES completion:nil];
+}
+
+#pragma mark - Ticket Notification 
+- (void)showTicketList:(NSNotification *)notification {
+    Event *cEvent = (Event *)[notification object];
+    TicketListViewController *ticketListVC = [[TicketListViewController alloc] init];
+    ticketListVC.cEvent = cEvent;
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:ticketListVC];
+    [self presentViewController:navigationController animated:YES completion:nil];
 }
 
 - (void)didReceiveMemoryWarning

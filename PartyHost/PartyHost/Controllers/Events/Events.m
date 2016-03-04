@@ -29,8 +29,6 @@
     
     self.sharedData = [SharedData sharedInstance];
     
-    self.cGuestListingIndexPath = nil;
-    
     self.isEventsLoaded = NO;
     self.didLoadFromHostings = NO;
     self.didLoadFromInvite = NO;
@@ -81,17 +79,89 @@
     [self.btnFilter addTarget:self action:@selector(showFilter) forControlEvents:UIControlEventTouchUpInside];
     [self.tabBar addSubview:self.btnFilter];
     
-    self.eventsA = [[NSMutableArray alloc] init];
-    self.eventsList = [[UITableView alloc] initWithFrame:CGRectMake(0, 40, frame.size.width, frame.size.height - self.tabBar.bounds.size.height - 20)];
-    self.eventsList.backgroundColor = [UIColor clearColor];
-    self.eventsList.delegate = self;
-    self.eventsList.dataSource = self;
-    self.eventsList.separatorColor = [UIColor clearColor];
-    self.eventsList.separatorStyle = UITableViewCellSeparatorStyleNone;
-    self.eventsList.allowsMultipleSelectionDuringEditing = NO;
-    self.eventsList.showsVerticalScrollIndicator = NO;
-    self.eventsList.hidden = YES;
-    [self.mainCon addSubview:self.eventsList];
+    self.segmentationView = [[UIView alloc] initWithFrame:CGRectMake(0, 40, frame.size.width, 34)];
+    [self.segmentationView setBackgroundColor:[UIColor colorFromHexCode:@"B238DE"]];
+    [self.mainCon addSubview:self.segmentationView];
+    
+    CGFloat buttonSegmentationWidth = frame.size.width/3;
+    UIButton *todayButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [todayButton setFrame:CGRectMake(0, 0, buttonSegmentationWidth, 32)];
+    [todayButton setBackgroundColor:[UIColor clearColor]];
+    [todayButton setTitle:@"Today" forState:UIControlStateNormal];
+    [todayButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [[todayButton titleLabel] setFont:[UIFont phBlond:14]];
+    [todayButton setTag:1];
+    [todayButton addTarget:self action:@selector(segmentationButtonDidTap:) forControlEvents:UIControlEventTouchUpInside];
+    [self.segmentationView addSubview:todayButton];
+    
+    UIButton *tomorrowButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [tomorrowButton setFrame:CGRectMake(buttonSegmentationWidth, 0, buttonSegmentationWidth, 32)];
+    [tomorrowButton setBackgroundColor:[UIColor clearColor]];
+    [tomorrowButton setTitle:@"Tomorrow" forState:UIControlStateNormal];
+    [tomorrowButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [[tomorrowButton titleLabel] setFont:[UIFont phBlond:14]];
+    [tomorrowButton setTag:2];
+    [tomorrowButton addTarget:self action:@selector(segmentationButtonDidTap:) forControlEvents:UIControlEventTouchUpInside];
+    [self.segmentationView addSubview:tomorrowButton];
+    
+    UIButton *upcomingButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [upcomingButton setFrame:CGRectMake(buttonSegmentationWidth * 2, 0, buttonSegmentationWidth, 32)];
+    [upcomingButton setBackgroundColor:[UIColor clearColor]];
+    [upcomingButton setTitle:@"Upcoming" forState:UIControlStateNormal];
+    [upcomingButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [[upcomingButton titleLabel] setFont:[UIFont phBlond:14]];
+    [upcomingButton setTag:3];
+    [upcomingButton addTarget:self action:@selector(segmentationButtonDidTap:) forControlEvents:UIControlEventTouchUpInside];
+    [self.segmentationView addSubview:upcomingButton];
+    
+    self.segmentationIndicator = [[UIView alloc] initWithFrame:CGRectMake(0, 32, buttonSegmentationWidth, 2)];
+    [self.segmentationIndicator setBackgroundColor:[UIColor whiteColor]];
+    [self.segmentationView addSubview:self.segmentationIndicator];
+    
+    self.currentSegmentationIndex = 1;
+    
+    self.eventsToday = [[NSMutableArray alloc] init];
+    self.eventsTomorrow = [[NSMutableArray alloc] init];
+    self.eventsUpcoming = [[NSMutableArray alloc] init];
+    
+    self.tableScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 40 + 34, frame.size.width, frame.size.height - self.tabBar.bounds.size.height - self.segmentationView.bounds.size.height - 20)];
+    [self.tableScrollView setBackgroundColor:[UIColor clearColor]];
+    [self.tableScrollView setContentSize:CGSizeMake(self.tableScrollView.bounds.size.width * 3, self.tableScrollView.bounds.size.height)];
+    [self.tableScrollView setPagingEnabled:YES];
+    [self.tableScrollView setShowsHorizontalScrollIndicator:NO];
+    [self.tableScrollView setBounces:NO];
+    [self.tableScrollView setDelegate:self];
+    [self.mainCon addSubview:self.tableScrollView];
+    
+    self.events1List = [[UITableView alloc] initWithFrame:CGRectMake(self.tableScrollView.bounds.size.width * 0, 0, self.tableScrollView.bounds.size.width, self.tableScrollView.bounds.size.height)];
+    self.events1List.backgroundColor = [UIColor clearColor];
+    self.events1List.delegate = self;
+    self.events1List.dataSource = self;
+    self.events1List.separatorColor = [UIColor clearColor];
+    self.events1List.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.events1List.allowsMultipleSelectionDuringEditing = NO;
+    self.events1List.showsVerticalScrollIndicator = NO;
+    [self.tableScrollView addSubview:self.events1List];
+    
+    self.events2List = [[UITableView alloc] initWithFrame:CGRectMake(self.tableScrollView.bounds.size.width * 1, 0, self.tableScrollView.bounds.size.width, self.tableScrollView.bounds.size.height)];
+    self.events2List.backgroundColor = [UIColor clearColor];
+    self.events2List.delegate = self;
+    self.events2List.dataSource = self;
+    self.events2List.separatorColor = [UIColor clearColor];
+    self.events2List.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.events2List.allowsMultipleSelectionDuringEditing = NO;
+    self.events2List.showsVerticalScrollIndicator = NO;
+    [self.tableScrollView addSubview:self.events2List];
+    
+    self.events3List = [[UITableView alloc] initWithFrame:CGRectMake(self.tableScrollView.bounds.size.width * 2, 0, self.tableScrollView.bounds.size.width, self.tableScrollView.bounds.size.height)];
+    self.events3List.backgroundColor = [UIColor clearColor];
+    self.events3List.delegate = self;
+    self.events3List.dataSource = self;
+    self.events3List.separatorColor = [UIColor clearColor];
+    self.events3List.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.events3List.allowsMultipleSelectionDuringEditing = NO;
+    self.events3List.showsVerticalScrollIndicator = NO;
+    [self.tableScrollView addSubview:self.events3List];
     
     //When there are no entries
     self.emptyView = [[EmptyView alloc] initWithFrame:CGRectMake(0, 40, frame.size.width, frame.size.height - 60)];
@@ -154,20 +224,6 @@
     self.eventsHostDetail = [[EventsHostDetail alloc] initWithFrame:CGRectMake(self.sharedData.screenWidth * 3, -20, self.sharedData.screenWidth, self.mainCon.frame.size.height)];
     [self.mainCon addSubview:self.eventsHostDetail];
     
-    
-    
-    [[NSNotificationCenter defaultCenter]
-     addObserver:self
-     selector:@selector(goToNextSection)
-     name:@"EVENTS_GO_DOWN"
-     object:nil];
-    
-    [[NSNotificationCenter defaultCenter]
-     addObserver:self
-     selector:@selector(goToPrevSection)
-     name:@"EVENTS_GO_UP"
-     object:nil];
-    
     [[NSNotificationCenter defaultCenter]
      addObserver:self
      selector:@selector(goHomeNoLoad)
@@ -229,17 +285,17 @@
      name:@"EVENTS_TAPPED"
      object:nil];
     
-    [[NSNotificationCenter defaultCenter]
-     addObserver:self
-     selector:@selector(eventsPreSelectHandler)
-     name:@"EVENTS_PRESELECT"
-     object:nil];
+//    [[NSNotificationCenter defaultCenter]
+//     addObserver:self
+//     selector:@selector(eventsPreSelectHandler)
+//     name:@"EVENTS_PRESELECT"
+//     object:nil];
     
-    [[NSNotificationCenter defaultCenter]
-     addObserver:self
-     selector:@selector(goToInitHosting)
-     name:@"GO_TO_INIT_HOSTING"
-     object:nil];
+//    [[NSNotificationCenter defaultCenter]
+//     addObserver:self
+//     selector:@selector(goToInitHosting)
+//     name:@"GO_TO_INIT_HOSTING"
+//     object:nil];
     
     [[NSNotificationCenter defaultCenter]
      addObserver:self
@@ -314,39 +370,20 @@
     }
 }
 
--(void)eventsPreSelectHandler
-{
-    [self tableView:self.eventsList didSelectRowAtIndexPath:self.sharedData.cHost_index_path];
-}
-
 -(void)eventsTappedHandler
 {
     if(self.mainCon.frame.origin.x < 0) //Not on events page
     {
         [self goHome];
     }else{ //Scroll to top
-        [self.eventsList setContentOffset:CGPointZero animated:YES];
+        if (self.currentSegmentationIndex == 1) {
+            [self.events1List setContentOffset:CGPointZero animated:YES];
+        } else if (self.currentSegmentationIndex == 2) {
+            [self.events2List setContentOffset:CGPointZero animated:YES];
+        } else if (self.currentSegmentationIndex == 3) {
+            [self.events3List setContentOffset:CGPointZero animated:YES];
+        }
     }
-}
-
--(void)goToNextSection
-{
-    NSUInteger sectionNumber = [[self.eventsList indexPathForCell:[[self.eventsList visibleCells] objectAtIndex:0]] section];
-    sectionNumber = (sectionNumber + 1 < [self.eventsA count])?sectionNumber + 1:sectionNumber;
-    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:sectionNumber];
-    [self.eventsList scrollToRowAtIndexPath:indexPath
-                         atScrollPosition:UITableViewScrollPositionTop
-                                 animated:YES];
-}
-
--(void)goToPrevSection
-{
-    //NSUInteger sectionNumber = [[self.eventsList indexPathForCell:[[self.eventsList visibleCells] objectAtIndex:0]] section];
-    //sectionNumber = (sectionNumber - 2 > -1)?sectionNumber - 2:sectionNumber;
-    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
-    [self.eventsList scrollToRowAtIndexPath:indexPath
-                           atScrollPosition:UITableViewScrollPositionTop
-                                   animated:YES];
 }
 
 #pragma mark - Fetch
@@ -394,19 +431,19 @@
     }
     
     BOOL performFetchResult = [[self fetchedResultsController] performFetch:error];
-   
+    
     if ([[self.fetchedResultsController fetchedObjects] count]>0) {
-        self.eventsList.hidden = NO;
+//        self.eventsList.hidden = NO;
         [self.emptyView setMode:@"hide"];
         
-        [self.eventsList reloadData];
+        [self reloadTables];
     }
     
     return performFetchResult;
 }
 
 - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
-    self.eventsList.hidden = NO;
+//    self.eventsList.hidden = NO;
     [self.emptyView setMode:@"hide"];
     
     if ([[self.fetchedResultsController fetchedObjects] count] == 0) {
@@ -414,7 +451,7 @@
     }
     
     if (self.needUpdateContents) {
-        [self.eventsList reloadData];
+        [self reloadTables];
     }
 }
 
@@ -433,11 +470,8 @@
 -(void)loadData
 {
     AFHTTPRequestOperationManager *manager = [self.sharedData getOperationManager];
-
-    NSString *url = [Constants eventsURL:@"host" fb_id:self.sharedData.fb_id];
-
     //events/list/
-    url = [NSString stringWithFormat:@"%@/events/list/%@",PHBaseNewURL,self.sharedData.fb_id];
+    NSString *url = [NSString stringWithFormat:@"%@/events/list/%@",PHBaseNewURL,self.sharedData.fb_id];
     
     [manager GET:url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject)
      {
@@ -509,11 +543,6 @@
                              if ([[eventRow objectForKey:@"date_day"] isEqualToString:@"Featured Events"]) {
                                  isFeatured = YES;
                              }
-//                             
-//                             if (self.sharedData.experiences.count == 0) {
-//                                 [self.emptyView setMode:@"empty"];
-//                                 break;
-//                             }
                              
                              Event *item = (Event *)[NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([Event class])
                                                                                   inManagedObjectContext:self.managedObjectContext];
@@ -590,7 +619,8 @@
                      
                  }
                  
-                 [self.eventsList reloadData];
+                 [self reloadTables];
+                 
                  self.needUpdateContents = YES;
                  
                  [self performSelector:@selector(loadImages) withObject:nil afterDelay:1.0];
@@ -621,36 +651,34 @@
      }];
 }
 
--(void)goToInitHosting
-{
-    for (int k = 0; k < [self.eventsA count]; k++)
-    {
-        for (int l = 0; l < [[self.eventsA objectAtIndex:k][@"events"] count]; l++)
-        {
-            NSDictionary *dict = [[self.eventsA objectAtIndex:k][@"events"] objectAtIndex:l];
-            
-            for (int m = 0; m < [[dict objectForKey:@"hostings"] count]; m++)
-            {
-                NSDictionary *hosting = [[dict objectForKey:@"hostings"] objectAtIndex:m];
-                if([hosting[@"_id"] isEqualToString:self.sharedData.cInitHosting_id])
-                {
-                    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:l inSection:k];
-                    [self.eventsList scrollToRowAtIndexPath:indexPath
-                                           atScrollPosition:UITableViewScrollPositionTop
-                                                   animated:YES];
-                    self.sharedData.cHost_index_path = indexPath;
-                    self.sharedData.cHost_index = m;
-                    [[NSNotificationCenter defaultCenter]
-                     postNotificationName:@"EVENTS_PRESELECT"
-                     object:self];
-                    
-                    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-                    [defaults setObject:@"YES" forKey:@"init_hosting"];
-                    [defaults synchronize];
-                }
-            }
+- (void)reloadTables {
+    [self.eventsToday removeAllObjects];
+    [self.eventsTomorrow removeAllObjects];
+    [self.eventsUpcoming removeAllObjects];
+    
+    NSCalendar *cal = [NSCalendar currentCalendar];
+    NSDateComponents *components = [cal components:(NSCalendarUnitEra | NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay) fromDate:[NSDate date]];
+    NSDate *today = [cal dateFromComponents:components];
+    
+    components.day = components.day + 1;
+    NSDate *tomorrow = [cal dateFromComponents:components];
+    
+    for (Event *event in [self.fetchedResultsController fetchedObjects]) {
+        components = [cal components:(NSCalendarUnitEra | NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay) fromDate:event.startDatetime];
+        NSDate *otherDate = [cal dateFromComponents:components];
+        
+        if([today isEqualToDate:otherDate]) {
+            [self.eventsToday addObject:event];
+        } else if([tomorrow isEqualToDate:otherDate]) {
+            [self.eventsTomorrow addObject:event];
+        } else {
+            [self.eventsUpcoming addObject:event];
         }
     }
+    
+    [self.events1List reloadData];
+    [self.events2List reloadData];
+    [self.events3List reloadData];
 }
 
 -(void)loadImages
@@ -673,37 +701,112 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if(self.fetchedResultsController && [[self.fetchedResultsController fetchedObjects] count]>0){
-        return [[self.fetchedResultsController fetchedObjects] count];
+    if ([tableView isEqual:self.events1List]) {
+        if (self.eventsToday.count == 0) {
+            return 1;
+        }
+        return self.eventsToday.count;
+    } else if ([tableView isEqual:self.events2List]) {
+        if (self.eventsTomorrow.count == 0) {
+            return 1;
+        }
+        return self.eventsTomorrow.count;
+    } else if ([tableView isEqual:self.events3List]) {
+        if (self.eventsUpcoming.count == 0) {
+            return 1;
+        }
+        return self.eventsUpcoming.count;
     }
+    
     return 0;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    if ([tableView isEqual:self.events1List] && self.eventsToday.count == 0) {
+        return tableView.bounds.size.height;
+    } else if ([tableView isEqual:self.events2List] && self.eventsTomorrow.count == 0) {
+        return tableView.bounds.size.height;
+    } else if ([tableView isEqual:self.events3List] && self.eventsUpcoming.count == 0) {
+        return tableView.bounds.size.height;
+    }
+    
     CGFloat pictureHeightRatio = 3.0 / 4.0;
-    CGFloat cellHeight = pictureHeightRatio  * tableView.bounds.size.width + 98;
+    CGFloat cellHeight = pictureHeightRatio * tableView.bounds.size.width + 98;
     return cellHeight;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *simpleTableIdentifier = @"EventsRowCell";
+    if ([tableView isEqual:self.events1List] && self.eventsToday.count > 0) {
     
-    EventsRowCell *cell = [tableView dequeueReusableCellWithIdentifier:simpleTableIdentifier];
-    
-    if (cell == nil)
-    {
-        cell = [[EventsRowCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:simpleTableIdentifier];
+        static NSString *simpleTableIdentifier = @"EventsRow1Cell";
+        
+        EventsRowCell *cell = [tableView dequeueReusableCellWithIdentifier:simpleTableIdentifier];
+        
+        if (cell == nil)
+        {
+            cell = [[EventsRowCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:simpleTableIdentifier];
+        }
+        
+        [cell clearData];
+        
+        Event *event = [self.eventsToday objectAtIndex:indexPath.row];
+        cell.isFeaturedEvent = [event.isFeatured boolValue];
+        [cell loadData:event];
+        
+        return cell;
+    } else if ([tableView isEqual:self.events2List] && self.eventsTomorrow.count > 0) {
+        
+        static NSString *simpleTableIdentifier = @"EventsRow2Cell";
+        
+        EventsRowCell *cell = [tableView dequeueReusableCellWithIdentifier:simpleTableIdentifier];
+        
+        if (cell == nil)
+        {
+            cell = [[EventsRowCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:simpleTableIdentifier];
+        }
+        
+        [cell clearData];
+        
+        Event *event = [self.eventsTomorrow objectAtIndex:indexPath.row];
+        cell.isFeaturedEvent = [event.isFeatured boolValue];
+        [cell loadData:event];
+        
+        return cell;
+    } else if ([tableView isEqual:self.events3List] && self.eventsUpcoming.count > 0) {
+        
+        static NSString *simpleTableIdentifier = @"EventsRow3Cell";
+        
+        EventsRowCell *cell = [tableView dequeueReusableCellWithIdentifier:simpleTableIdentifier];
+        
+        if (cell == nil)
+        {
+            cell = [[EventsRowCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:simpleTableIdentifier];
+        }
+        
+        [cell clearData];
+        
+        Event *event = [self.eventsUpcoming objectAtIndex:indexPath.row];
+        cell.isFeaturedEvent = [event.isFeatured boolValue];
+        [cell loadData:event];
+        
+        return cell;
     }
     
-    [cell clearData];
+    static NSString *emptyTableIdentifier = @"EmptyCell";
     
-    Event *event = [[self fetchedResultsController] objectAtIndexPath:indexPath];
-    cell.isFeaturedEvent = [event.isFeatured boolValue];
-    [cell loadData:event];
+    UITableViewCell *cell =[tableView dequeueReusableCellWithIdentifier:emptyTableIdentifier];
+    if (cell == nil) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:emptyTableIdentifier];
+    }
+    
+    [[cell textLabel] setText:@"No Events Found"];
+    [[cell textLabel] setFont:[UIFont phBlond:20]];
+    [[cell textLabel] setTextAlignment:NSTextAlignmentCenter];
     
     return cell;
+    
 }
 
 
@@ -712,42 +815,105 @@
 {
     [tableView deselectRowAtIndexPath:[tableView indexPathForSelectedRow] animated:YES];
     
-    self.cGuestListingIndexPath = indexPath;
+    Event *event = nil;
     
-    Event *event = [[self fetchedResultsController] objectAtIndexPath:indexPath];
-    
-    [self.sharedData.selectedEvent removeAllObjects];
-    self.sharedData.selectedEvent[@"_id"] = event.eventID;
-    self.sharedData.selectedEvent[@"venue_name"] = event.venue;
-    
-    self.sharedData.cEventId = event.eventID;
-    self.sharedData.mostRecentEventSelectedId = event.eventID;
-    self.sharedData.cVenueName = event.venue;
-    
-    if([self.sharedData isGuest] && ![self.sharedData isMember])
-    {
-        [self.eventsSummary initClassWithEvent:event];
-        
-        self.eventsSummary.hidden = NO;
-        self.eventsGuestList.hidden = YES;
-        self.eventsHostingsList.hidden = NO;
-    }
-    else if([self.sharedData isHost] || [self.sharedData isMember])
-    {
-        [self.eventsSummary initClassWithEvent:event];
-        
-        self.eventsSummary.hidden = NO;
-        self.eventsGuestList.hidden = NO;
-        self.eventsHostingsList.hidden = YES;
+    if ([tableView isEqual:self.events1List]) {
+        event = [self.eventsToday objectAtIndex:indexPath.row];
+    } else if ([tableView isEqual:self.events2List]) {
+        event = [self.eventsTomorrow objectAtIndex:indexPath.row];
+    } else if ([tableView isEqual:self.events3List]) {
+        event = [self.eventsUpcoming objectAtIndex:indexPath.row];
     }
     
-    [self goToSummary];
+    if (event != nil) {
+        [self.sharedData.selectedEvent removeAllObjects];
+        self.sharedData.selectedEvent[@"_id"] = event.eventID;
+        self.sharedData.selectedEvent[@"venue_name"] = event.venue;
+        
+        self.sharedData.cEventId = event.eventID;
+        self.sharedData.mostRecentEventSelectedId = event.eventID;
+        self.sharedData.cVenueName = event.venue;
+        
+        if([self.sharedData isGuest] && ![self.sharedData isMember])
+        {
+            [self.eventsSummary initClassWithEvent:event];
+            
+            self.eventsSummary.hidden = NO;
+            self.eventsGuestList.hidden = YES;
+            self.eventsHostingsList.hidden = NO;
+        }
+        else if([self.sharedData isHost] || [self.sharedData isMember])
+        {
+            [self.eventsSummary initClassWithEvent:event];
+            
+            self.eventsSummary.hidden = NO;
+            self.eventsGuestList.hidden = NO;
+            self.eventsHostingsList.hidden = YES;
+        }
+        
+        [self goToSummary];
+    }
 }
 
 - (void)tableView:(UITableView *)tableView didEndDisplayingCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    EventsRowCell *eventsRowCell = (EventsRowCell*)cell;
-    [eventsRowCell wentOffscreen];
+    if ([cell isKindOfClass:[EventsRowCell class]]) {
+        EventsRowCell *eventsRowCell = (EventsRowCell*)cell;
+        [eventsRowCell wentOffscreen];
+    }
+}
+
+#pragma mark - Segmentation
+-(void)segmentationButtonDidTap:(id)sender {
+    NSInteger senderTag = (NSInteger)[sender tag];
+    
+    if (senderTag == self.currentSegmentationIndex) {
+        return;
+    }
+    
+    self.currentSegmentationIndex = senderTag;
+    
+    CGFloat buttonSegmentationWidth = self.frame.size.width/3;
+    
+    [UIView animateWithDuration:0.25 animations:^()
+     {
+         self.segmentationIndicator.frame = CGRectMake((senderTag - 1) * buttonSegmentationWidth,
+                                                       self.segmentationIndicator.frame.origin.y,
+                                                       self.segmentationIndicator.bounds.size.width,
+                                                       self.segmentationIndicator.bounds.size.height);
+         
+     } completion:^(BOOL finished){
+         
+     }];
+    
+    [UIView animateWithDuration:0.5 animations:^()
+     {
+         [self.tableScrollView setContentOffset:CGPointMake((senderTag - 1) * self.tableScrollView.bounds.size.width, 0)];
+         
+     } completion:^(BOOL finished){
+         
+     }];
+}
+
+#pragma mark - UIScrollViewDelegate
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
+    if ([scrollView isEqual:self.tableScrollView]) {
+        CGPoint offset = scrollView.contentOffset;
+        NSInteger currentPage = offset.x / scrollView.bounds.size.width;
+        CGFloat buttonSegmentationWidth = self.frame.size.width/3;
+        
+        self.currentSegmentationIndex = currentPage + 1;
+        
+        [UIView animateWithDuration:0.25 animations:^()
+         {
+             self.segmentationIndicator.frame = CGRectMake(currentPage * buttonSegmentationWidth,
+                                                           self.segmentationIndicator.frame.origin.y,
+                                                           self.segmentationIndicator.bounds.size.width,
+                                                           self.segmentationIndicator.bounds.size.height);
+         } completion:^(BOOL finished) {
+             
+         }];
+    }
 }
 
 #pragma mark - Filter

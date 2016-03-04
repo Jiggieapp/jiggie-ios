@@ -53,6 +53,7 @@ static SharedData *sharedInstance = nil;
         self.isInConversation = NO; // if in the user conversation
         self.cPageIndex     = 0;
         self.hasMessageToLoad = NO; // boolean to open the message when going to the app
+        self.hasFeedToLoad = NO; // boolean to open the social feed when going to the app
         self.ph_token       = @""; // not use
         self.user_id        = @""; //
         self.cVenueListIndex = 0; // not use
@@ -523,7 +524,7 @@ static SharedData *sharedInstance = nil;
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     manager.requestSerializer = [AFJSONRequestSerializer serializer];
     manager.responseSerializer = [AFJSONResponseSerializer serializer];
-    [manager.requestSerializer setValue:self.ph_token forHTTPHeaderField:@"ph_token"];
+    [manager.requestSerializer setValue:self.ph_token forHTTPHeaderField:@"Authorization"];
     
 //    AFSecurityPolicy *policy = [AFSecurityPolicy policyWithPinningMode:AFSSLPinningModeCertificate];
 //    policy.validatesDomainName = NO;
@@ -662,7 +663,7 @@ static SharedData *sharedInstance = nil;
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     manager.requestSerializer = [AFJSONRequestSerializer serializer];
     manager.responseSerializer = [AFJSONResponseSerializer serializer];
-    NSString *urlToLoad = [NSString stringWithFormat:@"%@/user/sync/superproperties/%@",PHBaseURL,self.fb_id];
+    NSString *urlToLoad = [NSString stringWithFormat:@"%@/user/sync/superproperties/%@",PHBaseNewURL,self.fb_id];
     
     NSLog(@"MIXPANEL_URL :: %@",urlToLoad);
     NSLog(@"DATA_ :: %@",dict);

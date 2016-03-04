@@ -459,6 +459,14 @@
          object:self];
     }
     
+    if([self.fillType isEqualToString:@"ticket"]) {
+        // TICKET ACTION
+        [[NSNotificationCenter defaultCenter]
+         postNotificationName:@"SHOW_TICKET_LIST"
+         object:self.cEvent];
+
+    }
+    
 }
 
 #pragma mark - Fetch
@@ -1032,7 +1040,7 @@
                                              self.sharedData.screenWidth,
                                              self.sharedData.screenHeight - self.tabBar.bounds.size.height - PHTabHeight - 44)];
     }
-    
+
     if([self.fillType isEqualToString:@"none"])
     {
         self.btnHostHere.hidden = YES;
@@ -1056,6 +1064,10 @@
     {
         self.btnHostHere.hidden = NO;
         [self.btnHostHere setTitle:@"PURCHASE TABLE" forState:UIControlStateNormal];
+    } else if([self.fillType isEqualToString:@"ticket"])
+    {
+        self.btnHostHere.hidden = NO;
+        [self.btnHostHere setTitle:@"PURCHASE TICKET" forState:UIControlStateNormal];
     }
 
 }
