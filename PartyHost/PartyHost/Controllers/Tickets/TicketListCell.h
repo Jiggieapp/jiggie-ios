@@ -14,5 +14,8 @@
 @property (nonatomic, strong) UILabel *ticketDescription;
 @property (nonatomic, strong) UILabel *ticketPrice;
 @property (nonatomic, strong) UILabel *ticketPerson;
+@property (nonatomic, assign) CGFloat cellWidth;
+
+- (void)setData:(NSDictionary *)data hasDescription:(BOOL)hasDescription;
 
 @end

@@ -57,6 +57,7 @@ NSString *const PHBlankImgURL = @"https://partyhostapp.herokuapp.com/img/fbperso
 NSString *const PHDateFormatShort = @"MMM d, yyyy h:mm a"; //This is the format for date_str from API
 NSString *const PHDateFormatServer = @"yyyy-MM-dd'T'HH:mm:ss.SSSZ"; //Native server usually sends this
 NSString *const PHDateFormatApp = @"EEEE MMM dd, yyyy hh:mm a"; //Native server usually sends this
+NSString *const PHDateFormatAppShort = @"EE, dd MMM yyyy"; //Native server usually sends this
 
 
 int const PHTabHeight = 50; //Tabs at bottom of screen

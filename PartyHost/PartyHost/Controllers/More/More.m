@@ -74,7 +74,8 @@
     self.moreList.hidden = YES;
     self.moreList.backgroundColor = [UIColor whiteColor];
     self.moreList.separatorColor = [UIColor phLightGrayColor];
-    self.moreList.scrollEnabled = (self.sharedData.isIphone4)?YES:NO;
+    self.moreList.showsVerticalScrollIndicator = NO;
+//    self.moreList.scrollEnabled = (self.sharedData.isIphone4)?YES:NO;
     [self.mainCon addSubview:self.moreList];
     
     self.profilePage = [[Profile alloc] initWithFrame:CGRectMake(self.sharedData.screenWidth, 0, self.sharedData.screenWidth, frame.size.height)];
@@ -314,7 +315,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if (section==0) {
-        return 4;
+        return 6;
     } else if (section==1) {
         return 0;
     } else {
@@ -334,6 +335,36 @@
     if (indexPath.section==0)
     {
         if(indexPath.row==0)
+        {
+            cell = [tableView dequeueReusableCellWithIdentifier:@"EditProfileCell"];
+            if (cell == nil) {cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"EditProfileCell"];}
+            
+            UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(10, 0, self.sharedData.screenWidth, 0.4)];
+            [lineView setBackgroundColor:[UIColor phLightGrayColor]];
+            [[cell contentView] addSubview:lineView];
+            
+            UILabel *textLabel = [[UILabel alloc] initWithFrame:CGRectMake(70, 20, 180, 20)];
+            textLabel.backgroundColor = [UIColor clearColor];
+            textLabel.font = [UIFont phBlond:16];
+            textLabel.text = @"Edit Profile";
+            [[cell contentView] addSubview:textLabel];
+            
+            UIImageView *cellImage = [[UIImageView alloc] initWithFrame:CGRectMake(14, 10, 40, 40)];
+            cellImage.backgroundColor = [UIColor colorFromHexCode:@"E9D82E"];
+            cellImage.layer.cornerRadius = 20;
+            [[cell contentView] addSubview:cellImage];
+            
+            UIImageView *iconImage = [[UIImageView alloc] initWithFrame:CGRectMake(10, 10, 20, 20)];
+            [iconImage setImage:[UIImage imageNamed:@"icon_edit_profile.png"]];
+            [cellImage addSubview:iconImage];
+            
+            UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0.0, 0.0, 11.0, 21.0)];
+            [imageView setBackgroundColor:[UIColor clearColor]];
+            [imageView setImage:[UIImage imageNamed:@"forward.png"]];
+            [cell setAccessoryView:imageView];
+            [[cell accessoryView] setBackgroundColor:[UIColor clearColor]];
+        }
+        else if(indexPath.row==1)
         {
             cell = [tableView dequeueReusableCellWithIdentifier:@"SettingsCell"];
             if (cell == nil) {cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"SettingsCell"];}
@@ -363,7 +394,7 @@
             [cell setAccessoryView:imageView];
             [[cell accessoryView] setBackgroundColor:[UIColor clearColor]];
         }
-        else if(indexPath.row==1)
+        else if(indexPath.row==2)
         {
             cell = [tableView dequeueReusableCellWithIdentifier:@"InviteFriendsCell"];
             if (cell == nil) {cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"InviteFriendsCell"];}
@@ -390,7 +421,7 @@
             [[cell accessoryView] setBackgroundColor:[UIColor clearColor]];
 
         }
-        else if(indexPath.row==2)
+        else if(indexPath.row==3)
         {
             cell = [tableView dequeueReusableCellWithIdentifier:@"EmailSupportCell"];
             if (cell == nil) {cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"EmailSupportCell"];}
@@ -416,7 +447,35 @@
             [cell setAccessoryView:imageView];
             [[cell accessoryView] setBackgroundColor:[UIColor clearColor]];
 
-        } else if (indexPath.row==3)
+        }
+        else if(indexPath.row==4)
+        {
+            cell = [tableView dequeueReusableCellWithIdentifier:@"PurchaseHistoryCell"];
+            if (cell == nil) {cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"PurchaseHistoryCell"];}
+            
+            UILabel *textLabel = [[UILabel alloc] initWithFrame:CGRectMake(70, 20, 180, 20)];
+            textLabel.backgroundColor = [UIColor clearColor];
+            textLabel.font = [UIFont phBlond:16];
+            textLabel.text = @"Purchase History";
+            [[cell contentView] addSubview:textLabel];
+            
+            UIImageView *cellImage = [[UIImageView alloc] initWithFrame:CGRectMake(14, 10, 40, 40)];
+            cellImage.backgroundColor = [UIColor colorFromHexCode:@"A74CC9"];
+            cellImage.layer.cornerRadius = 20;
+            [[cell contentView] addSubview:cellImage];
+            
+            UIImageView *iconImage = [[UIImageView alloc] initWithFrame:CGRectMake(10, 10, 20, 20)];
+            [iconImage setImage:[UIImage imageNamed:@"icon_purchase_history.png"]];
+            [cellImage addSubview:iconImage];
+            
+            UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0.0, 0.0, 11.0, 21.0)];
+            [imageView setBackgroundColor:[UIColor clearColor]];
+            [imageView setImage:[UIImage imageNamed:@"forward.png"]];
+            [cell setAccessoryView:imageView];
+            [[cell accessoryView] setBackgroundColor:[UIColor clearColor]];
+            
+        }
+        else if (indexPath.row==5)
         {
             cell = [tableView dequeueReusableCellWithIdentifier:@"LogOutCell"];
             if (cell == nil) {cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"LogOutCell"];}
@@ -470,8 +529,14 @@
         
         UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
         
+        if(indexPath.row == 0) {
+            [self goProfile];
+            
+            return;
+        }
+            
         //Settings
-        if(indexPath.row == 0 && [UserManager updateLocalSetting])
+        else if(indexPath.row == 1 && [UserManager updateLocalSetting])
         {
             self.settingsPage.hidden = NO;
             self.profilePage.hidden = YES;
@@ -487,7 +552,7 @@
         }
 
         //Invite friends
-        else if(indexPath.row == 1)
+        else if(indexPath.row == 2)
         {
             [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Share App" withDict:@{@"origin":@"More"}];
             
@@ -499,7 +564,7 @@
         }
         
         //Email support
-        else if(indexPath.row == 2)
+        else if(indexPath.row == 3)
         {
             [[NSNotificationCenter defaultCenter]
              postNotificationName:@"SHOW_MAIL_MESSAGE"
@@ -508,8 +573,15 @@
             return;
         }
         
+        //Purchase History
+        else if(indexPath.row == 4)
+        {
+            
+            return;
+        }
+        
         //Log Out
-        else if(indexPath.row == 3)
+        else if(indexPath.row == 5)
         {
             
             [[UserManager sharedManager] clearAllUserData];
@@ -521,24 +593,6 @@
             [tableView deselectRowAtIndexPath:[tableView indexPathForSelectedRow] animated:YES];
             
             return;
-        }
-        
-        //My profile
-        else if([cell.textLabel.text isEqualToString:@"Profile"])
-        {
-            self.settingsPage.hidden = YES;
-            self.hostingsPage.hidden = YES;
-            self.confirmationsPage.hidden = YES;
-            self.purchasesPage.hidden = YES;
-            
-            self.profilePage.hidden = NO;
-            [self.profilePage initClass];
-            
-            self.btnBack.hidden = NO;
-            [UIView animateWithDuration:0.25 animations:^()
-             {
-                 self.mainCon.frame = CGRectMake(-self.sharedData.screenWidth, 0, self.sharedData.screenWidth * 3, self.sharedData.screenHeight - PHTabHeight);
-             }];
         }
         
         //Confirmations

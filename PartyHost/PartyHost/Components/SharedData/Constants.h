@@ -39,6 +39,7 @@ extern NSString *const PHUserTagListURL;
 extern NSString *const PHOrdersAllURL;
 extern NSString *const PHDateFormatServer;
 extern NSString *const PHDateFormatApp;
+extern NSString *const PHDateFormatAppShort;
 extern NSString *const PHPhoneVerifySendURL;
 extern NSString *const PHPhoneVerifyValidateURL;
 extern NSString *const PHUserPaymentURL;

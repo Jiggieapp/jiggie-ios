@@ -32,13 +32,27 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
+    // Remove nav bar shadow
+    [self.navigationController.navigationBar setBackgroundImage:[[UIImage alloc] init]
+                                                  forBarMetrics:UIBarMetricsDefault];
+    self.navigationController.navigationBar.shadowImage = [[UIImage alloc] init];
+    
+    
     UIButton *closeButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [closeButton setFrame:CGRectMake(0.0f, 0.0f, 40.0f, 40.0f)];
-    [closeButton setBackgroundImage:[UIImage imageNamed:@"nav_cancel"] forState:UIControlStateNormal];
+    [closeButton setFrame:CGRectMake(0.0f, 0.0f, 30.0f, 30.0f)];
+    [closeButton setImage:[UIImage imageNamed:@"nav_back_new"] forState:UIControlStateNormal];
     [closeButton addTarget:self action:@selector(closeButtonDidTap:) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem *closeBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:closeButton];
     
     [[self navigationItem] setLeftBarButtonItem:closeBarButtonItem];
+    
+    UIButton *helpButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [helpButton setFrame:CGRectMake(0.0f, 0.0f, 40.0f, 30.0f)];
+    [helpButton setImage:[UIImage imageNamed:@"button_help"] forState:UIControlStateNormal];
+    [helpButton addTarget:self action:@selector(helpButtonDidTap:) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *helpBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:helpButton];
+    
+    [[self navigationItem] setRightBarButtonItem:helpBarButtonItem];
     
     UIView *titleView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 200, 40)];
     [titleView setBackgroundColor:[UIColor clearColor]];
@@ -46,7 +60,7 @@
     UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 200, 20)];
     [titleLabel setTextAlignment:NSTextAlignmentCenter];
     [titleLabel setText:@"CHOOSE ADMISSION"];
-    [titleLabel setFont:[UIFont phBlond:14]];
+    [titleLabel setFont:[UIFont phBlond:13]];
     [titleLabel setTextColor:[UIColor whiteColor]];
     [titleLabel setBackgroundColor:[UIColor clearColor]];
     [titleView addSubview:titleLabel];
@@ -56,21 +70,37 @@
     [titleView addSubview:titleIcon];
     
     [self.navigationItem setTitleView:titleView];
+    
 
-    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.visibleSize.width, self.visibleSize.height - 44)];
+    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.visibleSize.width, self.visibleSize.height)];
     [self.tableView setDelegate:self];
     [self.tableView setDataSource:self];
+    [self.tableView setBackgroundColor:[UIColor whiteColor]];
     [self.view addSubview:self.tableView];
     
-    UIButton *continueButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [continueButton addTarget:self action:@selector(continueButtonDidTap:) forControlEvents:UIControlEventTouchUpInside];
-    [continueButton setFrame:CGRectMake(0, self.visibleSize.height - 44, self.visibleSize.width, 44)];
-    [continueButton setBackgroundColor:[UIColor phBlueColor]];
-    [continueButton.titleLabel setFont:[UIFont phBold:15]];
-    [continueButton setTitle:@"CONTINUE" forState:UIControlStateNormal];
-    [continueButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [self.view addSubview:continueButton];
+    UIView *tmpPurpleView = [[UIView alloc] initWithFrame:CGRectMake(0, -300, self.visibleSize.width, 300)];
+    tmpPurpleView.backgroundColor = [UIColor phPurpleColor];
+    [self.tableView addSubview:tmpPurpleView];
     
+    UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 80)];
+    [headerView setBackgroundColor:[UIColor phPurpleColor]];
+    
+    self.tableHeaderTitle = [[UILabel alloc] initWithFrame:CGRectMake(0, 25, self.view.bounds.size.width, 16)];
+    [self.tableHeaderTitle setFont:[UIFont phBlond:15]];
+    [self.tableHeaderTitle setTextColor:[UIColor whiteColor]];
+    [self.tableHeaderTitle setBackgroundColor:[UIColor clearColor]];
+    [self.tableHeaderTitle setTextAlignment:NSTextAlignmentCenter];
+    [headerView addSubview:self.tableHeaderTitle];
+    
+    self.tableHeaderDescription = [[UILabel alloc] initWithFrame:CGRectMake(0, 45, self.view.bounds.size.width, 16)];
+    [self.tableHeaderDescription setFont:[UIFont phBlond:12]];
+    [self.tableHeaderDescription setTextColor:[UIColor whiteColor]];
+    [self.tableHeaderDescription setBackgroundColor:[UIColor clearColor]];
+    [self.tableHeaderDescription setTextAlignment:NSTextAlignmentCenter];
+    [headerView addSubview:self.tableHeaderDescription];
+    
+    self.tableView.tableHeaderView = headerView;
+
     self.emptyView = [[EmptyView alloc] initWithFrame:CGRectMake(0, 0, self.visibleSize.width, self.visibleSize.height)];
     [self.emptyView setData:@"No data found" subtitle:@"Sorry we're having some server issues, please check back in a few minutes." imageNamed:@""];
     [self.emptyView setMode:@"load"];
@@ -88,6 +118,10 @@
 #pragma mark - Action
 - (void)closeButtonDidTap:(id)sender {
     [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void)helpButtonDidTap:(id)sender {
+
 }
 
 - (void)continueButtonDidTap:(id)sender {
@@ -122,6 +156,29 @@
                     if (data && data != nil) {
                         NSDictionary *product_lists = [data objectForKey:@"product_lists"];
                         if (product_lists && product_lists != nil) {
+                            self.productList = product_lists;
+                            
+                            NSString *event_name = [product_lists objectForKey:@"event_name"];
+                            if (event_name && event_name != nil) {
+                                self.tableHeaderTitle.text = event_name;
+                            }
+                            
+                            NSString *venue_name = [product_lists objectForKey:@"venue_name"];
+                            
+                            NSString *start_datetime = [product_lists objectForKey:@"start_datetime"];
+                            NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+                            [formatter setDateFormat:PHDateFormatServer];
+                            [formatter setLocale:[NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"]];
+                            [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
+                            NSDate *startDatetime = [formatter dateFromString:start_datetime];
+                            
+                            [formatter setDateFormat:PHDateFormatAppShort];
+                            [formatter setLocale:[NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"]];
+                            [formatter setTimeZone:[NSTimeZone localTimeZone]];
+                            NSString *shortDateTime = [formatter stringFromDate:startDatetime];
+                            
+                            self.tableHeaderDescription.text = [NSString stringWithFormat:@"%@ - %@", shortDateTime, venue_name];
+                            
                             NSArray *purchase = [product_lists objectForKey:@"purchase"];
                             if (purchase && purchase != nil) {
                                 self.purchases = purchase;
@@ -199,8 +256,6 @@
                             NSArray *product_list = [product_summary objectForKey:@"product_list"];
                             if (product_list && product_list != nil) {
                                 TicketSummaryViewController *ticketSummaryViewController = [[TicketSummaryViewController alloc] init];
-                                ticketSummaryViewController.productSummary = product_summary;
-                                ticketSummaryViewController.productList = product_list;
                                 [self.navigationController pushViewController:ticketSummaryViewController animated:YES];
                             }
                         }
@@ -244,6 +299,7 @@
     myLabel.text = [self tableView:tableView titleForHeaderInSection:section];
     
     UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.bounds.size.width, 26)];
+    [headerView setBackgroundColor:[UIColor whiteColor]];
     [headerView addSubview:myLabel];
     [headerView addSubview:topLine];
     [headerView addSubview:bottomLine];
@@ -274,46 +330,28 @@
     if (indexPath.section == 0) {
         static NSString *simpleTableIdentifier = @"Purchase-TicketCell";
         
-        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:simpleTableIdentifier];
+        TicketListCell *cell = (TicketListCell *)[tableView dequeueReusableCellWithIdentifier:simpleTableIdentifier];
         if (cell == nil) {
-            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:simpleTableIdentifier];
+            cell = [[TicketListCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:simpleTableIdentifier];
+            cell.cellWidth = self.visibleSize.width;
         }
         
         NSDictionary *purchase = [self.purchases objectAtIndex:indexPath.row];
-        if (purchase && purchase != nil) {
-            NSString *name = [purchase objectForKey:@"name"];
-            if (name && name != nil) {
-                [cell.textLabel setText:name];
-            }
-            
-            NSString *total_price = [purchase objectForKey:@"total_price"];
-            if (total_price && total_price != nil) {
-                [cell.detailTextLabel setText:total_price];
-            }
-        }
+        [cell setData:purchase hasDescription:YES];
         
         return cell;
     }
     
     static NSString *simpleTableIdentifier = @"Reservation-TicketCell";
     
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:simpleTableIdentifier];
+    TicketListCell *cell = (TicketListCell *)[tableView dequeueReusableCellWithIdentifier:simpleTableIdentifier];
     if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:simpleTableIdentifier];
+        cell = [[TicketListCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:simpleTableIdentifier];
+        cell.cellWidth = self.visibleSize.width;
     }
     
     NSDictionary *reservation = [self.reservations objectAtIndex:indexPath.row];
-    if (reservation && reservation != nil) {
-        NSString *name = [reservation objectForKey:@"name"];
-        if (name && name != nil) {
-            [cell.textLabel setText:name];
-        }
-        
-        NSString *total_price = [reservation objectForKey:@"total_price"];
-        if (total_price && total_price != nil) {
-            [cell.detailTextLabel setText:total_price];
-        }
-    }
+    [cell setData:reservation hasDescription:NO];
     
     return cell;
 }
@@ -321,7 +359,17 @@
 #pragma mark - UITableViewDelegate
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:[tableView indexPathForSelectedRow] animated:YES];
-
+    
+    TicketSummaryViewController *ticketSummaryViewController = [[TicketSummaryViewController alloc] init];
+    if ([indexPath section] == 0) {
+        ticketSummaryViewController.productSelected = [self.purchases objectAtIndex:indexPath.row];
+        ticketSummaryViewController.isTicketProduct = YES;
+    } else if ([indexPath section] == 1) {
+        ticketSummaryViewController.productSelected = [self.reservations objectAtIndex:indexPath.row];
+        ticketSummaryViewController.isTicketProduct = NO;
+    }
+    ticketSummaryViewController.productList = self.productList;
+    [self.navigationController pushViewController:ticketSummaryViewController animated:YES];
 }
 
 @end
