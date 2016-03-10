@@ -124,10 +124,6 @@
 
 }
 
-- (void)continueButtonDidTap:(id)sender {
-    [self postSummary];
-}
-
 #pragma mark - Data 
 - (void)loadData {
     AFHTTPRequestOperationManager *manager = [self.sharedData getOperationManager];
@@ -207,81 +203,19 @@
     }];
 }
 
-- (void)postSummary {
-    AFHTTPRequestOperationManager *manager = [self.sharedData getOperationManager];
-    NSString *url = [NSString stringWithFormat:@"%@/product/summary",PHBaseNewURL];
-    
-    NSMutableArray *summaryList = [NSMutableArray array];
-    for (NSDictionary *product in self.purchases) {
-        NSDictionary *summary = @{@"ticket_id":[product objectForKey:@"ticket_id"],
-                                  @"name":[product objectForKey:@"name"],
-                                  @"ticket_type":[product objectForKey:@"ticket_type"],
-                                  @"quantity":[product objectForKey:@"quantity"],
-                                  @"admin_fee":[product objectForKey:@"admin_fee"],
-                                  @"tax_percent":[product objectForKey:@"tax_percent"],
-                                  @"tax_amount":[product objectForKey:@"tax_amount"],
-                                  @"tip_percent":[product objectForKey:@"tip_percent"],
-                                  @"tip_amount":[product objectForKey:@"tip_amount"],
-                                  @"price":[product objectForKey:@"price"],
-                                  @"total_price":[product objectForKey:@"total_price"],
-                                  @"num_buy":@2};
-        [summaryList addObject:summary];
-    }
-    
-    NSDictionary *params = @{@"fb_id":self.sharedData.fb_id,
-                             @"event_id":self.cEvent.eventID,
-                             @"product_list":summaryList};
-    
-    [manager POST:url parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        
-        NSInteger responseStatusCode = operation.response.statusCode;
-        if (responseStatusCode != 200) {
-            return;
-        }
-        
-        NSString *responseString = operation.responseString;
-        NSError *error;
-        
-        NSDictionary *json = (NSDictionary *)[NSJSONSerialization
-                                              JSONObjectWithData:[responseString dataUsingEncoding:NSUTF8StringEncoding]
-                                              options:kNilOptions
-                                              error:&error];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if (json && json != nil) {
-                @try {
-                    NSDictionary *data = [json objectForKey:@"data"];
-                    if (data && data != nil) {
-                        NSDictionary *product_summary = [data objectForKey:@"product_summary"];
-                        if (product_summary && product_summary != nil) {
-                            NSArray *product_list = [product_summary objectForKey:@"product_list"];
-                            if (product_list && product_list != nil) {
-                                TicketSummaryViewController *ticketSummaryViewController = [[TicketSummaryViewController alloc] init];
-                                [self.navigationController pushViewController:ticketSummaryViewController animated:YES];
-                            }
-                        }
-                    }
-                }
-                @catch (NSException *exception) {
-                    
-                }
-                @finally {
-                    
-                }
-            }
-        });
-        
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-
-    }];
-}
-
 #pragma mark - UITableViewDataSource
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 2;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    return 30;
+    if (section == 0 && self.purchases.count > 0) {
+        return 30;
+    } else if (section == 1 && self.reservations.count > 0) {
+        return 30;
+    }
+    
+    return 0;
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {

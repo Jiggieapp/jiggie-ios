@@ -21,6 +21,10 @@
 		DA47B22A1C3A8553001B4476 /* AFNetworkActivityLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = DA47B2291C3A8553001B4476 /* AFNetworkActivityLogger.m */; };
 		DA47B23B1C3BA492001B4476 /* FeedMatch.m in Sources */ = {isa = PBXBuildFile; fileRef = DA47B23A1C3BA492001B4476 /* FeedMatch.m */; };
 		DA52379C1C805D9A00E140C1 /* TicketListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DA52379B1C805D9A00E140C1 /* TicketListCell.m */; };
+		DA5ED5E31C896AEA00004C7E /* GuestDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5ED5E21C896AEA00004C7E /* GuestDetailViewController.m */; };
+		DA5ED5E61C8FDF5100004C7E /* TicketConfirmationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5ED5E51C8FDF5000004C7E /* TicketConfirmationViewController.m */; };
+		DA5ED5E91C908F8D00004C7E /* PaymentSelectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5ED5E81C908F8D00004C7E /* PaymentSelectionViewController.m */; };
+		DA5ED5EC1C90A34400004C7E /* AddPaymentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5ED5EB1C90A34400004C7E /* AddPaymentViewController.m */; };
 		DA700E0E1C63561300E5D945 /* Jiggie.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = DA700E0D1C63515D00E5D945 /* Jiggie.entitlements */; };
 		DA9E0CF71C61F75000966F16 /* BaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA9E0CF61C61F75000966F16 /* BaseViewController.m */; };
 		DA9E0CFA1C61F76300966F16 /* TicketListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA9E0CF91C61F76300966F16 /* TicketListViewController.m */; };
@@ -316,6 +320,14 @@
 		DA47B23A1C3BA492001B4476 /* FeedMatch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FeedMatch.m; sourceTree = "<group>"; };
 		DA52379A1C805D9A00E140C1 /* TicketListCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TicketListCell.h; sourceTree = "<group>"; };
 		DA52379B1C805D9A00E140C1 /* TicketListCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TicketListCell.m; sourceTree = "<group>"; };
+		DA5ED5E11C896AEA00004C7E /* GuestDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GuestDetailViewController.h; sourceTree = "<group>"; };
+		DA5ED5E21C896AEA00004C7E /* GuestDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GuestDetailViewController.m; sourceTree = "<group>"; };
+		DA5ED5E41C8FDF5000004C7E /* TicketConfirmationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TicketConfirmationViewController.h; sourceTree = "<group>"; };
+		DA5ED5E51C8FDF5000004C7E /* TicketConfirmationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TicketConfirmationViewController.m; sourceTree = "<group>"; };
+		DA5ED5E71C908F8C00004C7E /* PaymentSelectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PaymentSelectionViewController.h; sourceTree = "<group>"; };
+		DA5ED5E81C908F8D00004C7E /* PaymentSelectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PaymentSelectionViewController.m; sourceTree = "<group>"; };
+		DA5ED5EA1C90A34400004C7E /* AddPaymentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddPaymentViewController.h; sourceTree = "<group>"; };
+		DA5ED5EB1C90A34400004C7E /* AddPaymentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddPaymentViewController.m; sourceTree = "<group>"; };
 		DA700E0D1C63515D00E5D945 /* Jiggie.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Jiggie.entitlements; sourceTree = SOURCE_ROOT; };
 		DA9E0CF51C61F75000966F16 /* BaseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseViewController.h; sourceTree = "<group>"; };
 		DA9E0CF61C61F75000966F16 /* BaseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseViewController.m; sourceTree = "<group>"; };
@@ -892,6 +904,14 @@
 				DA52379B1C805D9A00E140C1 /* TicketListCell.m */,
 				DAE02EA31C6C812200EBAAF0 /* TicketSummaryViewController.h */,
 				DAE02EA41C6C812200EBAAF0 /* TicketSummaryViewController.m */,
+				DA5ED5E41C8FDF5000004C7E /* TicketConfirmationViewController.h */,
+				DA5ED5E51C8FDF5000004C7E /* TicketConfirmationViewController.m */,
+				DA5ED5E71C908F8C00004C7E /* PaymentSelectionViewController.h */,
+				DA5ED5E81C908F8D00004C7E /* PaymentSelectionViewController.m */,
+				DA5ED5EA1C90A34400004C7E /* AddPaymentViewController.h */,
+				DA5ED5EB1C90A34400004C7E /* AddPaymentViewController.m */,
+				DA5ED5E11C896AEA00004C7E /* GuestDetailViewController.h */,
+				DA5ED5E21C896AEA00004C7E /* GuestDetailViewController.m */,
 			);
 			path = Tickets;
 			sourceTree = "<group>";
@@ -2021,6 +2041,7 @@
 				DAABB0D81C1FD50E004DDCFA /* MyHostingsCell.m in Sources */,
 				DAABB0DB1C1FD50E004DDCFA /* MemberProfile.m in Sources */,
 				DAABB0BA1C1FD50E004DDCFA /* BookTableOffering.m in Sources */,
+				DA5ED5EC1C90A34400004C7E /* AddPaymentViewController.m in Sources */,
 				DAABB2711C1FF5AE004DDCFA /* UITableViewCell+FlatUI.m in Sources */,
 				DAABB29F1C1FF5AE004DDCFA /* MPNotificationViewController.m in Sources */,
 				DAABB2FE1C200414004DDCFA /* Constants.m in Sources */,
@@ -2102,6 +2123,9 @@
 				DA43056C1C23E7D000ED6C54 /* BaseModel.m in Sources */,
 				DAABB2701C1FF5AE004DDCFA /* UITabBar+FlatUI.m in Sources */,
 				DAABB2791C1FF5AE004DDCFA /* MKMapView+ZoomLevel.m in Sources */,
+				DA5ED5E31C896AEA00004C7E /* GuestDetailViewController.m in Sources */,
+				DA5ED5E61C8FDF5100004C7E /* TicketConfirmationViewController.m in Sources */,
+				DA5ED5E91C908F8D00004C7E /* PaymentSelectionViewController.m in Sources */,
 				DAABB2AA1C1FF5AE004DDCFA /* MPSurvey.m in Sources */,
 				DAABB0B11C1FD50E004DDCFA /* BookTable.m in Sources */,
 				DAABB0D31C1FD50E004DDCFA /* HostVenueDetail.m in Sources */,

@@ -7,6 +7,9 @@
 //
 
 #import "TicketSummaryViewController.h"
+#import "GuestDetailViewController.h"
+#import "TicketConfirmationViewController.h"
+#import "UserManager.h"
 
 @interface TicketSummaryViewController ()
 
@@ -17,6 +20,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    
+    [self setupUserInfo];
     
     // Remove nav bar shadow
     [self.navigationController.navigationBar setBackgroundImage:[[UIImage alloc] init]
@@ -163,6 +168,8 @@
         }
     }
 
+    //  LINE 1 VIEW
+    
     UIView *line1View = [[UIView alloc] initWithFrame:CGRectMake(0, 80 + 60, self.visibleSize.width, 1)];
     [line1View setBackgroundColor:[UIColor phLightGrayColor]];
     [self.scrollView addSubview:line1View];
@@ -208,6 +215,12 @@
     [accessory setImage:[UIImage imageNamed:@"icon_purple_arrow"]];
     [self.view addSubview:accessory];
     
+    self.userDetailButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.userDetailButton setFrame:CGRectMake(0, self.visibleSize.height - 44 - 80 - 80, self.visibleSize.width, 80)];
+    [self.userDetailButton addTarget:self action:@selector(userDetailButtonDidTap:) forControlEvents:UIControlEventTouchUpInside];
+    [self.userDetailButton setBackgroundColor:[UIColor clearColor]];
+    [self.userDetailButton setHighlighted:YES];
+    [self.view addSubview:self.userDetailButton];
     
     // LINE 3 VIEW
     
@@ -285,27 +298,24 @@
     [minusButton addTarget:self action:@selector(minusButtonDidTap:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:minusButton];
     
-    self.userName.text = @"Han Kao";
-    self.userEmail.text = @"han-kao@gmail.com";
-    self.userPhone.text = @"phone number";
-    
     // BUTTON
     
-    UIButton *continueButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [continueButton addTarget:self action:@selector(continueButtonDidTap:) forControlEvents:UIControlEventTouchUpInside];
-    [continueButton setFrame:CGRectMake(0, self.visibleSize.height - 44, self.visibleSize.width, 44)];
-    [continueButton setBackgroundColor:[UIColor phBlueColor]];
-    [continueButton.titleLabel setFont:[UIFont phBold:15]];
-    [continueButton setTitle:@"CONTINUE" forState:UIControlStateNormal];
-    [continueButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [self.view addSubview:continueButton];
+    self.continueButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.continueButton addTarget:self action:@selector(continueButtonDidTap:) forControlEvents:UIControlEventTouchUpInside];
+    [self.continueButton setFrame:CGRectMake(0, self.visibleSize.height - 44, self.visibleSize.width, 44)];
+    [self.continueButton setBackgroundColor:[UIColor colorFromHexCode:@"B6ECFF"]];
+    [self.continueButton.titleLabel setFont:[UIFont phBold:15]];
+    [self.continueButton setTitle:@"CONTINUE" forState:UIControlStateNormal];
+    [self.continueButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [self.continueButton setEnabled:NO];
+    [self.view addSubview:self.continueButton];
 
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    
+    [self populateUserData];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -315,7 +325,71 @@
 
 #pragma mark - Action
 - (void)continueButtonDidTap:(id)sender {
-
+//    TicketConfirmationViewController *ticketConfirmationViewController = [[TicketConfirmationViewController alloc] init];
+//    [self.navigationController pushViewController:ticketConfirmationViewController animated:YES];
+//
+//    return;
+    
+    SharedData *sharedData = [SharedData sharedInstance];
+    AFHTTPRequestOperationManager *manager = [sharedData getOperationManager];
+    NSString *url = [NSString stringWithFormat:@"%@/product/summary",PHBaseNewURL];
+    
+    NSDictionary *userInfo = [UserManager loadUserTicketInfo];
+    
+    NSMutableArray *summaryList = [NSMutableArray array];
+    NSDictionary *summary = @{@"ticket_id":[self.productSelected objectForKey:@"ticket_id"],
+                              @"num_buy":self.totalTicket.text};
+    [summaryList addObject:summary];
+    
+    NSDictionary *params = @{@"fb_id":sharedData.fb_id,
+                             @"event_id":[self.productList objectForKey:@"event_id"],
+                             @"product_list":summaryList,
+                             @"guest_detail":@{@"name":[userInfo objectForKey:@"name"],
+                                               @"email":[userInfo objectForKey:@"email"],
+                                               @"phone":[NSString stringWithFormat:@"%@%@", [userInfo objectForKey:@"idd_code"], [userInfo objectForKey:@"phone"]]}};
+    
+    [manager POST:url parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        
+        NSInteger responseStatusCode = operation.response.statusCode;
+        if (responseStatusCode != 200) {
+            return;
+        }
+        
+        NSString *responseString = operation.responseString;
+        NSError *error;
+        
+        NSDictionary *json = (NSDictionary *)[NSJSONSerialization
+                                              JSONObjectWithData:[responseString dataUsingEncoding:NSUTF8StringEncoding]
+                                              options:kNilOptions
+                                              error:&error];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (json && json != nil) {
+                @try {
+//                    NSDictionary *data = [json objectForKey:@"data"];
+//                    if (data && data != nil) {
+//                        NSDictionary *product_summary = [data objectForKey:@"product_summary"];
+//                        if (product_summary && product_summary != nil) {
+//                            NSArray *product_list = [product_summary objectForKey:@"product_list"];
+//                            if (product_list && product_list != nil) {
+//                                TicketSummaryViewController *ticketSummaryViewController = [[TicketSummaryViewController alloc] init];
+//                                [self.navigationController pushViewController:ticketSummaryViewController animated:YES];
+//                            }
+//                        }
+//                    }
+                }
+                @catch (NSException *exception) {
+                    
+                }
+                @finally {
+                    
+                }
+            }
+        });
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        
+    }];
+    
 }
 
 - (void)helpButtonDidTap:(id)sender {
@@ -348,10 +422,87 @@
     }
 }
 
+- (void)userDetailButtonDidTap:(id)sender {
+    [self.userDetailButton setBackgroundColor:[UIColor lightGrayColor]];
+    [UIView animateWithDuration:0.15 animations:^()
+     {
+         [self.userDetailButton setBackgroundColor:[UIColor clearColor]];
+     } completion:^(BOOL finished){
+         GuestDetailViewController *guestDetailViewController = [[GuestDetailViewController alloc] init];
+         [self presentViewController:guestDetailViewController animated:YES completion:nil];
+     }];
+}
+
+
 #pragma mark - Data 
+- (void)setupUserInfo {
+    [UserManager clearUserTicketInfo];
+    
+    SharedData *sharedData = [SharedData sharedInstance];
+    
+    NSString *firstName = @"";
+    if ([sharedData.userDict objectForKey:@"first_name"] && [sharedData.userDict objectForKey:@"first_name"] != nil) {
+        firstName = [sharedData.userDict objectForKey:@"first_name"];
+    }
+    
+    NSString *lastName = @"";
+    if ([sharedData.userDict objectForKey:@"last_name"] && [sharedData.userDict objectForKey:@"last_name"] != nil) {
+        lastName = [sharedData.userDict objectForKey:@"last_name"];
+    }
+ 
+    NSString *name = [NSString stringWithFormat:@"%@ %@", firstName, lastName];
+    
+    NSString *email = @"";
+    if ([sharedData.userDict objectForKey:@"email"] && [sharedData.userDict objectForKey:@"email"] != nil) {
+        email = [sharedData.userDict objectForKey:@"email"];
+    }
+    
+    NSString *phone = @"";
+    NSString *idd_code = @"";
+    if ([sharedData.phone length] > 0) {
+        idd_code = [NSString stringWithFormat:@"+%@", [sharedData.phone substringWithRange:NSMakeRange(0, 2)]];
+        phone = [sharedData.phone substringFromIndex:2];
+    }
+    
+    NSDictionary *userInfo = @{@"name":name,
+                               @"email":email,
+                               @"idd_code":idd_code,
+                               @"phone":phone};
+    [UserManager saveUserTicketInfo:userInfo];
+}
 
 - (void)populateUserData {
     
+    self.isAllowToContinue = YES;
+    NSDictionary *userInfo = [UserManager loadUserTicketInfo];
+    
+    self.userName.text = [userInfo objectForKey:@"name"];
+    
+    if (![[userInfo objectForKey:@"email"] isEqualToString:@""]) {
+        self.userEmail.text = [userInfo objectForKey:@"email"];
+        self.userEmail.textColor = [UIColor blackColor];
+    } else {
+        self.userEmail.text = @"email";
+        self.userEmail.textColor = [UIColor redColor];
+        self.isAllowToContinue = NO;
+    }
+    
+    if (![[userInfo objectForKey:@"phone"] isEqualToString:@""]) {
+        self.userPhone.text = [NSString stringWithFormat:@"%@%@", [userInfo objectForKey:@"idd_code"], [userInfo objectForKey:@"phone"]];
+        self.userPhone.textColor = [UIColor blackColor];
+    } else {
+        self.userPhone.text = @"phone number";
+        self.userPhone.textColor = [UIColor redColor];
+        self.isAllowToContinue = NO;
+    }
+    
+    if (self.isAllowToContinue) {
+        [self.continueButton setEnabled:YES];
+        [self.continueButton setBackgroundColor:[UIColor phBlueColor]];
+    } else {
+        [self.continueButton setEnabled:YES];
+        [self.continueButton setBackgroundColor:[UIColor colorFromHexCode:@"B6ECFF"]];
+    }
 }
 
 @end
