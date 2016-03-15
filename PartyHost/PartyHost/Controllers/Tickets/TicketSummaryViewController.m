@@ -10,6 +10,7 @@
 #import "GuestDetailViewController.h"
 #import "TicketConfirmationViewController.h"
 #import "UserManager.h"
+#import "SVProgressHUD.h"
 
 @interface TicketSummaryViewController ()
 
@@ -163,8 +164,7 @@
     } else {
         NSString *max_guests = [self.productSelected objectForKey:@"max_guests"];
         if (max_guests && max_guests != nil) {
-            CGFloat pricePerPerson = (CGFloat)total_price.floatValue / (CGFloat)max_guests.floatValue;
-            [ticketPerson setText:[NSString stringWithFormat:@"%.2f / person", pricePerPerson]];
+            [ticketPerson setText:[NSString stringWithFormat:@"Max Guest %@", max_guests]];
         }
     }
 
@@ -348,7 +348,12 @@
                                                @"email":[userInfo objectForKey:@"email"],
                                                @"phone":[NSString stringWithFormat:@"%@%@", [userInfo objectForKey:@"idd_code"], [userInfo objectForKey:@"phone"]]}};
     
+    [SVProgressHUD show];
+    [self.continueButton setEnabled:NO];
+    
     [manager POST:url parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        [SVProgressHUD dismiss];
+        [self.continueButton setEnabled:YES];
         
         NSInteger responseStatusCode = operation.response.statusCode;
         if (responseStatusCode != 200) {
@@ -365,17 +370,21 @@
         dispatch_async(dispatch_get_main_queue(), ^{
             if (json && json != nil) {
                 @try {
-//                    NSDictionary *data = [json objectForKey:@"data"];
-//                    if (data && data != nil) {
-//                        NSDictionary *product_summary = [data objectForKey:@"product_summary"];
-//                        if (product_summary && product_summary != nil) {
-//                            NSArray *product_list = [product_summary objectForKey:@"product_list"];
-//                            if (product_list && product_list != nil) {
-//                                TicketSummaryViewController *ticketSummaryViewController = [[TicketSummaryViewController alloc] init];
-//                                [self.navigationController pushViewController:ticketSummaryViewController animated:YES];
-//                            }
-//                        }
-//                    }
+                    NSDictionary *data = [json objectForKey:@"data"];
+                    if (data && data != nil) {
+                        NSDictionary *product_summary = [data objectForKey:@"product_summary"];
+                        if (product_summary && product_summary != nil) {
+                            NSArray *product_list = [product_summary objectForKey:@"product_list"];
+                            if (product_list && product_list != nil && product_list.count > 0) {
+                                TicketConfirmationViewController *ticketConfirmationViewController = [[TicketConfirmationViewController alloc] init];
+                                ticketConfirmationViewController.productSummary = product_summary;
+                                ticketConfirmationViewController.productList = [product_list objectAtIndex:0];
+                                ticketConfirmationViewController.eventTitleString = self.summaryHeaderTitle.text;
+                                ticketConfirmationViewController.eventDescriptionString = self.summaryHeaderDescription.text;
+                                [self.navigationController pushViewController:ticketConfirmationViewController animated:YES];
+                            }
+                        }
+                    }
                 }
                 @catch (NSException *exception) {
                     
@@ -387,7 +396,8 @@
         });
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        
+        [SVProgressHUD dismiss];
+        [self.continueButton setEnabled:YES];
     }];
     
 }

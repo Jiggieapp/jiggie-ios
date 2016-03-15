@@ -17,5 +17,9 @@
 @property (nonatomic, strong) UIButton *paymentAddButton;
 
 @property (nonatomic, strong) NSMutableArray *agreeButtonArray;
+@property (nonatomic, strong) NSDictionary *productSummary;
+@property (nonatomic, strong) NSDictionary *productList;
+@property (nonatomic, strong) NSString *eventTitleString;
+@property (nonatomic, strong) NSString *eventDescriptionString;
 
 @end

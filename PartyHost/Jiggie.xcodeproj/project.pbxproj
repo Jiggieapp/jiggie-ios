@@ -25,6 +25,19 @@
 		DA5ED5E61C8FDF5100004C7E /* TicketConfirmationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5ED5E51C8FDF5000004C7E /* TicketConfirmationViewController.m */; };
 		DA5ED5E91C908F8D00004C7E /* PaymentSelectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5ED5E81C908F8D00004C7E /* PaymentSelectionViewController.m */; };
 		DA5ED5EC1C90A34400004C7E /* AddPaymentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5ED5EB1C90A34400004C7E /* AddPaymentViewController.m */; };
+		DA5ED6101C92975100004C7E /* VTAddress.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5ED5FC1C92975100004C7E /* VTAddress.m */; };
+		DA5ED6111C92975100004C7E /* VTBaseTransaction.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5ED5FE1C92975100004C7E /* VTBaseTransaction.m */; };
+		DA5ED6121C92975100004C7E /* VTBaseTransactionMethod.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5ED6001C92975100004C7E /* VTBaseTransactionMethod.m */; };
+		DA5ED6131C92975100004C7E /* VTCardDetails.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5ED6021C92975100004C7E /* VTCardDetails.m */; };
+		DA5ED6141C92975100004C7E /* VTConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5ED6041C92975100004C7E /* VTConfig.m */; };
+		DA5ED6151C92975100004C7E /* VTCustomerDetails.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5ED6061C92975100004C7E /* VTCustomerDetails.m */; };
+		DA5ED6161C92975100004C7E /* VTDirect.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5ED6081C92975100004C7E /* VTDirect.m */; };
+		DA5ED6171C92975100004C7E /* VTiOSAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5ED60B1C92975100004C7E /* VTiOSAPI.m */; };
+		DA5ED6181C92975100004C7E /* VTItemDetails.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5ED60D1C92975100004C7E /* VTItemDetails.m */; };
+		DA5ED6191C92975100004C7E /* VTTransactionDetails.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5ED60F1C92975100004C7E /* VTTransactionDetails.m */; };
+		DA5ED61E1C92DD5B00004C7E /* NTMonthYearPicker.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5ED61D1C92DD5B00004C7E /* NTMonthYearPicker.m */; };
+		DA5ED6211C968A1E00004C7E /* VirtualAccountViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5ED6201C968A1E00004C7E /* VirtualAccountViewController.m */; };
+		DA5ED6241C96D10700004C7E /* TicketSuccessViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5ED6231C96D10700004C7E /* TicketSuccessViewController.m */; };
 		DA700E0E1C63561300E5D945 /* Jiggie.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = DA700E0D1C63515D00E5D945 /* Jiggie.entitlements */; };
 		DA9E0CF71C61F75000966F16 /* BaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA9E0CF61C61F75000966F16 /* BaseViewController.m */; };
 		DA9E0CFA1C61F76300966F16 /* TicketListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA9E0CF91C61F76300966F16 /* TicketListViewController.m */; };
@@ -328,6 +341,45 @@
 		DA5ED5E81C908F8D00004C7E /* PaymentSelectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PaymentSelectionViewController.m; sourceTree = "<group>"; };
 		DA5ED5EA1C90A34400004C7E /* AddPaymentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddPaymentViewController.h; sourceTree = "<group>"; };
 		DA5ED5EB1C90A34400004C7E /* AddPaymentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddPaymentViewController.m; sourceTree = "<group>"; };
+		DA5ED5EF1C92975100004C7E /* VTAddress.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VTAddress.h; sourceTree = "<group>"; };
+		DA5ED5F01C92975100004C7E /* VTBaseTransaction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VTBaseTransaction.h; sourceTree = "<group>"; };
+		DA5ED5F11C92975100004C7E /* VTBaseTransactionMethod.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VTBaseTransactionMethod.h; sourceTree = "<group>"; };
+		DA5ED5F21C92975100004C7E /* VTCardDetails.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VTCardDetails.h; sourceTree = "<group>"; };
+		DA5ED5F31C92975100004C7E /* VTConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VTConfig.h; sourceTree = "<group>"; };
+		DA5ED5F41C92975100004C7E /* VTCustomerDetails.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VTCustomerDetails.h; sourceTree = "<group>"; };
+		DA5ED5F51C92975100004C7E /* VTDirect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VTDirect.h; sourceTree = "<group>"; };
+		DA5ED5F61C92975100004C7E /* VTiOSAPI-BridgingHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "VTiOSAPI-BridgingHeader.h"; sourceTree = "<group>"; };
+		DA5ED5F71C92975100004C7E /* VTItemDetails.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VTItemDetails.h; sourceTree = "<group>"; };
+		DA5ED5F81C92975100004C7E /* VTToken.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VTToken.h; sourceTree = "<group>"; };
+		DA5ED5F91C92975100004C7E /* VTTransactionDetails.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VTTransactionDetails.h; sourceTree = "<group>"; };
+		DA5ED5FB1C92975100004C7E /* VTAddress.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VTAddress.h; sourceTree = "<group>"; };
+		DA5ED5FC1C92975100004C7E /* VTAddress.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VTAddress.m; sourceTree = "<group>"; };
+		DA5ED5FD1C92975100004C7E /* VTBaseTransaction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VTBaseTransaction.h; sourceTree = "<group>"; };
+		DA5ED5FE1C92975100004C7E /* VTBaseTransaction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VTBaseTransaction.m; sourceTree = "<group>"; };
+		DA5ED5FF1C92975100004C7E /* VTBaseTransactionMethod.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VTBaseTransactionMethod.h; sourceTree = "<group>"; };
+		DA5ED6001C92975100004C7E /* VTBaseTransactionMethod.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VTBaseTransactionMethod.m; sourceTree = "<group>"; };
+		DA5ED6011C92975100004C7E /* VTCardDetails.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VTCardDetails.h; sourceTree = "<group>"; };
+		DA5ED6021C92975100004C7E /* VTCardDetails.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VTCardDetails.m; sourceTree = "<group>"; };
+		DA5ED6031C92975100004C7E /* VTConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VTConfig.h; sourceTree = "<group>"; };
+		DA5ED6041C92975100004C7E /* VTConfig.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VTConfig.m; sourceTree = "<group>"; };
+		DA5ED6051C92975100004C7E /* VTCustomerDetails.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VTCustomerDetails.h; sourceTree = "<group>"; };
+		DA5ED6061C92975100004C7E /* VTCustomerDetails.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VTCustomerDetails.m; sourceTree = "<group>"; };
+		DA5ED6071C92975100004C7E /* VTDirect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VTDirect.h; sourceTree = "<group>"; };
+		DA5ED6081C92975100004C7E /* VTDirect.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VTDirect.m; sourceTree = "<group>"; };
+		DA5ED6091C92975100004C7E /* VTiOSAPI-BridgingHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "VTiOSAPI-BridgingHeader.h"; sourceTree = "<group>"; };
+		DA5ED60A1C92975100004C7E /* VTiOSAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VTiOSAPI.h; sourceTree = "<group>"; };
+		DA5ED60B1C92975100004C7E /* VTiOSAPI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VTiOSAPI.m; sourceTree = "<group>"; };
+		DA5ED60C1C92975100004C7E /* VTItemDetails.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VTItemDetails.h; sourceTree = "<group>"; };
+		DA5ED60D1C92975100004C7E /* VTItemDetails.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VTItemDetails.m; sourceTree = "<group>"; };
+		DA5ED60E1C92975100004C7E /* VTTransactionDetails.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VTTransactionDetails.h; sourceTree = "<group>"; };
+		DA5ED60F1C92975100004C7E /* VTTransactionDetails.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VTTransactionDetails.m; sourceTree = "<group>"; };
+		DA5ED61B1C92DD5B00004C7E /* NTMonthYearPicker-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NTMonthYearPicker-Prefix.pch"; sourceTree = "<group>"; };
+		DA5ED61C1C92DD5B00004C7E /* NTMonthYearPicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTMonthYearPicker.h; sourceTree = "<group>"; };
+		DA5ED61D1C92DD5B00004C7E /* NTMonthYearPicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTMonthYearPicker.m; sourceTree = "<group>"; };
+		DA5ED61F1C968A1E00004C7E /* VirtualAccountViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VirtualAccountViewController.h; sourceTree = "<group>"; };
+		DA5ED6201C968A1E00004C7E /* VirtualAccountViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VirtualAccountViewController.m; sourceTree = "<group>"; };
+		DA5ED6221C96D10700004C7E /* TicketSuccessViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TicketSuccessViewController.h; sourceTree = "<group>"; };
+		DA5ED6231C96D10700004C7E /* TicketSuccessViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TicketSuccessViewController.m; sourceTree = "<group>"; };
 		DA700E0D1C63515D00E5D945 /* Jiggie.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Jiggie.entitlements; sourceTree = SOURCE_ROOT; };
 		DA9E0CF51C61F75000966F16 /* BaseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseViewController.h; sourceTree = "<group>"; };
 		DA9E0CF61C61F75000966F16 /* BaseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseViewController.m; sourceTree = "<group>"; };
@@ -895,6 +947,71 @@
 			path = AFNetworkActivityLogger;
 			sourceTree = "<group>";
 		};
+		DA5ED5ED1C92975100004C7E /* lib */ = {
+			isa = PBXGroup;
+			children = (
+				DA5ED5EE1C92975100004C7E /* include */,
+				DA5ED5FA1C92975100004C7E /* VTiOSAPI */,
+			);
+			path = lib;
+			sourceTree = "<group>";
+		};
+		DA5ED5EE1C92975100004C7E /* include */ = {
+			isa = PBXGroup;
+			children = (
+				DA5ED5EF1C92975100004C7E /* VTAddress.h */,
+				DA5ED5F01C92975100004C7E /* VTBaseTransaction.h */,
+				DA5ED5F11C92975100004C7E /* VTBaseTransactionMethod.h */,
+				DA5ED5F21C92975100004C7E /* VTCardDetails.h */,
+				DA5ED5F31C92975100004C7E /* VTConfig.h */,
+				DA5ED5F41C92975100004C7E /* VTCustomerDetails.h */,
+				DA5ED5F51C92975100004C7E /* VTDirect.h */,
+				DA5ED5F61C92975100004C7E /* VTiOSAPI-BridgingHeader.h */,
+				DA5ED5F71C92975100004C7E /* VTItemDetails.h */,
+				DA5ED5F81C92975100004C7E /* VTToken.h */,
+				DA5ED5F91C92975100004C7E /* VTTransactionDetails.h */,
+			);
+			path = include;
+			sourceTree = "<group>";
+		};
+		DA5ED5FA1C92975100004C7E /* VTiOSAPI */ = {
+			isa = PBXGroup;
+			children = (
+				DA5ED5FB1C92975100004C7E /* VTAddress.h */,
+				DA5ED5FC1C92975100004C7E /* VTAddress.m */,
+				DA5ED5FD1C92975100004C7E /* VTBaseTransaction.h */,
+				DA5ED5FE1C92975100004C7E /* VTBaseTransaction.m */,
+				DA5ED5FF1C92975100004C7E /* VTBaseTransactionMethod.h */,
+				DA5ED6001C92975100004C7E /* VTBaseTransactionMethod.m */,
+				DA5ED6011C92975100004C7E /* VTCardDetails.h */,
+				DA5ED6021C92975100004C7E /* VTCardDetails.m */,
+				DA5ED6031C92975100004C7E /* VTConfig.h */,
+				DA5ED6041C92975100004C7E /* VTConfig.m */,
+				DA5ED6051C92975100004C7E /* VTCustomerDetails.h */,
+				DA5ED6061C92975100004C7E /* VTCustomerDetails.m */,
+				DA5ED6071C92975100004C7E /* VTDirect.h */,
+				DA5ED6081C92975100004C7E /* VTDirect.m */,
+				DA5ED6091C92975100004C7E /* VTiOSAPI-BridgingHeader.h */,
+				DA5ED60A1C92975100004C7E /* VTiOSAPI.h */,
+				DA5ED60B1C92975100004C7E /* VTiOSAPI.m */,
+				DA5ED60C1C92975100004C7E /* VTItemDetails.h */,
+				DA5ED60D1C92975100004C7E /* VTItemDetails.m */,
+				DA5ED60E1C92975100004C7E /* VTTransactionDetails.h */,
+				DA5ED60F1C92975100004C7E /* VTTransactionDetails.m */,
+			);
+			path = VTiOSAPI;
+			sourceTree = "<group>";
+		};
+		DA5ED61A1C92DD5B00004C7E /* NTMonthYearPicker */ = {
+			isa = PBXGroup;
+			children = (
+				DA5ED61B1C92DD5B00004C7E /* NTMonthYearPicker-Prefix.pch */,
+				DA5ED61C1C92DD5B00004C7E /* NTMonthYearPicker.h */,
+				DA5ED61D1C92DD5B00004C7E /* NTMonthYearPicker.m */,
+			);
+			path = NTMonthYearPicker;
+			sourceTree = "<group>";
+		};
 		DA9E0CF41C61ED7100966F16 /* Tickets */ = {
 			isa = PBXGroup;
 			children = (
@@ -906,12 +1023,16 @@
 				DAE02EA41C6C812200EBAAF0 /* TicketSummaryViewController.m */,
 				DA5ED5E41C8FDF5000004C7E /* TicketConfirmationViewController.h */,
 				DA5ED5E51C8FDF5000004C7E /* TicketConfirmationViewController.m */,
+				DA5ED6221C96D10700004C7E /* TicketSuccessViewController.h */,
+				DA5ED6231C96D10700004C7E /* TicketSuccessViewController.m */,
 				DA5ED5E71C908F8C00004C7E /* PaymentSelectionViewController.h */,
 				DA5ED5E81C908F8D00004C7E /* PaymentSelectionViewController.m */,
 				DA5ED5EA1C90A34400004C7E /* AddPaymentViewController.h */,
 				DA5ED5EB1C90A34400004C7E /* AddPaymentViewController.m */,
 				DA5ED5E11C896AEA00004C7E /* GuestDetailViewController.h */,
 				DA5ED5E21C896AEA00004C7E /* GuestDetailViewController.m */,
+				DA5ED61F1C968A1E00004C7E /* VirtualAccountViewController.h */,
+				DA5ED6201C968A1E00004C7E /* VirtualAccountViewController.m */,
 			);
 			path = Tickets;
 			sourceTree = "<group>";
@@ -934,6 +1055,7 @@
 		DAABAFE81C1FC6F8004DDCFA /* ExtraLibraries */ = {
 			isa = PBXGroup;
 			children = (
+				DA5ED61A1C92DD5B00004C7E /* NTMonthYearPicker */,
 				DA10F5141C52149F006090ED /* SVProgressHUD */,
 				DA47B2271C3A8553001B4476 /* AFNetworkActivityLogger */,
 				DAABB2F51C200227004DDCFA /* Fabric */,
@@ -1769,6 +1891,7 @@
 				FA4D2EEE1A4D9A77006828E7 /* Jiggie */,
 				FA4D2F081A4D9A77006828E7 /* PartyHostTests */,
 				FA4D2EED1A4D9A77006828E7 /* Products */,
+				DA5ED5ED1C92975100004C7E /* lib */,
 			);
 			sourceTree = "<group>";
 		};
@@ -2002,6 +2125,7 @@
 				DAABB0CA1C1FD50E004DDCFA /* EventsGuestList.m in Sources */,
 				DAABB0DE1C1FD50E004DDCFA /* Profile.m in Sources */,
 				DAABB2671C1FF5AE004DDCFA /* UIBarButtonItem+FlatUI.m in Sources */,
+				DA5ED61E1C92DD5B00004C7E /* NTMonthYearPicker.m in Sources */,
 				DAABB1171C1FF0F3004DDCFA /* PHImage.m in Sources */,
 				DAABB2C31C1FF5AE004DDCFA /* NSDate+TimeAgo.m in Sources */,
 				DAABB1131C1FF0F3004DDCFA /* NSDate+Calculators.m in Sources */,
@@ -2015,7 +2139,9 @@
 				DAABB2C51C1FF5AE004DDCFA /* NWURLConnection.m in Sources */,
 				DAABB25B1C1FF5AE004DDCFA /* AFURLResponseSerialization.m in Sources */,
 				DAABB0F71C1FD50E004DDCFA /* SetupGenderView.m in Sources */,
+				DA5ED6181C92975100004C7E /* VTItemDetails.m in Sources */,
 				DAABB2BA1C1FF5AE004DDCFA /* MPVariant.m in Sources */,
+				DA5ED6191C92975100004C7E /* VTTransactionDetails.m in Sources */,
 				DAABB2821C1FF5AE004DDCFA /* MPABTestDesignerChangeResponseMessage.m in Sources */,
 				DAABB0B81C1FD50E004DDCFA /* BookTableDetailsCell.m in Sources */,
 				DAABB1161C1FF0F3004DDCFA /* UIView+FormScroll.m in Sources */,
@@ -2025,6 +2151,7 @@
 				DAABB2B81C1FF5AE004DDCFA /* MPUIImageToNSDictionaryValueTransformer.m in Sources */,
 				DAABB0D41C1FD50E004DDCFA /* HostVenueDetailFromShare.m in Sources */,
 				DAB3AF951C27D66900AA7E25 /* EventDetail.m in Sources */,
+				DA5ED6211C968A1E00004C7E /* VirtualAccountViewController.m in Sources */,
 				DAABB0CF1C1FD50E004DDCFA /* EventsHostMessage.m in Sources */,
 				DAABB0B51C1FD50E004DDCFA /* BookTableConfirm.m in Sources */,
 				DAABB0BD1C1FD50E004DDCFA /* ConvoCell.m in Sources */,
@@ -2044,12 +2171,14 @@
 				DA5ED5EC1C90A34400004C7E /* AddPaymentViewController.m in Sources */,
 				DAABB2711C1FF5AE004DDCFA /* UITableViewCell+FlatUI.m in Sources */,
 				DAABB29F1C1FF5AE004DDCFA /* MPNotificationViewController.m in Sources */,
+				DA5ED6171C92975100004C7E /* VTiOSAPI.m in Sources */,
 				DAABB2FE1C200414004DDCFA /* Constants.m in Sources */,
 				DAABB0B21C1FD50E004DDCFA /* BookTableAbout.m in Sources */,
 				DAABB1141C1FF0F3004DDCFA /* UIColor+PH.m in Sources */,
 				DAABB0BF1C1FD50E004DDCFA /* MessageCell.m in Sources */,
 				DAABB2CE1C1FF5AE004DDCFA /* TSLogging.m in Sources */,
 				DAABB0BE1C1FD50E004DDCFA /* MessageBubbleTriangle.m in Sources */,
+				DA5ED6151C92975100004C7E /* VTCustomerDetails.m in Sources */,
 				DAABB0F41C1FD50E004DDCFA /* WriteReview.m in Sources */,
 				DAABB2861C1FF5AE004DDCFA /* MPABTestDesignerDeviceInfoRequestMessage.m in Sources */,
 				DAABB26B1C1FF5AE004DDCFA /* UINavigationBar+FlatUI.m in Sources */,
@@ -2074,6 +2203,7 @@
 				DAABB2881C1FF5AE004DDCFA /* MPABTestDesignerDisconnectMessage.m in Sources */,
 				DAABB2941C1FF5AE004DDCFA /* MPCGSizeToNSDictionaryValueTransformer.m in Sources */,
 				DAABB25F1C1FF5AE004DDCFA /* FUIAlertView.m in Sources */,
+				DA5ED6141C92975100004C7E /* VTConfig.m in Sources */,
 				DAABB2C61C1FF5AE004DDCFA /* RFRateMe.m in Sources */,
 				DAABB0D11C1FD50E004DDCFA /* Feed.m in Sources */,
 				DAABB2801C1FF5AE004DDCFA /* MPAbstractABTestDesignerMessage.m in Sources */,
@@ -2092,10 +2222,12 @@
 				DAD2708D1C31110D00546106 /* UserManager.m in Sources */,
 				DAABB0E61C1FD50E004DDCFA /* PhoneVerifyComplete.m in Sources */,
 				DAABB25E1C1FF5AE004DDCFA /* CMPopTipView.m in Sources */,
+				DA5ED6131C92975100004C7E /* VTCardDetails.m in Sources */,
 				DAABB0D71C1FD50E004DDCFA /* MyHostings.m in Sources */,
 				DAABB2A31C1FF5AE004DDCFA /* MPObjectSelector.m in Sources */,
 				DAABB2911C1FF5AE004DDCFA /* MPCGColorRefToNSStringValueTransformer.m in Sources */,
 				DAABB12A1C1FF13A004DDCFA /* EmptyView.m in Sources */,
+				DA5ED6241C96D10700004C7E /* TicketSuccessViewController.m in Sources */,
 				DAABB2751C1FF5AE004DDCFA /* GSTouchesShowingWindow.m in Sources */,
 				DA9E0CF71C61F75000966F16 /* BaseViewController.m in Sources */,
 				DAABB1301C1FF13A004DDCFA /* UserBubble.m in Sources */,
@@ -2115,6 +2247,7 @@
 				DAABB0FC1C1FD50E004DDCFA /* SetupPickViewCell.m in Sources */,
 				DAABB0B71C1FD50E004DDCFA /* BookTableDetails.m in Sources */,
 				DAABB0DD1C1FD50E004DDCFA /* Privacy.m in Sources */,
+				DA5ED6111C92975100004C7E /* VTBaseTransaction.m in Sources */,
 				DAABB2D11C1FF5AE004DDCFA /* TSTapstream.m in Sources */,
 				DAABB2B31C1FF5AE004DDCFA /* MPTypeDescription.m in Sources */,
 				DAABB26E1C1FF5AE004DDCFA /* UISlider+FlatUI.m in Sources */,
@@ -2140,6 +2273,7 @@
 				DAABB1011C1FD50E004DDCFA /* SignupView.m in Sources */,
 				DAABB2641C1FF5AE004DDCFA /* FUISwitch.m in Sources */,
 				DA9E0CFA1C61F76300966F16 /* TicketListViewController.m in Sources */,
+				DA5ED6121C92975100004C7E /* VTBaseTransactionMethod.m in Sources */,
 				DAABB2AF1C1FF5AE004DDCFA /* MPSwizzler.m in Sources */,
 				DAABB0DC1C1FD50E004DDCFA /* More.m in Sources */,
 				DAB3AFA11C29541E00AA7E25 /* Chat.m in Sources */,
@@ -2170,6 +2304,7 @@
 				DAABB2A11C1FF5AE004DDCFA /* MPNSNumberToCGFloatValueTransformer.m in Sources */,
 				DAABB2891C1FF5AE004DDCFA /* MPABTestDesignerSnapshotRequestMessage.m in Sources */,
 				DAABB2811C1FF5AE004DDCFA /* MPABTestDesignerChangeRequestMessage.m in Sources */,
+				DA5ED6101C92975100004C7E /* VTAddress.m in Sources */,
 				DAABB28C1C1FF5AE004DDCFA /* MPABTestDesignerTweakResponseMessage.m in Sources */,
 				DAABB2551C1FF5AE004DDCFA /* AFHTTPRequestOperationManager.m in Sources */,
 				DAABB0F91C1FD50E004DDCFA /* SetupNotificationView.m in Sources */,
@@ -2187,6 +2322,7 @@
 				DAABB0CC1C1FD50E004DDCFA /* EventsHostDetail.m in Sources */,
 				DAABB2C91C1FF5AE004DDCFA /* TSConfig.m in Sources */,
 				DAABB2611C1FF5AE004DDCFA /* FUICellBackgroundView.m in Sources */,
+				DA5ED6161C92975100004C7E /* VTDirect.m in Sources */,
 				DAABB27F1C1FF5AE004DDCFA /* Mixpanel.m in Sources */,
 				DAABB27A1C1FF5AE004DDCFA /* MGSwipeButton.m in Sources */,
 				DAABB2541C1FF5AE004DDCFA /* AFHTTPRequestOperation.m in Sources */,

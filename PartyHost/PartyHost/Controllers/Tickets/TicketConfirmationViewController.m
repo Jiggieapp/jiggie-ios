@@ -63,8 +63,8 @@
     [headerView addSubview:agreeLabel];
     
     CGFloat listY = 34;
-    NSArray *test = @[@"All Booking are finals", @"I Will be charge the full amount", @"I will show up at the event", @"This purchase is not refundable"];
-    for (NSString *desc in test) {
+    NSArray *terms = [self.productList objectForKey:@"terms"];
+    for (NSDictionary *term in terms) {
         UIButton *checkButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [checkButton setImage:[UIImage imageNamed:@"button_checked_on"] forState:UIControlStateSelected];
         [checkButton setImage:[UIImage imageNamed:@"button_checked_off"] forState:UIControlStateNormal];
@@ -74,10 +74,11 @@
         
         [self.agreeButtonArray addObject:checkButton];
         
-        UILabel *termLabel = [[UILabel alloc] initWithFrame:CGRectMake(60, listY, self.visibleSize.width - 60 - 18, 30)];
-        [termLabel setText:desc];
-        [termLabel setFont:[UIFont phBlond:12]];
+        UILabel *termLabel = [[UILabel alloc] initWithFrame:CGRectMake(60, listY, self.visibleSize.width - 60 - 14, 30)];
+        [termLabel setText:[term objectForKey:@"body"]];
+        [termLabel setFont:[UIFont phBlond:11]];
         [termLabel setTextColor:[UIColor whiteColor]];
+        [termLabel setAdjustsFontSizeToFitWidth:YES];
         [termLabel setBackgroundColor:[UIColor clearColor]];
         [headerView addSubview:termLabel];
         
@@ -92,7 +93,7 @@
     [eventTitle setTextColor:[UIColor blackColor]];
     [eventTitle setBackgroundColor:[UIColor clearColor]];
     [eventTitle setTextAlignment:NSTextAlignmentCenter];
-    [eventTitle setText:@"AFRO JACK LIVE IN JAKARTA"];
+    [eventTitle setText:self.eventTitleString];
     [self.scrollView addSubview:eventTitle];
     
     UILabel *eventDescription = [[UILabel alloc] initWithFrame:CGRectMake(0, listY + 10 + 20, self.view.bounds.size.width, 16)];
@@ -100,7 +101,7 @@
     [eventDescription setTextColor:[UIColor blackColor]];
     [eventDescription setBackgroundColor:[UIColor clearColor]];
     [eventDescription setTextAlignment:NSTextAlignmentCenter];
-    [eventDescription setText:@"Sun, 29 Feb 2016 - Gelora Bung Karno"];
+    [eventDescription setText:self.eventDescriptionString];
     [self.scrollView addSubview:eventDescription];
     
     UIView *line1View = [[UIView alloc] initWithFrame:CGRectMake(14, listY + 10 + 20 + 24, self.visibleSize.width - 28, 1)];
@@ -113,7 +114,7 @@
     [ticketTitle setFont:[UIFont phBlond:13]];
     [ticketTitle setTextColor:[UIColor darkGrayColor]];
     [ticketTitle setBackgroundColor:[UIColor clearColor]];
-    [ticketTitle setText:@"Regular Ticket (3x)"];
+    [ticketTitle setText:[NSString stringWithFormat:@"%@ (%@x)",[self.productList objectForKey:@"name"], [self.productList objectForKey:@"num_buy"]]];
     [self.scrollView addSubview:ticketTitle];
     
     UILabel *ticketPrice = [[UILabel alloc] initWithFrame:CGRectMake(self.visibleSize.width - 140, CGRectGetMaxY(line1View.frame) + 14, 120, 20)];
@@ -121,7 +122,7 @@
     [ticketPrice setTextColor:[UIColor darkGrayColor]];
     [ticketPrice setBackgroundColor:[UIColor clearColor]];
     [ticketPrice setTextAlignment:NSTextAlignmentRight];
-    [ticketPrice setText:@"Rp3.000K"];
+    [ticketPrice setText:[self.productList objectForKey:@"total_price"]];
     [self.scrollView addSubview:ticketPrice];
     
     UILabel *adminTitle = [[UILabel alloc] initWithFrame:CGRectMake(18, CGRectGetMaxY(line1View.frame) + 14 + 30, ticketTitleWidth, 20)];
@@ -136,7 +137,7 @@
     [adminPrice setTextColor:[UIColor darkGrayColor]];
     [adminPrice setBackgroundColor:[UIColor clearColor]];
     [adminPrice setTextAlignment:NSTextAlignmentRight];
-    [adminPrice setText:@"Rp500K"];
+    [adminPrice setText:[self.productList objectForKey:@"admin_fee"]];
     [self.scrollView addSubview:adminPrice];
     
     UILabel *taxTitle = [[UILabel alloc] initWithFrame:CGRectMake(18, CGRectGetMaxY(line1View.frame) + 14 + 30 + 30, ticketTitleWidth, 20)];
@@ -151,7 +152,7 @@
     [taxPrice setTextColor:[UIColor darkGrayColor]];
     [taxPrice setBackgroundColor:[UIColor clearColor]];
     [taxPrice setTextAlignment:NSTextAlignmentRight];
-    [taxPrice setText:@"Rp150K"];
+    [taxPrice setText:[self.productList objectForKey:@"tax_amount"]];
     [self.scrollView addSubview:taxPrice];
     
     self.scrollView.contentSize = CGSizeMake(self.visibleSize.width, CGRectGetMaxY(taxPrice.frame) + 16);
@@ -168,7 +169,7 @@
     [self.view addSubview:totalLabel];
     
     self.totalPrice = [[UILabel alloc] initWithFrame:CGRectMake(self.visibleSize.width - 100 - 20, CGRectGetMaxY(line2View.frame) + 20, 100, 20)];
-    [self.totalPrice setText:@"Rp3.650K"];
+    [self.totalPrice setText:[self.productList objectForKey:@"total_price_all"]];
     [self.totalPrice setTextAlignment:NSTextAlignmentRight];
     [self.totalPrice setFont:[UIFont phBlond:20]];
     [self.totalPrice setTextColor:[UIColor blackColor]];

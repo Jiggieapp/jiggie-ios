@@ -7,8 +7,16 @@
 //
 
 #import "AddPaymentViewController.h"
+#import "VTConfig.h"
+#import "VTDirect.h"
+#import "NTMonthYearPicker.h"
 
-@interface AddPaymentViewController ()
+@interface AddPaymentViewController () {
+    NSString *previousTextFieldContent;
+    UITextRange *previousSelection;
+    
+    NTMonthYearPicker *picker;
+}
 
 @end
 
@@ -52,6 +60,13 @@
     [line2View setBackgroundColor:[UIColor phLightGrayColor]];
     [self.view addSubview:line2View];
     
+    UIToolbar *nextToolbar = [[UIToolbar alloc]initWithFrame:CGRectMake(0, 0, self.visibleSize.width, 50)];
+    nextToolbar.barStyle = UIBarStyleDefault;
+    nextToolbar.items = @[[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil],
+                            [[UIBarButtonItem alloc]initWithTitle:@"Next" style:UIBarButtonItemStyleDone target:self action:@selector(nextWithNumberPad)]];
+    [nextToolbar sizeToFit];
+    self.cvvTextField.inputAccessoryView = nextToolbar;
+    
     self.cardNumberTextField = [[UITextField alloc] initWithFrame:CGRectMake(16, CGRectGetMaxY(line2View.frame) + 10, self.visibleSize.width - 32, 30)];
     [self.cardNumberTextField setBackgroundColor:[UIColor clearColor]];
     [self.cardNumberTextField setPlaceholder:@"Credit card number"];
@@ -59,6 +74,7 @@
     [self.cardNumberTextField setKeyboardType:UIKeyboardTypeNumberPad];
     [self.cardNumberTextField setReturnKeyType:UIReturnKeyDone];
     [self.cardNumberTextField setDelegate:self];
+    [self.cardNumberTextField addTarget:self action:@selector(reformatAsCardNumber:) forControlEvents:UIControlEventEditingChanged];
     [self.view addSubview:self.cardNumberTextField];
     
     UIView *line3View = [[UIView alloc] initWithFrame:CGRectMake(0, 70 + 50 + 50, self.visibleSize.width, 1)];
@@ -71,21 +87,21 @@
     [self.dateTextField setKeyboardType:UIKeyboardTypePhonePad];
     [self.dateTextField setReturnKeyType:UIReturnKeyDone];
     [self.dateTextField setDelegate:self];
-    [self.dateTextField setEnabled:NO];
-    [self.dateTextField setText:@"MM/YYYY"];
+    [self.dateTextField setPlaceholder:@"MM/YYYY"];
     [self.view addSubview:self.dateTextField];
     
     UIView *lineVertical = [[UIView alloc] initWithFrame:CGRectMake(self.visibleSize.width/2, CGRectGetMaxY(line3View.frame) , 1, 50)];
     [lineVertical setBackgroundColor:[UIColor phLightGrayColor]];
     [self.view addSubview:lineVertical];
     
-    self.cvvTextField = [[UITextField alloc] initWithFrame:CGRectMake(16 + 40 + 16, CGRectGetMaxY(line3View.frame) + 10, 100, 30)];
+    self.cvvTextField = [[UITextField alloc] initWithFrame:CGRectMake(self.visibleSize.width/2 + 16, CGRectGetMaxY(line3View.frame) + 10, 100, 30)];
     [self.cvvTextField setBackgroundColor:[UIColor clearColor]];
     [self.cvvTextField setPlaceholder:@"CVV"];
     [self.cvvTextField setFont:[UIFont phBlond:13]];
     [self.cvvTextField setKeyboardType:UIKeyboardTypeNumberPad];
     [self.cvvTextField setReturnKeyType:UIReturnKeyDone];
     [self.cvvTextField setDelegate:self];
+    [self.cvvTextField setSecureTextEntry:YES];
     [self.view addSubview:self.cvvTextField];
     
     UIToolbar* numberToolbar = [[UIToolbar alloc]initWithFrame:CGRectMake(0, 0, self.visibleSize.width, 50)];
@@ -106,8 +122,33 @@
     [self.saveButton.titleLabel setFont:[UIFont phBold:15]];
     [self.saveButton setTitle:@"SAVE" forState:UIControlStateNormal];
     [self.saveButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [self.saveButton setEnabled:NO];
+    [self.saveButton setEnabled:YES];
     [self.view addSubview:self.saveButton];
+    
+    NSDateComponents *dateComponents = [[NSDateComponents alloc] init];
+    [dateComponents setYear:5];
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+    NSDate *newDate = [calendar dateByAddingComponents:dateComponents toDate:[NSDate date] options:0];
+    
+    // Initialize the picker
+    picker = [[NTMonthYearPicker alloc] init];
+    picker.datePickerMode = NTMonthYearPickerModeMonthAndYear;
+    [picker setMinimumDate:[NSDate date]];
+    [picker setMaximumDate:newDate];
+    [picker setBackgroundColor:[UIColor whiteColor]];
+    [picker addTarget:self action:@selector(onDatePicked:) forControlEvents:UIControlEventValueChanged];
+    
+    CGSize pickerSize = [picker sizeThatFits:CGSizeZero];
+    picker.frame = CGRectMake(0, self.visibleSize.height - pickerSize.height, pickerSize.width, pickerSize.height);
+    picker.hidden = YES;
+    [self.view addSubview:picker];
+    
+    UIToolbar *toolBar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, self.visibleSize.width, 44)];
+    UIBarButtonItem *barButtonDone = [[UIBarButtonItem alloc] initWithTitle:@"Done"
+                                                                      style:UIBarButtonItemStyleDone target:self action:@selector(doneDateFromToolbar)];
+    toolBar.items = @[[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil],
+                      barButtonDone];
+    [picker addSubview:toolBar];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -121,8 +162,202 @@
 }
 
 - (void)saveButtonDidTap:(id)sender {
+    VTDirect* vtDirect = [[VTDirect alloc] init];
     
+    VTCardDetails* cardDetails = [[VTCardDetails alloc] init];
+    cardDetails.card_number = @"4811111111111114";
+    cardDetails.card_cvv = @"123";
+    cardDetails.card_exp_month = @"01";
+    cardDetails.card_exp_year = 2020;
+    cardDetails.gross_amount = @"10000";
+    cardDetails.secure = YES;
+    
+    vtDirect.card_details = cardDetails;
+    
+    [vtDirect getToken:^(VTToken *token, NSException *exception) {
+        NSData *newToken = (NSData *)token;
+        
+        NSError *error;
+        NSDictionary *json = (NSDictionary *)[NSJSONSerialization
+                                              JSONObjectWithData:newToken
+                                              options:kNilOptions
+                                              error:&error];
+        if(exception == nil){
+            if (json[@"redirect_url"] != nil) {
+                UIWebView *webView = [[UIWebView alloc] initWithFrame:CGRectMake(0, 0, self.visibleSize.width, self.visibleSize.height)];
+                [webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:json[@"redirect_url"]]]];
+                [webView setDelegate:self];
+                [webView setScalesPageToFit:YES];
+                [webView setMultipleTouchEnabled:NO];
+                [webView setContentMode:UIViewContentModeScaleAspectFit];
+                [self.view addSubview:webView];
+            }
+            
+        }else{
+            NSLog(@"Reason: %@",exception.reason);
+        }
+    }];
 
+}
+
+- (void)doneWithNumberPad {
+    [self.cvvTextField resignFirstResponder];
+}
+
+- (void)nextWithNumberPad {
+    [self.dateTextField becomeFirstResponder];
+}
+
+- (void)doneDateFromToolbar {
+    [UIView animateWithDuration:0.25 animations:^()
+     {
+         [picker setHidden:YES];
+     } completion:^(BOOL finished){
+         
+     }];
+}
+
+- (void)onDatePicked:(UITapGestureRecognizer *)gestureRecognizer {
+    NSDateFormatter *df = [[NSDateFormatter alloc] init];
+    [df setDateFormat:@"MM/yyyy"];
+    
+    NSString *dateStr = [df stringFromDate:picker.date];
+    self.dateTextField.text = dateStr;
+}
+
+#pragma mark - UIWebViewDelegate
+
+- (void)webViewDidFinishLoad:(UIWebView *)webView {
+    if ([webView.request.URL.absoluteString rangeOfString:@"callback"].location == NSNotFound) {
+        [webView removeFromSuperview];
+        NSLog(@"SUCCESS!!");
+    }
+}
+
+#pragma mark - UITextFieldDelegate
+
+- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField {
+    if (textField == self.dateTextField) {
+        [self.nameTextField resignFirstResponder];
+        [self.cvvTextField resignFirstResponder];
+        [self.cardNumberTextField resignFirstResponder];
+        
+        [UIView animateWithDuration:0.25 animations:^()
+         {
+             [picker setHidden:NO];
+         } completion:^(BOOL finished){
+             
+         }];
+        return NO;
+    }
+    return YES;
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    if ([textField isEqual:self.nameTextField]) {
+        [self.cardNumberTextField becomeFirstResponder];
+    }
+    return YES;
+}
+
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+    if (textField == self.cardNumberTextField) {
+        previousTextFieldContent = textField.text;
+        previousSelection = textField.selectedTextRange;
+    } else if (textField == self.cvvTextField) {
+        NSUInteger newLength = [textField.text length] + [string length] - range.length;
+        return (newLength > 3) ? NO : YES;
+    }
+    return YES;
+}
+
+-(void)reformatAsCardNumber:(UITextField *)textField
+{
+    // In order to make the cursor end up positioned correctly, we need to
+    // explicitly reposition it after we inject spaces into the text.
+    // targetCursorPosition keeps track of where the cursor needs to end up as
+    // we modify the string, and at the end we set the cursor position to it.
+    NSUInteger targetCursorPosition =
+    [textField offsetFromPosition:textField.beginningOfDocument
+                       toPosition:textField.selectedTextRange.start];
+    
+    NSString *cardNumberWithoutSpaces =
+    [self removeNonDigits:textField.text
+andPreserveCursorPosition:&targetCursorPosition];
+    
+    if ([cardNumberWithoutSpaces length] > 16) {
+        // If the user is trying to enter more than 19 digits, we prevent
+        // their change, leaving the text field in  its previous state.
+        // While 16 digits is usual, credit card numbers have a hard
+        // maximum of 19 digits defined by ISO standard 7812-1 in section
+        // 3.8 and elsewhere. Applying this hard maximum here rather than
+        // a maximum of 16 ensures that users with unusual card numbers
+        // will still be able to enter their card number even if the
+        // resultant formatting is odd.
+        [textField setText:previousTextFieldContent];
+        textField.selectedTextRange = previousSelection;
+        return;
+    }
+    
+    NSString *cardNumberWithSpaces =
+    [self insertSpacesEveryFourDigitsIntoString:cardNumberWithoutSpaces
+                      andPreserveCursorPosition:&targetCursorPosition];
+    
+    textField.text = cardNumberWithSpaces;
+    UITextPosition *targetPosition =
+    [textField positionFromPosition:[textField beginningOfDocument]
+                             offset:targetCursorPosition];
+    
+    [textField setSelectedTextRange:
+     [textField textRangeFromPosition:targetPosition
+                           toPosition:targetPosition]
+     ];
+}
+
+- (NSString *)removeNonDigits:(NSString *)string
+    andPreserveCursorPosition:(NSUInteger *)cursorPosition
+{
+    NSUInteger originalCursorPosition = *cursorPosition;
+    NSMutableString *digitsOnlyString = [NSMutableString new];
+    for (NSUInteger i=0; i<[string length]; i++) {
+        unichar characterToAdd = [string characterAtIndex:i];
+        if (isdigit(characterToAdd)) {
+            NSString *stringToAdd =
+            [NSString stringWithCharacters:&characterToAdd
+                                    length:1];
+            
+            [digitsOnlyString appendString:stringToAdd];
+        }
+        else {
+            if (i < originalCursorPosition) {
+                (*cursorPosition)--;
+            }
+        }
+    }
+    
+    return digitsOnlyString;
+}
+
+- (NSString *)insertSpacesEveryFourDigitsIntoString:(NSString *)string
+                          andPreserveCursorPosition:(NSUInteger *)cursorPosition
+{
+    NSMutableString *stringWithAddedSpaces = [NSMutableString new];
+    NSUInteger cursorPositionInSpacelessString = *cursorPosition;
+    for (NSUInteger i=0; i<[string length]; i++) {
+        if ((i>0) && ((i % 4) == 0)) {
+            [stringWithAddedSpaces appendString:@"-"];
+            if (i < cursorPositionInSpacelessString) {
+                (*cursorPosition)++;
+            }
+        }
+        unichar characterToAdd = [string characterAtIndex:i];
+        NSString *stringToAdd =
+        [NSString stringWithCharacters:&characterToAdd length:1];
+        
+        [stringWithAddedSpaces appendString:stringToAdd];
+    }
+    
+    return stringWithAddedSpaces;
 }
 
 @end

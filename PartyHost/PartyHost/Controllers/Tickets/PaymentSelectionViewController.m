@@ -93,7 +93,7 @@
         [[tutorialButton titleLabel] setTextAlignment:NSTextAlignmentLeft];
         [headerView addSubview:tutorialButton];
         
-        UIView *blueBottomLine = [[UIView alloc] initWithFrame:CGRectMake(176, 20, 88, 1)];
+        UIView *blueBottomLine = [[UIView alloc] initWithFrame:CGRectMake(176, 20, 90, 1)];
         [blueBottomLine setBackgroundColor:[UIColor phBlueColor]];
         [headerView addSubview:blueBottomLine];
     }
@@ -156,8 +156,8 @@
         [cell.imageView setImage:[UIImage imageNamed:@"logo_mandiri"]];
         [cell.textLabel setText:@"Mandiri Virtual Account"];
     } else if (indexPath.row == 1) {
-        [cell.imageView setImage:[UIImage imageNamed:@"logo_mandiri"]];
-        [cell.textLabel setText:@"Mandiri Virtual Account"];
+        [cell.imageView setImage:[UIImage imageNamed:@"logo_bca"]];
+        [cell.textLabel setText:@"BCA Virtual Account"];
     } else {
         [cell.imageView setImage:nil];
         [cell.textLabel setText:@"Other Banks"];

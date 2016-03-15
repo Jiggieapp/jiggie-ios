@@ -8,7 +8,7 @@
 
 #import "BaseViewController.h"
 
-@interface AddPaymentViewController : BaseViewController <UITextFieldDelegate>
+@interface AddPaymentViewController : BaseViewController <UITextFieldDelegate, UIWebViewDelegate>
 
 @property (nonatomic, strong) UITextField *nameTextField;
 @property (nonatomic, strong) UITextField *cardNumberTextField;

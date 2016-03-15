@@ -94,8 +94,7 @@
         } else {
             NSString *max_guests = [data objectForKey:@"max_guests"];
             if (max_guests && max_guests != nil) {
-                CGFloat pricePerPerson = (CGFloat)price.floatValue / (CGFloat)max_guests.floatValue;
-                [self.ticketPerson setText:[NSString stringWithFormat:@"%.2f / person", pricePerPerson]];
+                [self.ticketPerson setText:[NSString stringWithFormat:@"Max Guest %@", max_guests]];
             }
         }
     }

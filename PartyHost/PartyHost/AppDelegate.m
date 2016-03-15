@@ -10,6 +10,7 @@
 #import "AnalyticManager.h"
 #import "AFNetworkActivityLogger.h"
 #import "UserManager.h"
+#import "VTConfig.h"
 
 ///REMOVE THIS WHEN LIVE
 //#import "GSTouchesShowingWindow.h"
@@ -220,6 +221,9 @@ static NSString *const kAllowTracking = @"allowTracking";
      object:nil];
     
     [self performSelector:@selector(checkApnAgain) withObject:nil afterDelay:4.0];
+    
+    [VTConfig setCLIENT_KEY:@"VT-client-gJRBbRZC0t_-JXUD"];
+    [VTConfig setVT_IsProduction:false];
     
     //[self performSelector:@selector(testApp) withObject:nil afterDelay:5.0];
     

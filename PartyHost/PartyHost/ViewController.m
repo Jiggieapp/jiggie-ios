@@ -10,6 +10,9 @@
 #import "AnalyticManager.h"
 #import "Event.h"
 #import "TicketListViewController.h"
+#import "AddPaymentViewController.h"
+#import "VirtualAccountViewController.h"
+#import "TicketSuccessViewController.h"
 
 @interface ViewController ()
 
@@ -619,10 +622,17 @@
 
 #pragma mark - Ticket Notification 
 - (void)showTicketList:(NSNotification *)notification {
-    Event *cEvent = (Event *)[notification object];
-    TicketListViewController *ticketListVC = [[TicketListViewController alloc] init];
-    ticketListVC.cEvent = cEvent;
-    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:ticketListVC];
+//    Event *cEvent = (Event *)[notification object];
+//    TicketListViewController *ticketListVC = [[TicketListViewController alloc] init];
+//    ticketListVC.cEvent = cEvent;
+//    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:ticketListVC];
+//    [self presentViewController:navigationController animated:YES completion:nil];
+    
+    TicketSuccessViewController *addPaymentVC = [[TicketSuccessViewController alloc] init];
+    [addPaymentVC setShowViewButton:YES];
+    [addPaymentVC setShowCloseButton:YES];
+    [[addPaymentVC navigationController] setNavigationBarHidden:YES];
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:addPaymentVC];
     [self presentViewController:navigationController animated:YES completion:nil];
 }
 
