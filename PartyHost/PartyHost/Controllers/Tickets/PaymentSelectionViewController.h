@@ -11,5 +11,11 @@
 @interface PaymentSelectionViewController : BaseViewController <UITableViewDelegate, UITableViewDataSource>
 
 @property (nonatomic, strong) UITableView *tableView;
+@property (nonatomic, strong) EmptyView *emptyView;
+
+@property (nonatomic, strong) NSDictionary *productList;
+@property (nonatomic, strong) SharedData *sharedData;
+@property (nonatomic, strong) NSMutableArray *creditCardNew;
+@property (nonatomic, strong) NSMutableArray *creditCardServer;
 
 @end

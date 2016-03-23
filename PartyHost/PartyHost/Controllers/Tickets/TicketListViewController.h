@@ -17,6 +17,7 @@
 @property (nonatomic, strong) EmptyView *emptyView;
 
 @property (nonatomic, strong) Event *cEvent;
+@property (nonatomic, strong) NSString *eventID;
 @property (nonatomic, strong) SharedData *sharedData;
 @property (nonatomic, strong) NSDictionary *productList;
 @property (nonatomic, strong) NSArray *purchases;

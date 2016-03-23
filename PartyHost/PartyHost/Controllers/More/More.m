@@ -576,6 +576,9 @@
         //Purchase History
         else if(indexPath.row == 4)
         {
+            [[NSNotificationCenter defaultCenter]
+             postNotificationName:@"SHOW_PURCHASE_HISTORY"
+             object:self];
             
             return;
         }

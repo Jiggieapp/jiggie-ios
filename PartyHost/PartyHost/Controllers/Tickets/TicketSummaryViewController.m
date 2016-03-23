@@ -151,7 +151,7 @@
         [ticketSubtitle setText:description];
     }
     
-    NSString *total_price = [self.productSelected objectForKey:@"total_price"];
+    NSString *total_price = [self.productSelected objectForKey:@"price"];
     if (total_price && total_price != nil) {
         [ticketPrice setText:[NSString stringWithFormat:@"Rp%@", total_price]];
     }
@@ -510,7 +510,7 @@
         [self.continueButton setEnabled:YES];
         [self.continueButton setBackgroundColor:[UIColor phBlueColor]];
     } else {
-        [self.continueButton setEnabled:YES];
+        [self.continueButton setEnabled:NO];
         [self.continueButton setBackgroundColor:[UIColor colorFromHexCode:@"B6ECFF"]];
     }
 }

@@ -40,7 +40,7 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (IBAction)backButtonDidTap:(id)sender {
+- (void)backButtonDidTap:(id)sender {
     [[self navigationController] popViewControllerAnimated:YES];
 }
 

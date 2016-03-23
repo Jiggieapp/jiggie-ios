@@ -128,8 +128,8 @@
 - (void)loadData {
     AFHTTPRequestOperationManager *manager = [self.sharedData getOperationManager];
     //events/list/
-//    NSString *url = [NSString stringWithFormat:@"%@/product/list/%@",PHBaseNewURL,self.cEvent.eventID];
-    NSString *url = [NSString stringWithFormat:@"%@/product/list/56b1a0bf89bfed03005c50f0",PHBaseNewURL];
+    NSString *url = [NSString stringWithFormat:@"%@/product/list/%@",PHBaseNewURL,self.eventID];
+//    NSString *url = [NSString stringWithFormat:@"%@/product/list/56bd7b9ccd915d0300f17514",PHBaseNewURL];
     [manager GET:url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
         
         NSInteger responseStatusCode = operation.response.statusCode;

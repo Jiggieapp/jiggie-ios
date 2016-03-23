@@ -10,6 +10,7 @@
 #import "VTConfig.h"
 #import "VTDirect.h"
 #import "NTMonthYearPicker.h"
+#import "SVProgressHUD.h"
 
 @interface AddPaymentViewController () {
     NSString *previousTextFieldContent;
@@ -31,7 +32,7 @@
     UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, 28, 200, 24)];
     [titleLabel setText:@"ADD CREDIT CARD"];
     [titleLabel setTextColor:[UIColor phPurpleColor]];
-    [titleLabel setFont:[UIFont phBlond:18]];
+    [titleLabel setFont:[UIFont phBlond:16]];
     [titleLabel setBackgroundColor:[UIColor clearColor]];
     [self.view addSubview:titleLabel];
     
@@ -60,13 +61,6 @@
     [line2View setBackgroundColor:[UIColor phLightGrayColor]];
     [self.view addSubview:line2View];
     
-    UIToolbar *nextToolbar = [[UIToolbar alloc]initWithFrame:CGRectMake(0, 0, self.visibleSize.width, 50)];
-    nextToolbar.barStyle = UIBarStyleDefault;
-    nextToolbar.items = @[[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil],
-                            [[UIBarButtonItem alloc]initWithTitle:@"Next" style:UIBarButtonItemStyleDone target:self action:@selector(nextWithNumberPad)]];
-    [nextToolbar sizeToFit];
-    self.cvvTextField.inputAccessoryView = nextToolbar;
-    
     self.cardNumberTextField = [[UITextField alloc] initWithFrame:CGRectMake(16, CGRectGetMaxY(line2View.frame) + 10, self.visibleSize.width - 32, 30)];
     [self.cardNumberTextField setBackgroundColor:[UIColor clearColor]];
     [self.cardNumberTextField setPlaceholder:@"Credit card number"];
@@ -76,6 +70,19 @@
     [self.cardNumberTextField setDelegate:self];
     [self.cardNumberTextField addTarget:self action:@selector(reformatAsCardNumber:) forControlEvents:UIControlEventEditingChanged];
     [self.view addSubview:self.cardNumberTextField];
+    
+    UIToolbar *nextToolbar = [[UIToolbar alloc]initWithFrame:CGRectMake(0, 0, self.visibleSize.width, 50)];
+    nextToolbar.barStyle = UIBarStyleDefault;
+    nextToolbar.items = @[[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil],
+                          [[UIBarButtonItem alloc]initWithTitle:@"Next" style:UIBarButtonItemStyleDone target:self action:@selector(nextWithNumberPad)]];
+    [nextToolbar sizeToFit];
+    self.cardNumberTextField.inputAccessoryView = nextToolbar;
+    
+    self.cardNumberAlert = [[UIImageView alloc] initWithFrame:CGRectMake(self.visibleSize.width - 36, CGRectGetMaxY(line2View.frame) + 14, 20, 20)];
+    [self.cardNumberAlert setImage:[UIImage imageNamed:@"icon_alert"]];
+    [self.cardNumberAlert setBackgroundColor:[UIColor clearColor]];
+    [self.cardNumberAlert setHidden:YES];
+    [self.view addSubview:self.cardNumberAlert];
     
     UIView *line3View = [[UIView alloc] initWithFrame:CGRectMake(0, 70 + 50 + 50, self.visibleSize.width, 1)];
     [line3View setBackgroundColor:[UIColor phLightGrayColor]];
@@ -103,6 +110,12 @@
     [self.cvvTextField setDelegate:self];
     [self.cvvTextField setSecureTextEntry:YES];
     [self.view addSubview:self.cvvTextField];
+    
+    self.cvvAlert = [[UIImageView alloc] initWithFrame:CGRectMake(self.visibleSize.width - 36, CGRectGetMaxY(line3View.frame) + 14, 20, 20)];
+    [self.cvvAlert setImage:[UIImage imageNamed:@"icon_alert"]];
+    [self.cvvAlert setBackgroundColor:[UIColor clearColor]];
+    [self.cvvAlert setHidden:YES];
+    [self.view addSubview:self.cvvAlert];
     
     UIToolbar* numberToolbar = [[UIToolbar alloc]initWithFrame:CGRectMake(0, 0, self.visibleSize.width, 50)];
     numberToolbar.barStyle = UIBarStyleDefault;
@@ -162,19 +175,56 @@
 }
 
 - (void)saveButtonDidTap:(id)sender {
-    VTDirect* vtDirect = [[VTDirect alloc] init];
+    NSString *cardNumber = [self.cardNumberTextField.text stringByReplacingOccurrencesOfString:@"-" withString:@""];
+    BOOL isValid = YES;
+    if (cardNumber.length < 16) {
+        [self.cardNumberTextField setTextColor:[UIColor redColor]];
+        [self.cardNumberAlert setHidden:NO];
+        isValid = NO;
+    } else if (self.cvvTextField.text.length < 3) {
+        [self.cvvTextField setTextColor:[UIColor redColor]];
+        [self.cvvAlert setHidden:NO];
+        isValid = NO;
+    }
     
-    VTCardDetails* cardDetails = [[VTCardDetails alloc] init];
-    cardDetails.card_number = @"4811111111111114";
-    cardDetails.card_cvv = @"123";
-    cardDetails.card_exp_month = @"01";
-    cardDetails.card_exp_year = 2020;
-    cardDetails.gross_amount = @"10000";
-    cardDetails.secure = YES;
+    if (!isValid) {
+        return;
+    }
+    
+    VTDirect *vtDirect = [[VTDirect alloc] init];
+
+    VTCardDetails *cardDetails = [[VTCardDetails alloc] init];
+    
+    @try {
+        NSArray *dateArr = [self.dateTextField.text componentsSeparatedByString:@"/"];
+        
+        cardDetails.card_number = cardNumber;
+        cardDetails.card_cvv = self.cvvTextField.text;
+        cardDetails.card_exp_month = [dateArr objectAtIndex:0];
+        cardDetails.card_exp_year = [[dateArr objectAtIndex:1] integerValue];
+        cardDetails.gross_amount = @"10000";
+        cardDetails.secure = YES;
+    }
+    @catch (NSException *exception) {
+        
+    }
+    @finally {
+        
+    }
+    
+//    cardDetails.card_number = @"4811111111111114";
+//    cardDetails.card_cvv = @"123";
+//    cardDetails.card_exp_month = @"01";
+//    cardDetails.card_exp_year = 2020;
+//    cardDetails.gross_amount = @"10000";
+//    cardDetails.secure = YES;
     
     vtDirect.card_details = cardDetails;
-    
+
+    [SVProgressHUD show];
     [vtDirect getToken:^(VTToken *token, NSException *exception) {
+        [SVProgressHUD dismiss];
+        
         NSData *newToken = (NSData *)token;
         
         NSError *error;
@@ -183,21 +233,30 @@
                                               options:kNilOptions
                                               error:&error];
         if(exception == nil){
-            if (json[@"redirect_url"] != nil) {
-                UIWebView *webView = [[UIWebView alloc] initWithFrame:CGRectMake(0, 0, self.visibleSize.width, self.visibleSize.height)];
-                [webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:json[@"redirect_url"]]]];
-                [webView setDelegate:self];
-                [webView setScalesPageToFit:YES];
-                [webView setMultipleTouchEnabled:NO];
-                [webView setContentMode:UIViewContentModeScaleAspectFit];
-                [self.view addSubview:webView];
+            if ([[json objectForKey:@"status_code"] isEqualToString:@"200"]) {
+                NSDictionary *cardDetail = @{@"card_number":cardDetails.card_number,
+                                             @"card_cvv":cardDetails.card_cvv,
+                                             @"card_exp_month":cardDetails.card_exp_month,
+                                             @"card_exp_year":[NSNumber numberWithInteger:cardDetails.card_exp_year],
+                                             @"gross_amount":cardDetails.gross_amount,
+                                             @"name_cc":self.nameTextField.text};
+                
+                NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+                [prefs setObject:cardDetail forKey:@"temp_da"];
+                [prefs synchronize];
+                
+                [self dismissViewControllerAnimated:YES completion:nil];
+            } else {
+                [self.cardNumberTextField setTextColor:[UIColor redColor]];
+                [self.cardNumberAlert setHidden:NO];
             }
-            
-        }else{
+        } else {
             NSLog(@"Reason: %@",exception.reason);
+            
+            [self.cardNumberTextField setTextColor:[UIColor redColor]];
+            [self.cardNumberAlert setHidden:NO];
         }
     }];
-
 }
 
 - (void)doneWithNumberPad {
@@ -223,6 +282,17 @@
     
     NSString *dateStr = [df stringFromDate:picker.date];
     self.dateTextField.text = dateStr;
+}
+
+#pragma mark - Validate
+- (void)checkButtonActivate {
+    if (self.nameTextField.text.length > 0 && self.cardNumberTextField.text.length > 0 && self.dateTextField.text.length > 0 && self.cvvTextField.text.length > 0) {
+        [self.saveButton setEnabled:YES];
+        [self.saveButton setBackgroundColor:[UIColor phBlueColor]];
+    } else {
+        [self.saveButton setEnabled:NO];
+        [self.saveButton setBackgroundColor:[UIColor colorFromHexCode:@"B6ECFF"]];
+    }
 }
 
 #pragma mark - UIWebViewDelegate
@@ -253,6 +323,10 @@
     return YES;
 }
 
+- (void)textFieldDidEndEditing:(UITextField *)textField {
+    [self checkButtonActivate];
+}
+
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
     if ([textField isEqual:self.nameTextField]) {
         [self.cardNumberTextField becomeFirstResponder];
@@ -261,17 +335,25 @@
 }
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+    
     if (textField == self.cardNumberTextField) {
         previousTextFieldContent = textField.text;
         previousSelection = textField.selectedTextRange;
+        
+        [self.cardNumberTextField setTextColor:[UIColor blackColor]];
+        [self.cardNumberAlert setHidden:YES];
+        
     } else if (textField == self.cvvTextField) {
+        [self.cvvTextField setTextColor:[UIColor blackColor]];
+        [self.cvvAlert setHidden:YES];
+        
         NSUInteger newLength = [textField.text length] + [string length] - range.length;
         return (newLength > 3) ? NO : YES;
     }
     return YES;
 }
 
--(void)reformatAsCardNumber:(UITextField *)textField
+- (void)reformatAsCardNumber:(UITextField *)textField
 {
     // In order to make the cursor end up positioned correctly, we need to
     // explicitly reposition it after we inject spaces into the text.

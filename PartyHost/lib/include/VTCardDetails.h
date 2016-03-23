@@ -18,7 +18,7 @@
 @property(nonatomic,copy) NSString* bank;
 @property(nonatomic,copy) NSString* gross_amount;
 
-@property (nonatomic,assign) NSInteger card_exp_month;
+@property (nonatomic,copy) NSString* card_exp_month;
 @property (nonatomic,assign) NSInteger card_exp_year;
 
 @property (nonatomic,assign) BOOL secure;

@@ -460,10 +460,11 @@
     }
     
     if([self.fillType isEqualToString:@"ticket"]) {
+        
         // TICKET ACTION
         [[NSNotificationCenter defaultCenter]
          postNotificationName:@"SHOW_TICKET_LIST"
-         object:self.cEvent];
+         object:self.event_id];
 
     }
     

@@ -16,4 +16,9 @@
 @property (nonatomic, strong) UITextField *cvvTextField;
 @property (nonatomic, strong) UIButton *saveButton;
 
+@property (nonatomic, strong) UIImageView *cardNumberAlert;
+@property (nonatomic, strong) UIImageView *cvvAlert;
+
+@property (nonatomic, strong) NSDictionary *productList;
+
 @end

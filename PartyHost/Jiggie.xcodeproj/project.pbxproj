@@ -10,6 +10,8 @@
 		CB3EB6C81B459177003F658F /* App.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CB3EB6C71B459177003F658F /* App.xcassets */; };
 		CB3EB6CA1B459184003F658F /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = CB3EB6C91B459184003F658F /* LaunchScreen.xib */; };
 		CB3EB6CC1B45919A003F658F /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CB3EB6CB1B45919A003F658F /* Images.xcassets */; };
+		DA0CEC8D1C9C181B00C0DA44 /* PurchaseHistoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA0CEC8C1C9C181B00C0DA44 /* PurchaseHistoryViewController.m */; };
+		DA0CEC901C9D39E200C0DA44 /* PurchaseHistoryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DA0CEC8F1C9D39E200C0DA44 /* PurchaseHistoryCell.m */; };
 		DA10F51D1C52149F006090ED /* SVIndefiniteAnimatedView.m in Sources */ = {isa = PBXBuildFile; fileRef = DA10F5161C52149F006090ED /* SVIndefiniteAnimatedView.m */; };
 		DA10F51E1C52149F006090ED /* SVProgressHUD.bundle in Resources */ = {isa = PBXBuildFile; fileRef = DA10F5181C52149F006090ED /* SVProgressHUD.bundle */; };
 		DA10F51F1C52149F006090ED /* SVProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = DA10F51A1C52149F006090ED /* SVProgressHUD.m */; };
@@ -313,6 +315,10 @@
 		CB3EB6C71B459177003F658F /* App.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = App.xcassets; sourceTree = "<group>"; };
 		CB3EB6C91B459184003F658F /* LaunchScreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LaunchScreen.xib; sourceTree = "<group>"; };
 		CB3EB6CB1B45919A003F658F /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		DA0CEC8B1C9C181B00C0DA44 /* PurchaseHistoryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PurchaseHistoryViewController.h; sourceTree = "<group>"; };
+		DA0CEC8C1C9C181B00C0DA44 /* PurchaseHistoryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PurchaseHistoryViewController.m; sourceTree = "<group>"; };
+		DA0CEC8E1C9D39E200C0DA44 /* PurchaseHistoryCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PurchaseHistoryCell.h; sourceTree = "<group>"; };
+		DA0CEC8F1C9D39E200C0DA44 /* PurchaseHistoryCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PurchaseHistoryCell.m; sourceTree = "<group>"; };
 		DA10F5151C52149F006090ED /* SVIndefiniteAnimatedView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVIndefiniteAnimatedView.h; sourceTree = "<group>"; };
 		DA10F5161C52149F006090ED /* SVIndefiniteAnimatedView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SVIndefiniteAnimatedView.m; sourceTree = "<group>"; };
 		DA10F5171C52149F006090ED /* SVProgressHUD-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SVProgressHUD-Prefix.pch"; sourceTree = "<group>"; };
@@ -1023,16 +1029,20 @@
 				DAE02EA41C6C812200EBAAF0 /* TicketSummaryViewController.m */,
 				DA5ED5E41C8FDF5000004C7E /* TicketConfirmationViewController.h */,
 				DA5ED5E51C8FDF5000004C7E /* TicketConfirmationViewController.m */,
-				DA5ED6221C96D10700004C7E /* TicketSuccessViewController.h */,
-				DA5ED6231C96D10700004C7E /* TicketSuccessViewController.m */,
 				DA5ED5E71C908F8C00004C7E /* PaymentSelectionViewController.h */,
 				DA5ED5E81C908F8D00004C7E /* PaymentSelectionViewController.m */,
 				DA5ED5EA1C90A34400004C7E /* AddPaymentViewController.h */,
 				DA5ED5EB1C90A34400004C7E /* AddPaymentViewController.m */,
 				DA5ED5E11C896AEA00004C7E /* GuestDetailViewController.h */,
 				DA5ED5E21C896AEA00004C7E /* GuestDetailViewController.m */,
+				DA5ED6221C96D10700004C7E /* TicketSuccessViewController.h */,
+				DA5ED6231C96D10700004C7E /* TicketSuccessViewController.m */,
 				DA5ED61F1C968A1E00004C7E /* VirtualAccountViewController.h */,
 				DA5ED6201C968A1E00004C7E /* VirtualAccountViewController.m */,
+				DA0CEC8B1C9C181B00C0DA44 /* PurchaseHistoryViewController.h */,
+				DA0CEC8C1C9C181B00C0DA44 /* PurchaseHistoryViewController.m */,
+				DA0CEC8E1C9D39E200C0DA44 /* PurchaseHistoryCell.h */,
+				DA0CEC8F1C9D39E200C0DA44 /* PurchaseHistoryCell.m */,
 			);
 			path = Tickets;
 			sourceTree = "<group>";
@@ -2284,6 +2294,7 @@
 				DAABB2A71C1FF5AE004DDCFA /* MPPassThroughValueTransformer.m in Sources */,
 				DAABB0C21C1FD50E004DDCFA /* CreditCardComplete.m in Sources */,
 				DAABB2A91C1FF5AE004DDCFA /* MPSequenceGenerator.m in Sources */,
+				DA0CEC901C9D39E200C0DA44 /* PurchaseHistoryCell.m in Sources */,
 				DA4305691C22916E00ED6C54 /* Event.m in Sources */,
 				DAABB12B1C1FF13A004DDCFA /* PerkButton.m in Sources */,
 				DAABB0CB1C1FD50E004DDCFA /* EventsGuestListCell.m in Sources */,
@@ -2319,6 +2330,7 @@
 				DAABB2781C1FF5AE004DDCFA /* KTCenterFlowLayout.m in Sources */,
 				DAABB1121C1FF0F3004DDCFA /* AnalyticManager.m in Sources */,
 				DAABB2A81C1FF5AE004DDCFA /* MPPropertyDescription.m in Sources */,
+				DA0CEC8D1C9C181B00C0DA44 /* PurchaseHistoryViewController.m in Sources */,
 				DAABB0CC1C1FD50E004DDCFA /* EventsHostDetail.m in Sources */,
 				DAABB2C91C1FF5AE004DDCFA /* TSConfig.m in Sources */,
 				DAABB2611C1FF5AE004DDCFA /* FUICellBackgroundView.m in Sources */,

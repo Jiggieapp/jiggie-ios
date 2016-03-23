@@ -24,7 +24,7 @@
     UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, 28, 200, 24)];
     [titleLabel setText:@"GUEST DETAIL"];
     [titleLabel setTextColor:[UIColor phPurpleColor]];
-    [titleLabel setFont:[UIFont phBlond:18]];
+    [titleLabel setFont:[UIFont phBlond:16]];
     [titleLabel setBackgroundColor:[UIColor clearColor]];
     [self.view addSubview:titleLabel];
     
@@ -184,6 +184,10 @@
         [self.phoneTextField resignFirstResponder];
     }
     return YES;
+}
+
+- (void)textFieldDidEndEditing:(UITextField *)textField {
+    [self checkButtonActivate];
 }
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {

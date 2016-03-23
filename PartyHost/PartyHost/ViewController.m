@@ -13,6 +13,8 @@
 #import "AddPaymentViewController.h"
 #import "VirtualAccountViewController.h"
 #import "TicketSuccessViewController.h"
+#import "PaymentSelectionViewController.h"
+#import "PurchaseHistoryViewController.h"
 
 @interface ViewController ()
 
@@ -136,6 +138,12 @@
      addObserver:self
      selector:@selector(showTicketList:)
      name:@"SHOW_TICKET_LIST"
+     object:nil];
+    
+    [[NSNotificationCenter defaultCenter]
+     addObserver:self
+     selector:@selector(showPurchaseHistory:)
+     name:@"SHOW_PURCHASE_HISTORY"
      object:nil];
     
     
@@ -622,17 +630,29 @@
 
 #pragma mark - Ticket Notification 
 - (void)showTicketList:(NSNotification *)notification {
-//    Event *cEvent = (Event *)[notification object];
-//    TicketListViewController *ticketListVC = [[TicketListViewController alloc] init];
-//    ticketListVC.cEvent = cEvent;
+    NSString *eventID = [notification object];
+    TicketListViewController *ticketListVC = [[TicketListViewController alloc] init];
+    ticketListVC.eventID = eventID;
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:ticketListVC];
+    [self presentViewController:navigationController animated:YES completion:nil];
+
+    
+//    PurchaseHistoryViewController *ticketListVC = [[PurchaseHistoryViewController alloc] init];
 //    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:ticketListVC];
 //    [self presentViewController:navigationController animated:YES completion:nil];
     
-    TicketSuccessViewController *addPaymentVC = [[TicketSuccessViewController alloc] init];
-    [addPaymentVC setShowViewButton:YES];
-    [addPaymentVC setShowCloseButton:YES];
-    [[addPaymentVC navigationController] setNavigationBarHidden:YES];
-    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:addPaymentVC];
+//    VirtualAccountViewController *addPaymentVC = [[VirtualAccountViewController alloc] init];
+//    [addPaymentVC setOrderID:@"1458265581161"];
+//    [addPaymentVC setShowCloseButton:YES];
+//    [addPaymentVC setVAType:@""];
+//    [addPaymentVC setShowOrderButton:NO];
+//    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:addPaymentVC];
+//    [self presentViewController:navigationController animated:YES completion:nil];
+}
+
+- (void)showPurchaseHistory:(NSNotification *)notification {
+    PurchaseHistoryViewController *purchaseHistoryViewController = [[PurchaseHistoryViewController alloc] init];
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:purchaseHistoryViewController];
     [self presentViewController:navigationController animated:YES completion:nil];
 }
 
