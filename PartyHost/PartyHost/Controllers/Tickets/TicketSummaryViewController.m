@@ -7,6 +7,8 @@
 //
 
 #import "TicketSummaryViewController.h"
+#import <MessageUI/MessageUI.h>
+
 #import "GuestDetailViewController.h"
 #import "TicketConfirmationViewController.h"
 #import "UserManager.h"
@@ -115,16 +117,18 @@
     
     CGFloat ticketTitleWidth = self.visibleSize.width/2;
     
-    UILabel *ticketTitle = [[UILabel alloc] initWithFrame:CGRectMake(14, 80 + 8, ticketTitleWidth, 20)];
+    UILabel *ticketTitle = [[UILabel alloc] initWithFrame:CGRectMake(14, 80 + 8, ticketTitleWidth + 10, 20)];
     [ticketTitle setFont:[UIFont phBlond:14]];
     [ticketTitle setTextColor:[UIColor darkGrayColor]];
     [ticketTitle setBackgroundColor:[UIColor clearColor]];
+    [ticketTitle setAdjustsFontSizeToFitWidth:YES];
     [self.scrollView addSubview:ticketTitle];
     
-    UILabel *ticketSubtitle = [[UILabel alloc] initWithFrame:CGRectMake(14, 80 + 30, ticketTitleWidth, 20)];
+    UILabel *ticketSubtitle = [[UILabel alloc] initWithFrame:CGRectMake(14, 80 + 30, ticketTitleWidth + 10, 20)];
     [ticketSubtitle setFont:[UIFont phBlond:13]];
     [ticketSubtitle setTextColor:[UIColor darkGrayColor]];
     [ticketSubtitle setBackgroundColor:[UIColor clearColor]];
+    [ticketTitle setAdjustsFontSizeToFitWidth:YES];
     [self.scrollView addSubview:ticketSubtitle];
     
     UILabel *ticketPrice = [[UILabel alloc] initWithFrame:CGRectMake(self.visibleSize.width - 140, 80 + 8, 120, 20)];
@@ -146,14 +150,16 @@
         [ticketTitle setText:name];
     }
     
-    NSString *description = [self.productSelected objectForKey:@"description"];
-    if (description && description != nil) {
-        [ticketSubtitle setText:description];
+    NSString *summary = [self.productSelected objectForKey:@"summary"];
+    if (summary && summary != nil) {
+        [ticketSubtitle setText:summary];
     }
     
     NSString *total_price = [self.productSelected objectForKey:@"price"];
     if (total_price && total_price != nil) {
-        [ticketPrice setText:[NSString stringWithFormat:@"Rp%@", total_price]];
+        SharedData *sharedData = [SharedData sharedInstance];
+        NSString *formattedPrice = [sharedData formatCurrencyString:total_price];
+        [ticketPrice setText:[NSString stringWithFormat:@"Rp%@", formattedPrice]];
     }
     
     if (self.isTicketProduct) {
@@ -182,8 +188,11 @@
     ticketDescription.backgroundColor = [UIColor clearColor];
     [self.scrollView addSubview:ticketDescription];
     
-    ticketDescription.text = @"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
-    [ticketDescription sizeToFit];
+    NSString *description = [self.productSelected objectForKey:@"description"];
+    if (description && description != nil) {
+        ticketDescription.text = description;
+        [ticketDescription sizeToFit];
+    }
     
     self.scrollView.contentSize = CGSizeMake(self.visibleSize.width, ticketDescription.frame.origin.y + ticketDescription.frame.size.height + 12);
     
@@ -249,7 +258,10 @@
     NSString *price = [self.productSelected objectForKey:@"price"];
     if (price && price != nil) {
         self.price = price.integerValue;
-        [self.totalPrice setText:[NSString stringWithFormat:@"Rp%@", price]];
+        
+        SharedData *sharedData = [SharedData sharedInstance];
+        NSString *formattedPrice = [sharedData formatCurrencyString:price];
+        [self.totalPrice setText:[NSString stringWithFormat:@"Rp%@", formattedPrice]];
     }
     
     UILabel *ticketLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.visibleSize.width - 130, line3View.frame.origin.y + 14, 120, 20)];
@@ -325,10 +337,6 @@
 
 #pragma mark - Action
 - (void)continueButtonDidTap:(id)sender {
-//    TicketConfirmationViewController *ticketConfirmationViewController = [[TicketConfirmationViewController alloc] init];
-//    [self.navigationController pushViewController:ticketConfirmationViewController animated:YES];
-//
-//    return;
     
     SharedData *sharedData = [SharedData sharedInstance];
     AFHTTPRequestOperationManager *manager = [sharedData getOperationManager];
@@ -403,7 +411,17 @@
 }
 
 - (void)helpButtonDidTap:(id)sender {
-
+    if ([MFMailComposeViewController canSendMail]) {
+        MFMailComposeViewController *picker = [[MFMailComposeViewController alloc] init];
+        [picker setSubject:@"Support"];
+        NSArray *myReceivers = [[NSArray alloc] initWithObjects:@"support@jiggieapp.com", nil];
+        [picker setToRecipients:myReceivers];
+        picker.delegate = self;
+        picker.mailComposeDelegate = self;
+        picker.navigationBar.barStyle = UIBarStyleDefault;
+        //iipicker.navigationBar.tintColor = [UIColor whiteColor];
+        [self presentViewController:picker animated:YES completion:^{}];
+    }
 }
 
 - (void)plusButtonDidTap:(id)sender {
@@ -415,7 +433,11 @@
     }
     
     if (self.isTicketProduct) {
-        self.totalPrice.text = [NSString stringWithFormat:@"Rp%li", currentAmount * self.price];
+        SharedData *sharedData = [SharedData sharedInstance];
+        NSString *totalPrice = [NSString stringWithFormat:@"%li", currentAmount * self.price];
+        NSString *formattedPrice = [sharedData formatCurrencyString:totalPrice];
+        
+        self.totalPrice.text = [NSString stringWithFormat:@"Rp%@", formattedPrice];
     }
 }
 
@@ -428,7 +450,11 @@
     }
     
     if (self.isTicketProduct) {
-        self.totalPrice.text = [NSString stringWithFormat:@"Rp%li", currentAmount * self.price];
+        SharedData *sharedData = [SharedData sharedInstance];
+        NSString *totalPrice = [NSString stringWithFormat:@"%li", currentAmount * self.price];
+        NSString *formattedPrice = [sharedData formatCurrencyString:totalPrice];
+        
+        self.totalPrice.text = [NSString stringWithFormat:@"Rp%@", formattedPrice];
     }
 }
 
@@ -513,6 +539,25 @@
         [self.continueButton setEnabled:NO];
         [self.continueButton setBackgroundColor:[UIColor colorFromHexCode:@"B6ECFF"]];
     }
+}
+
+#pragma mark - MFMailComposeViewControllerDelegate
+- (void)mailComposeController:(MFMailComposeViewController*)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error {
+    switch (result) {
+        case MFMailComposeResultCancelled:
+            break;
+        case MFMailComposeResultSaved:
+            break;
+        case MFMailComposeResultSent:
+            break;
+        case MFMailComposeResultFailed:
+            break;
+        default:
+            break;
+    }
+    
+    // Close the Mail Interface
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 @end

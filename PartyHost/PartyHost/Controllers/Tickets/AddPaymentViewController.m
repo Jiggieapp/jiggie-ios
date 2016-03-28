@@ -130,7 +130,7 @@
     
     self.saveButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.saveButton addTarget:self action:@selector(saveButtonDidTap:) forControlEvents:UIControlEventTouchUpInside];
-    [self.saveButton setFrame:CGRectMake(0, self.visibleSize.height - 44 + 20, self.visibleSize.width, 44)];
+    [self.saveButton setFrame:CGRectMake(0, self.view.bounds.size.height - 44, self.visibleSize.width, 44)];
     [self.saveButton setBackgroundColor:[UIColor colorFromHexCode:@"B6ECFF"]];
     [self.saveButton.titleLabel setFont:[UIFont phBold:15]];
     [self.saveButton setTitle:@"SAVE" forState:UIControlStateNormal];
@@ -152,8 +152,8 @@
     [picker addTarget:self action:@selector(onDatePicked:) forControlEvents:UIControlEventValueChanged];
     
     CGSize pickerSize = [picker sizeThatFits:CGSizeZero];
-    picker.frame = CGRectMake(0, self.visibleSize.height - pickerSize.height, pickerSize.width, pickerSize.height);
-    picker.hidden = YES;
+    picker.frame = CGRectMake(0, self.view.bounds.size.height - pickerSize.height, pickerSize.width, pickerSize.height);
+    [picker setAlpha:0.0];
     [self.view addSubview:picker];
     
     UIToolbar *toolBar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, self.visibleSize.width, 44)];
@@ -270,7 +270,7 @@
 - (void)doneDateFromToolbar {
     [UIView animateWithDuration:0.25 animations:^()
      {
-         [picker setHidden:YES];
+         [picker setAlpha:0.0];
      } completion:^(BOOL finished){
          
      }];
@@ -314,7 +314,7 @@
         
         [UIView animateWithDuration:0.25 animations:^()
          {
-             [picker setHidden:NO];
+             [picker setAlpha:1.0];
          } completion:^(BOOL finished){
              
          }];

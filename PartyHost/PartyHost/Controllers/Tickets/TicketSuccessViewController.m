@@ -57,14 +57,14 @@
     [ovalIcon setImage:[UIImage imageNamed:@"icon_oval_checked"]];
     [self.scrollView addSubview:ovalIcon];
     
-    UILabel *congratsLabel = [[UILabel alloc] initWithFrame:CGRectMake(14, 10 + 100 + 16, self.visibleSize.width - 28, 20)];
-    [congratsLabel setText:@"Congratulations Disky!"];
-    [congratsLabel setFont:[UIFont phBlond:16]];
-    [congratsLabel setTextColor:[UIColor blackColor]];
-    [congratsLabel setBackgroundColor:[UIColor clearColor]];
-    [congratsLabel setTextAlignment:NSTextAlignmentCenter];
-    [congratsLabel setAdjustsFontSizeToFitWidth:YES];
-    [self.scrollView addSubview:congratsLabel];
+    self.congratsLabel = [[UILabel alloc] initWithFrame:CGRectMake(14, 10 + 100 + 16, self.visibleSize.width - 28, 20)];
+    [self.congratsLabel setText:@"Congratulations Disky!"];
+    [self.congratsLabel setFont:[UIFont phBlond:16]];
+    [self.congratsLabel setTextColor:[UIColor blackColor]];
+    [self.congratsLabel setBackgroundColor:[UIColor clearColor]];
+    [self.congratsLabel setTextAlignment:NSTextAlignmentCenter];
+    [self.congratsLabel setAdjustsFontSizeToFitWidth:YES];
+    [self.scrollView addSubview:self.congratsLabel];
     
     UILabel *successLabel = [[UILabel alloc] initWithFrame:CGRectMake(14, 10 + 100 + 16 + 24, self.visibleSize.width - 28, 20)];
     [successLabel setText:@"You have successfully placed a reservation for"];
@@ -128,7 +128,6 @@
     [self.guestName setTextColor:[UIColor phPurpleColor]];
     [self.guestName setBackgroundColor:[UIColor clearColor]];
     [self.guestName setTextAlignment:NSTextAlignmentRight];
-    [self.guestName setText:@"BUSY PUTRI"];
     [self.scrollView addSubview:self.guestName];
     
     UILabel *statusLabel = [[UILabel alloc] initWithFrame:CGRectMake(14, CGRectGetMaxY(line1View.frame) + 16 + 30, 120, 20)];
@@ -193,7 +192,6 @@
     [self.ticketPrice setTextColor:[UIColor phPurpleColor]];
     [self.ticketPrice setBackgroundColor:[UIColor clearColor]];
     [self.ticketPrice setTextAlignment:NSTextAlignmentRight];
-    [self.ticketPrice setText:@"RP3.000.000"];
     [self.scrollView addSubview:self.ticketPrice];
     
     UILabel *adminLabel = [[UILabel alloc] initWithFrame:CGRectMake(14, CGRectGetMaxY(line2View.frame) + 50 + 30, 160, 20)];
@@ -208,7 +206,6 @@
     [self.adminPrice setTextColor:[UIColor phPurpleColor]];
     [self.adminPrice setBackgroundColor:[UIColor clearColor]];
     [self.adminPrice setTextAlignment:NSTextAlignmentRight];
-    [self.adminPrice setText:@"RP500.000"];
     [self.scrollView addSubview:self.adminPrice];
     
     UILabel *taxLabel = [[UILabel alloc] initWithFrame:CGRectMake(14, CGRectGetMaxY(line2View.frame) + 50 + 30 + 30, 160, 20)];
@@ -223,7 +220,6 @@
     [self.taxPrice setTextColor:[UIColor phPurpleColor]];
     [self.taxPrice setBackgroundColor:[UIColor clearColor]];
     [self.taxPrice setTextAlignment:NSTextAlignmentRight];
-    [self.taxPrice setText:@"RP150.000"];
     [self.scrollView addSubview:self.taxPrice];
     
     UIImageView *lineDotView = [[UIImageView alloc] initWithFrame:CGRectMake(self.visibleSize.width - 120, CGRectGetMaxY(line2View.frame) + 50 + 30 + 30 + 30, 100, 1)];
@@ -345,7 +341,6 @@
         [viewButton.titleLabel setFont:[UIFont phBold:15]];
         [viewButton setTitle:@"VIEW ORDERS" forState:UIControlStateNormal];
         [viewButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        [viewButton setEnabled:NO];
         [self.view addSubview:viewButton];
     }
     
@@ -505,29 +500,40 @@
             NSString *type = [self.successData objectForKey:@"type"];
             if (type && type != nil) {
                 if ([type isEqualToString:@"cc"]) {
-                    [self.status setText:@"CREDIT CARD"];
+                    [self.paymentMethod setText:@"CREDIT CARD"];
                 } else if ([type isEqualToString:@"bp"]) {
-                    [self.status setText:@"MANDIRI VIRTUAL ACCOUNT"];
+                    [self.paymentMethod setText:@"MANDIRI VIRTUAL ACCOUNT"];
                 } else if ([type isEqualToString:@"va"]) {
-                    [self.status setText:@"BANK TRANSFER"];
+                    [self.paymentMethod setText:@"BANK TRANSFER"];
                 }
             }
             
             NSDictionary *productList = [[summary objectForKey:@"product_list"] objectAtIndex:0];
             
+            SharedData *sharedData = [SharedData sharedInstance];
+        
             NSString *total_price = [productList objectForKey:@"total_price"];
             if (total_price && total_price != nil) {
-                [self.ticketPrice setText:[NSString stringWithFormat:@"Rp%@", total_price]];
+                NSString *formattedPrice = [sharedData formatCurrencyString:total_price];
+                [self.ticketPrice setText:[NSString stringWithFormat:@"Rp%@", formattedPrice]];
             }
             
             NSString *admin_fee = [productList objectForKey:@"admin_fee"];
             if (admin_fee && admin_fee != nil) {
-                [self.adminPrice setText:[NSString stringWithFormat:@"Rp%@", admin_fee]];
+                NSString *formattedPrice = [sharedData formatCurrencyString:admin_fee];
+                [self.adminPrice setText:[NSString stringWithFormat:@"Rp%@", formattedPrice]];
+            }
+            
+            NSString *tax_amount = [productList objectForKey:@"tax_amount"];
+            if (tax_amount && tax_amount != nil) {
+                NSString *formattedPrice = [sharedData formatCurrencyString:tax_amount];
+                [self.taxPrice setText:[NSString stringWithFormat:@"Rp%@", formattedPrice]];
             }
             
             NSString *total_price_all = [productList objectForKey:@"total_price_all"];
             if (total_price_all && total_price_all != nil) {
-                [self.totalPrice setText:[NSString stringWithFormat:@"Rp%@", total_price_all]];
+                 NSString *formattedPrice = [sharedData formatCurrencyString:total_price_all];
+                [self.totalPrice setText:[NSString stringWithFormat:@"Rp%@", formattedPrice]];
             }
         }
         

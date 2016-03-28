@@ -7,8 +7,9 @@
 //
 
 #import "BaseViewController.h"
+#import <MessageUI/MessageUI.h>
 
-@interface TicketConfirmationViewController : BaseViewController <UIWebViewDelegate>
+@interface TicketConfirmationViewController : BaseViewController <UIWebViewDelegate, MFMailComposeViewControllerDelegate, UINavigationControllerDelegate, UIScrollViewDelegate>
 
 @property (nonatomic, strong) UIScrollView *scrollView;
 @property (nonatomic, strong) UILabel *totalPrice;
@@ -16,6 +17,7 @@
 @property (nonatomic, strong) UILabel *paymentTitleView;
 @property (nonatomic, strong) UIButton *paymentAddButton;
 @property (nonatomic, strong) UIButton *continueButton;
+@property (nonatomic, strong) UIScrollView *swipeScrollView;
 
 @property (nonatomic, strong) NSMutableArray *agreeButtonArray;
 @property (nonatomic, strong) NSDictionary *productSummary;

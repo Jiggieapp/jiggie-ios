@@ -7,6 +7,8 @@
 //
 
 #import "TicketConfirmationViewController.h"
+#import <MessageUI/MessageUI.h>
+
 #import "PaymentSelectionViewController.h"
 #import "TicketSuccessViewController.h"
 #import "VirtualAccountViewController.h"
@@ -49,6 +51,14 @@
     [titleView addSubview:titleIcon];
     
     [self.navigationItem setTitleView:titleView];
+    
+    UIButton *helpButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [helpButton setFrame:CGRectMake(0.0f, 0.0f, 40.0f, 30.0f)];
+    [helpButton setImage:[UIImage imageNamed:@"button_help"] forState:UIControlStateNormal];
+    [helpButton addTarget:self action:@selector(helpButtonDidTap:) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *helpBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:helpButton];
+    
+    [[self navigationItem] setRightBarButtonItem:helpBarButtonItem];
     
     // SCROLL VIEW
     
@@ -131,12 +141,16 @@
     [ticketTitle setText:[NSString stringWithFormat:@"%@ (%@x)",[self.productList objectForKey:@"name"], [self.productList objectForKey:@"num_buy"]]];
     [self.scrollView addSubview:ticketTitle];
     
+    
+    SharedData *sharedData = [SharedData sharedInstance];
+    
     UILabel *ticketPrice = [[UILabel alloc] initWithFrame:CGRectMake(self.visibleSize.width - 140, CGRectGetMaxY(line1View.frame) + 14, 120, 20)];
     [ticketPrice setFont:[UIFont phBlond:13]];
     [ticketPrice setTextColor:[UIColor darkGrayColor]];
     [ticketPrice setBackgroundColor:[UIColor clearColor]];
     [ticketPrice setTextAlignment:NSTextAlignmentRight];
-    [ticketPrice setText:[self.productList objectForKey:@"total_price"]];
+    NSString *price = [sharedData formatCurrencyString:[self.productList objectForKey:@"price"]];
+    [ticketPrice setText:[NSString stringWithFormat:@"Rp%@",price]];
     [self.scrollView addSubview:ticketPrice];
     
     UILabel *adminTitle = [[UILabel alloc] initWithFrame:CGRectMake(18, CGRectGetMaxY(line1View.frame) + 14 + 30, ticketTitleWidth, 20)];
@@ -151,7 +165,8 @@
     [adminPrice setTextColor:[UIColor darkGrayColor]];
     [adminPrice setBackgroundColor:[UIColor clearColor]];
     [adminPrice setTextAlignment:NSTextAlignmentRight];
-    [adminPrice setText:[self.productList objectForKey:@"admin_fee"]];
+    NSString *admin_fee = [sharedData formatCurrencyString:[self.productList objectForKey:@"admin_fee"]];
+    [adminPrice setText:[NSString stringWithFormat:@"Rp%@",admin_fee]];
     [self.scrollView addSubview:adminPrice];
     
     UILabel *taxTitle = [[UILabel alloc] initWithFrame:CGRectMake(18, CGRectGetMaxY(line1View.frame) + 14 + 30 + 30, ticketTitleWidth, 20)];
@@ -166,7 +181,8 @@
     [taxPrice setTextColor:[UIColor darkGrayColor]];
     [taxPrice setBackgroundColor:[UIColor clearColor]];
     [taxPrice setTextAlignment:NSTextAlignmentRight];
-    [taxPrice setText:[self.productList objectForKey:@"tax_amount"]];
+    NSString *tax_amount = [sharedData formatCurrencyString:[self.productList objectForKey:@"tax_amount"]];
+    [taxPrice setText:[NSString stringWithFormat:@"Rp%@",tax_amount]];
     [self.scrollView addSubview:taxPrice];
     
     self.scrollView.contentSize = CGSizeMake(self.visibleSize.width, CGRectGetMaxY(taxPrice.frame) + 16);
@@ -183,7 +199,8 @@
     [self.view addSubview:totalLabel];
     
     self.totalPrice = [[UILabel alloc] initWithFrame:CGRectMake(self.visibleSize.width - 100 - 20, CGRectGetMaxY(line2View.frame) + 20, 100, 20)];
-    [self.totalPrice setText:[self.productSummary objectForKey:@"total_price"]];
+    NSString *total_price = [sharedData formatCurrencyString:[self.productList objectForKey:@"total_price"]];
+    [self.totalPrice setText:[NSString stringWithFormat:@"Rp%@",total_price]];
     [self.totalPrice setTextAlignment:NSTextAlignmentRight];
     [self.totalPrice setFont:[UIFont phBlond:20]];
     [self.totalPrice setTextColor:[UIColor blackColor]];
@@ -218,14 +235,24 @@
     [self.view addSubview:self.paymentAddButton];
     
     self.continueButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.continueButton addTarget:self action:@selector(continueButtonDidTap:) forControlEvents:UIControlEventTouchUpInside];
-    [self.continueButton setFrame:CGRectMake(0, self.visibleSize.height - 44, self.visibleSize.width, 44)];
-    [self.continueButton setBackgroundColor:[UIColor colorFromHexCode:@"B6ECFF"]];
+    [self.continueButton setFrame:CGRectMake(self.visibleSize.width, 0, self.visibleSize.width, 44)];
+    [self.continueButton setBackgroundColor:[UIColor clearColor]];
     [self.continueButton.titleLabel setFont:[UIFont phBold:15]];
-    [self.continueButton setTitle:@"CONTINUE" forState:UIControlStateNormal];
+    [self.continueButton setTitle:@"SWIPE TO PAY >>" forState:UIControlStateNormal];
     [self.continueButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [self.continueButton setEnabled:NO];
-    [self.view addSubview:self.continueButton];
+    
+    self.swipeScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, self.visibleSize.height - 44, self.visibleSize.width, 44)];
+    [self.swipeScrollView setBackgroundColor:[UIColor colorFromHexCode:@"B6ECFF"]];
+    [self.swipeScrollView setContentSize:CGSizeMake(self.visibleSize.width * 2, 44)];
+    [self.swipeScrollView setShowsHorizontalScrollIndicator:NO];
+    [self.swipeScrollView setPagingEnabled:YES];
+    [self.swipeScrollView setDelegate:self];
+    [self.swipeScrollView addSubview:self.continueButton];
+    [self.swipeScrollView setContentOffset:CGPointMake(self.visibleSize.width, 0)];
+    [self.view addSubview:self.swipeScrollView];
+    
+    [self prePopulatePayment];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -247,6 +274,27 @@
     [self populatePaymentData];
 }
 
+- (void)prePopulatePayment {
+    NSDictionary *lastPayment = [self.productSummary objectForKey:@"last_payment"];
+    if (lastPayment && lastPayment != nil) {
+        NSString *payment_type = [lastPayment objectForKey:@"payment_type"];
+        if ([payment_type isEqualToString:@"bp"]) {
+            self.paymentDetail = @{@"type":@"bp",
+                                   @"is_new_card":@"0",
+                                   @"token_id":@""};
+        } else if ([payment_type isEqualToString:@"va"]) {
+            self.paymentDetail = @{@"type":@"va",
+                                   @"is_new_card":@"0",
+                                   @"token_id":@""};
+        } else if ([payment_type isEqualToString:@"cc"]) {
+            self.paymentDetail = @{@"type":@"cc",
+                                   @"is_new_card":@"0",
+                                   @"token_id":[lastPayment objectForKey:@"saved_token_id"],
+                                   @"masked_card":[lastPayment objectForKey:@"masked_card"]};
+        }
+    }
+}
+
 - (BOOL)isAllAgree {
     for (UIButton *checkButton in self.agreeButtonArray) {
         if(![checkButton isSelected]) {
@@ -259,18 +307,18 @@
 - (void)checkValidToContinue {
     if (self.paymentDetail && self.paymentDetail != nil && [self isAllAgree]) {
         
-        [self.continueButton setEnabled:YES];
-        [self.continueButton setBackgroundColor:[UIColor phBlueColor]];
+        [self.swipeScrollView setScrollEnabled:YES];
+        [self.swipeScrollView setBackgroundColor:[UIColor phBlueColor]];
     } else {
         
-        [self.continueButton setEnabled:NO];
-        [self.continueButton setBackgroundColor:[UIColor colorFromHexCode:@"B6ECFF"]];
+        [self.swipeScrollView setScrollEnabled:NO];
+        [self.swipeScrollView setBackgroundColor:[UIColor colorFromHexCode:@"B6ECFF"]];
     }
 }
 
 - (void)populatePaymentData {
     if (self.paymentDetail && self.paymentDetail != nil) {
-        if ([[self.paymentDetail objectForKey:@"type"] isEqualToString:@"CC"]) {
+        if ([[self.paymentDetail objectForKey:@"type"] isEqualToString:@"cc"]) {
             if ([[self.paymentDetail objectForKey:@"is_new_card"] isEqualToString:@"1"]) {
                 
                 NSDictionary *content = [self.paymentDetail objectForKey:@"content"];
@@ -307,13 +355,13 @@
                 }
             }
             
-        } else if ([[self.paymentDetail objectForKey:@"type"] isEqualToString:@"BP"]) {
+        } else if ([[self.paymentDetail objectForKey:@"type"] isEqualToString:@"bp"]) {
             [self.paymentLogoView setImage:[UIImage imageNamed:@"logo_mandiri"]];
             
             [self.paymentTitleView setText:@"Mandiri Virtual Account"];
             [self.paymentTitleView setTextColor:[UIColor blackColor]];
             
-        } else if ([[self.paymentDetail objectForKey:@"type"] isEqualToString:@"VA"]) {
+        } else if ([[self.paymentDetail objectForKey:@"type"] isEqualToString:@"va"]) {
             [self.paymentLogoView setImage:nil];
             
             [self.paymentTitleView setText:@"Other Banks"];
@@ -343,13 +391,27 @@
     [self checkValidToContinue];
 }
 
+- (void)helpButtonDidTap:(id)sender {
+    if ([MFMailComposeViewController canSendMail]) {
+        MFMailComposeViewController *picker = [[MFMailComposeViewController alloc] init];
+        [picker setSubject:@"Support"];
+        NSArray *myReceivers = [[NSArray alloc] initWithObjects:@"support@jiggieapp.com", nil];
+        [picker setToRecipients:myReceivers];
+        picker.delegate = self;
+        picker.mailComposeDelegate = self;
+        picker.navigationBar.barStyle = UIBarStyleDefault;
+        //iipicker.navigationBar.tintColor = [UIColor whiteColor];
+        [self presentViewController:picker animated:YES completion:^{}];
+    }
+}
+
 - (void)paymentAddButtonDidTap:(id)sender {
     [self.paymentAddButton setBackgroundColor:[UIColor lightGrayColor]];
     [UIView animateWithDuration:0.15 animations:^()
      {
          [self.paymentAddButton setBackgroundColor:[UIColor clearColor]];
      } completion:^(BOOL finished){
-         self.paymentDetail = nil;
+//         self.paymentDetail = nil;
          
          PaymentSelectionViewController *paymentSelectionViewController = [[PaymentSelectionViewController alloc] init];
          paymentSelectionViewController.productList = self.productList;
@@ -357,7 +419,8 @@
      }];
 }
 
-- (void)continueButtonDidTap:(id)sender {
+#pragma mark - Data
+- (void)readyForPayment {
     if ([[self.paymentDetail objectForKey:@"is_new_card"] isEqualToString:@"1"]) {
         NSDictionary *content = [self.paymentDetail objectForKey:@"content"];
         
@@ -431,14 +494,19 @@
     }
 
     [SVProgressHUD show];
-    [self.continueButton setEnabled:NO];
+    [self.swipeScrollView setScrollEnabled:NO];
     
     [manager POST:url parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
         [SVProgressHUD dismiss];
-        [self.continueButton setEnabled:YES];
+        [self.swipeScrollView setScrollEnabled:YES];
         
         NSInteger responseStatusCode = operation.response.statusCode;
         if (responseStatusCode != 200) {
+            return;
+        }
+        
+        if (![[responseObject objectForKey:@"response"] boolValue]) {
+            [SVProgressHUD showErrorWithStatus:@"Problem with payment"];
             return;
         }
         
@@ -447,7 +515,7 @@
         [prefs removeObjectForKey:@"temp_da_list"];
         [prefs synchronize];
         
-        if ([[self.paymentDetail objectForKey:@"type"] isEqualToString:@"CC"]) {
+        if ([[self.paymentDetail objectForKey:@"type"] isEqualToString:@"cc"]) {
             TicketSuccessViewController *ticketSuccessViewController = [[TicketSuccessViewController alloc] init];
             [ticketSuccessViewController setShowCloseButton:YES];
             [ticketSuccessViewController setShowViewButton:YES];
@@ -466,18 +534,48 @@
         }
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        [self.continueButton setEnabled:YES];
+        [self.swipeScrollView setScrollEnabled:YES];
         [SVProgressHUD dismiss];
     }];
 }
 
 #pragma mark - UIWebViewDelegate
-
 - (void)webViewDidFinishLoad:(UIWebView *)webView {
     if ([webView.request.URL.absoluteString rangeOfString:@"callback"].location != NSNotFound) {
         [self postPayment];
         
         [webView performSelectorOnMainThread:@selector(removeFromSuperview) withObject:nil waitUntilDone:NO];
+    }
+}
+
+#pragma mark - MFMailComposeViewControllerDelegate
+- (void)mailComposeController:(MFMailComposeViewController*)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error {
+    switch (result) {
+        case MFMailComposeResultCancelled:
+            break;
+        case MFMailComposeResultSaved:
+            break;
+        case MFMailComposeResultSent:
+            break;
+        case MFMailComposeResultFailed:
+            break;
+        default:
+            break;
+    }
+    
+    // Close the Mail Interface
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+#pragma mark - UIScrollViewDelegate 
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
+    if ([scrollView isEqual:self.swipeScrollView]) {
+        if (scrollView.contentOffset.x < self.visibleSize.width/2) {
+            [UIView animateWithDuration:0.25 animations:^{
+                [scrollView setContentOffset:CGPointMake(self.visibleSize.width, 0)];
+            }];
+            [self readyForPayment];
+        }
     }
 }
 

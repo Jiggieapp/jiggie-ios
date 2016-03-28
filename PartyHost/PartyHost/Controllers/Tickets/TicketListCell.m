@@ -19,16 +19,18 @@
         
         CGFloat ticketTitleWidth = self.contentView.bounds.size.width/2;
         
-        self.ticketTitle = [[UILabel alloc] initWithFrame:CGRectMake(14, 8, ticketTitleWidth, 20)];
+        self.ticketTitle = [[UILabel alloc] initWithFrame:CGRectMake(14, 8, ticketTitleWidth + 10, 20)];
         [self.ticketTitle setFont:[UIFont phBlond:15]];
         [self.ticketTitle setTextColor:[UIColor blackColor]];
         [self.ticketTitle setBackgroundColor:[UIColor clearColor]];
+        [self.ticketTitle setAdjustsFontSizeToFitWidth:YES];
         [[self contentView] addSubview:self.ticketTitle];
         
-        self.ticketDescription = [[UILabel alloc] initWithFrame:CGRectMake(14, 30, ticketTitleWidth, 20)];
+        self.ticketDescription = [[UILabel alloc] initWithFrame:CGRectMake(14, 30, ticketTitleWidth + 10, 20)];
         [self.ticketDescription setFont:[UIFont phBlond:12]];
         [self.ticketDescription setTextColor:[UIColor lightGrayColor]];
         [self.ticketDescription setBackgroundColor:[UIColor clearColor]];
+        [self.ticketDescription setAdjustsFontSizeToFitWidth:YES];
         [[self contentView] addSubview:self.ticketDescription];
         
         self.ticketPrice = [[UILabel alloc] initWithFrame:CGRectMake(self.bounds.size.width - 160, 8, 120, 20)];
@@ -38,7 +40,7 @@
         [self.ticketPrice setTextAlignment:NSTextAlignmentRight];
         [[self contentView] addSubview:self.ticketPrice];
         
-        self.ticketPerson = [[UILabel alloc] initWithFrame:CGRectMake(self.bounds.size.width - 160, 30, 120, 20)];
+        self.ticketPerson = [[UILabel alloc] initWithFrame:CGRectMake(self.bounds.size.width - 150, 30, 110, 20)];
         [self.ticketPerson setFont:[UIFont phBlond:12]];
         [self.ticketPerson setTextColor:[UIColor lightGrayColor]];
         [self.ticketPerson setBackgroundColor:[UIColor clearColor]];
@@ -76,14 +78,16 @@
             [self.ticketTitle setText:name];
         }
         
-        NSString *description = [data objectForKey:@"description"];
-        if (description && description != nil) {
-            [self.ticketDescription setText:description];
+        NSString *summary = [data objectForKey:@"summary"];
+        if (summary && summary != nil) {
+            [self.ticketDescription setText:summary];
         }
         
         NSString *price = [data objectForKey:@"price"];
         if (price && price != nil) {
-            [self.ticketPrice setText:[NSString stringWithFormat:@"Rp%@", price]];
+            SharedData *sharedData = [SharedData sharedInstance];
+            NSString *formattedPrice = [sharedData formatCurrencyString:price];
+            [self.ticketPrice setText:[NSString stringWithFormat:@"Rp%@", formattedPrice]];
         }
         
         if (hasDescription) {

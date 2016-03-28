@@ -390,7 +390,7 @@
     [tableView deselectRowAtIndexPath:[tableView indexPathForSelectedRow] animated:YES];
     if ([indexPath section] == 0) {
         NSDictionary *selectedCard = [self.creditCardServer objectAtIndex:indexPath.row];
-        NSDictionary *paymentData = @{@"type":@"CC",
+        NSDictionary *paymentData = @{@"type":@"cc",
                                       @"is_new_card":@"0",
                                       @"token_id":[selectedCard objectForKey:@"saved_token_id"],
                                       @"masked_card":[selectedCard objectForKey:@"masked_card"]};
@@ -410,7 +410,7 @@
             
         } else {
             NSDictionary *selectedCard = [self.creditCardNew objectAtIndex:indexPath.row];
-            NSDictionary *paymentData = @{@"type":@"CC",
+            NSDictionary *paymentData = @{@"type":@"cc",
                                           @"is_new_card":@"1",
                                           @"token_id":@"",
                                           @"content":selectedCard};
@@ -424,7 +424,7 @@
         
     } else if ([indexPath section] == 2) {
         if (indexPath.row == 0) {
-            NSDictionary *paymentData = @{@"type":@"BP",
+            NSDictionary *paymentData = @{@"type":@"bp",
                                           @"is_new_card":@"0",
                                           @"token_id":@""};
             
@@ -434,7 +434,7 @@
             
             [[self navigationController] popViewControllerAnimated:YES];
         } else {
-            NSDictionary *paymentData = @{@"type":@"VA",
+            NSDictionary *paymentData = @{@"type":@"va",
                                           @"is_new_card":@"0",
                                           @"token_id":@""};
             

@@ -24,9 +24,9 @@
     [self.navigationController setNavigationBarHidden:YES];   //it hides
     
     self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, 28, 220, 24)];
-    if ([self.VAType isEqualToString:@"BP"]) {
+    if ([self.VAType isEqualToString:@"bp"]) {
         [self.titleLabel setText:@"MANDIRI VIRTUAL ACCOUNT"];
-    } else if ([self.VAType isEqualToString:@"VA"]) {
+    } else if ([self.VAType isEqualToString:@"va"]) {
         [self.titleLabel setText:@"BANK TRANSFER"];
     } else {
         [self.titleLabel setText:@"HOW TO PAY"];
@@ -245,85 +245,125 @@
 
 - (void)populateData {
     
-    NSString *payment_type = [self.successData objectForKey:@"payment_type"];
-    if (payment_type && payment_type!= nil) {
-        if ([payment_type isEqualToString:@"bp"]) {
-            [self.titleLabel setText:@"MANDIRI VIRTUAL ACCOUNT"];
-        } else if ([payment_type isEqualToString:@"va"]) {
-            [self.titleLabel setText:@"BANK TRANSFER"];
-        } else {
-            [self.titleLabel setText:@"HOW TO PAY"];
-        }
-    }
-
-    NSString *amount = [self.successData objectForKey:@"amount"];
-    if (amount && amount!= nil) {
-        [self.transferAmount setText:[NSString stringWithFormat:@"Rp%@",amount]];
-    }
-    
-    NSString *transfer_to = [self.successData objectForKey:@"transfer_to"];
-    if (transfer_to && transfer_to != nil) {
-        [self.transferTo setText:transfer_to];
-    }
-    
-    NSArray *stepPayments = [self.successData objectForKey:@"step_payment"];
-    self.listY = 10;
-    for (NSDictionary *stepPayment in stepPayments) {
-        NSString *header = [stepPayment objectForKey:@"header"];
-        if (header && header != nil) {
-            UILabel *stepLabel = [[UILabel alloc] initWithFrame:CGRectMake(14, self.listY, self.visibleSize.width - 28, 40)];
-            [stepLabel setText:header];
-            [stepLabel setTextColor:[UIColor blackColor]];
-            [stepLabel setFont:[UIFont phBlond:13]];
-            [stepLabel setBackgroundColor:[UIColor clearColor]];
-            [stepLabel setNumberOfLines:2];
-            [stepLabel sizeToFit];
-            [self.scrollView addSubview:stepLabel];
-            
-            UIView *line3View = [[UIView alloc] initWithFrame:CGRectMake(14, CGRectGetMaxY(stepLabel.frame) + 8, 60, 3)];
-            [line3View setBackgroundColor:[UIColor phLightGrayColor]];
-            [self.scrollView addSubview:line3View];
-            
-            self.listY = CGRectGetMaxY(line3View.frame) + 12;
-            
-            UILabel *lineVertical = [[UILabel alloc] initWithFrame:CGRectMake(26, self.listY + 26, 1, self.listY - CGRectGetMaxY(line3View.frame) - 30)];
-            [lineVertical setBackgroundColor:[UIColor phLightGrayColor]];
-            [self.scrollView addSubview:lineVertical];
-            
-            NSArray *steps = [stepPayment objectForKey:@"step"];
-            if (steps && steps != nil) {
-                NSInteger count = 1;
-                for (NSString *step in steps) {
-                    UIButton *iconButton = [UIButton buttonWithType:UIButtonTypeCustom];
-                    [iconButton setBackgroundImage:[UIImage imageNamed:@"icon_purple"] forState:UIControlStateNormal];
-                    [iconButton setFrame:CGRectMake(14, self.listY + 8, 24, 24)];
-                    [iconButton setEnabled:NO];
-                    [iconButton setTitle:[NSString stringWithFormat:@"%li", count] forState:UIControlStateNormal];
-                    [iconButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-                    [[iconButton titleLabel] setFont:[UIFont phBlond:13]];
-                    [iconButton setAdjustsImageWhenDisabled:NO];
-                    [self.scrollView addSubview:iconButton];
-                    
-                    UILabel *termLabel = [[UILabel alloc] initWithFrame:CGRectMake(60, self.listY, self.visibleSize.width - 60 - 14, 40)];
-                    [termLabel setText:step];
-                    [termLabel setFont:[UIFont phBlond:12]];
-                    [termLabel setTextColor:[UIColor blackColor]];
-                    [termLabel setAdjustsFontSizeToFitWidth:YES];
-                    [termLabel setBackgroundColor:[UIColor clearColor]];
-                    [termLabel setNumberOfLines:3];
-                    [self.scrollView addSubview:termLabel];
-                    
-                    self.listY += 48;
-                    count++;
-                }
-                
-                [lineVertical setFrame:CGRectMake(lineVertical.frame.origin.x, lineVertical.frame.origin.y, lineVertical.bounds.size.width, self.listY - CGRectGetMaxY(line3View.frame) - 50)];
-                self.listY += 20;
+    @try {
+        NSString *payment_type = [self.successData objectForKey:@"payment_type"];
+        if (payment_type && payment_type!= nil) {
+            if ([payment_type isEqualToString:@"bp"]) {
+                [self.titleLabel setText:@"MANDIRI VIRTUAL ACCOUNT"];
+            } else if ([payment_type isEqualToString:@"va"]) {
+                [self.titleLabel setText:@"BANK TRANSFER"];
+            } else {
+                [self.titleLabel setText:@"HOW TO PAY"];
             }
         }
+        
+        NSString *timelimit = [self.successData objectForKey:@"timelimit"];
+        if (timelimit && timelimit != nil) {
+            NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+            [formatter setDateFormat:PHDateFormatServer];
+            [formatter setLocale:[NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"]];
+            [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
+            NSDate *timelimitDate = [formatter dateFromString:timelimit];
+            
+            [self populateTimeLimit:timelimitDate];
+        }
+       
+        NSString *amount = [self.successData objectForKey:@"amount"];
+        if (amount && amount!= nil) {
+            SharedData *sharedData = [SharedData sharedInstance];
+            NSString *formattedPrice = [sharedData formatCurrencyString:amount];
+            
+            [self.transferAmount setText:[NSString stringWithFormat:@"Rp%@",formattedPrice]];
+        }
+        
+        NSString *transfer_to = [self.successData objectForKey:@"transfer_to"];
+        if (transfer_to && transfer_to != nil) {
+            [self.transferTo setText:transfer_to];
+        }
+        
+        NSArray *stepPayments = [self.successData objectForKey:@"step_payment"];
+        self.listY = 10;
+        for (NSDictionary *stepPayment in stepPayments) {
+            NSString *header = [stepPayment objectForKey:@"header"];
+            if (header && header != nil) {
+                UILabel *stepLabel = [[UILabel alloc] initWithFrame:CGRectMake(14, self.listY, self.visibleSize.width - 28, 40)];
+                [stepLabel setText:header];
+                [stepLabel setTextColor:[UIColor blackColor]];
+                [stepLabel setFont:[UIFont phBlond:13]];
+                [stepLabel setBackgroundColor:[UIColor clearColor]];
+                [stepLabel setNumberOfLines:2];
+                [stepLabel sizeToFit];
+                [self.scrollView addSubview:stepLabel];
+                
+                UIView *line3View = [[UIView alloc] initWithFrame:CGRectMake(14, CGRectGetMaxY(stepLabel.frame) + 8, 60, 3)];
+                [line3View setBackgroundColor:[UIColor phLightGrayColor]];
+                [self.scrollView addSubview:line3View];
+                
+                self.listY = CGRectGetMaxY(line3View.frame) + 12;
+                
+                UILabel *lineVertical = [[UILabel alloc] initWithFrame:CGRectMake(26, self.listY + 26, 1, self.listY - CGRectGetMaxY(line3View.frame) - 30)];
+                [lineVertical setBackgroundColor:[UIColor phLightGrayColor]];
+                [self.scrollView addSubview:lineVertical];
+                
+                NSArray *steps = [stepPayment objectForKey:@"step"];
+                if (steps && steps != nil) {
+                    NSInteger count = 1;
+                    for (NSString *step in steps) {
+                        UIButton *iconButton = [UIButton buttonWithType:UIButtonTypeCustom];
+                        [iconButton setBackgroundImage:[UIImage imageNamed:@"icon_purple"] forState:UIControlStateNormal];
+                        [iconButton setFrame:CGRectMake(14, self.listY + 8, 24, 24)];
+                        [iconButton setEnabled:NO];
+                        [iconButton setTitle:[NSString stringWithFormat:@"%li", count] forState:UIControlStateNormal];
+                        [iconButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+                        [[iconButton titleLabel] setFont:[UIFont phBlond:13]];
+                        [iconButton setAdjustsImageWhenDisabled:NO];
+                        [self.scrollView addSubview:iconButton];
+                        
+                        UILabel *termLabel = [[UILabel alloc] initWithFrame:CGRectMake(60, self.listY, self.visibleSize.width - 60 - 14, 40)];
+                        [termLabel setText:step];
+                        [termLabel setFont:[UIFont phBlond:12]];
+                        [termLabel setTextColor:[UIColor blackColor]];
+                        [termLabel setAdjustsFontSizeToFitWidth:YES];
+                        [termLabel setBackgroundColor:[UIColor clearColor]];
+                        [termLabel setNumberOfLines:3];
+                        [self.scrollView addSubview:termLabel];
+                        
+                        self.listY += 48;
+                        count++;
+                    }
+                    
+                    [lineVertical setFrame:CGRectMake(lineVertical.frame.origin.x, lineVertical.frame.origin.y, lineVertical.bounds.size.width, self.listY - CGRectGetMaxY(line3View.frame) - 50)];
+                    self.listY += 20;
+                }
+            }
+        }
+        
+        self.scrollView.contentSize = CGSizeMake(self.visibleSize.width, self.listY + 8);
     }
-    
-    self.scrollView.contentSize = CGSizeMake(self.visibleSize.width, self.listY + 8);
+    @catch (NSException *exception) {
+        
+    }
+    @finally {
+        
+    }
+}
+
+- (void)populateTimeLimit:(NSDate *)timelimitDate {
+    NSDate *currentDate = [NSDate date];
+
+    if ([timelimitDate timeIntervalSinceDate:currentDate] > 0) {
+        unsigned unitFlags = NSYearCalendarUnit | NSMonthCalendarUnit |  NSDayCalendarUnit | NSWeekCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit;
+        NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
+        NSDateComponents *comps = [gregorian components:unitFlags fromDate:currentDate  toDate:timelimitDate  options:0];
+        
+        [self.transferTime setText:[NSString stringWithFormat:@"%02li:%02li:%02li", comps.hour, comps.minute, comps.second]];
+        
+        if ([self isViewLoaded]) {
+            [self performSelector:@selector(populateTimeLimit:) withObject:timelimitDate afterDelay:1.0];
+        }
+    } else {
+        [self.transferTime setText:@"Expired"];
+    }
 }
 
 - (void)loadTutorialData {
@@ -375,82 +415,89 @@
 }
 
 - (void)populateTutorialData {
-    NSMutableArray *stepPayments = [NSMutableArray array];
-    
-    NSDictionary *va_step = [self.successData objectForKey:@"va_step"];
-    if (va_step && va_step != nil) {
-        NSArray *step_payment = [va_step objectForKey:@"step_payment"];
-        if (step_payment) {
-            [stepPayments addObjectsFromArray:step_payment];
-        }
-    }
-    
-    NSDictionary *bp_step = [self.successData objectForKey:@"bp_step"];
-    if (bp_step && bp_step != nil) {
-        NSArray *step_payment = [va_step objectForKey:@"step_payment"];
-        if (step_payment) {
-            [stepPayments addObjectsFromArray:step_payment];
-        }
-    }
-    
-    self.listY = 10;
-    for (NSDictionary *stepPayment in stepPayments) {
-        NSString *header = [stepPayment objectForKey:@"header"];
-        if (header && header != nil) {
-            UILabel *stepLabel = [[UILabel alloc] initWithFrame:CGRectMake(14, self.listY, self.visibleSize.width - 28, 40)];
-            [stepLabel setText:header];
-            [stepLabel setTextColor:[UIColor blackColor]];
-            [stepLabel setFont:[UIFont phBlond:13]];
-            [stepLabel setBackgroundColor:[UIColor clearColor]];
-            [stepLabel setNumberOfLines:2];
-            [stepLabel sizeToFit];
-            [self.scrollView addSubview:stepLabel];
-            
-            UIView *line3View = [[UIView alloc] initWithFrame:CGRectMake(14, CGRectGetMaxY(stepLabel.frame) + 8, 60, 3)];
-            [line3View setBackgroundColor:[UIColor phLightGrayColor]];
-            [self.scrollView addSubview:line3View];
-            
-            self.listY = CGRectGetMaxY(line3View.frame) + 12;
-            
-            UILabel *lineVertical = [[UILabel alloc] initWithFrame:CGRectMake(26, self.listY + 26, 1, self.listY - CGRectGetMaxY(line3View.frame) - 30)];
-            [lineVertical setBackgroundColor:[UIColor phLightGrayColor]];
-            [self.scrollView addSubview:lineVertical];
-            
-            NSArray *steps = [stepPayment objectForKey:@"step"];
-            if (steps && steps != nil) {
-                NSInteger count = 1;
-                for (NSString *step in steps) {
-                    UIButton *iconButton = [UIButton buttonWithType:UIButtonTypeCustom];
-                    [iconButton setBackgroundImage:[UIImage imageNamed:@"icon_purple"] forState:UIControlStateNormal];
-                    [iconButton setFrame:CGRectMake(14, self.listY + 8, 24, 24)];
-                    [iconButton setEnabled:NO];
-                    [iconButton setTitle:[NSString stringWithFormat:@"%li", count] forState:UIControlStateNormal];
-                    [iconButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-                    [[iconButton titleLabel] setFont:[UIFont phBlond:13]];
-                    [iconButton setAdjustsImageWhenDisabled:NO];
-                    [self.scrollView addSubview:iconButton];
-                    
-                    UILabel *termLabel = [[UILabel alloc] initWithFrame:CGRectMake(60, self.listY, self.visibleSize.width - 60 - 14, 40)];
-                    [termLabel setText:step];
-                    [termLabel setFont:[UIFont phBlond:12]];
-                    [termLabel setTextColor:[UIColor blackColor]];
-                    [termLabel setAdjustsFontSizeToFitWidth:YES];
-                    [termLabel setBackgroundColor:[UIColor clearColor]];
-                    [termLabel setNumberOfLines:3];
-                    [self.scrollView addSubview:termLabel];
-                    
-                    self.listY += 48;
-                    count++;
-                }
-
-                [lineVertical setFrame:CGRectMake(lineVertical.frame.origin.x, lineVertical.frame.origin.y, lineVertical.bounds.size.width, self.listY - CGRectGetMaxY(line3View.frame) - 50)];
-                self.listY += 20;
+    @try {
+        NSMutableArray *stepPayments = [NSMutableArray array];
+        
+        NSDictionary *va_step = [self.successData objectForKey:@"va_step"];
+        if (va_step && va_step != nil) {
+            NSArray *step_payment = [va_step objectForKey:@"step_payment"];
+            if (step_payment) {
+                [stepPayments addObjectsFromArray:step_payment];
             }
         }
+        
+        NSDictionary *bp_step = [self.successData objectForKey:@"bp_step"];
+        if (bp_step && bp_step != nil) {
+            NSArray *step_payment = [va_step objectForKey:@"step_payment"];
+            if (step_payment) {
+                [stepPayments addObjectsFromArray:step_payment];
+            }
+        }
+        
+        self.listY = 10;
+        for (NSDictionary *stepPayment in stepPayments) {
+            NSString *header = [stepPayment objectForKey:@"header"];
+            if (header && header != nil) {
+                UILabel *stepLabel = [[UILabel alloc] initWithFrame:CGRectMake(14, self.listY, self.visibleSize.width - 28, 40)];
+                [stepLabel setText:header];
+                [stepLabel setTextColor:[UIColor blackColor]];
+                [stepLabel setFont:[UIFont phBlond:13]];
+                [stepLabel setBackgroundColor:[UIColor clearColor]];
+                [stepLabel setNumberOfLines:2];
+                [stepLabel sizeToFit];
+                [self.scrollView addSubview:stepLabel];
+                
+                UIView *line3View = [[UIView alloc] initWithFrame:CGRectMake(14, CGRectGetMaxY(stepLabel.frame) + 8, 60, 3)];
+                [line3View setBackgroundColor:[UIColor phLightGrayColor]];
+                [self.scrollView addSubview:line3View];
+                
+                self.listY = CGRectGetMaxY(line3View.frame) + 12;
+                
+                UILabel *lineVertical = [[UILabel alloc] initWithFrame:CGRectMake(26, self.listY + 26, 1, self.listY - CGRectGetMaxY(line3View.frame) - 30)];
+                [lineVertical setBackgroundColor:[UIColor phLightGrayColor]];
+                [self.scrollView addSubview:lineVertical];
+                
+                NSArray *steps = [stepPayment objectForKey:@"step"];
+                if (steps && steps != nil) {
+                    NSInteger count = 1;
+                    for (NSString *step in steps) {
+                        UIButton *iconButton = [UIButton buttonWithType:UIButtonTypeCustom];
+                        [iconButton setBackgroundImage:[UIImage imageNamed:@"icon_purple"] forState:UIControlStateNormal];
+                        [iconButton setFrame:CGRectMake(14, self.listY + 8, 24, 24)];
+                        [iconButton setEnabled:NO];
+                        [iconButton setTitle:[NSString stringWithFormat:@"%li", count] forState:UIControlStateNormal];
+                        [iconButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+                        [[iconButton titleLabel] setFont:[UIFont phBlond:13]];
+                        [iconButton setAdjustsImageWhenDisabled:NO];
+                        [self.scrollView addSubview:iconButton];
+                        
+                        UILabel *termLabel = [[UILabel alloc] initWithFrame:CGRectMake(60, self.listY, self.visibleSize.width - 60 - 14, 40)];
+                        [termLabel setText:step];
+                        [termLabel setFont:[UIFont phBlond:12]];
+                        [termLabel setTextColor:[UIColor blackColor]];
+                        [termLabel setAdjustsFontSizeToFitWidth:YES];
+                        [termLabel setBackgroundColor:[UIColor clearColor]];
+                        [termLabel setNumberOfLines:3];
+                        [self.scrollView addSubview:termLabel];
+                        
+                        self.listY += 48;
+                        count++;
+                    }
+                    
+                    [lineVertical setFrame:CGRectMake(lineVertical.frame.origin.x, lineVertical.frame.origin.y, lineVertical.bounds.size.width, self.listY - CGRectGetMaxY(line3View.frame) - 50)];
+                    self.listY += 20;
+                }
+            }
+        }
+        
+        self.scrollView.contentSize = CGSizeMake(self.visibleSize.width, self.listY + 8);
     }
-    
-    self.scrollView.contentSize = CGSizeMake(self.visibleSize.width, self.listY + 8);
+    @catch (NSException *exception) {
+        
+    }
+    @finally {
+        
+    }
 }
-
 
 @end

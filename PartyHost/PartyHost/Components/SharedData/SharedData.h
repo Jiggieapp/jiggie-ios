@@ -293,4 +293,8 @@
 
 -(AFHTTPRequestOperationManager *)getOperationManager;
 -(void)loadTimeImage:(NSString *)imgURL withTimeOut:(float)time;
+
+- (NSString *)formatCurrencyString:(NSString *)price;
+- (BOOL)validateEmailWithString:(NSString*)checkString;
+
 @end

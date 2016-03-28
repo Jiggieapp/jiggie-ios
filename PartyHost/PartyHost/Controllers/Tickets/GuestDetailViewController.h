@@ -16,4 +16,6 @@
 @property (nonatomic, strong) UITextField *phoneTextField;
 @property (nonatomic, strong) UIButton *saveButton;
 
+@property (nonatomic, strong) UIImageView *emailAlert;
+
 @end

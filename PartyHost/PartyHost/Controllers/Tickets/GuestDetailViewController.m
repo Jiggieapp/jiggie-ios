@@ -62,6 +62,12 @@
     [self.emailTextField setDelegate:self];
     [self.view addSubview:self.emailTextField];
     
+    self.emailAlert = [[UIImageView alloc] initWithFrame:CGRectMake(self.visibleSize.width - 36, CGRectGetMaxY(line2View.frame) + 14, 20, 20)];
+    [self.emailAlert setImage:[UIImage imageNamed:@"icon_alert"]];
+    [self.emailAlert setBackgroundColor:[UIColor clearColor]];
+    [self.emailAlert setHidden:YES];
+    [self.view addSubview:self.emailAlert];
+    
     UIView *line3View = [[UIView alloc] initWithFrame:CGRectMake(0, 70 + 50 + 50, self.visibleSize.width, 1)];
     [line3View setBackgroundColor:[UIColor phLightGrayColor]];
     [self.view addSubview:line3View];
@@ -160,6 +166,12 @@
 }
 
 - (void)saveButtonDidTap:(id)sender {
+    SharedData *sharedData = [SharedData sharedInstance];
+    if (![sharedData validateEmailWithString:self.emailTextField.text]) {
+        [self.emailTextField setTextColor:[UIColor redColor]];
+        [self.emailAlert setHidden:NO];
+        return;
+    }
     
     NSDictionary *userInfo = @{@"name":self.nameTextField.text,
                                @"email":self.emailTextField.text,
@@ -193,8 +205,12 @@
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
     [self checkButtonActivate];
     
+    if (textField == self.emailTextField) {
+        [self.emailTextField setTextColor:[UIColor blackColor]];
+        [self.emailAlert setHidden:YES];
+    }
+    
     return YES;
 }
-
 
 @end

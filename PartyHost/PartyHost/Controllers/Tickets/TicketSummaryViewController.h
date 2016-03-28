@@ -7,8 +7,9 @@
 //
 
 #import "BaseViewController.h"
+#import <MessageUI/MessageUI.h>
 
-@interface TicketSummaryViewController : BaseViewController
+@interface TicketSummaryViewController : BaseViewController <MFMailComposeViewControllerDelegate, UINavigationControllerDelegate>
 
 @property (nonatomic, strong) UIScrollView *scrollView;
 @property (nonatomic, strong) UILabel *summaryHeaderTitle;

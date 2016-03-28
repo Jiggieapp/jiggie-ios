@@ -226,7 +226,6 @@ static NSString *const kAllowTracking = @"allowTracking";
     [VTConfig setVT_IsProduction:false];
     
     //[self performSelector:@selector(testApp) withObject:nil afterDelay:5.0];
-    
     return YES;
 }
 
@@ -312,6 +311,10 @@ static NSString *const kAllowTracking = @"allowTracking";
 {
     // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+    
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    [prefs removeObjectForKey:@"temp_da_list"];
+    [prefs synchronize];
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application

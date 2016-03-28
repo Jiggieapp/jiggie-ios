@@ -121,7 +121,36 @@
 }
 
 - (void)helpButtonDidTap:(id)sender {
+    if ([MFMailComposeViewController canSendMail]) {
+        MFMailComposeViewController *picker = [[MFMailComposeViewController alloc] init];
+        [picker setSubject:@"Support"];
+        NSArray *myReceivers = [[NSArray alloc] initWithObjects:@"support@jiggieapp.com", nil];
+        [picker setToRecipients:myReceivers];
+        picker.delegate = self;
+        picker.mailComposeDelegate = self;
+        picker.navigationBar.barStyle = UIBarStyleDefault;
+        //iipicker.navigationBar.tintColor = [UIColor whiteColor];
+        [self presentViewController:picker animated:YES completion:^{}];
+    }
+}
 
+#pragma mark - MFMailComposeViewControllerDelegate
+- (void)mailComposeController:(MFMailComposeViewController*)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error {
+    switch (result) {
+        case MFMailComposeResultCancelled:
+            break;
+        case MFMailComposeResultSaved:
+            break;
+        case MFMailComposeResultSent:
+            break;
+        case MFMailComposeResultFailed:
+            break;
+        default:
+            break;
+    }
+    
+    // Close the Mail Interface
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark - Data 
