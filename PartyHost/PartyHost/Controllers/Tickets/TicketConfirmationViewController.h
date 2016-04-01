@@ -9,10 +9,12 @@
 #import "BaseViewController.h"
 #import <MessageUI/MessageUI.h>
 
-@interface TicketConfirmationViewController : BaseViewController <UIWebViewDelegate, MFMailComposeViewControllerDelegate, UINavigationControllerDelegate, UIScrollViewDelegate>
+@interface TicketConfirmationViewController : BaseViewController <UIWebViewDelegate, MFMessageComposeViewControllerDelegate, UINavigationControllerDelegate, UIScrollViewDelegate>
 
 @property (nonatomic, strong) UIScrollView *scrollView;
 @property (nonatomic, strong) UILabel *totalPrice;
+@property (nonatomic, strong) UILabel *requiredPrice;
+@property (nonatomic, strong) UILabel *balancePrice;
 @property (nonatomic, strong) UIImageView *paymentLogoView;
 @property (nonatomic, strong) UILabel *paymentTitleView;
 @property (nonatomic, strong) UIButton *paymentAddButton;
@@ -26,5 +28,9 @@
 @property (nonatomic, strong) NSDictionary *paymentNew;
 @property (nonatomic, strong) NSString *eventTitleString;
 @property (nonatomic, strong) NSString *eventDescriptionString;
+@property (nonatomic, strong) NSString *ticketType;
+@property (nonatomic, assign) NSInteger maxPrice;
+@property (nonatomic, assign) NSInteger minPrice;
+@property (nonatomic, assign) NSInteger currentPrice;
 
 @end

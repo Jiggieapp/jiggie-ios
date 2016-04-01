@@ -24,7 +24,9 @@
     [self.navigationController setNavigationBarHidden:YES];   //it hides
     
     self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, 28, 220, 24)];
-    if ([self.VAType isEqualToString:@"bp"]) {
+    if ([self.VAType isEqualToString:@"bca"]) {
+        [self.titleLabel setText:@"BCA VIRTUAL ACCOUNT"];
+    } else if ([self.VAType isEqualToString:@"bp"]) {
         [self.titleLabel setText:@"MANDIRI VIRTUAL ACCOUNT"];
     } else if ([self.VAType isEqualToString:@"va"]) {
         [self.titleLabel setText:@"BANK TRANSFER"];
@@ -151,7 +153,7 @@
         [viewOrderButton setFrame:CGRectMake(0, self.view.bounds.size.height - orderButtonSize, self.visibleSize.width, orderButtonSize)];
         [viewOrderButton setBackgroundColor:[UIColor phBlueColor]];
         [viewOrderButton.titleLabel setFont:[UIFont phBold:15]];
-        [viewOrderButton setTitle:@"VIEW ORDERS" forState:UIControlStateNormal];
+        [viewOrderButton setTitle:@"VIEW BOOKING" forState:UIControlStateNormal];
         [viewOrderButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [self.view addSubview:viewOrderButton];
     }
@@ -248,7 +250,9 @@
     @try {
         NSString *payment_type = [self.successData objectForKey:@"payment_type"];
         if (payment_type && payment_type!= nil) {
-            if ([payment_type isEqualToString:@"bp"]) {
+            if ([payment_type isEqualToString:@"bca"]) {
+                [self.titleLabel setText:@"BCA VIRTUAL ACCOUNT"];
+            } else if ([payment_type isEqualToString:@"bp"]) {
                 [self.titleLabel setText:@"MANDIRI VIRTUAL ACCOUNT"];
             } else if ([payment_type isEqualToString:@"va"]) {
                 [self.titleLabel setText:@"BANK TRANSFER"];
@@ -268,7 +272,7 @@
             [self populateTimeLimit:timelimitDate];
         }
        
-        NSString *amount = [self.successData objectForKey:@"amount"];
+        NSString *amount = [[self.successData objectForKey:@"amount"] stringValue];
         if (amount && amount!= nil) {
             SharedData *sharedData = [SharedData sharedInstance];
             NSString *formattedPrice = [sharedData formatCurrencyString:amount];

@@ -411,15 +411,13 @@
 }
 
 - (void)helpButtonDidTap:(id)sender {
-    if ([MFMailComposeViewController canSendMail]) {
-        MFMailComposeViewController *picker = [[MFMailComposeViewController alloc] init];
-        [picker setSubject:@"Support"];
-        NSArray *myReceivers = [[NSArray alloc] initWithObjects:@"support@jiggieapp.com", nil];
-        [picker setToRecipients:myReceivers];
+    if ([MFMessageComposeViewController canSendText]) {
+        MFMessageComposeViewController *picker = [[MFMessageComposeViewController alloc] init];
+        NSArray *myReceivers = [[NSArray alloc] initWithObjects:@"+6281218288317", nil];
+        [picker setRecipients:myReceivers];
         picker.delegate = self;
-        picker.mailComposeDelegate = self;
+        picker.messageComposeDelegate = self;
         picker.navigationBar.barStyle = UIBarStyleDefault;
-        //iipicker.navigationBar.tintColor = [UIColor whiteColor];
         [self presentViewController:picker animated:YES completion:^{}];
     }
 }
@@ -542,15 +540,13 @@
 }
 
 #pragma mark - MFMailComposeViewControllerDelegate
-- (void)mailComposeController:(MFMailComposeViewController*)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error {
+- (void)messageComposeViewController:(MFMessageComposeViewController *)controller didFinishWithResult:(MessageComposeResult)result {
     switch (result) {
-        case MFMailComposeResultCancelled:
+        case MessageComposeResultCancelled:
             break;
-        case MFMailComposeResultSaved:
+        case MessageComposeResultFailed:
             break;
-        case MFMailComposeResultSent:
-            break;
-        case MFMailComposeResultFailed:
+        case MessageComposeResultSent:
             break;
         default:
             break;
@@ -559,5 +555,6 @@
     // Close the Mail Interface
     [self dismissViewControllerAnimated:YES completion:nil];
 }
+
 
 @end

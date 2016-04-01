@@ -25,10 +25,36 @@
 @property (nonatomic, strong) UILabel *taxPrice;
 @property (nonatomic, strong) UILabel *totalPrice;
 @property (nonatomic, strong) UILabel *instruction;
+@property (nonatomic, strong) UIView *bottomView;
 @property (nonatomic, strong) UILabel *eventNameBottom;
 @property (nonatomic, strong) UILabel *eventTimeBottom;
 @property (nonatomic, strong) UILabel *eventPlaceBottom;
 @property (nonatomic, strong) UILabel *eventDateBottom;
+
+@property (nonatomic, strong) UIScrollView *bookingScrollView;
+@property (nonatomic, strong) UILabel *bookingCongratsLabel;
+@property (nonatomic, strong) UILabel *bookingEventName;
+@property (nonatomic, strong) UILabel *bookingEventDate;
+@property (nonatomic, strong) UILabel *bookingOrderNumber;
+@property (nonatomic, strong) UILabel *bookingGuestName;
+@property (nonatomic, strong) UILabel *bookingTotalGuest;
+@property (nonatomic, strong) UILabel *bookingStatus;
+@property (nonatomic, strong) UILabel *bookingPaymentMethod;
+@property (nonatomic, strong) UILabel *bookingOrderDate;
+@property (nonatomic, strong) UILabel *bookingTicketName;
+@property (nonatomic, strong) UILabel *bookingTicketPrice;
+@property (nonatomic, strong) UILabel *bookingServicePrice;
+@property (nonatomic, strong) UILabel *bookingTaxPrice;
+@property (nonatomic, strong) UILabel *bookingTotalPrice;
+@property (nonatomic, strong) UILabel *bookingDepositPrice;
+@property (nonatomic, strong) UILabel *bookingBalancePrice;
+@property (nonatomic, strong) UILabel *bookingInstruction;
+@property (nonatomic, strong) UIView *bookingBottomView;
+@property (nonatomic, strong) UILabel *bookingEventNameBottom;
+@property (nonatomic, strong) UILabel *bookingEventTimeBottom;
+@property (nonatomic, strong) UILabel *bookingEventPlaceBottom;
+@property (nonatomic, strong) UILabel *bookingEventDateBottom;
+
 @property (nonatomic, strong) EmptyView *emptyView;
 
 @property (nonatomic, assign) BOOL showCloseButton;

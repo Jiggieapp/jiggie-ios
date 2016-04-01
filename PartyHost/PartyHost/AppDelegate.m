@@ -409,6 +409,10 @@ static NSString *const kAllowTracking = @"allowTracking";
             abort();
         }
     }
+    
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    [prefs removeObjectForKey:@"temp_da_list"];
+    [prefs synchronize];
 }
 
 - (BOOL)application:(UIApplication *)application

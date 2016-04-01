@@ -236,7 +236,7 @@
     } else if (section == 1) {
         return self.creditCardNew.count + 1;
     }
-    return 2;
+    return 3;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -339,6 +339,9 @@
     }
     
     if (indexPath.row == 0) {
+        [cell.imageView setImage:[UIImage imageNamed:@"logo_bca"]];
+        [cell.textLabel setText:@"BCA Virtual Account"];
+    } else if (indexPath.row == 1) {
         [cell.imageView setImage:[UIImage imageNamed:@"logo_mandiri"]];
         [cell.textLabel setText:@"Mandiri Virtual Account"];
     } else {
@@ -424,6 +427,16 @@
         
     } else if ([indexPath section] == 2) {
         if (indexPath.row == 0) {
+            NSDictionary *paymentData = @{@"type":@"bca",
+                                          @"is_new_card":@"0",
+                                          @"token_id":@""};
+            
+            NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+            [prefs setObject:paymentData forKey:@"pdata"];
+            [prefs synchronize];
+            
+            [[self navigationController] popViewControllerAnimated:YES];
+        } else if (indexPath.row == 1) {
             NSDictionary *paymentData = @{@"type":@"bp",
                                           @"is_new_card":@"0",
                                           @"token_id":@""};

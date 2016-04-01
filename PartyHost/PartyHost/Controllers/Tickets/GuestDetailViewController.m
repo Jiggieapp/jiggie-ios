@@ -9,6 +9,7 @@
 #import "GuestDetailViewController.h"
 #import "UserManager.h"
 #import "UserBubble.h"
+#import "SVProgressHUD.h"
 
 @interface GuestDetailViewController ()
 
@@ -170,6 +171,8 @@
     if (![sharedData validateEmailWithString:self.emailTextField.text]) {
         [self.emailTextField setTextColor:[UIColor redColor]];
         [self.emailAlert setHidden:NO];
+        
+        [SVProgressHUD showErrorWithStatus:@"Invalid Email Format"];
         return;
     }
     

@@ -10,7 +10,7 @@
 #import <MessageUI/MessageUI.h>
 #import "Event.h"
 
-@interface TicketListViewController : BaseViewController <UITableViewDataSource, UITableViewDelegate, MFMailComposeViewControllerDelegate, UINavigationControllerDelegate>
+@interface TicketListViewController : BaseViewController <UITableViewDataSource, UITableViewDelegate, MFMessageComposeViewControllerDelegate, UINavigationControllerDelegate>
 
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) UILabel *tableHeaderTitle;
