@@ -8,6 +8,7 @@
 
 #import "VirtualAccountViewController.h"
 #import "PurchaseHistoryViewController.h"
+#import "AnalyticManager.h"
 
 @interface VirtualAccountViewController ()
 
@@ -153,7 +154,7 @@
         [viewOrderButton setFrame:CGRectMake(0, self.view.bounds.size.height - orderButtonSize, self.visibleSize.width, orderButtonSize)];
         [viewOrderButton setBackgroundColor:[UIColor phBlueColor]];
         [viewOrderButton.titleLabel setFont:[UIFont phBold:15]];
-        [viewOrderButton setTitle:@"VIEW BOOKING" forState:UIControlStateNormal];
+        [viewOrderButton setTitle:@"VIEW BOOKINGS" forState:UIControlStateNormal];
         [viewOrderButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [self.view addSubview:viewOrderButton];
     }
@@ -166,6 +167,11 @@
     
     if ([self.VAType isEqualToString:@"tutorial"]) {
         [self loadTutorialData];
+        
+        // MixPanel
+        SharedData *sharedData = [SharedData sharedInstance];
+        [[AnalyticManager sharedManager] trackMixPanelWithDict:@"VA Instruction" withDict:sharedData.mixPanelCTicketDict];
+        
     } else {
         [self loadData];
     }
@@ -227,6 +233,30 @@
                         if (success_screen && success_screen != nil) {
                             self.successData = success_screen;
                             [self populateData];
+                            
+                            
+                            // MixPanel
+                            NSDictionary *summary = [self.successData objectForKey:@"summary"];
+                            if (summary && summary != nil) {
+                                NSDictionary *summary = [self.successData objectForKey:@"summary"];
+                                if (summary && summary != nil) {
+                                    SharedData *sharedData = [SharedData sharedInstance];
+                                    
+                                    NSDictionary *productList = [[summary objectForKey:@"product_list"] objectAtIndex:0];
+                                    if ([[productList objectForKey:@"ticket_type"] isEqualToString:@"booking"]) {
+                                        [sharedData.mixPanelCTicketDict setObject:[productList objectForKey:@"num_buy"] forKey:@"Total Guest"];
+                                    } else {
+                                        [sharedData.mixPanelCTicketDict setObject:[productList objectForKey:@"num_buy"] forKey:@"Purchase Quantity"];
+                                    }
+                                    
+                                    [sharedData.mixPanelCTicketDict setObject:[summary objectForKey:@"created_at"] forKey:@"Date Time"];
+                                    [sharedData.mixPanelCTicketDict setObject:[productList objectForKey:@"total_price_all"] forKey:@"Purchase Amount"];
+                                    [sharedData.mixPanelCTicketDict setObject:[self.successData objectForKey:@"payment_type"] forKey:@"Purchase Payment"];
+                                    if (self.showOrderButton) {
+                                        [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Commerce Finish VA" withDict:sharedData.mixPanelCTicketDict];
+                                    }
+                                }
+                            }
                         }
                     }
                     [self.emptyView setMode:@"hide"];
@@ -261,15 +291,21 @@
             }
         }
         
-        NSString *timelimit = [self.successData objectForKey:@"timelimit"];
-        if (timelimit && timelimit != nil) {
-            NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-            [formatter setDateFormat:PHDateFormatServer];
-            [formatter setLocale:[NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"]];
-            [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
-            NSDate *timelimitDate = [formatter dateFromString:timelimit];
+        NSString *payment_status = [self.successData objectForKey:@"payment_status"];
+        if (payment_status && payment_status != nil && [payment_status isEqualToString:@"expire"]) {
+            [self.transferTime setText:@"Expired"];
             
-            [self populateTimeLimit:timelimitDate];
+        } else {
+            NSString *timelimit = [self.successData objectForKey:@"timelimit"];
+            if (timelimit && timelimit != nil) {
+                NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+                [formatter setDateFormat:PHDateFormatServer];
+                [formatter setLocale:[NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"]];
+                [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
+                NSDate *timelimitDate = [formatter dateFromString:timelimit];
+                
+                [self populateTimeLimit:timelimitDate];
+            }
         }
        
         NSString *amount = [[self.successData objectForKey:@"amount"] stringValue];
@@ -309,7 +345,7 @@
                 [lineVertical setBackgroundColor:[UIColor phLightGrayColor]];
                 [self.scrollView addSubview:lineVertical];
                 
-                NSArray *steps = [stepPayment objectForKey:@"step"];
+                NSArray *steps = [stepPayment objectForKey:@"steps"];
                 if (steps && steps != nil) {
                     NSInteger count = 1;
                     for (NSString *step in steps) {
@@ -461,7 +497,7 @@
                 [lineVertical setBackgroundColor:[UIColor phLightGrayColor]];
                 [self.scrollView addSubview:lineVertical];
                 
-                NSArray *steps = [stepPayment objectForKey:@"step"];
+                NSArray *steps = [stepPayment objectForKey:@"steps"];
                 if (steps && steps != nil) {
                     NSInteger count = 1;
                     for (NSString *step in steps) {

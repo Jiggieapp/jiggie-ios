@@ -827,43 +827,51 @@
 {
     [tableView deselectRowAtIndexPath:[tableView indexPathForSelectedRow] animated:YES];
     
-    Event *event = nil;
-    
-    if ([tableView isEqual:self.events1List]) {
-        event = [self.eventsToday objectAtIndex:indexPath.row];
-    } else if ([tableView isEqual:self.events2List]) {
-        event = [self.eventsTomorrow objectAtIndex:indexPath.row];
-    } else if ([tableView isEqual:self.events3List]) {
-        event = [self.eventsUpcoming objectAtIndex:indexPath.row];
+    @try {
+        Event *event = nil;
+        
+        if ([tableView isEqual:self.events1List]) {
+            event = [self.eventsToday objectAtIndex:indexPath.row];
+        } else if ([tableView isEqual:self.events2List]) {
+            event = [self.eventsTomorrow objectAtIndex:indexPath.row];
+        } else if ([tableView isEqual:self.events3List]) {
+            event = [self.eventsUpcoming objectAtIndex:indexPath.row];
+        }
+        
+        if (event != nil) {
+            [self.sharedData.selectedEvent removeAllObjects];
+            self.sharedData.selectedEvent[@"_id"] = event.eventID;
+            self.sharedData.selectedEvent[@"venue_name"] = event.venue;
+            
+            self.sharedData.cEventId = event.eventID;
+            self.sharedData.mostRecentEventSelectedId = event.eventID;
+            self.sharedData.cVenueName = event.venue;
+            
+            if([self.sharedData isGuest] && ![self.sharedData isMember])
+            {
+                [self.eventsSummary initClassWithEvent:event];
+                
+                self.eventsSummary.hidden = NO;
+                self.eventsGuestList.hidden = YES;
+                self.eventsHostingsList.hidden = NO;
+            }
+            else if([self.sharedData isHost] || [self.sharedData isMember])
+            {
+                [self.eventsSummary initClassWithEvent:event];
+                
+                self.eventsSummary.hidden = NO;
+                self.eventsGuestList.hidden = NO;
+                self.eventsHostingsList.hidden = YES;
+            }
+            
+            [self goToSummary];
+        }
     }
-    
-    if (event != nil) {
-        [self.sharedData.selectedEvent removeAllObjects];
-        self.sharedData.selectedEvent[@"_id"] = event.eventID;
-        self.sharedData.selectedEvent[@"venue_name"] = event.venue;
+    @catch (NSException *exception) {
         
-        self.sharedData.cEventId = event.eventID;
-        self.sharedData.mostRecentEventSelectedId = event.eventID;
-        self.sharedData.cVenueName = event.venue;
+    }
+    @finally {
         
-        if([self.sharedData isGuest] && ![self.sharedData isMember])
-        {
-            [self.eventsSummary initClassWithEvent:event];
-            
-            self.eventsSummary.hidden = NO;
-            self.eventsGuestList.hidden = YES;
-            self.eventsHostingsList.hidden = NO;
-        }
-        else if([self.sharedData isHost] || [self.sharedData isMember])
-        {
-            [self.eventsSummary initClassWithEvent:event];
-            
-            self.eventsSummary.hidden = NO;
-            self.eventsGuestList.hidden = NO;
-            self.eventsHostingsList.hidden = YES;
-        }
-        
-        [self goToSummary];
     }
 }
 

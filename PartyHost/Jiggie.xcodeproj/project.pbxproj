@@ -41,6 +41,9 @@
 		DA5ED6211C968A1E00004C7E /* VirtualAccountViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5ED6201C968A1E00004C7E /* VirtualAccountViewController.m */; };
 		DA5ED6241C96D10700004C7E /* TicketSuccessViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5ED6231C96D10700004C7E /* TicketSuccessViewController.m */; };
 		DA700E0E1C63561300E5D945 /* Jiggie.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = DA700E0D1C63515D00E5D945 /* Jiggie.entitlements */; };
+		DA9B10A01CB4D7B7001FB798 /* GTMNSString+HTML.m in Sources */ = {isa = PBXBuildFile; fileRef = DA9B108F1CB4D7B7001FB798 /* GTMNSString+HTML.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		DA9B10A51CB4D7B7001FB798 /* NSString+HTML.m in Sources */ = {isa = PBXBuildFile; fileRef = DA9B109A1CB4D7B7001FB798 /* NSString+HTML.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		DA9B10A61CB4D7B7001FB798 /* NSString+XMLEntities.m in Sources */ = {isa = PBXBuildFile; fileRef = DA9B109C1CB4D7B7001FB798 /* NSString+XMLEntities.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		DA9E0CF71C61F75000966F16 /* BaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA9E0CF61C61F75000966F16 /* BaseViewController.m */; };
 		DA9E0CFA1C61F76300966F16 /* TicketListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA9E0CF91C61F76300966F16 /* TicketListViewController.m */; };
 		DAABB0B11C1FD50E004DDCFA /* BookTable.m in Sources */ = {isa = PBXBuildFile; fileRef = DAABB0091C1FD50E004DDCFA /* BookTable.m */; };
@@ -387,6 +390,13 @@
 		DA5ED6221C96D10700004C7E /* TicketSuccessViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TicketSuccessViewController.h; sourceTree = "<group>"; };
 		DA5ED6231C96D10700004C7E /* TicketSuccessViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TicketSuccessViewController.m; sourceTree = "<group>"; };
 		DA700E0D1C63515D00E5D945 /* Jiggie.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Jiggie.entitlements; sourceTree = SOURCE_ROOT; };
+		DA9B108D1CB4D7B7001FB798 /* GTMDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTMDefines.h; sourceTree = "<group>"; };
+		DA9B108E1CB4D7B7001FB798 /* GTMNSString+HTML.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "GTMNSString+HTML.h"; sourceTree = "<group>"; };
+		DA9B108F1CB4D7B7001FB798 /* GTMNSString+HTML.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GTMNSString+HTML.m"; sourceTree = "<group>"; };
+		DA9B10991CB4D7B7001FB798 /* NSString+HTML.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+HTML.h"; sourceTree = "<group>"; };
+		DA9B109A1CB4D7B7001FB798 /* NSString+HTML.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+HTML.m"; sourceTree = "<group>"; };
+		DA9B109B1CB4D7B7001FB798 /* NSString+XMLEntities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+XMLEntities.h"; sourceTree = "<group>"; };
+		DA9B109C1CB4D7B7001FB798 /* NSString+XMLEntities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+XMLEntities.m"; sourceTree = "<group>"; };
 		DA9E0CF51C61F75000966F16 /* BaseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseViewController.h; sourceTree = "<group>"; };
 		DA9E0CF61C61F75000966F16 /* BaseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseViewController.m; sourceTree = "<group>"; };
 		DA9E0CF81C61F76300966F16 /* TicketListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TicketListViewController.h; sourceTree = "<group>"; };
@@ -1018,6 +1028,20 @@
 			path = NTMonthYearPicker;
 			sourceTree = "<group>";
 		};
+		DA9B108A1CB4D7B7001FB798 /* MWFeedParser */ = {
+			isa = PBXGroup;
+			children = (
+				DA9B108D1CB4D7B7001FB798 /* GTMDefines.h */,
+				DA9B108E1CB4D7B7001FB798 /* GTMNSString+HTML.h */,
+				DA9B108F1CB4D7B7001FB798 /* GTMNSString+HTML.m */,
+				DA9B10991CB4D7B7001FB798 /* NSString+HTML.h */,
+				DA9B109A1CB4D7B7001FB798 /* NSString+HTML.m */,
+				DA9B109B1CB4D7B7001FB798 /* NSString+XMLEntities.h */,
+				DA9B109C1CB4D7B7001FB798 /* NSString+XMLEntities.m */,
+			);
+			path = MWFeedParser;
+			sourceTree = "<group>";
+		};
 		DA9E0CF41C61ED7100966F16 /* Tickets */ = {
 			isa = PBXGroup;
 			children = (
@@ -1065,6 +1089,7 @@
 		DAABAFE81C1FC6F8004DDCFA /* ExtraLibraries */ = {
 			isa = PBXGroup;
 			children = (
+				DA9B108A1CB4D7B7001FB798 /* MWFeedParser */,
 				DA5ED61A1C92DD5B00004C7E /* NTMonthYearPicker */,
 				DA10F5141C52149F006090ED /* SVProgressHUD */,
 				DA47B2271C3A8553001B4476 /* AFNetworkActivityLogger */,
@@ -2134,6 +2159,7 @@
 				DAABB0C81C1FD50E004DDCFA /* EventsSummaryModal.m in Sources */,
 				DAABB0CA1C1FD50E004DDCFA /* EventsGuestList.m in Sources */,
 				DAABB0DE1C1FD50E004DDCFA /* Profile.m in Sources */,
+				DA9B10A61CB4D7B7001FB798 /* NSString+XMLEntities.m in Sources */,
 				DAABB2671C1FF5AE004DDCFA /* UIBarButtonItem+FlatUI.m in Sources */,
 				DA5ED61E1C92DD5B00004C7E /* NTMonthYearPicker.m in Sources */,
 				DAABB1171C1FF0F3004DDCFA /* PHImage.m in Sources */,
@@ -2182,6 +2208,7 @@
 				DAABB2711C1FF5AE004DDCFA /* UITableViewCell+FlatUI.m in Sources */,
 				DAABB29F1C1FF5AE004DDCFA /* MPNotificationViewController.m in Sources */,
 				DA5ED6171C92975100004C7E /* VTiOSAPI.m in Sources */,
+				DA9B10A01CB4D7B7001FB798 /* GTMNSString+HTML.m in Sources */,
 				DAABB2FE1C200414004DDCFA /* Constants.m in Sources */,
 				DAABB0B21C1FD50E004DDCFA /* BookTableAbout.m in Sources */,
 				DAABB1141C1FF0F3004DDCFA /* UIColor+PH.m in Sources */,
@@ -2210,6 +2237,7 @@
 				DAABB26A1C1FF5AE004DDCFA /* UIImage+FlatUI.m in Sources */,
 				DAABB2A51C1FF5AE004DDCFA /* MPObjectSerializerConfig.m in Sources */,
 				DAABB0E01C1FD50E004DDCFA /* MyPurchasesCell.m in Sources */,
+				DA9B10A51CB4D7B7001FB798 /* NSString+HTML.m in Sources */,
 				DAABB2881C1FF5AE004DDCFA /* MPABTestDesignerDisconnectMessage.m in Sources */,
 				DAABB2941C1FF5AE004DDCFA /* MPCGSizeToNSDictionaryValueTransformer.m in Sources */,
 				DAABB25F1C1FF5AE004DDCFA /* FUIAlertView.m in Sources */,

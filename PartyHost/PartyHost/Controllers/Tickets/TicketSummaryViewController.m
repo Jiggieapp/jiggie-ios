@@ -13,6 +13,7 @@
 #import "TicketConfirmationViewController.h"
 #import "UserManager.h"
 #import "SVProgressHUD.h"
+#import "AnalyticManager.h"
 
 @interface TicketSummaryViewController ()
 
@@ -310,6 +311,24 @@
     [minusButton addTarget:self action:@selector(minusButtonDidTap:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:minusButton];
     
+    NSString *status = [self.productSelected objectForKey:@"status"];
+    NSNumber *quantity = [self.productSelected objectForKey:@"quantity"];
+    if ([status isEqualToString:@"sold out"] || quantity.integerValue == 0) {
+        UIView *soldOutView = [[UIView alloc] initWithFrame:CGRectMake(0, line3View.frame.origin.y + 14, self.visibleSize.width, 60)];
+        [soldOutView setBackgroundColor:[UIColor whiteColor]];
+        [self.view addSubview:soldOutView];
+        
+        UILabel *soldOutLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 16, self.visibleSize.width, 20)];
+        [soldOutLabel setText:@"SOLD OUT"];
+        [soldOutLabel setTextColor:[UIColor redColor]];
+        [soldOutLabel setFont:[UIFont phBold:20]];
+        [soldOutLabel setTextAlignment:NSTextAlignmentCenter];
+        [soldOutView addSubview:soldOutLabel];
+        
+        self.isSoldOut = YES;
+    }
+    
+    
     // BUTTON
     
     self.continueButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -321,7 +340,19 @@
     [self.continueButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [self.continueButton setEnabled:NO];
     [self.view addSubview:self.continueButton];
-
+    
+    // MixPanel
+    SharedData *sharedData = [SharedData sharedInstance];
+    [sharedData.mixPanelCTicketDict setObject:[self.productSelected objectForKey:@"name"] forKey:@"Ticket Name"];
+    [sharedData.mixPanelCTicketDict setObject:[self.productSelected objectForKey:@"ticket_type"] forKey:@"Ticket Type"];
+    [sharedData.mixPanelCTicketDict setObject:[self.productSelected objectForKey:@"price"] forKey:@"Ticket Price"];
+    if (self.isTicketProduct) {
+       [sharedData.mixPanelCTicketDict setObject:[self.productSelected objectForKey:@"max_purchase"] forKey:@"Ticket Max Per Guest"];
+    } else {
+        [sharedData.mixPanelCTicketDict setObject:[self.productSelected objectForKey:@"max_guests"] forKey:@"Ticket Max Per Guest"];
+    }
+    
+    [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Product Detail" withDict:sharedData.mixPanelCTicketDict];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -365,6 +396,46 @@
         
         NSInteger responseStatusCode = operation.response.statusCode;
         if (responseStatusCode != 200) {
+            return;
+        }
+        
+        if (![[responseObject objectForKey:@"response"] boolValue]) {
+            NSString *message = [responseObject objectForKey:@"msg"];
+            if (!message || message == nil) {
+                message = @"";
+            }
+            
+            self.errorType = [responseObject objectForKey:@"type"];
+            
+            if (([[[UIDevice currentDevice] systemVersion] compare:@"8.0" options:NSNumericSearch] == NSOrderedAscending)) {
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Booking Failed"
+                                                                message:message
+                                                               delegate:self
+                                                      cancelButtonTitle:@"OK"
+                                                      otherButtonTitles:nil];
+                [alert show];
+            }
+            else {
+                UIAlertController *alertController = [UIAlertController
+                                                      alertControllerWithTitle:@"Booking Failed"
+                                                      message:message
+                                                      preferredStyle:UIAlertControllerStyleAlert];
+                
+                UIAlertAction *cancelAction = [UIAlertAction
+                                               actionWithTitle:@"OK"
+                                               style:UIAlertActionStyleCancel
+                                               handler:^(UIAlertAction *action)
+                                               {
+                                                   if ([self.errorType isEqualToString:@"ticket_list"]) {
+                                                       [[self navigationController] popToRootViewControllerAnimated:YES];
+                                                       
+                                                   }
+                                               }];
+                
+                [alertController addAction:cancelAction];
+                [self presentViewController:alertController animated:YES completion:nil];
+            }
+            
             return;
         }
         
@@ -530,13 +601,21 @@
         self.isAllowToContinue = NO;
     }
     
-    if (self.isAllowToContinue) {
+    if (self.isAllowToContinue && !self.isSoldOut) {
         [self.continueButton setEnabled:YES];
         [self.continueButton setBackgroundColor:[UIColor phBlueColor]];
     } else {
         [self.continueButton setEnabled:NO];
         [self.continueButton setBackgroundColor:[UIColor colorFromHexCode:@"B6ECFF"]];
     }
+}
+
+#pragma mark - UIAlertViewDelegate
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if ([self.errorType isEqualToString:@"ticket_list"]) {
+        [[self navigationController] popToRootViewControllerAnimated:YES];
+        
+    } 
 }
 
 #pragma mark - MFMailComposeViewControllerDelegate

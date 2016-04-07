@@ -12,6 +12,7 @@
 #import "UIColor+PH.h"
 #import "UIFont+PH.h"
 #import "TicketListCell.h"
+#import "AnalyticManager.h"
 
 
 @interface TicketListViewController ()
@@ -31,6 +32,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    
+    [self.view setBackgroundColor:[UIColor colorFromHexCode:@"F1F1F1"]];
     
     // Remove nav bar shadow
     [self.navigationController.navigationBar setBackgroundImage:[[UIImage alloc] init]
@@ -75,7 +78,7 @@
     self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.visibleSize.width, self.visibleSize.height)];
     [self.tableView setDelegate:self];
     [self.tableView setDataSource:self];
-    [self.tableView setBackgroundColor:[UIColor whiteColor]];
+    [self.tableView setBackgroundColor:[UIColor clearColor]];
     [self.view addSubview:self.tableView];
     
     UIView *tmpPurpleView = [[UIView alloc] initWithFrame:CGRectMake(0, -300, self.visibleSize.width, 300)];
@@ -106,6 +109,11 @@
     [self.emptyView setMode:@"load"];
     [self.emptyView setBackgroundColor:[UIColor whiteColor]];
     [self.view addSubview:self.emptyView];
+    
+}
+
+- (void)viewWillAppear:(BOOL)animated  {
+    [super viewWillAppear:animated];
     
     [self loadData];
 }
@@ -209,6 +217,23 @@
                             if (reservation && reservation != nil) {
                                 self.reservations = reservation;
                             }
+                            
+                            
+                            // MixPanel
+                            [self.sharedData.mixPanelCTicketDict removeAllObjects];
+                            [self.sharedData.mixPanelCTicketDict setObject:[self.productList objectForKey:@"event_name"] forKey:@"Event Name"];
+                            [self.sharedData.mixPanelCTicketDict setObject:[self.productList objectForKey:@"start_datetime"] forKey:@"Event Start Date"];
+                            [self.sharedData.mixPanelCTicketDict setObject:[self.productList objectForKey:@"end_datetime"] forKey:@"Event End Date"];
+                            [self.sharedData.mixPanelCTicketDict setObject:[self.productList objectForKey:@"description"] forKey:@"Event Description"];
+                            [self.sharedData.mixPanelCTicketDict setObject:[self.productList objectForKey:@"venue_name"] forKey:@"Event Venue Name"];
+                            [self.sharedData.mixPanelCTicketDict setObject:[self.productList objectForKey:@"venue_city"] forKey:@"Event Venue City"];
+                            NSArray *mixpanelTags = [self.productList objectForKey:@"tags"];
+                            if (mixpanelTags && mixpanelTags != nil) {
+                                [self.sharedData.mixPanelCTicketDict setObject:mixpanelTags forKey:@"Event Tags"];
+                            }
+                            
+                            [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Product List" withDict:self.sharedData.mixPanelCTicketDict];
+
                         }
                     }
                     [self.tableView reloadData];

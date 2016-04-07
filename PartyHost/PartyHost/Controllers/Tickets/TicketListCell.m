@@ -76,6 +76,23 @@
         NSString *name = [data objectForKey:@"name"];
         if (name && name != nil) {
             [self.ticketTitle setText:name];
+            [self.ticketTitle setTextColor:[UIColor blackColor]];
+        }
+        
+        NSString *status = [data objectForKey:@"status"];
+        if (status && status != nil) {
+            if ([status isEqualToString:@"sold out"]) {
+                [self.ticketTitle setText:[NSString stringWithFormat:@"%@ (SOLD OUT)", name]];
+                [self.ticketTitle setTextColor:[UIColor redColor]];
+            }
+        }
+        
+        NSNumber *quantity = [data objectForKey:@"quantity"];
+        if (quantity && quantity != nil) {
+            if (quantity.integerValue == 0) {
+                [self.ticketTitle setText:[NSString stringWithFormat:@"%@ (SOLD OUT)", name]];
+                [self.ticketTitle setTextColor:[UIColor redColor]];
+            }
         }
         
         NSString *summary = [data objectForKey:@"summary"];

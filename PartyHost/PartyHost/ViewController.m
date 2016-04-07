@@ -520,20 +520,24 @@
           postNotificationName:@"HIDE_LOADING"
           object:self];
          
-         //[self shareText:responseObject[@"message"] andImage:newImage andUrl:[[NSURL alloc] initWithString:responseObject[@"url"]]];
-         
-         UIImage *shareImage = [UIImage imageNamed:@"splashLogoWhite"];
-         if (self.sharedData.cHostVenuePicURL && self.sharedData.cHostVenuePicURL.length > 0) {
-             NSString *picURL = self.sharedData.cHostVenuePicURL;
-             picURL = [self.sharedData picURL:picURL];
-             if([self.sharedData.imagesDict objectForKey:picURL] && [[self.sharedData.imagesDict objectForKey:picURL] isKindOfClass:[UIImage class]]) {
-                 shareImage = [self.sharedData.imagesDict objectForKey:picURL];
+         @try {
+             UIImage *shareImage = [UIImage imageNamed:@"splashLogoWhite"];
+             if (self.sharedData.cHostVenuePicURL && self.sharedData.cHostVenuePicURL.length > 0) {
+                 NSString *picURL = self.sharedData.cHostVenuePicURL;
+                 picURL = [self.sharedData picURL:picURL];
+                 if([self.sharedData.imagesDict objectForKey:picURL] && [[self.sharedData.imagesDict objectForKey:picURL] isKindOfClass:[UIImage class]]) {
+                     shareImage = [self.sharedData.imagesDict objectForKey:picURL];
+                 }
              }
+             
+             [self shareText:responseObject[@"message"] andImage:shareImage andUrl:[[NSURL alloc] initWithString:responseObject[@"url"]]];
          }
-         
-         [self shareText:responseObject[@"message"] andImage:shareImage andUrl:[[NSURL alloc] initWithString:responseObject[@"url"]]];
-
-         //
+         @catch (NSException *exception) {
+             
+         }
+         @finally {
+             
+         }
          
      } failure:^(AFHTTPRequestOperation *operation, NSError *error)
      {

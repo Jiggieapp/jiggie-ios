@@ -11,6 +11,7 @@
 #import "VTDirect.h"
 #import "NTMonthYearPicker.h"
 #import "SVProgressHUD.h"
+#import "AnalyticManager.h"
 
 @interface AddPaymentViewController () {
     NSString *previousTextFieldContent;
@@ -162,6 +163,10 @@
     toolBar.items = @[[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil],
                       barButtonDone];
     [picker addSubview:toolBar];
+    
+    // MixPanel
+    SharedData *sharedData = [SharedData sharedInstance];
+    [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Credit Card" withDict:sharedData.mixPanelCTicketDict];
 }
 
 - (void)didReceiveMemoryWarning {

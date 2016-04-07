@@ -86,6 +86,7 @@ static SharedData *sharedInstance = nil;
         self.unreadFeedCount    = 0;
         self.cShareHostingId    = @"";
         self.mixPanelCEventDict = [[NSMutableDictionary alloc] init]; // mixpanel data
+        self.mixPanelCTicketDict = [[NSMutableDictionary alloc] init]; // mixpanel data
         self.cEventId_Feed      = @""; // current feed id
         self.cEventId_Modal     = @""; // current modal id
         self.cEventId_Summary   = @""; // current summary id

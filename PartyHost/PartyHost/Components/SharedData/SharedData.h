@@ -144,6 +144,7 @@
 
 
 @property(nonatomic,strong) NSMutableDictionary *mixPanelCEventDict;
+@property(nonatomic,strong) NSMutableDictionary *mixPanelCTicketDict;
 
 @property(nonatomic,strong) NSString            *mostRecentEventSelectedId;
 

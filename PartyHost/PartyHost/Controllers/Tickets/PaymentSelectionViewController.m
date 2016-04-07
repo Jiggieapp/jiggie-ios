@@ -9,6 +9,7 @@
 #import "PaymentSelectionViewController.h"
 #import "AddPaymentViewController.h"
 #import "VirtualAccountViewController.h"
+#import "AnalyticManager.h"
 
 @interface PaymentSelectionViewController ()
 
@@ -55,6 +56,10 @@
     [self.view addSubview:self.emptyView];
     
     [self loadData];
+    
+    // MixPanel
+    SharedData *sharedData = [SharedData sharedInstance];
+    [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Payment Selection" withDict:sharedData.mixPanelCTicketDict];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -380,9 +385,16 @@
         } else if ([indexPath section] == 1) {
             [self.creditCardNew removeObjectAtIndex:indexPath.row];
         
-            NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-            [prefs setObject:self.creditCardNew forKey:@"temp_da_list"];
-            [prefs synchronize];
+            if (self.creditCardNew.count > 0) {
+                NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+                [prefs setObject:self.creditCardNew forKey:@"temp_da_list"];
+                [prefs synchronize];
+            } else {
+                NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+                [prefs removeObjectForKey:@"temp_da_list"];
+                [prefs synchronize];
+            }
+            
             
             [tableView reloadData];
         }

@@ -10,6 +10,7 @@
 #import "PurchaseHistoryCell.h"
 #import "TicketSuccessViewController.h"
 #import "VirtualAccountViewController.h"
+#import "AnalyticManager.h"
 
 
 @interface PurchaseHistoryViewController ()
@@ -47,6 +48,8 @@
     [self.view addSubview:self.emptyView];
     
     [self loadData];
+    
+    [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Order List" withDict:@{}];
 }
 
 - (void)didReceiveMemoryWarning {

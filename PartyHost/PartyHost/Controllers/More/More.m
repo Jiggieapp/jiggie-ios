@@ -67,7 +67,7 @@
     [self.mainCon addSubview:self.userProfilePhone];
     
     self.dataA = [[NSMutableArray alloc] init]; //Fill this out in initClass
-    self.moreList = [[UITableView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(self.userProfilePhone.frame) + 30 + OffSetLargeDevice - OffSet, frame.size.width, 240 - OffSet*3) style:UITableViewStylePlain];
+    self.moreList = [[UITableView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(self.userProfilePhone.frame) + 14 + OffSetLargeDevice - OffSet, frame.size.width, 256 - OffSet*3) style:UITableViewStylePlain];
     self.moreList.delegate = self;
     self.moreList.dataSource = self;
     self.moreList.allowsMultipleSelectionDuringEditing = NO;
@@ -366,6 +366,33 @@
         }
         else if(indexPath.row==1)
         {
+            cell = [tableView dequeueReusableCellWithIdentifier:@"PurchaseHistoryCell"];
+            if (cell == nil) {cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"PurchaseHistoryCell"];}
+            
+            UILabel *textLabel = [[UILabel alloc] initWithFrame:CGRectMake(70, 20, 180, 20)];
+            textLabel.backgroundColor = [UIColor clearColor];
+            textLabel.font = [UIFont phBlond:16];
+            textLabel.text = @"Purchase History";
+            [[cell contentView] addSubview:textLabel];
+            
+            UIImageView *cellImage = [[UIImageView alloc] initWithFrame:CGRectMake(14, 10, 40, 40)];
+            cellImage.backgroundColor = [UIColor colorFromHexCode:@"A74CC9"];
+            cellImage.layer.cornerRadius = 20;
+            [[cell contentView] addSubview:cellImage];
+            
+            UIImageView *iconImage = [[UIImageView alloc] initWithFrame:CGRectMake(10, 10, 20, 20)];
+            [iconImage setImage:[UIImage imageNamed:@"icon_purchase_history.png"]];
+            [cellImage addSubview:iconImage];
+            
+            UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0.0, 0.0, 11.0, 21.0)];
+            [imageView setBackgroundColor:[UIColor clearColor]];
+            [imageView setImage:[UIImage imageNamed:@"forward.png"]];
+            [cell setAccessoryView:imageView];
+            [[cell accessoryView] setBackgroundColor:[UIColor clearColor]];
+            
+        }
+        else if(indexPath.row==2)
+        {
             cell = [tableView dequeueReusableCellWithIdentifier:@"SettingsCell"];
             if (cell == nil) {cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"SettingsCell"];}
             
@@ -394,7 +421,7 @@
             [cell setAccessoryView:imageView];
             [[cell accessoryView] setBackgroundColor:[UIColor clearColor]];
         }
-        else if(indexPath.row==2)
+        else if(indexPath.row==3)
         {
             cell = [tableView dequeueReusableCellWithIdentifier:@"InviteFriendsCell"];
             if (cell == nil) {cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"InviteFriendsCell"];}
@@ -421,7 +448,7 @@
             [[cell accessoryView] setBackgroundColor:[UIColor clearColor]];
 
         }
-        else if(indexPath.row==3)
+        else if(indexPath.row==4)
         {
             cell = [tableView dequeueReusableCellWithIdentifier:@"EmailSupportCell"];
             if (cell == nil) {cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"EmailSupportCell"];}
@@ -448,33 +475,7 @@
             [[cell accessoryView] setBackgroundColor:[UIColor clearColor]];
 
         }
-        else if(indexPath.row==4)
-        {
-            cell = [tableView dequeueReusableCellWithIdentifier:@"PurchaseHistoryCell"];
-            if (cell == nil) {cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"PurchaseHistoryCell"];}
-            
-            UILabel *textLabel = [[UILabel alloc] initWithFrame:CGRectMake(70, 20, 180, 20)];
-            textLabel.backgroundColor = [UIColor clearColor];
-            textLabel.font = [UIFont phBlond:16];
-            textLabel.text = @"Purchase History";
-            [[cell contentView] addSubview:textLabel];
-            
-            UIImageView *cellImage = [[UIImageView alloc] initWithFrame:CGRectMake(14, 10, 40, 40)];
-            cellImage.backgroundColor = [UIColor colorFromHexCode:@"A74CC9"];
-            cellImage.layer.cornerRadius = 20;
-            [[cell contentView] addSubview:cellImage];
-            
-            UIImageView *iconImage = [[UIImageView alloc] initWithFrame:CGRectMake(10, 10, 20, 20)];
-            [iconImage setImage:[UIImage imageNamed:@"icon_purchase_history.png"]];
-            [cellImage addSubview:iconImage];
-            
-            UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0.0, 0.0, 11.0, 21.0)];
-            [imageView setBackgroundColor:[UIColor clearColor]];
-            [imageView setImage:[UIImage imageNamed:@"forward.png"]];
-            [cell setAccessoryView:imageView];
-            [[cell accessoryView] setBackgroundColor:[UIColor clearColor]];
-            
-        }
+        
         else if (indexPath.row==5)
         {
             cell = [tableView dequeueReusableCellWithIdentifier:@"LogOutCell"];
@@ -534,9 +535,19 @@
             
             return;
         }
+        
+        //Purchase History
+        else if(indexPath.row == 1)
+        {
+            [[NSNotificationCenter defaultCenter]
+             postNotificationName:@"SHOW_PURCHASE_HISTORY"
+             object:self];
             
+            return;
+        }
+        
         //Settings
-        else if(indexPath.row == 1 && [UserManager updateLocalSetting])
+        else if(indexPath.row == 2 && [UserManager updateLocalSetting])
         {
             self.settingsPage.hidden = NO;
             self.profilePage.hidden = YES;
@@ -552,7 +563,7 @@
         }
 
         //Invite friends
-        else if(indexPath.row == 2)
+        else if(indexPath.row == 3)
         {
             [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Share App" withDict:@{@"origin":@"More"}];
             
@@ -564,20 +575,10 @@
         }
         
         //Email support
-        else if(indexPath.row == 3)
-        {
-            [[NSNotificationCenter defaultCenter]
-             postNotificationName:@"SHOW_MAIL_MESSAGE"
-             object:self];
-            
-            return;
-        }
-        
-        //Purchase History
         else if(indexPath.row == 4)
         {
             [[NSNotificationCenter defaultCenter]
-             postNotificationName:@"SHOW_PURCHASE_HISTORY"
+             postNotificationName:@"SHOW_MAIL_MESSAGE"
              object:self];
             
             return;

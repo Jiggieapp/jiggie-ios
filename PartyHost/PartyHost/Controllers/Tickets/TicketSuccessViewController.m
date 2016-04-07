@@ -8,6 +8,8 @@
 
 #import "TicketSuccessViewController.h"
 #import "PurchaseHistoryViewController.h"
+#import "AnalyticManager.h"
+#import "NSString+HTML.h"
 
 @interface TicketSuccessViewController ()
 
@@ -51,8 +53,11 @@
     [line5View setBackgroundColor:[UIColor phLightGrayColor]];
     [self.view addSubview:line5View];
     
-    
-    UILabel *starLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, self.view.bounds.size.height - orderButtonSize - 28, 8, 20)];
+    CGFloat padding = 0;
+    if (self.visibleSize.width > 320) {
+        padding = 12.0;
+    }
+    UILabel *starLabel = [[UILabel alloc] initWithFrame:CGRectMake(6 + padding, self.view.bounds.size.height - orderButtonSize - 28, 8, 20)];
     [starLabel setText:@"*"];
     [starLabel setNumberOfLines:2];
     [starLabel setTextColor:[UIColor purpleColor]];
@@ -60,8 +65,8 @@
     [starLabel setBackgroundColor:[UIColor clearColor]];
     [self.view addSubview:starLabel];
     
-    UILabel *infoLabel = [[UILabel alloc] initWithFrame:CGRectMake(30, self.view.bounds.size.height - orderButtonSize - 32, self.visibleSize.width - 30 - 14, 20)];
-    [infoLabel setText:@"Tap \"Orders\" from the \"More\" tab to return to this screen"];
+    UILabel *infoLabel = [[UILabel alloc] initWithFrame:CGRectMake(16 + padding, self.view.bounds.size.height - orderButtonSize - 32, self.visibleSize.width, 20)];
+    [infoLabel setText:@"Tap \"Purchase History\" from \"More\" tab to return to this screen"];
     [infoLabel setNumberOfLines:2];
     [infoLabel setTextColor:[UIColor blackColor]];
     [infoLabel setFont:[UIFont phBlond:11]];
@@ -74,7 +79,7 @@
         [viewButton setFrame:CGRectMake(0, self.view.bounds.size.height - 44, self.visibleSize.width, 44)];
         [viewButton setBackgroundColor:[UIColor phBlueColor]];
         [viewButton.titleLabel setFont:[UIFont phBold:15]];
-        [viewButton setTitle:@"VIEW BOOKING" forState:UIControlStateNormal];
+        [viewButton setTitle:@"VIEW BOOKINGS" forState:UIControlStateNormal];
         [viewButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [self.view addSubview:viewButton];
     }
@@ -294,18 +299,18 @@
     
     // LINE 3
     
-    UILabel *instructionLabel = [[UILabel alloc] initWithFrame:CGRectMake(14, CGRectGetMaxY(line2View.frame) + 46 + 30 + 30 + 30 + 10 + 50, 120, 20)];
-    [instructionLabel setText:@"INSTRUCTIONS"];
-    [instructionLabel setFont:[UIFont phBlond:15]];
-    [instructionLabel setTextColor:[UIColor blackColor]];
-    [instructionLabel setBackgroundColor:[UIColor clearColor]];
-    [self.scrollView addSubview:instructionLabel];
+    self.instructionLabel = [[UILabel alloc] initWithFrame:CGRectMake(14, CGRectGetMaxY(line2View.frame) + 46 + 30 + 30 + 30 + 10 + 50, 120, 20)];
+    [self.instructionLabel setText:@"INSTRUCTIONS"];
+    [self.instructionLabel setFont:[UIFont phBlond:15]];
+    [self.instructionLabel setTextColor:[UIColor blackColor]];
+    [self.instructionLabel setBackgroundColor:[UIColor clearColor]];
+    [self.scrollView addSubview:self.instructionLabel];
     
-    UIView *line3View = [[UIView alloc] initWithFrame:CGRectMake(self.visibleSize.width - 160, CGRectGetMaxY(line2View.frame) + 46 + 30 + 30 + 30 + 10 + 60, 160, 1)];
-    [line3View setBackgroundColor:[UIColor phLightGrayColor]];
-    [self.scrollView addSubview:line3View];
+    self.instructionLine = [[UIView alloc] initWithFrame:CGRectMake(self.visibleSize.width - 160, CGRectGetMaxY(line2View.frame) + 46 + 30 + 30 + 30 + 10 + 60, 160, 1)];
+    [self.instructionLine setBackgroundColor:[UIColor phLightGrayColor]];
+    [self.scrollView addSubview:self.instructionLine];
     
-    self.instruction = [[UILabel alloc] initWithFrame:CGRectMake(14, CGRectGetMaxY(line3View.frame) + 16, self.visibleSize.width - 28, 20)];
+    self.instruction = [[UILabel alloc] initWithFrame:CGRectMake(14, CGRectGetMaxY(self.instructionLine.frame) + 16, self.visibleSize.width - 28, 20)];
     [self.instruction setFont:[UIFont phBlond:12]];
     [self.instruction setTextColor:[UIColor blackColor]];
     [self.instruction setBackgroundColor:[UIColor clearColor]];
@@ -611,18 +616,18 @@
     
     // LINE 3
     
-    UILabel *instructionLabel = [[UILabel alloc] initWithFrame:CGRectMake(14, CGRectGetMaxY(lineDot2View.frame) + 10 + 30 + 50, 120, 20)];
-    [instructionLabel setText:@"INSTRUCTIONS"];
-    [instructionLabel setFont:[UIFont phBlond:15]];
-    [instructionLabel setTextColor:[UIColor blackColor]];
-    [instructionLabel setBackgroundColor:[UIColor clearColor]];
-    [self.bookingScrollView addSubview:instructionLabel];
+    self.bookingInstructionLabel = [[UILabel alloc] initWithFrame:CGRectMake(14, CGRectGetMaxY(lineDot2View.frame) + 10 + 30 + 50, 120, 20)];
+    [self.bookingInstructionLabel setText:@"INSTRUCTIONS"];
+    [self.bookingInstructionLabel setFont:[UIFont phBlond:15]];
+    [self.bookingInstructionLabel setTextColor:[UIColor blackColor]];
+    [self.bookingInstructionLabel setBackgroundColor:[UIColor clearColor]];
+    [self.bookingScrollView addSubview:self.bookingInstructionLabel];
     
-    UIView *line3View = [[UIView alloc] initWithFrame:CGRectMake(self.visibleSize.width - 160, CGRectGetMaxY(lineDot2View.frame) + 10 + 30 + 60, 160, 1)];
-    [line3View setBackgroundColor:[UIColor phLightGrayColor]];
-    [self.bookingScrollView addSubview:line3View];
+    self.bookingInstructionLine = [[UIView alloc] initWithFrame:CGRectMake(self.visibleSize.width - 160, CGRectGetMaxY(lineDot2View.frame) + 10 + 30 + 60, 160, 1)];
+    [self.bookingInstructionLine setBackgroundColor:[UIColor phLightGrayColor]];
+    [self.bookingScrollView addSubview:self.bookingInstructionLine];
     
-    self.bookingInstruction = [[UILabel alloc] initWithFrame:CGRectMake(14, CGRectGetMaxY(line3View.frame) + 16, self.visibleSize.width - 28, 20)];
+    self.bookingInstruction = [[UILabel alloc] initWithFrame:CGRectMake(14, CGRectGetMaxY(self.bookingInstructionLine.frame) + 16, self.visibleSize.width - 28, 20)];
     [self.bookingInstruction setFont:[UIFont phBlond:12]];
     [self.bookingInstruction setTextColor:[UIColor blackColor]];
     [self.bookingInstruction setBackgroundColor:[UIColor clearColor]];
@@ -733,13 +738,27 @@
                             self.successData = success_screen;
                             NSDictionary *summary = [self.successData objectForKey:@"summary"];
                             if (summary && summary != nil) {
+                                // MixPanel
+                                SharedData *sharedData = [SharedData sharedInstance];
+                                
                                 NSDictionary *productList = [[summary objectForKey:@"product_list"] objectAtIndex:0];
                                 if ([[productList objectForKey:@"ticket_type"] isEqualToString:@"booking"]) {
                                     [self.scrollView setHidden:YES];
                                     [self populateBookingData];
+                                    
+                                    [sharedData.mixPanelCTicketDict setObject:[productList objectForKey:@"num_buy"] forKey:@"Total Guest"];
                                 } else {
                                     [self.bookingScrollView setHidden:YES];
                                     [self populateData];
+                                    
+                                    [sharedData.mixPanelCTicketDict setObject:[productList objectForKey:@"num_buy"] forKey:@"Purchase Quantity"];
+                                }
+                                
+                                [sharedData.mixPanelCTicketDict setObject:[summary objectForKey:@"created_at"] forKey:@"Date Time"];
+                                [sharedData.mixPanelCTicketDict setObject:[productList objectForKey:@"total_price_all"] forKey:@"Purchase Amount"];
+                                [sharedData.mixPanelCTicketDict setObject:[self.successData objectForKey:@"payment_type"] forKey:@"Purchase Payment"];
+                                if (self.showViewButton) {
+                                    [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Commerce Finish" withDict:sharedData.mixPanelCTicketDict];
                                 }
                                 
                                 return ;
@@ -843,14 +862,13 @@
                 }
             }
             
-            NSDictionary *vt_response = [summary objectForKey:@"vt_response"];
-            if (vt_response && vt_response != nil) {
-                NSString *transaction_time = [vt_response objectForKey:@"transaction_time"];
+            NSString *created_at = [summary objectForKey:@"created_at"];
+            if (created_at && created_at != nil) {
                 NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-                [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+                [formatter setDateFormat:PHDateFormatServer];
                 [formatter setLocale:[NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"]];
                 [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
-                NSDate *transactionDateTime = [formatter dateFromString:transaction_time];
+                NSDate *transactionDateTime = [formatter dateFromString:created_at];
                 
                 [formatter setDateFormat:@"dd MMMM yyyy - HH:mm:ss"];
                 [formatter setLocale:[NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"]];
@@ -894,7 +912,24 @@
                 [self.totalPrice setText:[NSString stringWithFormat:@"Rp%@", formattedPrice]];
             }
             
-            self.instruction.text = @"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
+            NSString *instructions = [self.successData objectForKey:@"instructions"];
+            if (instructions && instructions != nil && ![instructions isEqualToString:@""]) {
+                
+                NSMutableAttributedString *parsedInstruction = [[NSMutableAttributedString alloc] initWithData:[instructions dataUsingEncoding:NSUTF8StringEncoding]
+                                                                                                       options:@{NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType,
+                                                                                                                 NSCharacterEncodingDocumentAttribute: @(NSUTF8StringEncoding)}
+                                                                                            documentAttributes:nil
+                                                                                                         error:nil];
+                UIFont *font = [UIFont fontWithName:@"Lato-Regular" size:11.0];
+                NSDictionary *attrsDictionary = [NSDictionary dictionaryWithObject:font
+                                                                            forKey:NSFontAttributeName];
+                [parsedInstruction addAttributes:attrsDictionary range:NSMakeRange(0, parsedInstruction.length)];
+                self.instruction.attributedText = parsedInstruction;
+            } else {
+                self.instruction.text = @"";
+                [self.instructionLabel setHidden:YES];
+                [self.instructionLine setHidden:YES];
+            }
             [self.instruction sizeToFit];
             
             [self.bottomView setFrame:CGRectMake(0, CGRectGetMaxY(self.instruction.frame) + 20, self.visibleSize.width, 110)];
@@ -990,14 +1025,13 @@
                 }
             }
             
-            NSDictionary *vt_response = [summary objectForKey:@"vt_response"];
-            if (vt_response && vt_response != nil) {
-                NSString *transaction_time = [vt_response objectForKey:@"transaction_time"];
+            NSString *created_at = [summary objectForKey:@"created_at"];
+            if (created_at && created_at != nil) {
                 NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-                [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+                [formatter setDateFormat:PHDateFormatServer];
                 [formatter setLocale:[NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"]];
                 [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
-                NSDate *transactionDateTime = [formatter dateFromString:transaction_time];
+                NSDate *transactionDateTime = [formatter dateFromString:created_at];
                 
                 [formatter setDateFormat:@"dd MMMM yyyy - HH:mm:ss"];
                 [formatter setLocale:[NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"]];
@@ -1053,12 +1087,29 @@
             
             if (pay_deposit && total_price_all) {
                 NSInteger balance = [total_price_all integerValue] - [pay_deposit integerValue];
-                NSString *balanceText = [NSString stringWithFormat:@"%li", balance];
+                NSString *balanceText = [NSString stringWithFormat:@"%li", (long)balance];
                 NSString *balancePrice = [sharedData formatCurrencyString:balanceText];
                 [self.bookingBalancePrice setText:[NSString stringWithFormat:@"Rp%@", balancePrice]];
             }
             
-            self.bookingInstruction.text = @"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
+            NSString *instructions = [self.successData objectForKey:@"instructions"];
+            if (instructions && instructions != nil && ![instructions isEqualToString:@""]) {
+                
+                NSMutableAttributedString *parsedInstruction = [[NSMutableAttributedString alloc] initWithData:[instructions dataUsingEncoding:NSUTF8StringEncoding]
+                                                                                         options:@{NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType,
+                                                                                                   NSCharacterEncodingDocumentAttribute: @(NSUTF8StringEncoding)}
+                                                                              documentAttributes:nil
+                                                                                           error:nil];
+                UIFont *font = [UIFont fontWithName:@"Lato-Regular" size:11.0];
+                NSDictionary *attrsDictionary = [NSDictionary dictionaryWithObject:font
+                                                                            forKey:NSFontAttributeName];
+                [parsedInstruction addAttributes:attrsDictionary range:NSMakeRange(0, parsedInstruction.length)];
+                self.bookingInstruction.attributedText = parsedInstruction;
+            } else {
+                self.bookingInstruction.text = @"";
+                [self.bookingInstructionLabel setHidden:YES];
+                [self.bookingInstructionLine setHidden:YES];
+            }
             [self.bookingInstruction sizeToFit];
             
             [self.bookingBottomView setFrame:CGRectMake(0, CGRectGetMaxY(self.bookingInstruction.frame) + 20, self.visibleSize.width, 110)];

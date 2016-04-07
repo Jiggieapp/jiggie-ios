@@ -25,6 +25,8 @@
 @property (nonatomic, strong) UILabel *taxPrice;
 @property (nonatomic, strong) UILabel *totalPrice;
 @property (nonatomic, strong) UILabel *instruction;
+@property (nonatomic, strong) UILabel *instructionLabel;
+@property (nonatomic, strong) UIView *instructionLine;
 @property (nonatomic, strong) UIView *bottomView;
 @property (nonatomic, strong) UILabel *eventNameBottom;
 @property (nonatomic, strong) UILabel *eventTimeBottom;
@@ -49,6 +51,8 @@
 @property (nonatomic, strong) UILabel *bookingDepositPrice;
 @property (nonatomic, strong) UILabel *bookingBalancePrice;
 @property (nonatomic, strong) UILabel *bookingInstruction;
+@property (nonatomic, strong) UILabel *bookingInstructionLabel;
+@property (nonatomic, strong) UIView *bookingInstructionLine;
 @property (nonatomic, strong) UIView *bookingBottomView;
 @property (nonatomic, strong) UILabel *bookingEventNameBottom;
 @property (nonatomic, strong) UILabel *bookingEventTimeBottom;

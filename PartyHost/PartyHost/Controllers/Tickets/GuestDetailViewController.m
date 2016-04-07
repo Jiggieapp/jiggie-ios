@@ -10,6 +10,7 @@
 #import "UserManager.h"
 #import "UserBubble.h"
 #import "SVProgressHUD.h"
+#import "AnalyticManager.h"
 
 @interface GuestDetailViewController ()
 
@@ -127,6 +128,10 @@
     [self.view addSubview:self.saveButton];
  
     [self loadData];
+    
+    // MixPanel
+    SharedData *sharedData = [SharedData sharedInstance];
+    [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Guest Info" withDict:sharedData.mixPanelCTicketDict];
 }
 
 - (void)didReceiveMemoryWarning {

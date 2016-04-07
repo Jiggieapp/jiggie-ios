@@ -15,6 +15,7 @@
 #import "SVProgressHUD.h"
 #import "VTConfig.h"
 #import "VTDirect.h"
+#import "AnalyticManager.h"
 
 @interface TicketConfirmationViewController ()
 
@@ -112,6 +113,11 @@
     [self.view addSubview:self.swipeScrollView];
     
     [self prePopulatePayment];
+    
+    
+    // MixPanel
+    SharedData *sharedData = [SharedData sharedInstance];
+    [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Purchase Confirmation" withDict:sharedData.mixPanelCTicketDict];
 }
 
 - (void)loadPurchaseView {
@@ -801,10 +807,13 @@
             if (!message || message == nil) {
                 message = @"";
             }
+            
+            self.errorType = [responseObject objectForKey:@"type"];
+            
             if (([[[UIDevice currentDevice] systemVersion] compare:@"8.0" options:NSNumericSearch] == NSOrderedAscending)) {
                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Payment Failed"
                                                                 message:message
-                                                               delegate:nil
+                                                               delegate:self
                                                       cancelButtonTitle:@"OK"
                                                       otherButtonTitles:nil];
                 [alert show];
@@ -820,7 +829,19 @@
                                                style:UIAlertActionStyleCancel
                                                handler:^(UIAlertAction *action)
                                                {
-
+                                                   if ([self.errorType isEqualToString:@"ticket_list"]) {
+                                                       [[self navigationController] popToRootViewControllerAnimated:YES];
+                                                       
+                                                   } else if ([self.errorType isEqualToString:@"ticket_details"]) {
+                                                       [[self navigationController] popViewControllerAnimated:YES];
+                                                       
+                                                   } else if ([self.errorType isEqualToString:@"paid"]) {
+                                                       if ([[self.paymentDetail objectForKey:@"type"] isEqualToString:@"cc"]) {
+                                                           [self openSuccessScreen];
+                                                       } else {
+                                                           [self openVirtualAccountScreen];
+                                                       }
+                                                   }
                                                }];
                 
                 [alertController addAction:cancelAction];
@@ -836,27 +857,52 @@
         [prefs synchronize];
         
         if ([[self.paymentDetail objectForKey:@"type"] isEqualToString:@"cc"]) {
-            TicketSuccessViewController *ticketSuccessViewController = [[TicketSuccessViewController alloc] init];
-            [ticketSuccessViewController setShowCloseButton:YES];
-            [ticketSuccessViewController setShowViewButton:YES];
-            [ticketSuccessViewController setIsModalScreen:YES];
-            [ticketSuccessViewController setOrderID:[self.productSummary objectForKey:@"order_id"]];
-            [ticketSuccessViewController setTicketType:[self.productList objectForKey:@"ticket_type"]];
-            [[self navigationController] pushViewController:ticketSuccessViewController animated:YES];
-            
+            [self openSuccessScreen];
         } else {
-            VirtualAccountViewController *virtualAccountViewController = [[VirtualAccountViewController alloc] init];
-            [virtualAccountViewController setShowCloseButton:NO];
-            [virtualAccountViewController setShowOrderButton:YES];
-            [virtualAccountViewController setOrderID:[self.productSummary objectForKey:@"order_id"]];
-            [virtualAccountViewController setVAType:[self.paymentDetail objectForKey:@"type"]];
-            [[self navigationController] pushViewController:virtualAccountViewController animated:YES];
+            [self openVirtualAccountScreen];
         }
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         [self.swipeScrollView setScrollEnabled:YES];
         [SVProgressHUD dismiss];
     }];
+}
+
+#pragma mark - Navigation 
+- (void)openSuccessScreen {
+    TicketSuccessViewController *ticketSuccessViewController = [[TicketSuccessViewController alloc] init];
+    [ticketSuccessViewController setShowCloseButton:YES];
+    [ticketSuccessViewController setShowViewButton:YES];
+    [ticketSuccessViewController setIsModalScreen:YES];
+    [ticketSuccessViewController setOrderID:[self.productSummary objectForKey:@"order_id"]];
+    [ticketSuccessViewController setTicketType:[self.productList objectForKey:@"ticket_type"]];
+    [[self navigationController] pushViewController:ticketSuccessViewController animated:YES];
+}
+
+- (void)openVirtualAccountScreen {
+    VirtualAccountViewController *virtualAccountViewController = [[VirtualAccountViewController alloc] init];
+    [virtualAccountViewController setShowCloseButton:NO];
+    [virtualAccountViewController setShowOrderButton:YES];
+    [virtualAccountViewController setOrderID:[self.productSummary objectForKey:@"order_id"]];
+    [virtualAccountViewController setVAType:[self.paymentDetail objectForKey:@"type"]];
+    [[self navigationController] pushViewController:virtualAccountViewController animated:YES];
+}
+
+#pragma mark - UIAlertViewDelegate
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if ([self.errorType isEqualToString:@"ticket_list"]) {
+        [[self navigationController] popToRootViewControllerAnimated:YES];
+        
+    } else if ([self.errorType isEqualToString:@"ticket_details"]) {
+        [[self navigationController] popViewControllerAnimated:YES];
+        
+    } else if ([self.errorType isEqualToString:@"paid"]) {
+        if ([[self.paymentDetail objectForKey:@"type"] isEqualToString:@"cc"]) {
+            [self openSuccessScreen];
+        } else {
+            [self openVirtualAccountScreen];
+        }
+    }
 }
 
 #pragma mark - UIWebViewDelegate

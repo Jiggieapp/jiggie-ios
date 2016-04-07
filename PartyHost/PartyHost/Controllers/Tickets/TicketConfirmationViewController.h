@@ -9,7 +9,7 @@
 #import "BaseViewController.h"
 #import <MessageUI/MessageUI.h>
 
-@interface TicketConfirmationViewController : BaseViewController <UIWebViewDelegate, MFMessageComposeViewControllerDelegate, UINavigationControllerDelegate, UIScrollViewDelegate>
+@interface TicketConfirmationViewController : BaseViewController <UIWebViewDelegate, MFMessageComposeViewControllerDelegate, UINavigationControllerDelegate, UIScrollViewDelegate, UIAlertViewDelegate>
 
 @property (nonatomic, strong) UIScrollView *scrollView;
 @property (nonatomic, strong) UILabel *totalPrice;
@@ -32,5 +32,7 @@
 @property (nonatomic, assign) NSInteger maxPrice;
 @property (nonatomic, assign) NSInteger minPrice;
 @property (nonatomic, assign) NSInteger currentPrice;
+@property (nonatomic, strong) NSString *errorType;
+
 
 @end

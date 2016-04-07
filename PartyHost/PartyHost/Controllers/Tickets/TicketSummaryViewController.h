@@ -9,7 +9,7 @@
 #import "BaseViewController.h"
 #import <MessageUI/MessageUI.h>
 
-@interface TicketSummaryViewController : BaseViewController <MFMessageComposeViewControllerDelegate, UINavigationControllerDelegate>
+@interface TicketSummaryViewController : BaseViewController <MFMessageComposeViewControllerDelegate, UINavigationControllerDelegate, UIAlertViewDelegate>
 
 @property (nonatomic, strong) UIScrollView *scrollView;
 @property (nonatomic, strong) UILabel *summaryHeaderTitle;
@@ -28,5 +28,7 @@
 @property (nonatomic, assign) NSInteger maxAmount;
 @property (nonatomic, assign) NSInteger price;
 @property (nonatomic, assign) BOOL isAllowToContinue;
+@property (nonatomic, assign) BOOL isSoldOut;
+@property (nonatomic, strong) NSString *errorType;
 
 @end
