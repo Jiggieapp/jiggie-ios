@@ -79,6 +79,7 @@
     [self.tableView setDelegate:self];
     [self.tableView setDataSource:self];
     [self.tableView setBackgroundColor:[UIColor clearColor]];
+    [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     [self.view addSubview:self.tableView];
     
     UIView *tmpPurpleView = [[UIView alloc] initWithFrame:CGRectMake(0, -300, self.visibleSize.width, 300)];
@@ -321,7 +322,7 @@
         }
         
         NSDictionary *purchase = [self.purchases objectAtIndex:indexPath.row];
-        [cell setData:purchase hasDescription:YES];
+        [cell setData:purchase];
         
         return cell;
     }
@@ -335,7 +336,7 @@
     }
     
     NSDictionary *reservation = [self.reservations objectAtIndex:indexPath.row];
-    [cell setData:reservation hasDescription:NO];
+    [cell setData:reservation];
     
     return cell;
 }

@@ -10,12 +10,11 @@
 
 @interface TicketListCell : UITableViewCell
 
+@property (nonatomic, strong) UIView *ticketCard;
 @property (nonatomic, strong) UILabel *ticketTitle;
-@property (nonatomic, strong) UILabel *ticketDescription;
 @property (nonatomic, strong) UILabel *ticketPrice;
-@property (nonatomic, strong) UILabel *ticketPerson;
 @property (nonatomic, assign) CGFloat cellWidth;
 
-- (void)setData:(NSDictionary *)data hasDescription:(BOOL)hasDescription;
+- (void)setData:(NSDictionary *)data;
 
 @end
