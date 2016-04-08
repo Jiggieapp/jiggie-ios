@@ -87,6 +87,7 @@ static SharedData *sharedInstance = nil;
         self.unreadFeedCount    = 0;
         self.cShareHostingId    = @"";
         self.mixPanelCEventDict = [[NSMutableDictionary alloc] init]; // mixpanel data
+        self.mixPanelCTicketDict = [[NSMutableDictionary alloc] init]; // mixpanel data
         self.cEventId_Feed      = @""; // current feed id
         self.cEventId_Modal     = @""; // current modal id
         self.cEventId_Summary   = @""; // current summary id
@@ -751,5 +752,32 @@ static SharedData *sharedInstance = nil;
     }
 }
 //===================================================================================================//
+
+- (NSString *)formatCurrencyString:(NSString *)price {
+    if (price.length < 4) {
+        return price;
+    }
+    
+    NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
+    [formatter setNumberStyle:NSNumberFormatterDecimalStyle];
+    [formatter setGroupingSeparator:@"."];
+    [formatter setGroupingSize:3];
+    NSNumber *priceNumber = [NSNumber numberWithInteger:[price integerValue]];
+    NSString *newPrice = [formatter stringFromNumber:priceNumber];
+    
+    newPrice = [newPrice stringByReplacingCharactersInRange:NSMakeRange(newPrice.length - 4, 4) withString:@"K"];
+    
+    return newPrice;
+}
+
+- (BOOL)validateEmailWithString:(NSString*)checkString {
+    BOOL stricterFilter = NO; // Discussion http://blog.logichigh.com/2010/09/02/validating-an-e-mail-address/
+    NSString *stricterFilterString = @"[A-Z0-9a-z\\._%+-]+@([A-Za-z0-9-]+\\.)+[A-Za-z]{2,4}";
+    NSString *laxString = @".+@([A-Za-z0-9-]+\\.)+[A-Za-z]{2}[A-Za-z]*";
+    NSString *emailRegex = stricterFilter ? stricterFilterString : laxString;
+    NSPredicate *emailTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", emailRegex];
+    return [emailTest evaluateWithObject:checkString];
+}
+
 
 @end

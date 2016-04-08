@@ -10,6 +10,7 @@
 #import "AnalyticManager.h"
 #import "AFNetworkActivityLogger.h"
 #import "UserManager.h"
+#import "VTConfig.h"
 
 ///REMOVE THIS WHEN LIVE
 //#import "GSTouchesShowingWindow.h"
@@ -42,6 +43,9 @@ static NSString *const kAllowTracking = @"allowTracking";
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+    
     // Override point for customization after application launch.
     self.sharedData = [SharedData sharedInstance];
     self.inAskingAPNMode = NO;
@@ -221,8 +225,10 @@ static NSString *const kAllowTracking = @"allowTracking";
     
     [self performSelector:@selector(checkApnAgain) withObject:nil afterDelay:4.0];
     
-    //[self performSelector:@selector(testApp) withObject:nil afterDelay:5.0];
+    [VTConfig setCLIENT_KEY:@"VT-client-gJRBbRZC0t_-JXUD"];
+    [VTConfig setVT_IsProduction:false];
     
+    //[self performSelector:@selector(testApp) withObject:nil afterDelay:5.0];
     return YES;
 }
 
@@ -308,6 +314,10 @@ static NSString *const kAllowTracking = @"allowTracking";
 {
     // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+    
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    [prefs removeObjectForKey:@"temp_da_list"];
+    [prefs synchronize];
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application
@@ -402,6 +412,10 @@ static NSString *const kAllowTracking = @"allowTracking";
             abort();
         }
     }
+    
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    [prefs removeObjectForKey:@"temp_da_list"];
+    [prefs synchronize];
 }
 
 - (BOOL)application:(UIApplication *)application

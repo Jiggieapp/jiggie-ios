@@ -22,7 +22,15 @@
     [navigationBar setBarTintColor:[UIColor phPurpleColor]];
     [navigationBar setTintColor:[UIColor whiteColor]];
     [navigationBar setTranslucent:NO];
-    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+    
+    UIButton *backButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [backButton setFrame:CGRectMake(0.0f, 0.0f, 30.0f, 30.0f)];
+    [backButton setImage:[UIImage imageNamed:@"nav_back_new"] forState:UIControlStateNormal];
+    [backButton addTarget:self action:@selector(backButtonDidTap:) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *backBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:backButton];
+    
+    [[self navigationItem] setLeftBarButtonItem:backBarButtonItem];
     
     [self loadVisibleSize];
 }
@@ -30,6 +38,10 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)backButtonDidTap:(id)sender {
+    [[self navigationController] popViewControllerAnimated:YES];
 }
 
 - (void)loadVisibleSize {

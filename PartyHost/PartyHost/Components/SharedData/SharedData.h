@@ -144,6 +144,7 @@
 
 
 @property(nonatomic,strong) NSMutableDictionary *mixPanelCEventDict;
+@property(nonatomic,strong) NSMutableDictionary *mixPanelCTicketDict;
 
 @property(nonatomic,strong) NSString            *mostRecentEventSelectedId;
 
@@ -294,4 +295,8 @@
 
 -(AFHTTPRequestOperationManager *)getOperationManager;
 -(void)loadTimeImage:(NSString *)imgURL withTimeOut:(float)time;
+
+- (NSString *)formatCurrencyString:(NSString *)price;
+- (BOOL)validateEmailWithString:(NSString*)checkString;
+
 @end

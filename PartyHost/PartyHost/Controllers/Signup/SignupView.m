@@ -423,6 +423,7 @@
 
 -(void)changePage:(int)newPage {
     if(newPage >= self.totalPages) return;
+    if(newPage < 0) return;
     
     int lastPage = self.pageIndex;
     self.pageIndex = newPage;

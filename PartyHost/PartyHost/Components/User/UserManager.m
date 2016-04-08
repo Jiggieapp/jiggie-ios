@@ -29,6 +29,24 @@ static UserManager *_sharedManager = nil;
     return nil;
 }
 
++ (NSDictionary *)loadUserTicketInfo {
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    NSDictionary *UserInfo = [prefs objectForKey:@"user.ticketInfo"];
+    return UserInfo;
+}
+
++ (void)saveUserTicketInfo:(NSDictionary *)dict {
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    [prefs setObject:dict forKey:@"user.ticketInfo"];
+    [prefs synchronize];
+}
+
++ (void)clearUserTicketInfo {
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    [prefs removeObjectForKey:@"user.ticketInfo"];
+    [prefs synchronize];
+}
+
 + (void)saveUserSetting:(NSDictionary *)dict {
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     [prefs setObject:dict forKey:@"user.setting"];

@@ -10,6 +10,8 @@
 		CB3EB6C81B459177003F658F /* App.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CB3EB6C71B459177003F658F /* App.xcassets */; };
 		CB3EB6CA1B459184003F658F /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = CB3EB6C91B459184003F658F /* LaunchScreen.xib */; };
 		CB3EB6CC1B45919A003F658F /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CB3EB6CB1B45919A003F658F /* Images.xcassets */; };
+		DA0CEC8D1C9C181B00C0DA44 /* PurchaseHistoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA0CEC8C1C9C181B00C0DA44 /* PurchaseHistoryViewController.m */; };
+		DA0CEC901C9D39E200C0DA44 /* PurchaseHistoryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DA0CEC8F1C9D39E200C0DA44 /* PurchaseHistoryCell.m */; };
 		DA10F51D1C52149F006090ED /* SVIndefiniteAnimatedView.m in Sources */ = {isa = PBXBuildFile; fileRef = DA10F5161C52149F006090ED /* SVIndefiniteAnimatedView.m */; };
 		DA10F51E1C52149F006090ED /* SVProgressHUD.bundle in Resources */ = {isa = PBXBuildFile; fileRef = DA10F5181C52149F006090ED /* SVProgressHUD.bundle */; };
 		DA10F51F1C52149F006090ED /* SVProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = DA10F51A1C52149F006090ED /* SVProgressHUD.m */; };
@@ -20,7 +22,28 @@
 		DA43056C1C23E7D000ED6C54 /* BaseModel.m in Sources */ = {isa = PBXBuildFile; fileRef = DA43056B1C23E7D000ED6C54 /* BaseModel.m */; };
 		DA47B22A1C3A8553001B4476 /* AFNetworkActivityLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = DA47B2291C3A8553001B4476 /* AFNetworkActivityLogger.m */; };
 		DA47B23B1C3BA492001B4476 /* FeedMatch.m in Sources */ = {isa = PBXBuildFile; fileRef = DA47B23A1C3BA492001B4476 /* FeedMatch.m */; };
+		DA52379C1C805D9A00E140C1 /* TicketListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DA52379B1C805D9A00E140C1 /* TicketListCell.m */; };
+		DA5ED5E31C896AEA00004C7E /* GuestDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5ED5E21C896AEA00004C7E /* GuestDetailViewController.m */; };
+		DA5ED5E61C8FDF5100004C7E /* TicketConfirmationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5ED5E51C8FDF5000004C7E /* TicketConfirmationViewController.m */; };
+		DA5ED5E91C908F8D00004C7E /* PaymentSelectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5ED5E81C908F8D00004C7E /* PaymentSelectionViewController.m */; };
+		DA5ED5EC1C90A34400004C7E /* AddPaymentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5ED5EB1C90A34400004C7E /* AddPaymentViewController.m */; };
+		DA5ED6101C92975100004C7E /* VTAddress.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5ED5FC1C92975100004C7E /* VTAddress.m */; };
+		DA5ED6111C92975100004C7E /* VTBaseTransaction.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5ED5FE1C92975100004C7E /* VTBaseTransaction.m */; };
+		DA5ED6121C92975100004C7E /* VTBaseTransactionMethod.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5ED6001C92975100004C7E /* VTBaseTransactionMethod.m */; };
+		DA5ED6131C92975100004C7E /* VTCardDetails.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5ED6021C92975100004C7E /* VTCardDetails.m */; };
+		DA5ED6141C92975100004C7E /* VTConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5ED6041C92975100004C7E /* VTConfig.m */; };
+		DA5ED6151C92975100004C7E /* VTCustomerDetails.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5ED6061C92975100004C7E /* VTCustomerDetails.m */; };
+		DA5ED6161C92975100004C7E /* VTDirect.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5ED6081C92975100004C7E /* VTDirect.m */; };
+		DA5ED6171C92975100004C7E /* VTiOSAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5ED60B1C92975100004C7E /* VTiOSAPI.m */; };
+		DA5ED6181C92975100004C7E /* VTItemDetails.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5ED60D1C92975100004C7E /* VTItemDetails.m */; };
+		DA5ED6191C92975100004C7E /* VTTransactionDetails.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5ED60F1C92975100004C7E /* VTTransactionDetails.m */; };
+		DA5ED61E1C92DD5B00004C7E /* NTMonthYearPicker.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5ED61D1C92DD5B00004C7E /* NTMonthYearPicker.m */; };
+		DA5ED6211C968A1E00004C7E /* VirtualAccountViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5ED6201C968A1E00004C7E /* VirtualAccountViewController.m */; };
+		DA5ED6241C96D10700004C7E /* TicketSuccessViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5ED6231C96D10700004C7E /* TicketSuccessViewController.m */; };
 		DA700E0E1C63561300E5D945 /* Jiggie.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = DA700E0D1C63515D00E5D945 /* Jiggie.entitlements */; };
+		DA9B10A01CB4D7B7001FB798 /* GTMNSString+HTML.m in Sources */ = {isa = PBXBuildFile; fileRef = DA9B108F1CB4D7B7001FB798 /* GTMNSString+HTML.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		DA9B10A51CB4D7B7001FB798 /* NSString+HTML.m in Sources */ = {isa = PBXBuildFile; fileRef = DA9B109A1CB4D7B7001FB798 /* NSString+HTML.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		DA9B10A61CB4D7B7001FB798 /* NSString+XMLEntities.m in Sources */ = {isa = PBXBuildFile; fileRef = DA9B109C1CB4D7B7001FB798 /* NSString+XMLEntities.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		DA9E0CF71C61F75000966F16 /* BaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA9E0CF61C61F75000966F16 /* BaseViewController.m */; };
 		DA9E0CFA1C61F76300966F16 /* TicketListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA9E0CF91C61F76300966F16 /* TicketListViewController.m */; };
 		DAABB0B11C1FD50E004DDCFA /* BookTable.m in Sources */ = {isa = PBXBuildFile; fileRef = DAABB0091C1FD50E004DDCFA /* BookTable.m */; };
@@ -295,6 +318,10 @@
 		CB3EB6C71B459177003F658F /* App.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = App.xcassets; sourceTree = "<group>"; };
 		CB3EB6C91B459184003F658F /* LaunchScreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LaunchScreen.xib; sourceTree = "<group>"; };
 		CB3EB6CB1B45919A003F658F /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		DA0CEC8B1C9C181B00C0DA44 /* PurchaseHistoryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PurchaseHistoryViewController.h; sourceTree = "<group>"; };
+		DA0CEC8C1C9C181B00C0DA44 /* PurchaseHistoryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PurchaseHistoryViewController.m; sourceTree = "<group>"; };
+		DA0CEC8E1C9D39E200C0DA44 /* PurchaseHistoryCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PurchaseHistoryCell.h; sourceTree = "<group>"; };
+		DA0CEC8F1C9D39E200C0DA44 /* PurchaseHistoryCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PurchaseHistoryCell.m; sourceTree = "<group>"; };
 		DA10F5151C52149F006090ED /* SVIndefiniteAnimatedView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVIndefiniteAnimatedView.h; sourceTree = "<group>"; };
 		DA10F5161C52149F006090ED /* SVIndefiniteAnimatedView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SVIndefiniteAnimatedView.m; sourceTree = "<group>"; };
 		DA10F5171C52149F006090ED /* SVProgressHUD-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SVProgressHUD-Prefix.pch"; sourceTree = "<group>"; };
@@ -313,7 +340,63 @@
 		DA47B2291C3A8553001B4476 /* AFNetworkActivityLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFNetworkActivityLogger.m; sourceTree = "<group>"; };
 		DA47B2391C3BA492001B4476 /* FeedMatch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FeedMatch.h; sourceTree = "<group>"; };
 		DA47B23A1C3BA492001B4476 /* FeedMatch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FeedMatch.m; sourceTree = "<group>"; };
+		DA52379A1C805D9A00E140C1 /* TicketListCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TicketListCell.h; sourceTree = "<group>"; };
+		DA52379B1C805D9A00E140C1 /* TicketListCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TicketListCell.m; sourceTree = "<group>"; };
+		DA5ED5E11C896AEA00004C7E /* GuestDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GuestDetailViewController.h; sourceTree = "<group>"; };
+		DA5ED5E21C896AEA00004C7E /* GuestDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GuestDetailViewController.m; sourceTree = "<group>"; };
+		DA5ED5E41C8FDF5000004C7E /* TicketConfirmationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TicketConfirmationViewController.h; sourceTree = "<group>"; };
+		DA5ED5E51C8FDF5000004C7E /* TicketConfirmationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TicketConfirmationViewController.m; sourceTree = "<group>"; };
+		DA5ED5E71C908F8C00004C7E /* PaymentSelectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PaymentSelectionViewController.h; sourceTree = "<group>"; };
+		DA5ED5E81C908F8D00004C7E /* PaymentSelectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PaymentSelectionViewController.m; sourceTree = "<group>"; };
+		DA5ED5EA1C90A34400004C7E /* AddPaymentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddPaymentViewController.h; sourceTree = "<group>"; };
+		DA5ED5EB1C90A34400004C7E /* AddPaymentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddPaymentViewController.m; sourceTree = "<group>"; };
+		DA5ED5EF1C92975100004C7E /* VTAddress.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VTAddress.h; sourceTree = "<group>"; };
+		DA5ED5F01C92975100004C7E /* VTBaseTransaction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VTBaseTransaction.h; sourceTree = "<group>"; };
+		DA5ED5F11C92975100004C7E /* VTBaseTransactionMethod.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VTBaseTransactionMethod.h; sourceTree = "<group>"; };
+		DA5ED5F21C92975100004C7E /* VTCardDetails.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VTCardDetails.h; sourceTree = "<group>"; };
+		DA5ED5F31C92975100004C7E /* VTConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VTConfig.h; sourceTree = "<group>"; };
+		DA5ED5F41C92975100004C7E /* VTCustomerDetails.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VTCustomerDetails.h; sourceTree = "<group>"; };
+		DA5ED5F51C92975100004C7E /* VTDirect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VTDirect.h; sourceTree = "<group>"; };
+		DA5ED5F61C92975100004C7E /* VTiOSAPI-BridgingHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "VTiOSAPI-BridgingHeader.h"; sourceTree = "<group>"; };
+		DA5ED5F71C92975100004C7E /* VTItemDetails.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VTItemDetails.h; sourceTree = "<group>"; };
+		DA5ED5F81C92975100004C7E /* VTToken.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VTToken.h; sourceTree = "<group>"; };
+		DA5ED5F91C92975100004C7E /* VTTransactionDetails.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VTTransactionDetails.h; sourceTree = "<group>"; };
+		DA5ED5FB1C92975100004C7E /* VTAddress.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VTAddress.h; sourceTree = "<group>"; };
+		DA5ED5FC1C92975100004C7E /* VTAddress.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VTAddress.m; sourceTree = "<group>"; };
+		DA5ED5FD1C92975100004C7E /* VTBaseTransaction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VTBaseTransaction.h; sourceTree = "<group>"; };
+		DA5ED5FE1C92975100004C7E /* VTBaseTransaction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VTBaseTransaction.m; sourceTree = "<group>"; };
+		DA5ED5FF1C92975100004C7E /* VTBaseTransactionMethod.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VTBaseTransactionMethod.h; sourceTree = "<group>"; };
+		DA5ED6001C92975100004C7E /* VTBaseTransactionMethod.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VTBaseTransactionMethod.m; sourceTree = "<group>"; };
+		DA5ED6011C92975100004C7E /* VTCardDetails.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VTCardDetails.h; sourceTree = "<group>"; };
+		DA5ED6021C92975100004C7E /* VTCardDetails.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VTCardDetails.m; sourceTree = "<group>"; };
+		DA5ED6031C92975100004C7E /* VTConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VTConfig.h; sourceTree = "<group>"; };
+		DA5ED6041C92975100004C7E /* VTConfig.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VTConfig.m; sourceTree = "<group>"; };
+		DA5ED6051C92975100004C7E /* VTCustomerDetails.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VTCustomerDetails.h; sourceTree = "<group>"; };
+		DA5ED6061C92975100004C7E /* VTCustomerDetails.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VTCustomerDetails.m; sourceTree = "<group>"; };
+		DA5ED6071C92975100004C7E /* VTDirect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VTDirect.h; sourceTree = "<group>"; };
+		DA5ED6081C92975100004C7E /* VTDirect.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VTDirect.m; sourceTree = "<group>"; };
+		DA5ED6091C92975100004C7E /* VTiOSAPI-BridgingHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "VTiOSAPI-BridgingHeader.h"; sourceTree = "<group>"; };
+		DA5ED60A1C92975100004C7E /* VTiOSAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VTiOSAPI.h; sourceTree = "<group>"; };
+		DA5ED60B1C92975100004C7E /* VTiOSAPI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VTiOSAPI.m; sourceTree = "<group>"; };
+		DA5ED60C1C92975100004C7E /* VTItemDetails.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VTItemDetails.h; sourceTree = "<group>"; };
+		DA5ED60D1C92975100004C7E /* VTItemDetails.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VTItemDetails.m; sourceTree = "<group>"; };
+		DA5ED60E1C92975100004C7E /* VTTransactionDetails.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VTTransactionDetails.h; sourceTree = "<group>"; };
+		DA5ED60F1C92975100004C7E /* VTTransactionDetails.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VTTransactionDetails.m; sourceTree = "<group>"; };
+		DA5ED61B1C92DD5B00004C7E /* NTMonthYearPicker-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NTMonthYearPicker-Prefix.pch"; sourceTree = "<group>"; };
+		DA5ED61C1C92DD5B00004C7E /* NTMonthYearPicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTMonthYearPicker.h; sourceTree = "<group>"; };
+		DA5ED61D1C92DD5B00004C7E /* NTMonthYearPicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTMonthYearPicker.m; sourceTree = "<group>"; };
+		DA5ED61F1C968A1E00004C7E /* VirtualAccountViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VirtualAccountViewController.h; sourceTree = "<group>"; };
+		DA5ED6201C968A1E00004C7E /* VirtualAccountViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VirtualAccountViewController.m; sourceTree = "<group>"; };
+		DA5ED6221C96D10700004C7E /* TicketSuccessViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TicketSuccessViewController.h; sourceTree = "<group>"; };
+		DA5ED6231C96D10700004C7E /* TicketSuccessViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TicketSuccessViewController.m; sourceTree = "<group>"; };
 		DA700E0D1C63515D00E5D945 /* Jiggie.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Jiggie.entitlements; sourceTree = SOURCE_ROOT; };
+		DA9B108D1CB4D7B7001FB798 /* GTMDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTMDefines.h; sourceTree = "<group>"; };
+		DA9B108E1CB4D7B7001FB798 /* GTMNSString+HTML.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "GTMNSString+HTML.h"; sourceTree = "<group>"; };
+		DA9B108F1CB4D7B7001FB798 /* GTMNSString+HTML.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GTMNSString+HTML.m"; sourceTree = "<group>"; };
+		DA9B10991CB4D7B7001FB798 /* NSString+HTML.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+HTML.h"; sourceTree = "<group>"; };
+		DA9B109A1CB4D7B7001FB798 /* NSString+HTML.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+HTML.m"; sourceTree = "<group>"; };
+		DA9B109B1CB4D7B7001FB798 /* NSString+XMLEntities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+XMLEntities.h"; sourceTree = "<group>"; };
+		DA9B109C1CB4D7B7001FB798 /* NSString+XMLEntities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+XMLEntities.m"; sourceTree = "<group>"; };
 		DA9E0CF51C61F75000966F16 /* BaseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseViewController.h; sourceTree = "<group>"; };
 		DA9E0CF61C61F75000966F16 /* BaseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseViewController.m; sourceTree = "<group>"; };
 		DA9E0CF81C61F76300966F16 /* TicketListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TicketListViewController.h; sourceTree = "<group>"; };
@@ -880,13 +963,110 @@
 			path = AFNetworkActivityLogger;
 			sourceTree = "<group>";
 		};
+		DA5ED5ED1C92975100004C7E /* lib */ = {
+			isa = PBXGroup;
+			children = (
+				DA5ED5EE1C92975100004C7E /* include */,
+				DA5ED5FA1C92975100004C7E /* VTiOSAPI */,
+			);
+			path = lib;
+			sourceTree = "<group>";
+		};
+		DA5ED5EE1C92975100004C7E /* include */ = {
+			isa = PBXGroup;
+			children = (
+				DA5ED5EF1C92975100004C7E /* VTAddress.h */,
+				DA5ED5F01C92975100004C7E /* VTBaseTransaction.h */,
+				DA5ED5F11C92975100004C7E /* VTBaseTransactionMethod.h */,
+				DA5ED5F21C92975100004C7E /* VTCardDetails.h */,
+				DA5ED5F31C92975100004C7E /* VTConfig.h */,
+				DA5ED5F41C92975100004C7E /* VTCustomerDetails.h */,
+				DA5ED5F51C92975100004C7E /* VTDirect.h */,
+				DA5ED5F61C92975100004C7E /* VTiOSAPI-BridgingHeader.h */,
+				DA5ED5F71C92975100004C7E /* VTItemDetails.h */,
+				DA5ED5F81C92975100004C7E /* VTToken.h */,
+				DA5ED5F91C92975100004C7E /* VTTransactionDetails.h */,
+			);
+			path = include;
+			sourceTree = "<group>";
+		};
+		DA5ED5FA1C92975100004C7E /* VTiOSAPI */ = {
+			isa = PBXGroup;
+			children = (
+				DA5ED5FB1C92975100004C7E /* VTAddress.h */,
+				DA5ED5FC1C92975100004C7E /* VTAddress.m */,
+				DA5ED5FD1C92975100004C7E /* VTBaseTransaction.h */,
+				DA5ED5FE1C92975100004C7E /* VTBaseTransaction.m */,
+				DA5ED5FF1C92975100004C7E /* VTBaseTransactionMethod.h */,
+				DA5ED6001C92975100004C7E /* VTBaseTransactionMethod.m */,
+				DA5ED6011C92975100004C7E /* VTCardDetails.h */,
+				DA5ED6021C92975100004C7E /* VTCardDetails.m */,
+				DA5ED6031C92975100004C7E /* VTConfig.h */,
+				DA5ED6041C92975100004C7E /* VTConfig.m */,
+				DA5ED6051C92975100004C7E /* VTCustomerDetails.h */,
+				DA5ED6061C92975100004C7E /* VTCustomerDetails.m */,
+				DA5ED6071C92975100004C7E /* VTDirect.h */,
+				DA5ED6081C92975100004C7E /* VTDirect.m */,
+				DA5ED6091C92975100004C7E /* VTiOSAPI-BridgingHeader.h */,
+				DA5ED60A1C92975100004C7E /* VTiOSAPI.h */,
+				DA5ED60B1C92975100004C7E /* VTiOSAPI.m */,
+				DA5ED60C1C92975100004C7E /* VTItemDetails.h */,
+				DA5ED60D1C92975100004C7E /* VTItemDetails.m */,
+				DA5ED60E1C92975100004C7E /* VTTransactionDetails.h */,
+				DA5ED60F1C92975100004C7E /* VTTransactionDetails.m */,
+			);
+			path = VTiOSAPI;
+			sourceTree = "<group>";
+		};
+		DA5ED61A1C92DD5B00004C7E /* NTMonthYearPicker */ = {
+			isa = PBXGroup;
+			children = (
+				DA5ED61B1C92DD5B00004C7E /* NTMonthYearPicker-Prefix.pch */,
+				DA5ED61C1C92DD5B00004C7E /* NTMonthYearPicker.h */,
+				DA5ED61D1C92DD5B00004C7E /* NTMonthYearPicker.m */,
+			);
+			path = NTMonthYearPicker;
+			sourceTree = "<group>";
+		};
+		DA9B108A1CB4D7B7001FB798 /* MWFeedParser */ = {
+			isa = PBXGroup;
+			children = (
+				DA9B108D1CB4D7B7001FB798 /* GTMDefines.h */,
+				DA9B108E1CB4D7B7001FB798 /* GTMNSString+HTML.h */,
+				DA9B108F1CB4D7B7001FB798 /* GTMNSString+HTML.m */,
+				DA9B10991CB4D7B7001FB798 /* NSString+HTML.h */,
+				DA9B109A1CB4D7B7001FB798 /* NSString+HTML.m */,
+				DA9B109B1CB4D7B7001FB798 /* NSString+XMLEntities.h */,
+				DA9B109C1CB4D7B7001FB798 /* NSString+XMLEntities.m */,
+			);
+			path = MWFeedParser;
+			sourceTree = "<group>";
+		};
 		DA9E0CF41C61ED7100966F16 /* Tickets */ = {
 			isa = PBXGroup;
 			children = (
 				DA9E0CF81C61F76300966F16 /* TicketListViewController.h */,
 				DA9E0CF91C61F76300966F16 /* TicketListViewController.m */,
+				DA52379A1C805D9A00E140C1 /* TicketListCell.h */,
+				DA52379B1C805D9A00E140C1 /* TicketListCell.m */,
 				DAE02EA31C6C812200EBAAF0 /* TicketSummaryViewController.h */,
 				DAE02EA41C6C812200EBAAF0 /* TicketSummaryViewController.m */,
+				DA5ED5E41C8FDF5000004C7E /* TicketConfirmationViewController.h */,
+				DA5ED5E51C8FDF5000004C7E /* TicketConfirmationViewController.m */,
+				DA5ED5E71C908F8C00004C7E /* PaymentSelectionViewController.h */,
+				DA5ED5E81C908F8D00004C7E /* PaymentSelectionViewController.m */,
+				DA5ED5EA1C90A34400004C7E /* AddPaymentViewController.h */,
+				DA5ED5EB1C90A34400004C7E /* AddPaymentViewController.m */,
+				DA5ED5E11C896AEA00004C7E /* GuestDetailViewController.h */,
+				DA5ED5E21C896AEA00004C7E /* GuestDetailViewController.m */,
+				DA5ED6221C96D10700004C7E /* TicketSuccessViewController.h */,
+				DA5ED6231C96D10700004C7E /* TicketSuccessViewController.m */,
+				DA5ED61F1C968A1E00004C7E /* VirtualAccountViewController.h */,
+				DA5ED6201C968A1E00004C7E /* VirtualAccountViewController.m */,
+				DA0CEC8B1C9C181B00C0DA44 /* PurchaseHistoryViewController.h */,
+				DA0CEC8C1C9C181B00C0DA44 /* PurchaseHistoryViewController.m */,
+				DA0CEC8E1C9D39E200C0DA44 /* PurchaseHistoryCell.h */,
+				DA0CEC8F1C9D39E200C0DA44 /* PurchaseHistoryCell.m */,
 			);
 			path = Tickets;
 			sourceTree = "<group>";
@@ -909,6 +1089,8 @@
 		DAABAFE81C1FC6F8004DDCFA /* ExtraLibraries */ = {
 			isa = PBXGroup;
 			children = (
+				DA9B108A1CB4D7B7001FB798 /* MWFeedParser */,
+				DA5ED61A1C92DD5B00004C7E /* NTMonthYearPicker */,
 				DA10F5141C52149F006090ED /* SVProgressHUD */,
 				DA47B2271C3A8553001B4476 /* AFNetworkActivityLogger */,
 				DAABB2F51C200227004DDCFA /* Fabric */,
@@ -1744,6 +1926,7 @@
 				FA4D2EEE1A4D9A77006828E7 /* Jiggie */,
 				FA4D2F081A4D9A77006828E7 /* PartyHostTests */,
 				FA4D2EED1A4D9A77006828E7 /* Products */,
+				DA5ED5ED1C92975100004C7E /* lib */,
 			);
 			sourceTree = "<group>";
 		};
@@ -1976,7 +2159,9 @@
 				DAABB0C81C1FD50E004DDCFA /* EventsSummaryModal.m in Sources */,
 				DAABB0CA1C1FD50E004DDCFA /* EventsGuestList.m in Sources */,
 				DAABB0DE1C1FD50E004DDCFA /* Profile.m in Sources */,
+				DA9B10A61CB4D7B7001FB798 /* NSString+XMLEntities.m in Sources */,
 				DAABB2671C1FF5AE004DDCFA /* UIBarButtonItem+FlatUI.m in Sources */,
+				DA5ED61E1C92DD5B00004C7E /* NTMonthYearPicker.m in Sources */,
 				DAABB1171C1FF0F3004DDCFA /* PHImage.m in Sources */,
 				DAABB2C31C1FF5AE004DDCFA /* NSDate+TimeAgo.m in Sources */,
 				DAABB1131C1FF0F3004DDCFA /* NSDate+Calculators.m in Sources */,
@@ -1990,7 +2175,9 @@
 				DAABB2C51C1FF5AE004DDCFA /* NWURLConnection.m in Sources */,
 				DAABB25B1C1FF5AE004DDCFA /* AFURLResponseSerialization.m in Sources */,
 				DAABB0F71C1FD50E004DDCFA /* SetupGenderView.m in Sources */,
+				DA5ED6181C92975100004C7E /* VTItemDetails.m in Sources */,
 				DAABB2BA1C1FF5AE004DDCFA /* MPVariant.m in Sources */,
+				DA5ED6191C92975100004C7E /* VTTransactionDetails.m in Sources */,
 				DAABB2821C1FF5AE004DDCFA /* MPABTestDesignerChangeResponseMessage.m in Sources */,
 				DAABB0B81C1FD50E004DDCFA /* BookTableDetailsCell.m in Sources */,
 				DAABB1161C1FF0F3004DDCFA /* UIView+FormScroll.m in Sources */,
@@ -2000,6 +2187,7 @@
 				DAABB2B81C1FF5AE004DDCFA /* MPUIImageToNSDictionaryValueTransformer.m in Sources */,
 				DAABB0D41C1FD50E004DDCFA /* HostVenueDetailFromShare.m in Sources */,
 				DAB3AF951C27D66900AA7E25 /* EventDetail.m in Sources */,
+				DA5ED6211C968A1E00004C7E /* VirtualAccountViewController.m in Sources */,
 				DAABB0CF1C1FD50E004DDCFA /* EventsHostMessage.m in Sources */,
 				DAABB0B51C1FD50E004DDCFA /* BookTableConfirm.m in Sources */,
 				DAABB0BD1C1FD50E004DDCFA /* ConvoCell.m in Sources */,
@@ -2016,14 +2204,18 @@
 				DAABB0D81C1FD50E004DDCFA /* MyHostingsCell.m in Sources */,
 				DAABB0DB1C1FD50E004DDCFA /* MemberProfile.m in Sources */,
 				DAABB0BA1C1FD50E004DDCFA /* BookTableOffering.m in Sources */,
+				DA5ED5EC1C90A34400004C7E /* AddPaymentViewController.m in Sources */,
 				DAABB2711C1FF5AE004DDCFA /* UITableViewCell+FlatUI.m in Sources */,
 				DAABB29F1C1FF5AE004DDCFA /* MPNotificationViewController.m in Sources */,
+				DA5ED6171C92975100004C7E /* VTiOSAPI.m in Sources */,
+				DA9B10A01CB4D7B7001FB798 /* GTMNSString+HTML.m in Sources */,
 				DAABB2FE1C200414004DDCFA /* Constants.m in Sources */,
 				DAABB0B21C1FD50E004DDCFA /* BookTableAbout.m in Sources */,
 				DAABB1141C1FF0F3004DDCFA /* UIColor+PH.m in Sources */,
 				DAABB0BF1C1FD50E004DDCFA /* MessageCell.m in Sources */,
 				DAABB2CE1C1FF5AE004DDCFA /* TSLogging.m in Sources */,
 				DAABB0BE1C1FD50E004DDCFA /* MessageBubbleTriangle.m in Sources */,
+				DA5ED6151C92975100004C7E /* VTCustomerDetails.m in Sources */,
 				DAABB0F41C1FD50E004DDCFA /* WriteReview.m in Sources */,
 				DAABB2861C1FF5AE004DDCFA /* MPABTestDesignerDeviceInfoRequestMessage.m in Sources */,
 				DAABB26B1C1FF5AE004DDCFA /* UINavigationBar+FlatUI.m in Sources */,
@@ -2045,9 +2237,11 @@
 				DAABB26A1C1FF5AE004DDCFA /* UIImage+FlatUI.m in Sources */,
 				DAABB2A51C1FF5AE004DDCFA /* MPObjectSerializerConfig.m in Sources */,
 				DAABB0E01C1FD50E004DDCFA /* MyPurchasesCell.m in Sources */,
+				DA9B10A51CB4D7B7001FB798 /* NSString+HTML.m in Sources */,
 				DAABB2881C1FF5AE004DDCFA /* MPABTestDesignerDisconnectMessage.m in Sources */,
 				DAABB2941C1FF5AE004DDCFA /* MPCGSizeToNSDictionaryValueTransformer.m in Sources */,
 				DAABB25F1C1FF5AE004DDCFA /* FUIAlertView.m in Sources */,
+				DA5ED6141C92975100004C7E /* VTConfig.m in Sources */,
 				DAABB2C61C1FF5AE004DDCFA /* RFRateMe.m in Sources */,
 				DAABB0D11C1FD50E004DDCFA /* Feed.m in Sources */,
 				DAABB2801C1FF5AE004DDCFA /* MPAbstractABTestDesignerMessage.m in Sources */,
@@ -2066,10 +2260,12 @@
 				DAD2708D1C31110D00546106 /* UserManager.m in Sources */,
 				DAABB0E61C1FD50E004DDCFA /* PhoneVerifyComplete.m in Sources */,
 				DAABB25E1C1FF5AE004DDCFA /* CMPopTipView.m in Sources */,
+				DA5ED6131C92975100004C7E /* VTCardDetails.m in Sources */,
 				DAABB0D71C1FD50E004DDCFA /* MyHostings.m in Sources */,
 				DAABB2A31C1FF5AE004DDCFA /* MPObjectSelector.m in Sources */,
 				DAABB2911C1FF5AE004DDCFA /* MPCGColorRefToNSStringValueTransformer.m in Sources */,
 				DAABB12A1C1FF13A004DDCFA /* EmptyView.m in Sources */,
+				DA5ED6241C96D10700004C7E /* TicketSuccessViewController.m in Sources */,
 				DAABB2751C1FF5AE004DDCFA /* GSTouchesShowingWindow.m in Sources */,
 				DA9E0CF71C61F75000966F16 /* BaseViewController.m in Sources */,
 				DAABB1301C1FF13A004DDCFA /* UserBubble.m in Sources */,
@@ -2089,6 +2285,7 @@
 				DAABB0FC1C1FD50E004DDCFA /* SetupPickViewCell.m in Sources */,
 				DAABB0B71C1FD50E004DDCFA /* BookTableDetails.m in Sources */,
 				DAABB0DD1C1FD50E004DDCFA /* Privacy.m in Sources */,
+				DA5ED6111C92975100004C7E /* VTBaseTransaction.m in Sources */,
 				DAABB2D11C1FF5AE004DDCFA /* TSTapstream.m in Sources */,
 				DAABB2B31C1FF5AE004DDCFA /* MPTypeDescription.m in Sources */,
 				DAABB26E1C1FF5AE004DDCFA /* UISlider+FlatUI.m in Sources */,
@@ -2097,6 +2294,9 @@
 				DA43056C1C23E7D000ED6C54 /* BaseModel.m in Sources */,
 				DAABB2701C1FF5AE004DDCFA /* UITabBar+FlatUI.m in Sources */,
 				DAABB2791C1FF5AE004DDCFA /* MKMapView+ZoomLevel.m in Sources */,
+				DA5ED5E31C896AEA00004C7E /* GuestDetailViewController.m in Sources */,
+				DA5ED5E61C8FDF5100004C7E /* TicketConfirmationViewController.m in Sources */,
+				DA5ED5E91C908F8D00004C7E /* PaymentSelectionViewController.m in Sources */,
 				DAABB2AA1C1FF5AE004DDCFA /* MPSurvey.m in Sources */,
 				DAABB0B11C1FD50E004DDCFA /* BookTable.m in Sources */,
 				DAABB0D31C1FD50E004DDCFA /* HostVenueDetail.m in Sources */,
@@ -2111,6 +2311,7 @@
 				DAABB1011C1FD50E004DDCFA /* SignupView.m in Sources */,
 				DAABB2641C1FF5AE004DDCFA /* FUISwitch.m in Sources */,
 				DA9E0CFA1C61F76300966F16 /* TicketListViewController.m in Sources */,
+				DA5ED6121C92975100004C7E /* VTBaseTransactionMethod.m in Sources */,
 				DAABB2AF1C1FF5AE004DDCFA /* MPSwizzler.m in Sources */,
 				DAABB0DC1C1FD50E004DDCFA /* More.m in Sources */,
 				DAB3AFA11C29541E00AA7E25 /* Chat.m in Sources */,
@@ -2121,9 +2322,11 @@
 				DAABB2A71C1FF5AE004DDCFA /* MPPassThroughValueTransformer.m in Sources */,
 				DAABB0C21C1FD50E004DDCFA /* CreditCardComplete.m in Sources */,
 				DAABB2A91C1FF5AE004DDCFA /* MPSequenceGenerator.m in Sources */,
+				DA0CEC901C9D39E200C0DA44 /* PurchaseHistoryCell.m in Sources */,
 				DA4305691C22916E00ED6C54 /* Event.m in Sources */,
 				DAABB12B1C1FF13A004DDCFA /* PerkButton.m in Sources */,
 				DAABB0CB1C1FD50E004DDCFA /* EventsGuestListCell.m in Sources */,
+				DA52379C1C805D9A00E140C1 /* TicketListCell.m in Sources */,
 				DAABB2BC1C1FF5AE004DDCFA /* NSData+MPBase64.m in Sources */,
 				DA10F5201C52149F006090ED /* SVRadialGradientLayer.m in Sources */,
 				DAABB2D21C1FF5AE004DDCFA /* TSUtils.m in Sources */,
@@ -2140,6 +2343,7 @@
 				DAABB2A11C1FF5AE004DDCFA /* MPNSNumberToCGFloatValueTransformer.m in Sources */,
 				DAABB2891C1FF5AE004DDCFA /* MPABTestDesignerSnapshotRequestMessage.m in Sources */,
 				DAABB2811C1FF5AE004DDCFA /* MPABTestDesignerChangeRequestMessage.m in Sources */,
+				DA5ED6101C92975100004C7E /* VTAddress.m in Sources */,
 				DAABB28C1C1FF5AE004DDCFA /* MPABTestDesignerTweakResponseMessage.m in Sources */,
 				DAABB2551C1FF5AE004DDCFA /* AFHTTPRequestOperationManager.m in Sources */,
 				DAABB0F91C1FD50E004DDCFA /* SetupNotificationView.m in Sources */,
@@ -2154,9 +2358,11 @@
 				DAABB2781C1FF5AE004DDCFA /* KTCenterFlowLayout.m in Sources */,
 				DAABB1121C1FF0F3004DDCFA /* AnalyticManager.m in Sources */,
 				DAABB2A81C1FF5AE004DDCFA /* MPPropertyDescription.m in Sources */,
+				DA0CEC8D1C9C181B00C0DA44 /* PurchaseHistoryViewController.m in Sources */,
 				DAABB0CC1C1FD50E004DDCFA /* EventsHostDetail.m in Sources */,
 				DAABB2C91C1FF5AE004DDCFA /* TSConfig.m in Sources */,
 				DAABB2611C1FF5AE004DDCFA /* FUICellBackgroundView.m in Sources */,
+				DA5ED6161C92975100004C7E /* VTDirect.m in Sources */,
 				DAABB27F1C1FF5AE004DDCFA /* Mixpanel.m in Sources */,
 				DAABB27A1C1FF5AE004DDCFA /* MGSwipeButton.m in Sources */,
 				DAABB2541C1FF5AE004DDCFA /* AFHTTPRequestOperation.m in Sources */,
@@ -2278,7 +2484,7 @@
 					"$(PROJECT_DIR)/PartyHost/ExtraLibraries/AF-iOS-SDK-v3.3.0",
 					"$(PROJECT_DIR)/PartyHost/ExtraLibraries/Mixpanel",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.partyhost.jiggie;
+				PRODUCT_BUNDLE_IDENTIFIER = com.partyhost.jiggiedev;
 				PRODUCT_NAME = Jiggie;
 				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = 1;
@@ -2354,7 +2560,7 @@
 					"$(PROJECT_DIR)/PartyHost/ExtraLibraries/AF-iOS-SDK-v3.3.0",
 					"$(PROJECT_DIR)/PartyHost/ExtraLibraries/Mixpanel",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.partyhost.jiggie;
+				PRODUCT_BUNDLE_IDENTIFIER = com.partyhost.jiggiedev;
 				PRODUCT_NAME = Jiggie;
 				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = 1;
@@ -2473,7 +2679,7 @@
 					"$(PROJECT_DIR)/PartyHost/ExtraLibraries/AF-iOS-SDK-v3.3.0",
 					"$(PROJECT_DIR)/PartyHost/ExtraLibraries/Mixpanel",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.partyhost.jiggie;
+				PRODUCT_BUNDLE_IDENTIFIER = com.partyhost.jiggiedev;
 				PRODUCT_NAME = Jiggie;
 				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = 1;
@@ -2512,7 +2718,7 @@
 					"$(PROJECT_DIR)/PartyHost/ExtraLibraries/AF-iOS-SDK-v3.3.0",
 					"$(PROJECT_DIR)/PartyHost/ExtraLibraries/Mixpanel",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.partyhost.jiggie;
+				PRODUCT_BUNDLE_IDENTIFIER = com.partyhost.jiggiedev;
 				PRODUCT_NAME = Jiggie;
 				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = 1;

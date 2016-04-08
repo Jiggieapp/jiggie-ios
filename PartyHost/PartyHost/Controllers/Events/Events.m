@@ -25,7 +25,7 @@
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
-    self.backgroundColor = [UIColor phPurpleColor];
+    self.backgroundColor = [UIColor whiteColor];
     
     self.sharedData = [SharedData sharedInstance];
     
@@ -125,7 +125,7 @@
     self.eventsUpcoming = [[NSMutableArray alloc] init];
     
     self.tableScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 40 + 34, frame.size.width, frame.size.height - self.tabBar.bounds.size.height - self.segmentationView.bounds.size.height - 20)];
-    [self.tableScrollView setBackgroundColor:[UIColor clearColor]];
+    [self.tableScrollView setBackgroundColor:[UIColor purpleColor]];
     [self.tableScrollView setContentSize:CGSizeMake(self.tableScrollView.bounds.size.width * 3, self.tableScrollView.bounds.size.height)];
     [self.tableScrollView setPagingEnabled:YES];
     [self.tableScrollView setShowsHorizontalScrollIndicator:NO];
@@ -134,7 +134,7 @@
     [self.mainCon addSubview:self.tableScrollView];
     
     self.events1List = [[UITableView alloc] initWithFrame:CGRectMake(self.tableScrollView.bounds.size.width * 0, 0, self.tableScrollView.bounds.size.width, self.tableScrollView.bounds.size.height)];
-    self.events1List.backgroundColor = [UIColor clearColor];
+    self.events1List.backgroundColor = [UIColor whiteColor];
     self.events1List.delegate = self;
     self.events1List.dataSource = self;
     self.events1List.separatorColor = [UIColor clearColor];
@@ -143,8 +143,12 @@
     self.events1List.showsVerticalScrollIndicator = NO;
     [self.tableScrollView addSubview:self.events1List];
     
+    UIView *tmpPurple1View = [[UIView alloc] initWithFrame:CGRectMake(0, -300, self.sharedData.screenWidth, 300)];
+    tmpPurple1View.backgroundColor = [UIColor phPurpleColor];
+    [self.events1List addSubview:tmpPurple1View];
+    
     self.events2List = [[UITableView alloc] initWithFrame:CGRectMake(self.tableScrollView.bounds.size.width * 1, 0, self.tableScrollView.bounds.size.width, self.tableScrollView.bounds.size.height)];
-    self.events2List.backgroundColor = [UIColor clearColor];
+    self.events2List.backgroundColor = [UIColor whiteColor];
     self.events2List.delegate = self;
     self.events2List.dataSource = self;
     self.events2List.separatorColor = [UIColor clearColor];
@@ -153,8 +157,12 @@
     self.events2List.showsVerticalScrollIndicator = NO;
     [self.tableScrollView addSubview:self.events2List];
     
+    UIView *tmpPurple2View = [[UIView alloc] initWithFrame:CGRectMake(0, -300, self.sharedData.screenWidth, 300)];
+    tmpPurple2View.backgroundColor = [UIColor phPurpleColor];
+    [self.events2List addSubview:tmpPurple2View];
+    
     self.events3List = [[UITableView alloc] initWithFrame:CGRectMake(self.tableScrollView.bounds.size.width * 2, 0, self.tableScrollView.bounds.size.width, self.tableScrollView.bounds.size.height)];
-    self.events3List.backgroundColor = [UIColor clearColor];
+    self.events3List.backgroundColor = [UIColor whiteColor];
     self.events3List.delegate = self;
     self.events3List.dataSource = self;
     self.events3List.separatorColor = [UIColor clearColor];
@@ -162,6 +170,10 @@
     self.events3List.allowsMultipleSelectionDuringEditing = NO;
     self.events3List.showsVerticalScrollIndicator = NO;
     [self.tableScrollView addSubview:self.events3List];
+    
+    UIView *tmpPurple3View = [[UIView alloc] initWithFrame:CGRectMake(0, -300, self.sharedData.screenWidth, 300)];
+    tmpPurple3View.backgroundColor = [UIColor phPurpleColor];
+    [self.events3List addSubview:tmpPurple3View];
     
     //When there are no entries
     self.emptyView = [[EmptyView alloc] initWithFrame:CGRectMake(0, 40, frame.size.width, frame.size.height - 60)];
@@ -815,43 +827,51 @@
 {
     [tableView deselectRowAtIndexPath:[tableView indexPathForSelectedRow] animated:YES];
     
-    Event *event = nil;
-    
-    if ([tableView isEqual:self.events1List]) {
-        event = [self.eventsToday objectAtIndex:indexPath.row];
-    } else if ([tableView isEqual:self.events2List]) {
-        event = [self.eventsTomorrow objectAtIndex:indexPath.row];
-    } else if ([tableView isEqual:self.events3List]) {
-        event = [self.eventsUpcoming objectAtIndex:indexPath.row];
+    @try {
+        Event *event = nil;
+        
+        if ([tableView isEqual:self.events1List]) {
+            event = [self.eventsToday objectAtIndex:indexPath.row];
+        } else if ([tableView isEqual:self.events2List]) {
+            event = [self.eventsTomorrow objectAtIndex:indexPath.row];
+        } else if ([tableView isEqual:self.events3List]) {
+            event = [self.eventsUpcoming objectAtIndex:indexPath.row];
+        }
+        
+        if (event != nil) {
+            [self.sharedData.selectedEvent removeAllObjects];
+            self.sharedData.selectedEvent[@"_id"] = event.eventID;
+            self.sharedData.selectedEvent[@"venue_name"] = event.venue;
+            
+            self.sharedData.cEventId = event.eventID;
+            self.sharedData.mostRecentEventSelectedId = event.eventID;
+            self.sharedData.cVenueName = event.venue;
+            
+            if([self.sharedData isGuest] && ![self.sharedData isMember])
+            {
+                [self.eventsSummary initClassWithEvent:event];
+                
+                self.eventsSummary.hidden = NO;
+                self.eventsGuestList.hidden = YES;
+                self.eventsHostingsList.hidden = NO;
+            }
+            else if([self.sharedData isHost] || [self.sharedData isMember])
+            {
+                [self.eventsSummary initClassWithEvent:event];
+                
+                self.eventsSummary.hidden = NO;
+                self.eventsGuestList.hidden = NO;
+                self.eventsHostingsList.hidden = YES;
+            }
+            
+            [self goToSummary];
+        }
     }
-    
-    if (event != nil) {
-        [self.sharedData.selectedEvent removeAllObjects];
-        self.sharedData.selectedEvent[@"_id"] = event.eventID;
-        self.sharedData.selectedEvent[@"venue_name"] = event.venue;
+    @catch (NSException *exception) {
         
-        self.sharedData.cEventId = event.eventID;
-        self.sharedData.mostRecentEventSelectedId = event.eventID;
-        self.sharedData.cVenueName = event.venue;
+    }
+    @finally {
         
-        if([self.sharedData isGuest] && ![self.sharedData isMember])
-        {
-            [self.eventsSummary initClassWithEvent:event];
-            
-            self.eventsSummary.hidden = NO;
-            self.eventsGuestList.hidden = YES;
-            self.eventsHostingsList.hidden = NO;
-        }
-        else if([self.sharedData isHost] || [self.sharedData isMember])
-        {
-            [self.eventsSummary initClassWithEvent:event];
-            
-            self.eventsSummary.hidden = NO;
-            self.eventsGuestList.hidden = NO;
-            self.eventsHostingsList.hidden = YES;
-        }
-        
-        [self goToSummary];
     }
 }
 
