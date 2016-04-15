@@ -12,6 +12,7 @@
 #import "NTMonthYearPicker.h"
 #import "SVProgressHUD.h"
 #import "AnalyticManager.h"
+#import "PaymentSelectionCell.h"
 
 @interface AddPaymentViewController () {
     NSString *previousTextFieldContent;
@@ -30,24 +31,29 @@
     
     [self.view setBackgroundColor:[UIColor whiteColor]];
     
-    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, 28, 200, 24)];
-    [titleLabel setText:@"ADD CREDIT CARD"];
-    [titleLabel setTextColor:[UIColor phPurpleColor]];
+    self.navBar = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.visibleSize.width, 60)];
+    [self.navBar setBackgroundColor:[UIColor phPurpleColor]];
+    
+    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(40, 20, self.visibleSize.width - 80, 40)];
+    [titleLabel setTextAlignment:NSTextAlignmentCenter];
+    [titleLabel setText:@"Add Credit Card"];
     [titleLabel setFont:[UIFont phBlond:16]];
+    [titleLabel setTextColor:[UIColor whiteColor]];
     [titleLabel setBackgroundColor:[UIColor clearColor]];
-    [self.view addSubview:titleLabel];
+    [self.navBar addSubview:titleLabel];
     
     UIButton *cancelButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [cancelButton setFrame:CGRectMake(self.visibleSize.width - 80, 28, 60, 26)];
-    [cancelButton setTitle:@"CANCEL" forState:UIControlStateNormal];
+    [cancelButton setFrame:CGRectMake(self.visibleSize.width - 50, 20.0f, 40.0f, 40.0f)];
+    [cancelButton setImageEdgeInsets:UIEdgeInsetsMake(6, 6, 6, 6)];
+    [cancelButton setImage:[UIImage imageNamed:@"nav_close"] forState:UIControlStateNormal];
     [cancelButton addTarget:self action:@selector(cancelButtonDidTap:) forControlEvents:UIControlEventTouchUpInside];
-    [[cancelButton titleLabel] setFont:[UIFont phBlond:12]];
-    [cancelButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
-    [cancelButton setBackgroundColor:[UIColor clearColor]];
-    [self.view addSubview:cancelButton];
+    [self.navBar addSubview:cancelButton];
     
-    UIView *line1View = [[UIView alloc] initWithFrame:CGRectMake(0, 70, self.visibleSize.width, 1)];
+    [self.view addSubview:self.navBar];
+    
+    UIView *line1View = [[UIView alloc] initWithFrame:CGRectMake(0, 60, self.visibleSize.width, 1)];
     [line1View setBackgroundColor:[UIColor phLightGrayColor]];
+    [line1View setHidden:YES];
     [self.view addSubview:line1View];
     
     self.nameTextField = [[UITextField alloc] initWithFrame:CGRectMake(16, CGRectGetMaxY(line1View.frame) + 10, self.visibleSize.width - 32, 30)];
@@ -58,7 +64,7 @@
     [self.nameTextField setDelegate:self];
     [self.view addSubview:self.nameTextField];
     
-    UIView *line2View = [[UIView alloc] initWithFrame:CGRectMake(0, 70 + 50, self.visibleSize.width, 1)];
+    UIView *line2View = [[UIView alloc] initWithFrame:CGRectMake(0, 60 + 50, self.visibleSize.width, 1)];
     [line2View setBackgroundColor:[UIColor phLightGrayColor]];
     [self.view addSubview:line2View];
     
@@ -85,7 +91,7 @@
     [self.cardNumberAlert setHidden:YES];
     [self.view addSubview:self.cardNumberAlert];
     
-    UIView *line3View = [[UIView alloc] initWithFrame:CGRectMake(0, 70 + 50 + 50, self.visibleSize.width, 1)];
+    UIView *line3View = [[UIView alloc] initWithFrame:CGRectMake(0, 60 + 50 + 50, self.visibleSize.width, 1)];
     [line3View setBackgroundColor:[UIColor phLightGrayColor]];
     [self.view addSubview:line3View];
     
@@ -125,7 +131,7 @@
     [numberToolbar sizeToFit];
     self.cvvTextField.inputAccessoryView = numberToolbar;
     
-    UIView *line4View = [[UIView alloc] initWithFrame:CGRectMake(0, 70 + 50 + 50 + 50, self.visibleSize.width, 1)];
+    UIView *line4View = [[UIView alloc] initWithFrame:CGRectMake(0, 60 + 50 + 50 + 50, self.visibleSize.width, 1)];
     [line4View setBackgroundColor:[UIColor phLightGrayColor]];
     [self.view addSubview:line4View];
     
@@ -167,6 +173,15 @@
     // MixPanel
     SharedData *sharedData = [SharedData sharedInstance];
     [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Credit Card" withDict:sharedData.mixPanelCTicketDict];
+    
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillShow:)
+                                                 name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillBeHidden:)
+                                                 name:UIKeyboardWillHideNotification object:nil];
+    self.disableKeyboardNotification = NO;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -176,10 +191,14 @@
 
 #pragma mark - Action
 - (void)cancelButtonDidTap:(id)sender {
+    [self.view endEditing:YES];
+    
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)saveButtonDidTap:(id)sender {
+    [self.view endEditing:YES];
+    
     NSString *cardNumber = [self.cardNumberTextField.text stringByReplacingOccurrencesOfString:@"-" withString:@""];
     BOOL isValid = YES;
     if (cardNumber.length < 16) {
@@ -273,8 +292,14 @@
 }
 
 - (void)doneDateFromToolbar {
+
     [UIView animateWithDuration:0.25 animations:^()
      {
+         SharedData *sharedData = [SharedData sharedInstance];
+         if (!sharedData.isIphone4) {
+             [self.saveButton setFrame:CGRectMake(0, self.view.bounds.size.height - 44, self.saveButton.bounds.size.width, self.saveButton.bounds.size.height)];
+         }
+         
          [picker setAlpha:0.0];
      } completion:^(BOOL finished){
          
@@ -287,11 +312,13 @@
     
     NSString *dateStr = [df stringFromDate:picker.date];
     self.dateTextField.text = dateStr;
+    
+    [self checkButtonActivate];
 }
 
 #pragma mark - Validate
 - (void)checkButtonActivate {
-    if (self.nameTextField.text.length > 0 && self.cardNumberTextField.text.length > 0 && self.dateTextField.text.length > 0 && self.cvvTextField.text.length > 0) {
+    if (self.nameTextField.text.length > 0 && self.cardNumberTextField.text.length > 18 && self.dateTextField.text.length > 0 && self.cvvTextField.text.length > 2) {
         [self.saveButton setEnabled:YES];
         [self.saveButton setBackgroundColor:[UIColor phBlueColor]];
     } else {
@@ -301,30 +328,38 @@
 }
 
 #pragma mark - UIWebViewDelegate
-
 - (void)webViewDidFinishLoad:(UIWebView *)webView {
     if ([webView.request.URL.absoluteString rangeOfString:@"callback"].location == NSNotFound) {
         [webView removeFromSuperview];
-        NSLog(@"SUCCESS!!");
     }
 }
 
 #pragma mark - UITextFieldDelegate
-
 - (BOOL)textFieldShouldBeginEditing:(UITextField *)textField {
     if (textField == self.dateTextField) {
         [self.nameTextField resignFirstResponder];
         [self.cvvTextField resignFirstResponder];
         [self.cardNumberTextField resignFirstResponder];
         
+        self.disableKeyboardNotification = YES;
+        
         [UIView animateWithDuration:0.25 animations:^()
          {
              [picker setAlpha:1.0];
          } completion:^(BOOL finished){
+             SharedData *sharedData = [SharedData sharedInstance];
+             if (!sharedData.isIphone4) {
+                 [UIView animateWithDuration:0.1 animations:^{
+                    [self.saveButton setFrame:CGRectMake(0, self.view.bounds.size.height - picker.bounds.size.height - 44, self.saveButton.bounds.size.width, self.saveButton.bounds.size.height)];
+                 }];
+             }
              
          }];
         return NO;
     }
+    
+    [picker setAlpha:0.0];
+    
     return YES;
 }
 
@@ -340,6 +375,7 @@
 }
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+    [self checkButtonActivate];
     
     if (textField == self.cardNumberTextField) {
         previousTextFieldContent = textField.text;
@@ -445,6 +481,39 @@ andPreserveCursorPosition:&targetCursorPosition];
     }
     
     return stringWithAddedSpaces;
+}
+
+#pragma mark - UIKeyboardNotification
+// Called when the UIKeyboardDidShowNotification is sent.
+- (void)keyboardWillShow:(NSNotification*)aNotification {
+    SharedData *sharedData = [SharedData sharedInstance];
+    if (sharedData.isIphone4) {
+        return;
+    }
+    
+    NSDictionary* info = [aNotification userInfo];
+    CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
+    
+    // If active text field is hidden by keyboard, scroll it so it's visible
+    // Your application might not need or want this behavior.
+    CGRect aRect = self.view.frame;
+    aRect.size.height -= kbSize.height;
+    
+    [UIView animateWithDuration:0.25 animations:^{
+        [self.saveButton setFrame:CGRectMake(0, self.view.bounds.size.height - kbSize.height - 44, self.saveButton.bounds.size.width, self.saveButton.bounds.size.height)];
+    }];
+}
+
+// Called when the UIKeyboardWillHideNotification is sent
+- (void)keyboardWillBeHidden:(NSNotification*)aNotification {
+    SharedData *sharedData = [SharedData sharedInstance];
+    if (sharedData.isIphone4) {
+        return;
+    }
+    
+    [UIView animateWithDuration:0.25 animations:^{
+        [self.saveButton setFrame:CGRectMake(0, self.view.bounds.size.height - 44, self.saveButton.bounds.size.width, self.saveButton.bounds.size.height)];
+    }];
 }
 
 @end

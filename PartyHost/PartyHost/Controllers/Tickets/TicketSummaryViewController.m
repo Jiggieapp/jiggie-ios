@@ -27,48 +27,48 @@
     
     [self setupUserInfo];
     
-    // Remove nav bar shadow
-    [self.navigationController.navigationBar setBackgroundImage:[[UIImage alloc] init]
-                                                  forBarMetrics:UIBarMetricsDefault];
-    self.navigationController.navigationBar.shadowImage = [[UIImage alloc] init];
+    self.navBar = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.visibleSize.width, 60)];
+    [self.navBar setBackgroundColor:[UIColor phPurpleColor]];
     
-    
-    UIView *titleView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 200, 40)];
-    [titleView setBackgroundColor:[UIColor clearColor]];
-    
-    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 200, 20)];
+    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(40, 20, self.visibleSize.width - 80, 40)];
     [titleLabel setTextAlignment:NSTextAlignmentCenter];
-    [titleLabel setText:@"TICKET DETAIL"];
-    [titleLabel setFont:[UIFont phBlond:13]];
+    [titleLabel setFont:[UIFont phBlond:16]];
     [titleLabel setTextColor:[UIColor whiteColor]];
     [titleLabel setBackgroundColor:[UIColor clearColor]];
-    [titleView addSubview:titleLabel];
+    [self.navBar addSubview:titleLabel];
     
-    UIImageView *titleIcon = [[UIImageView alloc] initWithFrame:CGRectMake(65, 28, 71, 5)];
-    [titleIcon setImage:[UIImage imageNamed:@"icon_step_2"]];
-    [titleView addSubview:titleIcon];
+    NSString *name = [self.productSelected objectForKey:@"name"];
+    if (name && name != nil) {
+        [titleLabel setText:name];
+    }
     
-    [self.navigationItem setTitleView:titleView];
+    UIButton *closeButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [closeButton setFrame:CGRectMake(0.0f, 20.0f, 40.0f, 40.0f)];
+    [closeButton setImageEdgeInsets:UIEdgeInsetsMake(8, 14, 8, 14)];
+    [closeButton setImage:[UIImage imageNamed:@"nav_back"] forState:UIControlStateNormal];
+    [closeButton addTarget:self action:@selector(closeButtonDidTap:) forControlEvents:UIControlEventTouchUpInside];
+    [self.navBar addSubview:closeButton];
     
     UIButton *helpButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [helpButton setFrame:CGRectMake(0.0f, 0.0f, 40.0f, 30.0f)];
+    [helpButton setFrame:CGRectMake(self.visibleSize.width - 60, 20.0f, 50.0f, 40.0f)];
+    [helpButton setImageEdgeInsets:UIEdgeInsetsMake(5, 0, 5, 0)];
     [helpButton setImage:[UIImage imageNamed:@"button_help"] forState:UIControlStateNormal];
     [helpButton addTarget:self action:@selector(helpButtonDidTap:) forControlEvents:UIControlEventTouchUpInside];
-    UIBarButtonItem *helpBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:helpButton];
+    [self.navBar addSubview:helpButton];
     
-    [[self navigationItem] setRightBarButtonItem:helpBarButtonItem];
+    [self.view addSubview:self.navBar];
     
-    [self.view setBackgroundColor:[UIColor whiteColor]];
+    [self.view setBackgroundColor:[UIColor colorFromHexCode:@"F1F1F1"]];
     
     
     // SCROLL VIEW
     
-    self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.visibleSize.width, self.visibleSize.height - 44 - 80 - 80)];
-    self.scrollView.showsVerticalScrollIndicator    = NO;
+    self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 60, self.visibleSize.width, self.visibleSize.height - 44 - 140 - 140)];
+    self.scrollView.showsVerticalScrollIndicator    = YES;
     self.scrollView.showsHorizontalScrollIndicator  = NO;
     self.scrollView.scrollEnabled                   = YES;
     self.scrollView.userInteractionEnabled          = YES;
-    self.scrollView.backgroundColor                 = [UIColor whiteColor];
+    self.scrollView.backgroundColor                 = [UIColor clearColor];
     self.scrollView.contentSize                     = CGSizeMake(self.visibleSize.width, 500);
     [self.view addSubview:self.scrollView];
     
@@ -76,112 +76,14 @@
     tmpPurpleView.backgroundColor = [UIColor phPurpleColor];
     [self.scrollView addSubview:tmpPurpleView];
     
-    UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 80)];
-    [headerView setBackgroundColor:[UIColor phPurpleColor]];
+    UILabel *ticketInfoLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, 16, 120, 20)];
+    [ticketInfoLabel setText:@"TICKET INFO"];
+    [ticketInfoLabel setFont:[UIFont phBlond:12]];
+    [ticketInfoLabel setTextColor:[UIColor blackColor]];
+    [ticketInfoLabel setBackgroundColor:[UIColor clearColor]];
+    [self.scrollView addSubview:ticketInfoLabel];
     
-    self.summaryHeaderTitle = [[UILabel alloc] initWithFrame:CGRectMake(0, 25, self.view.bounds.size.width, 16)];
-    [self.summaryHeaderTitle setFont:[UIFont phBlond:15]];
-    [self.summaryHeaderTitle setTextColor:[UIColor whiteColor]];
-    [self.summaryHeaderTitle setBackgroundColor:[UIColor clearColor]];
-    [self.summaryHeaderTitle setTextAlignment:NSTextAlignmentCenter];
-    [headerView addSubview:self.summaryHeaderTitle];
-    
-    self.summaryHeaderDescription = [[UILabel alloc] initWithFrame:CGRectMake(0, 45, self.view.bounds.size.width, 16)];
-    [self.summaryHeaderDescription setFont:[UIFont phBlond:12]];
-    [self.summaryHeaderDescription setTextColor:[UIColor whiteColor]];
-    [self.summaryHeaderDescription setBackgroundColor:[UIColor clearColor]];
-    [self.summaryHeaderDescription setTextAlignment:NSTextAlignmentCenter];
-    [headerView addSubview:self.summaryHeaderDescription];
-    
-    [self.scrollView addSubview:headerView];
-    
-    NSString *event_name = [self.productList objectForKey:@"event_name"];
-    if (event_name && event_name != nil) {
-        self.summaryHeaderTitle.text = event_name;
-    }
-    
-    NSString *venue_name = [self.productList objectForKey:@"venue_name"];
-    
-    NSString *start_datetime = [self.productList objectForKey:@"start_datetime"];
-    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    [formatter setDateFormat:PHDateFormatServer];
-    [formatter setLocale:[NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"]];
-    [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
-    NSDate *startDatetime = [formatter dateFromString:start_datetime];
-    
-    [formatter setDateFormat:PHDateFormatAppShort];
-    [formatter setLocale:[NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"]];
-    [formatter setTimeZone:[NSTimeZone localTimeZone]];
-    NSString *shortDateTime = [formatter stringFromDate:startDatetime];
-    
-    self.summaryHeaderDescription.text = [NSString stringWithFormat:@"%@ - %@", shortDateTime, venue_name];
-    
-    CGFloat ticketTitleWidth = self.visibleSize.width/2;
-    
-    UILabel *ticketTitle = [[UILabel alloc] initWithFrame:CGRectMake(14, 80 + 8, ticketTitleWidth + 10, 20)];
-    [ticketTitle setFont:[UIFont phBlond:14]];
-    [ticketTitle setTextColor:[UIColor darkGrayColor]];
-    [ticketTitle setBackgroundColor:[UIColor clearColor]];
-    [ticketTitle setAdjustsFontSizeToFitWidth:YES];
-    [self.scrollView addSubview:ticketTitle];
-    
-    UILabel *ticketSubtitle = [[UILabel alloc] initWithFrame:CGRectMake(14, 80 + 30, ticketTitleWidth + 10, 20)];
-    [ticketSubtitle setFont:[UIFont phBlond:13]];
-    [ticketSubtitle setTextColor:[UIColor darkGrayColor]];
-    [ticketSubtitle setBackgroundColor:[UIColor clearColor]];
-    [ticketTitle setAdjustsFontSizeToFitWidth:YES];
-    [self.scrollView addSubview:ticketSubtitle];
-    
-    UILabel *ticketPrice = [[UILabel alloc] initWithFrame:CGRectMake(self.visibleSize.width - 140, 80 + 8, 120, 20)];
-    [ticketPrice setFont:[UIFont phBlond:14]];
-    [ticketPrice setTextColor:[UIColor darkGrayColor]];
-    [ticketPrice setBackgroundColor:[UIColor clearColor]];
-    [ticketPrice setTextAlignment:NSTextAlignmentRight];
-    [self.scrollView addSubview:ticketPrice];
-    
-    UILabel *ticketPerson = [[UILabel alloc] initWithFrame:CGRectMake(self.visibleSize.width - 140, 80 + 30, 120, 20)];
-    [ticketPerson setFont:[UIFont phBlond:13]];
-    [ticketPerson setTextColor:[UIColor darkGrayColor]];
-    [ticketPerson setBackgroundColor:[UIColor clearColor]];
-    [ticketPerson setTextAlignment:NSTextAlignmentRight];
-    [self.scrollView addSubview:ticketPerson];
-    
-    NSString *name = [self.productSelected objectForKey:@"name"];
-    if (name && name != nil) {
-        [ticketTitle setText:name];
-    }
-    
-    NSString *summary = [self.productSelected objectForKey:@"summary"];
-    if (summary && summary != nil) {
-        [ticketSubtitle setText:summary];
-    }
-    
-    NSString *total_price = [self.productSelected objectForKey:@"price"];
-    if (total_price && total_price != nil) {
-        SharedData *sharedData = [SharedData sharedInstance];
-        NSString *formattedPrice = [sharedData formatCurrencyString:total_price];
-        [ticketPrice setText:[NSString stringWithFormat:@"Rp%@", formattedPrice]];
-    }
-    
-    if (self.isTicketProduct) {
-        NSString *max_purchase = [self.productSelected objectForKey:@"max_purchase"];
-        if (max_purchase && max_purchase != nil) {
-            [ticketPerson setText:[NSString stringWithFormat:@"Max Purchased %@", max_purchase]];
-        }
-    } else {
-        NSString *max_guests = [self.productSelected objectForKey:@"max_guests"];
-        if (max_guests && max_guests != nil) {
-            [ticketPerson setText:[NSString stringWithFormat:@"Max Guest %@", max_guests]];
-        }
-    }
-
-    //  LINE 1 VIEW
-    
-    UIView *line1View = [[UIView alloc] initWithFrame:CGRectMake(0, 80 + 60, self.visibleSize.width, 1)];
-    [line1View setBackgroundColor:[UIColor phLightGrayColor]];
-    [self.scrollView addSubview:line1View];
-    
-    UITextView *ticketDescription = [[UITextView alloc] initWithFrame:CGRectMake(14, 80 + 60 + 10, self.visibleSize.width - 28, 0)];
+    UITextView *ticketDescription = [[UITextView alloc] initWithFrame:CGRectMake(14, 16 + 20 + 8, self.visibleSize.width - 28, 0)];
     ticketDescription.font = [UIFont phBlond:13];
     ticketDescription.textColor = [UIColor darkGrayColor];
     ticketDescription.textAlignment = NSTextAlignmentLeft;
@@ -199,34 +101,45 @@
     
      // LINE 2 VIEW
     
-    UIView *line2View = [[UIView alloc] initWithFrame:CGRectMake(0, self.visibleSize.height - 44 - 80 - 80, self.visibleSize.width, 1)];
+    UIView *line2View = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height - 44 - 140 - 140, self.visibleSize.width, 1)];
     [line2View setBackgroundColor:[UIColor phLightGrayColor]];
     [self.view addSubview:line2View];
     
-    self.userName = [[UILabel alloc] initWithFrame:CGRectMake(18, line2View.frame.origin.y + 14, self.visibleSize.width - 70, 18)];
+    UILabel *contactInfoLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, line2View.frame.origin.y + 16, 120, 20)];
+    [contactInfoLabel setText:@"CONTACT INFO"];
+    [contactInfoLabel setFont:[UIFont phBlond:13]];
+    [contactInfoLabel setTextColor:[UIColor blackColor]];
+    [contactInfoLabel setBackgroundColor:[UIColor clearColor]];
+    [self.view addSubview:contactInfoLabel];
+    
+    self.userBox = [[UIImageView alloc] initWithFrame:CGRectMake(8, line2View.frame.origin.y + 28 + 16, self.visibleSize.width - 16, 90)];
+    [self.userBox setImage:[[UIImage imageNamed:@"bg_rectangle"] stretchableImageWithLeftCapWidth:10 topCapHeight:10]];
+    [self.view addSubview:self.userBox];
+    
+    self.userName = [[UILabel alloc] initWithFrame:CGRectMake(12, 14, self.visibleSize.width - 70, 18)];
     [self.userName setFont:[UIFont phBlond:13]];
     [self.userName setTextColor:[UIColor blackColor]];
     [self.userName setBackgroundColor:[UIColor clearColor]];
-    [self.view addSubview:self.userName];
+    [self.userBox addSubview:self.userName];
     
-    self.userEmail = [[UILabel alloc] initWithFrame:CGRectMake(18, line2View.frame.origin.y + 14 + 18, self.visibleSize.width - 70, 18)];
+    self.userEmail = [[UILabel alloc] initWithFrame:CGRectMake(12, 14 + 20, self.visibleSize.width - 70, 18)];
     [self.userEmail setFont:[UIFont phBlond:13]];
     [self.userEmail setTextColor:[UIColor blackColor]];
     [self.userEmail setBackgroundColor:[UIColor clearColor]];
-    [self.view addSubview:self.userEmail];
+    [self.userBox addSubview:self.userEmail];
     
-    self.userPhone = [[UILabel alloc] initWithFrame:CGRectMake(18, line2View.frame.origin.y + 14 + 36, self.visibleSize.width - 70, 18)];
+    self.userPhone = [[UILabel alloc] initWithFrame:CGRectMake(12, 14 + 40, self.visibleSize.width - 70, 18)];
     [self.userPhone setFont:[UIFont phBlond:13]];
     [self.userPhone setTextColor:[UIColor blackColor]];
     [self.userPhone setBackgroundColor:[UIColor clearColor]];
-    [self.view addSubview:self.userPhone];
+    [self.userBox addSubview:self.userPhone];
     
-    UIImageView *accessory = [[UIImageView alloc] initWithFrame:CGRectMake(self.visibleSize.width - 24, line2View.frame.origin.y + 14 + 20, 8, 13)];
-    [accessory setImage:[UIImage imageNamed:@"icon_purple_arrow"]];
-    [self.view addSubview:accessory];
+    UIImageView *accessory = [[UIImageView alloc] initWithFrame:CGRectMake(self.userBox.bounds.size.width - 28, 14 + 20, 16, 24)];
+    [accessory setImage:[UIImage imageNamed:@"icon_blue_arrow"]];
+    [self.userBox addSubview:accessory];
     
     self.userDetailButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.userDetailButton setFrame:CGRectMake(0, self.visibleSize.height - 44 - 80 - 80, self.visibleSize.width, 80)];
+    [self.userDetailButton setFrame:self.userBox.frame];
     [self.userDetailButton addTarget:self action:@selector(userDetailButtonDidTap:) forControlEvents:UIControlEventTouchUpInside];
     [self.userDetailButton setBackgroundColor:[UIColor clearColor]];
     [self.userDetailButton setHighlighted:YES];
@@ -234,44 +147,16 @@
     
     // LINE 3 VIEW
     
-    UIView *line3View = [[UIView alloc] initWithFrame:CGRectMake(0, self.visibleSize.height - 44 - 80, self.visibleSize.width, 1)];
-    [line3View setBackgroundColor:[UIColor phLightGrayColor]];
-    [self.view addSubview:line3View];
+    UIView *bottomView = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height - 44 - 140, self.visibleSize.width, 160)];
+    [bottomView setBackgroundColor:[UIColor whiteColor]];
+    [self.view addSubview:bottomView];
     
-    UILabel *estimatedLabel = [[UILabel alloc] initWithFrame:CGRectMake(18, line3View.frame.origin.y + 14, 100, 20)];
-    [estimatedLabel setFont:[UIFont phBlond:11]];
-    [estimatedLabel setTextColor:[UIColor blackColor]];
-    [estimatedLabel setBackgroundColor:[UIColor clearColor]];
-    [self.view addSubview:estimatedLabel];
-    
-    if (self.isTicketProduct) {
-        [estimatedLabel setText:@"ESTIMATED COST"];
-    } else {
-        [estimatedLabel setText:@"MINIMUM SPEND"];
-    }
-    
-    self.totalPrice = [[UILabel alloc] initWithFrame:CGRectMake(14, line3View.frame.origin.y + 14 + 24, 160, 24)];
-    [self.totalPrice setFont:[UIFont phBlond:20]];
-    [self.totalPrice setTextColor:[UIColor blackColor]];
-    [self.totalPrice setBackgroundColor:[UIColor clearColor]];
-    [self.view addSubview:self.totalPrice];
-    
-    NSString *price = [self.productSelected objectForKey:@"price"];
-    if (price && price != nil) {
-        self.price = price.integerValue;
-        
-        SharedData *sharedData = [SharedData sharedInstance];
-        NSString *formattedPrice = [sharedData formatCurrencyString:price];
-        [self.totalPrice setText:[NSString stringWithFormat:@"Rp%@", formattedPrice]];
-    }
-    
-    UILabel *ticketLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.visibleSize.width - 130, line3View.frame.origin.y + 14, 120, 20)];
+    UILabel *ticketLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, 25, 120, 20)];
     [ticketLabel setText:@"TICKETS"];
-    [ticketLabel setFont:[UIFont phBlond:11]];
-    [ticketLabel setTextColor:[UIColor blackColor]];
+    [ticketLabel setFont:[UIFont phBlond:12]];
+    [ticketLabel setTextColor:[UIColor darkGrayColor]];
     [ticketLabel setBackgroundColor:[UIColor clearColor]];
-    [ticketLabel setTextAlignment:NSTextAlignmentCenter];
-    [self.view addSubview:ticketLabel];
+    [bottomView addSubview:ticketLabel];
     
     if (self.isTicketProduct) {
         [ticketLabel setText:@"TICKETS"];
@@ -279,17 +164,18 @@
         [ticketLabel setText:@"NUMBER OF GUEST"];
     }
     
-    UIButton *plusButton = [[UIButton alloc] initWithFrame:CGRectMake(self.visibleSize.width - 40 - 5, line3View.frame.origin.y + 14 + 20, 34, 34)];
+    UIButton *plusButton = [[UIButton alloc] initWithFrame:CGRectMake(self.visibleSize.width - 34 - 16, 19, 34, 34)];
     [plusButton setImage:[UIImage imageNamed:@"icon_plus"] forState:UIControlStateNormal];
     [plusButton addTarget:self action:@selector(plusButtonDidTap:) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:plusButton];
+    [plusButton setImageEdgeInsets:UIEdgeInsetsMake(2, 2, 2, 2)];
+    [bottomView addSubview:plusButton];
     
-    self.totalTicket = [[UILabel alloc] initWithFrame:CGRectMake(self.visibleSize.width - 40 - 50, line3View.frame.origin.y + 14 + 24, 40, 24)];
+    self.totalTicket = [[UILabel alloc] initWithFrame:CGRectMake(self.visibleSize.width - 34 - 60, 23, 40, 24)];
     [self.totalTicket setFont:[UIFont phBlond:18]];
     [self.totalTicket setTextColor:[UIColor blackColor]];
     [self.totalTicket setBackgroundColor:[UIColor clearColor]];
     [self.totalTicket setTextAlignment:NSTextAlignmentCenter];
-    [self.view addSubview:self.totalTicket];
+    [bottomView addSubview:self.totalTicket];
     
     [self.totalTicket setText:@"1"];
     
@@ -306,19 +192,52 @@
         }
     }
     
-    UIButton *minusButton = [[UIButton alloc] initWithFrame:CGRectMake(self.visibleSize.width - 40 - 50 - 40, line3View.frame.origin.y + 14 + 20, 34, 34)];
+    UIButton *minusButton = [[UIButton alloc] initWithFrame:CGRectMake(self.visibleSize.width - 34 - 60 - 40, 19, 34, 34)];
     [minusButton setImage:[UIImage imageNamed:@"icon_minus"] forState:UIControlStateNormal];
     [minusButton addTarget:self action:@selector(minusButtonDidTap:) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:minusButton];
+    [minusButton setImageEdgeInsets:UIEdgeInsetsMake(2, 2, 2, 2)];
+    [bottomView addSubview:minusButton];
+    
+    UIView *line3View = [[UIView alloc] initWithFrame:CGRectMake(16, 70, self.visibleSize.width - 32, 1)];
+    [line3View setBackgroundColor:[UIColor phLightGrayColor]];
+    [bottomView addSubview:line3View];
+    
+    UILabel *estimatedLabel = [[UILabel alloc] initWithFrame:CGRectMake(15, line3View.frame.origin.y + 25, 120, 20)];
+    [estimatedLabel setFont:[UIFont phBlond:12]];
+    [estimatedLabel setTextColor:[UIColor darkGrayColor]];
+    [estimatedLabel setBackgroundColor:[UIColor clearColor]];
+    [bottomView addSubview:estimatedLabel];
+    
+    if (self.isTicketProduct) {
+        [estimatedLabel setText:@"ESTIMATED COST"];
+    } else {
+        [estimatedLabel setText:@"MINIMUM SPEND"];
+    }
+    
+    self.totalPrice = [[UILabel alloc] initWithFrame:CGRectMake(self.visibleSize.width - 8 - 16 - 160, line3View.frame.origin.y + 23, 160, 24)];
+    [self.totalPrice setFont:[UIFont phBlond:20]];
+    [self.totalPrice setTextColor:[UIColor phPurpleColor]];
+    [self.totalPrice setBackgroundColor:[UIColor clearColor]];
+    [self.totalPrice setTextAlignment:NSTextAlignmentRight];
+    [bottomView addSubview:self.totalPrice];
+    
+    NSString *price = [self.productSelected objectForKey:@"price"];
+    if (price && price != nil) {
+        self.price = price.integerValue;
+        
+        SharedData *sharedData = [SharedData sharedInstance];
+        NSString *formattedPrice = [sharedData formatCurrencyString:price];
+        [self.totalPrice setText:[NSString stringWithFormat:@"Rp%@", formattedPrice]];
+    }
     
     NSString *status = [self.productSelected objectForKey:@"status"];
     NSNumber *quantity = [self.productSelected objectForKey:@"quantity"];
     if ([status isEqualToString:@"sold out"] || quantity.integerValue == 0) {
-        UIView *soldOutView = [[UIView alloc] initWithFrame:CGRectMake(0, line3View.frame.origin.y + 14, self.visibleSize.width, 60)];
+        UIView *soldOutView = [[UIView alloc] initWithFrame:bottomView.frame];
         [soldOutView setBackgroundColor:[UIColor whiteColor]];
         [self.view addSubview:soldOutView];
         
-        UILabel *soldOutLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 16, self.visibleSize.width, 20)];
+        UILabel *soldOutLabel = [[UILabel alloc] initWithFrame:bottomView.bounds];
         [soldOutLabel setText:@"SOLD OUT"];
         [soldOutLabel setTextColor:[UIColor redColor]];
         [soldOutLabel setFont:[UIFont phBold:20]];
@@ -328,18 +247,20 @@
         self.isSoldOut = YES;
     }
     
-    
     // BUTTON
-    
     self.continueButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.continueButton addTarget:self action:@selector(continueButtonDidTap:) forControlEvents:UIControlEventTouchUpInside];
-    [self.continueButton setFrame:CGRectMake(0, self.visibleSize.height - 44, self.visibleSize.width, 44)];
+    [self.continueButton setFrame:CGRectMake(0, self.view.bounds.size.height - 44, self.visibleSize.width, 44)];
     [self.continueButton setBackgroundColor:[UIColor colorFromHexCode:@"B6ECFF"]];
     [self.continueButton.titleLabel setFont:[UIFont phBold:15]];
-    [self.continueButton setTitle:@"CONTINUE" forState:UIControlStateNormal];
+    [self.continueButton setTitle:@"CONFIRM ORDER" forState:UIControlStateNormal];
     [self.continueButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [self.continueButton setEnabled:NO];
     [self.view addSubview:self.continueButton];
+    
+    // Load TCView
+    [self loadTCView];
+    
     
     // MixPanel
     SharedData *sharedData = [SharedData sharedInstance];
@@ -361,12 +282,180 @@
     [self populateUserData];
 }
 
+- (void)viewDidDisappear:(BOOL)animated {
+    [super viewDidDisappear:animated];
+    
+    [self showTCView:NO withAnimation:NO];
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
 
+#pragma mark - View
+- (void)loadTCView {
+    self.tcView = [[UIView alloc] initWithFrame:self.view.bounds];
+    [self.tcView setBackgroundColor:[UIColor clearColor]];
+    [self.view addSubview:self.tcView];
+    
+    if (([[[UIDevice currentDevice] systemVersion] compare:@"8.0" options:NSNumericSearch] == NSOrderedAscending)) {
+        UIView *tcBGView = [[UIView alloc] initWithFrame:self.view.bounds];
+        [tcBGView setBackgroundColor:[UIColor blackColor]];
+        [tcBGView setAlpha:0.8];
+        
+        [self.tcView addSubview:tcBGView];
+        
+    } else {
+        UIBlurEffect *blurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleDark];
+        UIVisualEffectView *blurEffectView = [[UIVisualEffectView alloc] initWithEffect:blurEffect];
+        blurEffectView.frame = self.view.bounds;
+        blurEffectView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        
+        [self.tcView insertSubview:blurEffectView atIndex:0];
+    }
+    
+    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 20, self.visibleSize.width, 40)];
+    [titleLabel setFont:[UIFont phBlond:15]];
+    [titleLabel setTextAlignment:NSTextAlignmentCenter];
+    [titleLabel setTextColor:[UIColor whiteColor]];
+    [titleLabel setText:@"Term and Conditions"];
+    [self.tcView addSubview:titleLabel];
+    
+    UIButton *cancelButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [cancelButton setFrame:CGRectMake(self.visibleSize.width - 50, 20, 40, 40)];
+    [cancelButton setImage:[UIImage imageNamed:@"nav_close_blue"] forState:UIControlStateNormal];
+    [cancelButton setImageEdgeInsets:UIEdgeInsetsMake(6, 6, 6, 6)];
+    [cancelButton addTarget:self action:@selector(cancelButtonDidTap:) forControlEvents:UIControlEventTouchUpInside];
+    [self.tcView addSubview:cancelButton];
+    
+    UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(0, 60, self.visibleSize.width, 1)];
+    [lineView setBackgroundColor:[UIColor whiteColor]];
+    [self.tcView addSubview:lineView];
+    
+    self.tcScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 60, self.visibleSize.width, self.visibleSize.height - 44)];
+    self.tcScrollView.showsVerticalScrollIndicator    = NO;
+    self.tcScrollView.showsHorizontalScrollIndicator  = NO;
+    self.tcScrollView.scrollEnabled                   = YES;
+    self.tcScrollView.userInteractionEnabled          = YES;
+    self.tcScrollView.backgroundColor                 = [UIColor clearColor];
+    self.tcScrollView.contentSize                     = CGSizeMake(self.visibleSize.width, 500);
+    [self.tcView addSubview:self.tcScrollView];
+    
+    self.tcContinueButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.tcContinueButton addTarget:self action:@selector(tcContinueButtonDidTap:) forControlEvents:UIControlEventTouchUpInside];
+    [self.tcContinueButton setFrame:CGRectMake(0, self.view.bounds.size.height - 44, self.visibleSize.width, 44)];
+    [self.tcContinueButton setBackgroundColor:[UIColor colorFromHexCode:@"B6ECFF"]];
+    [self.tcContinueButton.titleLabel setFont:[UIFont phBold:15]];
+    [self.tcContinueButton setTitle:@"CONTINUE" forState:UIControlStateNormal];
+    [self.tcContinueButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [self.tcContinueButton setEnabled:NO];
+    [self.tcView addSubview:self.tcContinueButton];
+    
+    // Hide TCView
+    [self showTCView:NO withAnimation:NO];
+}
+
+- (void)populateTCView {
+    NSArray *viewsToRemove = [self.tcScrollView subviews];
+    for (UIView *v in viewsToRemove) {
+        [v removeFromSuperview];
+    }
+    
+    if (self.productSummary && self.productSummary != nil) {
+        NSArray *product_list = [self.productSummary objectForKey:@"product_list"];
+        if (product_list && product_list != nil && product_list.count > 0) {
+            NSDictionary *productList = [product_list objectAtIndex:0];
+            
+            UILabel *agreeLabel = [[UILabel alloc] initWithFrame:CGRectMake(18, 16, self.visibleSize.width - 36, 20)];
+            [agreeLabel setText:@"By continue this order, I AGREE that :"];
+            [agreeLabel setFont:[UIFont phBlond:14]];
+            [agreeLabel setTextColor:[UIColor whiteColor]];
+            [agreeLabel setBackgroundColor:[UIColor clearColor]];
+            [self.tcScrollView addSubview:agreeLabel];
+            
+            CGFloat listY = 44;
+            NSArray *terms = [productList objectForKey:@"terms"];
+            NSInteger counter = 1;
+            for (NSDictionary *term in terms) {
+                UILabel *termLabel = [[UILabel alloc] initWithFrame:CGRectMake(18, listY, self.visibleSize.width - 18 - 14, 40)];
+                [termLabel setText:[NSString stringWithFormat:@"%li. %@", counter, [term objectForKey:@"body"]]];
+                [termLabel setFont:[UIFont phBlond:12]];
+                [termLabel setTextColor:[UIColor whiteColor]];
+                [termLabel setAdjustsFontSizeToFitWidth:YES];
+                [termLabel setBackgroundColor:[UIColor clearColor]];
+                [termLabel setNumberOfLines:2];
+                [self.tcScrollView addSubview:termLabel];
+                
+                listY += 48;
+                counter++;
+            }
+            
+            UIButton *checkButton = [UIButton buttonWithType:UIButtonTypeCustom];
+            [checkButton setImage:[UIImage imageNamed:@"button_checked_on"] forState:UIControlStateSelected];
+            [checkButton setImage:[UIImage imageNamed:@"button_checked_off"] forState:UIControlStateNormal];
+            [checkButton setFrame:CGRectMake(18, listY + 5, 30, 30)];
+            [checkButton addTarget:self action:@selector(checkButtonDidTap:) forControlEvents:UIControlEventTouchUpInside];
+            [self.tcScrollView addSubview:checkButton];
+            
+            UILabel *yesAgreeLabel = [[UILabel alloc] initWithFrame:CGRectMake(60, listY + 5, self.visibleSize.width - 36, 30)];
+            [yesAgreeLabel setText:@"Yes, I agree"];
+            [yesAgreeLabel setFont:[UIFont phBlond:12]];
+            [yesAgreeLabel setTextColor:[UIColor whiteColor]];
+            [yesAgreeLabel setBackgroundColor:[UIColor clearColor]];
+            [self.tcScrollView addSubview:yesAgreeLabel];
+            
+            self.tcScrollView.contentSize = CGSizeMake(self.visibleSize.width, CGRectGetMaxY(yesAgreeLabel.frame) + 16);
+        }
+    }
+}
+
+- (void)showTCView:(BOOL)isShow withAnimation:(BOOL)isAnimated {
+    CGFloat animateDuration = 0.0;
+    if (isAnimated) {
+        animateDuration = 0.25;
+    }
+    
+    if (isShow) {
+        [UIView animateWithDuration:animateDuration delay:0.0 options:UIViewAnimationOptionCurveEaseIn animations:^{
+            [self.tcView setFrame:CGRectMake(0, 0, self.tcView.bounds.size.width, self.tcView.bounds.size.height)];
+        } completion:^(BOOL finished) {
+            
+        }];
+    } else {
+        [UIView animateWithDuration:animateDuration delay:0.0 options:UIViewAnimationOptionCurveEaseIn animations:^{
+            [self.tcView setFrame:CGRectMake(0, self.tcView.bounds.size.height, self.tcView.bounds.size.width, self.tcView.bounds.size.height)];
+        } completion:^(BOOL finished) {
+            
+        }];
+    }
+}
+
 #pragma mark - Action
+- (void)closeButtonDidTap:(id)sender {
+    [[self navigationController] popViewControllerAnimated:YES];
+}
+
+- (void)cancelButtonDidTap:(id)sender {
+    [self showTCView:NO withAnimation:YES];
+}
+
+- (void)checkButtonDidTap:(id)sender {
+    UIButton *checkButton = (UIButton *)sender;
+    
+    if ([checkButton isSelected]) {
+        [checkButton setSelected:NO];
+        
+        [self.tcContinueButton setEnabled:NO];
+        [self.tcContinueButton setBackgroundColor:[UIColor colorFromHexCode:@"B6ECFF"]];
+    } else {
+        [checkButton setSelected:YES];
+        
+        [self.tcContinueButton setEnabled:YES];
+        [self.tcContinueButton setBackgroundColor:[UIColor phBlueColor]];
+    }
+}
+
 - (void)continueButtonDidTap:(id)sender {
     
     SharedData *sharedData = [SharedData sharedInstance];
@@ -452,17 +541,10 @@
                     NSDictionary *data = [json objectForKey:@"data"];
                     if (data && data != nil) {
                         NSDictionary *product_summary = [data objectForKey:@"product_summary"];
-                        if (product_summary && product_summary != nil) {
-                            NSArray *product_list = [product_summary objectForKey:@"product_list"];
-                            if (product_list && product_list != nil && product_list.count > 0) {
-                                TicketConfirmationViewController *ticketConfirmationViewController = [[TicketConfirmationViewController alloc] init];
-                                ticketConfirmationViewController.productSummary = product_summary;
-                                ticketConfirmationViewController.productList = [product_list objectAtIndex:0];
-                                ticketConfirmationViewController.eventTitleString = self.summaryHeaderTitle.text;
-                                ticketConfirmationViewController.eventDescriptionString = self.summaryHeaderDescription.text;
-                                [self.navigationController pushViewController:ticketConfirmationViewController animated:YES];
-                            }
-                        }
+                        self.productSummary = product_summary;
+                        
+                        [self populateTCView];
+                        [self showTCView:YES withAnimation:YES];
                     }
                 }
                 @catch (NSException *exception) {
@@ -483,13 +565,20 @@
 
 - (void)helpButtonDidTap:(id)sender {
     if ([MFMessageComposeViewController canSendText]) {
-        MFMessageComposeViewController *picker = [[MFMessageComposeViewController alloc] init];
-        NSArray *myReceivers = [[NSArray alloc] initWithObjects:@"+6281218288317", nil];
-        [picker setRecipients:myReceivers];
-        picker.delegate = self;
-        picker.messageComposeDelegate = self;
-        picker.navigationBar.barStyle = UIBarStyleDefault;
-        [self presentViewController:picker animated:YES completion:^{}];
+        NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+        NSDictionary *support = [prefs objectForKey:@"support"];
+        if (support && support != nil) {
+            NSString *telp = [support objectForKey:@"telp"];
+            if (telp && telp != nil) {
+                MFMessageComposeViewController *picker = [[MFMessageComposeViewController alloc] init];
+                NSArray *myReceivers = [[NSArray alloc] initWithObjects:telp, nil];
+                [picker setRecipients:myReceivers];
+                picker.delegate = self;
+                picker.messageComposeDelegate = self;
+                picker.navigationBar.barStyle = UIBarStyleDefault;
+                [self presentViewController:picker animated:YES completion:^{}];
+            }
+        }
     }
 }
 
@@ -538,8 +627,44 @@
      }];
 }
 
+- (void)tcContinueButtonDidTap:(id)sender {
+    if (self.productSummary && self.productSummary != nil) {
+        NSArray *product_list = [self.productSummary objectForKey:@"product_list"];
+        if (product_list && product_list != nil && product_list.count > 0) {
+            TicketConfirmationViewController *ticketConfirmationViewController = [[TicketConfirmationViewController alloc] init];
+            ticketConfirmationViewController.productSummary = self.productSummary;
+            ticketConfirmationViewController.productList = [product_list objectAtIndex:0];
+            
+            NSString *event_name = [self.productList objectForKey:@"event_name"];
+            if (event_name && event_name != nil) {
+                ticketConfirmationViewController.eventTitleString = [event_name uppercaseString];
+            }
+            
+            NSString *venue_name = [self.productList objectForKey:@"venue_name"];
+            if (venue_name && venue_name != nil) {
+                ticketConfirmationViewController.eventVenueString = venue_name;
+            }
+            
+            NSString *start_datetime = [self.productList objectForKey:@"start_datetime"];
+            NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+            [formatter setDateFormat:PHDateFormatServer];
+            [formatter setLocale:[NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"]];
+            [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
+            NSDate *startDatetime = [formatter dateFromString:start_datetime];
+            
+            [formatter setDateFormat:PHDateFormatAppShort];
+            [formatter setLocale:[NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"]];
+            [formatter setTimeZone:[NSTimeZone localTimeZone]];
+            NSString *shortDateTime = [formatter stringFromDate:startDatetime];
+            
+            ticketConfirmationViewController.eventDateString = shortDateTime;
+            
+            [self.navigationController pushViewController:ticketConfirmationViewController animated:YES];
+        }
+    }
+}
 
-#pragma mark - Data 
+#pragma mark - Data
 - (void)setupUserInfo {
     [UserManager clearUserTicketInfo];
     
@@ -586,19 +711,27 @@
     if (![[userInfo objectForKey:@"email"] isEqualToString:@""]) {
         self.userEmail.text = [userInfo objectForKey:@"email"];
         self.userEmail.textColor = [UIColor blackColor];
+        
+        [self.userBox setImage:[[UIImage imageNamed:@"bg_rectangle"] stretchableImageWithLeftCapWidth:10 topCapHeight:10]];
     } else {
         self.userEmail.text = @"email";
         self.userEmail.textColor = [UIColor redColor];
         self.isAllowToContinue = NO;
+        
+        [self.userBox setImage:[[UIImage imageNamed:@"bg_rectangle_red"] stretchableImageWithLeftCapWidth:10 topCapHeight:10]];
     }
     
     if (![[userInfo objectForKey:@"phone"] isEqualToString:@""]) {
         self.userPhone.text = [NSString stringWithFormat:@"%@%@", [userInfo objectForKey:@"idd_code"], [userInfo objectForKey:@"phone"]];
         self.userPhone.textColor = [UIColor blackColor];
+        
+        [self.userBox setImage:[[UIImage imageNamed:@"bg_rectangle"] stretchableImageWithLeftCapWidth:10 topCapHeight:10]];
     } else {
         self.userPhone.text = @"phone number";
         self.userPhone.textColor = [UIColor redColor];
         self.isAllowToContinue = NO;
+        
+        [self.userBox setImage:[[UIImage imageNamed:@"bg_rectangle_red"] stretchableImageWithLeftCapWidth:10 topCapHeight:10]];
     }
     
     if (self.isAllowToContinue && !self.isSoldOut) {
@@ -614,7 +747,6 @@
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
     if ([self.errorType isEqualToString:@"ticket_list"]) {
         [[self navigationController] popToRootViewControllerAnimated:YES];
-        
     } 
 }
 

@@ -10,11 +10,15 @@
 #import <MessageUI/MessageUI.h>
 #import "Event.h"
 
-@interface TicketListViewController : BaseViewController <UITableViewDataSource, UITableViewDelegate, MFMessageComposeViewControllerDelegate, UINavigationControllerDelegate>
+@interface TicketListViewController : BaseViewController <UITableViewDataSource, UITableViewDelegate, MFMessageComposeViewControllerDelegate, UINavigationControllerDelegate, UIScrollViewDelegate>
 
+@property (nonatomic, strong) UIView *navBar;
+@property (nonatomic, strong) UILabel *navTitle;
 @property (nonatomic, strong) UITableView *tableView;
-@property (nonatomic, strong) UILabel *tableHeaderTitle;
-@property (nonatomic, strong) UILabel *tableHeaderDescription;
+@property (nonatomic, strong) UILabel *eventTitle;
+@property (nonatomic, strong) UILabel *eventVenue;
+@property (nonatomic, strong) UILabel *eventDate;
+@property (nonatomic, strong) PHImage *eventImage;
 @property (nonatomic, strong) EmptyView *emptyView;
 
 @property (nonatomic, strong) NSString *eventID;
@@ -22,5 +26,6 @@
 @property (nonatomic, strong) NSDictionary *productList;
 @property (nonatomic, strong) NSArray *purchases;
 @property (nonatomic, strong) NSArray *reservations;
+@property (nonatomic, assign) BOOL isNavBarShowing;
 
 @end

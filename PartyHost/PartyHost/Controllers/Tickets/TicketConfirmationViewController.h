@@ -11,12 +11,14 @@
 
 @interface TicketConfirmationViewController : BaseViewController <UIWebViewDelegate, MFMessageComposeViewControllerDelegate, UINavigationControllerDelegate, UIScrollViewDelegate, UIAlertViewDelegate>
 
+@property (nonatomic, strong) UIView *navBar;
 @property (nonatomic, strong) UIScrollView *scrollView;
 @property (nonatomic, strong) UILabel *totalPrice;
 @property (nonatomic, strong) UILabel *requiredPrice;
 @property (nonatomic, strong) UILabel *balancePrice;
 @property (nonatomic, strong) UIImageView *paymentLogoView;
 @property (nonatomic, strong) UILabel *paymentTitleView;
+@property (nonatomic, strong) UIImageView *paymentBox;
 @property (nonatomic, strong) UIButton *paymentAddButton;
 @property (nonatomic, strong) UIButton *continueButton;
 @property (nonatomic, strong) UIScrollView *swipeScrollView;
@@ -27,7 +29,8 @@
 @property (nonatomic, strong) NSDictionary *paymentDetail;
 @property (nonatomic, strong) NSDictionary *paymentNew;
 @property (nonatomic, strong) NSString *eventTitleString;
-@property (nonatomic, strong) NSString *eventDescriptionString;
+@property (nonatomic, strong) NSString *eventVenueString;
+@property (nonatomic, strong) NSString *eventDateString;
 @property (nonatomic, strong) NSString *ticketType;
 @property (nonatomic, assign) NSInteger maxPrice;
 @property (nonatomic, assign) NSInteger minPrice;

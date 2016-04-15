@@ -21,27 +21,37 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
-    UIView *titleView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 200, 40)];
-    [titleView setBackgroundColor:[UIColor clearColor]];
     
-    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 200, 40)];
+    [self.navigationController setNavigationBarHidden:YES];   //it hides
+    [self.view setBackgroundColor:[UIColor whiteColor]];
+    
+    self.navBar = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.visibleSize.width, 60)];
+    [self.navBar setBackgroundColor:[UIColor phPurpleColor]];
+    
+    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(40, 20, self.visibleSize.width - 80, 40)];
     [titleLabel setTextAlignment:NSTextAlignmentCenter];
-    [titleLabel setText:@"PURCHASE HISTORY"];
-    [titleLabel setFont:[UIFont phBlond:15]];
+    [titleLabel setText:@"Purchase History"];
+    [titleLabel setFont:[UIFont phBlond:16]];
     [titleLabel setTextColor:[UIColor whiteColor]];
     [titleLabel setBackgroundColor:[UIColor clearColor]];
-    [titleView addSubview:titleLabel];
+    [self.navBar addSubview:titleLabel];
     
-    [self.navigationItem setTitleView:titleView];
+    UIButton *closeButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [closeButton setFrame:CGRectMake(0.0f, 20.0f, 40.0f, 40.0f)];
+    [closeButton setImageEdgeInsets:UIEdgeInsetsMake(8, 14, 8, 14)];
+    [closeButton setImage:[UIImage imageNamed:@"nav_back"] forState:UIControlStateNormal];
+    [closeButton addTarget:self action:@selector(backButtonDidTap:) forControlEvents:UIControlEventTouchUpInside];
+    [self.navBar addSubview:closeButton];
     
-    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.visibleSize.width, self.visibleSize.height)];
+    [self.view addSubview:self.navBar];
+    
+    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 60, self.visibleSize.width, self.visibleSize.height)];
     [self.tableView setDelegate:self];
     [self.tableView setDataSource:self];
     [self.tableView setBackgroundColor:[UIColor whiteColor]];
     [self.view addSubview:self.tableView];
     
-    self.emptyView = [[EmptyView alloc] initWithFrame:CGRectMake(0, 0, self.visibleSize.width, self.visibleSize.height)];
+    self.emptyView = [[EmptyView alloc] initWithFrame:CGRectMake(0, 60, self.visibleSize.width, self.view.bounds.size.height - 60)];
     [self.emptyView setData:@"No data found" subtitle:@"Sorry we're having some server issues, please check back in a few minutes." imageNamed:@""];
     [self.emptyView setMode:@"load"];
     [self.emptyView setBackgroundColor:[UIColor whiteColor]];

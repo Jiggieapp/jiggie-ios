@@ -28,11 +28,10 @@
     CGFloat closeButtonSize = 30;
     if (self.showCloseButton) {
         UIButton *closeButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        [closeButton setFrame:CGRectMake(self.visibleSize.width - 70, 20, 60, 26)];
-        [closeButton setTitle:@"CLOSE" forState:UIControlStateNormal];
+        [closeButton setFrame:CGRectMake(self.visibleSize.width - 50, 20, 40, 40)];
+        [closeButton setImage:[UIImage imageNamed:@"nav_close_blue"] forState:UIControlStateNormal];
+        [closeButton setImageEdgeInsets:UIEdgeInsetsMake(6, 6, 6, 6)];
         [closeButton addTarget:self action:@selector(closeButtonDidTap:) forControlEvents:UIControlEventTouchUpInside];
-        [[closeButton titleLabel] setFont:[UIFont phBlond:12]];
-        [closeButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
         [closeButton setBackgroundColor:[UIColor clearColor]];
         [self.view addSubview:closeButton];
         
@@ -682,12 +681,6 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
-}
-
-- (void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
-    
-    [self.navigationController setNavigationBarHidden:NO];    // it shows
 }
 
 #pragma mark - Action

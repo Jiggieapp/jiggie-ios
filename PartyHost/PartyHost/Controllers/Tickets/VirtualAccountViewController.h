@@ -10,6 +10,8 @@
 
 @interface VirtualAccountViewController : BaseViewController
 
+@property (nonatomic, strong) UIView *navBar;
+
 @property (nonatomic, strong) UILabel *titleLabel;
 @property (nonatomic, strong) UIScrollView *scrollView;
 @property (nonatomic, strong) UILabel *transferTime;

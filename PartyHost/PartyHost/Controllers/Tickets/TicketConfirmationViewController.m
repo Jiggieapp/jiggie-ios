@@ -34,32 +34,34 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    [self.view setBackgroundColor:[UIColor whiteColor]];
+    [self.view setBackgroundColor:[UIColor colorFromHexCode:@"F1F1F1"]];
     
-    UIView *titleView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 200, 40)];
-    [titleView setBackgroundColor:[UIColor clearColor]];
+    self.navBar = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.visibleSize.width, 60)];
+    [self.navBar setBackgroundColor:[UIColor phPurpleColor]];
     
-    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 200, 20)];
+    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(40, 20, self.visibleSize.width - 80, 40)];
     [titleLabel setTextAlignment:NSTextAlignmentCenter];
-    [titleLabel setText:@"PURCHASE INFO"];
-    [titleLabel setFont:[UIFont phBlond:13]];
+    [titleLabel setText:@"Purchase Info"];
+    [titleLabel setFont:[UIFont phBlond:16]];
     [titleLabel setTextColor:[UIColor whiteColor]];
     [titleLabel setBackgroundColor:[UIColor clearColor]];
-    [titleView addSubview:titleLabel];
+    [self.navBar addSubview:titleLabel];
     
-    UIImageView *titleIcon = [[UIImageView alloc] initWithFrame:CGRectMake(65, 28, 71, 5)];
-    [titleIcon setImage:[UIImage imageNamed:@"icon_step_3"]];
-    [titleView addSubview:titleIcon];
-    
-    [self.navigationItem setTitleView:titleView];
+    UIButton *closeButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [closeButton setFrame:CGRectMake(0.0f, 20.0f, 40.0f, 40.0f)];
+    [closeButton setImageEdgeInsets:UIEdgeInsetsMake(8, 14, 8, 14)];
+    [closeButton setImage:[UIImage imageNamed:@"nav_back"] forState:UIControlStateNormal];
+    [closeButton addTarget:self action:@selector(closeButtonDidTap:) forControlEvents:UIControlEventTouchUpInside];
+    [self.navBar addSubview:closeButton];
     
     UIButton *helpButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [helpButton setFrame:CGRectMake(0.0f, 0.0f, 40.0f, 30.0f)];
+    [helpButton setFrame:CGRectMake(self.visibleSize.width - 60, 20.0f, 50.0f, 40.0f)];
+    [helpButton setImageEdgeInsets:UIEdgeInsetsMake(5, 0, 5, 0)];
     [helpButton setImage:[UIImage imageNamed:@"button_help"] forState:UIControlStateNormal];
     [helpButton addTarget:self action:@selector(helpButtonDidTap:) forControlEvents:UIControlEventTouchUpInside];
-    UIBarButtonItem *helpBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:helpButton];
+    [self.navBar addSubview:helpButton];
     
-    [[self navigationItem] setRightBarButtonItem:helpBarButtonItem];
+    [self.view addSubview:self.navBar];
     
     if ([[self.productList objectForKey:@"ticket_type"] isEqualToString:@"booking"]) {
         [self loadBookingView];
@@ -67,28 +69,35 @@
         [self loadPurchaseView];
     }
     
-    UIView *line3View = [[UIView alloc] initWithFrame:CGRectMake(0, self.visibleSize.height - 44 - 60, self.visibleSize.width, 1)];
-    [line3View setBackgroundColor:[UIColor phLightGrayColor]];
-    [self.view addSubview:line3View];
+    UILabel *selectPaymentLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, self.view.bounds.size.height - 44 - 100, 120, 20)];
+    [selectPaymentLabel setText:@"Select Payment"];
+    [selectPaymentLabel setFont:[UIFont phBlond:13]];
+    [selectPaymentLabel setTextColor:[UIColor darkGrayColor]];
+    [selectPaymentLabel setBackgroundColor:[UIColor clearColor]];
+    [self.view addSubview:selectPaymentLabel];
     
-    self.paymentLogoView = [[UIImageView alloc] initWithFrame:CGRectMake(24, CGRectGetMaxY(line3View.frame) + 10, 40, 40)];
+    self.paymentBox = [[UIImageView alloc] initWithFrame:CGRectMake(8, CGRectGetMaxY(selectPaymentLabel.frame) + 4, self.visibleSize.width - 16, 70)];
+    [self.paymentBox setImage:[[UIImage imageNamed:@"bg_rectangle"] stretchableImageWithLeftCapWidth:10 topCapHeight:10]];
+    [self.view addSubview:self.paymentBox];
+    
+    self.paymentLogoView = [[UIImageView alloc] initWithFrame:CGRectMake(24, 15, 40, 40)];
     [self.paymentLogoView setImage:[UIImage imageNamed:@"icon_add"]];
     [self.paymentLogoView setContentMode:UIViewContentModeCenter];
-    [self.view addSubview:self.paymentLogoView];
+    [self.paymentBox addSubview:self.paymentLogoView];
     
-    self.paymentTitleView = [[UILabel alloc] initWithFrame:CGRectMake(80, CGRectGetMaxY(line3View.frame) + 15, self.visibleSize.width - 80 - 14, 30)];
+    self.paymentTitleView = [[UILabel alloc] initWithFrame:CGRectMake(80, 20, self.visibleSize.width - 80 - 24, 30)];
     [self.paymentTitleView setText:@"CHOOSE PAYMENT METHOD"];
-    [self.paymentTitleView setFont:[UIFont phBlond:12]];
+    [self.paymentTitleView setFont:[UIFont phBlond:13]];
     [self.paymentTitleView setTextColor:[UIColor phPurpleColor]];
     [self.paymentTitleView setBackgroundColor:[UIColor clearColor]];
-    [self.view addSubview:self.paymentTitleView];
+    [self.paymentBox addSubview:self.paymentTitleView];
     
-    UIImageView *accessory = [[UIImageView alloc] initWithFrame:CGRectMake(self.visibleSize.width - 24, CGRectGetMaxY(line3View.frame) + 23, 8, 13)];
-    [accessory setImage:[UIImage imageNamed:@"icon_purple_arrow"]];
-    [self.view addSubview:accessory];
+    UIImageView *accessory = [[UIImageView alloc] initWithFrame:CGRectMake(self.paymentBox.bounds.size.width - 28, 23, 16, 24)];
+    [accessory setImage:[UIImage imageNamed:@"icon_blue_arrow"]];
+    [self.paymentBox addSubview:accessory];
     
     self.paymentAddButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.paymentAddButton setFrame:CGRectMake(0, self.visibleSize.height - 44 - 60, self.visibleSize.width, 80)];
+    [self.paymentAddButton setFrame:self.paymentBox.frame];
     [self.paymentAddButton addTarget:self action:@selector(paymentAddButtonDidTap:) forControlEvents:UIControlEventTouchUpInside];
     [self.paymentAddButton setBackgroundColor:[UIColor clearColor]];
     [self.paymentAddButton setHighlighted:YES];
@@ -102,7 +111,7 @@
     [self.continueButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [self.continueButton setEnabled:NO];
     
-    self.swipeScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, self.visibleSize.height - 44, self.visibleSize.width, 44)];
+    self.swipeScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height - 44, self.visibleSize.width, 44)];
     [self.swipeScrollView setBackgroundColor:[UIColor colorFromHexCode:@"B6ECFF"]];
     [self.swipeScrollView setContentSize:CGSizeMake(self.visibleSize.width * 2, 44)];
     [self.swipeScrollView setShowsHorizontalScrollIndicator:NO];
@@ -113,22 +122,22 @@
     [self.view addSubview:self.swipeScrollView];
     
     [self prePopulatePayment];
-    
-    
+
     // MixPanel
     SharedData *sharedData = [SharedData sharedInstance];
     [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Purchase Confirmation" withDict:sharedData.mixPanelCTicketDict];
 }
 
+#pragma mark - View
 - (void)loadPurchaseView {
     // SCROLL VIEW
     
-    self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.visibleSize.width, self.visibleSize.height - 44 - 60 - 60)];
-    self.scrollView.showsVerticalScrollIndicator    = NO;
+    self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 60, self.visibleSize.width, self.visibleSize.height - 44 - 100)];
+    self.scrollView.showsVerticalScrollIndicator    = YES;
     self.scrollView.showsHorizontalScrollIndicator  = NO;
     self.scrollView.scrollEnabled                   = YES;
     self.scrollView.userInteractionEnabled          = YES;
-    self.scrollView.backgroundColor                 = [UIColor whiteColor];
+    self.scrollView.backgroundColor                 = [UIColor clearColor];
     self.scrollView.contentSize                     = CGSizeMake(self.visibleSize.width, 500);
     [self.view addSubview:self.scrollView];
     
@@ -136,44 +145,7 @@
     tmpPurpleView.backgroundColor = [UIColor phPurpleColor];
     [self.scrollView addSubview:tmpPurpleView];
     
-    UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 160)];
-    [headerView setBackgroundColor:[UIColor phPurpleColor]];
-    
-    UILabel *agreeLabel = [[UILabel alloc] initWithFrame:CGRectMake(18, 6, self.visibleSize.width - 36, 20)];
-    [agreeLabel setText:@"I Agree That ..."];
-    [agreeLabel setFont:[UIFont phBlond:14]];
-    [agreeLabel setTextColor:[UIColor whiteColor]];
-    [agreeLabel setBackgroundColor:[UIColor clearColor]];
-    [headerView addSubview:agreeLabel];
-    
-    CGFloat listY = 34;
-    NSArray *terms = [self.productList objectForKey:@"terms"];
-    for (NSDictionary *term in terms) {
-        UIButton *checkButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        [checkButton setImage:[UIImage imageNamed:@"button_checked_on"] forState:UIControlStateSelected];
-        [checkButton setImage:[UIImage imageNamed:@"button_checked_off"] forState:UIControlStateNormal];
-        [checkButton setFrame:CGRectMake(18, listY + 5, 30, 30)];
-        [checkButton addTarget:self action:@selector(checkButtonDidTap:) forControlEvents:UIControlEventTouchUpInside];
-        [headerView addSubview:checkButton];
-        
-        [self.agreeButtonArray addObject:checkButton];
-        
-        UILabel *termLabel = [[UILabel alloc] initWithFrame:CGRectMake(60, listY, self.visibleSize.width - 60 - 14, 40)];
-        [termLabel setText:[term objectForKey:@"body"]];
-        [termLabel setFont:[UIFont phBlond:12]];
-        [termLabel setTextColor:[UIColor whiteColor]];
-        [termLabel setAdjustsFontSizeToFitWidth:YES];
-        [termLabel setBackgroundColor:[UIColor clearColor]];
-        [termLabel setNumberOfLines:2];
-        [headerView addSubview:termLabel];
-        
-        listY += 48;
-    }
-    
-    [headerView setFrame:CGRectMake(0, 0, self.view.bounds.size.width, listY)];
-    [self.scrollView addSubview:headerView];
-    
-    UILabel *eventTitle = [[UILabel alloc] initWithFrame:CGRectMake(0, listY + 10, self.view.bounds.size.width, 16)];
+    UILabel *eventTitle = [[UILabel alloc] initWithFrame:CGRectMake(0, 16, self.view.bounds.size.width, 16)];
     [eventTitle setFont:[UIFont phBlond:15]];
     [eventTitle setTextColor:[UIColor blackColor]];
     [eventTitle setBackgroundColor:[UIColor clearColor]];
@@ -181,15 +153,24 @@
     [eventTitle setText:self.eventTitleString];
     [self.scrollView addSubview:eventTitle];
     
-    UILabel *eventDescription = [[UILabel alloc] initWithFrame:CGRectMake(0, listY + 10 + 20, self.view.bounds.size.width, 16)];
-    [eventDescription setFont:[UIFont phBlond:12]];
-    [eventDescription setTextColor:[UIColor blackColor]];
-    [eventDescription setBackgroundColor:[UIColor clearColor]];
-    [eventDescription setTextAlignment:NSTextAlignmentCenter];
-    [eventDescription setText:self.eventDescriptionString];
-    [self.scrollView addSubview:eventDescription];
+    UILabel *eventVenue = [[UILabel alloc] initWithFrame:CGRectMake(0, 16 + 20, self.view.bounds.size.width, 16)];
+    [eventVenue setFont:[UIFont phBlond:12]];
+    [eventVenue setTextColor:[UIColor darkGrayColor]];
+    [eventVenue setBackgroundColor:[UIColor clearColor]];
+    [eventVenue setTextAlignment:NSTextAlignmentCenter];
+    [eventVenue setText:self.eventVenueString];
+    [self.scrollView addSubview:eventVenue];
     
-    UIView *line1View = [[UIView alloc] initWithFrame:CGRectMake(14, listY + 10 + 20 + 24, self.visibleSize.width - 28, 1)];
+    UILabel *eventDate = [[UILabel alloc] initWithFrame:CGRectMake(0, 16 + 20 + 20, self.view.bounds.size.width, 16)];
+    [eventDate setFont:[UIFont phBlond:12]];
+    [eventDate setTextColor:[UIColor darkGrayColor]];
+    [eventDate setBackgroundColor:[UIColor clearColor]];
+    [eventDate setTextAlignment:NSTextAlignmentCenter];
+    [eventDate setText:self.eventDateString];
+    [self.scrollView addSubview:eventDate];
+    
+    // Line 1
+    UIView *line1View = [[UIView alloc] initWithFrame:CGRectMake(14, 16 + 20 + 20 + 24, self.visibleSize.width - 28, 1)];
     [line1View setBackgroundColor:[UIColor phLightGrayColor]];
     [self.scrollView addSubview:line1View];
     
@@ -207,7 +188,7 @@
     
     UILabel *ticketPrice = [[UILabel alloc] initWithFrame:CGRectMake(self.visibleSize.width - 140, CGRectGetMaxY(line1View.frame) + 14, 120, 20)];
     [ticketPrice setFont:[UIFont phBlond:13]];
-    [ticketPrice setTextColor:[UIColor darkGrayColor]];
+    [ticketPrice setTextColor:[UIColor phPurpleColor]];
     [ticketPrice setBackgroundColor:[UIColor clearColor]];
     [ticketPrice setTextAlignment:NSTextAlignmentRight];
     NSString *price = [sharedData formatCurrencyString:[self.productList objectForKey:@"total_price"]];
@@ -223,7 +204,7 @@
     
     UILabel *adminPrice = [[UILabel alloc] initWithFrame:CGRectMake(self.visibleSize.width - 140, CGRectGetMaxY(line1View.frame) + 14 + 30, 120, 20)];
     [adminPrice setFont:[UIFont phBlond:13]];
-    [adminPrice setTextColor:[UIColor darkGrayColor]];
+    [adminPrice setTextColor:[UIColor phPurpleColor]];
     [adminPrice setBackgroundColor:[UIColor clearColor]];
     [adminPrice setTextAlignment:NSTextAlignmentRight];
     NSString *admin_fee = [sharedData formatCurrencyString:[self.productList objectForKey:@"admin_fee"]];
@@ -239,45 +220,46 @@
     
     UILabel *taxPrice = [[UILabel alloc] initWithFrame:CGRectMake(self.visibleSize.width - 140, CGRectGetMaxY(line1View.frame) + 14 + 30 + 30, 120, 20)];
     [taxPrice setFont:[UIFont phBlond:13]];
-    [taxPrice setTextColor:[UIColor darkGrayColor]];
+    [taxPrice setTextColor:[UIColor phPurpleColor]];
     [taxPrice setBackgroundColor:[UIColor clearColor]];
     [taxPrice setTextAlignment:NSTextAlignmentRight];
     NSString *tax_amount = [sharedData formatCurrencyString:[self.productList objectForKey:@"tax_amount"]];
     [taxPrice setText:[NSString stringWithFormat:@"Rp%@",tax_amount]];
     [self.scrollView addSubview:taxPrice];
     
-    self.scrollView.contentSize = CGSizeMake(self.visibleSize.width, CGRectGetMaxY(taxPrice.frame) + 16);
-    
-    UIView *line2View = [[UIView alloc] initWithFrame:CGRectMake(0, self.visibleSize.height - 44 - 60 - 60, self.visibleSize.width, 1)];
+    // Line 2
+    UIView *line2View = [[UIView alloc] initWithFrame:CGRectMake(14, CGRectGetMaxY(line1View.frame) + 14 + 30 + 30 + 30, self.visibleSize.width - 28, 1)];
     [line2View setBackgroundColor:[UIColor phLightGrayColor]];
-    [self.view addSubview:line2View];
+    [self.scrollView addSubview:line2View];
     
     UILabel *totalLabel = [[UILabel alloc] initWithFrame:CGRectMake(18, CGRectGetMaxY(line2View.frame) + 20, 100, 20)];
     [totalLabel setText:@"Total Price"];
     [totalLabel setFont:[UIFont phBlond:13]];
     [totalLabel setTextColor:[UIColor blackColor]];
     [totalLabel setBackgroundColor:[UIColor clearColor]];
-    [self.view addSubview:totalLabel];
+    [self.scrollView addSubview:totalLabel];
     
     self.totalPrice = [[UILabel alloc] initWithFrame:CGRectMake(self.visibleSize.width - 100 - 20, CGRectGetMaxY(line2View.frame) + 20, 100, 20)];
     NSString *total_price = [sharedData formatCurrencyString:[self.productList objectForKey:@"total_price_all"]];
     [self.totalPrice setText:[NSString stringWithFormat:@"Rp%@",total_price]];
     [self.totalPrice setTextAlignment:NSTextAlignmentRight];
-    [self.totalPrice setFont:[UIFont phBlond:20]];
-    [self.totalPrice setTextColor:[UIColor blackColor]];
+    [self.totalPrice setFont:[UIFont phBlond:18]];
+    [self.totalPrice setTextColor:[UIColor phPurpleColor]];
     [self.totalPrice setBackgroundColor:[UIColor clearColor]];
-    [self.view addSubview:self.totalPrice];
+    [self.scrollView addSubview:self.totalPrice];
+    
+    self.scrollView.contentSize = CGSizeMake(self.visibleSize.width, CGRectGetMaxY(self.totalPrice.frame) + 16);
 }
 
 - (void)loadBookingView {
     // SCROLL VIEW
     
-    self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.visibleSize.width, self.visibleSize.height - 44 - 60 - 60)];
-    self.scrollView.showsVerticalScrollIndicator    = NO;
+    self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 60, self.visibleSize.width, self.visibleSize.height - 44 - 100 - 110)];
+    self.scrollView.showsVerticalScrollIndicator    = YES;
     self.scrollView.showsHorizontalScrollIndicator  = NO;
     self.scrollView.scrollEnabled                   = YES;
     self.scrollView.userInteractionEnabled          = YES;
-    self.scrollView.backgroundColor                 = [UIColor whiteColor];
+    self.scrollView.backgroundColor                 = [UIColor clearColor];
     self.scrollView.contentSize                     = CGSizeMake(self.visibleSize.width, 500);
     [self.view addSubview:self.scrollView];
     
@@ -285,44 +267,7 @@
     tmpPurpleView.backgroundColor = [UIColor phPurpleColor];
     [self.scrollView addSubview:tmpPurpleView];
     
-    UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 160)];
-    [headerView setBackgroundColor:[UIColor phPurpleColor]];
-    
-    UILabel *agreeLabel = [[UILabel alloc] initWithFrame:CGRectMake(18, 6, self.visibleSize.width - 36, 20)];
-    [agreeLabel setText:@"I Agree That ..."];
-    [agreeLabel setFont:[UIFont phBlond:14]];
-    [agreeLabel setTextColor:[UIColor whiteColor]];
-    [agreeLabel setBackgroundColor:[UIColor clearColor]];
-    [headerView addSubview:agreeLabel];
-    
-    CGFloat listY = 34;
-    NSArray *terms = [self.productList objectForKey:@"terms"];
-    for (NSDictionary *term in terms) {
-        UIButton *checkButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        [checkButton setImage:[UIImage imageNamed:@"button_checked_on"] forState:UIControlStateSelected];
-        [checkButton setImage:[UIImage imageNamed:@"button_checked_off"] forState:UIControlStateNormal];
-        [checkButton setFrame:CGRectMake(18, listY + 5, 30, 30)];
-        [checkButton addTarget:self action:@selector(checkButtonDidTap:) forControlEvents:UIControlEventTouchUpInside];
-        [headerView addSubview:checkButton];
-        
-        [self.agreeButtonArray addObject:checkButton];
-        
-        UILabel *termLabel = [[UILabel alloc] initWithFrame:CGRectMake(60, listY, self.visibleSize.width - 60 - 14, 40)];
-        [termLabel setText:[term objectForKey:@"body"]];
-        [termLabel setFont:[UIFont phBlond:12]];
-        [termLabel setTextColor:[UIColor whiteColor]];
-        [termLabel setAdjustsFontSizeToFitWidth:YES];
-        [termLabel setBackgroundColor:[UIColor clearColor]];
-        [termLabel setNumberOfLines:2];
-        [headerView addSubview:termLabel];
-        
-        listY += 48;
-    }
-    
-    [headerView setFrame:CGRectMake(0, 0, self.view.bounds.size.width, listY)];
-    [self.scrollView addSubview:headerView];
-    
-    UILabel *eventTitle = [[UILabel alloc] initWithFrame:CGRectMake(0, listY + 10, self.view.bounds.size.width, 16)];
+    UILabel *eventTitle = [[UILabel alloc] initWithFrame:CGRectMake(0, 16, self.view.bounds.size.width, 16)];
     [eventTitle setFont:[UIFont phBlond:15]];
     [eventTitle setTextColor:[UIColor blackColor]];
     [eventTitle setBackgroundColor:[UIColor clearColor]];
@@ -330,15 +275,23 @@
     [eventTitle setText:self.eventTitleString];
     [self.scrollView addSubview:eventTitle];
     
-    UILabel *eventDescription = [[UILabel alloc] initWithFrame:CGRectMake(0, listY + 10 + 20, self.view.bounds.size.width, 16)];
-    [eventDescription setFont:[UIFont phBlond:12]];
-    [eventDescription setTextColor:[UIColor blackColor]];
-    [eventDescription setBackgroundColor:[UIColor clearColor]];
-    [eventDescription setTextAlignment:NSTextAlignmentCenter];
-    [eventDescription setText:self.eventDescriptionString];
-    [self.scrollView addSubview:eventDescription];
+    UILabel *eventVenue = [[UILabel alloc] initWithFrame:CGRectMake(0, 16 + 20, self.view.bounds.size.width, 16)];
+    [eventVenue setFont:[UIFont phBlond:12]];
+    [eventVenue setTextColor:[UIColor darkGrayColor]];
+    [eventVenue setBackgroundColor:[UIColor clearColor]];
+    [eventVenue setTextAlignment:NSTextAlignmentCenter];
+    [eventVenue setText:self.eventVenueString];
+    [self.scrollView addSubview:eventVenue];
     
-    UIView *line1View = [[UIView alloc] initWithFrame:CGRectMake(14, listY + 10 + 20 + 24, self.visibleSize.width - 28, 1)];
+    UILabel *eventDate = [[UILabel alloc] initWithFrame:CGRectMake(0, 16 + 20 + 20, self.view.bounds.size.width, 16)];
+    [eventDate setFont:[UIFont phBlond:12]];
+    [eventDate setTextColor:[UIColor darkGrayColor]];
+    [eventDate setBackgroundColor:[UIColor clearColor]];
+    [eventDate setTextAlignment:NSTextAlignmentCenter];
+    [eventDate setText:self.eventDateString];
+    [self.scrollView addSubview:eventDate];
+    
+    UIView *line1View = [[UIView alloc] initWithFrame:CGRectMake(14, 16 + 20 + 20 + 24, self.visibleSize.width - 28, 1)];
     [line1View setBackgroundColor:[UIColor phLightGrayColor]];
     [self.scrollView addSubview:line1View];
     
@@ -356,7 +309,7 @@
     
     UILabel *ticketPrice = [[UILabel alloc] initWithFrame:CGRectMake(self.visibleSize.width - 140, CGRectGetMaxY(line1View.frame) + 14, 120, 20)];
     [ticketPrice setFont:[UIFont phBlond:13]];
-    [ticketPrice setTextColor:[UIColor darkGrayColor]];
+    [ticketPrice setTextColor:[UIColor phPurpleColor]];
     [ticketPrice setBackgroundColor:[UIColor clearColor]];
     [ticketPrice setTextAlignment:NSTextAlignmentRight];
     NSString *price = [sharedData formatCurrencyString:[self.productList objectForKey:@"total_price"]];
@@ -372,7 +325,7 @@
     
     UILabel *taxPrice = [[UILabel alloc] initWithFrame:CGRectMake(self.visibleSize.width - 140, CGRectGetMaxY(line1View.frame) + 14 + 30, 120, 20)];
     [taxPrice setFont:[UIFont phBlond:13]];
-    [taxPrice setTextColor:[UIColor darkGrayColor]];
+    [taxPrice setTextColor:[UIColor phPurpleColor]];
     [taxPrice setBackgroundColor:[UIColor clearColor]];
     [taxPrice setTextAlignment:NSTextAlignmentRight];
     NSString *tax_amount = [sharedData formatCurrencyString:[self.productList objectForKey:@"tax_amount"]];
@@ -388,7 +341,7 @@
     
     UILabel *servicePrice = [[UILabel alloc] initWithFrame:CGRectMake(self.visibleSize.width - 140, CGRectGetMaxY(line1View.frame) + 14 + 30 + 30, 120, 20)];
     [servicePrice setFont:[UIFont phBlond:13]];
-    [servicePrice setTextColor:[UIColor darkGrayColor]];
+    [servicePrice setTextColor:[UIColor phPurpleColor]];
     [servicePrice setBackgroundColor:[UIColor clearColor]];
     [servicePrice setTextAlignment:NSTextAlignmentRight];
     NSString *admin_fee = [sharedData formatCurrencyString:[self.productList objectForKey:@"admin_fee"]];
@@ -408,7 +361,7 @@
     
     UILabel *estimatedPrice = [[UILabel alloc] initWithFrame:CGRectMake(self.visibleSize.width - 140, CGRectGetMaxY(lineDot1View.frame) + 14, 120, 20)];
     [estimatedPrice setFont:[UIFont phBlond:13]];
-    [estimatedPrice setTextColor:[UIColor darkGrayColor]];
+    [estimatedPrice setTextColor:[UIColor phPurpleColor]];
     [estimatedPrice setBackgroundColor:[UIColor clearColor]];
     [estimatedPrice setTextAlignment:NSTextAlignmentRight];
     NSString *total_price_all = [sharedData formatCurrencyString:[self.productList objectForKey:@"total_price_all"]];
@@ -417,14 +370,14 @@
     
     UILabel *requiredLabel = [[UILabel alloc] initWithFrame:CGRectMake(18, CGRectGetMaxY(lineDot1View.frame) + 14 + 30, ticketTitleWidth, 20)];
     [requiredLabel setFont:[UIFont phBlond:13]];
-    [requiredLabel setTextColor:[UIColor darkGrayColor]];
+    [requiredLabel setTextColor:[UIColor blackColor]];
     [requiredLabel setBackgroundColor:[UIColor clearColor]];
     [requiredLabel setText:@"Required Deposit"];
     [self.scrollView addSubview:requiredLabel];
     
     self.requiredPrice = [[UILabel alloc] initWithFrame:CGRectMake(self.visibleSize.width - 140, CGRectGetMaxY(lineDot1View.frame) + 14 + 30, 120, 20)];
     [self.requiredPrice setFont:[UIFont phBlond:13]];
-    [self.requiredPrice setTextColor:[UIColor darkGrayColor]];
+    [self.requiredPrice setTextColor:[UIColor blackColor]];
     [self.requiredPrice setBackgroundColor:[UIColor clearColor]];
     [self.requiredPrice setTextAlignment:NSTextAlignmentRight];
     NSString *min_deposit_amount = [sharedData formatCurrencyString:[self.productList objectForKey:@"min_deposit_amount"]];
@@ -444,7 +397,7 @@
     
     self.balancePrice = [[UILabel alloc] initWithFrame:CGRectMake(self.visibleSize.width - 140, CGRectGetMaxY(lineDot2View.frame) + 14, 120, 20)];
     [self.balancePrice setFont:[UIFont phBlond:13]];
-    [self.balancePrice setTextColor:[UIColor darkGrayColor]];
+    [self.balancePrice setTextColor:[UIColor phPurpleColor]];
     [self.balancePrice setBackgroundColor:[UIColor clearColor]];
     [self.balancePrice setTextAlignment:NSTextAlignmentRight];
     NSInteger balance = [[self.productList objectForKey:@"total_price_all"] integerValue] - [[self.productList objectForKey:@"min_deposit_amount"] integerValue];
@@ -459,36 +412,40 @@
     self.scrollView.contentSize = CGSizeMake(self.visibleSize.width, CGRectGetMaxY(self.balancePrice.frame) + 16);
     
     
-    
-    UIView *line2View = [[UIView alloc] initWithFrame:CGRectMake(0, self.visibleSize.height - 44 - 60 - 60, self.visibleSize.width, 1)];
+    UIView *line2View = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height - 44 - 100 - 110, self.visibleSize.width, 1)];
     [line2View setBackgroundColor:[UIColor phLightGrayColor]];
     [self.view addSubview:line2View];
     
-    UILabel *totalLabel = [[UILabel alloc] initWithFrame:CGRectMake(18, CGRectGetMaxY(line2View.frame) + 20, 100, 20)];
+    UILabel *totalLabel = [[UILabel alloc] initWithFrame:CGRectMake(18, CGRectGetMaxY(line2View.frame) + 8, 100, 20)];
     [totalLabel setText:@"Pay Deposit"];
     [totalLabel setFont:[UIFont phBlond:13]];
-    [totalLabel setTextColor:[UIColor blackColor]];
+    [totalLabel setTextColor:[UIColor darkGrayColor]];
     [totalLabel setBackgroundColor:[UIColor clearColor]];
     [self.view addSubview:totalLabel];
     
-    UIButton *plusButton = [[UIButton alloc] initWithFrame:CGRectMake(self.visibleSize.width - 40 - 5, CGRectGetMaxY(line2View.frame) + 16, 34, 34)];
+    UIImageView *priceBox = [[UIImageView alloc] initWithFrame:CGRectMake(8, CGRectGetMaxY(line2View.frame) + 12 + 20 , self.visibleSize.width - 16, 70)];
+    [priceBox setImage:[[UIImage imageNamed:@"bg_rectangle"] stretchableImageWithLeftCapWidth:10 topCapHeight:10]];
+    [priceBox setUserInteractionEnabled:YES];
+    [self.view addSubview:priceBox];
+    
+    UIButton *plusButton = [[UIButton alloc] initWithFrame:CGRectMake(priceBox.frame.size.width - 24 - 34, 18, 34, 34)];
     [plusButton setImage:[UIImage imageNamed:@"icon_plus"] forState:UIControlStateNormal];
     [plusButton addTarget:self action:@selector(plusButtonDidTap:) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:plusButton];
+    [priceBox addSubview:plusButton];
     
-    self.totalPrice = [[UILabel alloc] initWithFrame:CGRectMake(self.visibleSize.width - 130 - 20, CGRectGetMaxY(line2View.frame) + 20, 100, 20)];
+    self.totalPrice = [[UILabel alloc] initWithFrame:CGRectMake((priceBox.frame.size.width - 120) /2, 25, 120, 20)];
     NSString *total_price = [sharedData formatCurrencyString:[self.productList objectForKey:@"min_deposit_amount"]];
     [self.totalPrice setText:[NSString stringWithFormat:@"Rp%@",total_price]];
-    [self.totalPrice setTextAlignment:NSTextAlignmentRight];
+    [self.totalPrice setTextAlignment:NSTextAlignmentCenter];
     [self.totalPrice setFont:[UIFont phBlond:20]];
     [self.totalPrice setTextColor:[UIColor blackColor]];
     [self.totalPrice setBackgroundColor:[UIColor clearColor]];
-    [self.view addSubview:self.totalPrice];
+    [priceBox addSubview:self.totalPrice];
     
-    UIButton *minusButton = [[UIButton alloc] initWithFrame:CGRectMake(self.visibleSize.width - 40 - 100 - 40, CGRectGetMaxY(line2View.frame) + 16, 34, 34)];
+    UIButton *minusButton = [[UIButton alloc] initWithFrame:CGRectMake(24, 18, 34, 34)];
     [minusButton setImage:[UIImage imageNamed:@"icon_minus"] forState:UIControlStateNormal];
     [minusButton addTarget:self action:@selector(minusButtonDidTap:) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:minusButton];
+    [priceBox addSubview:minusButton];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -535,17 +492,8 @@
     }
 }
 
-- (BOOL)isAllAgree {
-    for (UIButton *checkButton in self.agreeButtonArray) {
-        if(![checkButton isSelected]) {
-            return NO;
-        }
-    }
-    return YES;
-}
-
 - (void)checkValidToContinue {
-    if (self.paymentDetail && self.paymentDetail != nil && [self isAllAgree]) {
+    if (self.paymentDetail && self.paymentDetail != nil) {
         
         [self.swipeScrollView setScrollEnabled:YES];
         [self.swipeScrollView setBackgroundColor:[UIColor phBlueColor]];
@@ -614,38 +562,43 @@
             [self.paymentTitleView setTextColor:[UIColor blackColor]];
         }
         
+        [self.paymentTitleView setFrame:CGRectMake(80, 20, self.visibleSize.width - 80 - 24, 30)];
+        [self.paymentBox setImage:[[UIImage imageNamed:@"bg_rectangle"] stretchableImageWithLeftCapWidth:10 topCapHeight:10]];
+        
     } else {
-        [self.paymentLogoView setImage:[UIImage imageNamed:@"icon_add"]];
+        [self.paymentLogoView setImage:nil];
         
         [self.paymentTitleView setText:@"CHOOSE PAYMENT METHOD"];
-        [self.paymentTitleView setTextColor:[UIColor phPurpleColor]];
+        [self.paymentTitleView setTextColor:[UIColor phBlueColor]];
+        [self.paymentTitleView setFrame:CGRectMake(24, 20, self.visibleSize.width - 80 - 24, 30)];
+        
+        [self.paymentBox setImage:[[UIImage imageNamed:@"bg_rectangle_red"] stretchableImageWithLeftCapWidth:10 topCapHeight:10]];
     }
 
     [self checkValidToContinue];
 }
 
 #pragma mark - Action
-- (void)checkButtonDidTap:(id)sender {
-    UIButton *checkButton = (UIButton *)sender;
-    
-    if ([checkButton isSelected]) {
-        [checkButton setSelected:NO];
-    } else {
-        [checkButton setSelected:YES];
-    }
-    
-    [self checkValidToContinue];
+- (void)closeButtonDidTap:(id)sender {
+    [[self navigationController] popViewControllerAnimated:YES];
 }
 
 - (void)helpButtonDidTap:(id)sender {
     if ([MFMessageComposeViewController canSendText]) {
-        MFMessageComposeViewController *picker = [[MFMessageComposeViewController alloc] init];
-        NSArray *myReceivers = [[NSArray alloc] initWithObjects:@"+6281218288317", nil];
-        [picker setRecipients:myReceivers];
-        picker.delegate = self;
-        picker.messageComposeDelegate = self;
-        picker.navigationBar.barStyle = UIBarStyleDefault;
-        [self presentViewController:picker animated:YES completion:^{}];
+        NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+        NSDictionary *support = [prefs objectForKey:@"support"];
+        if (support && support != nil) {
+            NSString *telp = [support objectForKey:@"telp"];
+            if (telp && telp != nil) {
+                MFMessageComposeViewController *picker = [[MFMessageComposeViewController alloc] init];
+                NSArray *myReceivers = [[NSArray alloc] initWithObjects:telp, nil];
+                [picker setRecipients:myReceivers];
+                picker.delegate = self;
+                picker.messageComposeDelegate = self;
+                picker.navigationBar.barStyle = UIBarStyleDefault;
+                [self presentViewController:picker animated:YES completion:^{}];
+            }
+        }
     }
 }
 
@@ -744,7 +697,7 @@
                         self.paymentNew = @{@"token_id":[json objectForKey:@"token_id"],
                                             @"name_cc":[content objectForKey:@"name_cc"]};
                         
-                        UIWebView *webView = [[UIWebView alloc] initWithFrame:CGRectMake(0, 0, self.visibleSize.width, self.visibleSize.height)];
+                        UIWebView *webView = [[UIWebView alloc] initWithFrame:CGRectMake(0, 60, self.visibleSize.width, self.view.bounds.size.height - 60)];
                         [webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:json[@"redirect_url"]]]];
                         [webView setDelegate:self];
                         [webView setScalesPageToFit:YES];
@@ -931,7 +884,6 @@
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
-
 #pragma mark - UIScrollViewDelegate 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
     if ([scrollView isEqual:self.swipeScrollView]) {
@@ -939,6 +891,7 @@
             [UIView animateWithDuration:0.25 animations:^{
                 [scrollView setContentOffset:CGPointMake(self.visibleSize.width, 0)];
             }];
+            
             [self readyForPayment];
         }
     }

@@ -576,7 +576,7 @@
 
 -(void)reset
 {
-    self.image.image = [UIImage imageNamed:@"nightclub_default"];
+    self.image.image = [UIImage imageNamed:@""];
     [self.circle setImage:[UIImage imageNamed:@"fbperson_blank_square"] forState:UIControlStateNormal];
     self.textLine1.text = @"";
     self.textLine2.text = @"";

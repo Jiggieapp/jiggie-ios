@@ -10,6 +10,7 @@
 
 @interface PurchaseHistoryViewController : BaseViewController <UITableViewDataSource, UITableViewDelegate>
 
+@property (nonatomic, strong) UIView *navBar;
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) EmptyView *emptyView;
 

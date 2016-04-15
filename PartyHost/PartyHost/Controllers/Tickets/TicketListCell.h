@@ -10,7 +10,7 @@
 
 @interface TicketListCell : UITableViewCell
 
-@property (nonatomic, strong) UIView *ticketCard;
+@property (nonatomic, strong) UIImageView *ticketCard;
 @property (nonatomic, strong) UILabel *ticketTitle;
 @property (nonatomic, strong) UILabel *ticketPrice;
 @property (nonatomic, assign) CGFloat cellWidth;

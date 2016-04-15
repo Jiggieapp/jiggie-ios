@@ -10,6 +10,7 @@
 
 @interface GuestDetailViewController : BaseViewController <UITextFieldDelegate>
 
+@property (nonatomic, strong) UIView *navBar;
 @property (nonatomic, strong) UITextField *nameTextField;
 @property (nonatomic, strong) UITextField *emailTextField;
 @property (nonatomic, strong) UITextField *phoneCodeTextField;

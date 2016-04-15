@@ -10,6 +10,7 @@
 #import "AddPaymentViewController.h"
 #import "VirtualAccountViewController.h"
 #import "AnalyticManager.h"
+#import "PaymentSelectionCell.h"
 
 @interface PaymentSelectionViewController ()
 
@@ -21,6 +22,8 @@
     if ((self = [super init])) {
         self.sharedData = [SharedData sharedInstance];
         self.creditCardNew = [NSMutableArray array];
+        self.paymentMethods = [NSMutableArray array];
+        self.isCreditCardAllowed = NO;
     }
     
     return self;
@@ -28,28 +31,38 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
-    UIView *titleView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 200, 40)];
-    [titleView setBackgroundColor:[UIColor clearColor]];
     
-    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 200, 40)];
+    [self.view setBackgroundColor:[UIColor colorFromHexCode:@"F1F1F1"]];
+    
+    // Do any additional setup after loading the view.
+    self.navBar = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.visibleSize.width, 60)];
+    [self.navBar setBackgroundColor:[UIColor phPurpleColor]];
+    
+    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(40, 20, self.visibleSize.width - 80, 40)];
     [titleLabel setTextAlignment:NSTextAlignmentCenter];
-    [titleLabel setText:@"SELECT PAYMENT METHOD"];
-    [titleLabel setFont:[UIFont phBlond:15]];
+    [titleLabel setText:@"Select Payment Method"];
+    [titleLabel setFont:[UIFont phBlond:16]];
     [titleLabel setTextColor:[UIColor whiteColor]];
     [titleLabel setBackgroundColor:[UIColor clearColor]];
-    [titleView addSubview:titleLabel];
+    [self.navBar addSubview:titleLabel];
     
-    [self.navigationItem setTitleView:titleView];
+    UIButton *closeButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [closeButton setFrame:CGRectMake(0.0f, 20.0f, 40.0f, 40.0f)];
+    [closeButton setImageEdgeInsets:UIEdgeInsetsMake(8, 14, 8, 14)];
+    [closeButton setImage:[UIImage imageNamed:@"nav_back"] forState:UIControlStateNormal];
+    [closeButton addTarget:self action:@selector(closeButtonDidTap:) forControlEvents:UIControlEventTouchUpInside];
+    [self.navBar addSubview:closeButton];
     
-    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.visibleSize.width, self.visibleSize.height)];
+    [self.view addSubview:self.navBar];
+    
+    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 60, self.visibleSize.width, self.visibleSize.height)];
     [self.tableView setDelegate:self];
     [self.tableView setDataSource:self];
-    [self.tableView setBackgroundColor:[UIColor whiteColor]];
+    [self.tableView setBackgroundColor:[UIColor clearColor]];
     [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     [self.view addSubview:self.tableView];
     
-    self.emptyView = [[EmptyView alloc] initWithFrame:CGRectMake(0, 0, self.visibleSize.width, self.visibleSize.height)];
+    self.emptyView = [[EmptyView alloc] initWithFrame:CGRectMake(0, 60, self.visibleSize.width, self.view.bounds.size.height - 60)];
     [self.emptyView setData:@"No data found" subtitle:@"Sorry we're having some server issues, please check back in a few minutes." imageNamed:@""];
     [self.emptyView setMode:@"load"];
     [self.emptyView setBackgroundColor:[UIColor whiteColor]];
@@ -96,6 +109,10 @@
 }
 
 #pragma mark - Action 
+- (void)closeButtonDidTap:(id)sender {
+    [[self navigationController] popViewControllerAnimated:YES];
+}
+
 - (void)tutorialButtonDidTap:(id)sender {
     VirtualAccountViewController *virtualAccountViewController = [[VirtualAccountViewController alloc] init];
     virtualAccountViewController.isModalScreen = YES;
@@ -107,6 +124,66 @@
 
 #pragma mark - Data
 - (void)loadData {
+    AFHTTPRequestOperationManager *manager = [self.sharedData getOperationManager];
+    //events/list/
+    NSString *url = [NSString stringWithFormat:@"%@/product/payment_method",PHBaseNewURL];
+    [manager GET:url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSInteger responseStatusCode = operation.response.statusCode;
+        if (responseStatusCode != 200) {
+            [self.emptyView setMode:@"hide"];
+            return;
+        }
+        
+        NSString *responseString = operation.responseString;
+        NSError *error;
+        
+        NSDictionary *json = (NSDictionary *)[NSJSONSerialization
+                                              JSONObjectWithData:[responseString dataUsingEncoding:NSUTF8StringEncoding]
+                                              options:kNilOptions
+                                              error:&error];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (json && json != nil) {
+                @try {
+                    NSDictionary *data = [json objectForKey:@"data"];
+                    if (data && data != nil) {
+                        NSMutableArray *paymentMethods = [data objectForKey:@"paymentmethod"];
+                        if (paymentMethods && paymentMethods != nil) {
+                            for (NSDictionary *paymentMethod in paymentMethods) {
+                                if ([[paymentMethod objectForKey:@"type"] isEqualToString:@"cc"]) {
+                                    if ([[paymentMethod objectForKey:@"status"] boolValue]) {
+                                        self.isCreditCardAllowed = YES;
+                                    }
+                                } else {
+                                    if ([[paymentMethod objectForKey:@"status"] boolValue]) {
+                                        [self.paymentMethods addObject:[paymentMethod objectForKey:@"type"]];
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    [self.tableView reloadData];
+                    
+                    if (self.isCreditCardAllowed) {
+                        [self loadCreditCards];
+                    } else {
+                        [self.emptyView setMode:@"hide"];
+                    }
+                }
+                @catch (NSException *exception) {
+                    
+                }
+                @finally {
+                    
+                }
+            }
+        });
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        [self.emptyView setMode:@"hide"];
+    }];
+}
+
+- (void)loadCreditCards {
     AFHTTPRequestOperationManager *manager = [self.sharedData getOperationManager];
     //events/list/
     NSString *url = [NSString stringWithFormat:@"%@/product/credit_card/%@",PHBaseNewURL,self.sharedData.fb_id];
@@ -180,10 +257,12 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    if (section == 1) {
+    if (section == 0 && !self.isCreditCardAllowed) {
+        return 0;
+    } else if (section == 1) {
         return 0;
     }
-    return 30;
+    return 50;
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
@@ -191,28 +270,20 @@
         return nil;
     }
     
-    UIView *topLine = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.bounds.size.width, 1)];
-    [topLine setBackgroundColor:[UIColor phLightGrayColor]];
-    
-    UIView *bottomLine = [[UIView alloc] initWithFrame:CGRectMake(0, 26, tableView.bounds.size.width, 1)];
-    [bottomLine setBackgroundColor:[UIColor phLightGrayColor]];
-    
     UILabel *myLabel = [[UILabel alloc] init];
-    myLabel.frame = CGRectMake(14, 0, 320, 26);
-    myLabel.font = [UIFont phBlond:12];
-    myLabel.textColor = [UIColor blackColor];
+    myLabel.frame = CGRectMake(14, 20, 320, 26);
+    myLabel.font = [UIFont phBlond:13];
+    myLabel.textColor = [UIColor darkGrayColor];
     myLabel.text = [self tableView:tableView titleForHeaderInSection:section];
     
     UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.bounds.size.width, 26)];
-    [headerView setBackgroundColor:[UIColor whiteColor]];
+    [headerView setBackgroundColor:[UIColor clearColor]];
     [headerView addSubview:myLabel];
-    [headerView addSubview:topLine];
-    [headerView addSubview:bottomLine];
     
     if (section == 2) {
         UIButton *tutorialButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [tutorialButton addTarget:self action:@selector(tutorialButtonDidTap:) forControlEvents:UIControlEventTouchUpInside];
-        [tutorialButton setFrame:CGRectMake(162, 0, 120, 26)];
+        [tutorialButton setFrame:CGRectMake(132, 20, 120, 26)];
         [tutorialButton setBackgroundColor:[UIColor clearColor]];
         [tutorialButton setTitle:@"HOW IT WORKS?" forState:UIControlStateNormal];
         [tutorialButton setTitleColor:[UIColor phBlueColor] forState:UIControlStateNormal];
@@ -220,9 +291,9 @@
         [[tutorialButton titleLabel] setTextAlignment:NSTextAlignmentLeft];
         [headerView addSubview:tutorialButton];
         
-        UIView *blueBottomLine = [[UIView alloc] initWithFrame:CGRectMake(176, 20, 90, 1)];
-        [blueBottomLine setBackgroundColor:[UIColor phBlueColor]];
-        [headerView addSubview:blueBottomLine];
+//        UIView *blueBottomLine = [[UIView alloc] initWithFrame:CGRectMake(176, 40, 90, 1)];
+//        [blueBottomLine setBackgroundColor:[UIColor phBlueColor]];
+//        [headerView addSubview:blueBottomLine];
     }
     
     return headerView;
@@ -230,22 +301,33 @@
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     if (section == 0) {
-        return @"CREDIT CARD";
+        return @"Credit Card";
     }
-    return @"VIRTUAL BANK TRANSFER";
+    return @"Virtual Bank Transfer";
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if (section == 0) {
         return self.creditCardServer.count;
     } else if (section == 1) {
-        return self.creditCardNew.count + 1;
+        if (self.isCreditCardAllowed) {
+            return self.creditCardNew.count + 1;
+        } else {
+            return 0;
+        }
+    } else if (section == 2) {
+        return self.paymentMethods.count;
     }
     return 3;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 60;
+    if (indexPath.section == 0 || indexPath.section == 1) {
+        if (!self.isCreditCardAllowed) {
+            return 0;
+        }
+    }
+    return 70;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -253,30 +335,25 @@
     if ([indexPath section] == 0) {
         static NSString *simpleTableIdentifier = @"ServerCreditCardCell";
         
-        UITableViewCell *cell = (UITableViewCell *)[tableView dequeueReusableCellWithIdentifier:simpleTableIdentifier];
+        PaymentSelectionCell *cell = (PaymentSelectionCell *)[tableView dequeueReusableCellWithIdentifier:simpleTableIdentifier];
         if (cell == nil) {
-            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:simpleTableIdentifier];
-            [cell.textLabel setFont:[UIFont phBlond:13]];
-            
-            UIView *bottomLine = [[UIView alloc] initWithFrame:CGRectMake(0, 60, tableView.bounds.size.width, 1)];
-            [bottomLine setBackgroundColor:[UIColor phLightGrayColor]];
-            [[cell contentView] addSubview:bottomLine];
+            cell = [[PaymentSelectionCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:simpleTableIdentifier];
+            cell.cellWidth = self.visibleSize.width;
         }
         
         NSDictionary *cardDetails = [self.creditCardServer objectAtIndex:indexPath.row];
         NSString *masked_card = [cardDetails objectForKey:@"masked_card"];
         NSString *cardSubstring = [masked_card substringFromIndex:masked_card.length - 4];
         
-        [cell.textLabel setText:[NSString stringWithFormat:@"**** **** **** %@", cardSubstring]];
-        
         NSString *firstDigit = [masked_card substringToIndex:1];
+        UIImage *cardImage = nil;
         if ([firstDigit isEqualToString:@"4"]) {
-            [cell.imageView setImage:[UIImage imageNamed:@"logo_visa"]];
+            cardImage = [UIImage imageNamed:@"logo_visa"];
         } else if ([firstDigit isEqualToString:@"5"]) {
-            [cell.imageView setImage:[UIImage imageNamed:@"logo_master"]];
-        } else {
-            [cell.imageView setImage:nil];
+            cardImage = [UIImage imageNamed:@"logo_master"];
         }
+        
+        [cell setTitle:[NSString stringWithFormat:@"**** **** **** %@", cardSubstring] andImage:cardImage];
         
         return cell;
         
@@ -285,73 +362,62 @@
         if (indexPath.row == self.creditCardNew.count) {
             static NSString *simpleTableIdentifier = @"AddPaymentCell";
             
-            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:simpleTableIdentifier];
+            PaymentSelectionCell *cell = (PaymentSelectionCell *)[tableView dequeueReusableCellWithIdentifier:simpleTableIdentifier];
             if (cell == nil) {
-                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:simpleTableIdentifier];
-                [cell.textLabel setFont:[UIFont phBlond:13]];
+                cell = [[PaymentSelectionCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:simpleTableIdentifier];
+                cell.cellWidth = self.visibleSize.width;
                 
-                UIView *bottomLine = [[UIView alloc] initWithFrame:CGRectMake(0, 60, tableView.bounds.size.width, 1)];
-                [bottomLine setBackgroundColor:[UIColor phLightGrayColor]];
-                [[cell contentView] addSubview:bottomLine];
+                UIImageView *iconPlus = [[UIImageView alloc] initWithFrame:CGRectMake(self.visibleSize.width - 46, 28, 16, 14)];
+                [iconPlus setImage:[UIImage imageNamed:@"icon_plus_blue"]];
+                [[cell contentView] addSubview:iconPlus];
             }
-            [cell.imageView setImage:[UIImage imageNamed:@"icon_add"]];
-            [cell.textLabel setText:@"ADD CREDIT CARD"];
-            [cell.textLabel setTextColor:[UIColor phPurpleColor]];
+            
+            [cell setTitle:@"ADD CREDIT CARD" andImage:nil];
+            [cell.paymentTitle setFont:[UIFont phBlond:14]];
+            [cell.paymentTitle setTextColor:[UIColor phBlueColor]];
             
             return cell;
         }
         
         static NSString *simpleTableIdentifier = @"NewCreditCardCell";
         
-        UITableViewCell *cell = (UITableViewCell *)[tableView dequeueReusableCellWithIdentifier:simpleTableIdentifier];
+        PaymentSelectionCell *cell = (PaymentSelectionCell *)[tableView dequeueReusableCellWithIdentifier:simpleTableIdentifier];
         if (cell == nil) {
-            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:simpleTableIdentifier];
-            [cell.textLabel setFont:[UIFont phBlond:13]];
-            
-            UIView *bottomLine = [[UIView alloc] initWithFrame:CGRectMake(0, 60, tableView.bounds.size.width, 1)];
-            [bottomLine setBackgroundColor:[UIColor phLightGrayColor]];
-            [[cell contentView] addSubview:bottomLine];
+            cell = [[PaymentSelectionCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:simpleTableIdentifier];
+            cell.cellWidth = self.visibleSize.width;
         }
         
         NSDictionary *cardDetails = [self.creditCardNew objectAtIndex:indexPath.row];
         NSString *cardNumber = [cardDetails objectForKey:@"card_number"];
         NSString *cardSubstring = [cardNumber substringFromIndex:cardNumber.length - 4];
         
-        [cell.textLabel setText:[NSString stringWithFormat:@"**** **** **** %@", cardSubstring]];
-        
         NSString *firstDigit = [cardNumber substringToIndex:1];
+        UIImage *cardImage = nil;
         if ([firstDigit isEqualToString:@"4"]) {
-            [cell.imageView setImage:[UIImage imageNamed:@"logo_visa"]];
+             cardImage = [UIImage imageNamed:@"logo_visa"];
         } else if ([firstDigit isEqualToString:@"5"]) {
-            [cell.imageView setImage:[UIImage imageNamed:@"logo_master"]];
-        } else {
-            [cell.imageView setImage:nil];
+            cardImage = [UIImage imageNamed:@"logo_master"];
         }
+        
+        [cell setTitle:[NSString stringWithFormat:@"**** **** **** %@", cardSubstring] andImage:cardImage];
         
         return cell;
     }
     
     static NSString *simpleTableIdentifier = @"VirtualBankCell";
     
-    UITableViewCell *cell = (UITableViewCell *)[tableView dequeueReusableCellWithIdentifier:simpleTableIdentifier];
+    PaymentSelectionCell *cell = (PaymentSelectionCell *)[tableView dequeueReusableCellWithIdentifier:simpleTableIdentifier];
     if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:simpleTableIdentifier];
-        [cell.textLabel setFont:[UIFont phBlond:13]];
-        
-        UIView *bottomLine = [[UIView alloc] initWithFrame:CGRectMake(0, 60, tableView.bounds.size.width, 1)];
-        [bottomLine setBackgroundColor:[UIColor phLightGrayColor]];
-        [[cell contentView] addSubview:bottomLine];
+        cell = [[PaymentSelectionCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:simpleTableIdentifier];
+        cell.cellWidth = self.visibleSize.width;
     }
     
-    if (indexPath.row == 0) {
-        [cell.imageView setImage:[UIImage imageNamed:@"logo_bca"]];
-        [cell.textLabel setText:@"BCA Virtual Account"];
-    } else if (indexPath.row == 1) {
-        [cell.imageView setImage:[UIImage imageNamed:@"logo_mandiri"]];
-        [cell.textLabel setText:@"Mandiri Virtual Account"];
-    } else {
-        [cell.imageView setImage:nil];
-        [cell.textLabel setText:@"Other Banks"];
+    if ([[self.paymentMethods objectAtIndex:indexPath.row] isEqualToString:@"bca"]) {
+        [cell setTitle:@"BCA Virtual Account" andImage:[UIImage imageNamed:@"logo_bca"]];
+    } else if ([[self.paymentMethods objectAtIndex:indexPath.row] isEqualToString:@"bp"]) {
+        [cell setTitle:@"Mandiri Virtual Account" andImage:[UIImage imageNamed:@"logo_mandiri"]];
+    } else if ([[self.paymentMethods objectAtIndex:indexPath.row] isEqualToString:@"va"]) {
+        [cell setTitle:@"Other Banks" andImage:nil];
     }
     
     return cell;
@@ -438,17 +504,16 @@
         }
         
     } else if ([indexPath section] == 2) {
-        if (indexPath.row == 0) {
+        if ([[self.paymentMethods objectAtIndex:indexPath.row] isEqualToString:@"bca"]) {
             NSDictionary *paymentData = @{@"type":@"bca",
                                           @"is_new_card":@"0",
                                           @"token_id":@""};
-            
             NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
             [prefs setObject:paymentData forKey:@"pdata"];
             [prefs synchronize];
             
             [[self navigationController] popViewControllerAnimated:YES];
-        } else if (indexPath.row == 1) {
+        } else if ([[self.paymentMethods objectAtIndex:indexPath.row] isEqualToString:@"bp"]) {
             NSDictionary *paymentData = @{@"type":@"bp",
                                           @"is_new_card":@"0",
                                           @"token_id":@""};
@@ -458,7 +523,7 @@
             [prefs synchronize];
             
             [[self navigationController] popViewControllerAnimated:YES];
-        } else {
+        } else if ([[self.paymentMethods objectAtIndex:indexPath.row] isEqualToString:@"va"]) {
             NSDictionary *paymentData = @{@"type":@"va",
                                           @"is_new_card":@"0",
                                           @"token_id":@""};

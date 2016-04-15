@@ -10,6 +10,7 @@
 
 @interface AddPaymentViewController : BaseViewController <UITextFieldDelegate, UIWebViewDelegate>
 
+@property (nonatomic, strong) UIView *navBar;
 @property (nonatomic, strong) UITextField *nameTextField;
 @property (nonatomic, strong) UITextField *cardNumberTextField;
 @property (nonatomic, strong) UITextField *dateTextField;
@@ -20,5 +21,6 @@
 @property (nonatomic, strong) UIImageView *cvvAlert;
 
 @property (nonatomic, strong) NSDictionary *productList;
+@property (nonatomic, assign) BOOL disableKeyboardNotification;
 
 @end

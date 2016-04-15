@@ -41,7 +41,7 @@
     [self.tabBar addSubview:btnEvents];
     
     self.eventsIcon = [[UIImageView alloc] init];
-    self.eventsIcon.frame = CGRectMake(((frame.size.width/4) - 32)/2, 3, 32, 32);
+    self.eventsIcon.frame = CGRectMake(((frame.size.width/4) - 21)/2, 9, 21, 21);
     self.eventsIcon.image = [UIImage imageNamed:@"tab_events"];
     self.eventsIcon.image = [self.eventsIcon.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     self.eventsIcon.contentMode = UIViewContentModeScaleAspectFit;

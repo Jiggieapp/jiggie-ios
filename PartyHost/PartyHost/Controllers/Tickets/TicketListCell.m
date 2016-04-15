@@ -14,18 +14,22 @@
     
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
         
-        CGFloat ticketTitleWidth = self.contentView.bounds.size.width/2;
+        [[self contentView] setBackgroundColor:[UIColor clearColor]];
+        [self setBackgroundColor:[UIColor clearColor]];
+        [self setSelectionStyle:UITableViewCellSelectionStyleNone];
         
-        self.ticketCard = [[UIView alloc] initWithFrame:CGRectMake(8, 2, ticketTitleWidth, 46)];
+        self.ticketCard = [[UIImageView alloc] initWithFrame:CGRectZero];
+        [self.ticketCard setImage:[[UIImage imageNamed:@"bg_rectangle"] stretchableImageWithLeftCapWidth:10 topCapHeight:10]];
+        [[self contentView] addSubview:self.ticketCard];
         
-        self.ticketTitle = [[UILabel alloc] initWithFrame:CGRectMake(14, 8, ticketTitleWidth + 10, 20)];
-        [self.ticketTitle setFont:[UIFont phBlond:15]];
+        self.ticketTitle = [[UILabel alloc] initWithFrame:CGRectZero];
+        [self.ticketTitle setFont:[UIFont phBlond:16]];
         [self.ticketTitle setTextColor:[UIColor blackColor]];
         [self.ticketTitle setBackgroundColor:[UIColor clearColor]];
         [self.ticketTitle setAdjustsFontSizeToFitWidth:YES];
         [[self contentView] addSubview:self.ticketTitle];
         
-        self.ticketPrice = [[UILabel alloc] initWithFrame:CGRectMake(self.bounds.size.width - 160, 8, 120, 20)];
+        self.ticketPrice = [[UILabel alloc] initWithFrame:CGRectZero];
         [self.ticketPrice setFont:[UIFont phBlond:16]];
         [self.ticketPrice setTextColor:[UIColor phPurpleColor]];
         [self.ticketPrice setBackgroundColor:[UIColor clearColor]];
@@ -60,9 +64,10 @@
 - (void)setData:(NSDictionary *)data {
     
     CGFloat ticketTitleWidth = self.cellWidth/2;
-    [self.ticketTitle setFrame:CGRectMake(14, 8, ticketTitleWidth, 20)];
-    [self.ticketPrice setFrame:CGRectMake(self.cellWidth - 160, 8, 120, 20)];
     
+    [self.ticketCard setFrame:CGRectMake(8, 1, self.cellWidth - 16, 68)];
+    [self.ticketTitle setFrame:CGRectMake(24, 24, ticketTitleWidth, 20)];
+    [self.ticketPrice setFrame:CGRectMake(self.cellWidth - 100 - 24, 24, 100, 20)];
     if (data && data != nil) {
         NSString *name = [data objectForKey:@"name"];
         if (name && name != nil) {
@@ -92,8 +97,6 @@
             NSString *formattedPrice = [sharedData formatCurrencyString:price];
             [self.ticketPrice setText:[NSString stringWithFormat:@"Rp%@", formattedPrice]];
         }
-        
-        
         
         /*
          [self.ticketDescription setFrame:CGRectMake(14, 30, ticketTitleWidth, 20)];

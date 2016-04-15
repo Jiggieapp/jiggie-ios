@@ -24,7 +24,17 @@
     
     [self.navigationController setNavigationBarHidden:YES];   //it hides
     
-    self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, 28, 220, 24)];
+    self.navBar = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.visibleSize.width, 60)];
+    [self.navBar setBackgroundColor:[UIColor phPurpleColor]];
+    
+    self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(40, 20, self.visibleSize.width - 80, 40)];
+    [self.titleLabel setTextAlignment:NSTextAlignmentCenter];
+    [self.titleLabel setText:@"Purchase History"];
+    [self.titleLabel setFont:[UIFont phBlond:16]];
+    [self.titleLabel setTextColor:[UIColor whiteColor]];
+    [self.titleLabel setBackgroundColor:[UIColor clearColor]];
+    [self.navBar addSubview:self.titleLabel];
+    
     if ([self.VAType isEqualToString:@"bca"]) {
         [self.titleLabel setText:@"BCA VIRTUAL ACCOUNT"];
     } else if ([self.VAType isEqualToString:@"bp"]) {
@@ -35,26 +45,20 @@
         [self.titleLabel setText:@"HOW TO PAY"];
     }
     
-    [self.titleLabel setTextColor:[UIColor phPurpleColor]];
-    [self.titleLabel setFont:[UIFont phBlond:16]];
-    [self.titleLabel setBackgroundColor:[UIColor clearColor]];
-    [self.titleLabel setAdjustsFontSizeToFitWidth:YES];
-    [self.view addSubview:self.titleLabel];
-    
-    
     if (self.showCloseButton) {
         UIButton *closeButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        [closeButton setFrame:CGRectMake(self.visibleSize.width - 70, 28, 60, 26)];
-        [closeButton setTitle:@"CLOSE" forState:UIControlStateNormal];
+        [closeButton setFrame:CGRectMake(0.0f, 20.0f, 40.0f, 40.0f)];
+        [closeButton setImageEdgeInsets:UIEdgeInsetsMake(8, 14, 8, 14)];
+        [closeButton setImage:[UIImage imageNamed:@"nav_back"] forState:UIControlStateNormal];
         [closeButton addTarget:self action:@selector(closeButtonDidTap:) forControlEvents:UIControlEventTouchUpInside];
-        [[closeButton titleLabel] setFont:[UIFont phBlond:12]];
-        [closeButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
-        [closeButton setBackgroundColor:[UIColor clearColor]];
-        [self.view addSubview:closeButton];
+        [self.navBar addSubview:closeButton];
     }
+
+    [self.view addSubview:self.navBar];
     
-    UIView *line1View = [[UIView alloc] initWithFrame:CGRectMake(0, 70, self.visibleSize.width, 1)];
+    UIView *line1View = [[UIView alloc] initWithFrame:CGRectMake(0, 60, self.visibleSize.width, 1)];
     [line1View setBackgroundColor:[UIColor phLightGrayColor]];
+    [line1View setHidden:YES];
     [self.view addSubview:line1View];
     
     // SCROLL VIEW
@@ -159,7 +163,7 @@
         [self.view addSubview:viewOrderButton];
     }
     
-    self.emptyView = [[EmptyView alloc] initWithFrame:CGRectMake(0, 0, self.visibleSize.width, self.view.bounds.size.height)];
+    self.emptyView = [[EmptyView alloc] initWithFrame:CGRectMake(0, 60, self.visibleSize.width, self.view.bounds.size.height - 60)];
     [self.emptyView setData:@"No data found" subtitle:@"Sorry we're having some server issues, please check back in a few minutes." imageNamed:@""];
     [self.emptyView setMode:@"load"];
     [self.emptyView setBackgroundColor:[UIColor whiteColor]];
@@ -180,12 +184,6 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
-}
-
-- (void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
-    
-    [self.navigationController setNavigationBarHidden:NO];    // it shows
 }
 
 #pragma mark - Action

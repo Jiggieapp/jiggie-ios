@@ -295,6 +295,7 @@
 		DAB3AFA11C29541E00AA7E25 /* Chat.m in Sources */ = {isa = PBXBuildFile; fileRef = DAB3AF9F1C29541E00AA7E25 /* Chat.m */; };
 		DAD2708D1C31110D00546106 /* UserManager.m in Sources */ = {isa = PBXBuildFile; fileRef = DAD2708C1C31110D00546106 /* UserManager.m */; };
 		DAE02EA51C6C812200EBAAF0 /* TicketSummaryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DAE02EA41C6C812200EBAAF0 /* TicketSummaryViewController.m */; };
+		DAEE2C331CBEBF8600F1546F /* PaymentSelectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DAEE2C321CBEBF8600F1546F /* PaymentSelectionCell.m */; };
 		FA3702B81A8F9E9000B2BD6A /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA3702B71A8F9E9000B2BD6A /* MapKit.framework */; };
 		FA3702BA1A8F9EC300B2BD6A /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA3702B91A8F9EC300B2BD6A /* CoreLocation.framework */; };
 		FA4D2EF21A4D9A77006828E7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = FA4D2EF11A4D9A77006828E7 /* main.m */; };
@@ -866,6 +867,8 @@
 		DAD2708C1C31110D00546106 /* UserManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserManager.m; sourceTree = "<group>"; };
 		DAE02EA31C6C812200EBAAF0 /* TicketSummaryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TicketSummaryViewController.h; sourceTree = "<group>"; };
 		DAE02EA41C6C812200EBAAF0 /* TicketSummaryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TicketSummaryViewController.m; sourceTree = "<group>"; };
+		DAEE2C311CBEBF8600F1546F /* PaymentSelectionCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PaymentSelectionCell.h; sourceTree = "<group>"; };
+		DAEE2C321CBEBF8600F1546F /* PaymentSelectionCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PaymentSelectionCell.m; sourceTree = "<group>"; };
 		FA3702B71A8F9E9000B2BD6A /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		FA3702B91A8F9EC300B2BD6A /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		FA4D2EEC1A4D9A77006828E7 /* Jiggie.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Jiggie.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1055,6 +1058,8 @@
 				DA5ED5E51C8FDF5000004C7E /* TicketConfirmationViewController.m */,
 				DA5ED5E71C908F8C00004C7E /* PaymentSelectionViewController.h */,
 				DA5ED5E81C908F8D00004C7E /* PaymentSelectionViewController.m */,
+				DAEE2C311CBEBF8600F1546F /* PaymentSelectionCell.h */,
+				DAEE2C321CBEBF8600F1546F /* PaymentSelectionCell.m */,
 				DA5ED5EA1C90A34400004C7E /* AddPaymentViewController.h */,
 				DA5ED5EB1C90A34400004C7E /* AddPaymentViewController.m */,
 				DA5ED5E11C896AEA00004C7E /* GuestDetailViewController.h */,
@@ -2346,6 +2351,7 @@
 				DA5ED6101C92975100004C7E /* VTAddress.m in Sources */,
 				DAABB28C1C1FF5AE004DDCFA /* MPABTestDesignerTweakResponseMessage.m in Sources */,
 				DAABB2551C1FF5AE004DDCFA /* AFHTTPRequestOperationManager.m in Sources */,
+				DAEE2C331CBEBF8600F1546F /* PaymentSelectionCell.m in Sources */,
 				DAABB0F91C1FD50E004DDCFA /* SetupNotificationView.m in Sources */,
 				DA10F51F1C52149F006090ED /* SVProgressHUD.m in Sources */,
 				DAABB2871C1FF5AE004DDCFA /* MPABTestDesignerDeviceInfoResponseMessage.m in Sources */,

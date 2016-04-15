@@ -34,48 +34,10 @@
     // Do any additional setup after loading the view.
     
     [self.view setBackgroundColor:[UIColor colorFromHexCode:@"F1F1F1"]];
+    [self.navigationController setNavigationBarHidden:YES];   //it hides
+    self.extendedLayoutIncludesOpaqueBars = YES;
     
-    // Remove nav bar shadow
-    [self.navigationController.navigationBar setBackgroundImage:[[UIImage alloc] init]
-                                                  forBarMetrics:UIBarMetricsDefault];
-    self.navigationController.navigationBar.shadowImage = [[UIImage alloc] init];
-    
-    
-    UIButton *closeButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [closeButton setFrame:CGRectMake(0.0f, 0.0f, 30.0f, 30.0f)];
-    [closeButton setImage:[UIImage imageNamed:@"nav_back_new"] forState:UIControlStateNormal];
-    [closeButton addTarget:self action:@selector(closeButtonDidTap:) forControlEvents:UIControlEventTouchUpInside];
-    UIBarButtonItem *closeBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:closeButton];
-    
-    [[self navigationItem] setLeftBarButtonItem:closeBarButtonItem];
-    
-    UIButton *helpButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [helpButton setFrame:CGRectMake(0.0f, 0.0f, 40.0f, 30.0f)];
-    [helpButton setImage:[UIImage imageNamed:@"button_help"] forState:UIControlStateNormal];
-    [helpButton addTarget:self action:@selector(helpButtonDidTap:) forControlEvents:UIControlEventTouchUpInside];
-    UIBarButtonItem *helpBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:helpButton];
-    
-    [[self navigationItem] setRightBarButtonItem:helpBarButtonItem];
-    
-    UIView *titleView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 200, 40)];
-    [titleView setBackgroundColor:[UIColor clearColor]];
-    
-    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 200, 20)];
-    [titleLabel setTextAlignment:NSTextAlignmentCenter];
-    [titleLabel setText:@"CHOOSE ADMISSION"];
-    [titleLabel setFont:[UIFont phBlond:13]];
-    [titleLabel setTextColor:[UIColor whiteColor]];
-    [titleLabel setBackgroundColor:[UIColor clearColor]];
-    [titleView addSubview:titleLabel];
-    
-    UIImageView *titleIcon = [[UIImageView alloc] initWithFrame:CGRectMake(65, 28, 71, 5)];
-    [titleIcon setImage:[UIImage imageNamed:@"icon_step_1"]];
-    [titleView addSubview:titleIcon];
-    
-    [self.navigationItem setTitleView:titleView];
-    
-
-    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.visibleSize.width, self.visibleSize.height)];
+    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.visibleSize.width, self.view.bounds.size.height)];
     [self.tableView setDelegate:self];
     [self.tableView setDataSource:self];
     [self.tableView setBackgroundColor:[UIColor clearColor]];
@@ -86,26 +48,78 @@
     tmpPurpleView.backgroundColor = [UIColor phPurpleColor];
     [self.tableView addSubview:tmpPurpleView];
     
-    UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 80)];
-    [headerView setBackgroundColor:[UIColor phPurpleColor]];
+    UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 240)];
+    [headerView setBackgroundColor:[UIColor colorFromHexCode:@"F1F1F1"]];
     
-    self.tableHeaderTitle = [[UILabel alloc] initWithFrame:CGRectMake(0, 25, self.view.bounds.size.width, 16)];
-    [self.tableHeaderTitle setFont:[UIFont phBlond:15]];
-    [self.tableHeaderTitle setTextColor:[UIColor whiteColor]];
-    [self.tableHeaderTitle setBackgroundColor:[UIColor clearColor]];
-    [self.tableHeaderTitle setTextAlignment:NSTextAlignmentCenter];
-    [headerView addSubview:self.tableHeaderTitle];
+    self.eventImage = [[PHImage alloc] initWithFrame:CGRectMake(0, 0, self.visibleSize.width, 240)];
+    [self.eventImage setContentMode:UIViewContentModeScaleAspectFill];
+    self.eventImage.layer.masksToBounds = YES;
+    [self.eventImage setBackgroundColor:[UIColor phDarkGrayColor]];
+    [self.eventImage setShowLoading:YES];
+    [headerView addSubview:self.eventImage];
     
-    self.tableHeaderDescription = [[UILabel alloc] initWithFrame:CGRectMake(0, 45, self.view.bounds.size.width, 16)];
-    [self.tableHeaderDescription setFont:[UIFont phBlond:12]];
-    [self.tableHeaderDescription setTextColor:[UIColor whiteColor]];
-    [self.tableHeaderDescription setBackgroundColor:[UIColor clearColor]];
-    [self.tableHeaderDescription setTextAlignment:NSTextAlignmentCenter];
-    [headerView addSubview:self.tableHeaderDescription];
+    UIButton *closeButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [closeButton setFrame:CGRectMake(10.0f, 10.0f, 30.0f, 30.0f)];
+    [closeButton setImage:[UIImage imageNamed:@"nav_back_shadow"] forState:UIControlStateNormal];
+    [closeButton addTarget:self action:@selector(closeButtonDidTap:) forControlEvents:UIControlEventTouchUpInside];
+    [headerView addSubview:closeButton];
+    
+    UIButton *helpButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [helpButton setFrame:CGRectMake(self.visibleSize.width - 60, 10.0f, 50.0f, 30.0f)];
+    [helpButton setImage:[UIImage imageNamed:@"button_help_shadow"] forState:UIControlStateNormal];
+    [helpButton addTarget:self action:@selector(helpButtonDidTap:) forControlEvents:UIControlEventTouchUpInside];
+    [headerView addSubview:helpButton];
+    
+    self.eventTitle = [[UILabel alloc] initWithFrame:CGRectMake(14, 170, self.view.bounds.size.width - 28, 20)];
+    [self.eventTitle setFont:[UIFont phBold:15]];
+    [self.eventTitle setTextColor:[UIColor whiteColor]];
+    [self.eventTitle setBackgroundColor:[UIColor clearColor]];
+    [headerView addSubview:self.eventTitle];
+    
+    self.eventVenue = [[UILabel alloc] initWithFrame:CGRectMake(14, 190, self.view.bounds.size.width - 28, 20)];
+    [self.eventVenue setFont:[UIFont phBlond:13]];
+    [self.eventVenue setTextColor:[UIColor whiteColor]];
+    [self.eventVenue setBackgroundColor:[UIColor clearColor]];
+    [headerView addSubview:self.eventVenue];
+    
+    self.eventDate = [[UILabel alloc] initWithFrame:CGRectMake(14, 208, self.view.bounds.size.width - 28, 20)];
+    [self.eventDate setFont:[UIFont phBlond:13]];
+    [self.eventDate setTextColor:[UIColor whiteColor]];
+    [self.eventDate setBackgroundColor:[UIColor clearColor]];
+    [headerView addSubview:self.eventDate];
     
     self.tableView.tableHeaderView = headerView;
+    
+    self.navBar = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.visibleSize.width, 60)];
+    [self.navBar setBackgroundColor:[UIColor phPurpleColor]];
+    
+    self.navTitle = [[UILabel alloc] initWithFrame:CGRectMake(40, 20, self.visibleSize.width - 100, 40)];
+    [self.navTitle setTextAlignment:NSTextAlignmentCenter];
+    [self.navTitle setFont:[UIFont phBlond:16]];
+    [self.navTitle setTextColor:[UIColor whiteColor]];
+    [self.navTitle setBackgroundColor:[UIColor clearColor]];
+    [self.navBar addSubview:self.navTitle];
 
-    self.emptyView = [[EmptyView alloc] initWithFrame:CGRectMake(0, 0, self.visibleSize.width, self.visibleSize.height)];
+    UIButton *navCloseButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [navCloseButton setFrame:CGRectMake(0.0f, 20.0f, 40.0f, 40.0f)];
+    [navCloseButton setImageEdgeInsets:UIEdgeInsetsMake(8, 14, 8, 14)];
+    [navCloseButton setImage:[UIImage imageNamed:@"nav_back"] forState:UIControlStateNormal];
+    [navCloseButton addTarget:self action:@selector(closeButtonDidTap:) forControlEvents:UIControlEventTouchUpInside];
+    [self.navBar addSubview:navCloseButton];
+    
+    UIButton *navHelpButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [navHelpButton setFrame:CGRectMake(self.visibleSize.width - 60, 20.0f, 50.0f, 40.0f)];
+    [navHelpButton setImageEdgeInsets:UIEdgeInsetsMake(5, 0, 5, 0)];
+    [navHelpButton setImage:[UIImage imageNamed:@"button_help"] forState:UIControlStateNormal];
+    [navHelpButton addTarget:self action:@selector(helpButtonDidTap:) forControlEvents:UIControlEventTouchUpInside];
+    [self.navBar addSubview:navHelpButton];
+    
+    [self.view addSubview:self.navBar];
+    
+    // hides navbar
+    [self showNavBar:NO withAnimation:NO];
+
+    self.emptyView = [[EmptyView alloc] initWithFrame:CGRectMake(0, 0, self.visibleSize.width, self.view.bounds.size.height)];
     [self.emptyView setData:@"No data found" subtitle:@"Sorry we're having some server issues, please check back in a few minutes." imageNamed:@""];
     [self.emptyView setMode:@"load"];
     [self.emptyView setBackgroundColor:[UIColor whiteColor]];
@@ -117,11 +131,35 @@
     [super viewWillAppear:animated];
     
     [self loadData];
+    [self loadSupport];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)showNavBar:(BOOL)isShow withAnimation:(BOOL)isAnimated {
+    self.isNavBarShowing = isShow;
+    
+    CGFloat animateDuration = 0.0;
+    if (isAnimated) {
+        animateDuration = 0.25;
+    }
+    
+    if (isShow) {
+        [UIView animateWithDuration:animateDuration delay:0.0 options:UIViewAnimationOptionCurveEaseIn animations:^{
+            [self.navBar setFrame:CGRectMake(0, 0, self.navBar.bounds.size.width, self.navBar.bounds.size.height)];
+        } completion:^(BOOL finished) {
+            
+        }];
+    } else {
+        [UIView animateWithDuration:animateDuration delay:0.0 options:UIViewAnimationOptionCurveEaseIn animations:^{
+            [self.navBar setFrame:CGRectMake(0, - self.navBar.bounds.size.height, self.navBar.bounds.size.width, self.navBar.bounds.size.height)];
+        } completion:^(BOOL finished) {
+            
+        }];
+    }
 }
 
 #pragma mark - Action
@@ -131,13 +169,20 @@
 
 - (void)helpButtonDidTap:(id)sender {
     if ([MFMessageComposeViewController canSendText]) {
-        MFMessageComposeViewController *picker = [[MFMessageComposeViewController alloc] init];
-        NSArray *myReceivers = [[NSArray alloc] initWithObjects:@"+6281218288317", nil];
-        [picker setRecipients:myReceivers];
-        picker.delegate = self;
-        picker.messageComposeDelegate = self;
-        picker.navigationBar.barStyle = UIBarStyleDefault;
-        [self presentViewController:picker animated:YES completion:^{}];
+        NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+        NSDictionary *support = [prefs objectForKey:@"support"];
+        if (support && support != nil) {
+            NSString *telp = [support objectForKey:@"telp"];
+            if (telp && telp != nil) {
+                MFMessageComposeViewController *picker = [[MFMessageComposeViewController alloc] init];
+                NSArray *myReceivers = [[NSArray alloc] initWithObjects:telp, nil];
+                [picker setRecipients:myReceivers];
+                picker.delegate = self;
+                picker.messageComposeDelegate = self;
+                picker.navigationBar.barStyle = UIBarStyleDefault;
+                [self presentViewController:picker animated:YES completion:^{}];
+            }
+        }
     }
 }
 
@@ -163,7 +208,6 @@
     AFHTTPRequestOperationManager *manager = [self.sharedData getOperationManager];
     //events/list/
     NSString *url = [NSString stringWithFormat:@"%@/product/list/%@",PHBaseNewURL,self.eventID];
-//    NSString *url = [NSString stringWithFormat:@"%@/product/list/56bd7b9ccd915d0300f17514",PHBaseNewURL];
     [manager GET:url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
         
         NSInteger responseStatusCode = operation.response.statusCode;
@@ -188,12 +232,23 @@
                         if (product_lists && product_lists != nil) {
                             self.productList = product_lists;
                             
+                            NSArray *photos = [product_lists objectForKey:@"photos"];
+                            if (photos && photos!= nil && photos.count > 0) {
+                                NSString *picURL = [photos objectAtIndex:0];
+                                picURL = [self.sharedData picURL:picURL];
+                                [self.eventImage loadImage:picURL defaultImageNamed:nil];
+                            }
+                            
                             NSString *event_name = [product_lists objectForKey:@"event_name"];
                             if (event_name && event_name != nil) {
-                                self.tableHeaderTitle.text = event_name;
+                                self.eventTitle.text = [event_name uppercaseString];
+                                self.navTitle.text = event_name;
                             }
                             
                             NSString *venue_name = [product_lists objectForKey:@"venue_name"];
+                            if (venue_name && venue_name != nil) {
+                                self.eventVenue.text = venue_name;
+                            }
                             
                             NSString *start_datetime = [product_lists objectForKey:@"start_datetime"];
                             NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
@@ -207,7 +262,7 @@
                             [formatter setTimeZone:[NSTimeZone localTimeZone]];
                             NSString *shortDateTime = [formatter stringFromDate:startDatetime];
                             
-                            self.tableHeaderDescription.text = [NSString stringWithFormat:@"%@ - %@", shortDateTime, venue_name];
+                            self.eventDate.text = shortDateTime;
                             
                             NSArray *purchase = [product_lists objectForKey:@"purchase"];
                             if (purchase && purchase != nil) {
@@ -218,7 +273,6 @@
                             if (reservation && reservation != nil) {
                                 self.reservations = reservation;
                             }
-                            
                             
                             // MixPanel
                             [self.sharedData.mixPanelCTicketDict removeAllObjects];
@@ -254,6 +308,44 @@
     }];
 }
 
+- (void)loadSupport {
+    AFHTTPRequestOperationManager *manager = [self.sharedData getOperationManager];
+    //events/list/
+    NSString *url = [NSString stringWithFormat:@"%@/product/support",PHBaseNewURL];
+    [manager GET:url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSString *responseString = operation.responseString;
+        NSError *error;
+        
+        NSDictionary *json = (NSDictionary *)[NSJSONSerialization
+                                              JSONObjectWithData:[responseString dataUsingEncoding:NSUTF8StringEncoding]
+                                              options:kNilOptions
+                                              error:&error];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (json && json != nil) {
+                @try {
+                    NSDictionary *data = [json objectForKey:@"data"];
+                    if (data && data != nil) {
+                        NSDictionary *support = [data objectForKey:@"support"];
+                        if (support && support != nil) {
+                            NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+                            [prefs setObject:support forKey:@"support"];
+                            [prefs synchronize];
+                        }
+                    }
+                }
+                @catch (NSException *exception) {
+                    
+                }
+                @finally {
+                    
+                }
+            }
+        });
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        
+    }];
+}
+
 #pragma mark - UITableViewDataSource
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 2;
@@ -261,9 +353,9 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
     if (section == 0 && self.purchases.count > 0) {
-        return 30;
+        return 40;
     } else if (section == 1 && self.reservations.count > 0) {
-        return 30;
+        return 40;
     }
     
     return 0;
@@ -271,23 +363,16 @@
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     
-    UIView *topLine = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.bounds.size.width, 1)];
-    [topLine setBackgroundColor:[UIColor phLightGrayColor]];
-    
-    UIView *bottomLine = [[UIView alloc] initWithFrame:CGRectMake(0, 26, tableView.bounds.size.width, 1)];
-    [bottomLine setBackgroundColor:[UIColor phLightGrayColor]];
-    
     UILabel *myLabel = [[UILabel alloc] init];
-    myLabel.frame = CGRectMake(14, 0, 320, 26);
+    myLabel.frame = CGRectMake(14, 14, 320, 20);
     myLabel.font = [UIFont phBlond:12];
-    myLabel.textColor = [UIColor lightGrayColor];
+    myLabel.textColor = [UIColor darkGrayColor];
     myLabel.text = [self tableView:tableView titleForHeaderInSection:section];
+    myLabel.backgroundColor = [UIColor clearColor];
     
-    UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.bounds.size.width, 26)];
-    [headerView setBackgroundColor:[UIColor whiteColor]];
+    UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.bounds.size.width, 40)];
+    [headerView setBackgroundColor:[UIColor clearColor]];
     [headerView addSubview:myLabel];
-    [headerView addSubview:topLine];
-    [headerView addSubview:bottomLine];
     
     return headerView;
 }
@@ -307,7 +392,7 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 60.0;
+    return 70.0;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -355,6 +440,18 @@
     }
     ticketSummaryViewController.productList = self.productList;
     [self.navigationController pushViewController:ticketSummaryViewController animated:YES];
+}
+
+#pragma mark - UIScrollViewDelegate
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    CGPoint offset = scrollView.contentOffset;
+    if (offset.y > 180) {
+        if (!self.isNavBarShowing) {
+            [self showNavBar:YES withAnimation:YES];
+        }
+    } else if (self.isNavBarShowing) {
+        [self showNavBar:NO withAnimation:YES];
+    }
 }
 
 @end

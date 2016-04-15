@@ -169,10 +169,11 @@
         self.picURL = [self.sharedData picURL:event.photo];
         
         //Load venue image
-        [self.mainImg loadImage:self.picURL defaultImageNamed:@"nightclub_default"]; //This will load and can be cancelled?
+//        [self.mainImg loadImage:self.picURL defaultImageNamed:@"nightclub_default"]; //This will load and can be cancelled?
+        [self.mainImg loadImage:self.picURL defaultImageNamed:@""]; //This will load and can be cancelled?
 
     } else {
-        [self.mainImg setImage:[UIImage imageNamed:@"nightclub_default"]];
+        [self.mainImg setImage:[UIImage imageNamed:@""]];
     }
     
     NSLog(@"LOADING_IMG_URL :: %@ - %@",self.title.text, self.picURL);

@@ -11,6 +11,8 @@
 #import "UserBubble.h"
 #import "SVProgressHUD.h"
 #import "AnalyticManager.h"
+#import "SharedData.h"
+
 
 @interface GuestDetailViewController ()
 
@@ -23,23 +25,27 @@
     // Do any additional setup after loading the view.
     [self.view setBackgroundColor:[UIColor whiteColor]];
     
-    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, 28, 200, 24)];
-    [titleLabel setText:@"GUEST DETAIL"];
-    [titleLabel setTextColor:[UIColor phPurpleColor]];
+    self.navBar = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.visibleSize.width, 60)];
+    [self.navBar setBackgroundColor:[UIColor phPurpleColor]];
+    
+    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(40, 20, self.visibleSize.width - 80, 40)];
+    [titleLabel setTextAlignment:NSTextAlignmentCenter];
+    [titleLabel setText:@"Contact Detail"];
     [titleLabel setFont:[UIFont phBlond:16]];
+    [titleLabel setTextColor:[UIColor whiteColor]];
     [titleLabel setBackgroundColor:[UIColor clearColor]];
-    [self.view addSubview:titleLabel];
+    [self.navBar addSubview:titleLabel];
     
     UIButton *cancelButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [cancelButton setFrame:CGRectMake(self.visibleSize.width - 80, 28, 60, 26)];
-    [cancelButton setTitle:@"CANCEL" forState:UIControlStateNormal];
+    [cancelButton setFrame:CGRectMake(self.visibleSize.width - 50, 20.0f, 40.0f, 40.0f)];
+    [cancelButton setImageEdgeInsets:UIEdgeInsetsMake(6, 6, 6, 6)];
+    [cancelButton setImage:[UIImage imageNamed:@"nav_close"] forState:UIControlStateNormal];
     [cancelButton addTarget:self action:@selector(cancelButtonDidTap:) forControlEvents:UIControlEventTouchUpInside];
-    [[cancelButton titleLabel] setFont:[UIFont phBlond:12]];
-    [cancelButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
-    [cancelButton setBackgroundColor:[UIColor clearColor]];
-    [self.view addSubview:cancelButton];
+    [self.navBar addSubview:cancelButton];
     
-    UIView *line1View = [[UIView alloc] initWithFrame:CGRectMake(0, 70, self.visibleSize.width, 1)];
+    [self.view addSubview:self.navBar];
+    
+    UIView *line1View = [[UIView alloc] initWithFrame:CGRectMake(0, 60, self.visibleSize.width, 1)];
     [line1View setBackgroundColor:[UIColor phLightGrayColor]];
     [self.view addSubview:line1View];
     
@@ -51,7 +57,7 @@
     [self.nameTextField setDelegate:self];
     [self.view addSubview:self.nameTextField];
     
-    UIView *line2View = [[UIView alloc] initWithFrame:CGRectMake(0, 70 + 50, self.visibleSize.width, 1)];
+    UIView *line2View = [[UIView alloc] initWithFrame:CGRectMake(0, 60 + 50, self.visibleSize.width, 1)];
     [line2View setBackgroundColor:[UIColor phLightGrayColor]];
     [self.view addSubview:line2View];
     
@@ -70,7 +76,7 @@
     [self.emailAlert setHidden:YES];
     [self.view addSubview:self.emailAlert];
     
-    UIView *line3View = [[UIView alloc] initWithFrame:CGRectMake(0, 70 + 50 + 50, self.visibleSize.width, 1)];
+    UIView *line3View = [[UIView alloc] initWithFrame:CGRectMake(0, 60 + 50 + 50, self.visibleSize.width, 1)];
     [line3View setBackgroundColor:[UIColor phLightGrayColor]];
     [self.view addSubview:line3View];
     
@@ -80,7 +86,7 @@
     [self.phoneCodeTextField setKeyboardType:UIKeyboardTypePhonePad];
     [self.phoneCodeTextField setReturnKeyType:UIReturnKeyDone];
     [self.phoneCodeTextField setDelegate:self];
-    [self.phoneCodeTextField setEnabled:NO];
+    [self.phoneCodeTextField setEnabled:YES];
     [self.phoneCodeTextField setText:@"+62"];
     [self.view addSubview:self.phoneCodeTextField];
     
@@ -104,15 +110,15 @@
     [numberToolbar sizeToFit];
     self.phoneTextField.inputAccessoryView = numberToolbar;
     
-    UIView *line4View = [[UIView alloc] initWithFrame:CGRectMake(0, 70 + 50 + 50 + 50, self.visibleSize.width, 1)];
+    UIView *line4View = [[UIView alloc] initWithFrame:CGRectMake(0, 60 + 50 + 50 + 50, self.visibleSize.width, 1)];
     [line4View setBackgroundColor:[UIColor phLightGrayColor]];
     [self.view addSubview:line4View];
     
     UILabel *tncLabel = [[UILabel alloc] initWithFrame:CGRectMake(30, CGRectGetMaxY(line4View.frame) + 10, self.visibleSize.width - 30 - 16, 40)];
-    [tncLabel setText:@"Please verify your information is correct so we can keep you updated on your order"];
+    [tncLabel setText:@"* Please verify your information is correct so we can keep you updated on your order"];
     [tncLabel setNumberOfLines:2];
     [tncLabel setFont:[UIFont phBlond:13]];
-    [tncLabel setTextColor:[UIColor lightGrayColor]];
+    [tncLabel setTextColor:[UIColor phPurpleColor]];
     [tncLabel setBackgroundColor:[UIColor clearColor]];
     [tncLabel sizeToFit];
     [self.view addSubview:tncLabel];
@@ -132,11 +138,22 @@
     // MixPanel
     SharedData *sharedData = [SharedData sharedInstance];
     [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Guest Info" withDict:sharedData.mixPanelCTicketDict];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillShow:)
+                                                 name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillBeHidden:)
+                                                 name:UIKeyboardWillHideNotification object:nil];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 #pragma mark - Validate 
@@ -168,10 +185,14 @@
 
 #pragma mark - Action
 - (void)cancelButtonDidTap:(id)sender {
+    [self.view endEditing:YES];
+    
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)saveButtonDidTap:(id)sender {
+    [self.view endEditing:YES];
+    
     SharedData *sharedData = [SharedData sharedInstance];
     if (![sharedData validateEmailWithString:self.emailTextField.text]) {
         [self.emailTextField setTextColor:[UIColor redColor]];
@@ -183,7 +204,7 @@
     
     NSDictionary *userInfo = @{@"name":self.nameTextField.text,
                                @"email":self.emailTextField.text,
-                               @"idd_code":@"+62",
+                               @"idd_code":self.phoneCodeTextField.text,
                                @"phone":self.phoneTextField.text};
     [UserManager saveUserTicketInfo:userInfo];
     
@@ -219,6 +240,39 @@
     }
     
     return YES;
+}
+
+#pragma mark - UIKeyboardNotification
+// Called when the UIKeyboardDidShowNotification is sent.
+- (void)keyboardWillShow:(NSNotification*)aNotification {
+    SharedData *sharedData = [SharedData sharedInstance];
+    if (sharedData.isIphone4) {
+        return;
+    }
+    
+    NSDictionary* info = [aNotification userInfo];
+    CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
+    
+    // If active text field is hidden by keyboard, scroll it so it's visible
+    // Your application might not need or want this behavior.
+    CGRect aRect = self.view.frame;
+    aRect.size.height -= kbSize.height;
+    
+    [UIView animateWithDuration:0.25 animations:^{
+        [self.saveButton setFrame:CGRectMake(0, self.view.bounds.size.height - kbSize.height - 44, self.saveButton.bounds.size.width, self.saveButton.bounds.size.height)];
+    }];
+}
+
+// Called when the UIKeyboardWillHideNotification is sent
+- (void)keyboardWillBeHidden:(NSNotification*)aNotification {
+    SharedData *sharedData = [SharedData sharedInstance];
+    if (sharedData.isIphone4) {
+        return;
+    }
+    
+    [UIView animateWithDuration:0.25 animations:^{
+        [self.saveButton setFrame:CGRectMake(0, self.view.bounds.size.height - 44, self.saveButton.bounds.size.width, self.saveButton.bounds.size.height)];
+    }];
 }
 
 @end
