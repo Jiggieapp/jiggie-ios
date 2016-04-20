@@ -23,6 +23,11 @@ NSString *const AppsFlyerDevKey = @"D4Uux6HSu3aYjNHkCHsTiC";
 
 NSString *const JiggieItunesID = @"1047291489";
 
+NSString *const VeritransClientKey = @"VT-client-gJRBbRZC0t_-JXUD"; // Dev
+BOOL const isVeritransInProducion = false; // Dev
+
+//NSString *const VeritransClientKey = @"VT-client-tHEKcD0xJGsm6uwH"; // Live
+//BOOL isVeritransInProducion = true; // Dev
 
 //URLs with substitution
 NSString *const PHBaseURL = @"https://jiggie-dev.herokuapp.com/app/v3";

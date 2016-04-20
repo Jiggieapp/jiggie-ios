@@ -208,14 +208,14 @@
     
     self.cardTwo.hidden = ![self.mainData[@"type"] isEqualToString:@"approved"];
     
-    NSString *usrImgURL = [self.sharedData profileImgLarge:self.mainData[@"from_fb_id"]];
-    
     [self.btnUserImage setImage:[UIImage imageNamed:@"fbperson_blank_square"] forState:UIControlStateNormal];
     self.btnUserImage.contentMode = UIViewContentModeScaleToFill;
     self.btnUserImage.imageView.contentMode = UIViewContentModeScaleToFill;
     
     [self.btnUserImageTwo setImage:[UIImage imageNamed:@"fbperson_blank_square"] forState:UIControlStateNormal];
     
+//    NSString *usrImgURL = [self.sharedData profileImgLarge:self.mainData[@"from_fb_id"]];
+    NSString *usrImgURL = [self.mainData objectForKey:@"image"];
     
     [self.sharedData loadImage:usrImgURL onCompletion:^(){
         [self.btnUserImage setImage:[self.sharedData.imagesDict objectForKey:usrImgURL] forState:UIControlStateNormal];
@@ -502,6 +502,7 @@
              self.sharedData.messagesPage.toId = self.mainData[@"from_fb_id"];
              self.sharedData.messagesPage.toLabel.text = [self.mainData[@"from_first_name"] uppercaseString];
              self.sharedData.feedMatchEvent = self.mainData[@"event_name"];
+             self.sharedData.feedMatchImage = self.mainData[@"image"];
              self.sharedData.toImgURL = [self.sharedData profileImg:self.sharedData.fromMailId];
              
              [[NSNotificationCenter defaultCenter]

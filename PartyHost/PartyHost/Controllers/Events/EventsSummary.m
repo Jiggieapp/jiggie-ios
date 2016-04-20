@@ -1064,11 +1064,11 @@
     } else if([self.fillType isEqualToString:@"purchase"])
     {
         self.btnHostHere.hidden = NO;
-        [self.btnHostHere setTitle:@"PURCHASE TABLE" forState:UIControlStateNormal];
+        [self.btnHostHere setTitle:@"BOOK NOW" forState:UIControlStateNormal];
     } else if([self.fillType isEqualToString:@"ticket"])
     {
         self.btnHostHere.hidden = NO;
-        [self.btnHostHere setTitle:@"PURCHASE TICKET" forState:UIControlStateNormal];
+        [self.btnHostHere setTitle:@"BOOK NOW" forState:UIControlStateNormal];
     }
 
 }

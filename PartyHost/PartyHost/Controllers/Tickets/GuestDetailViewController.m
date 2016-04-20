@@ -12,7 +12,7 @@
 #import "SVProgressHUD.h"
 #import "AnalyticManager.h"
 #import "SharedData.h"
-
+#import "DialCodeListViewController.h"
 
 @interface GuestDetailViewController ()
 
@@ -24,6 +24,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     [self.view setBackgroundColor:[UIColor whiteColor]];
+    [self.navigationController setNavigationBarHidden:YES];   //it hides
     
     self.navBar = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.visibleSize.width, 60)];
     [self.navBar setBackgroundColor:[UIColor phPurpleColor]];
@@ -114,8 +115,16 @@
     [line4View setBackgroundColor:[UIColor phLightGrayColor]];
     [self.view addSubview:line4View];
     
+    UILabel *starLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, CGRectGetMaxY(line4View.frame) + 10, 8, 20)];
+    [starLabel setText:@"*"];
+    [starLabel setNumberOfLines:2];
+    [starLabel setTextColor:[UIColor purpleColor]];
+    [starLabel setFont:[UIFont phBlond:15]];
+    [starLabel setBackgroundColor:[UIColor clearColor]];
+    [self.view addSubview:starLabel];
+    
     UILabel *tncLabel = [[UILabel alloc] initWithFrame:CGRectMake(30, CGRectGetMaxY(line4View.frame) + 10, self.visibleSize.width - 30 - 16, 40)];
-    [tncLabel setText:@"* Please verify your information is correct so we can keep you updated on your order"];
+    [tncLabel setText:@"Please verify your information is correct so we can keep you updated on your order"];
     [tncLabel setNumberOfLines:2];
     [tncLabel setFont:[UIFont phBlond:13]];
     [tncLabel setTextColor:[UIColor phPurpleColor]];
@@ -125,7 +134,7 @@
     
     self.saveButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.saveButton addTarget:self action:@selector(saveButtonDidTap:) forControlEvents:UIControlEventTouchUpInside];
-    [self.saveButton setFrame:CGRectMake(0, self.visibleSize.height - 44 + 20, self.visibleSize.width, 44)];
+    [self.saveButton setFrame:CGRectMake(0, self.view.bounds.size.height - 54, self.visibleSize.width, 54)];
     [self.saveButton setBackgroundColor:[UIColor colorFromHexCode:@"B6ECFF"]];
     [self.saveButton.titleLabel setFont:[UIFont phBold:15]];
     [self.saveButton setTitle:@"SAVE" forState:UIControlStateNormal];
@@ -158,7 +167,7 @@
 
 #pragma mark - Validate 
 - (void)checkButtonActivate {
-    if (self.emailTextField.text.length > 0 && self.phoneTextField.text.length > 0 && self.nameTextField.text.length > 0) {
+    if (self.emailTextField.text.length > 0 && self.phoneTextField.text.length > 0 && self.nameTextField.text.length > 0 && self.phoneCodeTextField.text.length > 1) {
         [self.saveButton setEnabled:YES];
         [self.saveButton setBackgroundColor:[UIColor phBlueColor]];
     } else {
@@ -216,6 +225,17 @@
 }
 
 #pragma mark - UITextFieldDelegate
+- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField {
+    if (textField == self.phoneCodeTextField) {
+        DialCodeListViewController * dialCodeListViewController = [[DialCodeListViewController alloc] init];
+        [self.navigationController pushViewController:dialCodeListViewController animated:YES];
+        
+        return NO;
+    }
+    
+    return YES;
+}
+
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
     if ([textField isEqual:self.nameTextField]) {
         [self.emailTextField becomeFirstResponder];
@@ -232,9 +252,22 @@
 }
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
-    [self checkButtonActivate];
+    [self performSelector:@selector(checkButtonActivate) withObject:nil afterDelay:0.1];
     
-    if (textField == self.emailTextField) {
+    if (textField == self.phoneCodeTextField) {
+        // Prevent crashing undo bug – see note below.
+        if(range.length + range.location > textField.text.length)
+        {
+            return NO;
+        }
+        
+        NSUInteger newLength = [textField.text length] + [string length] - range.length;
+        if(newLength == 0 || newLength > 4) {
+            return NO;
+        }
+        return YES;
+        
+    } else if (textField == self.emailTextField) {
         [self.emailTextField setTextColor:[UIColor blackColor]];
         [self.emailAlert setHidden:YES];
     }
@@ -259,7 +292,7 @@
     aRect.size.height -= kbSize.height;
     
     [UIView animateWithDuration:0.25 animations:^{
-        [self.saveButton setFrame:CGRectMake(0, self.view.bounds.size.height - kbSize.height - 44, self.saveButton.bounds.size.width, self.saveButton.bounds.size.height)];
+        [self.saveButton setFrame:CGRectMake(0, self.view.bounds.size.height - kbSize.height - self.saveButton.bounds.size.height, self.saveButton.bounds.size.width, self.saveButton.bounds.size.height)];
     }];
 }
 
@@ -271,7 +304,7 @@
     }
     
     [UIView animateWithDuration:0.25 animations:^{
-        [self.saveButton setFrame:CGRectMake(0, self.view.bounds.size.height - 44, self.saveButton.bounds.size.width, self.saveButton.bounds.size.height)];
+        [self.saveButton setFrame:CGRectMake(0, self.view.bounds.size.height - self.saveButton.bounds.size.height, self.saveButton.bounds.size.width, self.saveButton.bounds.size.height)];
     }];
 }
 

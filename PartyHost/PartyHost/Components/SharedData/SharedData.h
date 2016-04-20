@@ -234,6 +234,7 @@
 
 //feed match
 @property(nonatomic,strong) NSString            *feedMatchEvent;
+@property(nonatomic,strong) NSString            *feedMatchImage;
 
 -(NSString*)capitalizeFirstLetter:(NSString *)strg;
 

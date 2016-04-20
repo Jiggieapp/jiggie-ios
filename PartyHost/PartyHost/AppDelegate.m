@@ -217,8 +217,8 @@ static NSString *const kAllowTracking = @"allowTracking";
     [self performSelector:@selector(checkApnAgain) withObject:nil afterDelay:4.0];
     
     // for testing
-    [VTConfig setCLIENT_KEY:@"VT-client-gJRBbRZC0t_-JXUD"];
-    [VTConfig setVT_IsProduction:false];
+    [VTConfig setCLIENT_KEY:VeritransClientKey];
+    [VTConfig setVT_IsProduction:isVeritransInProducion];
     
 //    [VTConfig setCLIENT_KEY:@"VT-client-tHEKcD0xJGsm6uwH"];
 //    [VTConfig setVT_IsProduction:true];

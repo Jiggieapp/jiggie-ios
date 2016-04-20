@@ -1,28 +1,23 @@
 //
-//  PurchaseHistoryViewController.m
+//  DialCodeListViewController.m
 //  Jiggie
 //
-//  Created by Setiady Wiguna on 3/18/16.
+//  Created by Setiady Wiguna on 4/20/16.
 //  Copyright © 2016 Sunny Clark. All rights reserved.
 //
 
-#import "PurchaseHistoryViewController.h"
-#import "PurchaseHistoryCell.h"
-#import "TicketSuccessViewController.h"
-#import "VirtualAccountViewController.h"
-#import "AnalyticManager.h"
+#import "DialCodeListViewController.h"
 
-
-@interface PurchaseHistoryViewController ()
+@interface DialCodeListViewController ()
 
 @end
 
-@implementation PurchaseHistoryViewController
+@implementation DialCodeListViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    // Do any additional setup after loading the view.
     
-    [self.navigationController setNavigationBarHidden:YES];   //it hides
     [self.view setBackgroundColor:[UIColor whiteColor]];
     
     self.navBar = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.visibleSize.width, 60)];
@@ -30,7 +25,7 @@
     
     UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(40, 20, self.visibleSize.width - 80, 40)];
     [titleLabel setTextAlignment:NSTextAlignmentCenter];
-    [titleLabel setText:@"Bookings"];
+    [titleLabel setText:@""];
     [titleLabel setFont:[UIFont phBlond:16]];
     [titleLabel setTextColor:[UIColor whiteColor]];
     [titleLabel setBackgroundColor:[UIColor clearColor]];
@@ -40,15 +35,15 @@
     [closeButton setFrame:CGRectMake(0.0f, 20.0f, 40.0f, 40.0f)];
     [closeButton setImageEdgeInsets:UIEdgeInsetsMake(8, 14, 8, 14)];
     [closeButton setImage:[UIImage imageNamed:@"nav_back"] forState:UIControlStateNormal];
-    [closeButton addTarget:self action:@selector(backButtonDidTap:) forControlEvents:UIControlEventTouchUpInside];
+    [closeButton addTarget:self action:@selector(closeButtonDidTap:) forControlEvents:UIControlEventTouchUpInside];
     [self.navBar addSubview:closeButton];
     
     [self.view addSubview:self.navBar];
     
-    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 60, self.visibleSize.width, self.visibleSize.height)];
+    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 60, self.visibleSize.width, self.view.bounds.size.height - 60)];
     [self.tableView setDelegate:self];
     [self.tableView setDataSource:self];
-    [self.tableView setBackgroundColor:[UIColor whiteColor]];
+    [self.tableView setBackgroundColor:[UIColor clearColor]];
     [self.view addSubview:self.tableView];
     
     self.emptyView = [[EmptyView alloc] initWithFrame:CGRectMake(0, 60, self.visibleSize.width, self.view.bounds.size.height - 60)];
@@ -58,8 +53,6 @@
     [self.view addSubview:self.emptyView];
     
     [self loadData];
-    
-    [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Order List" withDict:@{}];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -67,22 +60,21 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (void)backButtonDidTap:(id)sender {
-    [self dismissViewControllerAnimated:YES completion:nil];
+#pragma mark - Action
+- (void)closeButtonDidTap:(id)sender {
+    [[self navigationController] popViewControllerAnimated:YES];
 }
 
 #pragma mark - Data
 - (void)loadData {
     SharedData *sharedData = [SharedData sharedInstance];
     AFHTTPRequestOperationManager *manager = [sharedData getOperationManager];
-    
     //events/list/
-    NSString *url = [NSString stringWithFormat:@"%@/product/order_list/%@", PHBaseNewURL, sharedData.fb_id];
+    NSString *url = [NSString stringWithFormat:@"%@/list_countrycode",PHBaseNewURL];
     [manager GET:url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        
         NSInteger responseStatusCode = operation.response.statusCode;
         if (responseStatusCode != 200) {
-            [self.emptyView setMode:@"empty"];
+            [self.emptyView setMode:@"hide"];
             return;
         }
         
@@ -98,12 +90,12 @@
                 @try {
                     NSDictionary *data = [json objectForKey:@"data"];
                     if (data && data != nil) {
-                        NSArray *order_lists = [data objectForKey:@"order_lists"];
-                        if (order_lists && order_lists != nil) {
-                            self.orderList = order_lists;
+                        NSArray *list_countryCode = [data objectForKey:@"list_countryCode"];
+                        if (list_countryCode && list_countryCode != nil) {
+                            self.dialCodes = list_countryCode;
                         }
+                        
                     }
-                    
                     [self.tableView reloadData];
                     [self.emptyView setMode:@"hide"];
                 }
@@ -117,7 +109,7 @@
         });
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        [self.emptyView setMode:@"empty"];
+        [self.emptyView setMode:@"hide"];
     }];
 }
 
@@ -127,25 +119,38 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return self.orderList.count;
+    return self.dialCodes.count;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 120.0;
+    return 44;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    static NSString *simpleTableIdentifier = @"DialCodeCell";
     
-    static NSString *simpleTableIdentifier = @"PurchaseHistoryCell";
-    
-    PurchaseHistoryCell *cell = (PurchaseHistoryCell *)[tableView dequeueReusableCellWithIdentifier:simpleTableIdentifier];
+    UITableViewCell *cell = (UITableViewCell *)[tableView dequeueReusableCellWithIdentifier:simpleTableIdentifier];
     if (cell == nil) {
-        cell = [[PurchaseHistoryCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:simpleTableIdentifier];
-        cell.cellWidth = self.visibleSize.width;
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:simpleTableIdentifier];
     }
     
-    NSDictionary *reservation = [self.orderList objectAtIndex:indexPath.row];
-    [cell setData:reservation];
+    NSDictionary *dialCode = [self.dialCodes objectAtIndex:indexPath.row];
+    if (dialCode && dialCode != nil) {
+        NSString *name = [dialCode objectForKey:@"name"];
+        if (name && name != nil) {
+            [[cell textLabel] setText:name];
+        }
+        
+        NSArray *countryCallingCodes = [dialCode objectForKey:@"countryCallingCodes"];
+        if (countryCallingCodes && countryCallingCodes != nil && countryCallingCodes.count > 0) {
+            NSString *countryCode = [countryCallingCodes objectAtIndex:0];
+            if (countryCode && countryCode != nil) {
+                [[cell detailTextLabel] setText:countryCode];
+            } else {
+                [[cell detailTextLabel] setText:@""];
+            }
+        }
+    }
     
     return cell;
 }
@@ -154,30 +159,6 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:[tableView indexPathForSelectedRow] animated:YES];
     
-    NSDictionary *reservation = [self.orderList objectAtIndex:indexPath.row];
-    if (reservation && reservation != nil) {
-        NSDictionary *order = [reservation objectForKey:@"order"];
-        if (order && order != nil) {
-            NSString *payment_status = [order objectForKey:@"payment_status"];
-            if ([payment_status isEqualToString:@"paid"]) {
-                TicketSuccessViewController *ticketSuccessViewController = [[TicketSuccessViewController alloc] init];
-                [ticketSuccessViewController setOrderID:[order objectForKey:@"order_id"]];
-                [ticketSuccessViewController setShowCloseButton:YES];
-                [ticketSuccessViewController setShowViewButton:NO];
-                [ticketSuccessViewController setIsModalScreen:NO];
-                [ticketSuccessViewController setTicketType:@""];
-                [self.navigationController pushViewController:ticketSuccessViewController animated:YES];
-            } else {
-                VirtualAccountViewController *virtualAccountViewController = [[VirtualAccountViewController alloc] init];
-                [virtualAccountViewController setOrderID:[order objectForKey:@"order_id"]];
-                [virtualAccountViewController setShowCloseButton:YES];
-                [virtualAccountViewController setShowOrderButton:NO];
-                [virtualAccountViewController setIsModalScreen:NO];
-                [virtualAccountViewController setVAType:@""];
-                [self.navigationController pushViewController:virtualAccountViewController animated:YES];
-            }
-        }
-    }
 }
 
 @end

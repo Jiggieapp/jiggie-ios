@@ -41,18 +41,18 @@
     
     UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(40, 20, self.visibleSize.width - 80, 40)];
     [titleLabel setTextAlignment:NSTextAlignmentCenter];
-    [titleLabel setText:@"Purchase Info"];
+    [titleLabel setText:@"Booking Info"];
     [titleLabel setFont:[UIFont phBlond:16]];
     [titleLabel setTextColor:[UIColor whiteColor]];
     [titleLabel setBackgroundColor:[UIColor clearColor]];
     [self.navBar addSubview:titleLabel];
     
-    UIButton *closeButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [closeButton setFrame:CGRectMake(0.0f, 20.0f, 40.0f, 40.0f)];
-    [closeButton setImageEdgeInsets:UIEdgeInsetsMake(8, 14, 8, 14)];
-    [closeButton setImage:[UIImage imageNamed:@"nav_back"] forState:UIControlStateNormal];
-    [closeButton addTarget:self action:@selector(closeButtonDidTap:) forControlEvents:UIControlEventTouchUpInside];
-    [self.navBar addSubview:closeButton];
+    self.closeButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.closeButton setFrame:CGRectMake(0.0f, 20.0f, 40.0f, 40.0f)];
+    [self.closeButton setImageEdgeInsets:UIEdgeInsetsMake(8, 14, 8, 14)];
+    [self.closeButton setImage:[UIImage imageNamed:@"nav_back"] forState:UIControlStateNormal];
+    [self.closeButton addTarget:self action:@selector(closeButtonDidTap:) forControlEvents:UIControlEventTouchUpInside];
+    [self.navBar addSubview:self.closeButton];
     
     UIButton *helpButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [helpButton setFrame:CGRectMake(self.visibleSize.width - 60, 20.0f, 50.0f, 40.0f)];
@@ -69,7 +69,7 @@
         [self loadPurchaseView];
     }
     
-    UILabel *selectPaymentLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, self.view.bounds.size.height - 44 - 100, 120, 20)];
+    UILabel *selectPaymentLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, self.view.bounds.size.height - 54 - 100, 120, 20)];
     [selectPaymentLabel setText:@"Select Payment"];
     [selectPaymentLabel setFont:[UIFont phBlond:13]];
     [selectPaymentLabel setTextColor:[UIColor darkGrayColor]];
@@ -104,16 +104,25 @@
     [self.view addSubview:self.paymentAddButton];
     
     self.continueButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.continueButton setFrame:CGRectMake(self.visibleSize.width, 0, self.visibleSize.width, 44)];
+    [self.continueButton setFrame:CGRectMake(self.visibleSize.width, 0, self.visibleSize.width, 54)];
     [self.continueButton setBackgroundColor:[UIColor clearColor]];
     [self.continueButton.titleLabel setFont:[UIFont phBold:15]];
-    [self.continueButton setTitle:@"SWIPE TO PAY >>" forState:UIControlStateNormal];
+    [self.continueButton setTitle:@"SWIPE TO PAY" forState:UIControlStateNormal];
     [self.continueButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [self.continueButton setEnabled:NO];
     
-    self.swipeScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height - 44, self.visibleSize.width, 44)];
+    UIImageView *iconArrow1 = [[UIImageView alloc] initWithFrame:CGRectMake(self.visibleSize.width/2 + 56, (self.continueButton.bounds.size.height-15) /2, 9, 15)];
+    [iconArrow1 setImage:[UIImage imageNamed:@"icon_arrow"]];
+    [self.continueButton addSubview:iconArrow1];
+    
+    UIImageView *iconArrow2 = [[UIImageView alloc] initWithFrame:CGRectMake(self.visibleSize.width/2 + 62, (self.continueButton.bounds.size.height-15) /2, 9, 15)];
+    [iconArrow2 setImage:[UIImage imageNamed:@"icon_arrow"]];
+    [self.continueButton addSubview:iconArrow2];
+    
+    
+    self.swipeScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height - 54, self.visibleSize.width, 54)];
     [self.swipeScrollView setBackgroundColor:[UIColor colorFromHexCode:@"B6ECFF"]];
-    [self.swipeScrollView setContentSize:CGSizeMake(self.visibleSize.width * 2, 44)];
+    [self.swipeScrollView setContentSize:CGSizeMake(self.visibleSize.width * 2, 54)];
     [self.swipeScrollView setShowsHorizontalScrollIndicator:NO];
     [self.swipeScrollView setPagingEnabled:YES];
     [self.swipeScrollView setDelegate:self];
@@ -132,7 +141,7 @@
 - (void)loadPurchaseView {
     // SCROLL VIEW
     
-    self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 60, self.visibleSize.width, self.visibleSize.height - 44 - 100)];
+    self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 60, self.visibleSize.width, self.view.bounds.size.height - 60 - 100)];
     self.scrollView.showsVerticalScrollIndicator    = YES;
     self.scrollView.showsHorizontalScrollIndicator  = NO;
     self.scrollView.scrollEnabled                   = YES;
@@ -145,15 +154,21 @@
     tmpPurpleView.backgroundColor = [UIColor phPurpleColor];
     [self.scrollView addSubview:tmpPurpleView];
     
-    UILabel *eventTitle = [[UILabel alloc] initWithFrame:CGRectMake(0, 16, self.view.bounds.size.width, 16)];
+    CGRect eventFrame = [self.eventTitleString boundingRectWithSize:CGSizeMake(self.view.bounds.size.width - 28, 40)
+                                                            options:NSStringDrawingUsesLineFragmentOrigin
+                                                         attributes:@{NSFontAttributeName:[UIFont phBlond:15]}
+                                                            context:nil];
+    
+    UILabel *eventTitle = [[UILabel alloc] initWithFrame:CGRectMake(14, 16, self.view.bounds.size.width - 28, eventFrame.size.height)];
     [eventTitle setFont:[UIFont phBlond:15]];
     [eventTitle setTextColor:[UIColor blackColor]];
     [eventTitle setBackgroundColor:[UIColor clearColor]];
     [eventTitle setTextAlignment:NSTextAlignmentCenter];
+    [eventTitle setNumberOfLines:2];
     [eventTitle setText:self.eventTitleString];
     [self.scrollView addSubview:eventTitle];
     
-    UILabel *eventVenue = [[UILabel alloc] initWithFrame:CGRectMake(0, 16 + 20, self.view.bounds.size.width, 16)];
+    UILabel *eventVenue = [[UILabel alloc] initWithFrame:CGRectMake(14, CGRectGetMaxY(eventTitle.frame) + 4, self.view.bounds.size.width - 28, 16)];
     [eventVenue setFont:[UIFont phBlond:12]];
     [eventVenue setTextColor:[UIColor darkGrayColor]];
     [eventVenue setBackgroundColor:[UIColor clearColor]];
@@ -161,7 +176,7 @@
     [eventVenue setText:self.eventVenueString];
     [self.scrollView addSubview:eventVenue];
     
-    UILabel *eventDate = [[UILabel alloc] initWithFrame:CGRectMake(0, 16 + 20 + 20, self.view.bounds.size.width, 16)];
+    UILabel *eventDate = [[UILabel alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(eventVenue.frame) + 4, self.view.bounds.size.width, 16)];
     [eventDate setFont:[UIFont phBlond:12]];
     [eventDate setTextColor:[UIColor darkGrayColor]];
     [eventDate setBackgroundColor:[UIColor clearColor]];
@@ -169,10 +184,10 @@
     [eventDate setText:self.eventDateString];
     [self.scrollView addSubview:eventDate];
     
-    // Line 1
-    UIView *line1View = [[UIView alloc] initWithFrame:CGRectMake(14, 16 + 20 + 20 + 24, self.visibleSize.width - 28, 1)];
+    UIView *line1View = [[UIView alloc] initWithFrame:CGRectMake(14, CGRectGetMaxY(eventDate.frame) + 8, self.visibleSize.width - 28, 1)];
     [line1View setBackgroundColor:[UIColor phLightGrayColor]];
     [self.scrollView addSubview:line1View];
+
     
     CGFloat ticketTitleWidth = self.visibleSize.width/2;
     
@@ -254,7 +269,7 @@
 - (void)loadBookingView {
     // SCROLL VIEW
     
-    self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 60, self.visibleSize.width, self.visibleSize.height - 44 - 100 - 110)];
+    self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 60, self.visibleSize.width, self.view.bounds.size.height - 60 - 54 - 100 - 110)];
     self.scrollView.showsVerticalScrollIndicator    = YES;
     self.scrollView.showsHorizontalScrollIndicator  = NO;
     self.scrollView.scrollEnabled                   = YES;
@@ -267,15 +282,21 @@
     tmpPurpleView.backgroundColor = [UIColor phPurpleColor];
     [self.scrollView addSubview:tmpPurpleView];
     
-    UILabel *eventTitle = [[UILabel alloc] initWithFrame:CGRectMake(0, 16, self.view.bounds.size.width, 16)];
+    CGRect eventFrame = [self.eventTitleString boundingRectWithSize:CGSizeMake(self.view.bounds.size.width - 28, 40)
+                                                             options:NSStringDrawingUsesLineFragmentOrigin
+                                                          attributes:@{NSFontAttributeName:[UIFont phBlond:15]}
+                                                             context:nil];
+    
+    UILabel *eventTitle = [[UILabel alloc] initWithFrame:CGRectMake(14, 16, self.view.bounds.size.width - 28, eventFrame.size.height)];
     [eventTitle setFont:[UIFont phBlond:15]];
     [eventTitle setTextColor:[UIColor blackColor]];
     [eventTitle setBackgroundColor:[UIColor clearColor]];
     [eventTitle setTextAlignment:NSTextAlignmentCenter];
+    [eventTitle setNumberOfLines:2];
     [eventTitle setText:self.eventTitleString];
     [self.scrollView addSubview:eventTitle];
     
-    UILabel *eventVenue = [[UILabel alloc] initWithFrame:CGRectMake(0, 16 + 20, self.view.bounds.size.width, 16)];
+    UILabel *eventVenue = [[UILabel alloc] initWithFrame:CGRectMake(14, CGRectGetMaxY(eventTitle.frame) + 4, self.view.bounds.size.width - 28, 16)];
     [eventVenue setFont:[UIFont phBlond:12]];
     [eventVenue setTextColor:[UIColor darkGrayColor]];
     [eventVenue setBackgroundColor:[UIColor clearColor]];
@@ -283,7 +304,7 @@
     [eventVenue setText:self.eventVenueString];
     [self.scrollView addSubview:eventVenue];
     
-    UILabel *eventDate = [[UILabel alloc] initWithFrame:CGRectMake(0, 16 + 20 + 20, self.view.bounds.size.width, 16)];
+    UILabel *eventDate = [[UILabel alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(eventVenue.frame) + 4, self.view.bounds.size.width, 16)];
     [eventDate setFont:[UIFont phBlond:12]];
     [eventDate setTextColor:[UIColor darkGrayColor]];
     [eventDate setBackgroundColor:[UIColor clearColor]];
@@ -291,7 +312,7 @@
     [eventDate setText:self.eventDateString];
     [self.scrollView addSubview:eventDate];
     
-    UIView *line1View = [[UIView alloc] initWithFrame:CGRectMake(14, 16 + 20 + 20 + 24, self.visibleSize.width - 28, 1)];
+    UIView *line1View = [[UIView alloc] initWithFrame:CGRectMake(14, CGRectGetMaxY(eventDate.frame) + 8, self.visibleSize.width - 28, 1)];
     [line1View setBackgroundColor:[UIColor phLightGrayColor]];
     [self.scrollView addSubview:line1View];
     
@@ -412,7 +433,7 @@
     self.scrollView.contentSize = CGSizeMake(self.visibleSize.width, CGRectGetMaxY(self.balancePrice.frame) + 16);
     
     
-    UIView *line2View = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height - 44 - 100 - 110, self.visibleSize.width, 1)];
+    UIView *line2View = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height - 54 - 100 - 110, self.visibleSize.width, 1)];
     [line2View setBackgroundColor:[UIColor phLightGrayColor]];
     [self.view addSubview:line2View];
     
@@ -744,11 +765,19 @@
     }
 
     [SVProgressHUD show];
+    
+    // disable all button
     [self.swipeScrollView setScrollEnabled:NO];
+    [self.closeButton setEnabled:NO];
+    [self.paymentAddButton setEnabled:NO];
     
     [manager POST:url parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
         [SVProgressHUD dismiss];
+        
+        // enable all button
         [self.swipeScrollView setScrollEnabled:YES];
+        [self.closeButton setEnabled:YES];
+        [self.paymentAddButton setEnabled:YES];
         
         NSInteger responseStatusCode = operation.response.statusCode;
         if (responseStatusCode != 200) {
@@ -816,7 +845,11 @@
         }
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        // enable all button
         [self.swipeScrollView setScrollEnabled:YES];
+        [self.closeButton setEnabled:YES];
+        [self.paymentAddButton setEnabled:YES];
+        
         [SVProgressHUD dismiss];
     }];
 }

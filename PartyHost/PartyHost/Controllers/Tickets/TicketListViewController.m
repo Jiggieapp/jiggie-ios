@@ -71,6 +71,7 @@
     [headerView addSubview:helpButton];
     
     self.eventTitle = [[UILabel alloc] initWithFrame:CGRectMake(14, 170, self.view.bounds.size.width - 28, 20)];
+    [self.eventTitle setNumberOfLines:2];
     [self.eventTitle setFont:[UIFont phBold:15]];
     [self.eventTitle setTextColor:[UIColor whiteColor]];
     [self.eventTitle setBackgroundColor:[UIColor clearColor]];
@@ -241,8 +242,18 @@
                             
                             NSString *event_name = [product_lists objectForKey:@"event_name"];
                             if (event_name && event_name != nil) {
-                                self.eventTitle.text = [event_name uppercaseString];
                                 self.navTitle.text = event_name;
+                                
+                                self.eventTitle.text = [event_name uppercaseString];
+                                
+                                CGRect eventFrame = [self.eventTitle.text boundingRectWithSize:CGSizeMake(self.eventTitle.bounds.size.width, 40)
+                                                                                        options:NSStringDrawingUsesLineFragmentOrigin
+                                                                                     attributes:@{NSFontAttributeName:self.eventTitle.font}
+                                                                                        context:nil];
+                                CGFloat diff = eventFrame.size.height - self.eventTitle.bounds.size.height;
+                                if (diff > 0) {
+                                    [self.eventTitle setFrame:CGRectMake(self.eventTitle.frame.origin.x, self.eventTitle.frame.origin.y - diff, self.eventTitle.bounds.size.width, eventFrame.size.height)];
+                                }
                             }
                             
                             NSString *venue_name = [product_lists objectForKey:@"venue_name"];
@@ -257,7 +268,7 @@
                             [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
                             NSDate *startDatetime = [formatter dateFromString:start_datetime];
                             
-                            [formatter setDateFormat:PHDateFormatAppShort];
+                            [formatter setDateFormat:PHDateFormatApp];
                             [formatter setLocale:[NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"]];
                             [formatter setTimeZone:[NSTimeZone localTimeZone]];
                             NSString *shortDateTime = [formatter stringFromDate:startDatetime];
@@ -379,9 +390,15 @@
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     if (section == 0) {
-        return @"TICKETS";
+        if (self.purchases.count > 1) {
+            return @"TICKETS";
+        }
+        return @"TICKET";
     }
-    return @"RESERVE TABLE";
+    if (self.reservations.count > 1) {
+        return @"TABLES";
+    }
+    return @"TABLE";
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {

@@ -372,7 +372,7 @@
             UILabel *textLabel = [[UILabel alloc] initWithFrame:CGRectMake(70, 20, 180, 20)];
             textLabel.backgroundColor = [UIColor clearColor];
             textLabel.font = [UIFont phBlond:16];
-            textLabel.text = @"Purchase History";
+            textLabel.text = @"Bookings";
             [[cell contentView] addSubview:textLabel];
             
             UIImageView *cellImage = [[UIImageView alloc] initWithFrame:CGRectMake(14, 10, 40, 40)];

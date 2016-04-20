@@ -63,7 +63,7 @@
     
     // SCROLL VIEW
     
-    self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 60, self.visibleSize.width, self.visibleSize.height - 44 - 140 - 140)];
+    self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 60, self.visibleSize.width, self.view.bounds.size.height - 60 - 54 - 140 - 140)];
     self.scrollView.showsVerticalScrollIndicator    = YES;
     self.scrollView.showsHorizontalScrollIndicator  = NO;
     self.scrollView.scrollEnabled                   = YES;
@@ -101,7 +101,7 @@
     
      // LINE 2 VIEW
     
-    UIView *line2View = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height - 44 - 140 - 140, self.visibleSize.width, 1)];
+    UIView *line2View = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height - 54 - 140 - 140, self.visibleSize.width, 1)];
     [line2View setBackgroundColor:[UIColor phLightGrayColor]];
     [self.view addSubview:line2View];
     
@@ -147,7 +147,7 @@
     
     // LINE 3 VIEW
     
-    UIView *bottomView = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height - 44 - 140, self.visibleSize.width, 160)];
+    UIView *bottomView = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height - 54 - 140, self.visibleSize.width, 160)];
     [bottomView setBackgroundColor:[UIColor whiteColor]];
     [self.view addSubview:bottomView];
     
@@ -250,7 +250,7 @@
     // BUTTON
     self.continueButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.continueButton addTarget:self action:@selector(continueButtonDidTap:) forControlEvents:UIControlEventTouchUpInside];
-    [self.continueButton setFrame:CGRectMake(0, self.view.bounds.size.height - 44, self.visibleSize.width, 44)];
+    [self.continueButton setFrame:CGRectMake(0, self.view.bounds.size.height - 54, self.visibleSize.width, 54)];
     [self.continueButton setBackgroundColor:[UIColor colorFromHexCode:@"B6ECFF"]];
     [self.continueButton.titleLabel setFont:[UIFont phBold:15]];
     [self.continueButton setTitle:@"CONFIRM ORDER" forState:UIControlStateNormal];
@@ -260,7 +260,6 @@
     
     // Load TCView
     [self loadTCView];
-    
     
     // MixPanel
     SharedData *sharedData = [SharedData sharedInstance];
@@ -319,7 +318,7 @@
     [titleLabel setFont:[UIFont phBlond:15]];
     [titleLabel setTextAlignment:NSTextAlignmentCenter];
     [titleLabel setTextColor:[UIColor whiteColor]];
-    [titleLabel setText:@"Term and Conditions"];
+    [titleLabel setText:@"Terms and Conditions"];
     [self.tcView addSubview:titleLabel];
     
     UIButton *cancelButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -333,7 +332,7 @@
     [lineView setBackgroundColor:[UIColor whiteColor]];
     [self.tcView addSubview:lineView];
     
-    self.tcScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 60, self.visibleSize.width, self.visibleSize.height - 44)];
+    self.tcScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 60, self.visibleSize.width, self.view.bounds.size.height - 60 - 54)];
     self.tcScrollView.showsVerticalScrollIndicator    = NO;
     self.tcScrollView.showsHorizontalScrollIndicator  = NO;
     self.tcScrollView.scrollEnabled                   = YES;
@@ -344,7 +343,7 @@
     
     self.tcContinueButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.tcContinueButton addTarget:self action:@selector(tcContinueButtonDidTap:) forControlEvents:UIControlEventTouchUpInside];
-    [self.tcContinueButton setFrame:CGRectMake(0, self.view.bounds.size.height - 44, self.visibleSize.width, 44)];
+    [self.tcContinueButton setFrame:CGRectMake(0, self.view.bounds.size.height - 54, self.visibleSize.width, 54)];
     [self.tcContinueButton setBackgroundColor:[UIColor colorFromHexCode:@"B6ECFF"]];
     [self.tcContinueButton.titleLabel setFont:[UIFont phBold:15]];
     [self.tcContinueButton setTitle:@"CONTINUE" forState:UIControlStateNormal];
@@ -368,7 +367,7 @@
             NSDictionary *productList = [product_list objectAtIndex:0];
             
             UILabel *agreeLabel = [[UILabel alloc] initWithFrame:CGRectMake(18, 16, self.visibleSize.width - 36, 20)];
-            [agreeLabel setText:@"By continue this order, I AGREE that :"];
+            [agreeLabel setText:@"By continuing with this order, I AGREE that :"];
             [agreeLabel setFont:[UIFont phBlond:14]];
             [agreeLabel setTextColor:[UIColor whiteColor]];
             [agreeLabel setBackgroundColor:[UIColor clearColor]];
@@ -420,9 +419,11 @@
         [UIView animateWithDuration:animateDuration delay:0.0 options:UIViewAnimationOptionCurveEaseIn animations:^{
             [self.tcView setFrame:CGRectMake(0, 0, self.tcView.bounds.size.width, self.tcView.bounds.size.height)];
         } completion:^(BOOL finished) {
-            
+            [self.tcContinueButton setBackgroundColor:[UIColor colorFromHexCode:@"B6ECFF"]];
+            [self.tcContinueButton setEnabled:NO];
         }];
     } else {
+        
         [UIView animateWithDuration:animateDuration delay:0.0 options:UIViewAnimationOptionCurveEaseIn animations:^{
             [self.tcView setFrame:CGRectMake(0, self.tcView.bounds.size.height, self.tcView.bounds.size.width, self.tcView.bounds.size.height)];
         } completion:^(BOOL finished) {
@@ -623,7 +624,8 @@
          [self.userDetailButton setBackgroundColor:[UIColor clearColor]];
      } completion:^(BOOL finished){
          GuestDetailViewController *guestDetailViewController = [[GuestDetailViewController alloc] init];
-         [self presentViewController:guestDetailViewController animated:YES completion:nil];
+         UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:guestDetailViewController];
+         [self presentViewController:nav animated:YES completion:nil];
      }];
 }
 
@@ -652,13 +654,13 @@
             [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
             NSDate *startDatetime = [formatter dateFromString:start_datetime];
             
-            [formatter setDateFormat:PHDateFormatAppShort];
+            [formatter setDateFormat:PHDateFormatApp];
             [formatter setLocale:[NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"]];
             [formatter setTimeZone:[NSTimeZone localTimeZone]];
             NSString *shortDateTime = [formatter stringFromDate:startDatetime];
             
             ticketConfirmationViewController.eventDateString = shortDateTime;
-            
+    
             [self.navigationController pushViewController:ticketConfirmationViewController animated:YES];
         }
     }
@@ -669,6 +671,8 @@
     [UserManager clearUserTicketInfo];
     
     SharedData *sharedData = [SharedData sharedInstance];
+    
+        NSLog(@"USERDICT : %@", sharedData.userDict);
     
     NSString *firstName = @"";
     if ([sharedData.userDict objectForKey:@"first_name"] && [sharedData.userDict objectForKey:@"first_name"] != nil) {

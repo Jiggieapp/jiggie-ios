@@ -56,7 +56,7 @@
     if (self.visibleSize.width > 320) {
         padding = 12.0;
     }
-    UILabel *starLabel = [[UILabel alloc] initWithFrame:CGRectMake(6 + padding, self.view.bounds.size.height - orderButtonSize - 28, 8, 20)];
+    UILabel *starLabel = [[UILabel alloc] initWithFrame:CGRectMake(16 + padding, self.view.bounds.size.height - orderButtonSize - 28, 8, 20)];
     [starLabel setText:@"*"];
     [starLabel setNumberOfLines:2];
     [starLabel setTextColor:[UIColor purpleColor]];
@@ -64,8 +64,8 @@
     [starLabel setBackgroundColor:[UIColor clearColor]];
     [self.view addSubview:starLabel];
     
-    UILabel *infoLabel = [[UILabel alloc] initWithFrame:CGRectMake(16 + padding, self.view.bounds.size.height - orderButtonSize - 32, self.visibleSize.width, 20)];
-    [infoLabel setText:@"Tap \"Purchase History\" from \"More\" tab to return to this screen"];
+    UILabel *infoLabel = [[UILabel alloc] initWithFrame:CGRectMake(26 + padding, self.view.bounds.size.height - orderButtonSize - 32, self.visibleSize.width, 20)];
+    [infoLabel setText:@"Tap \"Bookings\" from \"More\" tab to return to this screen"];
     [infoLabel setNumberOfLines:2];
     [infoLabel setTextColor:[UIColor blackColor]];
     [infoLabel setFont:[UIFont phBlond:11]];

@@ -137,7 +137,7 @@
     
     self.saveButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.saveButton addTarget:self action:@selector(saveButtonDidTap:) forControlEvents:UIControlEventTouchUpInside];
-    [self.saveButton setFrame:CGRectMake(0, self.view.bounds.size.height - 44, self.visibleSize.width, 44)];
+    [self.saveButton setFrame:CGRectMake(0, self.view.bounds.size.height - 54, self.visibleSize.width, 54)];
     [self.saveButton setBackgroundColor:[UIColor colorFromHexCode:@"B6ECFF"]];
     [self.saveButton.titleLabel setFont:[UIFont phBold:15]];
     [self.saveButton setTitle:@"SAVE" forState:UIControlStateNormal];
@@ -297,7 +297,7 @@
      {
          SharedData *sharedData = [SharedData sharedInstance];
          if (!sharedData.isIphone4) {
-             [self.saveButton setFrame:CGRectMake(0, self.view.bounds.size.height - 44, self.saveButton.bounds.size.width, self.saveButton.bounds.size.height)];
+             [self.saveButton setFrame:CGRectMake(0, self.view.bounds.size.height - self.saveButton.bounds.size.height, self.saveButton.bounds.size.width, self.saveButton.bounds.size.height)];
          }
          
          [picker setAlpha:0.0];
@@ -350,7 +350,7 @@
              SharedData *sharedData = [SharedData sharedInstance];
              if (!sharedData.isIphone4) {
                  [UIView animateWithDuration:0.1 animations:^{
-                    [self.saveButton setFrame:CGRectMake(0, self.view.bounds.size.height - picker.bounds.size.height - 44, self.saveButton.bounds.size.width, self.saveButton.bounds.size.height)];
+                    [self.saveButton setFrame:CGRectMake(0, self.view.bounds.size.height - picker.bounds.size.height - self.saveButton.bounds.size.height, self.saveButton.bounds.size.width, self.saveButton.bounds.size.height)];
                  }];
              }
              
@@ -375,7 +375,7 @@
 }
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
-    [self checkButtonActivate];
+    [self performSelector:@selector(checkButtonActivate) withObject:nil afterDelay:0.1];
     
     if (textField == self.cardNumberTextField) {
         previousTextFieldContent = textField.text;
@@ -387,6 +387,11 @@
     } else if (textField == self.cvvTextField) {
         [self.cvvTextField setTextColor:[UIColor blackColor]];
         [self.cvvAlert setHidden:YES];
+        
+        if(range.length + range.location > textField.text.length)
+        {
+            return NO;
+        }
         
         NSUInteger newLength = [textField.text length] + [string length] - range.length;
         return (newLength > 3) ? NO : YES;
@@ -500,7 +505,7 @@ andPreserveCursorPosition:&targetCursorPosition];
     aRect.size.height -= kbSize.height;
     
     [UIView animateWithDuration:0.25 animations:^{
-        [self.saveButton setFrame:CGRectMake(0, self.view.bounds.size.height - kbSize.height - 44, self.saveButton.bounds.size.width, self.saveButton.bounds.size.height)];
+        [self.saveButton setFrame:CGRectMake(0, self.view.bounds.size.height - kbSize.height - self.saveButton.bounds.size.height, self.saveButton.bounds.size.width, self.saveButton.bounds.size.height)];
     }];
 }
 
@@ -512,7 +517,7 @@ andPreserveCursorPosition:&targetCursorPosition];
     }
     
     [UIView animateWithDuration:0.25 animations:^{
-        [self.saveButton setFrame:CGRectMake(0, self.view.bounds.size.height - 44, self.saveButton.bounds.size.width, self.saveButton.bounds.size.height)];
+        [self.saveButton setFrame:CGRectMake(0, self.view.bounds.size.height - self.saveButton.bounds.size.height, self.saveButton.bounds.size.width, self.saveButton.bounds.size.height)];
     }];
 }
 

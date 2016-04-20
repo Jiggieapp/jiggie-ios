@@ -40,6 +40,7 @@
 		DA5ED61E1C92DD5B00004C7E /* NTMonthYearPicker.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5ED61D1C92DD5B00004C7E /* NTMonthYearPicker.m */; };
 		DA5ED6211C968A1E00004C7E /* VirtualAccountViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5ED6201C968A1E00004C7E /* VirtualAccountViewController.m */; };
 		DA5ED6241C96D10700004C7E /* TicketSuccessViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5ED6231C96D10700004C7E /* TicketSuccessViewController.m */; };
+		DA6A7FA71CC755F800A666E8 /* DialCodeListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA6A7FA61CC755F800A666E8 /* DialCodeListViewController.m */; };
 		DA700E0E1C63561300E5D945 /* Jiggie.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = DA700E0D1C63515D00E5D945 /* Jiggie.entitlements */; };
 		DA9B10A01CB4D7B7001FB798 /* GTMNSString+HTML.m in Sources */ = {isa = PBXBuildFile; fileRef = DA9B108F1CB4D7B7001FB798 /* GTMNSString+HTML.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		DA9B10A51CB4D7B7001FB798 /* NSString+HTML.m in Sources */ = {isa = PBXBuildFile; fileRef = DA9B109A1CB4D7B7001FB798 /* NSString+HTML.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -390,6 +391,8 @@
 		DA5ED6201C968A1E00004C7E /* VirtualAccountViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VirtualAccountViewController.m; sourceTree = "<group>"; };
 		DA5ED6221C96D10700004C7E /* TicketSuccessViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TicketSuccessViewController.h; sourceTree = "<group>"; };
 		DA5ED6231C96D10700004C7E /* TicketSuccessViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TicketSuccessViewController.m; sourceTree = "<group>"; };
+		DA6A7FA51CC755F800A666E8 /* DialCodeListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DialCodeListViewController.h; sourceTree = "<group>"; };
+		DA6A7FA61CC755F800A666E8 /* DialCodeListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DialCodeListViewController.m; sourceTree = "<group>"; };
 		DA700E0D1C63515D00E5D945 /* Jiggie.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Jiggie.entitlements; sourceTree = SOURCE_ROOT; };
 		DA9B108D1CB4D7B7001FB798 /* GTMDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTMDefines.h; sourceTree = "<group>"; };
 		DA9B108E1CB4D7B7001FB798 /* GTMNSString+HTML.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "GTMNSString+HTML.h"; sourceTree = "<group>"; };
@@ -1064,6 +1067,8 @@
 				DA5ED5EB1C90A34400004C7E /* AddPaymentViewController.m */,
 				DA5ED5E11C896AEA00004C7E /* GuestDetailViewController.h */,
 				DA5ED5E21C896AEA00004C7E /* GuestDetailViewController.m */,
+				DA6A7FA51CC755F800A666E8 /* DialCodeListViewController.h */,
+				DA6A7FA61CC755F800A666E8 /* DialCodeListViewController.m */,
 				DA5ED6221C96D10700004C7E /* TicketSuccessViewController.h */,
 				DA5ED6231C96D10700004C7E /* TicketSuccessViewController.m */,
 				DA5ED61F1C968A1E00004C7E /* VirtualAccountViewController.h */,
@@ -2310,6 +2315,7 @@
 				DA47B22A1C3A8553001B4476 /* AFNetworkActivityLogger.m in Sources */,
 				DAABB0E11C1FD50E004DDCFA /* Settings.m in Sources */,
 				DAABB2561C1FF5AE004DDCFA /* AFHTTPSessionManager.m in Sources */,
+				DA6A7FA71CC755F800A666E8 /* DialCodeListViewController.m in Sources */,
 				DAABB2A41C1FF5AE004DDCFA /* MPObjectSerializer.m in Sources */,
 				DA10F51D1C52149F006090ED /* SVIndefiniteAnimatedView.m in Sources */,
 				DAABB12C1C1FF13A004DDCFA /* RatingView.m in Sources */,

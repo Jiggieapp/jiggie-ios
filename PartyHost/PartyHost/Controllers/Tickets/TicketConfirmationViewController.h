@@ -12,6 +12,7 @@
 @interface TicketConfirmationViewController : BaseViewController <UIWebViewDelegate, MFMessageComposeViewControllerDelegate, UINavigationControllerDelegate, UIScrollViewDelegate, UIAlertViewDelegate>
 
 @property (nonatomic, strong) UIView *navBar;
+@property (nonatomic, strong) UIButton *closeButton;
 @property (nonatomic, strong) UIScrollView *scrollView;
 @property (nonatomic, strong) UILabel *totalPrice;
 @property (nonatomic, strong) UILabel *requiredPrice;
