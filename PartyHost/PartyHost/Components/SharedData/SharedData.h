@@ -163,6 +163,7 @@
 
 @property(nonatomic,assign) BOOL                isInConversation;
 @property(nonatomic,assign) BOOL                hasMessageToLoad;
+@property(nonatomic,assign) BOOL                hasFeedToLoad;
 
 
 @property(nonatomic,assign) BOOL                isInAskingNotification;

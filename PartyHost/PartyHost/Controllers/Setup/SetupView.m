@@ -100,7 +100,6 @@ int totalPages;
     [[NSNotificationCenter defaultCenter] postNotificationName:@"SHOW_LOADING" object:self];
     
     //Load picks
-  
     AFHTTPRequestOperationManager *manager = [self.sharedData getOperationManager];
     NSString *url = [Constants userTagListURL];
     [manager GET:url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject)
@@ -253,14 +252,15 @@ int totalPages;
     }
     
     //Update the scroll view to the appropriate page
-    CGFloat pageWidth  = self.scrollView.frame.size.width;
+    CGFloat pageWidth  = self.frame.size.width;
     CGFloat pageHeight = self.scrollView.frame.size.height;
     CGRect rect = CGRectMake(pageWidth * pageIndex, 0, pageWidth, pageHeight);
     //[self.scrollView scrollRectToVisible:rect animated:YES];
     
     [UIView animateWithDuration:0.25 animations:^()
     {
-        [self.scrollView scrollRectToVisible:rect animated:NO];
+//        [self.scrollView scrollRectToVisible:rect animated:NO];
+        [self.scrollView setContentOffset:CGPointMake(rect.origin.x, rect.origin.y)];
     } completion:^(BOOL finished)
     {
         self.isAnimating = NO;

@@ -825,7 +825,7 @@
         
         NSLog(@"FB_ID :: %@",facebookId);
         NSLog(@"APPSFLYER OBJ :: %@",info);
-        NSString *urlToLoad = [NSString stringWithFormat:@"%@/appsflyerinfo",PHBaseURL];
+        NSString *urlToLoad = [NSString stringWithFormat:@"%@/appsflyerinfo",PHBaseNewURL];
         [manager POST:urlToLoad parameters:params
               success:^(AFHTTPRequestOperation *operation, id responseObject)
          {
