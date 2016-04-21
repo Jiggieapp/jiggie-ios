@@ -93,9 +93,13 @@
 
         NSString *price = [data objectForKey:@"price"];
         if (price && price != nil) {
-            SharedData *sharedData = [SharedData sharedInstance];
-            NSString *formattedPrice = [sharedData formatCurrencyString:price];
-            [self.ticketPrice setText:[NSString stringWithFormat:@"Rp%@", formattedPrice]];
+            if ([price integerValue] == 0) {
+                [self.ticketPrice setText:@"FREE"];
+            } else {
+                SharedData *sharedData = [SharedData sharedInstance];
+                NSString *formattedPrice = [sharedData formatCurrencyString:price];
+                [self.ticketPrice setText:[NSString stringWithFormat:@"Rp%@", formattedPrice]];
+            }
         }
         
         /*

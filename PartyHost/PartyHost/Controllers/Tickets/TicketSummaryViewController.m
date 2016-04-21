@@ -233,9 +233,13 @@
     if (price && price != nil) {
         self.price = price.integerValue;
         
-        SharedData *sharedData = [SharedData sharedInstance];
-        NSString *formattedPrice = [sharedData formatCurrencyString:price];
-        [self.totalPrice setText:[NSString stringWithFormat:@"Rp%@", formattedPrice]];
+        if (self.price == 0) {
+            [self.totalPrice setText:@"FREE"];
+        } else {
+            SharedData *sharedData = [SharedData sharedInstance];
+            NSString *formattedPrice = [sharedData formatCurrencyString:price];
+            [self.totalPrice setText:[NSString stringWithFormat:@"Rp%@", formattedPrice]];
+        }
     }
     
     NSString *status = [self.productSelected objectForKey:@"status"];
@@ -601,11 +605,15 @@
     }
     
     if (self.isTicketProduct) {
-        SharedData *sharedData = [SharedData sharedInstance];
-        NSString *totalPrice = [NSString stringWithFormat:@"%li", currentAmount * self.price];
-        NSString *formattedPrice = [sharedData formatCurrencyString:totalPrice];
-        
-        self.totalPrice.text = [NSString stringWithFormat:@"Rp%@", formattedPrice];
+        if (self.price == 0) {
+            [self.totalPrice setText:@"FREE"];
+        } else {
+            SharedData *sharedData = [SharedData sharedInstance];
+            NSString *totalPrice = [NSString stringWithFormat:@"%li", currentAmount * self.price];
+            NSString *formattedPrice = [sharedData formatCurrencyString:totalPrice];
+            
+            self.totalPrice.text = [NSString stringWithFormat:@"Rp%@", formattedPrice];
+        }
     }
 }
 
@@ -618,11 +626,15 @@
     }
     
     if (self.isTicketProduct) {
-        SharedData *sharedData = [SharedData sharedInstance];
-        NSString *totalPrice = [NSString stringWithFormat:@"%li", currentAmount * self.price];
-        NSString *formattedPrice = [sharedData formatCurrencyString:totalPrice];
-        
-        self.totalPrice.text = [NSString stringWithFormat:@"Rp%@", formattedPrice];
+        if (self.price == 0) {
+            [self.totalPrice setText:@"FREE"];
+        } else {
+            SharedData *sharedData = [SharedData sharedInstance];
+            NSString *totalPrice = [NSString stringWithFormat:@"%li", currentAmount * self.price];
+            NSString *formattedPrice = [sharedData formatCurrencyString:totalPrice];
+            
+            self.totalPrice.text = [NSString stringWithFormat:@"Rp%@", formattedPrice];
+        }
     }
 }
 

@@ -63,12 +63,6 @@
     
     [self.view addSubview:self.navBar];
     
-    if ([[self.productList objectForKey:@"ticket_type"] isEqualToString:@"booking"]) {
-        [self loadBookingView];
-    } else {
-        [self loadPurchaseView];
-    }
-    
     UILabel *selectPaymentLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, self.view.bounds.size.height - 54 - 100, 120, 20)];
     [selectPaymentLabel setText:@"Select Payment"];
     [selectPaymentLabel setFont:[UIFont phBlond:13]];
@@ -103,11 +97,28 @@
     [self.paymentAddButton setHighlighted:YES];
     [self.view addSubview:self.paymentAddButton];
     
+    
+    if ([[self.productList objectForKey:@"ticket_type"] isEqualToString:@"booking"]) {
+        [self loadBookingView];
+        
+    } else {
+        // hide payment for free ticket
+        NSString *total_price = [self.productList objectForKey:@"total_price_all"];
+        if ([total_price integerValue] == 0) {
+            [selectPaymentLabel setHidden:YES];
+            [self.paymentBox setHidden:YES];
+        }
+        
+        [self loadPurchaseView];
+    }
+    
+    
     self.continueButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.continueButton setFrame:CGRectMake(self.visibleSize.width, 0, self.visibleSize.width, 54)];
     [self.continueButton setBackgroundColor:[UIColor clearColor]];
     [self.continueButton.titleLabel setFont:[UIFont phBold:15]];
     [self.continueButton setTitle:@"SWIPE TO PAY" forState:UIControlStateNormal];
+    [self.continueButton setTitleEdgeInsets:UIEdgeInsetsMake(0, 0, 0, 20)];
     [self.continueButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [self.continueButton setEnabled:NO];
     
@@ -118,7 +129,6 @@
     UIImageView *iconArrow2 = [[UIImageView alloc] initWithFrame:CGRectMake(self.visibleSize.width/2 + 62, (self.continueButton.bounds.size.height-15) /2, 9, 15)];
     [iconArrow2 setImage:[UIImage imageNamed:@"icon_arrow"]];
     [self.continueButton addSubview:iconArrow2];
-    
     
     self.swipeScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height - 54, self.visibleSize.width, 54)];
     [self.swipeScrollView setBackgroundColor:[UIColor colorFromHexCode:@"B6ECFF"]];
@@ -207,7 +217,11 @@
     [ticketPrice setBackgroundColor:[UIColor clearColor]];
     [ticketPrice setTextAlignment:NSTextAlignmentRight];
     NSString *price = [sharedData formatCurrencyString:[self.productList objectForKey:@"total_price"]];
-    [ticketPrice setText:[NSString stringWithFormat:@"Rp%@",price]];
+    if ([price integerValue] == 0) {
+        [ticketPrice setText:@"FREE"];
+    } else {
+        [ticketPrice setText:[NSString stringWithFormat:@"Rp%@",price]];
+    }
     [self.scrollView addSubview:ticketPrice];
     
     UILabel *adminTitle = [[UILabel alloc] initWithFrame:CGRectMake(18, CGRectGetMaxY(line1View.frame) + 14 + 30, ticketTitleWidth, 20)];
@@ -223,7 +237,11 @@
     [adminPrice setBackgroundColor:[UIColor clearColor]];
     [adminPrice setTextAlignment:NSTextAlignmentRight];
     NSString *admin_fee = [sharedData formatCurrencyString:[self.productList objectForKey:@"admin_fee"]];
-    [adminPrice setText:[NSString stringWithFormat:@"Rp%@",admin_fee]];
+    if ([admin_fee integerValue] == 0) {
+        [adminPrice setText:@"FREE"];
+    } else {
+        [adminPrice setText:[NSString stringWithFormat:@"Rp%@",admin_fee]];
+    }
     [self.scrollView addSubview:adminPrice];
     
     UILabel *taxTitle = [[UILabel alloc] initWithFrame:CGRectMake(18, CGRectGetMaxY(line1View.frame) + 14 + 30 + 30, ticketTitleWidth, 20)];
@@ -239,7 +257,11 @@
     [taxPrice setBackgroundColor:[UIColor clearColor]];
     [taxPrice setTextAlignment:NSTextAlignmentRight];
     NSString *tax_amount = [sharedData formatCurrencyString:[self.productList objectForKey:@"tax_amount"]];
-    [taxPrice setText:[NSString stringWithFormat:@"Rp%@",tax_amount]];
+    if ([tax_amount integerValue] == 0) {
+        [taxPrice setText:@"FREE"];
+    } else {
+        [taxPrice setText:[NSString stringWithFormat:@"Rp%@",tax_amount]];
+    }
     [self.scrollView addSubview:taxPrice];
     
     // Line 2
@@ -255,12 +277,16 @@
     [self.scrollView addSubview:totalLabel];
     
     self.totalPrice = [[UILabel alloc] initWithFrame:CGRectMake(self.visibleSize.width - 100 - 20, CGRectGetMaxY(line2View.frame) + 20, 100, 20)];
-    NSString *total_price = [sharedData formatCurrencyString:[self.productList objectForKey:@"total_price_all"]];
-    [self.totalPrice setText:[NSString stringWithFormat:@"Rp%@",total_price]];
     [self.totalPrice setTextAlignment:NSTextAlignmentRight];
     [self.totalPrice setFont:[UIFont phBlond:18]];
     [self.totalPrice setTextColor:[UIColor phPurpleColor]];
     [self.totalPrice setBackgroundColor:[UIColor clearColor]];
+    NSString *total_price = [sharedData formatCurrencyString:[self.productList objectForKey:@"total_price_all"]];
+    if ([total_price integerValue] == 0) {
+        [self.totalPrice setText:@"FREE"];
+    } else {
+        [self.totalPrice setText:[NSString stringWithFormat:@"Rp%@",total_price]];
+    }
     [self.scrollView addSubview:self.totalPrice];
     
     self.scrollView.contentSize = CGSizeMake(self.visibleSize.width, CGRectGetMaxY(self.totalPrice.frame) + 16);
