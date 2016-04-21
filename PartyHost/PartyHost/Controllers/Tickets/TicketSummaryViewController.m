@@ -25,7 +25,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    [self setupUserInfo];
+//    [self setupUserInfo];
     
     self.navBar = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.visibleSize.width, 60)];
     [self.navBar setBackgroundColor:[UIColor phPurpleColor]];
@@ -475,7 +475,8 @@
                              @"product_list":summaryList,
                              @"guest_detail":@{@"name":[userInfo objectForKey:@"name"],
                                                @"email":[userInfo objectForKey:@"email"],
-                                               @"phone":[NSString stringWithFormat:@"%@%@", [userInfo objectForKey:@"idd_code"], [userInfo objectForKey:@"phone"]]}};
+                                               @"phone":[userInfo objectForKey:@"phone"],
+                                               @"dial_code":[userInfo objectForKey:@"dial_code"]}};
     
     [SVProgressHUD show];
     [self.continueButton setEnabled:NO];
@@ -504,8 +505,8 @@
                                                       cancelButtonTitle:@"OK"
                                                       otherButtonTitles:nil];
                 [alert show];
-            }
-            else {
+                
+            } else {
                 UIAlertController *alertController = [UIAlertController
                                                       alertControllerWithTitle:@"Booking Failed"
                                                       message:message
@@ -667,50 +668,23 @@
 }
 
 #pragma mark - Data
-- (void)setupUserInfo {
-    [UserManager clearUserTicketInfo];
-    
-    SharedData *sharedData = [SharedData sharedInstance];
-    
-        NSLog(@"USERDICT : %@", sharedData.userDict);
-    
-    NSString *firstName = @"";
-    if ([sharedData.userDict objectForKey:@"first_name"] && [sharedData.userDict objectForKey:@"first_name"] != nil) {
-        firstName = [sharedData.userDict objectForKey:@"first_name"];
-    }
-    
-    NSString *lastName = @"";
-    if ([sharedData.userDict objectForKey:@"last_name"] && [sharedData.userDict objectForKey:@"last_name"] != nil) {
-        lastName = [sharedData.userDict objectForKey:@"last_name"];
-    }
- 
-    NSString *name = [NSString stringWithFormat:@"%@ %@", firstName, lastName];
-    
-    NSString *email = @"";
-    if ([sharedData.userDict objectForKey:@"email"] && [sharedData.userDict objectForKey:@"email"] != nil) {
-        email = [sharedData.userDict objectForKey:@"email"];
-    }
-    
-    NSString *phone = @"";
-    NSString *idd_code = @"";
-    if ([sharedData.phone length] > 0) {
-        idd_code = [NSString stringWithFormat:@"+%@", [sharedData.phone substringWithRange:NSMakeRange(0, 2)]];
-        phone = [sharedData.phone substringFromIndex:2];
-    }
-    
-    NSDictionary *userInfo = @{@"name":name,
-                               @"email":email,
-                               @"idd_code":idd_code,
-                               @"phone":phone};
-    [UserManager saveUserTicketInfo:userInfo];
-}
-
 - (void)populateUserData {
     
     self.isAllowToContinue = YES;
     NSDictionary *userInfo = [UserManager loadUserTicketInfo];
     
-    self.userName.text = [userInfo objectForKey:@"name"];
+    if (![[userInfo objectForKey:@"name"] isEqualToString:@""]) {
+        self.userName.text = [userInfo objectForKey:@"name"];
+        self.userName.textColor = [UIColor blackColor];
+        
+        [self.userBox setImage:[[UIImage imageNamed:@"bg_rectangle"] stretchableImageWithLeftCapWidth:10 topCapHeight:10]];
+    } else {
+        self.userName.text = @"name";
+        self.userName.textColor = [UIColor redColor];
+        self.isAllowToContinue = NO;
+        
+        [self.userBox setImage:[[UIImage imageNamed:@"bg_rectangle_red"] stretchableImageWithLeftCapWidth:10 topCapHeight:10]];
+    }
     
     if (![[userInfo objectForKey:@"email"] isEqualToString:@""]) {
         self.userEmail.text = [userInfo objectForKey:@"email"];
@@ -726,7 +700,7 @@
     }
     
     if (![[userInfo objectForKey:@"phone"] isEqualToString:@""]) {
-        self.userPhone.text = [NSString stringWithFormat:@"%@%@", [userInfo objectForKey:@"idd_code"], [userInfo objectForKey:@"phone"]];
+        self.userPhone.text = [NSString stringWithFormat:@"+%@", [userInfo objectForKey:@"phone"]];
         self.userPhone.textColor = [UIColor blackColor];
         
         [self.userBox setImage:[[UIImage imageNamed:@"bg_rectangle"] stretchableImageWithLeftCapWidth:10 topCapHeight:10]];

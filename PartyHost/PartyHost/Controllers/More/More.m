@@ -64,10 +64,12 @@
     self.userProfilePhone.titleLabel.font = [UIFont phBlond:15];
     [self.userProfilePhone setTitleColor:[UIColor phBlueColor] forState:UIControlStateNormal];
     [self.userProfilePhone addTarget:self action:@selector(goVerifyPhone) forControlEvents:UIControlEventTouchUpInside];
+    [self.userProfilePhone setHidden:YES];
     [self.mainCon addSubview:self.userProfilePhone];
     
+    CGFloat moreListY = CGRectGetMaxY(self.userProfilePhone.frame) + 14 + OffSetLargeDevice - OffSet;
     self.dataA = [[NSMutableArray alloc] init]; //Fill this out in initClass
-    self.moreList = [[UITableView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(self.userProfilePhone.frame) + 14 + OffSetLargeDevice - OffSet, frame.size.width, 256 - OffSet*3) style:UITableViewStylePlain];
+    self.moreList = [[UITableView alloc] initWithFrame:CGRectMake(0, moreListY, frame.size.width, self.bounds.size.height - moreListY) style:UITableViewStylePlain];
     self.moreList.delegate = self;
     self.moreList.dataSource = self;
     self.moreList.allowsMultipleSelectionDuringEditing = NO;

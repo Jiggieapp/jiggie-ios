@@ -13,6 +13,7 @@
 #import "UIFont+PH.h"
 #import "TicketListCell.h"
 #import "AnalyticManager.h"
+#import "UserManager.h"
 
 
 @interface TicketListViewController ()
@@ -132,6 +133,7 @@
     [super viewWillAppear:animated];
     
     [self loadData];
+    [self loadGuestInfo];
     [self loadSupport];
 }
 
@@ -341,6 +343,46 @@
                             NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
                             [prefs setObject:support forKey:@"support"];
                             [prefs synchronize];
+                        }
+                    }
+                }
+                @catch (NSException *exception) {
+                    
+                }
+                @finally {
+                    
+                }
+            }
+        });
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        
+    }];
+}
+
+- (void)loadGuestInfo {
+    AFHTTPRequestOperationManager *manager = [self.sharedData getOperationManager];
+    //events/list/
+    NSString *url = [NSString stringWithFormat:@"%@/product/guest_info/%@",PHBaseNewURL, self.sharedData.fb_id];
+    [manager GET:url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSString *responseString = operation.responseString;
+        NSError *error;
+        
+        NSDictionary *json = (NSDictionary *)[NSJSONSerialization
+                                              JSONObjectWithData:[responseString dataUsingEncoding:NSUTF8StringEncoding]
+                                              options:kNilOptions
+                                              error:&error];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (json && json != nil) {
+                @try {
+                    NSDictionary *data = [json objectForKey:@"data"];
+                    if (data && data != nil) {
+                        NSDictionary *guest_detail = [data objectForKey:@"guest_detail"];
+                        if (guest_detail && guest_detail != nil) {
+                            NSDictionary *userInfo = @{@"name":[guest_detail objectForKey:@"name"],
+                                                       @"email":[guest_detail objectForKey:@"email"],
+                                                       @"dial_code":[guest_detail objectForKey:@"dial_code"],
+                                                       @"phone":[guest_detail objectForKey:@"phone"]};
+                            [UserManager saveUserTicketInfo:userInfo];
                         }
                     }
                 }

@@ -81,7 +81,7 @@
     [line3View setBackgroundColor:[UIColor phLightGrayColor]];
     [self.view addSubview:line3View];
     
-    self.phoneCodeTextField = [[UITextField alloc] initWithFrame:CGRectMake(16, CGRectGetMaxY(line3View.frame) + 10, 40 , 30)];
+    self.phoneCodeTextField = [[UITextField alloc] initWithFrame:CGRectMake(16, CGRectGetMaxY(line3View.frame) + 10, 50 , 30)];
     [self.phoneCodeTextField setBackgroundColor:[UIColor clearColor]];
     [self.phoneCodeTextField setFont:[UIFont phBlond:13]];
     [self.phoneCodeTextField setKeyboardType:UIKeyboardTypePhonePad];
@@ -91,11 +91,11 @@
     [self.phoneCodeTextField setText:@"+62"];
     [self.view addSubview:self.phoneCodeTextField];
     
-    UIView *lineVertical = [[UIView alloc] initWithFrame:CGRectMake(16 + 40, CGRectGetMaxY(line3View.frame) , 1, 50)];
+    UIView *lineVertical = [[UIView alloc] initWithFrame:CGRectMake(16 + 50, CGRectGetMaxY(line3View.frame) , 1, 50)];
     [lineVertical setBackgroundColor:[UIColor phLightGrayColor]];
     [self.view addSubview:lineVertical];
     
-    self.phoneTextField = [[UITextField alloc] initWithFrame:CGRectMake(16 + 40 + 16, CGRectGetMaxY(line3View.frame) + 10, self.visibleSize.width - 32 - 40 - 16, 30)];
+    self.phoneTextField = [[UITextField alloc] initWithFrame:CGRectMake(16 + 50 + 16, CGRectGetMaxY(line3View.frame) + 10, self.visibleSize.width - 32 - 50 - 16, 30)];
     [self.phoneTextField setBackgroundColor:[UIColor clearColor]];
     [self.phoneTextField setPlaceholder:@"Phone number"];
     [self.phoneTextField setFont:[UIFont phBlond:13]];
@@ -154,6 +154,11 @@
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(keyboardWillBeHidden:)
                                                  name:UIKeyboardWillHideNotification object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(dialCodeSelectionHandler:)
+                                                 name:@"DialCodeSelected"
+                                               object:nil];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -167,7 +172,7 @@
 
 #pragma mark - Validate 
 - (void)checkButtonActivate {
-    if (self.emailTextField.text.length > 0 && self.phoneTextField.text.length > 0 && self.nameTextField.text.length > 0 && self.phoneCodeTextField.text.length > 1) {
+    if (self.emailTextField.text.length > 0 && self.phoneTextField.text.length > 0 && self.nameTextField.text.length > 0 && self.phoneCodeTextField.text.length > 0) {
         [self.saveButton setEnabled:YES];
         [self.saveButton setBackgroundColor:[UIColor phBlueColor]];
     } else {
@@ -185,10 +190,17 @@
     
     if (![[userInfo objectForKey:@"email"] isEqualToString:@""]) {
         self.emailTextField.text = [userInfo objectForKey:@"email"];
-    } 
+    }
+    
+    if (![[userInfo objectForKey:@"dial_code"] isEqualToString:@""]) {
+        self.phoneCodeTextField.text = [NSString stringWithFormat:@"+%@", [userInfo objectForKey:@"dial_code"]];
+    }
     
     if (![[userInfo objectForKey:@"phone"] isEqualToString:@""]) {
-        self.phoneTextField.text = [userInfo objectForKey:@"phone"];
+        NSString *dial_code =  [userInfo objectForKey:@"dial_code"];
+        NSString *phone =  [userInfo objectForKey:@"phone"];
+        
+        self.phoneTextField.text = [phone substringFromIndex:dial_code.length];
     }
 }
 
@@ -211,10 +223,17 @@
         return;
     }
     
+    NSString *dialCode = self.phoneCodeTextField.text;
+    if (dialCode && dialCode.length > 0) {
+        dialCode = [dialCode substringFromIndex:1];
+    }
+    
+    NSString *phone = [NSString stringWithFormat:@"%@%@", dialCode, self.phoneTextField.text];
+    
     NSDictionary *userInfo = @{@"name":self.nameTextField.text,
                                @"email":self.emailTextField.text,
-                               @"idd_code":self.phoneCodeTextField.text,
-                               @"phone":self.phoneTextField.text};
+                               @"dial_code":dialCode,
+                               @"phone":phone};
     [UserManager saveUserTicketInfo:userInfo];
     
     [self dismissViewControllerAnimated:YES completion:nil];
@@ -254,20 +273,7 @@
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
     [self performSelector:@selector(checkButtonActivate) withObject:nil afterDelay:0.1];
     
-    if (textField == self.phoneCodeTextField) {
-        // Prevent crashing undo bug – see note below.
-        if(range.length + range.location > textField.text.length)
-        {
-            return NO;
-        }
-        
-        NSUInteger newLength = [textField.text length] + [string length] - range.length;
-        if(newLength == 0 || newLength > 4) {
-            return NO;
-        }
-        return YES;
-        
-    } else if (textField == self.emailTextField) {
+    if (textField == self.emailTextField) {
         [self.emailTextField setTextColor:[UIColor blackColor]];
         [self.emailAlert setHidden:YES];
     }
@@ -307,5 +313,12 @@
         [self.saveButton setFrame:CGRectMake(0, self.view.bounds.size.height - self.saveButton.bounds.size.height, self.saveButton.bounds.size.width, self.saveButton.bounds.size.height)];
     }];
 }
+
+#pragma mark - Notification Handlers
+- (void)dialCodeSelectionHandler:(NSNotification *)notification {
+    NSString *dialCode = (NSString *)[notification object];
+    [self.phoneCodeTextField setText:dialCode];
+}
+
 
 @end

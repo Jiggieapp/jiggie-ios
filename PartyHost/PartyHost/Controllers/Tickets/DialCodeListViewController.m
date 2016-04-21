@@ -40,7 +40,11 @@
     
     [self.view addSubview:self.navBar];
     
-    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 60, self.visibleSize.width, self.view.bounds.size.height - 60)];
+    self.searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 60, self.visibleSize.width, 44)];
+    [self.searchBar setDelegate:self];
+    [self.view addSubview:self.searchBar];
+    
+    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 60 + self.searchBar.bounds.size.height, self.visibleSize.width, self.view.bounds.size.height - 60 - self.searchBar.bounds.size.height)];
     [self.tableView setDelegate:self];
     [self.tableView setDataSource:self];
     [self.tableView setBackgroundColor:[UIColor clearColor]];
@@ -132,6 +136,9 @@
     UITableViewCell *cell = (UITableViewCell *)[tableView dequeueReusableCellWithIdentifier:simpleTableIdentifier];
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:simpleTableIdentifier];
+        
+        [[cell textLabel] setFont:[UIFont phBlond:14]];
+        [[cell detailTextLabel] setFont:[UIFont phBlond:13]];
     }
     
     NSDictionary *dialCode = [self.dialCodes objectAtIndex:indexPath.row];
@@ -141,14 +148,11 @@
             [[cell textLabel] setText:name];
         }
         
-        NSArray *countryCallingCodes = [dialCode objectForKey:@"countryCallingCodes"];
-        if (countryCallingCodes && countryCallingCodes != nil && countryCallingCodes.count > 0) {
-            NSString *countryCode = [countryCallingCodes objectAtIndex:0];
-            if (countryCode && countryCode != nil) {
-                [[cell detailTextLabel] setText:countryCode];
-            } else {
-                [[cell detailTextLabel] setText:@""];
-            }
+        NSString *countryCallingCodes = [dialCode objectForKey:@"countryCallingCodes"];
+        if (countryCallingCodes && countryCallingCodes != nil) {
+            [[cell detailTextLabel] setText:countryCallingCodes];
+        } else {
+            [[cell detailTextLabel] setText:@""];
         }
     }
     
@@ -159,6 +163,13 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:[tableView indexPathForSelectedRow] animated:YES];
     
+    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+    NSString *dialCode = cell.detailTextLabel.text;
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"DialCodeSelected"
+                                                        object:dialCode];
+    
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 @end

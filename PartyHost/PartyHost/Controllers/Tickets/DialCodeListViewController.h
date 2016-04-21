@@ -8,7 +8,7 @@
 
 #import "BaseViewController.h"
 
-@interface DialCodeListViewController : BaseViewController <UITableViewDataSource, UITableViewDelegate>
+@interface DialCodeListViewController : BaseViewController <UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate>
 
 @property (nonatomic, strong) UIView *navBar;
 @property (nonatomic, strong) UITableView *tableView;
