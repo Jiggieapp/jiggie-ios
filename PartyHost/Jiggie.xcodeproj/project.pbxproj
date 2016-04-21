@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9A85A5531CC8B89300C8818B /* JGKeyboardNotificationHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A85A5521CC8B89300C8818B /* JGKeyboardNotificationHelper.m */; };
 		CB3EB6C81B459177003F658F /* App.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CB3EB6C71B459177003F658F /* App.xcassets */; };
 		CB3EB6CA1B459184003F658F /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = CB3EB6C91B459184003F658F /* LaunchScreen.xib */; };
 		CB3EB6CC1B45919A003F658F /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CB3EB6CB1B45919A003F658F /* Images.xcassets */; };
@@ -318,6 +319,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		9A85A5511CC8B89300C8818B /* JGKeyboardNotificationHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JGKeyboardNotificationHelper.h; sourceTree = "<group>"; };
+		9A85A5521CC8B89300C8818B /* JGKeyboardNotificationHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JGKeyboardNotificationHelper.m; sourceTree = "<group>"; };
 		CB3EB6C71B459177003F658F /* App.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = App.xcassets; sourceTree = "<group>"; };
 		CB3EB6C91B459184003F658F /* LaunchScreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LaunchScreen.xib; sourceTree = "<group>"; };
 		CB3EB6CB1B45919A003F658F /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
@@ -1105,6 +1108,8 @@
 				DAABB1111C1FF0F3004DDCFA /* SharedData */,
 				DA43056A1C23E7D000ED6C54 /* BaseModel.h */,
 				DA43056B1C23E7D000ED6C54 /* BaseModel.m */,
+				9A85A5511CC8B89300C8818B /* JGKeyboardNotificationHelper.h */,
+				9A85A5521CC8B89300C8818B /* JGKeyboardNotificationHelper.m */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -2220,6 +2225,7 @@
 				DAABB0CE1C1FD50E004DDCFA /* EventsHostingsListCell.m in Sources */,
 				DAABB12E1C1FF13A004DDCFA /* SelectionCheckmark.m in Sources */,
 				DAABB2D01C1FF5AE004DDCFA /* TSResponse.m in Sources */,
+				9A85A5531CC8B89300C8818B /* JGKeyboardNotificationHelper.m in Sources */,
 				DAABB2901C1FF5AE004DDCFA /* MPCGAffineTransformToNSDictionaryValueTransformer.m in Sources */,
 				DAABB0FD1C1FD50E004DDCFA /* SetupView.m in Sources */,
 				DAABB2851C1FF5AE004DDCFA /* MPABTestDesignerConnection.m in Sources */,

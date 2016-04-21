@@ -7,12 +7,25 @@
 //
 
 #import "DialCodeListViewController.h"
+#import "JGKeyboardNotificationHelper.h"
 
 @interface DialCodeListViewController ()
+
+@property (nonatomic, assign) BOOL isSearchDialCodes;
+@property (nonatomic, strong) NSArray *searchedDialCodes;
+@property (nonatomic, strong) JGKeyboardNotificationHelper *keyboardNotification;
 
 @end
 
 @implementation DialCodeListViewController
+
+- (JGKeyboardNotificationHelper *)keyboardNotification {
+    if (!_keyboardNotification) {
+        _keyboardNotification = [JGKeyboardNotificationHelper new];
+    }
+    
+    return _keyboardNotification;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -41,6 +54,7 @@
     [self.view addSubview:self.navBar];
     
     self.searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 60, self.visibleSize.width, 44)];
+    [self.searchBar setPlaceholder:@"Country Name"];
     [self.searchBar setDelegate:self];
     [self.view addSubview:self.searchBar];
     
@@ -48,6 +62,7 @@
     [self.tableView setDelegate:self];
     [self.tableView setDataSource:self];
     [self.tableView setBackgroundColor:[UIColor clearColor]];
+    [self.tableView setTableFooterView:[UIView new]];
     [self.view addSubview:self.tableView];
     
     self.emptyView = [[EmptyView alloc] initWithFrame:CGRectMake(0, 60, self.visibleSize.width, self.view.bounds.size.height - 60)];
@@ -59,9 +74,38 @@
     [self loadData];
 }
 
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    
+    [self observeKeyboardNotification];
+}
+
+- (void)viewDidDisappear:(BOOL)animated {
+    [super viewDidDisappear:animated];
+    
+    [self.keyboardNotification removeObserser:self];
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+#pragma mark - Observer
+- (void)observeKeyboardNotification {
+    [self.keyboardNotification handleKeyboardNotificationWithCompletion:^(UIViewAnimationOptions animation, NSTimeInterval duration, CGRect frame) {
+        [UIView animateWithDuration:duration
+                              delay:.0f
+                            options:animation
+                         animations:^{
+                             CGRect tableViewFrame = self.tableView.frame;
+                             CGFloat tableViewHeight = CGRectGetHeight(frame) > 0 ? CGRectGetHeight(tableViewFrame) - CGRectGetHeight(frame) : CGRectGetHeight(self.view.bounds) - 60 - CGRectGetHeight(self.searchBar.bounds);
+                             tableViewFrame.size.height = tableViewHeight;
+                             self.tableView.frame = tableViewFrame;
+                         } completion:nil];
+    }];
+    
+    [self.keyboardNotification addObserser];
 }
 
 #pragma mark - Action
@@ -123,6 +167,10 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    if (self.isSearchDialCodes) {
+        return self.searchedDialCodes.count;
+    }
+    
     return self.dialCodes.count;
 }
 
@@ -142,6 +190,11 @@
     }
     
     NSDictionary *dialCode = [self.dialCodes objectAtIndex:indexPath.row];
+    
+    if (self.isSearchDialCodes) {
+        dialCode = [self.searchedDialCodes objectAtIndex:indexPath.row];
+    }
+    
     if (dialCode && dialCode != nil) {
         NSString *name = [dialCode objectForKey:@"name"];
         if (name && name != nil) {
@@ -170,6 +223,28 @@
                                                         object:dialCode];
     
     [self.navigationController popViewControllerAnimated:YES];
+}
+
+#pragma mark - UISearchBarDelegate
+- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
+    [self.view endEditing:YES];
+}
+
+- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
+    NSCharacterSet *digitCharacters = [NSCharacterSet decimalDigitCharacterSet];
+    NSCharacterSet *symbolCharacters = [NSCharacterSet symbolCharacterSet];
+    
+    if ([searchText rangeOfCharacterFromSet:digitCharacters].location != NSNotFound ||
+        [searchText rangeOfCharacterFromSet:symbolCharacters].location != NSNotFound) {
+        return;
+    }
+    
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.name CONTAINS[c] %@", searchText];
+    self.searchedDialCodes = [self.dialCodes filteredArrayUsingPredicate:predicate];
+    
+    self.isSearchDialCodes = ![searchText isEqualToString:@""];
+        
+    [self.tableView reloadData];
 }
 
 @end
