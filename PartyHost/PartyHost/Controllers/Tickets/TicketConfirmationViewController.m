@@ -514,12 +514,24 @@
 }
 
 - (void)checkValidToContinue {
-    if (self.paymentDetail && self.paymentDetail != nil) {
-        
+    if ([[self.productList objectForKey:@"ticket_type"] isEqualToString:@"booking"]) {
+    }
+    
+    if ((self.paymentDetail && self.paymentDetail != nil)) {
         [self.swipeScrollView setScrollEnabled:YES];
         [self.swipeScrollView setBackgroundColor:[UIColor phBlueColor]];
-    } else {
         
+    } else if([[self.productList objectForKey:@"total_price_all"] integerValue] == 0) {
+        // check if free event
+        [self.swipeScrollView setScrollEnabled:YES];
+        [self.swipeScrollView setBackgroundColor:[UIColor phBlueColor]];
+        
+    } else if([[self.productList objectForKey:@"ticket_type"] isEqualToString:@"booking"] && self.currentPrice == 0) {
+        // check if no min booking payment required
+        [self.swipeScrollView setScrollEnabled:YES];
+        [self.swipeScrollView setBackgroundColor:[UIColor phBlueColor]];
+        
+    } else {
         [self.swipeScrollView setScrollEnabled:NO];
         [self.swipeScrollView setBackgroundColor:[UIColor colorFromHexCode:@"B6ECFF"]];
     }
@@ -655,6 +667,8 @@
         self.requiredPrice.text = [NSString stringWithFormat:@"Rp%@", formattedPrice];
         self.balancePrice.text = [NSString stringWithFormat:@"Rp%@", balanceText];
         self.totalPrice.text = [NSString stringWithFormat:@"Rp%@", formattedPrice];
+        
+        [self checkValidToContinue];
     }
 }
 
@@ -676,65 +690,78 @@
         self.requiredPrice.text = [NSString stringWithFormat:@"Rp%@", formattedPrice];
         self.balancePrice.text = [NSString stringWithFormat:@"Rp%@", balanceText];
         self.totalPrice.text = [NSString stringWithFormat:@"Rp%@", formattedPrice];
+        
+        [self checkValidToContinue];
     }
 }
 
 #pragma mark - Data
 - (void)readyForPayment {
-    if ([[self.paymentDetail objectForKey:@"is_new_card"] isEqualToString:@"1"]) {
-        NSDictionary *content = [self.paymentDetail objectForKey:@"content"];
+    
+    if ([[self.productList objectForKey:@"total_price_all"] integerValue] == 0) {
+        // Check if free event
+        [self postPaymentFree];
         
-        VTDirect *vtDirect = [[VTDirect alloc] init];
+    } else if([[self.productList objectForKey:@"ticket_type"] isEqualToString:@"booking"] && self.currentPrice == 0) {
+        // check if no min booking payment required
+        [self postPaymentFree];
         
-        VTCardDetails *cardDetails = [[VTCardDetails alloc] init];
-        cardDetails.card_number = [content objectForKey:@"card_number"];
-        cardDetails.card_cvv =[content objectForKey:@"card_cvv"];
-        cardDetails.card_exp_month =[content objectForKey:@"card_exp_month"];
-        cardDetails.card_exp_year = [[content objectForKey:@"card_exp_year"] integerValue];
-        if ([[self.productList objectForKey:@"ticket_type"] isEqualToString:@"booking"]) {
-            cardDetails.gross_amount = [NSString stringWithFormat:@"%li", self.currentPrice];
-        } else {
-            cardDetails.gross_amount = [self.productSummary objectForKey:@"total_price"];
-        }
-        cardDetails.secure = YES;
-        
-        vtDirect.card_details = cardDetails;
-        
-        [SVProgressHUD show];
-        [vtDirect getToken:^(VTToken *token, NSException *exception) {
-            [SVProgressHUD dismiss];
-            
-            NSData *newToken = (NSData *)token;
-            
-            NSError *error;
-            NSDictionary *json = (NSDictionary *)[NSJSONSerialization
-                                                  JSONObjectWithData:newToken
-                                                  options:kNilOptions
-                                                  error:&error];
-            if(exception == nil){
-                if ([[json objectForKey:@"status_code"] isEqualToString:@"200"]) {
-                    if (json[@"redirect_url"] != nil) {
-                        self.paymentNew = nil;
-                        self.paymentNew = @{@"token_id":[json objectForKey:@"token_id"],
-                                            @"name_cc":[content objectForKey:@"name_cc"]};
-                        
-                        UIWebView *webView = [[UIWebView alloc] initWithFrame:CGRectMake(0, 60, self.visibleSize.width, self.view.bounds.size.height - 60)];
-                        [webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:json[@"redirect_url"]]]];
-                        [webView setDelegate:self];
-                        [webView setScalesPageToFit:YES];
-                        [webView setMultipleTouchEnabled:NO];
-                        [webView setContentMode:UIViewContentModeScaleAspectFit];
-                        [self.view addSubview:webView];
-                    }
-                }
-                
-            } else {
-                NSLog(@"Reason: %@",exception.reason);
-                
-            }
-        }];
     } else {
-        [self postPayment];
+        if ([[self.paymentDetail objectForKey:@"is_new_card"] isEqualToString:@"1"]) {
+            NSDictionary *content = [self.paymentDetail objectForKey:@"content"];
+            
+            VTDirect *vtDirect = [[VTDirect alloc] init];
+            
+            VTCardDetails *cardDetails = [[VTCardDetails alloc] init];
+            cardDetails.card_number = [content objectForKey:@"card_number"];
+            cardDetails.card_cvv =[content objectForKey:@"card_cvv"];
+            cardDetails.card_exp_month =[content objectForKey:@"card_exp_month"];
+            cardDetails.card_exp_year = [[content objectForKey:@"card_exp_year"] integerValue];
+            if ([[self.productList objectForKey:@"ticket_type"] isEqualToString:@"booking"]) {
+                cardDetails.gross_amount = [NSString stringWithFormat:@"%li", self.currentPrice];
+            } else {
+                cardDetails.gross_amount = [self.productSummary objectForKey:@"total_price"];
+            }
+            cardDetails.secure = YES;
+            
+            vtDirect.card_details = cardDetails;
+            
+            [SVProgressHUD show];
+            [vtDirect getToken:^(VTToken *token, NSException *exception) {
+                [SVProgressHUD dismiss];
+                
+                NSData *newToken = (NSData *)token;
+                
+                NSError *error;
+                NSDictionary *json = (NSDictionary *)[NSJSONSerialization
+                                                      JSONObjectWithData:newToken
+                                                      options:kNilOptions
+                                                      error:&error];
+                if(exception == nil){
+                    if ([[json objectForKey:@"status_code"] isEqualToString:@"200"]) {
+                        if (json[@"redirect_url"] != nil) {
+                            self.paymentNew = nil;
+                            self.paymentNew = @{@"token_id":[json objectForKey:@"token_id"],
+                                                @"name_cc":[content objectForKey:@"name_cc"]};
+                            
+                            UIWebView *webView = [[UIWebView alloc] initWithFrame:CGRectMake(0, 60, self.visibleSize.width, self.view.bounds.size.height - 60)];
+                            [webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:json[@"redirect_url"]]]];
+                            [webView setDelegate:self];
+                            [webView setScalesPageToFit:YES];
+                            [webView setMultipleTouchEnabled:NO];
+                            [webView setContentMode:UIViewContentModeScaleAspectFit];
+                            [self.view addSubview:webView];
+                        }
+                    }
+                    
+                } else {
+                    NSLog(@"Reason: %@",exception.reason);
+                    
+                }
+            }];
+        } else {
+            [self postPayment];
+        }
     }
 }
 
@@ -843,6 +870,96 @@
         } else {
             [self openVirtualAccountScreen];
         }
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        // enable all button
+        [self.swipeScrollView setScrollEnabled:YES];
+        [self.closeButton setEnabled:YES];
+        [self.paymentAddButton setEnabled:YES];
+        
+        [SVProgressHUD dismiss];
+    }];
+}
+
+- (void)postPaymentFree {
+    SharedData *sharedData = [SharedData sharedInstance];
+    AFHTTPRequestOperationManager *manager = [sharedData getOperationManager];
+    NSString *url = [NSString stringWithFormat:@"%@/product/free_payment",PHBaseNewURL];
+    
+    NSDictionary *params = @{@"order_id":[self.productSummary objectForKey:@"order_id"],
+                             @"pay_deposit":@"0"};
+    
+    [SVProgressHUD show];
+    
+    // disable all button
+    [self.swipeScrollView setScrollEnabled:NO];
+    [self.closeButton setEnabled:NO];
+    [self.paymentAddButton setEnabled:NO];
+    
+    [manager POST:url parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        [SVProgressHUD dismiss];
+        
+        // enable all button
+        [self.swipeScrollView setScrollEnabled:YES];
+        [self.closeButton setEnabled:YES];
+        [self.paymentAddButton setEnabled:YES];
+        
+        NSInteger responseStatusCode = operation.response.statusCode;
+        if (responseStatusCode != 200) {
+            return;
+        }
+        
+        if (![[responseObject objectForKey:@"response"] boolValue]) {
+            NSString *message = [responseObject objectForKey:@"msg"];
+            if (!message || message == nil) {
+                message = @"";
+            }
+            
+            self.errorType = [responseObject objectForKey:@"type"];
+            
+            if (([[[UIDevice currentDevice] systemVersion] compare:@"8.0" options:NSNumericSearch] == NSOrderedAscending)) {
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Payment Failed"
+                                                                message:message
+                                                               delegate:self
+                                                      cancelButtonTitle:@"OK"
+                                                      otherButtonTitles:nil];
+                [alert show];
+            }
+            else {
+                UIAlertController *alertController = [UIAlertController
+                                                      alertControllerWithTitle:@"Payment Failed"
+                                                      message:message
+                                                      preferredStyle:UIAlertControllerStyleAlert];
+                
+                UIAlertAction *cancelAction = [UIAlertAction
+                                               actionWithTitle:@"OK"
+                                               style:UIAlertActionStyleCancel
+                                               handler:^(UIAlertAction *action)
+                                               {
+                                                   if ([self.errorType isEqualToString:@"ticket_list"]) {
+                                                       [[self navigationController] popToRootViewControllerAnimated:YES];
+                                                       
+                                                   } else if ([self.errorType isEqualToString:@"ticket_details"]) {
+                                                       [[self navigationController] popViewControllerAnimated:YES];
+                                                       
+                                                   } else if ([self.errorType isEqualToString:@"paid"]) {
+                                                       [self openSuccessScreen];
+                                                   }
+                                               }];
+                
+                [alertController addAction:cancelAction];
+                [self presentViewController:alertController animated:YES completion:nil];
+            }
+            
+            return;
+        }
+        
+        // Remove cache
+        NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+        [prefs removeObjectForKey:@"temp_da_list"];
+        [prefs synchronize];
+        
+        [self openSuccessScreen];
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         // enable all button

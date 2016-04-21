@@ -134,6 +134,14 @@
     [self.userPhone setBackgroundColor:[UIColor clearColor]];
     [self.userBox addSubview:self.userPhone];
     
+    self.userCaption = [[UILabel alloc] initWithFrame:CGRectMake(12, 14 + 20, self.visibleSize.width - 70, 18)];
+    [self.userCaption setFont:[UIFont phBlond:13]];
+    [self.userCaption setTextColor:[UIColor phBlueColor]];
+    [self.userCaption setBackgroundColor:[UIColor clearColor]];
+    [self.userCaption setHidden:YES];
+    [self.userCaption setText:@"FILL IN YOUR CONTACT INFO"];
+    [self.userBox addSubview:self.userCaption];
+    
     UIImageView *accessory = [[UIImageView alloc] initWithFrame:CGRectMake(self.userBox.bounds.size.width - 28, 14 + 20, 16, 24)];
     [accessory setImage:[UIImage imageNamed:@"icon_blue_arrow"]];
     [self.userBox addSubview:accessory];
@@ -672,6 +680,7 @@
     
     self.isAllowToContinue = YES;
     NSDictionary *userInfo = [UserManager loadUserTicketInfo];
+    NSInteger emptyCounter = 0;
     
     if (![[userInfo objectForKey:@"name"] isEqualToString:@""]) {
         self.userName.text = [userInfo objectForKey:@"name"];
@@ -684,6 +693,7 @@
         self.isAllowToContinue = NO;
         
         [self.userBox setImage:[[UIImage imageNamed:@"bg_rectangle_red"] stretchableImageWithLeftCapWidth:10 topCapHeight:10]];
+        emptyCounter++;
     }
     
     if (![[userInfo objectForKey:@"email"] isEqualToString:@""]) {
@@ -697,6 +707,7 @@
         self.isAllowToContinue = NO;
         
         [self.userBox setImage:[[UIImage imageNamed:@"bg_rectangle_red"] stretchableImageWithLeftCapWidth:10 topCapHeight:10]];
+        emptyCounter++;
     }
     
     if (![[userInfo objectForKey:@"phone"] isEqualToString:@""]) {
@@ -710,6 +721,22 @@
         self.isAllowToContinue = NO;
         
         [self.userBox setImage:[[UIImage imageNamed:@"bg_rectangle_red"] stretchableImageWithLeftCapWidth:10 topCapHeight:10]];
+        emptyCounter++;
+    }
+    
+    if (emptyCounter == 3) {
+        // check if all data is empty
+        [self.userName setHidden:YES];
+        [self.userEmail setHidden:YES];
+        [self.userPhone setHidden:YES];
+        
+        [self.userCaption setHidden:NO];
+    } else {
+        [self.userName setHidden:NO];
+        [self.userEmail setHidden:NO];
+        [self.userPhone setHidden:NO];
+        
+        [self.userCaption setHidden:YES];
     }
     
     if (self.isAllowToContinue && !self.isSoldOut) {

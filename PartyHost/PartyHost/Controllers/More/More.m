@@ -60,7 +60,7 @@
     [self.mainCon addSubview:self.userProfileName];
     
     self.userProfilePhone = [UIButton buttonWithType:UIButtonTypeCustom];
-    self.userProfilePhone.frame = CGRectMake(self.sharedData.screenWidth/2 - 100, CGRectGetMaxY(self.userProfileName.frame), 200, 36);
+    self.userProfilePhone.frame = CGRectMake(self.sharedData.screenWidth/2 - 100, CGRectGetMaxY(self.userProfileName.frame), 200, 10);
     self.userProfilePhone.titleLabel.font = [UIFont phBlond:15];
     [self.userProfilePhone setTitleColor:[UIColor phBlueColor] forState:UIControlStateNormal];
     [self.userProfilePhone addTarget:self action:@selector(goVerifyPhone) forControlEvents:UIControlEventTouchUpInside];

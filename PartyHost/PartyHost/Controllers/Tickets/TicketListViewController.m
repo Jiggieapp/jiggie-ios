@@ -97,7 +97,7 @@
     
     self.navTitle = [[UILabel alloc] initWithFrame:CGRectMake(40, 20, self.visibleSize.width - 100, 40)];
     [self.navTitle setTextAlignment:NSTextAlignmentCenter];
-    [self.navTitle setFont:[UIFont phBlond:16]];
+    [self.navTitle setFont:[UIFont phBlond:15]];
     [self.navTitle setTextColor:[UIColor whiteColor]];
     [self.navTitle setBackgroundColor:[UIColor clearColor]];
     [self.navBar addSubview:self.navTitle];

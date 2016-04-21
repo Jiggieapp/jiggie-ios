@@ -17,6 +17,7 @@
 @property (nonatomic, strong) UILabel *userName;
 @property (nonatomic, strong) UILabel *userEmail;
 @property (nonatomic, strong) UILabel *userPhone;
+@property (nonatomic, strong) UILabel *userCaption;
 @property (nonatomic, strong) UIButton *userDetailButton;
 @property (nonatomic, strong) UILabel *totalPrice;
 @property (nonatomic, strong) UILabel *totalTicket;
