@@ -7,15 +7,25 @@
 //
 
 #import "DialCodeListViewController.h"
+#import "JGKeyboardNotificationHelper.h"
 
 @interface DialCodeListViewController ()
 
 @property (nonatomic, assign) BOOL isSearchDialCodes;
 @property (nonatomic, strong) NSArray *searchedDialCodes;
+@property (nonatomic, strong) JGKeyboardNotificationHelper *keyboardNotification;
 
 @end
 
 @implementation DialCodeListViewController
+
+- (JGKeyboardNotificationHelper *)keyboardNotification {
+    if (!_keyboardNotification) {
+        _keyboardNotification = [JGKeyboardNotificationHelper new];
+    }
+    
+    return _keyboardNotification;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -64,9 +74,38 @@
     [self loadData];
 }
 
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    
+    [self observeKeyboardNotification];
+}
+
+- (void)viewDidDisappear:(BOOL)animated {
+    [super viewDidDisappear:animated];
+    
+    [self.keyboardNotification removeObserser:self];
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+#pragma mark - Observer
+- (void)observeKeyboardNotification {
+    [self.keyboardNotification handleKeyboardNotificationWithCompletion:^(UIViewAnimationOptions animation, NSTimeInterval duration, CGRect frame) {
+        [UIView animateWithDuration:duration
+                              delay:.0f
+                            options:animation
+                         animations:^{
+                             CGRect tableViewFrame = self.tableView.frame;
+                             CGFloat tableViewHeight = CGRectGetHeight(frame) > 0 ? CGRectGetHeight(tableViewFrame) - CGRectGetHeight(frame) : CGRectGetHeight(self.view.bounds) - 60 - CGRectGetHeight(self.searchBar.bounds);
+                             tableViewFrame.size.height = tableViewHeight;
+                             self.tableView.frame = tableViewFrame;
+                         } completion:nil];
+    }];
+    
+    [self.keyboardNotification addObserser];
 }
 
 #pragma mark - Action
@@ -187,6 +226,10 @@
 }
 
 #pragma mark - UISearchBarDelegate
+- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
+    [self.view endEditing:YES];
+}
+
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
     NSCharacterSet *digitCharacters = [NSCharacterSet decimalDigitCharacterSet];
     NSCharacterSet *symbolCharacters = [NSCharacterSet symbolCharacterSet];
