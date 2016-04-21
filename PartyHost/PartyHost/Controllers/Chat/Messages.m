@@ -267,6 +267,15 @@
                      
                      self.confirmMode = 0;
                      
+                     if (!self.messagesList.tableHeaderView) {
+                         UIView *view = [self headerViewWithText:chat_conversations[@"event_name"]];
+                         UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(.0f, .0f, CGRectGetWidth(self.messagesList.bounds), CGRectGetHeight(view.bounds) + 20.0f)];
+                         [headerView addSubview:view];
+                         [view setCenter:headerView.center];
+                         
+                         [self.messagesList setTableHeaderView:headerView];
+                     }
+                     
                      if(self.isMessagesLoaded && [chat_conversations[@"messages"] isEqualToArray:self.messagesA])
                      {
                          NSLog(@"SAME_MESSAGES");
@@ -1048,6 +1057,39 @@
     [self.sharedData clearKeyBoards];
     [self reset];
     [self initClass];
+}
+
+#pragma mark - Header View
+- (UIView *)headerViewWithText:(NSString *)text {
+    UILabel *label = [UILabel new];
+    [label setNumberOfLines:0];
+    [label setTextColor:[UIColor whiteColor]];
+    [label setText:text];
+    [label setFont:[UIFont phBlond:12]];
+    
+    CGSize textSize = [text boundingRectWithSize:CGSizeMake(CGRectGetWidth([UIScreen mainScreen].bounds) - 60, 60)
+                                         options:NSStringDrawingUsesFontLeading
+                                      attributes:@{ NSFontAttributeName : label.font }
+                                         context:nil].size;
+    [label setFrame:CGRectMake(.0f,
+                               .0f,
+                               textSize.width,
+                               textSize.height)];
+    [label sizeToFit];
+    
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(.0,
+                                                            .0f,
+                                                            CGRectGetWidth(label.bounds) + 10,
+                                                            CGRectGetHeight(label.bounds) + 10)];
+    
+    [label setCenter:view.center];
+    
+    [view setBackgroundColor:[UIColor phPurpleColor]];
+    [view.layer setCornerRadius:5.0f];
+    
+    [view addSubview:label];
+    
+    return view;
 }
 
 #pragma mark - UITableViewDataSource
