@@ -157,7 +157,22 @@
         });
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        [self.emptyView setMode:@"hide"];
+        if (operation.response.statusCode == 410) {
+            [self reloadLoginWithFBToken];
+        } else {
+            [self.emptyView setMode:@"empty"];
+        }
+    }];
+}
+
+- (void)reloadLoginWithFBToken {
+    SharedData *sharedData = [SharedData sharedInstance];
+    
+    [sharedData loginWithFBToken:^(AFHTTPRequestOperation *operation, id responseObject) {
+        sharedData.ph_token = responseObject[@"data"][@"token"];
+        [self loadData];
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        [self reloadLoginWithFBToken];
     }];
 }
 

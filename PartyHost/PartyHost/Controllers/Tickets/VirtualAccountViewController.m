@@ -267,7 +267,12 @@
         });
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        [self.emptyView setMode:@"empty"];
+        if (operation.response.statusCode == 410) {
+            [self.emptyView setMode:@"load"];
+            [self reloadLoginWithFBToken:@"success_screen"];
+        } else {
+            [self.emptyView setMode:@"empty"];
+        }
     }];
 }
 
@@ -448,21 +453,25 @@
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         if (operation.response.statusCode == 410) {
             [self.emptyView setMode:@"load"];
-            [self reloadLoginWithFBToken];
+            [self reloadLoginWithFBToken:@"walkthrough_payment"];
         } else {
             [self.emptyView setMode:@"empty"];
         }
     }];
 }
 
-- (void)reloadLoginWithFBToken {
+- (void)reloadLoginWithFBToken:(NSString *)loadType {
     SharedData *sharedData = [SharedData sharedInstance];
     
     [sharedData loginWithFBToken:^(AFHTTPRequestOperation *operation, id responseObject) {
         sharedData.ph_token = responseObject[@"data"][@"token"];
-        [self loadTutorialData];
+        if ([loadType isEqualToString:@"walkthrough_payment"]) {
+            [self loadTutorialData];
+        } else if ([loadType isEqualToString:@"success_screen"]) {
+            [self loadData];
+        }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        [self reloadLoginWithFBToken];
+        [self reloadLoginWithFBToken:loadType];
     }];
 }
 

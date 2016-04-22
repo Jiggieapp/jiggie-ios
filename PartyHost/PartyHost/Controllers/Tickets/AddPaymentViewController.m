@@ -81,7 +81,7 @@
     UIToolbar *nextToolbar = [[UIToolbar alloc]initWithFrame:CGRectMake(0, 0, self.visibleSize.width, 50)];
     nextToolbar.barStyle = UIBarStyleDefault;
     nextToolbar.items = @[[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil],
-                          [[UIBarButtonItem alloc]initWithTitle:@"Next" style:UIBarButtonItemStyleDone target:self action:@selector(nextWithNumberPad)]];
+                          [[UIBarButtonItem alloc]initWithTitle:@"Done" style:UIBarButtonItemStyleDone target:self action:@selector(nextWithNumberPad)]];
     [nextToolbar sizeToFit];
     self.cardNumberTextField.inputAccessoryView = nextToolbar;
     
@@ -288,7 +288,7 @@
 }
 
 - (void)nextWithNumberPad {
-    [self.dateTextField becomeFirstResponder];
+    [self.cardNumberTextField resignFirstResponder];
 }
 
 - (void)doneDateFromToolbar {
@@ -324,13 +324,6 @@
     } else {
         [self.saveButton setEnabled:NO];
         [self.saveButton setBackgroundColor:[UIColor colorFromHexCode:@"B6ECFF"]];
-    }
-}
-
-#pragma mark - UIWebViewDelegate
-- (void)webViewDidFinishLoad:(UIWebView *)webView {
-    if ([webView.request.URL.absoluteString rangeOfString:@"callback"].location == NSNotFound) {
-        [webView removeFromSuperview];
     }
 }
 
@@ -399,6 +392,7 @@
     return YES;
 }
 
+#pragma mark - CardNumberFormat
 - (void)reformatAsCardNumber:(UITextField *)textField
 {
     // In order to make the cursor end up positioned correctly, we need to

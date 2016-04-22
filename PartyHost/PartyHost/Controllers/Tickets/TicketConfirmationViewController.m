@@ -938,12 +938,16 @@
         }
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        // enable all button
-        [self.swipeScrollView setScrollEnabled:YES];
-        [self.closeButton setEnabled:YES];
-        [self.paymentAddButton setEnabled:YES];
-        
-        [SVProgressHUD dismiss];
+        if (operation.response.statusCode == 410) {
+            [self reloadLoginWithFBToken:@"payment"];
+        } else {
+            // enable all button
+            [self.swipeScrollView setScrollEnabled:YES];
+            [self.closeButton setEnabled:YES];
+            [self.paymentAddButton setEnabled:YES];
+            
+            [SVProgressHUD dismiss];
+        }
     }];
 }
 
@@ -1028,12 +1032,31 @@
         [self openSuccessScreen];
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        // enable all button
-        [self.swipeScrollView setScrollEnabled:YES];
-        [self.closeButton setEnabled:YES];
-        [self.paymentAddButton setEnabled:YES];
-        
-        [SVProgressHUD dismiss];
+        if (operation.response.statusCode == 410) {
+            [self reloadLoginWithFBToken:@"free_payment"];
+        } else {
+            // enable all button
+            [self.swipeScrollView setScrollEnabled:YES];
+            [self.closeButton setEnabled:YES];
+            [self.paymentAddButton setEnabled:YES];
+            
+            [SVProgressHUD dismiss];
+        }
+    }];
+}
+
+- (void)reloadLoginWithFBToken:(NSString *)loadType {
+    SharedData *sharedData = [SharedData sharedInstance];
+    
+    [sharedData loginWithFBToken:^(AFHTTPRequestOperation *operation, id responseObject) {
+        sharedData.ph_token = responseObject[@"data"][@"token"];
+        if ([loadType isEqualToString:@"payment"]) {
+            [self postPayment];
+        } else if ([loadType isEqualToString:@"free_payment"]) {
+            [self postPaymentFree];
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        [self reloadLoginWithFBToken:loadType];
     }];
 }
 
