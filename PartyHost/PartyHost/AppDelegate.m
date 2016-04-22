@@ -956,6 +956,11 @@ continueUserActivity:(NSUserActivity *)userActivity
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     if(![defaults objectForKey:@"FIRST_RUN"])
     {
+        [self.sharedData.appsFlyerDict removeAllObjects];
+        [self.sharedData.appsFlyerDict setObject:@"organic" forKey:@"media_source"];
+        [self.sharedData.appsFlyerDict setObject:@"organic" forKey:@"campaign"];
+        [self.sharedData.appsFlyerDict setObject:@"organic" forKey:@"af_status"];
+        
         NSString *media_source = @"organic";
         NSString *campaign = @"organic";
         NSString *installType = @"organic";

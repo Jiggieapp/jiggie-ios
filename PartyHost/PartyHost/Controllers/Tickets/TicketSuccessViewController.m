@@ -40,7 +40,7 @@
     
     CGFloat orderButtonSize = 0;
     if (self.showViewButton) {
-        orderButtonSize = 44;
+        orderButtonSize = 54;
     }
     
     [self loadPurchaseView];
@@ -75,7 +75,7 @@
     if (self.showViewButton) {
         UIButton *viewButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [viewButton addTarget:self action:@selector(viewOrderButtonDidTap:) forControlEvents:UIControlEventTouchUpInside];
-        [viewButton setFrame:CGRectMake(0, self.view.bounds.size.height - 44, self.visibleSize.width, 44)];
+        [viewButton setFrame:CGRectMake(0, self.view.bounds.size.height - orderButtonSize, self.visibleSize.width, orderButtonSize)];
         [viewButton setBackgroundColor:[UIColor phBlueColor]];
         [viewButton.titleLabel setFont:[UIFont phBold:15]];
         [viewButton setTitle:@"VIEW BOOKINGS" forState:UIControlStateNormal];
@@ -83,7 +83,7 @@
         [self.view addSubview:viewButton];
     }
     
-    self.emptyView = [[EmptyView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height)];
+    self.emptyView = [[EmptyView alloc] initWithFrame:CGRectMake(0, 60, self.view.bounds.size.width, self.view.bounds.size.height - 60)];
     [self.emptyView setData:@"No data found" subtitle:@"Sorry we're having some server issues, please check back in a few minutes." imageNamed:@""];
     [self.emptyView setMode:@"load"];
     [self.emptyView setBackgroundColor:[UIColor whiteColor]];
@@ -102,10 +102,10 @@
     
     CGFloat orderButtonSize = 0;
     if (self.showViewButton) {
-        orderButtonSize = 44;
+        orderButtonSize = 54;
     }
     
-    self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 50 - closeButtonSize, self.visibleSize.width, self.view.bounds.size.height - orderButtonSize - 50 + closeButtonSize - 42)];
+    self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 60 - closeButtonSize, self.visibleSize.width, self.view.bounds.size.height - orderButtonSize - 60 + closeButtonSize - 42)];
     self.scrollView.showsVerticalScrollIndicator    = NO;
     self.scrollView.showsHorizontalScrollIndicator  = NO;
     self.scrollView.scrollEnabled                   = YES;
@@ -371,10 +371,10 @@
     
     CGFloat orderButtonSize = 0;
     if (self.showViewButton) {
-        orderButtonSize = 44;
+        orderButtonSize = 54;
     }
     
-    self.bookingScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 50 - closeButtonSize, self.visibleSize.width, self.view.bounds.size.height - orderButtonSize - 50 + closeButtonSize - 42)];
+    self.bookingScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 60 - closeButtonSize, self.visibleSize.width, self.view.bounds.size.height - orderButtonSize - 60 + closeButtonSize - 42)];
     self.bookingScrollView.showsVerticalScrollIndicator    = NO;
     self.bookingScrollView.showsHorizontalScrollIndicator  = NO;
     self.bookingScrollView.scrollEnabled                   = YES;
@@ -712,8 +712,6 @@
             return;
         }
         
-        [self.emptyView setMode:@"hide"];
-        
         NSString *responseString = operation.responseString;
         NSError *error;
         
@@ -746,6 +744,8 @@
                                     
                                     [sharedData.mixPanelCTicketDict setObject:[productList objectForKey:@"num_buy"] forKey:@"Purchase Quantity"];
                                 }
+                                
+                                [self.emptyView setMode:@"hide"];
                                 
                                 [sharedData.mixPanelCTicketDict setObject:[summary objectForKey:@"created_at"] forKey:@"Date Time"];
                                 [sharedData.mixPanelCTicketDict setObject:[productList objectForKey:@"total_price_all"] forKey:@"Purchase Amount"];
@@ -852,6 +852,8 @@
                     [self.paymentMethod setText:@"MANDIRI VIRTUAL ACCOUNT"];
                 } else if ([type isEqualToString:@"va"]) {
                     [self.paymentMethod setText:@"BANK TRANSFER"];
+                } else {
+                    [self.paymentMethod setText:@"FREE"];
                 }
             }
             
@@ -883,26 +885,42 @@
             
             NSString *total_price = [productList objectForKey:@"total_price"];
             if (total_price && total_price != nil) {
-                NSString *formattedPrice = [sharedData formatCurrencyString:total_price];
-                [self.ticketPrice setText:[NSString stringWithFormat:@"Rp%@", formattedPrice]];
+                if ([total_price integerValue] == 0) {
+                    [self.ticketPrice setText:@"FREE"];
+                } else {
+                    NSString *formattedPrice = [sharedData formatCurrencyString:total_price];
+                    [self.ticketPrice setText:[NSString stringWithFormat:@"Rp%@", formattedPrice]];
+                }
             }
             
             NSString *admin_fee = [productList objectForKey:@"admin_fee"];
             if (admin_fee && admin_fee != nil) {
-                NSString *formattedPrice = [sharedData formatCurrencyString:admin_fee];
-                [self.adminPrice setText:[NSString stringWithFormat:@"Rp%@", formattedPrice]];
+                if ([admin_fee integerValue] == 0) {
+                    [self.adminPrice setText:@"FREE"];
+                } else {
+                    NSString *formattedPrice = [sharedData formatCurrencyString:admin_fee];
+                    [self.adminPrice setText:[NSString stringWithFormat:@"Rp%@", formattedPrice]];
+                }
             }
             
             NSString *tax_amount = [productList objectForKey:@"tax_amount"];
             if (tax_amount && tax_amount != nil) {
-                NSString *formattedPrice = [sharedData formatCurrencyString:tax_amount];
-                [self.taxPrice setText:[NSString stringWithFormat:@"Rp%@", formattedPrice]];
+                if ([tax_amount integerValue] == 0) {
+                    [self.taxPrice setText:@"FREE"];
+                } else {
+                    NSString *formattedPrice = [sharedData formatCurrencyString:tax_amount];
+                    [self.taxPrice setText:[NSString stringWithFormat:@"Rp%@", formattedPrice]];
+                }
             }
             
             NSString *total_price_all = [productList objectForKey:@"total_price_all"];
             if (total_price_all && total_price_all != nil) {
-                 NSString *formattedPrice = [sharedData formatCurrencyString:total_price_all];
-                [self.totalPrice setText:[NSString stringWithFormat:@"Rp%@", formattedPrice]];
+                if ([total_price_all integerValue] == 0) {
+                    [self.totalPrice setText:@"FREE"];
+                } else {
+                    NSString *formattedPrice = [sharedData formatCurrencyString:total_price_all];
+                    [self.totalPrice setText:[NSString stringWithFormat:@"Rp%@", formattedPrice]];
+                }
             }
             
             NSString *instructions = [self.successData objectForKey:@"instructions"];
@@ -1015,6 +1033,8 @@
                     [self.bookingPaymentMethod setText:@"MANDIRI VIRTUAL ACCOUNT"];
                 } else if ([type isEqualToString:@"va"]) {
                     [self.bookingPaymentMethod setText:@"BANK TRANSFER"];
+                } else {
+                    [self.bookingPaymentMethod setText:@"FREE"];
                 }
             }
             

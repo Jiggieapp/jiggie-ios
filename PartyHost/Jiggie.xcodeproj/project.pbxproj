@@ -18,6 +18,7 @@
 		DA10F51E1C52149F006090ED /* SVProgressHUD.bundle in Resources */ = {isa = PBXBuildFile; fileRef = DA10F5181C52149F006090ED /* SVProgressHUD.bundle */; };
 		DA10F51F1C52149F006090ED /* SVProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = DA10F51A1C52149F006090ED /* SVProgressHUD.m */; };
 		DA10F5201C52149F006090ED /* SVRadialGradientLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = DA10F51C1C52149F006090ED /* SVRadialGradientLayer.m */; };
+		DA2675C41CC8CD1300974CD8 /* LocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = DA2675C31CC8CD1300974CD8 /* LocationManager.m */; };
 		DA34D80E1C69C794008162DA /* jiggie.cer in Resources */ = {isa = PBXBuildFile; fileRef = DA34D80D1C69C794008162DA /* jiggie.cer */; };
 		DA4305611C22823700ED6C54 /* Jiggie.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = DA43055F1C22823700ED6C54 /* Jiggie.xcdatamodeld */; };
 		DA4305691C22916E00ED6C54 /* Event.m in Sources */ = {isa = PBXBuildFile; fileRef = DA4305671C22916E00ED6C54 /* Event.m */; };
@@ -338,6 +339,8 @@
 		DA10F51A1C52149F006090ED /* SVProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SVProgressHUD.m; sourceTree = "<group>"; };
 		DA10F51B1C52149F006090ED /* SVRadialGradientLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVRadialGradientLayer.h; sourceTree = "<group>"; };
 		DA10F51C1C52149F006090ED /* SVRadialGradientLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SVRadialGradientLayer.m; sourceTree = "<group>"; };
+		DA2675C21CC8CD1300974CD8 /* LocationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationManager.h; sourceTree = "<group>"; };
+		DA2675C31CC8CD1300974CD8 /* LocationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationManager.m; sourceTree = "<group>"; };
 		DA34D80D1C69C794008162DA /* jiggie.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = jiggie.cer; sourceTree = SOURCE_ROOT; };
 		DA4305601C22823700ED6C54 /* Jiggie.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Jiggie.xcdatamodel; sourceTree = "<group>"; };
 		DA4305661C22916E00ED6C54 /* Event.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Event.h; sourceTree = "<group>"; };
@@ -953,6 +956,15 @@
 			path = SVProgressHUD;
 			sourceTree = "<group>";
 		};
+		DA2675C11CC8CD0000974CD8 /* Location */ = {
+			isa = PBXGroup;
+			children = (
+				DA2675C21CC8CD1300974CD8 /* LocationManager.h */,
+				DA2675C31CC8CD1300974CD8 /* LocationManager.m */,
+			);
+			path = Location;
+			sourceTree = "<group>";
+		};
 		DA4305631C22915000ED6C54 /* Models */ = {
 			isa = PBXGroup;
 			children = (
@@ -1090,6 +1102,7 @@
 		DAABAFDD1C1EC994004DDCFA /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				DA2675C11CC8CD0000974CD8 /* Location */,
 				DAD2708A1C31110200546106 /* User */,
 				DAABB1031C1FF0F3004DDCFA /* Analytics */,
 				DAABB1061C1FF0F3004DDCFA /* Extensions */,
@@ -2366,6 +2379,7 @@
 				DAABB2A11C1FF5AE004DDCFA /* MPNSNumberToCGFloatValueTransformer.m in Sources */,
 				DAABB2891C1FF5AE004DDCFA /* MPABTestDesignerSnapshotRequestMessage.m in Sources */,
 				DAABB2811C1FF5AE004DDCFA /* MPABTestDesignerChangeRequestMessage.m in Sources */,
+				DA2675C41CC8CD1300974CD8 /* LocationManager.m in Sources */,
 				DA5ED6101C92975100004C7E /* VTAddress.m in Sources */,
 				DAABB28C1C1FF5AE004DDCFA /* MPABTestDesignerTweakResponseMessage.m in Sources */,
 				DAABB2551C1FF5AE004DDCFA /* AFHTTPRequestOperationManager.m in Sources */,
