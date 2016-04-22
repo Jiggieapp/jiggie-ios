@@ -11,6 +11,7 @@
 #import "AFNetworkActivityLogger.h"
 #import "UserManager.h"
 #import "VTConfig.h"
+#import "LocationManager.h"
 
 ///REMOVE THIS WHEN LIVE
 //#import "GSTouchesShowingWindow.h"
@@ -387,8 +388,22 @@ static NSString *const kAllowTracking = @"allowTracking";
          object:self];
     }
     
-     [FBSDKAppEvents activateApp];
-
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    if([defaults objectForKey:@"SHOWED_WALKTHROUGH"]) {
+        [[LocationManager manager] startUpdatingLocation];
+        [[LocationManager manager] didUpdateLocationsWithCompletion:^(CLLocationDegrees latitude, CLLocationDegrees longitude) {
+            AFHTTPRequestOperationManager *manager = [self.sharedData getOperationManager];
+            NSString *url = [NSString stringWithFormat:@"%@/save_longlat", PHBaseNewURL];
+            NSDictionary *parameters = @{@"fb_id" : self.sharedData.fb_id,
+                                         @"longitude" : [NSNumber numberWithDouble:longitude],
+                                         @"latitude" : [NSNumber numberWithDouble:latitude]};
+            
+            [manager POST:url parameters:parameters success:nil failure:nil];
+        }];
+    }
+    
+    [FBSDKAppEvents activateApp];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application

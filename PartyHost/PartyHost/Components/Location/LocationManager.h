@@ -14,7 +14,8 @@ typedef void (^LocationManagerUpdateLocationsCompletion)(CLLocationDegrees latit
 @interface LocationManager : NSObject
 
 + (LocationManager *)manager;
-
+    
+- (void)startUpdatingLocation;
 - (void)didUpdateLocationsWithCompletion:(LocationManagerUpdateLocationsCompletion)completion;
 
 @end
