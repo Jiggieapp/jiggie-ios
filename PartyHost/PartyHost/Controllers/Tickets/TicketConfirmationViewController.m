@@ -63,14 +63,14 @@
     
     [self.view addSubview:self.navBar];
     
-    UILabel *selectPaymentLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, self.view.bounds.size.height - 54 - 100, 120, 20)];
-    [selectPaymentLabel setText:@"Select Payment"];
-    [selectPaymentLabel setFont:[UIFont phBlond:13]];
-    [selectPaymentLabel setTextColor:[UIColor darkGrayColor]];
-    [selectPaymentLabel setBackgroundColor:[UIColor clearColor]];
-    [self.view addSubview:selectPaymentLabel];
+    self.selectPaymentLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, self.view.bounds.size.height - 54 - 100, 120, 20)];
+    [self.selectPaymentLabel setText:@"Select Payment"];
+    [self.selectPaymentLabel setFont:[UIFont phBlond:13]];
+    [self.selectPaymentLabel setTextColor:[UIColor darkGrayColor]];
+    [self.selectPaymentLabel setBackgroundColor:[UIColor clearColor]];
+    [self.view addSubview:self.selectPaymentLabel];
     
-    self.paymentBox = [[UIImageView alloc] initWithFrame:CGRectMake(8, CGRectGetMaxY(selectPaymentLabel.frame) + 4, self.visibleSize.width - 16, 70)];
+    self.paymentBox = [[UIImageView alloc] initWithFrame:CGRectMake(8, CGRectGetMaxY(self.selectPaymentLabel.frame) + 4, self.visibleSize.width - 16, 70)];
     [self.paymentBox setImage:[[UIImage imageNamed:@"bg_rectangle"] stretchableImageWithLeftCapWidth:10 topCapHeight:10]];
     [self.view addSubview:self.paymentBox];
     
@@ -97,22 +97,6 @@
     [self.paymentAddButton setHighlighted:YES];
     [self.view addSubview:self.paymentAddButton];
     
-    
-    if ([[self.productList objectForKey:@"ticket_type"] isEqualToString:@"booking"]) {
-        [self loadBookingView];
-        
-    } else {
-        // hide payment for free ticket
-        NSString *total_price = [self.productList objectForKey:@"total_price_all"];
-        if ([total_price integerValue] == 0) {
-            [selectPaymentLabel setHidden:YES];
-            [self.paymentBox setHidden:YES];
-        }
-        
-        [self loadPurchaseView];
-    }
-    
-    
     self.continueButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.continueButton setFrame:CGRectMake(self.visibleSize.width, 0, self.visibleSize.width, 54)];
     [self.continueButton setBackgroundColor:[UIColor clearColor]];
@@ -122,13 +106,13 @@
     [self.continueButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [self.continueButton setEnabled:NO];
     
-    UIImageView *iconArrow1 = [[UIImageView alloc] initWithFrame:CGRectMake(self.visibleSize.width/2 + 56, (self.continueButton.bounds.size.height-15) /2, 9, 15)];
-    [iconArrow1 setImage:[UIImage imageNamed:@"icon_arrow"]];
-    [self.continueButton addSubview:iconArrow1];
+    self.iconArrow1 = [[UIImageView alloc] initWithFrame:CGRectMake(self.visibleSize.width/2 + 50, (self.continueButton.bounds.size.height-15) /2, 9, 15)];
+    [self.iconArrow1 setImage:[UIImage imageNamed:@"icon_arrow"]];
+    [self.continueButton addSubview:self.iconArrow1];
     
-    UIImageView *iconArrow2 = [[UIImageView alloc] initWithFrame:CGRectMake(self.visibleSize.width/2 + 62, (self.continueButton.bounds.size.height-15) /2, 9, 15)];
-    [iconArrow2 setImage:[UIImage imageNamed:@"icon_arrow"]];
-    [self.continueButton addSubview:iconArrow2];
+    self.iconArrow2 = [[UIImageView alloc] initWithFrame:CGRectMake(self.visibleSize.width/2 + 56, (self.continueButton.bounds.size.height-15) /2, 9, 15)];
+    [self.iconArrow2 setImage:[UIImage imageNamed:@"icon_arrow"]];
+    [self.continueButton addSubview:self.iconArrow2];
     
     self.swipeScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height - 54, self.visibleSize.width, 54)];
     [self.swipeScrollView setBackgroundColor:[UIColor colorFromHexCode:@"B6ECFF"]];
@@ -139,6 +123,23 @@
     [self.swipeScrollView addSubview:self.continueButton];
     [self.swipeScrollView setContentOffset:CGPointMake(self.visibleSize.width, 0)];
     [self.view addSubview:self.swipeScrollView];
+    
+    
+    if ([[self.productList objectForKey:@"ticket_type"] isEqualToString:@"booking"]) {
+        [self loadBookingView];
+        
+        if (self.currentPrice == 0) {
+            [self showPaymentMethod:NO withAnimation:NO];
+        }
+    } else {
+        [self loadPurchaseView];
+        
+        // hide payment for free ticket
+        NSString *total_price = [self.productList objectForKey:@"total_price_all"];
+        if ([total_price integerValue] == 0) {
+            [self showPaymentMethod:NO withAnimation:NO];
+        }
+    }
     
     [self prePopulatePayment];
 
@@ -540,9 +541,7 @@
 }
 
 - (void)checkValidToContinue {
-    if ([[self.productList objectForKey:@"ticket_type"] isEqualToString:@"booking"]) {
-    }
-    
+
     if ((self.paymentDetail && self.paymentDetail != nil)) {
         [self.swipeScrollView setScrollEnabled:YES];
         [self.swipeScrollView setBackgroundColor:[UIColor phBlueColor]];
@@ -695,6 +694,10 @@
         self.totalPrice.text = [NSString stringWithFormat:@"Rp%@", formattedPrice];
         
         [self checkValidToContinue];
+        
+        if (!self.isPaymentMethodShow) {
+            [self showPaymentMethod:YES withAnimation:YES];
+        }
     }
 }
 
@@ -718,6 +721,43 @@
         self.totalPrice.text = [NSString stringWithFormat:@"Rp%@", formattedPrice];
         
         [self checkValidToContinue];
+        
+        if (self.currentPrice == 0 && self.isPaymentMethodShow) {
+            [self showPaymentMethod:NO withAnimation:YES];
+        }
+    }
+}
+
+- (void)showPaymentMethod:(BOOL)isShow withAnimation:(BOOL)isAnimated {
+    self.isPaymentMethodShow = isShow;
+    
+    CGFloat animateDuration = 0.0;
+    if (isAnimated) {
+        animateDuration = 0.25;
+    }
+    
+    if (isShow) {
+        [UIView animateWithDuration:animateDuration delay:0.0 options:UIViewAnimationOptionCurveEaseIn animations:^{
+            [self.selectPaymentLabel setAlpha:1.0];
+            [self.paymentBox setAlpha:1.0];
+            
+            [self.continueButton setTitle:@"SWIPE TO PAY" forState:UIControlStateNormal];
+            [self.iconArrow1 setFrame:CGRectMake(self.visibleSize.width/2 + 50, self.iconArrow1.frame.origin.y, self.iconArrow1.bounds.size.width, self.iconArrow1.bounds.size.height)];
+            [self.iconArrow2 setFrame:CGRectMake(self.visibleSize.width/2 + 56, self.iconArrow2.frame.origin.y, self.iconArrow2.bounds.size.width, self.iconArrow2.bounds.size.height)];
+        } completion:^(BOOL finished) {
+            
+        }];
+    } else {
+        [UIView animateWithDuration:animateDuration delay:0.0 options:UIViewAnimationOptionCurveEaseIn animations:^{
+            [self.selectPaymentLabel setAlpha:0.0];
+            [self.paymentBox setAlpha:0.0];
+            
+            [self.continueButton setTitle:@"SWIPE TO CONTINUE" forState:UIControlStateNormal];
+            [self.iconArrow1 setFrame:CGRectMake(self.visibleSize.width/2 + 76, self.iconArrow1.frame.origin.y, self.iconArrow1.bounds.size.width, self.iconArrow1.bounds.size.height)];
+            [self.iconArrow2 setFrame:CGRectMake(self.visibleSize.width/2 + 82, self.iconArrow2.frame.origin.y, self.iconArrow2.bounds.size.width, self.iconArrow2.bounds.size.height)];
+        } completion:^(BOOL finished) {
+            
+        }];
     }
 }
 
@@ -898,12 +938,16 @@
         }
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        // enable all button
-        [self.swipeScrollView setScrollEnabled:YES];
-        [self.closeButton setEnabled:YES];
-        [self.paymentAddButton setEnabled:YES];
-        
-        [SVProgressHUD dismiss];
+        if (operation.response.statusCode == 410) {
+            [self reloadLoginWithFBToken:@"payment"];
+        } else {
+            // enable all button
+            [self.swipeScrollView setScrollEnabled:YES];
+            [self.closeButton setEnabled:YES];
+            [self.paymentAddButton setEnabled:YES];
+            
+            [SVProgressHUD dismiss];
+        }
     }];
 }
 
@@ -988,12 +1032,31 @@
         [self openSuccessScreen];
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        // enable all button
-        [self.swipeScrollView setScrollEnabled:YES];
-        [self.closeButton setEnabled:YES];
-        [self.paymentAddButton setEnabled:YES];
-        
-        [SVProgressHUD dismiss];
+        if (operation.response.statusCode == 410) {
+            [self reloadLoginWithFBToken:@"free_payment"];
+        } else {
+            // enable all button
+            [self.swipeScrollView setScrollEnabled:YES];
+            [self.closeButton setEnabled:YES];
+            [self.paymentAddButton setEnabled:YES];
+            
+            [SVProgressHUD dismiss];
+        }
+    }];
+}
+
+- (void)reloadLoginWithFBToken:(NSString *)loadType {
+    SharedData *sharedData = [SharedData sharedInstance];
+    
+    [sharedData loginWithFBToken:^(AFHTTPRequestOperation *operation, id responseObject) {
+        sharedData.ph_token = responseObject[@"data"][@"token"];
+        if ([loadType isEqualToString:@"payment"]) {
+            [self postPayment];
+        } else if ([loadType isEqualToString:@"free_payment"]) {
+            [self postPaymentFree];
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        [self reloadLoginWithFBToken:loadType];
     }];
 }
 

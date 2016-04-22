@@ -447,16 +447,16 @@
     
     if([self.fillType isEqualToString:@"reservation"] || [self.fillType isEqualToString:@"purchase"])
     {
-        self.sharedData.cEventId_toLoad = self.mainDict[@"_id"];
-        
-        [self.sharedData.cAddEventDict removeAllObjects];
-        [self.sharedData.cAddEventDict addEntriesFromDictionary:self.mainDict];
-        
-        
-        
-        [[NSNotificationCenter defaultCenter]
-         postNotificationName:@"SHOW_BOOKTABLE"
-         object:self];
+//        self.sharedData.cEventId_toLoad = self.mainDict[@"_id"];
+//        
+//        [self.sharedData.cAddEventDict removeAllObjects];
+//        [self.sharedData.cAddEventDict addEntriesFromDictionary:self.mainDict];
+//        
+//        
+//        
+//        [[NSNotificationCenter defaultCenter]
+//         postNotificationName:@"SHOW_BOOKTABLE"
+//         object:self];
     }
     
     if([self.fillType isEqualToString:@"ticket"]) {

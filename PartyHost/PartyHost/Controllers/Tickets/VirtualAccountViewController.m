@@ -29,20 +29,17 @@
     
     self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(40, 20, self.visibleSize.width - 80, 40)];
     [self.titleLabel setTextAlignment:NSTextAlignmentCenter];
-    [self.titleLabel setText:@"Purchase History"];
     [self.titleLabel setFont:[UIFont phBlond:16]];
     [self.titleLabel setTextColor:[UIColor whiteColor]];
     [self.titleLabel setBackgroundColor:[UIColor clearColor]];
     [self.navBar addSubview:self.titleLabel];
     
     if ([self.VAType isEqualToString:@"bca"]) {
-        [self.titleLabel setText:@"BCA VIRTUAL ACCOUNT"];
+        [self.titleLabel setText:@"BCA Virtual Account"];
     } else if ([self.VAType isEqualToString:@"bp"]) {
-        [self.titleLabel setText:@"MANDIRI VIRTUAL ACCOUNT"];
+        [self.titleLabel setText:@"Mandiri Virtual Account"];
     } else if ([self.VAType isEqualToString:@"va"]) {
-        [self.titleLabel setText:@"BANK TRANSFER"];
-    } else {
-        [self.titleLabel setText:@"HOW TO PAY"];
+        [self.titleLabel setText:@"Bank Transfer"];
     }
     
     if (self.showCloseButton) {
@@ -170,6 +167,7 @@
     [self.view addSubview:self.emptyView];
     
     if ([self.VAType isEqualToString:@"tutorial"]) {
+        [self.titleLabel setText:@"HOW TO PAY"];
         [self loadTutorialData];
         
         // MixPanel
@@ -269,7 +267,12 @@
         });
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        [self.emptyView setMode:@"empty"];
+        if (operation.response.statusCode == 410) {
+            [self.emptyView setMode:@"load"];
+            [self reloadLoginWithFBToken:@"success_screen"];
+        } else {
+            [self.emptyView setMode:@"empty"];
+        }
     }];
 }
 
@@ -279,13 +282,13 @@
         NSString *payment_type = [self.successData objectForKey:@"payment_type"];
         if (payment_type && payment_type!= nil) {
             if ([payment_type isEqualToString:@"bca"]) {
-                [self.titleLabel setText:@"BCA VIRTUAL ACCOUNT"];
+                [self.titleLabel setText:@"BCA Virtual Account"];
             } else if ([payment_type isEqualToString:@"bp"]) {
-                [self.titleLabel setText:@"MANDIRI VIRTUAL ACCOUNT"];
+                [self.titleLabel setText:@"Mandiri Virtual Account"];
             } else if ([payment_type isEqualToString:@"va"]) {
-                [self.titleLabel setText:@"BANK TRANSFER"];
+                [self.titleLabel setText:@"Bank Transfer"];
             } else {
-                [self.titleLabel setText:@"HOW TO PAY"];
+                [self.titleLabel setText:@"How To Pay"];
             }
         }
         
@@ -394,7 +397,7 @@
         NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
         NSDateComponents *comps = [gregorian components:unitFlags fromDate:currentDate  toDate:timelimitDate  options:0];
         
-        [self.transferTime setText:[NSString stringWithFormat:@"%02li:%02li:%02li", comps.hour, comps.minute, comps.second]];
+        [self.transferTime setText:[NSString stringWithFormat:@"%02li:%02li:%02li", (long)comps.hour, (long)comps.minute, (long)comps.second]];
         
         if ([self isViewLoaded]) {
             [self performSelector:@selector(populateTimeLimit:) withObject:timelimitDate afterDelay:1.0];
@@ -450,21 +453,25 @@
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         if (operation.response.statusCode == 410) {
             [self.emptyView setMode:@"load"];
-            [self reloadLoginWithFBToken];
+            [self reloadLoginWithFBToken:@"walkthrough_payment"];
         } else {
             [self.emptyView setMode:@"empty"];
         }
     }];
 }
 
-- (void)reloadLoginWithFBToken {
+- (void)reloadLoginWithFBToken:(NSString *)loadType {
     SharedData *sharedData = [SharedData sharedInstance];
     
     [sharedData loginWithFBToken:^(AFHTTPRequestOperation *operation, id responseObject) {
         sharedData.ph_token = responseObject[@"data"][@"token"];
-        [self loadTutorialData];
+        if ([loadType isEqualToString:@"walkthrough_payment"]) {
+            [self loadTutorialData];
+        } else if ([loadType isEqualToString:@"success_screen"]) {
+            [self loadData];
+        }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        [self reloadLoginWithFBToken];
+        [self reloadLoginWithFBToken:loadType];
     }];
 }
 

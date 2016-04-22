@@ -470,111 +470,7 @@
 }
 
 - (void)continueButtonDidTap:(id)sender {
-    
-    SharedData *sharedData = [SharedData sharedInstance];
-    AFHTTPRequestOperationManager *manager = [sharedData getOperationManager];
-    NSString *url = [NSString stringWithFormat:@"%@/product/summary",PHBaseNewURL];
-    
-    NSDictionary *userInfo = [UserManager loadUserTicketInfo];
-    
-    NSMutableArray *summaryList = [NSMutableArray array];
-    NSDictionary *summary = @{@"ticket_id":[self.productSelected objectForKey:@"ticket_id"],
-                              @"num_buy":self.totalTicket.text};
-    [summaryList addObject:summary];
-    
-    NSDictionary *params = @{@"fb_id":sharedData.fb_id,
-                             @"event_id":[self.productList objectForKey:@"event_id"],
-                             @"product_list":summaryList,
-                             @"guest_detail":@{@"name":[userInfo objectForKey:@"name"],
-                                               @"email":[userInfo objectForKey:@"email"],
-                                               @"phone":[userInfo objectForKey:@"phone"],
-                                               @"dial_code":[userInfo objectForKey:@"dial_code"]}};
-    
-    [SVProgressHUD show];
-    [self.continueButton setEnabled:NO];
-    
-    [manager POST:url parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        [SVProgressHUD dismiss];
-        [self.continueButton setEnabled:YES];
-        
-        NSInteger responseStatusCode = operation.response.statusCode;
-        if (responseStatusCode != 200) {
-            return;
-        }
-        
-        if (![[responseObject objectForKey:@"response"] boolValue]) {
-            NSString *message = [responseObject objectForKey:@"msg"];
-            if (!message || message == nil) {
-                message = @"";
-            }
-            
-            self.errorType = [responseObject objectForKey:@"type"];
-            
-            if (([[[UIDevice currentDevice] systemVersion] compare:@"8.0" options:NSNumericSearch] == NSOrderedAscending)) {
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Booking Failed"
-                                                                message:message
-                                                               delegate:self
-                                                      cancelButtonTitle:@"OK"
-                                                      otherButtonTitles:nil];
-                [alert show];
-                
-            } else {
-                UIAlertController *alertController = [UIAlertController
-                                                      alertControllerWithTitle:@"Booking Failed"
-                                                      message:message
-                                                      preferredStyle:UIAlertControllerStyleAlert];
-                
-                UIAlertAction *cancelAction = [UIAlertAction
-                                               actionWithTitle:@"OK"
-                                               style:UIAlertActionStyleCancel
-                                               handler:^(UIAlertAction *action)
-                                               {
-                                                   if ([self.errorType isEqualToString:@"ticket_list"]) {
-                                                       [[self navigationController] popToRootViewControllerAnimated:YES];
-                                                       
-                                                   }
-                                               }];
-                
-                [alertController addAction:cancelAction];
-                [self presentViewController:alertController animated:YES completion:nil];
-            }
-            
-            return;
-        }
-        
-        NSString *responseString = operation.responseString;
-        NSError *error;
-        
-        NSDictionary *json = (NSDictionary *)[NSJSONSerialization
-                                              JSONObjectWithData:[responseString dataUsingEncoding:NSUTF8StringEncoding]
-                                              options:kNilOptions
-                                              error:&error];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if (json && json != nil) {
-                @try {
-                    NSDictionary *data = [json objectForKey:@"data"];
-                    if (data && data != nil) {
-                        NSDictionary *product_summary = [data objectForKey:@"product_summary"];
-                        self.productSummary = product_summary;
-                        
-                        [self populateTCView];
-                        [self showTCView:YES withAnimation:YES];
-                    }
-                }
-                @catch (NSException *exception) {
-                    
-                }
-                @finally {
-                    
-                }
-            }
-        });
-        
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        [SVProgressHUD dismiss];
-        [self.continueButton setEnabled:YES];
-    }];
-    
+    [self postTicketSummary];
 }
 
 - (void)helpButtonDidTap:(id)sender {
@@ -758,6 +654,127 @@
         [self.continueButton setEnabled:NO];
         [self.continueButton setBackgroundColor:[UIColor colorFromHexCode:@"B6ECFF"]];
     }
+}
+
+- (void)postTicketSummary {
+    SharedData *sharedData = [SharedData sharedInstance];
+    AFHTTPRequestOperationManager *manager = [sharedData getOperationManager];
+    NSString *url = [NSString stringWithFormat:@"%@/product/summary",PHBaseNewURL];
+    
+    NSDictionary *userInfo = [UserManager loadUserTicketInfo];
+    
+    NSMutableArray *summaryList = [NSMutableArray array];
+    NSDictionary *summary = @{@"ticket_id":[self.productSelected objectForKey:@"ticket_id"],
+                              @"num_buy":self.totalTicket.text};
+    [summaryList addObject:summary];
+    
+    NSDictionary *params = @{@"fb_id":sharedData.fb_id,
+                             @"event_id":[self.productList objectForKey:@"event_id"],
+                             @"product_list":summaryList,
+                             @"guest_detail":@{@"name":[userInfo objectForKey:@"name"],
+                                               @"email":[userInfo objectForKey:@"email"],
+                                               @"phone":[userInfo objectForKey:@"phone"],
+                                               @"dial_code":[userInfo objectForKey:@"dial_code"]}};
+    
+    [SVProgressHUD show];
+    [self.continueButton setEnabled:NO];
+    
+    [manager POST:url parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        [SVProgressHUD dismiss];
+        [self.continueButton setEnabled:YES];
+        
+        NSInteger responseStatusCode = operation.response.statusCode;
+        if (responseStatusCode != 200) {
+            return;
+        }
+        
+        if (![[responseObject objectForKey:@"response"] boolValue]) {
+            NSString *message = [responseObject objectForKey:@"msg"];
+            if (!message || message == nil) {
+                message = @"";
+            }
+            
+            self.errorType = [responseObject objectForKey:@"type"];
+            
+            if (([[[UIDevice currentDevice] systemVersion] compare:@"8.0" options:NSNumericSearch] == NSOrderedAscending)) {
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Booking Failed"
+                                                                message:message
+                                                               delegate:self
+                                                      cancelButtonTitle:@"OK"
+                                                      otherButtonTitles:nil];
+                [alert show];
+                
+            } else {
+                UIAlertController *alertController = [UIAlertController
+                                                      alertControllerWithTitle:@"Booking Failed"
+                                                      message:message
+                                                      preferredStyle:UIAlertControllerStyleAlert];
+                
+                UIAlertAction *cancelAction = [UIAlertAction
+                                               actionWithTitle:@"OK"
+                                               style:UIAlertActionStyleCancel
+                                               handler:^(UIAlertAction *action)
+                                               {
+                                                   if ([self.errorType isEqualToString:@"ticket_list"]) {
+                                                       [[self navigationController] popToRootViewControllerAnimated:YES];
+                                                       
+                                                   }
+                                               }];
+                
+                [alertController addAction:cancelAction];
+                [self presentViewController:alertController animated:YES completion:nil];
+            }
+            
+            return;
+        }
+        
+        NSString *responseString = operation.responseString;
+        NSError *error;
+        
+        NSDictionary *json = (NSDictionary *)[NSJSONSerialization
+                                              JSONObjectWithData:[responseString dataUsingEncoding:NSUTF8StringEncoding]
+                                              options:kNilOptions
+                                              error:&error];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (json && json != nil) {
+                @try {
+                    NSDictionary *data = [json objectForKey:@"data"];
+                    if (data && data != nil) {
+                        NSDictionary *product_summary = [data objectForKey:@"product_summary"];
+                        self.productSummary = product_summary;
+                        
+                        [self populateTCView];
+                        [self showTCView:YES withAnimation:YES];
+                    }
+                }
+                @catch (NSException *exception) {
+                    
+                }
+                @finally {
+                    
+                }
+            }
+        });
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        if (operation.response.statusCode == 410) {
+            [self reloadLoginWithFBToken];
+        } else {
+            [SVProgressHUD dismiss];
+            [self.continueButton setEnabled:YES];
+        }
+    }];
+}
+
+- (void)reloadLoginWithFBToken {
+    SharedData *sharedData = [SharedData sharedInstance];
+    
+    [sharedData loginWithFBToken:^(AFHTTPRequestOperation *operation, id responseObject) {
+        sharedData.ph_token = responseObject[@"data"][@"token"];
+        [self postTicketSummary];
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        [self reloadLoginWithFBToken];
+    }];
 }
 
 #pragma mark - UIAlertViewDelegate

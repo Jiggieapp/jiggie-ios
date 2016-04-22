@@ -317,7 +317,11 @@
         });
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-         [self.emptyView setMode:@"empty"];
+        if (operation.response.statusCode == 410) {
+            [self reloadLoginWithFBToken:@"list"];
+        } else {
+            [self.emptyView setMode:@"empty"];
+        }
     }];
 }
 
@@ -355,7 +359,9 @@
             }
         });
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        
+        if (operation.response.statusCode == 410) {
+            [self reloadLoginWithFBToken:@"support"];
+        }
     }];
 }
 
@@ -395,7 +401,26 @@
             }
         });
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        
+        if (operation.response.statusCode == 410) {
+            [self reloadLoginWithFBToken:@"guest_info"];
+        }
+    }];
+}
+
+- (void)reloadLoginWithFBToken:(NSString *)loadType {
+    SharedData *sharedData = [SharedData sharedInstance];
+    
+    [sharedData loginWithFBToken:^(AFHTTPRequestOperation *operation, id responseObject) {
+        sharedData.ph_token = responseObject[@"data"][@"token"];
+        if ([loadType isEqualToString:@"list"]) {
+            [self loadData];
+        } else if ([loadType isEqualToString:@"support"]) {
+            [self loadSupport];
+        } else if ([loadType isEqualToString:@"guest_info"]) {
+            [self loadGuestInfo];
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        [self reloadLoginWithFBToken:loadType];
     }];
 }
 

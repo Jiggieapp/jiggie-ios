@@ -179,7 +179,11 @@
         });
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        [self.emptyView setMode:@"hide"];
+        if (operation.response.statusCode == 410) {
+            [self reloadLoginWithFBToken:@"payment_method" andAdditionalInfo:nil];
+        } else {
+            [self.emptyView setMode:@"hide"];
+        }
     }];
 }
 
@@ -225,7 +229,11 @@
         });
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        [self.emptyView setMode:@"hide"];
+        if (operation.response.statusCode == 410) {
+            [self reloadLoginWithFBToken:@"credit_card" andAdditionalInfo:nil];
+        } else {
+            [self.emptyView setMode:@"hide"];
+        }
     }];
 }
 
@@ -243,12 +251,30 @@
         if (responseStatusCode != 200) {
             return;
         }
-        
-        
+
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        
+        if (operation.response.statusCode == 410) {
+            [self reloadLoginWithFBToken:@"delete_cc" andAdditionalInfo:maskedCard];
+        }
     }];
     
+}
+
+- (void)reloadLoginWithFBToken:(NSString *)loadType andAdditionalInfo:(NSString *)info {
+    SharedData *sharedData = [SharedData sharedInstance];
+    
+    [sharedData loginWithFBToken:^(AFHTTPRequestOperation *operation, id responseObject) {
+        sharedData.ph_token = responseObject[@"data"][@"token"];
+        if ([loadType isEqualToString:@"payment_method"]) {
+            [self loadData];
+        } else if ([loadType isEqualToString:@"credit_card"]) {
+            [self loadCreditCards];
+        } else if ([loadType isEqualToString:@"delete_cc"]) {
+            [self deleteCard:info];
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        [self reloadLoginWithFBToken:loadType andAdditionalInfo:info];
+    }];
 }
 
 #pragma mark - UITableViewDataSource
@@ -460,8 +486,7 @@
                 [prefs removeObjectForKey:@"temp_da_list"];
                 [prefs synchronize];
             }
-            
-            
+
             [tableView reloadData];
         }
     }
