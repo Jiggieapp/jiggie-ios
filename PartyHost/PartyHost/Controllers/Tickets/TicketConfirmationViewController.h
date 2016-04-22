@@ -19,9 +19,12 @@
 @property (nonatomic, strong) UILabel *balancePrice;
 @property (nonatomic, strong) UIImageView *paymentLogoView;
 @property (nonatomic, strong) UILabel *paymentTitleView;
+@property (nonatomic, strong) UILabel *selectPaymentLabel;
 @property (nonatomic, strong) UIImageView *paymentBox;
 @property (nonatomic, strong) UIButton *paymentAddButton;
 @property (nonatomic, strong) UIButton *continueButton;
+@property (nonatomic, strong) UIImageView *iconArrow1;
+@property (nonatomic, strong) UIImageView *iconArrow2;
 @property (nonatomic, strong) UIScrollView *swipeScrollView;
 
 @property (nonatomic, strong) NSMutableArray *agreeButtonArray;
@@ -37,6 +40,6 @@
 @property (nonatomic, assign) NSInteger minPrice;
 @property (nonatomic, assign) NSInteger currentPrice;
 @property (nonatomic, strong) NSString *errorType;
-
+@property (nonatomic, assign) BOOL isPaymentMethodShow;
 
 @end
