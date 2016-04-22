@@ -64,9 +64,9 @@
     [self.view addSubview:self.navBar];
     
     self.selectPaymentLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, self.view.bounds.size.height - 54 - 100, 120, 20)];
-    [self.selectPaymentLabel setText:@"Select Payment"];
+    [self.selectPaymentLabel setText:@"SELECT PAYMENT"];
     [self.selectPaymentLabel setFont:[UIFont phBlond:13]];
-    [self.selectPaymentLabel setTextColor:[UIColor darkGrayColor]];
+    [self.selectPaymentLabel setTextColor:[UIColor blackColor]];
     [self.selectPaymentLabel setBackgroundColor:[UIColor clearColor]];
     [self.view addSubview:self.selectPaymentLabel];
     
@@ -465,9 +465,9 @@
     [self.view addSubview:line2View];
     
     UILabel *totalLabel = [[UILabel alloc] initWithFrame:CGRectMake(18, CGRectGetMaxY(line2View.frame) + 8, 100, 20)];
-    [totalLabel setText:@"Pay Deposit"];
+    [totalLabel setText:@"PAY DEPOSIT"];
     [totalLabel setFont:[UIFont phBlond:13]];
-    [totalLabel setTextColor:[UIColor darkGrayColor]];
+    [totalLabel setTextColor:[UIColor blackColor]];
     [totalLabel setBackgroundColor:[UIColor clearColor]];
     [self.view addSubview:totalLabel];
     
@@ -752,9 +752,9 @@
             [self.selectPaymentLabel setAlpha:0.0];
             [self.paymentBox setAlpha:0.0];
             
-            [self.continueButton setTitle:@"SWIPE TO CONTINUE" forState:UIControlStateNormal];
-            [self.iconArrow1 setFrame:CGRectMake(self.visibleSize.width/2 + 76, self.iconArrow1.frame.origin.y, self.iconArrow1.bounds.size.width, self.iconArrow1.bounds.size.height)];
-            [self.iconArrow2 setFrame:CGRectMake(self.visibleSize.width/2 + 82, self.iconArrow2.frame.origin.y, self.iconArrow2.bounds.size.width, self.iconArrow2.bounds.size.height)];
+            [self.continueButton setTitle:@"SWIPE TO BOOK" forState:UIControlStateNormal];
+            [self.iconArrow1 setFrame:CGRectMake(self.visibleSize.width/2 + 56, self.iconArrow1.frame.origin.y, self.iconArrow1.bounds.size.width, self.iconArrow1.bounds.size.height)];
+            [self.iconArrow2 setFrame:CGRectMake(self.visibleSize.width/2 + 62, self.iconArrow2.frame.origin.y, self.iconArrow2.bounds.size.width, self.iconArrow2.bounds.size.height)];
         } completion:^(BOOL finished) {
             
         }];

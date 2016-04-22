@@ -557,6 +557,10 @@
              @try {
                  if(![json[@"response"] boolValue])
                  {
+                     [[NSNotificationCenter defaultCenter]
+                      postNotificationName:@"SHOW_LOGIN"
+                      object:self];
+                     
                      [self showUpgrade];
                      return;
                  }

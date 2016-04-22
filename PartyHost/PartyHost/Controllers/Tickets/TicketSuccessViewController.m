@@ -155,7 +155,7 @@
     [rectangleView addSubview:self.eventDate];
     
     UILabel *orderLabel = [[UILabel alloc] initWithFrame:CGRectMake(14, CGRectGetMaxY(rectangleView.frame) + 20, 120, 20)];
-    [orderLabel setText:@"ORDER NUMBER"];
+    [orderLabel setText:@"BOOKING NUMBER"];
     [orderLabel setFont:[UIFont phBlond:15]];
     [orderLabel setTextColor:[UIColor blackColor]];
     [orderLabel setBackgroundColor:[UIColor clearColor]];
@@ -503,7 +503,7 @@
     // LINE 2
     
     UILabel *orderSummaryLabel = [[UILabel alloc] initWithFrame:CGRectMake(14, CGRectGetMaxY(line1View.frame) + 16 + 30 + 30 + 30 + 50, 200, 20)];
-    [orderSummaryLabel setText:@"RESERVATION SUMMARY"];
+    [orderSummaryLabel setText:@"BOOKING SUMMARY"];
     [orderSummaryLabel setFont:[UIFont phBlond:14]];
     [orderSummaryLabel setTextColor:[UIColor blackColor]];
     [orderSummaryLabel setBackgroundColor:[UIColor clearColor]];
@@ -1051,6 +1051,10 @@
                 } else {
                     [self.bookingPaymentMethod setText:@"FREE"];
                 }
+            }
+            
+            if ([self.bookingPaymentMethod.text isEqualToString:@"FREE"]) {
+                [self.bookingStatus setText:@"BOOKED"];
             }
             
             NSString *created_at = [summary objectForKey:@"created_at"];

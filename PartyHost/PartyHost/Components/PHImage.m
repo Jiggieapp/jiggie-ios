@@ -26,6 +26,16 @@
 
 -(void)loadImage:(NSString *)imgURL defaultImageNamed:(NSString*)defaultImageNamed
 {
+    
+    if (imgURL == nil) {
+        if(defaultImageNamed!=nil) //Use default image
+        {
+            self.image = [UIImage imageNamed:defaultImageNamed];
+        }
+        self.picURL = @"";
+        return;
+    }
+    
     self.picURL = imgURL;
     
     //Already exists
@@ -86,6 +96,10 @@
 {
     //Cancel if previous
     //[self cancelImage];
+    
+    if (url == nil || !url) {
+        return;
+    }
     
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
     
