@@ -525,6 +525,9 @@ static SharedData *sharedInstance = nil;
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     manager.requestSerializer = [AFJSONRequestSerializer serializer];
     manager.responseSerializer = [AFJSONResponseSerializer serializer];
+    
+    NSLog(@"token: %@", self.ph_token);
+    
     [manager.requestSerializer setValue:self.ph_token forHTTPHeaderField:@"Authorization"];
     
 //    AFSecurityPolicy *policy = [AFSecurityPolicy policyWithPinningMode:AFSSLPinningModeCertificate];
@@ -537,6 +540,17 @@ static SharedData *sharedInstance = nil;
     return manager;
 }
 
+- (void)loginWithFBToken:(void (^)(AFHTTPRequestOperation *, id))success
+                 failure:(void (^)(AFHTTPRequestOperation *, NSError *))failure {
+    NSDictionary *parameters = @{@"fb_token" : self.fb_access_token};
+    AFHTTPRequestOperationManager *manager = [self getOperationManager];
+    NSString *urlToLoad = [NSString stringWithFormat:@"%@/userlogin", PHBaseNewURL];
+    
+    [manager POST:urlToLoad
+       parameters:parameters
+          success:success
+          failure:failure];
+}
 
 //===================================================================================================//
 //GENDER
