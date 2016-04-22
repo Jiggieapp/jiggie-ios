@@ -1063,11 +1063,12 @@
 - (UIView *)headerViewWithText:(NSString *)text {
     UILabel *label = [UILabel new];
     [label setNumberOfLines:0];
+    [label setTextAlignment:NSTextAlignmentCenter];
     [label setTextColor:[UIColor whiteColor]];
     [label setText:text];
     [label setFont:[UIFont phBlond:12]];
     
-    CGSize textSize = [text boundingRectWithSize:CGSizeMake(CGRectGetWidth([UIScreen mainScreen].bounds) - 60, 60)
+    CGSize textSize = [text boundingRectWithSize:CGSizeMake(CGRectGetWidth([UIScreen mainScreen].bounds) - 80, 60)
                                          options:NSStringDrawingUsesFontLeading
                                       attributes:@{ NSFontAttributeName : label.font }
                                          context:nil].size;
