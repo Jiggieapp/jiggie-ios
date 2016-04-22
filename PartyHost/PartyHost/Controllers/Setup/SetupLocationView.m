@@ -33,8 +33,8 @@
         AFHTTPRequestOperationManager *manager = [sharedData getOperationManager];
         NSString *url = [NSString stringWithFormat:@"%@/save_longlat", PHBaseNewURL];
         NSDictionary *parameters = @{@"fb_id" : sharedData.fb_id,
-                                     @"longitude" : [NSNumber numberWithDouble:longitude],
-                                     @"latitude" : [NSNumber numberWithDouble:latitude]};
+                                     @"longitude" : [NSString stringWithFormat:@"%f", longitude],
+                                     @"latitude" : [NSString stringWithFormat:@"%f", latitude]};
         
         [manager POST:url parameters:parameters success:nil failure:nil];
     }];
