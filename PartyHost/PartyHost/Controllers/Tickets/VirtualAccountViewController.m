@@ -448,8 +448,7 @@
         });
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"error: %ld", (long)operation.response.statusCode);
-        if (operation.response.statusCode == 401 || operation.response.statusCode == 410) {
+        if (operation.response.statusCode == 410) {
             [self reloadLoginWithFBToken];
         }
         [self.emptyView setMode:@"empty"];
@@ -458,7 +457,6 @@
 
 - (void)reloadLoginWithFBToken {
     SharedData *sharedData = [SharedData sharedInstance];
-    NSDictionary *params = @{@"fb_token" : sharedData.fb_access_token};
     
     [sharedData loginWithFBToken:^(AFHTTPRequestOperation *operation, id responseObject) {
         sharedData.ph_token = responseObject[@"data"][@"token"];
