@@ -289,13 +289,16 @@
 //===================================================================================================//
 
 //SPECIAL LOAD WITH CANCEL
--(NWURLConnection*)loadImageCancelable:(NSString *)imgURL completionBlock:(void (^)(UIImage *image))completionBlock;
+- (NWURLConnection*)loadImageCancelable:(NSString *)imgURL completionBlock:(void (^)(UIImage *image))completionBlock;
 //===================================================================================================//
 
--(void)syncSuperPropertiesOnServer:(NSMutableDictionary *)dict;
+- (void)syncSuperPropertiesOnServer:(NSMutableDictionary *)dict;
 
--(AFHTTPRequestOperationManager *)getOperationManager;
--(void)loadTimeImage:(NSString *)imgURL withTimeOut:(float)time;
+- (AFHTTPRequestOperationManager *)getOperationManager;
+- (void)loginWithFBToken:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
+                 failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
+
+- (void)loadTimeImage:(NSString *)imgURL withTimeOut:(float)time;
 
 - (NSString *)formatCurrencyString:(NSString *)price;
 - (BOOL)validateEmailWithString:(NSString*)checkString;

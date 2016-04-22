@@ -2,7 +2,7 @@
 //  JGKeyboardNotificationHelper.m
 //  Jiggie
 //
-//  Created by Jiggie - Muhammad Nuruddin Effendi on 4/21/16.
+//  Created by Uuds on 4/21/16.
 //  Copyright © 2016 Sunny Clark. All rights reserved.
 //
 

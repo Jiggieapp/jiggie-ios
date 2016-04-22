@@ -448,7 +448,21 @@
         });
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        if (operation.response.statusCode == 410) {
+            [self reloadLoginWithFBToken];
+        }
         [self.emptyView setMode:@"empty"];
+    }];
+}
+
+- (void)reloadLoginWithFBToken {
+    SharedData *sharedData = [SharedData sharedInstance];
+    
+    [sharedData loginWithFBToken:^(AFHTTPRequestOperation *operation, id responseObject) {
+        sharedData.ph_token = responseObject[@"data"][@"token"];
+        [self loadTutorialData];
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        [self reloadLoginWithFBToken];
     }];
 }
 
