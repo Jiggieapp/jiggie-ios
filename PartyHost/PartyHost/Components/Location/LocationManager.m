@@ -10,8 +10,9 @@
 
 @interface LocationManager () <CLLocationManagerDelegate>
 
-@property (nonatomic, strong) CLLocationManager *locationManager;
+@property (nonatomic, strong) CLLocationManager *location;
 @property (nonatomic, strong) LocationManagerUpdateLocationsCompletion locationManagerUpdateLocationsCompletion;
+@property (nonatomic, assign) BOOL didUpdatedLocation;
 
 @end
 
@@ -23,40 +24,54 @@
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         _sharedManager = [[self alloc] init];
-        [_sharedManager enableLocationService];
     });
     
     return _sharedManager;
 }
 
-- (void)enableLocationService {
-    if ([self.locationManager respondsToSelector:@selector(requestWhenInUseAuthorization)]) {
-        [self.locationManager requestWhenInUseAuthorization];
+- (instancetype)init {
+    if (self = [super init]) {
+        self.location  = [CLLocationManager new];
+        [self.location setDesiredAccuracy:kCLLocationAccuracyHundredMeters];
+        
+        if (!self.location.delegate) {
+            self.location.delegate = self;
+        }
     }
     
-    if (!self.locationManager.delegate) {
-        self.locationManager.delegate = self;
+    return self;
+}
+
+- (void)startUpdatingLocation {
+    if ([self.location respondsToSelector:@selector(requestWhenInUseAuthorization)]) {
+        [self.location requestWhenInUseAuthorization];
     }
     
     if([CLLocationManager locationServicesEnabled]) {
         if([CLLocationManager authorizationStatus] == kCLAuthorizationStatusDenied ||
            [CLLocationManager authorizationStatus] == kCLAuthorizationStatusNotDetermined) {
         } else {
+            [self.location startUpdatingLocation];
         }
     }
+    
+    self.didUpdatedLocation = false;
 }
 
 - (void)didUpdateLocationsWithCompletion:(LocationManagerUpdateLocationsCompletion)completion {
-    [self.locationManager startUpdatingLocation];
     self.locationManagerUpdateLocationsCompletion = completion;
 }
 
 #pragma mark - CLLocationManagerDelegate
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations {
-    if (self.locationManagerUpdateLocationsCompletion) {
-        self.locationManagerUpdateLocationsCompletion(locations[0].coordinate.latitude,
-                                                      locations[0].coordinate.longitude);
+    if (!self.didUpdatedLocation) {
+        if (self.locationManagerUpdateLocationsCompletion) {
+            self.locationManagerUpdateLocationsCompletion(locations[0].coordinate.latitude,
+                                                          locations[0].coordinate.longitude);
+        }
     }
+    
+    self.didUpdatedLocation = true;
 }
 
 @end
