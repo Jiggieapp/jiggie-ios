@@ -312,49 +312,35 @@
 
 */
 
--(void)loginWithToken
-{
-    AFHTTPRequestOperationManager *manager = [self.sharedData getOperationManager];
-    NSDictionary *params = @{
-                             @"fb_token" : self.sharedData.fb_access_token
-                             };
-    
-    NSString *urlToLoad = [NSString stringWithFormat:@"%@/userlogin",PHBaseNewURL];
-    
-    NSLog(@"urlToLoad :: %@",urlToLoad);
-    
-    [manager POST:urlToLoad parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject)
-     {
-         NSLog(@"TOKEN_responseObject :: %@",responseObject);
-         if([responseObject[@"response"] boolValue])
-         {
-             self.didFBLogin = YES;
-             self.sharedData.ph_token = responseObject[@"token"];
-             [self checkIfAPNisLoaded];
-         }else{
-             [[NSNotificationCenter defaultCenter] postNotificationName:@"HIDE_LOADING" object:self];
-             
-             [FBSDKAccessToken setCurrentAccessToken:nil];
-             FBSDKLoginManager *logMeOut = [[FBSDKLoginManager alloc] init];
-             [logMeOut logOut];
-             
-             if (self.isAutoLoginMode) {
-                 [[NSNotificationCenter defaultCenter]
-                  postNotificationName:@"SHOW_LOGIN"
-                  object:self];
-             }
-             
-             //[FBSession.activeSession closeAndClearTokenInformation];
-             self.didFBInitInfo = NO;
-             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Login Error" message:@"There was an issue logging in, please try again" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-             [alert show];
-         }
-         
-         
-     } failure:^(AFHTTPRequestOperation *operation, NSError *error)
-     {
-         NSLog(@"FAILING_responseObject :: %@",operation.responseString);
-     }];
+-(void)loginWithToken {
+    [self.sharedData loginWithFBToken:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSLog(@"TOKEN_responseObject :: %@",responseObject);
+        if([responseObject[@"response"] boolValue])
+        {
+            self.didFBLogin = YES;
+            self.sharedData.ph_token = responseObject[@"data"][@"token"];
+            [self checkIfAPNisLoaded];
+        }else{
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"HIDE_LOADING" object:self];
+            
+            [FBSDKAccessToken setCurrentAccessToken:nil];
+            FBSDKLoginManager *logMeOut = [[FBSDKLoginManager alloc] init];
+            [logMeOut logOut];
+            
+            if (self.isAutoLoginMode) {
+                [[NSNotificationCenter defaultCenter]
+                 postNotificationName:@"SHOW_LOGIN"
+                 object:self];
+            }
+            
+            //[FBSession.activeSession closeAndClearTokenInformation];
+            self.didFBInitInfo = NO;
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Login Error" message:@"There was an issue logging in, please try again" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            [alert show];
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"FAILING_responseObject :: %@",operation.responseString);
+    }];
 }
 
 
@@ -423,6 +409,7 @@
 
 -(void)changePage:(int)newPage {
     if(newPage >= self.totalPages) return;
+    if(newPage < 0) return;
     
     int lastPage = self.pageIndex;
     self.pageIndex = newPage;
@@ -570,6 +557,10 @@
              @try {
                  if(![json[@"response"] boolValue])
                  {
+                     [[NSNotificationCenter defaultCenter]
+                      postNotificationName:@"SHOW_LOGIN"
+                      object:self];
+                     
                      [self showUpgrade];
                      return;
                  }

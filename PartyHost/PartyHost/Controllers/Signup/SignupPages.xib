@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9059" systemVersion="15B42" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9531" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9049"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
     </dependencies>
     <customFonts key="customFonts">
         <mutableArray key="FaktPro-Blond.ttf">
@@ -32,28 +32,24 @@
             <subviews>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Jiggie" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4Q7-sX-pSX">
                     <rect key="frame" x="40" y="328" width="240" height="20"/>
-                    <animations/>
                     <fontDescription key="fontDescription" name="FaktPro-SemiBold" family="Fakt Pro" pointSize="20"/>
                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="See whats going on..." lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mDc-JH-4zH">
                     <rect key="frame" x="40" y="352" width="240" height="18"/>
-                    <animations/>
                     <fontDescription key="fontDescription" name="FaktPro-Blond" family="Fakt Pro" pointSize="18"/>
                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="We don't post anything to Facebook" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7iG-No-Xkr">
                     <rect key="frame" x="45" y="466" width="240" height="14"/>
-                    <animations/>
                     <fontDescription key="fontDescription" name="FaktPro-Blond" family="Fakt Pro" pointSize="14"/>
                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Owr-Ob-CMO">
                     <rect key="frame" x="0.0" y="504" width="320" height="64"/>
-                    <animations/>
                     <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.5" colorSpace="calibratedRGB"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="64" id="U2s-On-Y2F"/>
@@ -65,7 +61,6 @@
                     </state>
                 </button>
             </subviews>
-            <animations/>
             <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
             <constraints>
                 <constraint firstAttribute="trailing" secondItem="7iG-No-Xkr" secondAttribute="trailing" constant="35" id="6eQ-Ao-NC3"/>
@@ -93,11 +88,9 @@
                     <subviews>
                         <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="signup_1" translatesAutoresizingMaskIntoConstraints="NO" id="w46-ar-tPO">
                             <rect key="frame" x="0.0" y="96" width="320" height="326"/>
-                            <animations/>
                         </imageView>
                         <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" text="Discover upcoming food bazaars, music, fashion and nightlife events" textAlignment="center" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qbZ-FQ-bL3">
                             <rect key="frame" x="19" y="44" width="283" height="54"/>
-                            <animations/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="54" id="dLS-Bm-rHv"/>
                             </constraints>
@@ -106,7 +99,6 @@
                             <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                         </textView>
                     </subviews>
-                    <animations/>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     <constraints>
                         <constraint firstItem="w46-ar-tPO" firstAttribute="top" secondItem="qbZ-FQ-bL3" secondAttribute="bottom" constant="-2" id="B4B-Zg-Gg4"/>
@@ -120,7 +112,6 @@
                 </view>
                 <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="O7q-d6-Xvj">
                     <rect key="frame" x="0.0" y="504" width="320" height="64"/>
-                    <animations/>
                     <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.5" colorSpace="calibratedRGB"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="64" id="MRL-0c-TxT"/>
@@ -132,7 +123,6 @@
                     </state>
                 </button>
             </subviews>
-            <animations/>
             <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
             <constraints>
                 <constraint firstItem="gje-ou-dKG" firstAttribute="top" secondItem="hku-nV-cEA" secondAttribute="top" id="CmC-yJ-9r5"/>
@@ -154,11 +144,9 @@
                     <subviews>
                         <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="signup_2" translatesAutoresizingMaskIntoConstraints="NO" id="MDz-Nz-LfT">
                             <rect key="frame" x="0.0" y="96" width="320" height="326"/>
-                            <animations/>
                         </imageView>
                         <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" text="Get detailed information on events and book your tickets" textAlignment="center" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jgg-om-YLh">
                             <rect key="frame" x="19" y="44" width="283" height="54"/>
-                            <animations/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="54" id="SxG-oc-PxY"/>
                             </constraints>
@@ -167,7 +155,6 @@
                             <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                         </textView>
                     </subviews>
-                    <animations/>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     <constraints>
                         <constraint firstAttribute="trailing" secondItem="MDz-Nz-LfT" secondAttribute="trailing" id="B8C-0I-IlE"/>
@@ -181,7 +168,6 @@
                 </view>
                 <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JeB-a6-I1L">
                     <rect key="frame" x="0.0" y="504" width="320" height="64"/>
-                    <animations/>
                     <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.5" colorSpace="calibratedRGB"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="64" id="4VV-o9-ZIE"/>
@@ -193,7 +179,6 @@
                     </state>
                 </button>
             </subviews>
-            <animations/>
             <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
             <constraints>
                 <constraint firstAttribute="bottom" secondItem="9zI-ed-rWL" secondAttribute="bottom" constant="64" id="4Ty-lQ-Xol"/>
@@ -215,11 +200,9 @@
                     <subviews>
                         <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="signup_3" translatesAutoresizingMaskIntoConstraints="NO" id="QPq-1K-opG">
                             <rect key="frame" x="0.0" y="96" width="320" height="325.5"/>
-                            <animations/>
                         </imageView>
                         <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" text="Check out other guests who like the same events you do " textAlignment="center" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tfn-6c-zAf">
                             <rect key="frame" x="16" y="44" width="288" height="52"/>
-                            <animations/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="52" id="bF0-jc-hIa"/>
                             </constraints>
@@ -228,7 +211,6 @@
                             <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                         </textView>
                     </subviews>
-                    <animations/>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     <constraints>
                         <constraint firstItem="tfn-6c-zAf" firstAttribute="top" secondItem="zF5-Mr-b4T" secondAttribute="top" constant="44" id="LQs-Gi-PPW"/>
@@ -242,7 +224,6 @@
                 </view>
                 <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0dW-29-htU">
                     <rect key="frame" x="0.0" y="504" width="320" height="64"/>
-                    <animations/>
                     <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.5" colorSpace="calibratedRGB"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="64" id="nFb-W5-6MH"/>
@@ -254,7 +235,6 @@
                     </state>
                 </button>
             </subviews>
-            <animations/>
             <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
             <constraints>
                 <constraint firstAttribute="bottom" secondItem="0dW-29-htU" secondAttribute="bottom" id="0Di-ba-z3r"/>
@@ -276,11 +256,9 @@
                     <subviews>
                         <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="signup_4" translatesAutoresizingMaskIntoConstraints="NO" id="Ead-wv-khY">
                             <rect key="frame" x="0.0" y="96" width="320" height="326"/>
-                            <animations/>
                         </imageView>
                         <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" text="Connect with other fun-loving people and make new friends" textAlignment="center" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="n2k-TQ-bfm">
                             <rect key="frame" x="27" y="44" width="272" height="58"/>
-                            <animations/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="58" id="Euu-fR-Sc1"/>
                             </constraints>
@@ -289,7 +267,6 @@
                             <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                         </textView>
                     </subviews>
-                    <animations/>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     <constraints>
                         <constraint firstAttribute="bottom" secondItem="Ead-wv-khY" secondAttribute="bottom" constant="82" id="0zH-xt-F3l"/>
@@ -303,7 +280,6 @@
                 </view>
                 <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ie9-XD-Zn8">
                     <rect key="frame" x="0.0" y="504" width="320" height="64"/>
-                    <animations/>
                     <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.5" colorSpace="calibratedRGB"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="64" id="d6r-2H-Sur"/>
@@ -315,7 +291,6 @@
                     </state>
                 </button>
             </subviews>
-            <animations/>
             <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
             <constraints>
                 <constraint firstAttribute="bottom" secondItem="mYI-DO-DmE" secondAttribute="bottom" constant="64" id="0L1-AH-QCd"/>
@@ -337,11 +312,9 @@
                     <subviews>
                         <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="signup_5" translatesAutoresizingMaskIntoConstraints="NO" id="7th-ev-Ffa">
                             <rect key="frame" x="0.0" y="96" width="320" height="325.5"/>
-                            <animations/>
                         </imageView>
                         <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" text="Chat with your new friends and make plans to meet up" textAlignment="center" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Faj-MP-Nmv">
                             <rect key="frame" x="16" y="44" width="288" height="52"/>
-                            <animations/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="52" id="KdV-6s-BYk"/>
                             </constraints>
@@ -350,7 +323,6 @@
                             <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                         </textView>
                     </subviews>
-                    <animations/>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     <constraints>
                         <constraint firstAttribute="trailing" secondItem="7th-ev-Ffa" secondAttribute="trailing" id="3Ja-zO-dSQ"/>
@@ -364,7 +336,6 @@
                 </view>
                 <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Kgb-58-iMN">
                     <rect key="frame" x="0.0" y="504" width="320" height="64"/>
-                    <animations/>
                     <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.5" colorSpace="calibratedRGB"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="64" id="tHh-o7-gqJ"/>
@@ -376,7 +347,6 @@
                     </state>
                 </button>
             </subviews>
-            <animations/>
             <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
             <constraints>
                 <constraint firstItem="Kgb-58-iMN" firstAttribute="leading" secondItem="wqa-Rd-x6g" secondAttribute="leading" id="7Ih-9F-FHb"/>

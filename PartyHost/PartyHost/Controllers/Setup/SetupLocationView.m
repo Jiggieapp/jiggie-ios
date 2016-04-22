@@ -7,6 +7,7 @@
 //
 
 #import "SetupLocationView.h"
+#import "LocationManager.h"
 
 @implementation SetupLocationView
 
@@ -27,42 +28,16 @@
     
     if(self.locationSwitch.isOn==NO) return YES; //Just ignore
     
-    
-    
-    
-    if([CLLocationManager authorizationStatus]==kCLAuthorizationStatusDenied || [CLLocationManager authorizationStatus]==kCLAuthorizationStatusRestricted )
-    {
+    [[LocationManager manager] startUpdatingLocation];
+    [[LocationManager manager] didUpdateLocationsWithCompletion:^(CLLocationDegrees latitude, CLLocationDegrees longitude) {
+        AFHTTPRequestOperationManager *manager = [sharedData getOperationManager];
+        NSString *url = [NSString stringWithFormat:@"%@/save_longlat", PHBaseNewURL];
+        NSDictionary *parameters = @{@"fb_id" : sharedData.fb_id,
+                                     @"longitude" : [NSString stringWithFormat:@"%f", longitude],
+                                     @"latitude" : [NSString stringWithFormat:@"%f", latitude]};
         
-        return YES;
-        if (&UIApplicationOpenSettingsURLString != NULL)
-        { //iOS 8
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Location Services" message:@"Please go to your settings and enable location services for Jiggie." delegate:self cancelButtonTitle:nil otherButtonTitles:@"Okay", nil];
-            alert.tag = 1;
-            [alert show];
-            return NO;
-        }
-        else
-        {  //Old OS
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Location Services" message:@"Please go to your settings and enable location services for Jiggie." delegate:nil cancelButtonTitle:nil otherButtonTitles:@"Okay", nil];
-            [alert show];
-            return NO;
-        }
-    }
-    else if([CLLocationManager authorizationStatus]==kCLAuthorizationStatusNotDetermined)
-    {
-        if ([sharedData.locationManager respondsToSelector:@selector(requestWhenInUseAuthorization)]) { // iOS8+
-            // Sending a message to avoid compile time error
-            [[UIApplication sharedApplication] sendAction:@selector(requestWhenInUseAuthorization)
-                                                       to:sharedData.locationManager
-                                                     from:self
-                                                 forEvent:nil];
-        }
-        return YES;
-    }
-    else
-    {
-        NSLog(@"SetupLocationView: Already allowed location");
-    }
+        [manager POST:url parameters:parameters success:nil failure:nil];
+    }];
     
     return YES;
 }

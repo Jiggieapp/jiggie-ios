@@ -157,7 +157,8 @@
     
     [self.btnUserImage setFrame:CGRectMake((self.bounds.size.width - 100)/2, startY, 100, 100)];
     
-    NSString *usrImgURL = [self.sharedData profileImgLarge:self.fromFBId];
+//    NSString *usrImgURL = [self.sharedData profileImgLarge:self.fromFBId];
+    NSString *usrImgURL = self.sharedData.feedMatchImage;
     [self.sharedData loadImage:usrImgURL onCompletion:^(){
         [self.btnUserImage setImage:[self.sharedData.imagesDict objectForKey:usrImgURL] forState:UIControlStateNormal];
         self.btnUserImage.contentMode = UIViewContentModeScaleAspectFill;

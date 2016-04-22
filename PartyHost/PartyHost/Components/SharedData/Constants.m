@@ -23,11 +23,16 @@ NSString *const AppsFlyerDevKey = @"D4Uux6HSu3aYjNHkCHsTiC";
 
 NSString *const JiggieItunesID = @"1047291489";
 
+NSString *const VeritransClientKey = @"VT-client-gJRBbRZC0t_-JXUD"; // Dev
+BOOL const isVeritransInProducion = false; // Dev
+
+//NSString *const VeritransClientKey = @"VT-client-tHEKcD0xJGsm6uwH"; // Live
+//BOOL isVeritransInProducion = true; // Dev
 
 //URLs with substitution
-NSString *const PHBaseURL = @"https://jiggie.herokuapp.com/app/v3";
-NSString *const PHBaseNewURL = @"https://api.jiggieapp.com/app/v3";
-NSString *const PHBaseDomain = @"https://jiggie.herokuapp.com";
+NSString *const PHBaseURL = @"https://jiggie-dev.herokuapp.com/app/v3";
+NSString *const PHBaseNewURL = @"https://api-dev.jiggieapp.com/app/v3";
+NSString *const PHBaseDomain = @"https://jiggie-dev.herokuapp.com";
 
 
 //NSString *const PHBaseDomain = @"https://partyhostapp.herokuapp.com";
@@ -57,6 +62,7 @@ NSString *const PHBlankImgURL = @"https://partyhostapp.herokuapp.com/img/fbperso
 NSString *const PHDateFormatShort = @"MMM d, yyyy h:mm a"; //This is the format for date_str from API
 NSString *const PHDateFormatServer = @"yyyy-MM-dd'T'HH:mm:ss.SSSZ"; //Native server usually sends this
 NSString *const PHDateFormatApp = @"EEEE MMM dd, yyyy hh:mm a"; //Native server usually sends this
+NSString *const PHDateFormatAppShort = @"EE, dd MMM yyyy"; //Native server usually sends this
 
 
 int const PHTabHeight = 50; //Tabs at bottom of screen
