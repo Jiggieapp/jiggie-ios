@@ -447,9 +447,11 @@
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         if (operation.response.statusCode == 410) {
+            [self.emptyView setMode:@"load"];
             [self reloadLoginWithFBToken];
+        } else {
+            [self.emptyView setMode:@"empty"];
         }
-        [self.emptyView setMode:@"empty"];
     }];
 }
 
