@@ -27,7 +27,7 @@
 -(void)loadImage:(NSString *)imgURL defaultImageNamed:(NSString*)defaultImageNamed
 {
     
-    if (imgURL == nil) {
+    if (imgURL == nil || [imgURL isEqualToString:@""]) {
         if(defaultImageNamed!=nil) //Use default image
         {
             self.image = [UIImage imageNamed:defaultImageNamed];
@@ -66,17 +66,18 @@
     //Download image and add to shared dict
     [self downloadImageWithURL:[[NSURL alloc] initWithString:imgURL] completionBlock:^(BOOL succeed, UIImage *result, NSString *pic_url)
     {
-        if(succeed)
+        if(self.showLoading)
+        {
+            [self.spinner stopAnimating];
+            [self.spinner removeFromSuperview];
+        }
+        
+        if(succeed && result && pic_url)
         {
             [self.sharedData.imagesDict setObject:result forKey:pic_url];
             if([pic_url isEqualToString:self.picURL])
             {
                 self.image = result;
-                if(self.showLoading)
-                {
-                    [self.spinner stopAnimating];
-                    [self.spinner removeFromSuperview];
-                }
             }
         }
     }];
@@ -96,7 +97,7 @@
 {
     //Cancel if previous
     //[self cancelImage];
-    
+
     if (url == nil || !url) {
         return;
     }

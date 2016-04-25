@@ -225,6 +225,7 @@ static NSString *const kAllowTracking = @"allowTracking";
 //    [VTConfig setVT_IsProduction:true];
     
     //[self performSelector:@selector(testApp) withObject:nil afterDelay:5.0];
+
     return YES;
 }
 

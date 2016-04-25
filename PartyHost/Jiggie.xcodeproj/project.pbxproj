@@ -2524,6 +2524,8 @@
 				PRODUCT_NAME = Jiggie;
 				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = 1;
+				VT_CLIENT = "VT-client-gJRBbRZC0t_-JXUD";
+				VT_ENABLE_PROD = 0;
 			};
 			name = "Debug[Dev]";
 		};
@@ -2604,6 +2606,8 @@
 				PRODUCT_NAME = Jiggie;
 				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = 1;
+				VT_CLIENT = "VT-client-gJRBbRZC0t_-JXUD";
+				VT_ENABLE_PROD = 0;
 			};
 			name = "Release[Dev]";
 		};
@@ -2727,6 +2731,8 @@
 				PRODUCT_NAME = Jiggie;
 				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = 1;
+				VT_CLIENT = "VT-client-tHEKcD0xJGsm6uwH";
+				VT_ENABLE_PROD = 1;
 			};
 			name = Debug;
 		};
@@ -2770,6 +2776,8 @@
 				PRODUCT_NAME = Jiggie;
 				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = 1;
+				VT_CLIENT = "VT-client-tHEKcD0xJGsm6uwH";
+				VT_ENABLE_PROD = 1;
 			};
 			name = Release;
 		};

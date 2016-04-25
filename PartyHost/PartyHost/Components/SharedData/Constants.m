@@ -26,8 +26,8 @@ NSString *const JiggieItunesID = @"1047291489";
 //NSString *const VeritransClientKey = @"VT-client-gJRBbRZC0t_-JXUD"; // Dev
 //BOOL const isVeritransInProducion = false; // Dev
 
-NSString *const VeritransClientKey = @"VT-client-tHEKcD0xJGsm6uwH"; // Live
-BOOL const isVeritransInProducion = true; // Live
+//NSString *const VeritransClientKey = @"VT-client-tHEKcD0xJGsm6uwH"; // Live
+//BOOL const isVeritransInProducion = true; // Live
 
 
 //NSString *const PHBaseDomain = @"https://partyhostapp.herokuapp.com";
