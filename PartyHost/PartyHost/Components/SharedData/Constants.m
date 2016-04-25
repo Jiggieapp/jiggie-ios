@@ -29,11 +29,6 @@ NSString *const JiggieItunesID = @"1047291489";
 NSString *const VeritransClientKey = @"VT-client-tHEKcD0xJGsm6uwH"; // Live
 BOOL const isVeritransInProducion = true; // Live
 
-//URLs with substitution
-NSString *const PHBaseURL = @"https://jiggie.herokuapp.com/app/v3";
-NSString *const PHBaseNewURL = @"https://api.jiggieapp.com/app/v3";
-NSString *const PHBaseDomain = @"https://jiggie.herokuapp.com";
-
 
 //NSString *const PHBaseDomain = @"https://partyhostapp.herokuapp.com";
 //NSString *const PHBaseURL = @"https://partyhostapp.herokuapp.com/app/v3";

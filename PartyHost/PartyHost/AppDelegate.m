@@ -34,7 +34,7 @@ static NSString *const kAllowTracking = @"allowTracking";
 - (GSTouchesShowingWindow *)window {
     static GSTouchesShowingWindow *window = nil;
     if (!window) {
-        window = [[GSTouchesShowingWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+        window = [[GSTouchesShwingWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     }
     return window;
 }

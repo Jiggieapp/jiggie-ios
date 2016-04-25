@@ -9,6 +9,9 @@
 #ifndef PartyHost_Constants_h
 #define PartyHost_Constants_h
 #define PHVersion [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"]
+#define PHBaseURL [[[NSBundle mainBundle] infoDictionary] objectForKey:@"BASE_URL"]
+#define PHBaseNewURL [[[NSBundle mainBundle] infoDictionary] objectForKey:@"BASE_NEW_URL"]
+#define PHBaseDomain [[[NSBundle mainBundle] infoDictionary] objectForKey:@"BASE_DOMAIN"]
 
 //Others
 extern BOOL const PHDebugOn; //Pretend we are a new user in debug mode, they will see walkthrough, alerts etc.
@@ -26,9 +29,6 @@ extern NSString *const VeritransClientKey;
 extern BOOL const isVeritransInProducion;
 
 //URL
-extern NSString *const PHBaseURL;
-extern NSString *const PHBaseNewURL;
-extern NSString *const PHBaseDomain;
 extern NSString *const PHGuestListingsURL;
 extern NSString *const PHHostListingsURL;
 extern NSString *const PHEventsURL;
