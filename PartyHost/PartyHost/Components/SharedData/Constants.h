@@ -16,6 +16,13 @@
 #define VeritransClientKey [[[NSBundle mainBundle] infoDictionary] objectForKey:@"VTClient"]
 #define isVeritransInProducion [[[[NSBundle mainBundle] infoDictionary] objectForKey:@"VTEnableProd"] boolValue]
 
+//API Completion Handler
+typedef void (^PartyFeedCompletionHandler)(NSArray *feeds,
+                                           NSInteger statusCode,
+                                           NSError *error);
+
+typedef void (^MatchFeedCompletionHandler)(NSError *error);
+
 //Others
 extern BOOL const PHDebugOn; //Pretend we are a new user in debug mode, they will see walkthrough, alerts etc.
 extern int const PHTabHeight;

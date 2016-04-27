@@ -183,7 +183,8 @@
     self.hostVenueDetailFromShare = [[HostVenueDetailFromShare alloc] initWithFrame:CGRectMake(0, self.sharedData.screenHeight, self.sharedData.screenWidth, self.sharedData.screenHeight)];
     
     
-    self.feedPage       = [[Feed alloc] initWithFrame:pageRect];
+    self.feedPage       = [FeedView instanceFromNib];
+    self.feedPage.frame = pageRect;
     self.feedPage.layer.masksToBounds = YES;
     
     self.morePage       = [[More alloc] initWithFrame:pageRect];
@@ -225,6 +226,7 @@
     self.sharedData.memberProfile = self.memberProfile;
     self.sharedData.morePage = self.morePage;
     self.sharedData.eventsPage = self.eventsPage;
+    self.sharedData.feedPage = self.feedPage;
     
     [self.pagesA addObject:self.eventsPage];
     [self.pagesA addObject:self.chatPage];

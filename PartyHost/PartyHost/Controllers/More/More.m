@@ -7,7 +7,6 @@
 //
 
 #import "More.h"
-#import "Feed.h"
 #import "AnalyticManager.h"
 #import "UserManager.h"
 
@@ -707,7 +706,6 @@
         if (indexPath.row==0) {
             if (self.sharedData.isHost == NO) {
                 [self.sharedData.eventsPage resetApp];
-                [self.sharedData.feedPage forceReload];
                 guestCell.accessoryType = UITableViewCellAccessoryNone;
                 hostCell.accessoryType = UITableViewCellAccessoryCheckmark;
                 self.sharedData.account_type = @"host";
@@ -724,7 +722,6 @@
         else if (indexPath.row==1) {
             if (self.sharedData.isGuest == NO) {
                 [self.sharedData.eventsPage resetApp];
-                [self.sharedData.feedPage forceReload];
                 guestCell.accessoryType = UITableViewCellAccessoryCheckmark;
                 hostCell.accessoryType = UITableViewCellAccessoryNone;
                 self.sharedData.account_type = @"guest";

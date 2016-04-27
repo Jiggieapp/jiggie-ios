@@ -16,7 +16,7 @@
 #import "MPTweakInline.h"
 
 @class Messages;
-@class Feed;
+@class FeedView;
 @class Profile;
 @class More;
 @class Settings;
@@ -51,7 +51,7 @@
 @property(nonatomic,strong) More                *morePage;
 @property(nonatomic,strong) Settings            *settingsPage;
 //@property(nonatomic,strong) Hostings            *hostingsPage;
-@property(nonatomic,strong) Feed                *feedPage;
+@property(nonatomic,strong) FeedView            *feedPage;
 //@property(nonatomic,strong) Confirmations       *confirmationsPage;
 @property(nonatomic,strong) Events              *eventsPage;
 @property(nonatomic,strong) BookTable           *bookTable;

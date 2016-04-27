@@ -75,7 +75,6 @@
     [self.loadingView addSubview:spinnerCon];
     [self.view addSubview:self.loadingView];
     
-    
     [[NSNotificationCenter defaultCenter]
      addObserver:self
      selector:@selector(startPollingChat)
