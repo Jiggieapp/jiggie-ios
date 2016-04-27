@@ -99,14 +99,18 @@
     
     if (feeds) {
         self.feedData = [NSMutableArray arrayWithArray:feeds];
-        [self.swipeableView loadViewsIfNeeded];
+        if (feeds.count > 0) {
+            [self.swipeableView loadViewsIfNeeded];
+        } else {
+            [self showEmptyView];
+        }
     } else {
         [self loadDataAndShowHUD:NO];
     }
 }
 
 - (IBAction)discoverDidValueChanged:(UISwitch *)sender {
-    if (self.sharedData.matchMe) {
+    if (!sender.isOn) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Turn off socialize?"
                                                         message:@"while turned off, your profile card won't be shown to other users."
                                                        delegate:self
@@ -155,10 +159,7 @@
             [self.feedData removeAllObjects];
             
             if (statusCode == 204) {
-                [self.emptyView setData:@"Check back soon"
-                               subtitle:@"Browse some events and your social feed will show members who like the same events."
-                             imageNamed:@"PickIcon"];
-                [self.emptyView setMode:@"empty"];
+                [self showEmptyView];
                 [self.feedData removeAllObjects];
                 [self.swipeableView setHidden:YES];
                 
@@ -182,35 +183,32 @@
 }
 
 - (void)toggleMatch {
-    NSString *matchMe = (self.sharedData.matchMe == YES)?@"yes":@"no";
+    NSString *matchMe = self.sharedData.matchMe ? @"yes" : @"no";
     AFHTTPRequestOperationManager *manager = [self.sharedData getOperationManager];
     NSString *url = [NSString stringWithFormat:@"%@/partyfeed/settings/%@/%@", PHBaseURL, self.sharedData.fb_id, matchMe];
     
     [SVProgressHUD show];
-    [manager GET:url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [manager GET:url parameters:@{} success:^(AFHTTPRequestOperation *operation, id responseObject) {
         [SVProgressHUD dismiss];
+        
         [self.swipeableView setHidden:!self.sharedData.matchMe];
         [self.discoverSwitch setOn:self.sharedData.matchMe animated:YES];
-        
-        if (self.sharedData.matchMe) {
-            [self.discoverImageView setImage:[UIImage imageNamed:@"discover_on"]];
-            [self.discoverLabel setText:@"Turn off if you do not wish to be seen by others"];
-        } else {
-            [self.emptyView setMode:@"hide"];
-            [self.discoverImageView setImage:[UIImage imageNamed:@"discover_off"]];
-            [self.discoverLabel setText:@"Turn on if you wish to be seen by others"];
-        }
+        [self setMatchViewToOn:self.sharedData.matchMe];
         
         self.sharedData.feedBadge.hidden = !self.sharedData.matchMe;
         self.sharedData.feedBadge.canShow = self.sharedData.matchMe;
         
         if (self.sharedData.matchMe) {
             [self loadDataAndShowHUD:YES];
+        } else {
+            [self.emptyView setMode:@"hide"];
         }
         
         [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Socialize Toggle" withDict:@{@"toggle":matchMe}];
      } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
          [SVProgressHUD dismiss];
+         [self.discoverSwitch setOn:!self.sharedData.matchMe animated:YES];
+         [self setMatchViewToOn:!self.sharedData.matchMe];
      }];
 }
 
@@ -237,6 +235,23 @@
     
     if (![self.emptyView isDescendantOfView:self]) {
         [self addSubview:self.emptyView];
+    }
+}
+
+- (void)showEmptyView {
+    [self.emptyView setData:@"Check back soon"
+                   subtitle:@"Browse some events and your social feed will show members who like the same events."
+                 imageNamed:@"PickIcon"];
+    [self.emptyView setMode:@"empty"];
+}
+
+- (void)setMatchViewToOn:(BOOL)match {
+    if (match) {
+        [self.discoverImageView setImage:[UIImage imageNamed:@"discover_on"]];
+        [self.discoverLabel setText:@"Turn off if you do not wish to be seen by others"];
+    } else {
+        [self.discoverImageView setImage:[UIImage imageNamed:@"discover_off"]];
+        [self.discoverLabel setText:@"Turn on if you wish to be seen by others"];
     }
 }
 
@@ -375,8 +390,8 @@
                         self.sharedData.feedMatchImage = feed.fromImageURL;
                         self.sharedData.toImgURL = [self.sharedData profileImg:self.sharedData.fromMailId];
                         
-                        if (self.feedIndex == self.feedData.count-1) {
-                            [self.emptyView setMode:@"empty"];
+                        if (self.feedData.count == 0) {
+                            [self showEmptyView];
                         }
                         
                         [[NSNotificationCenter defaultCenter] postNotificationName:@"SHOW_FEED_MATCH"
@@ -388,12 +403,20 @@
             }
             case FeedTypeViewed: {
                 [self trackDeniedFeedItemWithType:feed.type];
-                [Feed approveFeed:YES withFbId:feed.fromFbId andCompletionHandler:nil];
+                [Feed approveFeed:YES withFbId:feed.fromFbId andCompletionHandler:^(NSError *error) {
+                    if (self.feedData.count == 0) {
+                        [self showEmptyView];
+                    }
+                }];
                 break;
             }
         }
     } else {
-        [Feed approveFeed:NO withFbId:feed.fbId andCompletionHandler:nil];
+        [Feed approveFeed:NO withFbId:feed.fromFbId andCompletionHandler:^(NSError *error) {
+            if (self.feedData.count == 0) {
+                [self showEmptyView];
+            }
+        }];
     }
 }
 
@@ -416,13 +439,8 @@
         self.sharedData.matchMe = NO;
         [self toggleMatch];
     } else {
-        if (self.sharedData.matchMe) {
-            [self.discoverImageView setImage:[UIImage imageNamed:@"discover_on"]];
-            [self.discoverLabel setText:@"Turn off if you do not wish to be seen by others"];
-        } else {
-            [self.discoverImageView setImage:[UIImage imageNamed:@"discover_off"]];
-            [self.discoverLabel setText:@"Turn on if you wish to be seen by others"];
-        }
+        [self.discoverSwitch setOn:YES animated:YES];
+        [self setMatchViewToOn:self.sharedData.matchMe];
     }
 }
 
