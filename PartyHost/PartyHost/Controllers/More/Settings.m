@@ -472,16 +472,23 @@
         [self.sharedData saveSettingsResponse];
         [self.settingsList reloadData];
         [self.sharedData.eventsPage resetApp];
-        NSLog(@"%@", self.sharedData.feedPage);
-        [self.sharedData.feedPage loadDataAndShowHUD:NO];
         
-        //Start spinner
         [[NSNotificationCenter defaultCenter]
          postNotificationName:@"EVENTS_GO_HOME"
          object:self];
         
-        [self saveSettings];
+        //Start spinner
+        [[NSNotificationCenter defaultCenter]
+         postNotificationName:@"SHOW_LOADING"
+         object:self];
+        [self.sharedData.feedPage loadDataAndShowHUD:NO withCompletionHandler:^(NSArray *feeds, NSInteger statusCode, NSError *error) {
+            //Hide spinner
+            [[NSNotificationCenter defaultCenter]
+             postNotificationName:@"HIDE_LOADING"
+             object:self];
+        }];
         
+        [self saveSettings];
     }
     else if (indexPath.section==3) //Delete
     {

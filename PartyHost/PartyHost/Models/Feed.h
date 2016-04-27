@@ -23,15 +23,15 @@ typedef enum : NSUInteger {
 @property (copy, nonatomic, readonly) NSString *fromImageURL;
 @property (assign, nonatomic, readonly) FeedType type;
 
-+ (void)retrieveFeedsWithCompletionHandler:(PartyFeedCompletionHandler)completion;
-+ (void)approveFeed:(BOOL)approved withFbId:(NSString *)fbId andCompletionHandler:(MatchFeedCompletionHandler)completion;
-
 + (NSString *)feedTypeAsString:(FeedType)type;
 
 + (NSString *)pathToArchive;
-
 + (void)archiveObject:(NSArray *)object;
 + (NSArray *)unarchiveObject;
 + (void)removeArchivedObject;
+
++ (void)retrieveFeedsWithCompletionHandler:(PartyFeedCompletionHandler)completion;
++ (void)approveFeed:(BOOL)approved withFbId:(NSString *)fbId andCompletionHandler:(MatchFeedCompletionHandler)completion;
++ (void)enableSocialFeed:(BOOL)enabled withCompletionHandler:(MatchFeedCompletionHandler)completion;
 
 @end
