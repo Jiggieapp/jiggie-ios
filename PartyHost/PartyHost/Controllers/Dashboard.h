@@ -13,7 +13,7 @@
 #import "Messages.h"
 #import "More.h"
 #import "MemberProfile.h"
-#import "Feed.h"
+#import "FeedView.h"
 #import "MemberReviews.h"
 #import "WriteReview.h"
 #import "BookTable.h"
@@ -25,7 +25,6 @@
 #import "CreditCard.h"
 #import "EventsSummaryModal.h"
 #import "FeedMatch.h"
-
 
 @interface Dashboard : UIView
 
@@ -43,7 +42,7 @@
 @property(nonatomic,strong) More            *morePage;
 @property(nonatomic,strong) Hostings        *hostingsPage;
 @property(nonatomic,strong) Messages        *messagesPage;
-@property(nonatomic,strong) Feed            *feedPage;
+@property(nonatomic,strong) FeedView        *feedPage;
 @property(nonatomic,strong) SetupView       *walkthroughPage;
 @property(nonatomic,strong) HostVenueDetail *hostVenueDetailPage; //Shows host shoutout with venue details
 

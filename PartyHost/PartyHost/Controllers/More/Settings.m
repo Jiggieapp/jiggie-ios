@@ -7,7 +7,7 @@
 //
 
 #import "Settings.h"
-#import "Feed.h"
+#import "FeedView.h"
 #import "UserManager.h"
 
 @implementation Settings
@@ -472,7 +472,8 @@
         [self.sharedData saveSettingsResponse];
         [self.settingsList reloadData];
         [self.sharedData.eventsPage resetApp];
-        [self.sharedData.feedPage forceReload];
+        NSLog(@"%@", self.sharedData.feedPage);
+        [self.sharedData.feedPage loadDataAndShowHUD:NO];
         
         //Start spinner
         [[NSNotificationCenter defaultCenter]
