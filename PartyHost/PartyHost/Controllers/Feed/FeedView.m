@@ -257,6 +257,39 @@
     [[AnalyticManager sharedManager] trackMixPanelWithDict:@"View Feed Item" withDict:paramsToSend];
 }
 
+- (void)trackApprovedFeedItemWithType:(FeedType)type {
+    NSString *val = @"";
+    if ([self.sharedData.ABTestChat isEqualToString:@"YES"]) {
+        val = @"Connect";
+    } else {
+        val = @"Chat";
+    }
+    
+    AnalyticManager *analyticManager = [AnalyticManager sharedManager];
+    [analyticManager trackMixPanelWithDict:@"Accept Feed Item" withDict:@{@"ABTestChat":val,
+                                                                          @"feed_item_type":[Feed feedTypeAsString:type]}];
+    
+    [analyticManager trackMixPanelIncrementWithDict:@{@"feed_item_accept":@1}];
+    [analyticManager trackMixPanelIncrementWithDict:@{@"feed_item_response":@1}];
+}
+
+- (void)trackDeniedFeedItemWithType:(FeedType)type {
+    NSString *val = @"";
+    if ([self.sharedData.ABTestChat isEqualToString:@"YES"]) {
+        val = @"Connect";
+    } else {
+        val = @"Chat";
+    }
+    
+    AnalyticManager *analyticManager = [AnalyticManager sharedManager];
+    [analyticManager trackMixPanelWithDict:@"Passed Feed Item" withDict:@{@"ABTestChat":val,
+                                                                          @"feed_item_type":[Feed feedTypeAsString:type]}];
+    
+    [analyticManager trackMixPanelIncrementWithDict:@{@"feed_item_passed":@1}];
+    [analyticManager trackMixPanelIncrementWithDict:@{@"feed_item_response":@1}];
+}
+
+
 #pragma mark - ZLSwipeableViewDataSource
 - (UIView *)nextViewForSwipeableView:(ZLSwipeableView *)swipeableView {
     if (self.feedIndex < self.feedData.count) {
@@ -329,6 +362,8 @@
     if (direction == ZLSwipeableViewDirectionRight) {
         switch (feed.type) {
             case FeedTypeApproved: {
+                [self trackApprovedFeedItemWithType:feed.type];
+                
                 [SVProgressHUD show];
                 [Feed approveFeed:YES withFbId:feed.fromFbId andCompletionHandler:^(NSError *error) {
                     [SVProgressHUD dismiss];
@@ -352,6 +387,7 @@
                 break;
             }
             case FeedTypeViewed: {
+                [self trackDeniedFeedItemWithType:feed.type];
                 [Feed approveFeed:YES withFbId:feed.fromFbId andCompletionHandler:nil];
                 break;
             }
