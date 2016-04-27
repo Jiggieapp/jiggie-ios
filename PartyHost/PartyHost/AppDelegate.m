@@ -79,8 +79,8 @@ static NSString *const kAllowTracking = @"allowTracking";
     [[AnalyticManager sharedManager] startAnalytics];
     
     // AFNetworking Debug Setting:
-//    [[AFNetworkActivityLogger sharedLogger] startLogging];
-//    [[AFNetworkActivityLogger sharedLogger] setLevel:AFLoggerLevelDebug];
+    [[AFNetworkActivityLogger sharedLogger] startLogging];
+    [[AFNetworkActivityLogger sharedLogger] setLevel:AFLoggerLevelDebug];
     
     
     
@@ -220,9 +220,6 @@ static NSString *const kAllowTracking = @"allowTracking";
     // for testing
     [VTConfig setCLIENT_KEY:VeritransClientKey];
     [VTConfig setVT_IsProduction:isVeritransInProducion];
-    
-//    [VTConfig setCLIENT_KEY:@"VT-client-tHEKcD0xJGsm6uwH"];
-//    [VTConfig setVT_IsProduction:true];
     
     //[self performSelector:@selector(testApp) withObject:nil afterDelay:5.0];
 
@@ -1022,7 +1019,13 @@ continueUserActivity:(NSUserActivity *)userActivity
     if (managedObjectModel != nil) {
         return managedObjectModel;
     }
-    managedObjectModel = [NSManagedObjectModel mergedModelFromBundles:nil];
+//    managedObjectModel = [NSManagedObjectModel mergedModelFromBundles:nil];
+    
+    // use this code on versioned models:
+    NSString *path = [[NSBundle mainBundle] pathForResource:@"Jiggie" ofType:@"momd"];
+    NSURL *momURL = [NSURL fileURLWithPath:path];
+    managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:momURL];
+    
     return managedObjectModel;
 }
 

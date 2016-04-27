@@ -326,6 +326,7 @@
 		CB3EB6C71B459177003F658F /* App.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = App.xcassets; sourceTree = "<group>"; };
 		CB3EB6C91B459184003F658F /* LaunchScreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LaunchScreen.xib; sourceTree = "<group>"; };
 		CB3EB6CB1B45919A003F658F /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		DA0906F41CCE3D9F0072D6EC /* Jiggie 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Jiggie 2.xcdatamodel"; sourceTree = "<group>"; };
 		DA0CEC8B1C9C181B00C0DA44 /* PurchaseHistoryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PurchaseHistoryViewController.h; sourceTree = "<group>"; };
 		DA0CEC8C1C9C181B00C0DA44 /* PurchaseHistoryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PurchaseHistoryViewController.m; sourceTree = "<group>"; };
 		DA0CEC8E1C9D39E200C0DA44 /* PurchaseHistoryCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PurchaseHistoryCell.h; sourceTree = "<group>"; };
@@ -2812,9 +2813,10 @@
 		DA43055F1C22823700ED6C54 /* Jiggie.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				DA0906F41CCE3D9F0072D6EC /* Jiggie 2.xcdatamodel */,
 				DA4305601C22823700ED6C54 /* Jiggie.xcdatamodel */,
 			);
-			currentVersion = DA4305601C22823700ED6C54 /* Jiggie.xcdatamodel */;
+			currentVersion = DA0906F41CCE3D9F0072D6EC /* Jiggie 2.xcdatamodel */;
 			path = Jiggie.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

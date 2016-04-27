@@ -54,28 +54,42 @@
         self.dimView.hidden = YES;
         [self addSubview:self.dimView];
         
-        self.date = [[UILabel alloc] initWithFrame:CGRectMake(10, CGRectGetMaxY(self.mainImg.frame) + 6, self.sharedData.screenWidth - 20, 18)];
-        self.date.textColor = [UIColor blackColor];
-        self.date.adjustsFontSizeToFitWidth = YES;
-        self.date.textAlignment = NSTextAlignmentLeft;
-        self.date.font = [UIFont phThin:15];
-        [self addSubview:self.date];
-        
-        self.title = [[UILabel alloc] initWithFrame:CGRectMake(10, CGRectGetMaxY(self.date.frame) , self.sharedData.screenWidth - 20, 20)];
+        self.title = [[UILabel alloc] initWithFrame:CGRectMake(10, CGRectGetMaxY(self.mainImg.frame) + 14, self.sharedData.screenWidth - 20 - 70, 20)];
         self.title.textColor = [UIColor blackColor];
         self.title.textAlignment = NSTextAlignmentLeft;
         self.title.adjustsFontSizeToFitWidth = YES;
-        self.title.font = [UIFont phBold:17];
+        self.title.font = [UIFont phBlond:16];
         [self addSubview:self.title];
         
-        self.subtitle = [[UILabel alloc] initWithFrame:CGRectMake(10, CGRectGetMaxY(self.title.frame), self.sharedData.screenWidth - 20, 18)];
-        self.subtitle.textColor = [UIColor blackColor];
+        self.likeButton = [[UIButton alloc] initWithFrame:CGRectMake(self.sharedData.screenWidth - 70, CGRectGetMaxY(self.mainImg.frame) + 8, 40, 40)];
+        [self.likeButton setImage:[UIImage imageNamed:@"icon_love_on"] forState:UIControlStateNormal];
+        [self.likeButton setImageEdgeInsets:UIEdgeInsetsMake(5, 5, 5, 5)];
+        [self.likeButton setAdjustsImageWhenDisabled:NO];
+        [self.likeButton setEnabled:NO];
+        [self addSubview:self.likeButton];
+        
+        self.likeCount = [[UILabel alloc] initWithFrame:CGRectMake(self.sharedData.screenWidth - 34, CGRectGetMaxY(self.mainImg.frame) + 16, 28, 20)];
+        self.likeCount.textColor = [UIColor darkGrayColor];
+        self.likeCount.adjustsFontSizeToFitWidth = YES;
+        self.likeCount.textAlignment = NSTextAlignmentCenter;
+        self.likeCount.font = [UIFont phBlond:13];
+        [self addSubview:self.likeCount];
+        
+        self.date = [[UILabel alloc] initWithFrame:CGRectMake(10, CGRectGetMaxY(self.title.frame), self.sharedData.screenWidth - 20, 20)];
+        self.date.textColor = [UIColor darkGrayColor];
+        self.date.adjustsFontSizeToFitWidth = YES;
+        self.date.textAlignment = NSTextAlignmentLeft;
+        self.date.font = [UIFont phBlond:15];
+        [self addSubview:self.date];
+        
+        self.subtitle = [[UILabel alloc] initWithFrame:CGRectMake(10, CGRectGetMaxY(self.date.frame), self.sharedData.screenWidth - 20, 20)];
+        self.subtitle.textColor = [UIColor darkGrayColor];
         self.subtitle.adjustsFontSizeToFitWidth = YES;
         self.subtitle.textAlignment = NSTextAlignmentLeft;
-        self.subtitle.font = [UIFont phThin:15];
+        self.subtitle.font = [UIFont phBlond:15];
         [self addSubview:self.subtitle];
         
-        self.tagsView = [[UIView alloc] initWithFrame:CGRectMake(10, CGRectGetMaxY(self.subtitle.frame) + 6, self.sharedData.screenWidth, 20)];
+        self.tagsView = [[UIView alloc] initWithFrame:CGRectMake(10, CGRectGetMaxY(self.subtitle.frame) + 8, self.sharedData.screenWidth, 20)];
         self.tagsView.backgroundColor = [UIColor clearColor];
         [self addSubview:self.tagsView];
         
@@ -156,6 +170,8 @@
     
     self.title.text = [event.title uppercaseString];
     self.subtitle.text = [event.venue capitalizedString];
+    
+    self.likeCount.text = [NSString stringWithFormat:@"%@", event.likes];
     
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     [formatter setDateFormat:PHDateFormatApp];

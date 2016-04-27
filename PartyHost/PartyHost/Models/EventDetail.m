@@ -26,5 +26,7 @@
 @dynamic venue;
 @dynamic venueID;
 @dynamic venueName;
+@dynamic likes;
+@dynamic isLiked;
 
 @end

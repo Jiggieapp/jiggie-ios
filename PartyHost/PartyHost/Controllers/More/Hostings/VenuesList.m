@@ -187,25 +187,25 @@
 -(void)loadData
 {
     /**/
-    AFHTTPRequestOperationManager *manager = [self.sharedData getOperationManager];
-    NSString *url = [NSString stringWithFormat:@"%@/venues/list",PHBaseURL];
-    [manager GET:url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject)
-     {
-         self.isVenuesListLoaded = YES;
-         NSLog(@"VENUE_LIST");
-         NSLog(@"%@",responseObject);
-         
-         [self.sharedData.venuesNameList removeAllObjects];
-         [self.sharedData.venuesNameList addObjectsFromArray:responseObject];
-         [self.venuesA removeAllObjects];
-         [self.venuesA addObjectsFromArray:responseObject];
-         [self.originalVenuesA removeAllObjects];
-         [self.originalVenuesA addObjectsFromArray:responseObject];
-         [self.venuesList reloadData];
-     } failure:^(AFHTTPRequestOperation *operation, NSError *error)
-     {
-         NSLog(@"ERROR :: %@",error);
-     }];
+//    AFHTTPRequestOperationManager *manager = [self.sharedData getOperationManager];
+//    NSString *url = [NSString stringWithFormat:@"%@/venues/list",PHBaseURL];
+//    [manager GET:url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject)
+//     {
+//         self.isVenuesListLoaded = YES;
+//         NSLog(@"VENUE_LIST");
+//         NSLog(@"%@",responseObject);
+//         
+//         [self.sharedData.venuesNameList removeAllObjects];
+//         [self.sharedData.venuesNameList addObjectsFromArray:responseObject];
+//         [self.venuesA removeAllObjects];
+//         [self.venuesA addObjectsFromArray:responseObject];
+//         [self.originalVenuesA removeAllObjects];
+//         [self.originalVenuesA addObjectsFromArray:responseObject];
+//         [self.venuesList reloadData];
+//     } failure:^(AFHTTPRequestOperation *operation, NSError *error)
+//     {
+//         NSLog(@"ERROR :: %@",error);
+//     }];
     
 }
 

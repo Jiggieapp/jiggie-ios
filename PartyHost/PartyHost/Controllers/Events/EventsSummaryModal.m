@@ -245,24 +245,6 @@
     [[NSNotificationCenter defaultCenter]
      postNotificationName:@"EVENTS_GO_GUEST_LIST"
      object:self];
-    
-    
-    
-    
-    
-    /*
-     if([self.sharedData isGuest] && ![self.sharedData isMember])
-     {
-     [[NSNotificationCenter defaultCenter]
-     postNotificationName:@"EVENTS_GO_HOST_LIST"
-     object:self];
-     }
-     else{
-     [[NSNotificationCenter defaultCenter]
-     postNotificationName:@"EVENTS_GO_GUEST_LIST"
-     object:self];
-     }
-     */
 }
 
 //Go to the ADD HOSTING screen
