@@ -55,10 +55,10 @@
     [self.mainCon addSubview:self.tabBar];
     
     self.title = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.sharedData.screenWidth, 40)];
-    self.title.text = @"THIS WEEK";
+    self.title.text = @"This Week";
     self.title.textColor = [UIColor whiteColor];
     self.title.textAlignment = NSTextAlignmentCenter;
-    self.title.font = [UIFont phBold:18];
+    self.title.font = [UIFont phBlond:16];
     [self.tabBar addSubview:self.title];
     
     //Cancel button
@@ -586,6 +586,13 @@
                              } else {
                                  item.venue = @"";
                              }
+                            
+                             NSNumber *likes = [eventRow objectForKey:@"likes"];
+                             if (likes && ![likes isEqual:[NSNull null]]) {
+                                 item.likes = likes;
+                             } else {
+                                 item.likes = [NSNumber numberWithInteger:0];
+                             }
                              
                              NSArray *tags = [eventRow objectForKey:@"tags"];
                              if (tags && ![tags isEqual:[NSNull null]]) {
@@ -625,7 +632,7 @@
 
                  }
                  @catch (NSException *exception) {
-                     
+
                  }
                  @finally {
                      
@@ -744,7 +751,7 @@
     }
     
     CGFloat pictureHeightRatio = 3.0 / 4.0;
-    CGFloat cellHeight = pictureHeightRatio * tableView.bounds.size.width + 98;
+    CGFloat cellHeight = pictureHeightRatio * tableView.bounds.size.width + 120;
     return cellHeight;
 }
 

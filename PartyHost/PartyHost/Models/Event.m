@@ -16,6 +16,7 @@
 @dynamic tags;
 @dynamic title;
 @dynamic venue;
+@dynamic likes;
 @dynamic modified;
 @dynamic startDatetime;
 @dynamic endDatetime;

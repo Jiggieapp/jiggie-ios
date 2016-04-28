@@ -79,8 +79,8 @@ static NSString *const kAllowTracking = @"allowTracking";
     [[AnalyticManager sharedManager] startAnalytics];
     
     // AFNetworking Debug Setting:
-//    [[AFNetworkActivityLogger sharedLogger] startLogging];
-//    [[AFNetworkActivityLogger sharedLogger] setLevel:AFLoggerLevelDebug];
+    [[AFNetworkActivityLogger sharedLogger] startLogging];
+    [[AFNetworkActivityLogger sharedLogger] setLevel:AFLoggerLevelDebug];
     
     
     
@@ -220,9 +220,6 @@ static NSString *const kAllowTracking = @"allowTracking";
     // for testing
     [VTConfig setCLIENT_KEY:VeritransClientKey];
     [VTConfig setVT_IsProduction:isVeritransInProducion];
-    
-//    [VTConfig setCLIENT_KEY:@"VT-client-tHEKcD0xJGsm6uwH"];
-//    [VTConfig setVT_IsProduction:true];
     
     //[self performSelector:@selector(testApp) withObject:nil afterDelay:5.0];
 
@@ -1022,7 +1019,13 @@ continueUserActivity:(NSUserActivity *)userActivity
     if (managedObjectModel != nil) {
         return managedObjectModel;
     }
-    managedObjectModel = [NSManagedObjectModel mergedModelFromBundles:nil];
+//    managedObjectModel = [NSManagedObjectModel mergedModelFromBundles:nil];
+    
+    // use this code on versioned models:
+    NSString *path = [[NSBundle mainBundle] pathForResource:@"Jiggie" ofType:@"momd"];
+    NSURL *momURL = [NSURL fileURLWithPath:path];
+    managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:momURL];
+    
     return managedObjectModel;
 }
 
@@ -1038,10 +1041,13 @@ continueUserActivity:(NSUserActivity *)userActivity
     }
     
     NSURL *storeUrl = [NSURL fileURLWithPath: [[self applicationDocumentsDirectory] stringByAppendingPathComponent: @"Jiggie.sqlite"]];
+    NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:
+                             [NSNumber numberWithBool:YES], NSMigratePersistentStoresAutomaticallyOption,
+                             [NSNumber numberWithBool:YES], NSInferMappingModelAutomaticallyOption, nil];
     
     NSError *error = nil;
     persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
-    if (![persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeUrl options:nil error:&error]) {
+    if (![persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeUrl options:options error:&error]) {
         /*
          Replace this implementation with code to handle the error appropriately.
          

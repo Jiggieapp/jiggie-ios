@@ -56,7 +56,7 @@ NSString *const PHBlankImgURL = @"https://partyhostapp.herokuapp.com/img/fbperso
 //Date formats
 NSString *const PHDateFormatShort = @"MMM d, yyyy h:mm a"; //This is the format for date_str from API
 NSString *const PHDateFormatServer = @"yyyy-MM-dd'T'HH:mm:ss.SSSZ"; //Native server usually sends this
-NSString *const PHDateFormatApp = @"EEEE MMM dd, yyyy hh:mm a"; //Native server usually sends this
+NSString *const PHDateFormatApp = @"EE, MMM dd yyyy / hh:mm a"; //Native server usually sends this
 NSString *const PHDateFormatAppShort = @"EE, dd MMM yyyy"; //Native server usually sends this
 
 
@@ -336,8 +336,7 @@ int const PHButtonHeight = 50; //This is the button at bottom of screen
 }
 
 //Convert dates from the server to a nicer display string
-+(NSString*)toTitleDate:(NSDate *)dbStartDate dbEndDate:(NSDate *)dbEndDate
-{
++(NSString*)toTitleDate:(NSDate *)dbStartDate dbEndDate:(NSDate *)dbEndDate {
     NSDateFormatter *format = [[NSDateFormatter alloc] init];
     [format setLocale:[NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"]];
     [format setTimeZone:[NSTimeZone localTimeZone]];
@@ -346,13 +345,13 @@ int const PHButtonHeight = 50; //This is the button at bottom of screen
     NSCalendar *calendar = [NSCalendar currentCalendar];
     
     //Do start date
-    [format setDateFormat:@"EEEE, MMMM d"];
+    [format setDateFormat:@"EEEE, MMMM d yyyy"];
     NSString *startDatePart1 = [format stringFromDate:dbStartDate];
     NSDateComponents *startComponents = [calendar components:(NSCalendarUnitHour | NSCalendarUnitMinute) fromDate:dbStartDate];
     NSString *startDatePart2;
     if ([startComponents minute]>0)
     {
-        [format setDateFormat:@"h:mma"];
+        [format setDateFormat:@"hh:mm a"];
         startDatePart2 = [format stringFromDate:dbStartDate];
     }
     else
@@ -368,7 +367,7 @@ int const PHButtonHeight = 50; //This is the button at bottom of screen
     NSString *endDatePart2;
     if ([endComponents minute]>0)
     {
-        [format setDateFormat:@"h:mma"];
+        [format setDateFormat:@"hh:mm a"];
         endDatePart2 = [format stringFromDate:dbEndDate];
     }
     else
@@ -377,7 +376,7 @@ int const PHButtonHeight = 50; //This is the button at bottom of screen
         endDatePart2 = [format stringFromDate:dbEndDate];
     }
     
-    return [NSString stringWithFormat:@"%@ At %@ to %@",startDatePart1,startDatePart2,endDatePart2];
+    return [NSString stringWithFormat:@"%@ \n %@ - %@",startDatePart1,startDatePart2,endDatePart2];
 }
 
 +(NSString*)formatPhoneNumber:(NSString*)simpleNumber {
