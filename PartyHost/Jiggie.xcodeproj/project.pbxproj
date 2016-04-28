@@ -2788,7 +2788,7 @@
 				BUNDLE_APP_NAME = "Jiggie Dev";
 				BUNDLE_ID = com.partyhost.jiggiedev;
 				CODE_SIGN_ENTITLEMENTS = Jiggie.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -2958,7 +2958,7 @@
 				BUNDLE_APP_NAME = Jiggie;
 				BUNDLE_ID = com.partyhost.jiggie;
 				CODE_SIGN_ENTITLEMENTS = Jiggie.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
