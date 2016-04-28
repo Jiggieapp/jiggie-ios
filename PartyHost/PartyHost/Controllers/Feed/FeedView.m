@@ -50,11 +50,11 @@
         _emptyView = [[EmptyView alloc] initWithFrame:CGRectMake(15,
                                                                  0,
                                                                  CGRectGetWidth([UIScreen mainScreen].bounds) - 30,
-                                                                 200)];
+                                                                 CGRectGetHeight([UIScreen mainScreen].bounds) - 200)];
         
         CGRect frame = [UIScreen mainScreen].bounds;
-        [ _emptyView setCenter:CGPointMake(frame.size.width / 2, frame.size.height / 2)];
-        
+        [ _emptyView setCenter:CGPointMake(frame.size.width / 2, frame.size.height / 2 + 40)];
+        [_emptyView.layer setZPosition:1200];
         [_emptyView setMode:@"hide"];
     }
     
@@ -105,7 +105,7 @@
             [self showEmptyView];
         }
     } else {
-        [self loadDataAndShowHUD:NO];
+        [self loadDataAndShowHUD:NO withCompletionHandler:nil];
     }
 }
 
@@ -131,7 +131,7 @@
 }
 
 #pragma mark - Load Data
-- (void)loadDataAndShowHUD:(BOOL)show {
+- (void)loadDataAndShowHUD:(BOOL)show withCompletionHandler:(PartyFeedCompletionHandler)completion {
     if (self.sharedData.fb_id == nil ||
         [self.sharedData.fb_id isEqualToString:@""]) {
         return;
@@ -179,37 +179,38 @@
                 [[AnalyticManager sharedManager] trackMixPanelWithDict:@"New Feed Item" withDict:@{}];
             }
         }
+        
+        if (completion) {
+            completion(feeds, statusCode, error);
+        }
     }];
 }
 
 - (void)toggleMatch {
-    NSString *matchMe = self.sharedData.matchMe ? @"yes" : @"no";
-    AFHTTPRequestOperationManager *manager = [self.sharedData getOperationManager];
-    NSString *url = [NSString stringWithFormat:@"%@/partyfeed/settings/%@/%@", PHBaseURL, self.sharedData.fb_id, matchMe];
-    
     [SVProgressHUD show];
-    [manager GET:url parameters:@{} success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        [SVProgressHUD dismiss];
-        
-        [self.swipeableView setHidden:!self.sharedData.matchMe];
-        [self.discoverSwitch setOn:self.sharedData.matchMe animated:YES];
-        [self setMatchViewToOn:self.sharedData.matchMe];
-        
-        self.sharedData.feedBadge.hidden = !self.sharedData.matchMe;
-        self.sharedData.feedBadge.canShow = self.sharedData.matchMe;
-        
-        if (self.sharedData.matchMe) {
-            [self loadDataAndShowHUD:YES];
+    [Feed enableSocialFeed:self.sharedData.matchMe withCompletionHandler:^(NSError *error) {
+        if (error) {
+            [self.discoverSwitch setOn:!self.sharedData.matchMe animated:YES];
+            [self setMatchViewToOn:!self.sharedData.matchMe];
         } else {
-            [self.emptyView setMode:@"hide"];
+            [self.swipeableView setHidden:!self.sharedData.matchMe];
+            [self.discoverSwitch setOn:self.sharedData.matchMe animated:YES];
+            [self setMatchViewToOn:self.sharedData.matchMe];
+            
+            self.sharedData.feedBadge.hidden = !self.sharedData.matchMe;
+            self.sharedData.feedBadge.canShow = self.sharedData.matchMe;
+            
+            if (self.sharedData.matchMe) {
+                [self loadDataAndShowHUD:YES withCompletionHandler:nil];
+            } else {
+                [self.emptyView setMode:@"hide"];
+            }
+            
+            [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Socialize Toggle" withDict:@{@"toggle":self.sharedData.matchMe ? @"yes" : @"no"}];
         }
         
-        [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Socialize Toggle" withDict:@{@"toggle":matchMe}];
-     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-         [SVProgressHUD dismiss];
-         [self.discoverSwitch setOn:!self.sharedData.matchMe animated:YES];
-         [self setMatchViewToOn:!self.sharedData.matchMe];
-     }];
+        [SVProgressHUD dismiss];
+    }];
 }
 
 #pragma mark - View
@@ -355,7 +356,7 @@
 - (void)swipeableView:(ZLSwipeableView *)swipeableView didSwipeView:(UIView *)view inDirection:(ZLSwipeableViewDirection)direction {
     NSInteger feedIndex = view.tag-CARD_VIEW_TAG;
     if (feedIndex == self.feedData.count-4) {
-        [self loadDataAndShowHUD:NO];
+        [self loadDataAndShowHUD:NO withCompletionHandler:nil];
     }
     
     [self.swipeableView setUserInteractionEnabled:NO];

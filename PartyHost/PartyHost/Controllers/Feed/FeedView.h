@@ -12,6 +12,6 @@
 
 + (FeedView *)instanceFromNib;
 
-- (void)loadDataAndShowHUD:(BOOL)show;
+- (void)loadDataAndShowHUD:(BOOL)show withCompletionHandler:(PartyFeedCompletionHandler)completion;
 
 @end

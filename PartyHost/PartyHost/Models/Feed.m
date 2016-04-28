@@ -82,13 +82,17 @@
         NSArray *feeds = [MTLJSONAdapter modelsOfClass:[Feed class]
                                          fromJSONArray:responseObject[@"data"][@"social_feeds"]
                                                  error:&error];
-        completion(feeds,
-                   operation.response.statusCode,
-                   nil);
+        if (completion) {
+            completion(feeds,
+                       operation.response.statusCode,
+                       nil);
+        }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        completion(nil,
-                   operation.response.statusCode,
-                   error);
+        if (completion) {
+            completion(nil,
+                       operation.response.statusCode,
+                       error);
+        }
     }];
 }
 
@@ -98,6 +102,23 @@
     NSString *approveStatus = approved ? @"approved" : @"denied";
     
     NSString *url = [NSString stringWithFormat:@"%@/partyfeed_socialmatch/match/%@/%@/%@", PHBaseNewURL, sharedData.fb_id, fbId, approveStatus];
+    
+    [manager GET:url parameters:@{} success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        if (completion) {
+            completion(nil);
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        if (completion) {
+            completion(error);
+        }
+    }];
+}
+
++ (void)enableSocialFeed:(BOOL)enabled withCompletionHandler:(MatchFeedCompletionHandler)completion {
+    SharedData *sharedData = [SharedData sharedInstance];
+    NSString *matchMe = enabled ? @"yes" : @"no";
+    AFHTTPRequestOperationManager *manager = [sharedData getOperationManager];
+    NSString *url = [NSString stringWithFormat:@"%@/partyfeed/settings/%@/%@", PHBaseURL, sharedData.fb_id, matchMe];
     
     [manager GET:url parameters:@{} success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if (completion) {
