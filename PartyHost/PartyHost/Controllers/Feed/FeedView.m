@@ -37,6 +37,8 @@
 @property (strong, nonatomic) SocialFilterView *filterView;
 @property (strong, nonatomic) UIView *transparentView;
 
+@property (assign, nonatomic) BOOL isSwipedOut;
+
 @end
 
 @implementation FeedView
@@ -217,7 +219,7 @@
         } else {
             [self.feedData removeAllObjects];
             
-            if (statusCode == 204) {
+            if ((!feeds || feeds.count == 0) && statusCode == 204) {
                 [self showEmptyView];
                 [self.feedData removeAllObjects];
                 [self.swipeableView setHidden:YES];
@@ -226,7 +228,7 @@
                 
                 return;
             }
-            
+        
             [self.emptyView setMode:@"hide"];
             [self.feedData addObjectsFromArray:feeds];
             
@@ -262,6 +264,7 @@
             if (self.sharedData.matchMe) {
                 [self loadDataAndShowHUD:YES withCompletionHandler:nil];
             } else {
+                [self.swipeableView discardAllViews];
                 [self.emptyView setMode:@"hide"];
             }
             
@@ -270,6 +273,53 @@
         
         [SVProgressHUD dismiss];
     }];
+}
+
+- (void)approveFeed:(BOOL)approved withFeed:(Feed *)feed {
+    if (approved) {
+        switch (feed.type) {
+            case FeedTypeApproved: {
+                [self trackApprovedFeedItemWithType:feed.type];
+                
+                [SVProgressHUD show];
+                [Feed approveFeed:approved withFbId:feed.fromFbId andCompletionHandler:^(NSError *error) {
+                    [SVProgressHUD dismiss];
+                    if (error == nil) {
+                        self.sharedData.conversationId = feed.fromFbId;
+                        self.sharedData.messagesPage.toId = feed.fromFbId;
+                        self.sharedData.messagesPage.toLabel.text = [feed.fromFirstName uppercaseString];
+                        self.sharedData.feedMatchEvent = feed.eventName;
+                        self.sharedData.feedMatchImage = feed.fromImageURL;
+                        self.sharedData.toImgURL = [self.sharedData profileImg:self.sharedData.fromMailId];
+                        
+                        if (self.feedData.count == 0) {
+                            [self showEmptyView];
+                        }
+                        
+                        [[NSNotificationCenter defaultCenter] postNotificationName:@"SHOW_FEED_MATCH"
+                                                                            object:self];
+                        
+                    }
+                }];
+                break;
+            }
+            case FeedTypeViewed: {
+                [self trackDeniedFeedItemWithType:feed.type];
+                [Feed approveFeed:YES withFbId:feed.fromFbId andCompletionHandler:^(NSError *error) {
+                    if (self.feedData.count == 0) {
+                        [self showEmptyView];
+                    }
+                }];
+                break;
+            }
+        }
+    } else {
+        [Feed approveFeed:approved withFbId:feed.fromFbId andCompletionHandler:^(NSError *error) {
+            if (self.feedData.count == 0) {
+                [self showEmptyView];
+            }
+        }];
+    }
 }
 
 #pragma mark - View
@@ -305,8 +355,8 @@
     [self.emptyView setMode:@"empty"];
 }
 
-- (void)setMatchViewToOn:(BOOL)match {
-    if (match) {
+- (void)setMatchViewToOn:(BOOL)matched {
+    if (matched) {
         [self.discoverImageView setImage:[UIImage imageNamed:@"discover_on"]];
         [self.discoverLabel setText:@"Turn off if you do not wish to be seen by others"];
     } else {
@@ -412,12 +462,40 @@
 }
 
 #pragma mark - ZLSwipeableViewDelegate
-- (void)swipeableView:(ZLSwipeableView *)swipeableView didSwipeView:(UIView *)view inDirection:(ZLSwipeableViewDirection)direction {
-    NSInteger feedIndex = view.tag-CARD_VIEW_TAG;
-    if (feedIndex == self.feedData.count-4) {
-        [self loadDataAndShowHUD:NO withCompletionHandler:nil];
-    }
+- (void)swipeableView:(ZLSwipeableView *)swipeableView didEndSwipingView:(UIView *)view atLocation:(CGPoint)location {
+    if (self.isSwipedOut) {
+        Feed *feed = [self getFeedFromCardView:view];
+        
+        [self.feedData removeObject:feed];
     
+        [Feed archiveObject:self.feedData];
+        
+        if (location.x > CGRectGetWidth(self.bounds) / 2 ) {
+            [self approveFeed:YES withFeed:feed];
+        } else {
+            [self approveFeed:NO withFeed:feed];
+        }
+        
+        [self trackViewFeedItem];
+    }
+}
+
+- (void)swipeableView:(ZLSwipeableView *)swipeableView didCancelSwipe:(UIView *)view {
+    self.isSwipedOut = NO;
+
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW,
+                                 (int64_t)(0.7 * NSEC_PER_SEC)),
+                   dispatch_get_main_queue(), ^{
+                       NSInteger feedIndex = view.tag-CARD_VIEW_TAG;
+                       NSInteger numberOfCardsLeft = self.feedData.count - feedIndex;
+                       if (numberOfCardsLeft == 3 || numberOfCardsLeft == 0) {
+                           [self loadDataAndShowHUD:NO withCompletionHandler:nil];
+                       }
+                   });
+}
+
+- (void)swipeableView:(ZLSwipeableView *)swipeableView didSwipeView:(UIView *)view inDirection:(ZLSwipeableViewDirection)direction {
+    self.isSwipedOut = YES;
     [self.swipeableView setUserInteractionEnabled:NO];
     
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW,
@@ -425,71 +503,22 @@
                    dispatch_get_main_queue(), ^{
                        [self.swipeableView setUserInteractionEnabled:YES];
                    });
-    
-    [self trackViewFeedItem];
-    
-    Feed *feed = [self getFeedFromCardView:view];
-    
-    [self.feedData removeObject:feed];
-    
-    [Feed archiveObject:self.feedData];
-    
-    if (direction == ZLSwipeableViewDirectionRight) {
-        switch (feed.type) {
-            case FeedTypeApproved: {
-                [self trackApprovedFeedItemWithType:feed.type];
-                
-                [SVProgressHUD show];
-                [Feed approveFeed:YES withFbId:feed.fromFbId andCompletionHandler:^(NSError *error) {
-                    [SVProgressHUD dismiss];
-                    if (error == nil) {
-                        self.sharedData.conversationId = feed.fromFbId;
-                        self.sharedData.messagesPage.toId = feed.fromFbId;
-                        self.sharedData.messagesPage.toLabel.text = [feed.fromFirstName uppercaseString];
-                        self.sharedData.feedMatchEvent = feed.eventName;
-                        self.sharedData.feedMatchImage = feed.fromImageURL;
-                        self.sharedData.toImgURL = [self.sharedData profileImg:self.sharedData.fromMailId];
-                        
-                        if (self.feedData.count == 0) {
-                            [self showEmptyView];
-                        }
-                        
-                        [[NSNotificationCenter defaultCenter] postNotificationName:@"SHOW_FEED_MATCH"
-                                                                            object:self];
-                        
-                    }
-                }];
-                break;
-            }
-            case FeedTypeViewed: {
-                [self trackDeniedFeedItemWithType:feed.type];
-                [Feed approveFeed:YES withFbId:feed.fromFbId andCompletionHandler:^(NSError *error) {
-                    if (self.feedData.count == 0) {
-                        [self showEmptyView];
-                    }
-                }];
-                break;
-            }
-        }
-    } else {
-        [Feed approveFeed:NO withFbId:feed.fromFbId andCompletionHandler:^(NSError *error) {
-            if (self.feedData.count == 0) {
-                [self showEmptyView];
-            }
-        }];
-    }
 }
 
 #pragma mark - FeedCardViewDelegate
 - (void)feedCardView:(FeedCardView *)view didTapButton:(UIButton *)button withFeed:(Feed *)feed {
     if ([[button.titleLabel.text lowercaseString] isEqualToString:@"connect"]) {
         [self.swipeableView swipeTopViewToRight];
+        [self approveFeed:YES withFeed:feed];
     } else if ([[button.titleLabel.text lowercaseString] isEqualToString:@"skip"]) {
         [self.swipeableView swipeTopViewToLeft];
+        [self approveFeed:NO withFeed:feed];
     } else if ([[button.titleLabel.text lowercaseString] isEqualToString:@"yes"]) {
         [self.swipeableView swipeTopViewToRight];
+        [self approveFeed:YES withFeed:feed];
     } else {
         [self.swipeableView swipeTopViewToLeft];
+        [self approveFeed:NO withFeed:feed];
     }
 }
 
