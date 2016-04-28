@@ -481,7 +481,7 @@
 }
 
 #pragma mark - FeedCardViewDelegate
-- (void)feedCardView:(FeedCardView *)view didTapButton:(UIButton *)button withFbId:(NSString *)fbId {
+- (void)feedCardView:(FeedCardView *)view didTapButton:(UIButton *)button withFeed:(Feed *)feed {
     if ([[button.titleLabel.text lowercaseString] isEqualToString:@"connect"]) {
         [self.swipeableView swipeTopViewToRight];
     } else if ([[button.titleLabel.text lowercaseString] isEqualToString:@"skip"]) {
@@ -491,6 +491,22 @@
     } else {
         [self.swipeableView swipeTopViewToLeft];
     }
+}
+
+- (void)feedCardView:(FeedCardView *)view didTapPersonImageButton:(UIButton *)button withFeed:(Feed *)feed {
+    self.sharedData.member_fb_id = feed.fromFbId;
+    self.sharedData.member_user_id = feed.fromFbId;
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"SHOW_MEMBER_PROFILE"
+                                                        object:self];
+}
+
+- (void)feedCardView:(FeedCardView *)view didTapEventNameLabel:(UILabel *)label withFeed:(Feed *)feed {
+    self.sharedData.cEventId_Feed = feed.eventId;
+    self.sharedData.cEventId_Modal = feed.eventId;
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"SHOW_EVENT_MODAL"
+                                                        object:self];
 }
 
 #pragma mark - UIAlertViewDelegate
