@@ -13,22 +13,14 @@
 static NSString *const SocialOptionTableViewCellIdentifier = @"SocialOptionTableViewCellIdentifier";
 static NSString *const SocialSliderTableViewCellIdentifier = @"SocialSliderTableViewCellIdentifier";
 
-@interface SocialFilterView () <UITableViewDataSource, UITableViewDelegate>
+@interface SocialFilterView () <SocialSliderTableViewCellDelegate, UITableViewDataSource, UITableViewDelegate, UIAlertViewDelegate>
 
-@property (strong, nonatomic) IBOutlet UIImageView *discoverImageView;
-@property (strong, nonatomic) IBOutlet UILabel *discoverLabel;
-@property (strong, nonatomic) IBOutlet UITableView *tableView;
-@property (strong, nonatomic) IBOutlet UIView *contentView;
+@property (strong, nonatomic) NSArray *filters;
+@property (strong, nonatomic) SharedData *sharedData;
 
 @end
 
 @implementation SocialFilterView
-
--(NSArray *)filters {
-    return @[@{@"Interested in Meeting" : @"Women"},
-             @{@"Maximum Distance" : @"22 miles"},
-             @{@"Age" : @"18-32 years old"}];
-}
 
 + (SocialFilterView *)instanceFromNib {
     return (SocialFilterView *)[[UINib nibWithNibName:@"SocialFilterView" bundle:nil] instantiateWithOwner:self options:nil][0];
@@ -40,14 +32,67 @@ static NSString *const SocialSliderTableViewCellIdentifier = @"SocialSliderTable
     self.contentView.layer.cornerRadius = 6.0f;
     self.backgroundColor = [UIColor clearColor];
     
+    [self.tableView setTableFooterView:[UIView new]];
     [self.tableView setDataSource:self];
     [self.tableView setDelegate:self];
     [self.tableView registerNib:[SocialOptionTableViewCell nib] forCellReuseIdentifier:SocialOptionTableViewCellIdentifier];
     [self.tableView registerNib:[SocialSliderTableViewCell nib] forCellReuseIdentifier:SocialSliderTableViewCellIdentifier];
+    
+    self.sharedData = [SharedData sharedInstance];
+}
+
+- (void)willMoveToSuperview:(UIView *)newSuperview {
+    [super willMoveToSuperview:newSuperview];
+    
+    [self reloadData];
+}
+
+#pragma mark - Data
+- (void)reloadData {
+    NSString *genderInterest = @"";
+    if ([self.sharedData.gender_interest isEqualToString:@"female"]) {
+        genderInterest = @"Women";
+    } else if([self.sharedData.gender_interest isEqualToString:@"male"]) {
+        genderInterest = @"Men";
+    } else {
+        genderInterest = @"Both";
+    }
+    
+    self.filters = @[@{@"Interested in Meeting" : genderInterest},
+                     @{@"Maximum Distance" : @"22 miles"},
+                     @{@"Age" : @"18-32 years old"}];
+    [self.tableView reloadData];
+}
+
+#pragma mark - View
+- (void)setMatchViewToOn:(BOOL)matched {
+    [self.discoverSwitch setOn:matched animated:YES];
+    
+    if (matched) {
+        [self.discoverImageView setImage:[UIImage imageNamed:@"discover_on"]];
+        [self.discoverLabel setText:@"Turn off if you do not wish to be seen by others"];
+    } else {
+        [self.discoverImageView setImage:[UIImage imageNamed:@"discover_off"]];
+        [self.discoverLabel setText:@"Turn on if you wish to be seen by others"];
+    }
 }
 
 #pragma mark - Action
-- (IBAction)discoverDidValueChanged:(id)sender {
+- (IBAction)discoverDidValueChanged:(UISwitch *)sender {
+    if (!sender.isOn) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Turn off socialize?"
+                                                        message:@"while turned off, your profile card won't be shown to other users."
+                                                       delegate:self
+                                              cancelButtonTitle:@"Go Invisible"
+                                              otherButtonTitles:@"Cancel",nil];
+        [alert show];
+    } else {
+        [self setMatchViewToOn:YES];
+        
+        if (self.delegate) {
+            [self.delegate socialFilterView:self discoverDidValueChanged:sender];
+        }
+    }
 }
 
 #pragma mark - UITableViewDataSource
@@ -95,6 +140,10 @@ static NSString *const SocialSliderTableViewCellIdentifier = @"SocialSliderTable
         SocialSliderTableViewCell *sliderCell = [tableView dequeueReusableCellWithIdentifier:SocialSliderTableViewCellIdentifier];
         if (cell == nil) {
             cell = [[SocialSliderTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:SocialSliderTableViewCellIdentifier];
+            
+            if (!sliderCell.delegate) {
+                sliderCell.delegate = self;
+            }
         }
         
         [sliderCell setSelectionStyle:UITableViewCellSelectionStyleNone];
@@ -118,6 +167,42 @@ static NSString *const SocialSliderTableViewCellIdentifier = @"SocialSliderTable
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    if (indexPath.row <= 0) {
+        SocialOptionTableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+        if ([cell.detailLabel.text isEqualToString:@"Women"]) {
+            [cell.detailLabel setText:@"Men"];
+        } else if([cell.detailLabel.text isEqualToString:@"Men"]) {
+            [cell.detailLabel setText:@"Both"];
+        } else {
+            [cell.detailLabel setText:@"Women"];
+        }
+        
+        if (self.delegate) {
+            [self.delegate socialFilterView:self interestDidValueChanged:cell.detailLabel.text];
+        }
+    }
+}
+
+#pragma mark - UIAlertViewDelegate
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if (buttonIndex == 0) {
+        [self setMatchViewToOn:NO];
+        
+        if (self.delegate) {
+            [self.delegate socialFilterView:self discoverDidValueChanged:self.discoverSwitch];
+        }
+    } else {
+        [self setMatchViewToOn:YES];
+    }
+}
+
+#pragma mark - SocialSliderTableViewCellDelegate
+- (void)socialSliderTableViewCell:(SocialSliderTableViewCell *)cell sliderDidValueChanged:(UISlider *)slider {
+    [cell.detailLabel setText:[NSString stringWithFormat:@"%d KM", (int)roundf(slider.value)]];
+    if (self.delegate) {
+        [self.delegate socialFilterView:self distanceDidValueChanged:slider];
+    }
 }
 
 @end

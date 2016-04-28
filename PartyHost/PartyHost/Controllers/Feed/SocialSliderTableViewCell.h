@@ -8,7 +8,17 @@
 
 #import <UIKit/UIKit.h>
 
+@class SocialSliderTableViewCell;
+@protocol SocialSliderTableViewCellDelegate <NSObject>
+
+@required
+- (void)socialSliderTableViewCell:(SocialSliderTableViewCell *)cell sliderDidValueChanged:(UISlider *)slider;
+
+@end
+
 @interface SocialSliderTableViewCell : UITableViewCell
+
+@property (weak, nonatomic) id<SocialSliderTableViewCellDelegate> delegate;
 
 @property (strong, nonatomic) IBOutlet UILabel *titleLabel;
 @property (strong, nonatomic) IBOutlet UILabel *detailLabel;

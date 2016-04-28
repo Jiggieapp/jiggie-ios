@@ -29,7 +29,7 @@
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QjF-uE-8wS">
                     <rect key="frame" x="8" y="8" width="384" height="384"/>
                     <subviews>
-                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="discover_off" translatesAutoresizingMaskIntoConstraints="NO" id="0jb-mn-gAm">
+                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="discover_on" translatesAutoresizingMaskIntoConstraints="NO" id="0jb-mn-gAm">
                             <rect key="frame" x="15" y="22" width="25" height="17"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="25" id="f1Q-ky-hHi"/>
@@ -112,6 +112,7 @@
                 <outlet property="contentView" destination="QjF-uE-8wS" id="y9D-8b-VnD"/>
                 <outlet property="discoverImageView" destination="0jb-mn-gAm" id="QKA-KE-RVC"/>
                 <outlet property="discoverLabel" destination="gSk-Hb-AO2" id="JVv-aE-QKv"/>
+                <outlet property="discoverSwitch" destination="Dn3-FB-dHe" id="QYQ-1T-RU0"/>
                 <outlet property="tableView" destination="SCN-Vg-rLA" id="WbL-Kb-VTx"/>
             </connections>
             <point key="canvasLocation" x="375" y="379"/>
@@ -119,6 +120,6 @@
     </objects>
     <resources>
         <image name="arrow_icon" width="23" height="23"/>
-        <image name="discover_off" width="25" height="17"/>
+        <image name="discover_on" width="25" height="17"/>
     </resources>
 </document>

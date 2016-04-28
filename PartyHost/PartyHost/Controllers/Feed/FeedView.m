@@ -19,14 +19,7 @@
 #define POLL_SECONDS 25
 #define CARD_VIEW_TAG 1900
 
-@interface FeedView () <ZLSwipeableViewDataSource, ZLSwipeableViewDelegate, FeedCardViewDelegate, UIAlertViewDelegate>
-
-@property (strong, nonatomic) IBOutlet UIView *navigationBarView;
-@property (strong, nonatomic) IBOutlet UILabel *navigationBarTitleLabel;
-@property (strong, nonatomic) IBOutlet UIImageView *discoverImageView;
-@property (strong, nonatomic) IBOutlet UILabel *discoverLabel;
-@property (strong, nonatomic) IBOutlet UISwitch *discoverSwitch;
-@property (strong, nonatomic) IBOutlet UIButton *filterButton;
+@interface FeedView () <SocialFilterViewDelegate, ZLSwipeableViewDataSource, ZLSwipeableViewDelegate, FeedCardViewDelegate, UIAlertViewDelegate>
 
 @property(strong, nonatomic) SharedData *sharedData;
 @property(strong, nonatomic) NSMutableArray *feedData;
@@ -125,6 +118,7 @@
 - (SocialFilterView *)filterView {
     if (!_filterView) {
         _filterView = [SocialFilterView instanceFromNib];
+        [_filterView setDelegate:self];
         _filterView.alpha = .0f;
         _filterView.frame = CGRectMake(0,
                                        62,
@@ -140,7 +134,7 @@
         _transparentView = [[UIView alloc] initWithFrame:CGRectMake(0,
                                                                     60,
                                                                     CGRectGetWidth(self.bounds),
-                                                                    CGRectGetHeight(self.bounds) - 60)];
+                                                                    CGRectGetHeight(self.bounds))];
         _transparentView.alpha = .0f;
         _transparentView.backgroundColor = [UIColor colorWithWhite:.0f alpha:0.3f];
         
@@ -536,6 +530,29 @@
     
     [[NSNotificationCenter defaultCenter] postNotificationName:@"SHOW_EVENT_MODAL"
                                                         object:self];
+}
+
+#pragma mark - SocialFilterViewDelegate
+- (void)socialFilterView:(SocialFilterView *)view discoverDidValueChanged:(UISwitch *)sender {
+    if (sender.isOn) {
+        self.sharedData.matchMe = YES;
+    } else {
+        self.sharedData.matchMe = NO;
+    }
+}
+
+- (void)socialFilterView:(SocialFilterView *)view interestDidValueChanged:(NSString *)genderInterest {
+    if ([genderInterest isEqualToString:@"Women"]) {
+        self.sharedData.gender_interest = @"female";
+    } else if([genderInterest isEqualToString:@"Men"]) {
+        self.sharedData.gender_interest = @"male";
+    } else {
+        self.sharedData.gender_interest = @"both";
+    }
+}
+
+- (void)socialFilterView:(SocialFilterView *)view distanceDidValueChanged:(UISlider *)sender {
+    
 }
 
 #pragma mark - UIAlertViewDelegate

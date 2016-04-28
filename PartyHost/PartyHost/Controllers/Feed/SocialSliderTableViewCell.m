@@ -26,6 +26,9 @@
 }
 
 - (IBAction)sliderDidValueChanged:(id)sender {
+    if (self.delegate) {
+        [self.delegate socialSliderTableViewCell:self sliderDidValueChanged:sender];
+    }
 }
 
 @end
