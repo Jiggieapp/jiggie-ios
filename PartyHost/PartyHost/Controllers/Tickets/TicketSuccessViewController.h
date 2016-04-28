@@ -41,6 +41,7 @@
 @property (nonatomic, strong) UILabel *bookingGuestName;
 @property (nonatomic, strong) UILabel *bookingTotalGuest;
 @property (nonatomic, strong) UILabel *bookingStatus;
+@property (nonatomic, strong) UILabel *paymentLabel;
 @property (nonatomic, strong) UILabel *bookingPaymentMethod;
 @property (nonatomic, strong) UILabel *bookingOrderDate;
 @property (nonatomic, strong) UILabel *bookingTicketName;

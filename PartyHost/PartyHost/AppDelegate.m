@@ -79,8 +79,8 @@ static NSString *const kAllowTracking = @"allowTracking";
     [[AnalyticManager sharedManager] startAnalytics];
     
     // AFNetworking Debug Setting:
-    [[AFNetworkActivityLogger sharedLogger] startLogging];
-    [[AFNetworkActivityLogger sharedLogger] setLevel:AFLoggerLevelDebug];
+//    [[AFNetworkActivityLogger sharedLogger] startLogging];
+//    [[AFNetworkActivityLogger sharedLogger] setLevel:AFLoggerLevelDebug];
     
     
     

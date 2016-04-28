@@ -2516,7 +2516,7 @@
 					"$(PROJECT_DIR)/PartyHost/ExtraLibraries/AF-iOS-SDK-v3.3.0",
 					"$(PROJECT_DIR)/PartyHost/ExtraLibraries/Mixpanel",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.partyhost.jiggiedev;
+				PRODUCT_BUNDLE_IDENTIFIER = com.partyhost.jiggie;
 				PRODUCT_NAME = Jiggie;
 				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = 1;
@@ -2567,7 +2567,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				BUNDLE_APP_NAME = "PH [DEV]";
 				CODE_SIGN_ENTITLEMENTS = Jiggie.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -2592,7 +2592,7 @@
 					"$(PROJECT_DIR)/PartyHost/ExtraLibraries/AF-iOS-SDK-v3.3.0",
 					"$(PROJECT_DIR)/PartyHost/ExtraLibraries/Mixpanel",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.partyhost.jiggiedev;
+				PRODUCT_BUNDLE_IDENTIFIER = com.partyhost.jiggie;
 				PRODUCT_NAME = Jiggie;
 				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = 1;
@@ -2711,7 +2711,7 @@
 					"$(PROJECT_DIR)/PartyHost/ExtraLibraries/AF-iOS-SDK-v3.3.0",
 					"$(PROJECT_DIR)/PartyHost/ExtraLibraries/Mixpanel",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.partyhost.jiggiedev;
+				PRODUCT_BUNDLE_IDENTIFIER = com.partyhost.jiggie;
 				PRODUCT_NAME = Jiggie;
 				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = 1;
@@ -2725,7 +2725,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				BUNDLE_APP_NAME = Jiggie;
 				CODE_SIGN_ENTITLEMENTS = Jiggie.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -2750,7 +2750,7 @@
 					"$(PROJECT_DIR)/PartyHost/ExtraLibraries/AF-iOS-SDK-v3.3.0",
 					"$(PROJECT_DIR)/PartyHost/ExtraLibraries/Mixpanel",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.partyhost.jiggiedev;
+				PRODUCT_BUNDLE_IDENTIFIER = com.partyhost.jiggie;
 				PRODUCT_NAME = Jiggie;
 				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = 1;

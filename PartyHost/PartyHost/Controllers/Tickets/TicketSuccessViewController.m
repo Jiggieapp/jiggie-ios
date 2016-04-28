@@ -154,7 +154,7 @@
     [self.eventDate setTextAlignment:NSTextAlignmentCenter];
     [rectangleView addSubview:self.eventDate];
     
-    UILabel *orderLabel = [[UILabel alloc] initWithFrame:CGRectMake(14, CGRectGetMaxY(rectangleView.frame) + 20, 120, 20)];
+    UILabel *orderLabel = [[UILabel alloc] initWithFrame:CGRectMake(14, CGRectGetMaxY(rectangleView.frame) + 20, 160, 20)];
     [orderLabel setText:@"BOOKING NUMBER"];
     [orderLabel setFont:[UIFont phBlond:15]];
     [orderLabel setTextColor:[UIColor blackColor]];
@@ -219,7 +219,7 @@
     // LINE 2
     
     UILabel *orderSummaryLabel = [[UILabel alloc] initWithFrame:CGRectMake(14, CGRectGetMaxY(line1View.frame) + 16 + 30 + 30 + 50, 200, 20)];
-    [orderSummaryLabel setText:@"ORDER SUMMARY"];
+    [orderSummaryLabel setText:@"BOOKING SUMMARY"];
     [orderSummaryLabel setFont:[UIFont phBlond:14]];
     [orderSummaryLabel setTextColor:[UIColor blackColor]];
     [orderSummaryLabel setBackgroundColor:[UIColor clearColor]];
@@ -423,8 +423,8 @@
     [self.bookingEventDate setTextAlignment:NSTextAlignmentCenter];
     [rectangleView addSubview:self.bookingEventDate];
     
-    UILabel *orderLabel = [[UILabel alloc] initWithFrame:CGRectMake(14, CGRectGetMaxY(rectangleView.frame) + 20, 120, 20)];
-    [orderLabel setText:@"ORDER NUMBER"];
+    UILabel *orderLabel = [[UILabel alloc] initWithFrame:CGRectMake(14, CGRectGetMaxY(rectangleView.frame) + 20, 160, 20)];
+    [orderLabel setText:@"BOOKING NUMBER"];
     [orderLabel setFont:[UIFont phBlond:15]];
     [orderLabel setTextColor:[UIColor blackColor]];
     [orderLabel setBackgroundColor:[UIColor clearColor]];
@@ -486,12 +486,12 @@
     [self.bookingStatus setText:@"PAID"];
     [self.bookingScrollView addSubview:self.bookingStatus];
     
-    UILabel *paymentLabel = [[UILabel alloc] initWithFrame:CGRectMake(14, CGRectGetMaxY(line1View.frame) + 16 + 30 + 30 + 30, 120, 20)];
-    [paymentLabel setText:@"PAYMENT METHOD"];
-    [paymentLabel setFont:[UIFont phBlond:11]];
-    [paymentLabel setTextColor:[UIColor blackColor]];
-    [paymentLabel setBackgroundColor:[UIColor clearColor]];
-    [self.bookingScrollView addSubview:paymentLabel];
+    self.paymentLabel = [[UILabel alloc] initWithFrame:CGRectMake(14, CGRectGetMaxY(line1View.frame) + 16 + 30 + 30 + 30, 120, 20)];
+    [self.paymentLabel setText:@"PAYMENT METHOD"];
+    [self.paymentLabel setFont:[UIFont phBlond:11]];
+    [self.paymentLabel setTextColor:[UIColor blackColor]];
+    [self.paymentLabel setBackgroundColor:[UIColor clearColor]];
+    [self.bookingScrollView addSubview:self.paymentLabel];
     
     self.bookingPaymentMethod = [[UILabel alloc] initWithFrame:CGRectMake(self.visibleSize.width - 180, CGRectGetMaxY(line1View.frame) + 16 + 30 + 30 + 30, 160, 20)];
     [self.bookingPaymentMethod setFont:[UIFont phBlond:11]];
@@ -1055,6 +1055,8 @@
             
             if ([self.bookingPaymentMethod.text isEqualToString:@"FREE"]) {
                 [self.bookingStatus setText:@"BOOKED"];
+                [self.paymentLabel setHidden:YES];
+                [self.bookingPaymentMethod setHidden:YES];
             }
             
             NSString *created_at = [summary objectForKey:@"created_at"];
