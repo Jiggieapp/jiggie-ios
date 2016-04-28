@@ -12,6 +12,7 @@
 #import "ShadowView.h"
 #import "FeedCardView.h"
 #import "ZLSwipeableView.h"
+#import "SocialFilterView.h"
 #import "AnalyticManager.h"
 #import "SVProgressHUD.h"
 
@@ -25,55 +26,20 @@
 @property (strong, nonatomic) IBOutlet UIImageView *discoverImageView;
 @property (strong, nonatomic) IBOutlet UILabel *discoverLabel;
 @property (strong, nonatomic) IBOutlet UISwitch *discoverSwitch;
+@property (strong, nonatomic) IBOutlet UIButton *filterButton;
 
 @property(strong, nonatomic) SharedData *sharedData;
 @property(strong, nonatomic) NSMutableArray *feedData;
 @property(assign, nonatomic) NSInteger feedIndex;
 
 @property (strong, nonatomic) ZLSwipeableView *swipeableView;
-@property(nonatomic,strong) EmptyView *emptyView;
+@property (strong, nonatomic) EmptyView *emptyView;
+@property (strong, nonatomic) SocialFilterView *filterView;
+@property (strong, nonatomic) UIView *transparentView;
 
 @end
 
 @implementation FeedView
-
-- (SharedData *)sharedData {
-    if (!_sharedData) {
-        _sharedData = [SharedData sharedInstance];
-    }
-    
-    return _sharedData;
-}
-
-- (EmptyView *)emptyView {
-    if (!_emptyView) {
-        _emptyView = [[EmptyView alloc] initWithFrame:CGRectMake(15,
-                                                                 0,
-                                                                 CGRectGetWidth([UIScreen mainScreen].bounds) - 30,
-                                                                 CGRectGetHeight([UIScreen mainScreen].bounds) - 200)];
-        
-        CGRect frame = [UIScreen mainScreen].bounds;
-        [ _emptyView setCenter:CGPointMake(frame.size.width / 2, frame.size.height / 2 + 40)];
-        [_emptyView.layer setZPosition:1200];
-        [_emptyView setMode:@"hide"];
-    }
-    
-    return _emptyView;
-}
-
-- (ZLSwipeableView *)swipeableView {
-    if (!_swipeableView) {
-        _swipeableView = [[ZLSwipeableView alloc] initWithFrame:CGRectZero];
-        [_swipeableView.layer setZPosition:1000];
-        [_swipeableView setBackgroundColor:[UIColor clearColor]];
-        [_swipeableView setTranslatesAutoresizingMaskIntoConstraints:NO];
-        [_swipeableView setAllowedDirection:ZLSwipeableViewDirectionHorizontal];
-        [_swipeableView setDataSource:self];
-        [_swipeableView setDelegate:self];
-    }
-    
-    return _swipeableView;
-}
 
 + (FeedView *)instanceFromNib {
     return (FeedView *)[[UINib nibWithNibName:@"FeedView" bundle:nil] instantiateWithOwner:self options:nil][0];
@@ -109,6 +75,82 @@
     }
 }
 
+- (Feed *)getFeedFromCardView:(UIView *)view {
+    ShadowView *shadowView = (ShadowView*)view;
+    Feed *feed = ((FeedCardView *)shadowView.subviews.lastObject).feed;
+    
+    return feed;
+}
+
+#pragma mark - Lazy Instantiation
+- (SharedData *)sharedData {
+    if (!_sharedData) {
+        _sharedData = [SharedData sharedInstance];
+    }
+    
+    return _sharedData;
+}
+
+- (EmptyView *)emptyView {
+    if (!_emptyView) {
+        _emptyView = [[EmptyView alloc] initWithFrame:CGRectMake(15,
+                                                                 0,
+                                                                 CGRectGetWidth([UIScreen mainScreen].bounds) - 30,
+                                                                 CGRectGetHeight([UIScreen mainScreen].bounds) - 200)];
+        
+        CGRect frame = [UIScreen mainScreen].bounds;
+        [_emptyView setCenter:CGPointMake(frame.size.width / 2, frame.size.height / 2 + 40)];
+        [_emptyView setMode:@"hide"];
+    }
+    
+    return _emptyView;
+}
+
+- (ZLSwipeableView *)swipeableView {
+    if (!_swipeableView) {
+        _swipeableView = [[ZLSwipeableView alloc] initWithFrame:CGRectZero];
+        [_swipeableView.layer setZPosition:1000];
+        [_swipeableView setBackgroundColor:[UIColor clearColor]];
+        [_swipeableView setTranslatesAutoresizingMaskIntoConstraints:NO];
+        [_swipeableView setAllowedDirection:ZLSwipeableViewDirectionHorizontal];
+        [_swipeableView setDataSource:self];
+        [_swipeableView setDelegate:self];
+    }
+    
+    return _swipeableView;
+}
+
+- (SocialFilterView *)filterView {
+    if (!_filterView) {
+        _filterView = [SocialFilterView instanceFromNib];
+        _filterView.alpha = .0f;
+        _filterView.frame = CGRectMake(0,
+                                       62,
+                                       CGRectGetWidth(self.bounds),
+                                       310);
+    }
+    
+    return _filterView;
+}
+
+- (UIView *)transparentView {
+    if (!_transparentView) {
+        _transparentView = [[UIView alloc] initWithFrame:CGRectMake(0,
+                                                                    60,
+                                                                    CGRectGetWidth(self.bounds),
+                                                                    CGRectGetHeight(self.bounds) - 60)];
+        _transparentView.alpha = .0f;
+        _transparentView.backgroundColor = [UIColor colorWithWhite:.0f alpha:0.3f];
+        
+        UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self
+                                                                                     action:@selector(didTapFilterButton:)];
+        [_transparentView addGestureRecognizer:tapGesture];
+    }
+    
+    return _transparentView;
+}
+
+#pragma mark - Action
 - (IBAction)discoverDidValueChanged:(UISwitch *)sender {
     if (!sender.isOn) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Turn off socialize?"
@@ -123,11 +165,28 @@
     }
 }
 
-- (Feed *)getFeedFromCardView:(UIView *)view {
-    ShadowView *shadowView = (ShadowView*)view;
-    Feed *feed = ((FeedCardView *)shadowView.subviews.lastObject).feed;
+- (IBAction)didTapFilterButton:(id)sender {
+    if (self.filterView.alpha == .0f) {
+        [[UIApplication sharedApplication].keyWindow addSubview:self.transparentView];
+        [[UIApplication sharedApplication].keyWindow addSubview:self.filterView];
+    }
     
-    return feed;
+    [UIView animateWithDuration:0.2 delay:.0f options:UIViewAnimationOptionCurveEaseIn animations:^{
+        if (self.filterView.alpha == 1.0f) {
+            self.filterView.alpha = .0f;
+            self.transparentView.alpha = .0f;
+            [self.swipeableView setUserInteractionEnabled:YES];
+        } else {
+            self.filterView.alpha = 1.0f;
+            self.transparentView.alpha = 1.0f;
+            [self.swipeableView setUserInteractionEnabled:NO];
+        }
+    } completion:^(BOOL finished) {
+        if (self.filterView.alpha == .0f) {
+            [self.transparentView removeFromSuperview];
+            [self.filterView removeFromSuperview];
+        }
+    }];
 }
 
 #pragma mark - Load Data

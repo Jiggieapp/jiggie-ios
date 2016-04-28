@@ -40,6 +40,12 @@
 		938CE7D11CCF627D00ADDD4C /* NSValueTransformer+MTLInversionAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 938CE7BF1CCF627D00ADDD4C /* NSValueTransformer+MTLInversionAdditions.m */; };
 		938CE7D21CCF627D00ADDD4C /* NSValueTransformer+MTLPredefinedTransformerAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 938CE7C11CCF627D00ADDD4C /* NSValueTransformer+MTLPredefinedTransformerAdditions.m */; };
 		938CE7D51CCF629700ADDD4C /* Feed.m in Sources */ = {isa = PBXBuildFile; fileRef = 938CE7D41CCF629700ADDD4C /* Feed.m */; };
+		938CE7D91CD1BE8600ADDD4C /* SocialFilterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 938CE7D71CD1BE8600ADDD4C /* SocialFilterView.m */; };
+		938CE7DA1CD1BE8600ADDD4C /* SocialFilterView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 938CE7D81CD1BE8600ADDD4C /* SocialFilterView.xib */; };
+		938CE7DE1CD1C91700ADDD4C /* SocialOptionTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 938CE7DC1CD1C91700ADDD4C /* SocialOptionTableViewCell.m */; };
+		938CE7DF1CD1C91700ADDD4C /* SocialOptionTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 938CE7DD1CD1C91700ADDD4C /* SocialOptionTableViewCell.xib */; };
+		938CE7E31CD1CAD200ADDD4C /* SocialSliderTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 938CE7E11CD1CAD200ADDD4C /* SocialSliderTableViewCell.m */; };
+		938CE7E41CD1CAD200ADDD4C /* SocialSliderTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 938CE7E21CD1CAD200ADDD4C /* SocialSliderTableViewCell.xib */; };
 		9A85A5531CC8B89300C8818B /* JGKeyboardNotificationHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A85A5521CC8B89300C8818B /* JGKeyboardNotificationHelper.m */; };
 		9AF3EEFF1CC9FA9E00CA9497 /* LocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AF3EEFE1CC9FA9E00CA9497 /* LocationManager.m */; };
 		CB3EB6C81B459177003F658F /* App.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CB3EB6C71B459177003F658F /* App.xcassets */; };
@@ -416,6 +422,15 @@
 		938CE7C11CCF627D00ADDD4C /* NSValueTransformer+MTLPredefinedTransformerAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSValueTransformer+MTLPredefinedTransformerAdditions.m"; sourceTree = "<group>"; };
 		938CE7D31CCF629700ADDD4C /* Feed.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Feed.h; sourceTree = "<group>"; };
 		938CE7D41CCF629700ADDD4C /* Feed.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Feed.m; sourceTree = "<group>"; };
+		938CE7D61CD1BE8600ADDD4C /* SocialFilterView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SocialFilterView.h; sourceTree = "<group>"; };
+		938CE7D71CD1BE8600ADDD4C /* SocialFilterView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SocialFilterView.m; sourceTree = "<group>"; };
+		938CE7D81CD1BE8600ADDD4C /* SocialFilterView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SocialFilterView.xib; sourceTree = "<group>"; };
+		938CE7DB1CD1C91700ADDD4C /* SocialOptionTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SocialOptionTableViewCell.h; sourceTree = "<group>"; };
+		938CE7DC1CD1C91700ADDD4C /* SocialOptionTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SocialOptionTableViewCell.m; sourceTree = "<group>"; };
+		938CE7DD1CD1C91700ADDD4C /* SocialOptionTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SocialOptionTableViewCell.xib; sourceTree = "<group>"; };
+		938CE7E01CD1CAD200ADDD4C /* SocialSliderTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SocialSliderTableViewCell.h; sourceTree = "<group>"; };
+		938CE7E11CD1CAD200ADDD4C /* SocialSliderTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SocialSliderTableViewCell.m; sourceTree = "<group>"; };
+		938CE7E21CD1CAD200ADDD4C /* SocialSliderTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SocialSliderTableViewCell.xib; sourceTree = "<group>"; };
 		9A85A5511CC8B89300C8818B /* JGKeyboardNotificationHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JGKeyboardNotificationHelper.h; sourceTree = "<group>"; };
 		9A85A5521CC8B89300C8818B /* JGKeyboardNotificationHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JGKeyboardNotificationHelper.m; sourceTree = "<group>"; };
 		9AF3EEFD1CC9FA9E00CA9497 /* LocationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationManager.h; sourceTree = "<group>"; };
@@ -1467,6 +1482,15 @@
 				938CE7751CCE2C9900ADDD4C /* FeedView.h */,
 				938CE7761CCE2C9900ADDD4C /* FeedView.m */,
 				938CE7771CCE2C9900ADDD4C /* FeedView.xib */,
+				938CE7D61CD1BE8600ADDD4C /* SocialFilterView.h */,
+				938CE7D71CD1BE8600ADDD4C /* SocialFilterView.m */,
+				938CE7D81CD1BE8600ADDD4C /* SocialFilterView.xib */,
+				938CE7DB1CD1C91700ADDD4C /* SocialOptionTableViewCell.h */,
+				938CE7DC1CD1C91700ADDD4C /* SocialOptionTableViewCell.m */,
+				938CE7DD1CD1C91700ADDD4C /* SocialOptionTableViewCell.xib */,
+				938CE7E01CD1CAD200ADDD4C /* SocialSliderTableViewCell.h */,
+				938CE7E11CD1CAD200ADDD4C /* SocialSliderTableViewCell.m */,
+				938CE7E21CD1CAD200ADDD4C /* SocialSliderTableViewCell.xib */,
 			);
 			path = Feed;
 			sourceTree = "<group>";
@@ -2322,14 +2346,17 @@
 				DAABB2971C1FF5AE004DDCFA /* MPCloseBtn@2x.png in Resources */,
 				DAABB0E91C1FD50E004DDCFA /* ChatPopup.xib in Resources */,
 				DAABB0EF1C1FD50E004DDCFA /* FeedPopup.xib in Resources */,
+				938CE7E41CD1CAD200ADDD4C /* SocialSliderTableViewCell.xib in Resources */,
 				DAABB0FE1C1FD50E004DDCFA /* Signup.xcassets in Resources */,
 				DAABB0D01C1FD50E004DDCFA /* EventsHostMessage.xib in Resources */,
+				938CE7DA1CD1BE8600ADDD4C /* SocialFilterView.xib in Resources */,
 				DAABB0EE1C1FD50E004DDCFA /* FeedPopup.xcassets in Resources */,
 				DAABB2C41C1FF5AE004DDCFA /* NSDateTimeAgo.bundle in Resources */,
 				DAABB0F61C1FD50E004DDCFA /* Setup.xib in Resources */,
 				DAABB2BF1C1FF5AE004DDCFA /* test_variant.json in Resources */,
 				DAABB2771C1FF5AE004DDCFA /* GSTouchImage@2x.png in Resources */,
 				938CE7C41CCF627D00ADDD4C /* Info.plist in Resources */,
+				938CE7DF1CD1C91700ADDD4C /* SocialOptionTableViewCell.xib in Resources */,
 				DA10F51E1C52149F006090ED /* SVProgressHUD.bundle in Resources */,
 				CB3EB6CA1B459184003F658F /* LaunchScreen.xib in Resources */,
 				DAABB0F51C1FD50E004DDCFA /* Setup.xcassets in Resources */,
@@ -2425,6 +2452,7 @@
 				DA5ED5EC1C90A34400004C7E /* AddPaymentViewController.m in Sources */,
 				DAABB2711C1FF5AE004DDCFA /* UITableViewCell+FlatUI.m in Sources */,
 				DAABB29F1C1FF5AE004DDCFA /* MPNotificationViewController.m in Sources */,
+				938CE7DE1CD1C91700ADDD4C /* SocialOptionTableViewCell.m in Sources */,
 				DA5ED6171C92975100004C7E /* VTiOSAPI.m in Sources */,
 				DA9B10A01CB4D7B7001FB798 /* GTMNSString+HTML.m in Sources */,
 				DAABB2FE1C200414004DDCFA /* Constants.m in Sources */,
@@ -2446,6 +2474,7 @@
 				DAABB25A1C1FF5AE004DDCFA /* AFURLRequestSerialization.m in Sources */,
 				DAABB2BD1C1FF5AE004DDCFA /* NSInvocation+MPHelpers.m in Sources */,
 				DAABB0CD1C1FD50E004DDCFA /* EventsHostingsList.m in Sources */,
+				938CE7E31CD1CAD200ADDD4C /* SocialSliderTableViewCell.m in Sources */,
 				DAABB2831C1FF5AE004DDCFA /* MPABTestDesignerClearRequestMessage.m in Sources */,
 				DAABB0C11C1FD50E004DDCFA /* CreditCard.m in Sources */,
 				DAABB2991C1FF5AE004DDCFA /* MPDesignerEventBindingResponseMesssage.m in Sources */,
@@ -2623,6 +2652,7 @@
 				DAABB0BB1C1FD50E004DDCFA /* BookTableOfferingCell.m in Sources */,
 				938CE7921CCE2D2C00ADDD4C /* DefaultDirectionInterpretor.m in Sources */,
 				FA4D2EF21A4D9A77006828E7 /* main.m in Sources */,
+				938CE7D91CD1BE8600ADDD4C /* SocialFilterView.m in Sources */,
 				DAABB0F21C1FD50E004DDCFA /* MemberReviewCell.m in Sources */,
 				DAABB2681C1FF5AE004DDCFA /* UIColor+FlatUI.m in Sources */,
 				DAABB0C41C1FD50E004DDCFA /* Events.m in Sources */,
