@@ -22,6 +22,9 @@ extern NSString *const AppsFlyerDevKey;
 
 extern NSString *const JiggieItunesID;
 
+extern NSString *const VeritransClientKey;
+extern BOOL const isVeritransInProducion;
+
 //URL
 extern NSString *const PHBaseURL;
 extern NSString *const PHBaseNewURL;
@@ -39,6 +42,7 @@ extern NSString *const PHUserTagListURL;
 extern NSString *const PHOrdersAllURL;
 extern NSString *const PHDateFormatServer;
 extern NSString *const PHDateFormatApp;
+extern NSString *const PHDateFormatAppShort;
 extern NSString *const PHPhoneVerifySendURL;
 extern NSString *const PHPhoneVerifyValidateURL;
 extern NSString *const PHUserPaymentURL;

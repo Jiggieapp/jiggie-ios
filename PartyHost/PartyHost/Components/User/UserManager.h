@@ -12,6 +12,10 @@
 
 + (UserManager *)sharedManager;
 
++ (NSDictionary *)loadUserTicketInfo;
++ (void)saveUserTicketInfo:(NSDictionary *)dict;
++ (void)clearUserTicketInfo;
+
 + (void)saveUserSetting:(NSDictionary *)dict;
 + (BOOL)updateLocalSetting;
 

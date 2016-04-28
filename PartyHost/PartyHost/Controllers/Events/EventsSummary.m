@@ -447,23 +447,24 @@
     
     if([self.fillType isEqualToString:@"reservation"] || [self.fillType isEqualToString:@"purchase"])
     {
-        self.sharedData.cEventId_toLoad = self.mainDict[@"_id"];
-        
-        [self.sharedData.cAddEventDict removeAllObjects];
-        [self.sharedData.cAddEventDict addEntriesFromDictionary:self.mainDict];
-        
-        
-        
-        [[NSNotificationCenter defaultCenter]
-         postNotificationName:@"SHOW_BOOKTABLE"
-         object:self];
+//        self.sharedData.cEventId_toLoad = self.mainDict[@"_id"];
+//        
+//        [self.sharedData.cAddEventDict removeAllObjects];
+//        [self.sharedData.cAddEventDict addEntriesFromDictionary:self.mainDict];
+//        
+//        
+//        
+//        [[NSNotificationCenter defaultCenter]
+//         postNotificationName:@"SHOW_BOOKTABLE"
+//         object:self];
     }
     
     if([self.fillType isEqualToString:@"ticket"]) {
+        
         // TICKET ACTION
         [[NSNotificationCenter defaultCenter]
          postNotificationName:@"SHOW_TICKET_LIST"
-         object:self.cEvent];
+         object:self.event_id];
 
     }
     
@@ -1063,11 +1064,11 @@
     } else if([self.fillType isEqualToString:@"purchase"])
     {
         self.btnHostHere.hidden = NO;
-        [self.btnHostHere setTitle:@"PURCHASE TABLE" forState:UIControlStateNormal];
+        [self.btnHostHere setTitle:@"BOOK NOW" forState:UIControlStateNormal];
     } else if([self.fillType isEqualToString:@"ticket"])
     {
         self.btnHostHere.hidden = NO;
-        [self.btnHostHere setTitle:@"PURCHASE TICKET" forState:UIControlStateNormal];
+        [self.btnHostHere setTitle:@"BOOK NOW" forState:UIControlStateNormal];
     }
 
 }

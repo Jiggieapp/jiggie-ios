@@ -10,6 +10,11 @@
 #import "AnalyticManager.h"
 #import "Event.h"
 #import "TicketListViewController.h"
+#import "AddPaymentViewController.h"
+#import "VirtualAccountViewController.h"
+#import "TicketSuccessViewController.h"
+#import "PaymentSelectionViewController.h"
+#import "PurchaseHistoryViewController.h"
 
 @interface ViewController ()
 
@@ -133,6 +138,12 @@
      addObserver:self
      selector:@selector(showTicketList:)
      name:@"SHOW_TICKET_LIST"
+     object:nil];
+    
+    [[NSNotificationCenter defaultCenter]
+     addObserver:self
+     selector:@selector(showPurchaseHistory:)
+     name:@"SHOW_PURCHASE_HISTORY"
      object:nil];
     
     
@@ -509,20 +520,24 @@
           postNotificationName:@"HIDE_LOADING"
           object:self];
          
-         //[self shareText:responseObject[@"message"] andImage:newImage andUrl:[[NSURL alloc] initWithString:responseObject[@"url"]]];
-         
-         UIImage *shareImage = [UIImage imageNamed:@"splashLogoWhite"];
-         if (self.sharedData.cHostVenuePicURL && self.sharedData.cHostVenuePicURL.length > 0) {
-             NSString *picURL = self.sharedData.cHostVenuePicURL;
-             picURL = [self.sharedData picURL:picURL];
-             if([self.sharedData.imagesDict objectForKey:picURL] && [[self.sharedData.imagesDict objectForKey:picURL] isKindOfClass:[UIImage class]]) {
-                 shareImage = [self.sharedData.imagesDict objectForKey:picURL];
+         @try {
+             UIImage *shareImage = [UIImage imageNamed:@"splashLogoWhite"];
+             if (self.sharedData.cHostVenuePicURL && self.sharedData.cHostVenuePicURL.length > 0) {
+                 NSString *picURL = self.sharedData.cHostVenuePicURL;
+                 picURL = [self.sharedData picURL:picURL];
+                 if([self.sharedData.imagesDict objectForKey:picURL] && [[self.sharedData.imagesDict objectForKey:picURL] isKindOfClass:[UIImage class]]) {
+                     shareImage = [self.sharedData.imagesDict objectForKey:picURL];
+                 }
              }
+             
+             [self shareText:responseObject[@"message"] andImage:shareImage andUrl:[[NSURL alloc] initWithString:responseObject[@"url"]]];
          }
-         
-         [self shareText:responseObject[@"message"] andImage:shareImage andUrl:[[NSURL alloc] initWithString:responseObject[@"url"]]];
-
-         //
+         @catch (NSException *exception) {
+             
+         }
+         @finally {
+             
+         }
          
      } failure:^(AFHTTPRequestOperation *operation, NSError *error)
      {
@@ -619,10 +634,29 @@
 
 #pragma mark - Ticket Notification 
 - (void)showTicketList:(NSNotification *)notification {
-    Event *cEvent = (Event *)[notification object];
+    NSString *eventID = [notification object];
     TicketListViewController *ticketListVC = [[TicketListViewController alloc] init];
-    ticketListVC.cEvent = cEvent;
+    ticketListVC.eventID = eventID;
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:ticketListVC];
+    [self presentViewController:navigationController animated:YES completion:nil];
+
+    
+//    PurchaseHistoryViewController *ticketListVC = [[PurchaseHistoryViewController alloc] init];
+//    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:ticketListVC];
+//    [self presentViewController:navigationController animated:YES completion:nil];
+    
+//    VirtualAccountViewController *addPaymentVC = [[VirtualAccountViewController alloc] init];
+//    [addPaymentVC setOrderID:@"1458265581161"];
+//    [addPaymentVC setShowCloseButton:YES];
+//    [addPaymentVC setVAType:@""];
+//    [addPaymentVC setShowOrderButton:NO];
+//    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:addPaymentVC];
+//    [self presentViewController:navigationController animated:YES completion:nil];
+}
+
+- (void)showPurchaseHistory:(NSNotification *)notification {
+    PurchaseHistoryViewController *purchaseHistoryViewController = [[PurchaseHistoryViewController alloc] init];
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:purchaseHistoryViewController];
     [self presentViewController:navigationController animated:YES completion:nil];
 }
 

@@ -10,6 +10,8 @@
 #import "AnalyticManager.h"
 #import "AFNetworkActivityLogger.h"
 #import "UserManager.h"
+#import "VTConfig.h"
+#import "LocationManager.h"
 
 ///REMOVE THIS WHEN LIVE
 //#import "GSTouchesShowingWindow.h"
@@ -42,6 +44,9 @@ static NSString *const kAllowTracking = @"allowTracking";
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+    
     // Override point for customization after application launch.
     self.sharedData = [SharedData sharedInstance];
     self.inAskingAPNMode = NO;
@@ -74,8 +79,8 @@ static NSString *const kAllowTracking = @"allowTracking";
     [[AnalyticManager sharedManager] startAnalytics];
     
     // AFNetworking Debug Setting:
-    [[AFNetworkActivityLogger sharedLogger] startLogging];
-    [[AFNetworkActivityLogger sharedLogger] setLevel:AFLoggerLevelDebug];
+//    [[AFNetworkActivityLogger sharedLogger] startLogging];
+//    [[AFNetworkActivityLogger sharedLogger] setLevel:AFLoggerLevelDebug];
     
     
     
@@ -86,17 +91,7 @@ static NSString *const kAllowTracking = @"allowTracking";
     //[TSTapstream createWithAccountName:@"partyhost" developerSecret:@"a5FxhL0zS9Wwqrq1dBQruw" config:config];
     
     
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     
-    if(![defaults objectForKey:@"FIRST_RUN"])
-    {
-        Mixpanel *mixpanel = [Mixpanel sharedInstance];
-        [mixpanel track:@"Install" properties:nil];
-        
-        //[self.sharedData trackMixPanel:@"ios-party-host-install"];
-        [defaults setValue:@"YES" forKey:@"FIRST_RUN"];
-        [defaults synchronize];
-    }
     
     
     //config.odin1 = @"82a53f1222f8781a5063a773231d4a7ee41bdd6f";
@@ -201,6 +196,7 @@ static NSString *const kAllowTracking = @"allowTracking";
     if(PHDebugOn==YES) {
         NSLog(@">>> PhDebugOn==YES: Clearing all ONE-TIME helpers.");
         
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
         [defaults setValue:NULL forKey:@"SHOWED_EVENTS_OVERLAY"];
         [defaults setValue:NULL forKey:@"SHOWED_EVENTS_SUMMARY_HOST_OVERLAY"];
         [defaults setValue:NULL forKey:@"SHOWED_EVENTS_SUMMARY_GUEST_OVERLAY"];
@@ -221,8 +217,14 @@ static NSString *const kAllowTracking = @"allowTracking";
     
     [self performSelector:@selector(checkApnAgain) withObject:nil afterDelay:4.0];
     
-    //[self performSelector:@selector(testApp) withObject:nil afterDelay:5.0];
+    // for testing
+    [VTConfig setCLIENT_KEY:VeritransClientKey];
+    [VTConfig setVT_IsProduction:isVeritransInProducion];
     
+//    [VTConfig setCLIENT_KEY:@"VT-client-tHEKcD0xJGsm6uwH"];
+//    [VTConfig setVT_IsProduction:true];
+    
+    //[self performSelector:@selector(testApp) withObject:nil afterDelay:5.0];
     return YES;
 }
 
@@ -308,6 +310,10 @@ static NSString *const kAllowTracking = @"allowTracking";
 {
     // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+    
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    [prefs removeObjectForKey:@"temp_da_list"];
+    [prefs synchronize];
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application
@@ -382,8 +388,22 @@ static NSString *const kAllowTracking = @"allowTracking";
          object:self];
     }
     
-     [FBSDKAppEvents activateApp];
-
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    if([defaults objectForKey:@"SHOWED_WALKTHROUGH"]) {
+        [[LocationManager manager] startUpdatingLocation];
+        [[LocationManager manager] didUpdateLocationsWithCompletion:^(CLLocationDegrees latitude, CLLocationDegrees longitude) {
+            AFHTTPRequestOperationManager *manager = [self.sharedData getOperationManager];
+            NSString *url = [NSString stringWithFormat:@"%@/save_longlat", PHBaseNewURL];
+            NSDictionary *parameters = @{@"fb_id" : self.sharedData.fb_id,
+                                         @"longitude" : [NSString stringWithFormat:@"%f", longitude],
+                                         @"latitude" : [NSString stringWithFormat:@"%f", latitude]};
+            
+            [manager POST:url parameters:parameters success:nil failure:nil];
+        }];
+    }
+    
+    [FBSDKAppEvents activateApp];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application
@@ -402,6 +422,10 @@ static NSString *const kAllowTracking = @"allowTracking";
             abort();
         }
     }
+    
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    [prefs removeObjectForKey:@"temp_da_list"];
+    [prefs synchronize];
 }
 
 - (BOOL)application:(UIApplication *)application
@@ -871,8 +895,8 @@ continueUserActivity:(NSUserActivity *)userActivity
 
 
 #pragma AppsFlyerTrackerDelegate methods
-- (void)onConversionDataReceived:(NSDictionary*) installData
-{
+- (void)onConversionDataReceived:(NSDictionary*) installData {
+    
     NSLog(@"RECEIVE_INSTALL DATA :: %@",installData);
     
     
@@ -919,10 +943,51 @@ continueUserActivity:(NSUserActivity *)userActivity
         [self.sharedData.appsFlyerDict setObject:@"organic" forKey:@"campaign"];
         [self.sharedData.appsFlyerDict setObject:@"organic" forKey:@"af_status"];
     }
+    
+    
+    // Track Mixpanel Install
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    if(![defaults objectForKey:@"FIRST_RUN"])
+    {
+        NSString *media_source = self.sharedData.appsFlyerDict[@"media_source"];
+        NSString *campaign = self.sharedData.appsFlyerDict[@"campaign"];
+        NSString *installType = self.sharedData.appsFlyerDict[@"af_status"];
+        
+        NSDictionary *dict = @{@"AFmedia_source": media_source,
+                               @"AFcampaign": campaign,
+                               @"AFinstall_type": installType};
+        [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Install" withDict:dict];
+        
+        [defaults setValue:@"YES" forKey:@"FIRST_RUN"];
+        [defaults synchronize];
+    }
 }
 
-- (void) onConversionDataRequestFailure:(NSError *)error{
+- (void)onConversionDataRequestFailure:(NSError *)error {
+    
     NSLog(@"Failed to get data from AppsFlyer's server: %@",[error localizedDescription]);
+    
+    // Track Mixpanel Install
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    if(![defaults objectForKey:@"FIRST_RUN"])
+    {
+        [self.sharedData.appsFlyerDict removeAllObjects];
+        [self.sharedData.appsFlyerDict setObject:@"organic" forKey:@"media_source"];
+        [self.sharedData.appsFlyerDict setObject:@"organic" forKey:@"campaign"];
+        [self.sharedData.appsFlyerDict setObject:@"organic" forKey:@"af_status"];
+        
+        NSString *media_source = @"organic";
+        NSString *campaign = @"organic";
+        NSString *installType = @"organic";
+        
+        NSDictionary *dict = @{@"AFmedia_source": media_source,
+                               @"AFcampaign": campaign,
+                               @"AFinstall_type": installType};
+        [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Install" withDict:dict];
+        
+        [defaults setValue:@"YES" forKey:@"FIRST_RUN"];
+        [defaults synchronize];
+    }
 }
 
 #pragma mark -
