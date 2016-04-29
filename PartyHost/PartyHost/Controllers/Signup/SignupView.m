@@ -31,6 +31,14 @@
         self.didLogin = NO;
         self.currentUser = [[NSMutableDictionary alloc] init];
         
+        [self.pageControl setCurrentPageIndicatorTintColor:[UIColor phBlueColor]];
+        [self.pageControl setPageIndicatorTintColor:[UIColor colorFromHexCode:@"B6ECFF"]];
+        
+        [self.buttonNext setTitleColor:[UIColor phBlueColor] forState:UIControlStateNormal];
+        [self.buttonNext addTarget:self action:@selector(buttonNextDidTap) forControlEvents:UIControlEventTouchUpInside];
+        
+        self.buttonHelp.hidden = YES;
+        [self.buttonHelp addTarget:self action:@selector(buttonHelpDidTap) forControlEvents:UIControlEventTouchUpInside];
         
         //Load all pages
         self.pageViews = [[NSMutableArray alloc] init];
@@ -50,15 +58,17 @@
         self.scrollView.contentSize = CGSizeMake(self.frame.size.width * self.totalPages, self.frame.size.height);
         self.scrollView.scrollsToTop = NO;
         self.scrollView.delaysContentTouches = NO;
-        self.pageControl.numberOfPages = self.totalPages;
+        self.scrollView.bounces = NO;
+        self.scrollView.pagingEnabled = YES;
+        self.pageControl.numberOfPages = self.totalPages - 1;
         
         //Hide images get ready for fading
         self.backgroundImages = [[NSMutableArray alloc] init];
         [self.backgroundImages addObject:self.backgroundImage1];
-        [self.backgroundImages addObject:self.backgroundImage2];
-        [self.backgroundImages addObject:self.backgroundImage2];
-        [self.backgroundImages addObject:self.backgroundImage2];
-        [self.backgroundImages addObject:self.backgroundImage2];
+        [self.backgroundImages addObject:self.backgroundImage1];
+        [self.backgroundImages addObject:self.backgroundImage1];
+        [self.backgroundImages addObject:self.backgroundImage1];
+        [self.backgroundImages addObject:self.backgroundImage1];
         [self.backgroundImages addObject:self.backgroundImage2];
         for(int i=1;i<[self.backgroundImages count];i++) [self.backgroundImages[i] setAlpha:0.0f];
         [self.backgroundImages[0] setAlpha:1.0f];
@@ -67,8 +77,8 @@
        /*
         self.loginView = [[FBLoginView alloc] initWithReadPermissions:@[@"public_profile",@"user_birthday", @"email", @"user_photos",@"user_friends",@"user_likes",@"user_relationships",@"user_about_me",@"user_location",@"user_photos",@"user_status",@"user_friends"]];
         self.loginView.delegate = self;*/
-        [self.buttonFacebook setTitle:@"SIGN IN WITH FACEBOOK" forState:UIControlStateNormal];
         [self.buttonFacebook addTarget:self action:@selector(buttonFacebookDidTap) forControlEvents:UIControlEventTouchUpInside];
+        self.buttonFacebook.hidden = YES;
         
         /*
         self.btnLoginFB = [[FBSDKLoginButton alloc] init];
@@ -88,13 +98,6 @@
          name:@"APP_UNLOADED"
          object:nil];
         
-        
-        
-        NSLog(@"TOKEN____ :: %@",[FBSDKAccessToken currentAccessToken].tokenString);
-        
-//        [self performSelector:@selector(skipLogin) withObject:nil afterDelay:0.1];
-        
-//        [self checkIfHasLogin];
         [self performSelector:@selector(checkIfHasLogin) withObject:nil afterDelay:0.0];
     }
     return self;
@@ -195,12 +198,18 @@
 -(void)initClass
 {
     self.isAutoLoginMode = NO;
-    [self.buttonFacebook setTitle:@"SIGN IN WITH FACEBOOK" forState:UIControlStateNormal];
 }
 
--(void)buttonFacebookDidTap
-{
-    [self.buttonFacebook setTitle:@"SIGNING INTO JIGGIE" forState:UIControlStateNormal];
+#pragma mark - Actions
+- (void)buttonNextDidTap {
+    [self.scrollView setContentOffset:CGPointMake(self.scrollView.frame.size.width * (self.totalPages - 1), 0)];
+}
+
+- (void)buttonHelpDidTap {
+    [self.scrollView setContentOffset:CGPointMake(0, 0)];
+}
+
+-(void)buttonFacebookDidTap {
     [FBSDKAccessToken setCurrentAccessToken:nil];
     
     FBSDKLoginManager *logMeOut = [[FBSDKLoginManager alloc] init];
@@ -273,6 +282,7 @@
 
 }
 
+#pragma mark -
 
 -(NSString *)getProfileAlbumId:(NSMutableArray *)dataA
 {
@@ -314,7 +324,6 @@
 
 -(void)loginWithToken {
     [self.sharedData loginWithFBToken:^(AFHTTPRequestOperation *operation, id responseObject) {
-        NSLog(@"TOKEN_responseObject :: %@",responseObject);
         if([responseObject[@"response"] boolValue])
         {
             self.didFBLogin = YES;
@@ -339,7 +348,6 @@
             [alert show];
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"FAILING_responseObject :: %@",operation.responseString);
     }];
 }
 
@@ -351,8 +359,6 @@
     [[[FBSDKGraphRequest alloc] initWithGraphPath:@"/me/permissions" parameters:nil]
      startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error)
      {
-         
-          NSLog(@"PERMISSION_RESULT :: %@",result[@"data"]);
           
           BOOL canDo = YES;
           NSString *errorMessage = @"To get the full benefits of Jiggie please accept the following Facebook permission(s):";
@@ -397,8 +403,6 @@
               SET_IF_NOT_NULL(self.sharedData.userDict[@"location"],self.currentUser[@"location"][@"name"]);
               SET_IF_NOT_NULL(self.sharedData.userDict[@"about"],self.currentUser[@"bio"]);
               
-              NSLog(@"self.sharedData.userDict");
-              NSLog(@"%@",self.sharedData.userDict);
               
               //[self checkIfAPNisLoaded];
               [self loginWithToken];
@@ -407,54 +411,6 @@
       }];
 }
 
--(void)changePage:(int)newPage {
-    if(newPage >= self.totalPages) return;
-    if(newPage < 0) return;
-    
-    int lastPage = self.pageIndex;
-    self.pageIndex = newPage;
-    
-    //Fade background between pages
-    [UIView animateWithDuration:1.0f delay:0 options:UIViewAnimationOptionBeginFromCurrentState animations:^{
-        [self.backgroundImages[lastPage] setAlpha:0.0f];
-        [self.backgroundImages[newPage] setAlpha:1.0f];
-    } completion:^(BOOL finished) {
-    }];
-}
-
-- (IBAction)pageControlChanged:(id)sender {
-    // Set the boolean used when scrolls originate from the page control.
-    [self changePage:(int)self.pageControl.currentPage];
-    self.pageControlUsed = YES;
-    
-    // Update the scroll view to the appropriate page
-    CGFloat pageWidth  = self.scrollView.frame.size.width;
-    CGFloat pageHeight = self.scrollView.frame.size.height;
-    CGRect rect = CGRectMake(pageWidth * self.pageIndex, 0, pageWidth, pageHeight);
-    [self.scrollView scrollRectToVisible:rect animated:YES];
-}
-
-- (void)scrollViewDidScroll:(UIScrollView*)sender {
-    // If the scroll was initiated from the page control, do nothing.
-    if (!self.pageControlUsed) {
-        //Switch the page control when more than 50% of the previous/next
-        CGFloat pageWidth = self.scrollView.frame.size.width;
-        CGFloat xOffset = self.scrollView.contentOffset.x;
-        int index = floor((xOffset - pageWidth/2) / pageWidth) + 1;
-        if (index != self.pageIndex && index < self.totalPages) {
-            self.pageControl.currentPage = index;
-            [self changePage:index];
-        }
-    }
-}
-
-- (void)scrollViewWillBeginDragging:(UIScrollView*)scrollView {
-    self.pageControlUsed = NO;
-}
-
-- (void)scrollViewDidEndDecelerating:(UIScrollView*)scrollView {
-    self.pageControlUsed = NO;
-}
 //---------------------------------------------------------------------//
 //FACEBOOK
 
@@ -646,7 +602,7 @@
          UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Temporary Maintenance" message:@"We are undergoing maintenance, please try again in a few minutes." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
          [alert show];
          
-         [self.buttonFacebook setTitle:@"SIGNOUT FROM FACEBOOK" forState:UIControlStateNormal];
+//         [self.buttonFacebook setTitle:@"SIGNOUT FROM FACEBOOK" forState:UIControlStateNormal];
          
          [[NSNotificationCenter defaultCenter]
           postNotificationName:@"HIDE_LOADING"
@@ -849,6 +805,70 @@
           postNotificationName:@"HIDE_LOADING"
           object:self];
      }];
+}
+
+#pragma mark - Pages
+-(void)changePage:(int)newPage {
+    if(newPage >= self.totalPages) return;
+    if(newPage < 0) return;
+    
+    int lastPage = self.pageIndex;
+    self.pageIndex = newPage;
+    
+    //Fade background between pages
+    [UIView animateWithDuration:1.0f delay:0 options:UIViewAnimationOptionBeginFromCurrentState animations:^{
+        [self.backgroundImages[lastPage] setAlpha:0.0f];
+        [self.backgroundImages[newPage] setAlpha:1.0f];
+    } completion:^(BOOL finished) {
+    }];
+}
+
+- (IBAction)pageControlChanged:(id)sender {
+    // Set the boolean used when scrolls originate from the page control.
+    [self changePage:(int)self.pageControl.currentPage];
+    self.pageControlUsed = YES;
+    
+    // Update the scroll view to the appropriate page
+    CGFloat pageWidth  = self.scrollView.frame.size.width;
+    CGFloat pageHeight = self.scrollView.frame.size.height;
+    CGRect rect = CGRectMake(pageWidth * self.pageIndex, 0, pageWidth, pageHeight);
+    [self.scrollView scrollRectToVisible:rect animated:YES];
+}
+
+#pragma mark - UIScrollViewDelegate
+- (void)scrollViewDidScroll:(UIScrollView*)sender {
+    // If the scroll was initiated from the page control, do nothing.
+    if (!self.pageControlUsed) {
+        //Switch the page control when more than 50% of the previous/next
+        CGFloat pageWidth = self.scrollView.frame.size.width;
+        CGFloat xOffset = self.scrollView.contentOffset.x;
+        int index = floor((xOffset - pageWidth/2) / pageWidth) + 1;
+        if (index != self.pageIndex && index < self.totalPages) {
+            if (index == self.totalPages - 1) {
+                self.pageControl.hidden = YES;
+                self.buttonNext.hidden = YES;
+                self.buttonHelp.hidden = NO;
+                self.buttonFacebook.hidden = NO;
+            } else {
+                self.pageControl.currentPage = index;
+                
+                self.pageControl.hidden = NO;
+                self.buttonNext.hidden = NO;
+                self.buttonHelp.hidden = YES;
+                self.buttonFacebook.hidden = YES;
+            }
+            
+            [self changePage:index];
+        }
+    }
+}
+
+- (void)scrollViewWillBeginDragging:(UIScrollView*)scrollView {
+    self.pageControlUsed = NO;
+}
+
+- (void)scrollViewDidEndDecelerating:(UIScrollView*)scrollView {
+    self.pageControlUsed = NO;
 }
 
 @end

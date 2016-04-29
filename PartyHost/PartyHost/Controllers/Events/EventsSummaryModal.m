@@ -701,9 +701,6 @@
      postNotificationName:@"SHOW_LOADING"
      object:self];
     
-    //Add to view count if guest
-    //[self addViewCount];
-    
     self.btnInfo.hidden = YES;
     
     //Clear text
@@ -828,29 +825,6 @@
      [cell.button buttonSelect:NO animated:YES];
      [self updateSelected];
      */
-}
-
--(void)addViewCount
-{
-    //Guests only
-    //if(self.sharedData.isHost) return;
-    
-    NSLog(@"VIEW_COUNT :: %@",self.event_id);
-    
-    AFHTTPRequestOperationManager *manager = [self.sharedData getOperationManager];
-    
-    NSString *url = [Constants guestEventsViewedURL:self.event_id fb_id:self.sharedData.fb_id];
-    
-    NSLog(@"VIEW_COUNT_URL :: %@",url);
-    
-    [manager GET:url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject)
-     {
-         NSLog(@"VIEW_COUNT_UPDATED");
-         
-     } failure:^(AFHTTPRequestOperation *operation, NSError *error)
-     {
-         NSLog(@"VIEW_COUNT_ERROR :: %@",error);
-     }];
 }
 
 @end

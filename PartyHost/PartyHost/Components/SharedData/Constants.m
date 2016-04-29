@@ -302,34 +302,18 @@ int const PHButtonHeight = 50; //This is the button at bottom of screen
     //Do start date
     [format setDateFormat:@"EEEE, MMMM d"];
     NSString *startDatePart1 = [format stringFromDate:startDate];
-    NSDateComponents *startComponents = [calendar components:(NSCalendarUnitHour | NSCalendarUnitMinute) fromDate:startDate];
+//    NSDateComponents *startComponents = [calendar components:(NSCalendarUnitHour | NSCalendarUnitMinute) fromDate:startDate];
     NSString *startDatePart2;
-    if ([startComponents minute]>0)
-    {
-        [format setDateFormat:@"h:mma"];
-        startDatePart2 = [format stringFromDate:startDate];
-    }
-    else
-    {
-        [format setDateFormat:@"ha"];
-        startDatePart2 = [format stringFromDate:startDate];
-    }
+    [format setDateFormat:@"hh:mm a"];
+    startDatePart2 = [format stringFromDate:startDate];
     
     //Do end date
     //[format setDateFormat:@"EEEE MMMM d"];
     //NSString *endDatePart1 = [format stringFromDate:endDate];
-    NSDateComponents *endComponents = [calendar components:(NSCalendarUnitHour | NSCalendarUnitMinute) fromDate:endDate];
+//    NSDateComponents *endComponents = [calendar components:(NSCalendarUnitHour | NSCalendarUnitMinute) fromDate:endDate];
     NSString *endDatePart2;
-    if ([endComponents minute]>0)
-    {
-        [format setDateFormat:@"h:mma"];
-        endDatePart2 = [format stringFromDate:endDate];
-    }
-    else
-    {
-        [format setDateFormat:@"ha"];
-        endDatePart2 = [format stringFromDate:endDate];
-    }
+    [format setDateFormat:@"hh:mm a"];
+    endDatePart2 = [format stringFromDate:endDate];
     
     
     return [NSString stringWithFormat:@"%@ At %@ to %@",startDatePart1,startDatePart2,endDatePart2];
@@ -347,34 +331,20 @@ int const PHButtonHeight = 50; //This is the button at bottom of screen
     //Do start date
     [format setDateFormat:@"EEEE, MMMM d yyyy"];
     NSString *startDatePart1 = [format stringFromDate:dbStartDate];
-    NSDateComponents *startComponents = [calendar components:(NSCalendarUnitHour | NSCalendarUnitMinute) fromDate:dbStartDate];
+//    NSDateComponents *startComponents = [calendar components:(NSCalendarUnitHour | NSCalendarUnitMinute) fromDate:dbStartDate];
     NSString *startDatePart2;
-    if ([startComponents minute]>0)
-    {
-        [format setDateFormat:@"hh:mm a"];
-        startDatePart2 = [format stringFromDate:dbStartDate];
-    }
-    else
-    {
-        [format setDateFormat:@"ha"];
-        startDatePart2 = [format stringFromDate:dbStartDate];
-    }
+    [format setDateFormat:@"hh:mm a"];
+    startDatePart2 = [format stringFromDate:dbStartDate];
+
     
     //Do end date
     //[format setDateFormat:@"EEEE MMMM d"];
     //NSString *endDatePart1 = [format stringFromDate:endDate];
-    NSDateComponents *endComponents = [calendar components:(NSCalendarUnitHour | NSCalendarUnitMinute) fromDate:dbEndDate];
+//    NSDateComponents *endComponents = [calendar components:(NSCalendarUnitHour | NSCalendarUnitMinute) fromDate:dbEndDate];
     NSString *endDatePart2;
-    if ([endComponents minute]>0)
-    {
-        [format setDateFormat:@"hh:mm a"];
-        endDatePart2 = [format stringFromDate:dbEndDate];
-    }
-    else
-    {
-        [format setDateFormat:@"ha"];
-        endDatePart2 = [format stringFromDate:dbEndDate];
-    }
+    [format setDateFormat:@"hh:mm a"];
+    endDatePart2 = [format stringFromDate:dbEndDate];
+    
     
     return [NSString stringWithFormat:@"%@ \n %@ - %@",startDatePart1,startDatePart2,endDatePart2];
 }

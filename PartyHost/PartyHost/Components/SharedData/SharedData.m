@@ -248,7 +248,7 @@ static SharedData *sharedInstance = nil;
     */
     
     NSString *newUrl = [url stringByReplacingOccurrencesOfString:@"_original.png" withString:@"_540.jpg"];
-    return [NSString stringWithFormat:@"%@/image?url=%@",PHBaseURL,newUrl];
+    return newUrl;
 }
 
 -(NSString *)profileImg:(NSString *)fb_id
@@ -529,8 +529,6 @@ static SharedData *sharedInstance = nil;
     manager.requestSerializer = [AFJSONRequestSerializer serializer];
     manager.responseSerializer = [AFJSONResponseSerializer serializer];
     
-    NSLog(@"token: %@", self.ph_token);
-    
     [manager.requestSerializer setValue:self.ph_token forHTTPHeaderField:@"Authorization"];
     
 //    AFSecurityPolicy *policy = [AFSecurityPolicy policyWithPinningMode:AFSSLPinningModeCertificate];
@@ -712,9 +710,9 @@ static SharedData *sharedInstance = nil;
             self.gender_interest = ([self.gender isEqualToString:@"female"])?@"male":@"female";
         };
         
-        self.distance = dict[@"distance"];
-        self.from_age = dict[@"from_age"];
-        self.to_age = dict[@"to_age"];
+        self.distance = (dict[@"distance"])?:self.distance;
+        self.from_age = (dict[@"from_age"])?:self.from_age;
+        self.to_age = (dict[@"to_age"])?:self.to_age;
         
         self.notification_feed = [dict[@"notifications"][@"feed"] boolValue];
         self.notification_messages = [dict[@"notifications"][@"chat"] boolValue];
