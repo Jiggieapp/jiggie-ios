@@ -16,6 +16,7 @@
 #import "UserManager.h"
 #import "AnalyticManager.h"
 #import "SVProgressHUD.h"
+#import "MSRangeSlider.h"
 
 #define POLL_SECONDS 25
 #define CARD_VIEW_TAG 1900
@@ -624,10 +625,9 @@
     self.isFilterChanges = YES;
 }
 
-- (void)socialFilterView:(SocialFilterView *)view ageDidValueChanged:(UISlider *)sender {
-    self.sharedData.from_age = [NSString stringWithFormat:@"%d", (int)roundf(sender.value)];
-    self.sharedData.to_age = self.sharedData.from_age;
-    self.isFilterChanges = YES;
+- (void)socialFilterView:(SocialFilterView *)view ageDidValueChanged:(MSRangeSlider *)sender {
+    self.sharedData.from_age = [NSString stringWithFormat:@"%d", (int)roundf(sender.fromValue)];
+    self.sharedData.to_age = [NSString stringWithFormat:@"%d", (int)roundf(sender.toValue)];
 }
 
 #pragma mark - UIAlertViewDelegate

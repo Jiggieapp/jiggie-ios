@@ -22,7 +22,7 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="10" minValue="0.0" maxValue="160" translatesAutoresizingMaskIntoConstraints="NO" id="Osb-km-F8k">
-                        <rect key="frame" x="0.0" y="40" width="320" height="32.5"/>
+                        <rect key="frame" x="0.0" y="35.5" width="320" height="37"/>
                         <color key="tintColor" red="0.062745098039215685" green="0.73333333333333328" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                         <connections>
                             <action selector="sliderDidValueChanged:" destination="KGk-i7-Jjw" eventType="valueChanged" id="CWP-QN-luw"/>
@@ -45,7 +45,7 @@
                     <constraint firstAttribute="topMargin" secondItem="Xxd-t8-kjV" secondAttribute="top" id="37e-Rd-LQN"/>
                     <constraint firstAttribute="bottomMargin" secondItem="Osb-km-F8k" secondAttribute="bottom" constant="0.5" id="73W-KQ-Jux"/>
                     <constraint firstAttribute="trailingMargin" secondItem="Osb-km-F8k" secondAttribute="trailing" constant="-6" id="W76-PE-MQV"/>
-                    <constraint firstItem="Osb-km-F8k" firstAttribute="top" secondItem="sns-Cq-AOi" secondAttribute="bottom" constant="12" id="av9-Qp-Gdx"/>
+                    <constraint firstItem="Osb-km-F8k" firstAttribute="top" secondItem="sns-Cq-AOi" secondAttribute="bottom" constant="8" id="av9-Qp-Gdx"/>
                     <constraint firstItem="Osb-km-F8k" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="-6" id="ciy-E3-xX7"/>
                     <constraint firstAttribute="topMargin" secondItem="sns-Cq-AOi" secondAttribute="top" id="eHp-0b-9cf"/>
                     <constraint firstAttribute="trailingMargin" secondItem="Xxd-t8-kjV" secondAttribute="trailing" constant="-2" id="hKi-zT-Mnc"/>

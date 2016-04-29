@@ -9,11 +9,14 @@
 #import "SocialFilterView.h"
 #import "SocialOptionTableViewCell.h"
 #import "SocialSliderTableViewCell.h"
+#import "SocialMultiSliderTableViewCell.h"
+#import "MSRangeSlider.h"
 
 static NSString *const SocialOptionTableViewCellIdentifier = @"SocialOptionTableViewCellIdentifier";
 static NSString *const SocialSliderTableViewCellIdentifier = @"SocialSliderTableViewCellIdentifier";
+static NSString *const SocialMultiSliderTableViewCellIdentifier = @"SocialMultiSliderTableViewCellIdentifier";
 
-@interface SocialFilterView () <SocialSliderTableViewCellDelegate, UITableViewDataSource, UITableViewDelegate, UIAlertViewDelegate>
+@interface SocialFilterView () <SocialSliderTableViewCellDelegate, SocialMultiSliderTableViewCellDelegate, UITableViewDataSource, UITableViewDelegate, UIAlertViewDelegate>
 
 @property (strong, nonatomic) NSArray *filters;
 @property (strong, nonatomic) SharedData *sharedData;
@@ -36,6 +39,7 @@ static NSString *const SocialSliderTableViewCellIdentifier = @"SocialSliderTable
     [self.tableView setDelegate:self];
     [self.tableView registerNib:[SocialOptionTableViewCell nib] forCellReuseIdentifier:SocialOptionTableViewCellIdentifier];
     [self.tableView registerNib:[SocialSliderTableViewCell nib] forCellReuseIdentifier:SocialSliderTableViewCellIdentifier];
+    [self.tableView registerNib:[SocialMultiSliderTableViewCell nib] forCellReuseIdentifier:SocialMultiSliderTableViewCellIdentifier];
     
     self.sharedData = [SharedData sharedInstance];
 }
@@ -58,8 +62,10 @@ static NSString *const SocialSliderTableViewCellIdentifier = @"SocialSliderTable
     }
     
     self.filters = @[@{@"Interested in Meeting" : genderInterest},
-                     @{@"Maximum Distance" : @"22 miles"},
-                     @{@"Age" : @"18-32 years old"}];
+                     @{@"Maximum Distance" : self.sharedData.distance},
+                     @{@"Age" : [NSString stringWithFormat:@"%@-%@ years old",
+                                 self.sharedData.from_age,
+                                 self.sharedData.to_age]}];
     [self.tableView reloadData];
 }
 
@@ -135,30 +141,40 @@ static NSString *const SocialSliderTableViewCellIdentifier = @"SocialSliderTable
         [optionCell.detailLabel setText:filter.allValues.firstObject];
         
         cell = optionCell;
-    } else {
+    } else if (indexPath.row == 1) {
         SocialSliderTableViewCell *sliderCell = [tableView dequeueReusableCellWithIdentifier:SocialSliderTableViewCellIdentifier];
         if (cell == nil) {
             cell = [[SocialSliderTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:SocialSliderTableViewCellIdentifier];
-            
-            if (!sliderCell.delegate) {
-                sliderCell.delegate = self;
-            }
+        }
+        
+        if (!sliderCell.delegate) {
+            sliderCell.delegate = self;
         }
         
         [sliderCell setSelectionStyle:UITableViewCellSelectionStyleNone];
         [sliderCell.titleLabel setText:filter.allKeys.firstObject];
+        [sliderCell.slider setMinimumValue:0];
+        [sliderCell.slider setMaximumValue:160];
+        [sliderCell.slider setValue:[self.sharedData.distance intValue]];
+        [sliderCell.detailLabel setText:[NSString stringWithFormat:@"%@ KM", self.sharedData.distance]];
         
-        if ([sliderCell.titleLabel.text isEqualToString:@"Age"]) {
-            [sliderCell.slider setMinimumValue:18];
-            [sliderCell.slider setMaximumValue:60];
-            [sliderCell.slider setValue:[self.sharedData.from_age intValue]];
-            [sliderCell.detailLabel setText:[NSString stringWithFormat:@"%d years old", (int)roundf(sliderCell.slider.value)]];
-        } else {
-            [sliderCell.slider setMinimumValue:0];
-            [sliderCell.slider setMaximumValue:160];
-            [sliderCell.slider setValue:[self.sharedData.distance intValue]];
-            [sliderCell.detailLabel setText:[NSString stringWithFormat:@"%d KM", (int)roundf(sliderCell.slider.value)]];
+        cell = sliderCell;
+    } else {
+        SocialMultiSliderTableViewCell *sliderCell = [tableView dequeueReusableCellWithIdentifier:SocialMultiSliderTableViewCellIdentifier];
+        if (cell == nil) {
+            cell = [[SocialMultiSliderTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:SocialMultiSliderTableViewCellIdentifier];
         }
+
+        if (!sliderCell.delegate) {
+            sliderCell.delegate = self;
+        }
+        
+        [sliderCell setSelectionStyle:UITableViewCellSelectionStyleNone];
+        [sliderCell.titleLabel setText:filter.allKeys.firstObject];
+        [sliderCell.detailLabel setText:[NSString stringWithFormat:@"%@ - %@ years old",
+                                         self.sharedData.from_age, self.sharedData.to_age]];
+        [sliderCell.slider setFromValue:[self.sharedData.from_age floatValue]];
+        [sliderCell.slider setToValue:[self.sharedData.to_age floatValue]];
         
         cell = sliderCell;
     }
@@ -213,20 +229,20 @@ static NSString *const SocialSliderTableViewCellIdentifier = @"SocialSliderTable
 
 #pragma mark - SocialSliderTableViewCellDelegate
 - (void)socialSliderTableViewCell:(SocialSliderTableViewCell *)cell sliderDidValueChanged:(UISlider *)slider {
-    if ([cell.titleLabel.text isEqualToString:@"Age"]) {
-        [cell.detailLabel setText:[NSString stringWithFormat:@"%d years old", (int)roundf(slider.value)]];
-        
-        if (self.delegate) {
-            [self.delegate socialFilterView:self ageDidValueChanged:slider];
-        }
-    } else {
-        [cell.detailLabel setText:[NSString stringWithFormat:@"%d KM", (int)roundf(slider.value)]];
+    [cell.detailLabel setText:[NSString stringWithFormat:@"%d KM", (int)roundf(slider.value)]];
 
-        if (self.delegate) {
-            [self.delegate socialFilterView:self distanceDidValueChanged:slider];
-        }
+    if (self.delegate) {
+        [self.delegate socialFilterView:self distanceDidValueChanged:slider];
     }
+}
+
+#pragma mark - SocialMultiSliderTableViewCellDelegate
+- (void)socialMultiSliderTableViewCell:(SocialMultiSliderTableViewCell *)cell sliderDidValueChanged:(MSRangeSlider *)slider {
+    [cell.detailLabel setText:[NSString stringWithFormat:@"%d - %d years old", (int)roundf(slider.fromValue), (int)roundf(slider.toValue)]];
     
+    if (self.delegate) {
+        [self.delegate socialFilterView:self ageDidValueChanged:slider];
+    }
 }
 
 @end

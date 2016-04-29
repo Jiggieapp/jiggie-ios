@@ -661,7 +661,7 @@ static SharedData *sharedInstance = nil;
                          @"gender_interest": self.gender_interest,
                          @"distance": self.distance,
                          @"from_age": self.from_age,
-                         @"to_age": self.from_age, // haehae
+                         @"to_age": self.to_age,
                          @"feed": [NSNumber numberWithInt:(self.notification_feed)?1:0],
                          @"chat": [NSNumber numberWithInt:(self.notification_messages)?1:0],
                          @"location": [NSNumber numberWithInt:(self.location_on)?1:0],

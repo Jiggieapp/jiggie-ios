@@ -46,6 +46,10 @@
 		938CE7DF1CD1C91700ADDD4C /* SocialOptionTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 938CE7DD1CD1C91700ADDD4C /* SocialOptionTableViewCell.xib */; };
 		938CE7E31CD1CAD200ADDD4C /* SocialSliderTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 938CE7E11CD1CAD200ADDD4C /* SocialSliderTableViewCell.m */; };
 		938CE7E41CD1CAD200ADDD4C /* SocialSliderTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 938CE7E21CD1CAD200ADDD4C /* SocialSliderTableViewCell.xib */; };
+		938CE8041CD3184300ADDD4C /* SocialMultiSliderTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 938CE8021CD3184300ADDD4C /* SocialMultiSliderTableViewCell.m */; };
+		938CE8051CD3184300ADDD4C /* SocialMultiSliderTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 938CE8031CD3184300ADDD4C /* SocialMultiSliderTableViewCell.xib */; };
+		938CE80B1CD3435700ADDD4C /* MSRangeSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 938CE8081CD3435700ADDD4C /* MSRangeSlider.m */; };
+		938CE80C1CD3435700ADDD4C /* UIControl+HitTestEdgeInsets.m in Sources */ = {isa = PBXBuildFile; fileRef = 938CE80A1CD3435700ADDD4C /* UIControl+HitTestEdgeInsets.m */; };
 		9A85A5531CC8B89300C8818B /* JGKeyboardNotificationHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A85A5521CC8B89300C8818B /* JGKeyboardNotificationHelper.m */; };
 		9AF3EEFF1CC9FA9E00CA9497 /* LocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AF3EEFE1CC9FA9E00CA9497 /* LocationManager.m */; };
 		CB3EB6C81B459177003F658F /* App.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CB3EB6C71B459177003F658F /* App.xcassets */; };
@@ -431,6 +435,13 @@
 		938CE7E01CD1CAD200ADDD4C /* SocialSliderTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SocialSliderTableViewCell.h; sourceTree = "<group>"; };
 		938CE7E11CD1CAD200ADDD4C /* SocialSliderTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SocialSliderTableViewCell.m; sourceTree = "<group>"; };
 		938CE7E21CD1CAD200ADDD4C /* SocialSliderTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SocialSliderTableViewCell.xib; sourceTree = "<group>"; };
+		938CE8011CD3184300ADDD4C /* SocialMultiSliderTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SocialMultiSliderTableViewCell.h; sourceTree = "<group>"; };
+		938CE8021CD3184300ADDD4C /* SocialMultiSliderTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SocialMultiSliderTableViewCell.m; sourceTree = "<group>"; };
+		938CE8031CD3184300ADDD4C /* SocialMultiSliderTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SocialMultiSliderTableViewCell.xib; sourceTree = "<group>"; };
+		938CE8071CD3435700ADDD4C /* MSRangeSlider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSRangeSlider.h; sourceTree = "<group>"; };
+		938CE8081CD3435700ADDD4C /* MSRangeSlider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSRangeSlider.m; sourceTree = "<group>"; };
+		938CE8091CD3435700ADDD4C /* UIControl+HitTestEdgeInsets.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIControl+HitTestEdgeInsets.h"; sourceTree = "<group>"; };
+		938CE80A1CD3435700ADDD4C /* UIControl+HitTestEdgeInsets.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIControl+HitTestEdgeInsets.m"; sourceTree = "<group>"; };
 		9A85A5511CC8B89300C8818B /* JGKeyboardNotificationHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JGKeyboardNotificationHelper.h; sourceTree = "<group>"; };
 		9A85A5521CC8B89300C8818B /* JGKeyboardNotificationHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JGKeyboardNotificationHelper.m; sourceTree = "<group>"; };
 		9AF3EEFD1CC9FA9E00CA9497 /* LocationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationManager.h; sourceTree = "<group>"; };
@@ -1125,6 +1136,17 @@
 			path = extobjc;
 			sourceTree = "<group>";
 		};
+		938CE8061CD3435600ADDD4C /* MSRangeSlider */ = {
+			isa = PBXGroup;
+			children = (
+				938CE8071CD3435700ADDD4C /* MSRangeSlider.h */,
+				938CE8081CD3435700ADDD4C /* MSRangeSlider.m */,
+				938CE8091CD3435700ADDD4C /* UIControl+HitTestEdgeInsets.h */,
+				938CE80A1CD3435700ADDD4C /* UIControl+HitTestEdgeInsets.m */,
+			);
+			path = MSRangeSlider;
+			sourceTree = "<group>";
+		};
 		9AF3EEFC1CC9FA9E00CA9497 /* Location */ = {
 			isa = PBXGroup;
 			children = (
@@ -1306,6 +1328,7 @@
 		DAABAFE81C1FC6F8004DDCFA /* ExtraLibraries */ = {
 			isa = PBXGroup;
 			children = (
+				938CE8061CD3435600ADDD4C /* MSRangeSlider */,
 				938CE79C1CCF627D00ADDD4C /* Mantle */,
 				938CE77D1CCE2D2C00ADDD4C /* ZLSwipeableView */,
 				DA9B108A1CB4D7B7001FB798 /* MWFeedParser */,
@@ -1492,6 +1515,9 @@
 				938CE7E01CD1CAD200ADDD4C /* SocialSliderTableViewCell.h */,
 				938CE7E11CD1CAD200ADDD4C /* SocialSliderTableViewCell.m */,
 				938CE7E21CD1CAD200ADDD4C /* SocialSliderTableViewCell.xib */,
+				938CE8011CD3184300ADDD4C /* SocialMultiSliderTableViewCell.h */,
+				938CE8021CD3184300ADDD4C /* SocialMultiSliderTableViewCell.m */,
+				938CE8031CD3184300ADDD4C /* SocialMultiSliderTableViewCell.xib */,
 			);
 			path = Feed;
 			sourceTree = "<group>";
@@ -2345,6 +2371,7 @@
 				DAABB0E21C1FD50E004DDCFA /* GenericOverlay.xib in Resources */,
 				DAABB2E61C1FF993004DDCFA /* FaktPro-SemiBold.ttf in Resources */,
 				DAABB2971C1FF5AE004DDCFA /* MPCloseBtn@2x.png in Resources */,
+				938CE8051CD3184300ADDD4C /* SocialMultiSliderTableViewCell.xib in Resources */,
 				DAABB0E91C1FD50E004DDCFA /* ChatPopup.xib in Resources */,
 				DAABB0EF1C1FD50E004DDCFA /* FeedPopup.xib in Resources */,
 				938CE7E41CD1CAD200ADDD4C /* SocialSliderTableViewCell.xib in Resources */,
@@ -2419,6 +2446,7 @@
 				938CE7CA1CCF627D00ADDD4C /* MTLValueTransformer.m in Sources */,
 				DA5ED6181C92975100004C7E /* VTItemDetails.m in Sources */,
 				DAABB2BA1C1FF5AE004DDCFA /* MPVariant.m in Sources */,
+				938CE80B1CD3435700ADDD4C /* MSRangeSlider.m in Sources */,
 				DA5ED6191C92975100004C7E /* VTTransactionDetails.m in Sources */,
 				DAABB2821C1FF5AE004DDCFA /* MPABTestDesignerChangeResponseMessage.m in Sources */,
 				DAABB0B81C1FD50E004DDCFA /* BookTableDetailsCell.m in Sources */,
@@ -2565,6 +2593,7 @@
 				DAABB2B91C1FF5AE004DDCFA /* MPUITableViewBinding.m in Sources */,
 				938CE7961CCE2D2C00ADDD4C /* Scheduler.m in Sources */,
 				DA47B22A1C3A8553001B4476 /* AFNetworkActivityLogger.m in Sources */,
+				938CE8041CD3184300ADDD4C /* SocialMultiSliderTableViewCell.m in Sources */,
 				DAABB0E11C1FD50E004DDCFA /* Settings.m in Sources */,
 				DAABB2561C1FF5AE004DDCFA /* AFHTTPSessionManager.m in Sources */,
 				DA6A7FA71CC755F800A666E8 /* DialCodeListViewController.m in Sources */,
@@ -2580,6 +2609,7 @@
 				DAB3AFA11C29541E00AA7E25 /* Chat.m in Sources */,
 				DAABB1151C1FF0F3004DDCFA /* UIFont+PH.m in Sources */,
 				DAABB2CD1C1FF5AE004DDCFA /* TSHit.m in Sources */,
+				938CE80C1CD3435700ADDD4C /* UIControl+HitTestEdgeInsets.m in Sources */,
 				DAABB2CA1C1FF5AE004DDCFA /* TSCore.m in Sources */,
 				DAABB0C71C1FD50E004DDCFA /* EventsSummary.m in Sources */,
 				DAABB2A71C1FF5AE004DDCFA /* MPPassThroughValueTransformer.m in Sources */,
