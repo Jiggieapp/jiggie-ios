@@ -135,7 +135,6 @@
         if([dict[@"photos"] count]>0)
         {
             NSString *picURL = [dict[@"photos"] objectAtIndex:0];
-            picURL = [self.sharedData picURL:picURL];
             [cell.bkImage loadImage:picURL defaultImageNamed:@"nightclub_default"];
         }
     }else{

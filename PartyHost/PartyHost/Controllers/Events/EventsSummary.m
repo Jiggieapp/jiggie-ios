@@ -49,28 +49,6 @@
     tmpPurpleView.backgroundColor = [UIColor phPurpleColor];
     [self.mainScroll addSubview:tmpPurpleView];
     
-    //Nav Bar
-    self.navBar = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.sharedData.screenWidth, 60)];
-    self.navBar.backgroundColor = [UIColor phPurpleColor];
-    [self addSubview:self.navBar];
-    
-    self.btnBack = [UIButton buttonWithType:UIButtonTypeCustom];
-    self.btnBack.frame = CGRectMake(0, 20, 40, 40);
-    [self.btnBack setImage:[UIImage imageNamed:@"nav_back"] forState:UIControlStateNormal];
-    [self.btnBack setImageEdgeInsets:UIEdgeInsetsMake(8, 14, 8, 14)];
-    [self.btnBack addTarget:self action:@selector(goBack) forControlEvents:UIControlEventTouchUpInside];
-    [self.navBar addSubview:self.btnBack];
-    
-    self.title = [[UILabel alloc] initWithFrame:CGRectMake(40, 20, self.sharedData.screenWidth - 80, 40)];
-    self.title.textAlignment = NSTextAlignmentCenter;
-    self.title.textColor = [UIColor whiteColor];
-    self.title.adjustsFontSizeToFitWidth = YES;
-    self.title.font = [UIFont phBlond:15];
-    [self.navBar addSubview:self.title];
-    
-    // hides navbar
-    [self showNavBar:NO withAnimation:NO];
-    
     //Inner bg
     self.innerBg = [[UIView alloc] init];
     self.innerBg.backgroundColor = [UIColor whiteColor];
@@ -279,6 +257,28 @@
     self.emptyView.backgroundColor = [UIColor whiteColor];
     [self addSubview:self.emptyView];
     
+    //Nav Bar
+    self.navBar = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.sharedData.screenWidth, 60)];
+    self.navBar.backgroundColor = [UIColor phPurpleColor];
+    [self addSubview:self.navBar];
+    
+    self.btnBack = [UIButton buttonWithType:UIButtonTypeCustom];
+    self.btnBack.frame = CGRectMake(0, 20, 40, 40);
+    [self.btnBack setImage:[UIImage imageNamed:@"nav_back"] forState:UIControlStateNormal];
+    [self.btnBack setImageEdgeInsets:UIEdgeInsetsMake(8, 14, 8, 14)];
+    [self.btnBack addTarget:self action:@selector(goBack) forControlEvents:UIControlEventTouchUpInside];
+    [self.navBar addSubview:self.btnBack];
+    
+    self.title = [[UILabel alloc] initWithFrame:CGRectMake(40, 20, self.sharedData.screenWidth - 80, 40)];
+    self.title.textAlignment = NSTextAlignmentCenter;
+    self.title.textColor = [UIColor whiteColor];
+    self.title.adjustsFontSizeToFitWidth = YES;
+    self.title.font = [UIFont phBlond:15];
+    [self.navBar addSubview:self.title];
+    
+    // hides navbar
+    [self showNavBar:NO withAnimation:NO];
+    
     //version_3.0
     return self;
 }
@@ -291,9 +291,6 @@
     if(self.event_id!=nil) lastEventId = [NSString stringWithString:self.event_id];
     
     [self.emptyView setMode:@"load"];
-    
-    //Add to view count if guest
-    [self addViewCount];
     
     //Clear NavBar
     self.title.text = @"";
@@ -650,7 +647,6 @@
     PHImage *img = [[PHImage alloc] initWithFrame:CGRectMake(0, 0, picSize.width, picSize.height)];
     img.contentMode = UIViewContentModeScaleAspectFill;
     NSString *picURL = self.cEvent.photo;
-    picURL = [self.sharedData picURL:picURL];
     img.showLoading = YES;
     [img loadImage:picURL defaultImageNamed:nil];
     [imgCon addSubview:img];
@@ -1061,6 +1057,13 @@
         [imgCon addSubview:img];
         [self.picScroll addSubview:imgCon];
     }
+    
+    if (photos.count > 1) {
+        self.pControl.hidden = NO;
+    } else {
+        self.pControl.hidden = YES;
+    }
+    
     self.picScroll.contentSize = CGSizeMake([photos count] * picSize.width, picSize.height);
     
     //Map
@@ -1158,23 +1161,6 @@
     MKMapItem *endingItem = [[MKMapItem alloc] initWithPlacemark:placemark];
     NSMutableDictionary *launchOptions = [[NSMutableDictionary alloc] init];
     [endingItem openInMapsWithLaunchOptions:launchOptions];
-}
-
-- (void)addViewCount {
-    if (!self.event_id || self.event_id == nil) {
-        return;
-    }
-    
-    AFHTTPRequestOperationManager *manager = [self.sharedData getOperationManager];
-    
-    NSString *url = [Constants guestEventsViewedURL:self.event_id fb_id:self.sharedData.fb_id];
-    
-    [manager GET:url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject)
-     {
-         
-     } failure:^(AFHTTPRequestOperation *operation, NSError *error)
-     {
-     }];
 }
 
 - (void)postLikeEvent:(BOOL)isLike {

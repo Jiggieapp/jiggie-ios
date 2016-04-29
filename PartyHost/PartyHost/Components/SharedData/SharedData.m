@@ -245,7 +245,7 @@ static SharedData *sharedInstance = nil;
     */
     
     NSString *newUrl = [url stringByReplacingOccurrencesOfString:@"_original.png" withString:@"_540.jpg"];
-    return [NSString stringWithFormat:@"%@/image?url=%@",PHBaseURL,newUrl];
+    return newUrl;
 }
 
 -(NSString *)profileImg:(NSString *)fb_id
@@ -525,8 +525,6 @@ static SharedData *sharedInstance = nil;
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     manager.requestSerializer = [AFJSONRequestSerializer serializer];
     manager.responseSerializer = [AFJSONResponseSerializer serializer];
-    
-    NSLog(@"token: %@", self.ph_token);
     
     [manager.requestSerializer setValue:self.ph_token forHTTPHeaderField:@"Authorization"];
     

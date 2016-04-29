@@ -92,6 +92,12 @@
     
     self.tableView.tableHeaderView = headerView;
     
+    self.emptyView = [[EmptyView alloc] initWithFrame:CGRectMake(0, 0, self.visibleSize.width, self.view.bounds.size.height)];
+    [self.emptyView setData:@"No data found" subtitle:@"Sorry we're having some server issues, please check back in a few minutes." imageNamed:@""];
+    [self.emptyView setMode:@"load"];
+    [self.emptyView setBackgroundColor:[UIColor whiteColor]];
+    [self.view addSubview:self.emptyView];
+    
     self.navBar = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.visibleSize.width, 60)];
     [self.navBar setBackgroundColor:[UIColor phPurpleColor]];
     
@@ -120,12 +126,6 @@
     
     // hides navbar
     [self showNavBar:NO withAnimation:NO];
-
-    self.emptyView = [[EmptyView alloc] initWithFrame:CGRectMake(0, 0, self.visibleSize.width, self.view.bounds.size.height)];
-    [self.emptyView setData:@"No data found" subtitle:@"Sorry we're having some server issues, please check back in a few minutes." imageNamed:@""];
-    [self.emptyView setMode:@"load"];
-    [self.emptyView setBackgroundColor:[UIColor whiteColor]];
-    [self.view addSubview:self.emptyView];
     
 }
 
@@ -216,6 +216,7 @@
         NSInteger responseStatusCode = operation.response.statusCode;
         if (responseStatusCode != 200) {
             [self.emptyView setMode:@"empty"];
+            [self showNavBar:YES withAnimation:YES];
             return;
         }
         
@@ -321,6 +322,7 @@
             [self reloadLoginWithFBToken:@"list"];
         } else {
             [self.emptyView setMode:@"empty"];
+            [self showNavBar:YES withAnimation:YES];
         }
     }];
 }

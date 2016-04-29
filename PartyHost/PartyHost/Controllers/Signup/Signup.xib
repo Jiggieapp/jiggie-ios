@@ -1,15 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9531" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
     </dependencies>
     <customFonts key="customFonts">
-        <mutableArray key="FaktPro-Blond.ttf">
-            <string>FaktPro-Blond</string>
-        </mutableArray>
-        <mutableArray key="FaktPro-SemiBold.ttf">
-            <string>FaktPro-SemiBold</string>
+        <mutableArray key="Lato-Regular.ttf">
+            <string>Lato-Regular</string>
         </mutableArray>
     </customFonts>
     <objects>
@@ -28,8 +25,19 @@
                 <scrollView autoresizesSubviews="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" pagingEnabled="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GE9-ho-wR8">
                     <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                 </scrollView>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="f6A-vm-2JO">
+                    <rect key="frame" x="271" y="28" width="49" height="40"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="49" id="8cb-k2-mDG"/>
+                        <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="40" id="Nd7-Nf-WUU"/>
+                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="49" id="ah8-QF-5X4"/>
+                        <constraint firstAttribute="height" constant="40" id="vDo-fM-7DZ"/>
+                    </constraints>
+                    <inset key="imageEdgeInsets" minX="10" minY="10" maxX="10" maxY="10"/>
+                </button>
                 <pageControl opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="3" translatesAutoresizingMaskIntoConstraints="NO" id="8zU-0c-wGZ">
-                    <rect key="frame" x="140" y="420" width="39" height="44"/>
+                    <rect key="frame" x="140" y="501" width="39" height="44"/>
+                    <color key="tintColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="44" id="s6c-Hw-tdm"/>
                     </constraints>
@@ -37,53 +45,52 @@
                         <action selector="pageControlChanged:" destination="iN0-l3-epB" eventType="valueChanged" id="Ap3-M0-BfR"/>
                     </connections>
                 </pageControl>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="We don't post anything to Facebook" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2Pa-r7-9r1">
-                    <rect key="frame" x="45" y="472" width="240" height="14"/>
-                    <fontDescription key="fontDescription" name="FaktPro-Blond" family="Fakt Pro" pointSize="14"/>
-                    <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
-                    <nil key="highlightedColor"/>
-                </label>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="e70-UH-ZN0">
-                    <rect key="frame" x="0.0" y="510" width="320" height="58"/>
-                    <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.5" colorSpace="calibratedRGB"/>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EXH-NB-Z0F">
+                    <rect key="frame" x="0.0" y="504" width="320" height="64"/>
                     <constraints>
-                        <constraint firstAttribute="height" constant="58" id="u5A-bb-xuR"/>
+                        <constraint firstAttribute="height" constant="64" id="eJp-7P-l9Z"/>
                     </constraints>
-                    <fontDescription key="fontDescription" name="FaktPro-SemiBold" family="Fakt Pro" pointSize="18"/>
-                    <inset key="contentEdgeInsets" minX="0.0" minY="4" maxX="0.0" maxY="0.0"/>
-                    <state key="normal" title="SIGN IN WITH FACEBOOK">
-                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                    </state>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fZh-9s-U8h">
+                    <rect key="frame" x="246" y="504" width="58" height="39"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="39" id="eZd-Np-KOM"/>
+                        <constraint firstAttribute="width" constant="58" id="iyx-Vv-sIs"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="14"/>
+                    <state key="normal" title="SKIP"/>
                 </button>
             </subviews>
             <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
             <constraints>
-                <constraint firstItem="2Pa-r7-9r1" firstAttribute="top" secondItem="8zU-0c-wGZ" secondAttribute="bottom" constant="8" id="3Vi-6b-s0w"/>
-                <constraint firstItem="e70-UH-ZN0" firstAttribute="top" secondItem="2Pa-r7-9r1" secondAttribute="bottom" constant="24" id="4NR-us-v4P"/>
                 <constraint firstAttribute="trailing" secondItem="GE9-ho-wR8" secondAttribute="trailing" id="65i-Oi-Obh"/>
-                <constraint firstAttribute="trailing" secondItem="2Pa-r7-9r1" secondAttribute="trailing" constant="35" id="6gg-0r-hcb"/>
-                <constraint firstItem="8zU-0c-wGZ" firstAttribute="centerX" secondItem="e70-UH-ZN0" secondAttribute="centerX" id="CiG-sw-ZMW"/>
                 <constraint firstAttribute="bottom" secondItem="GE9-ho-wR8" secondAttribute="bottom" id="Di0-Iq-dVh"/>
                 <constraint firstItem="oe5-ye-uro" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="DjB-9o-mgm"/>
                 <constraint firstAttribute="bottom" secondItem="Lpf-77-m5J" secondAttribute="bottom" id="DzD-wt-QdI"/>
-                <constraint firstItem="2Pa-r7-9r1" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="45" id="Kqz-lV-9XZ"/>
+                <constraint firstAttribute="bottom" secondItem="fZh-9s-U8h" secondAttribute="bottom" constant="25" id="IL5-RC-w8N"/>
+                <constraint firstItem="EXH-NB-Z0F" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="KFG-Sa-TOn"/>
+                <constraint firstAttribute="trailing" secondItem="fZh-9s-U8h" secondAttribute="trailing" constant="16" id="L0k-sl-WiI"/>
                 <constraint firstItem="oe5-ye-uro" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="Mlx-1D-uRg"/>
+                <constraint firstItem="f6A-vm-2JO" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="28" id="SKs-rQ-QQK"/>
                 <constraint firstItem="GE9-ho-wR8" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="ZWu-yx-Uzf"/>
                 <constraint firstItem="Lpf-77-m5J" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="akV-XB-IN9"/>
+                <constraint firstAttribute="trailing" secondItem="EXH-NB-Z0F" secondAttribute="trailing" id="b1V-pe-HTs"/>
                 <constraint firstItem="Lpf-77-m5J" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="cAZ-ux-JFe"/>
+                <constraint firstAttribute="trailing" secondItem="f6A-vm-2JO" secondAttribute="trailing" id="eV4-jh-aX2"/>
                 <constraint firstAttribute="trailing" secondItem="Lpf-77-m5J" secondAttribute="trailing" id="eXB-cZ-hZe"/>
                 <constraint firstAttribute="trailing" secondItem="oe5-ye-uro" secondAttribute="trailing" id="gfD-Am-sBD"/>
-                <constraint firstItem="e70-UH-ZN0" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="lqh-sP-Sed"/>
-                <constraint firstAttribute="trailing" secondItem="e70-UH-ZN0" secondAttribute="trailing" id="nxN-t8-vVU"/>
-                <constraint firstAttribute="bottom" secondItem="e70-UH-ZN0" secondAttribute="bottom" id="p8T-9a-XHW"/>
+                <constraint firstAttribute="bottom" secondItem="8zU-0c-wGZ" secondAttribute="bottom" constant="22.5" id="iEy-K1-uP2"/>
                 <constraint firstItem="GE9-ho-wR8" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="qbV-pZ-41l"/>
+                <constraint firstItem="8zU-0c-wGZ" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="trw-4A-rNe"/>
                 <constraint firstAttribute="bottom" secondItem="oe5-ye-uro" secondAttribute="bottom" id="v1s-hL-rOU"/>
+                <constraint firstAttribute="bottom" secondItem="EXH-NB-Z0F" secondAttribute="bottom" id="xaC-Rs-rFn"/>
             </constraints>
             <connections>
                 <outlet property="backgroundImage1" destination="oe5-ye-uro" id="MNl-kg-9Eh"/>
                 <outlet property="backgroundImage2" destination="Lpf-77-m5J" id="wK0-BF-MAq"/>
-                <outlet property="buttonFacebook" destination="e70-UH-ZN0" id="cFH-cW-L6Y"/>
+                <outlet property="buttonFacebook" destination="EXH-NB-Z0F" id="oRF-qk-oV4"/>
+                <outlet property="buttonHelp" destination="f6A-vm-2JO" id="dlD-Ed-dvC"/>
+                <outlet property="buttonNext" destination="fZh-9s-U8h" id="1Q3-fm-Z6o"/>
                 <outlet property="pageControl" destination="8zU-0c-wGZ" id="Zfg-tg-aI9"/>
                 <outlet property="scrollView" destination="GE9-ho-wR8" id="G7l-aj-EJ2"/>
             </connections>
@@ -91,7 +98,7 @@
         </view>
     </objects>
     <resources>
-        <image name="Signup1Bg" width="750" height="1334"/>
-        <image name="Signup2Bg" width="750" height="1334"/>
+        <image name="Signup1Bg" width="375" height="666"/>
+        <image name="Signup2Bg" width="375" height="666"/>
     </resources>
 </document>

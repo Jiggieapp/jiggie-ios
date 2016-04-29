@@ -523,7 +523,6 @@
              UIImage *shareImage = [UIImage imageNamed:@"splashLogoWhite"];
              if (self.sharedData.cHostVenuePicURL && self.sharedData.cHostVenuePicURL.length > 0) {
                  NSString *picURL = self.sharedData.cHostVenuePicURL;
-                 picURL = [self.sharedData picURL:picURL];
                  if([self.sharedData.imagesDict objectForKey:picURL] && [[self.sharedData.imagesDict objectForKey:picURL] isKindOfClass:[UIImage class]]) {
                      shareImage = [self.sharedData.imagesDict objectForKey:picURL];
                  }

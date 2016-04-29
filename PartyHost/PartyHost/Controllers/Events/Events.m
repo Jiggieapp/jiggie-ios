@@ -705,8 +705,8 @@
     int count = 0;
     for (Event *event in [self.fetchedResultsController fetchedObjects]) {
         if (event.photo && event.photo!=nil) {
-            NSString *picURL = [self.sharedData picURL:event.photo];
-            [self.sharedData loadTimeImage:picURL withTimeOut:count * .25];
+            NSString *picURl = [self.sharedData picURL:event.photo];
+            [self.sharedData loadTimeImage:picURl withTimeOut:count * .25];
         }
         count++;
     }
