@@ -15,6 +15,7 @@
 - (void)socialFilterView:(SocialFilterView *)view interestDidValueChanged:(NSString *)string;
 - (void)socialFilterView:(SocialFilterView *)view discoverDidValueChanged:(UISwitch *)sender;
 - (void)socialFilterView:(SocialFilterView *)view distanceDidValueChanged:(UISlider *)sender;
+- (void)socialFilterView:(SocialFilterView *)view ageDidValueChanged:(UISlider *)sender;
 
 @end
 

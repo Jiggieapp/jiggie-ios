@@ -32,7 +32,6 @@ static NSString *const SocialSliderTableViewCellIdentifier = @"SocialSliderTable
     self.contentView.layer.cornerRadius = 6.0f;
     self.backgroundColor = [UIColor clearColor];
     
-    [self.tableView setTableFooterView:[UIView new]];
     [self.tableView setDataSource:self];
     [self.tableView setDelegate:self];
     [self.tableView registerNib:[SocialOptionTableViewCell nib] forCellReuseIdentifier:SocialOptionTableViewCellIdentifier];
@@ -148,7 +147,18 @@ static NSString *const SocialSliderTableViewCellIdentifier = @"SocialSliderTable
         
         [sliderCell setSelectionStyle:UITableViewCellSelectionStyleNone];
         [sliderCell.titleLabel setText:filter.allKeys.firstObject];
-        [sliderCell.detailLabel setText:filter.allValues.firstObject];
+        
+        if ([sliderCell.titleLabel.text isEqualToString:@"Age"]) {
+            [sliderCell.slider setMinimumValue:18];
+            [sliderCell.slider setMaximumValue:60];
+            [sliderCell.slider setValue:[self.sharedData.from_age intValue]];
+            [sliderCell.detailLabel setText:[NSString stringWithFormat:@"%d years old", (int)roundf(sliderCell.slider.value)]];
+        } else {
+            [sliderCell.slider setMinimumValue:0];
+            [sliderCell.slider setMaximumValue:160];
+            [sliderCell.slider setValue:[self.sharedData.distance intValue]];
+            [sliderCell.detailLabel setText:[NSString stringWithFormat:@"%d KM", (int)roundf(sliderCell.slider.value)]];
+        }
         
         cell = sliderCell;
     }
@@ -157,6 +167,10 @@ static NSString *const SocialSliderTableViewCellIdentifier = @"SocialSliderTable
 }
 
 #pragma mark - UITableViewDelegate
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
+    return [UIView new];
+}
+
 - (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath {
     return 50;
 }
@@ -199,10 +213,20 @@ static NSString *const SocialSliderTableViewCellIdentifier = @"SocialSliderTable
 
 #pragma mark - SocialSliderTableViewCellDelegate
 - (void)socialSliderTableViewCell:(SocialSliderTableViewCell *)cell sliderDidValueChanged:(UISlider *)slider {
-    [cell.detailLabel setText:[NSString stringWithFormat:@"%d KM", (int)roundf(slider.value)]];
-    if (self.delegate) {
-        [self.delegate socialFilterView:self distanceDidValueChanged:slider];
+    if ([cell.titleLabel.text isEqualToString:@"Age"]) {
+        [cell.detailLabel setText:[NSString stringWithFormat:@"%d years old", (int)roundf(slider.value)]];
+        
+        if (self.delegate) {
+            [self.delegate socialFilterView:self ageDidValueChanged:slider];
+        }
+    } else {
+        [cell.detailLabel setText:[NSString stringWithFormat:@"%d KM", (int)roundf(slider.value)]];
+
+        if (self.delegate) {
+            [self.delegate socialFilterView:self distanceDidValueChanged:slider];
+        }
     }
+    
 }
 
 @end

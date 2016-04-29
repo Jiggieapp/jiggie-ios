@@ -13,6 +13,7 @@
 #import "FeedCardView.h"
 #import "ZLSwipeableView.h"
 #import "SocialFilterView.h"
+#import "UserManager.h"
 #import "AnalyticManager.h"
 #import "SVProgressHUD.h"
 
@@ -31,6 +32,9 @@
 @property (strong, nonatomic) UIView *transparentView;
 
 @property (assign, nonatomic) BOOL isSwipedOut;
+
+@property (assign, nonatomic) BOOL isLoadedUserSetting;
+@property (assign, nonatomic) BOOL isFilterChanges;
 
 @end
 
@@ -56,6 +60,9 @@
         [self.discoverImageView setImage:[UIImage imageNamed:@"discover_off"]];
     }
     
+    self.isFilterChanges = NO;
+    
+    // Load cards from file if available
     NSArray *feeds = [Feed unarchiveObject];
     
     if (feeds) {
@@ -67,6 +74,46 @@
         }
     } else {
         [self loadDataAndShowHUD:NO withCompletionHandler:nil];
+    }
+    
+    // Load user setting
+    if (!self.isLoadedUserSetting) {
+        NSDictionary *params = @{ @"fb_id" : self.sharedData.fb_id };
+        NSString *url = [Constants memberSettingsURL];
+        AFHTTPRequestOperationManager *manager = [self.sharedData getOperationManager];
+        
+        [self.emptyView setMode:@"load"];
+        [manager GET:url parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+            NSString *responseString = operation.responseString;
+            NSError *error;
+            NSDictionary *json = (NSDictionary *)[NSJSONSerialization
+                                                  JSONObjectWithData:[responseString dataUsingEncoding:NSUTF8StringEncoding]
+                                                  options:kNilOptions
+                                                  error:&error];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                @try {
+                    NSDictionary *data = [json objectForKey:@"data"];
+                    if (data && data != nil) {
+                        NSDictionary *membersettings = [data objectForKey:@"membersettings"];
+                        if (membersettings && membersettings != nil) {
+                            [UserManager saveUserSetting:membersettings];
+                            [UserManager updateLocalSetting];
+                        }
+                    }
+                }
+                @catch (NSException *exception) {
+                }
+                @finally {
+                }
+                
+                [self.emptyView setMode:@"hide"];
+            });
+            
+        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+            [self.emptyView setMode:@"hide"];
+        }];
+        
+        self.isLoadedUserSetting = YES;
     }
 }
 
@@ -123,7 +170,7 @@
         _filterView.frame = CGRectMake(0,
                                        62,
                                        CGRectGetWidth(self.bounds),
-                                       310);
+                                       304);
     }
     
     return _filterView;
@@ -181,6 +228,23 @@
         if (self.filterView.alpha == .0f) {
             [self.transparentView removeFromSuperview];
             [self.filterView removeFromSuperview];
+            
+            if (self.isFilterChanges) {
+                AFHTTPRequestOperationManager *manager = [self.sharedData getOperationManager];
+                NSString *url = [Constants memberSettingsURL];
+                NSDictionary *params = [self.sharedData createSaveSettingsParams];
+                
+                [SVProgressHUD show];
+                [manager POST:url parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                    [SVProgressHUD dismiss];
+                    if(responseObject[@"response"]) {
+                        [self toggleMatch];
+                        [self.sharedData saveSettingsResponse];
+                    }
+                } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                    [SVProgressHUD dismiss];
+                }];
+            }
         }
     }];
 }
@@ -539,6 +603,8 @@
     } else {
         self.sharedData.matchMe = NO;
     }
+    
+    self.isFilterChanges = YES;
 }
 
 - (void)socialFilterView:(SocialFilterView *)view interestDidValueChanged:(NSString *)genderInterest {
@@ -549,10 +615,19 @@
     } else {
         self.sharedData.gender_interest = @"both";
     }
+    
+    self.isFilterChanges = YES;
 }
 
 - (void)socialFilterView:(SocialFilterView *)view distanceDidValueChanged:(UISlider *)sender {
-    
+    self.sharedData.distance = [NSString stringWithFormat:@"%d", (int)roundf(sender.value)];
+    self.isFilterChanges = YES;
+}
+
+- (void)socialFilterView:(SocialFilterView *)view ageDidValueChanged:(UISlider *)sender {
+    self.sharedData.from_age = [NSString stringWithFormat:@"%d", (int)roundf(sender.value)];
+    self.sharedData.to_age = self.sharedData.from_age;
+    self.isFilterChanges = YES;
 }
 
 #pragma mark - UIAlertViewDelegate

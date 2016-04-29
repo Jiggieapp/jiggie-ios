@@ -279,9 +279,12 @@
 -(void)saveSettingsResponse;
 
 //===================================================================================================//
-//GENDER
+//SOCIAL FILTER
 @property(nonatomic,strong) NSString *gender;
 @property(nonatomic,strong) NSString *gender_interest;
+@property(nonatomic,strong) NSString *distance;
+@property(nonatomic,strong) NSString *from_age;
+@property(nonatomic,strong) NSString *to_age;
 -(BOOL)isGuest;
 -(BOOL)isHost;
 -(BOOL)isMember;
