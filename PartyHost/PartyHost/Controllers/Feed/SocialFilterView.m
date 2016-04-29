@@ -127,59 +127,47 @@ static NSString *const SocialMultiSliderTableViewCellIdentifier = @"SocialMultiS
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell;
     NSDictionary *filter = self.filters[indexPath.row];
     
     if (indexPath.row <= 0) {
-        SocialOptionTableViewCell *optionCell = [tableView dequeueReusableCellWithIdentifier:SocialOptionTableViewCellIdentifier];
-        if (cell == nil) {
-            cell = [[SocialOptionTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:SocialOptionTableViewCellIdentifier];
-        }
+        SocialOptionTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:SocialOptionTableViewCellIdentifier];
         
-        [optionCell setSelectionStyle:UITableViewCellSelectionStyleDefault];
-        [optionCell.titleLabel setText:filter.allKeys.firstObject];
-        [optionCell.detailLabel setText:filter.allValues.firstObject];
-        
-        cell = optionCell;
-    } else if (indexPath.row == 1) {
-        SocialSliderTableViewCell *sliderCell = [tableView dequeueReusableCellWithIdentifier:SocialSliderTableViewCellIdentifier];
-        if (cell == nil) {
-            cell = [[SocialSliderTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:SocialSliderTableViewCellIdentifier];
-        }
-        
-        if (!sliderCell.delegate) {
-            sliderCell.delegate = self;
-        }
-        
-        [sliderCell setSelectionStyle:UITableViewCellSelectionStyleNone];
-        [sliderCell.titleLabel setText:filter.allKeys.firstObject];
-        [sliderCell.slider setMinimumValue:0];
-        [sliderCell.slider setMaximumValue:160];
-        [sliderCell.slider setValue:[self.sharedData.distance intValue]];
-        [sliderCell.detailLabel setText:[NSString stringWithFormat:@"%@ KM", self.sharedData.distance]];
-        
-        cell = sliderCell;
-    } else {
-        SocialMultiSliderTableViewCell *sliderCell = [tableView dequeueReusableCellWithIdentifier:SocialMultiSliderTableViewCellIdentifier];
-        if (cell == nil) {
-            cell = [[SocialMultiSliderTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:SocialMultiSliderTableViewCellIdentifier];
-        }
-
-        if (!sliderCell.delegate) {
-            sliderCell.delegate = self;
-        }
-        
-        [sliderCell setSelectionStyle:UITableViewCellSelectionStyleNone];
-        [sliderCell.titleLabel setText:filter.allKeys.firstObject];
-        [sliderCell.detailLabel setText:[NSString stringWithFormat:@"%@ - %@ years old",
-                                         self.sharedData.from_age, self.sharedData.to_age]];
-        [sliderCell.slider setFromValue:[self.sharedData.from_age floatValue]];
-        [sliderCell.slider setToValue:[self.sharedData.to_age floatValue]];
-        
-        cell = sliderCell;
-    }
+        [cell setSelectionStyle:UITableViewCellSelectionStyleDefault];
+        [cell.titleLabel setText:filter.allKeys.firstObject];
+        [cell.detailLabel setText:filter.allValues.firstObject];
     
-    return cell;
+        return cell;
+    } else if (indexPath.row == 1) {
+        SocialSliderTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:SocialSliderTableViewCellIdentifier];
+        
+        if (!cell.delegate) {
+            cell.delegate = self;
+        }
+        
+        [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
+        [cell.titleLabel setText:filter.allKeys.firstObject];
+        [cell.slider setMinimumValue:0];
+        [cell.slider setMaximumValue:160];
+        [cell.slider setValue:[self.sharedData.distance intValue]];
+        [cell.detailLabel setText:[NSString stringWithFormat:@"%@ KM", self.sharedData.distance]];
+        
+        return cell;
+    } else {
+        SocialMultiSliderTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:SocialMultiSliderTableViewCellIdentifier];
+        
+        if (!cell.delegate) {
+            cell.delegate = self;
+        }
+        
+        [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
+        [cell.titleLabel setText:filter.allKeys.firstObject];
+        [cell.detailLabel setText:[NSString stringWithFormat:@"%@ - %@ years old",
+                                         self.sharedData.from_age, self.sharedData.to_age]];
+        [cell.slider setFromValue:[self.sharedData.from_age floatValue]];
+        [cell.slider setToValue:[self.sharedData.to_age floatValue]];
+        
+        return cell;
+    }
 }
 
 #pragma mark - UITableViewDelegate
@@ -192,7 +180,11 @@ static NSString *const SocialMultiSliderTableViewCellIdentifier = @"SocialMultiS
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return UITableViewAutomaticDimension;
+    if ([[[UIDevice currentDevice] systemVersion] compare:@"8.0" options:NSNumericSearch] != NSOrderedAscending) {
+        return UITableViewAutomaticDimension;
+    }
+
+    return indexPath.row == 0 ? 50 : 80;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {

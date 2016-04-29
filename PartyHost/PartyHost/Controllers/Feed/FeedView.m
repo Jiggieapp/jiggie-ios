@@ -171,7 +171,7 @@
         _filterView.frame = CGRectMake(0,
                                        62,
                                        CGRectGetWidth(self.bounds),
-                                       304);
+                                       308);
     }
     
     return _filterView;
@@ -263,6 +263,7 @@
         [self.emptyView setMode:@"load"];
     }
     
+    [self.filterButton setEnabled:NO];
     [Feed retrieveFeedsWithCompletionHandler:^(NSArray *feeds, NSInteger statusCode, NSError *error) {
         if (show) {
             [SVProgressHUD dismiss];
@@ -271,6 +272,8 @@
         }
         
         self.feedIndex = 0;
+        
+        [self.filterButton setEnabled:YES];
         
         if (error) {
             [self.emptyView setMode:@"empty"];
@@ -628,6 +631,7 @@
 - (void)socialFilterView:(SocialFilterView *)view ageDidValueChanged:(MSRangeSlider *)sender {
     self.sharedData.from_age = [NSString stringWithFormat:@"%d", (int)roundf(sender.fromValue)];
     self.sharedData.to_age = [NSString stringWithFormat:@"%d", (int)roundf(sender.toValue)];
+    self.isFilterChanges = YES;
 }
 
 #pragma mark - UIAlertViewDelegate
