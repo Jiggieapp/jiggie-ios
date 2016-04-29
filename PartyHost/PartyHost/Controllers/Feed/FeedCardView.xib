@@ -23,9 +23,13 @@
             <rect key="frame" x="0.0" y="0.0" width="340" height="440"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kMH-zE-awb">
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kMH-zE-awb">
                     <rect key="frame" x="0.0" y="0.0" width="340" height="300"/>
+                    <gestureRecognizers/>
                     <state key="normal" image="fbperson_blank"/>
+                    <connections>
+                        <action selector="didTapPersonImageButton:" destination="i5M-Pr-FkT" eventType="touchUpInside" id="C15-M7-R8G"/>
+                    </connections>
                 </button>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wfC-ub-vE0">
                     <rect key="frame" x="0.0" y="300" width="340" height="140"/>
@@ -36,11 +40,15 @@
                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="TAME IMPALA LIVE IN JAKARTA" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Edr-6s-zPg">
+                        <label opaque="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="TAME IMPALA LIVE IN JAKARTA" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Edr-6s-zPg">
                             <rect key="frame" x="8" y="45" width="324" height="17"/>
+                            <gestureRecognizers/>
                             <fontDescription key="fontDescription" name="Lato-Bold" family="Lato" pointSize="14"/>
                             <color key="textColor" red="0.63921568627450975" green="0.1803921568627451" blue="0.81176470588235294" alpha="1" colorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
+                            <connections>
+                                <outletCollection property="gestureRecognizers" destination="arm-PT-XSB" appends="YES" id="Dej-nU-vFS"/>
+                            </connections>
                         </label>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Connect with Dorothy?" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Sad-af-9Rg">
                             <rect key="frame" x="8" y="65" width="324" height="17"/>
@@ -140,6 +148,11 @@
                 <outlet property="personImageButton" destination="kMH-zE-awb" id="v87-He-z8J"/>
             </connections>
         </view>
+        <tapGestureRecognizer id="arm-PT-XSB">
+            <connections>
+                <action selector="didTapEventNameLabel:" destination="i5M-Pr-FkT" id="FS6-rw-Puz"/>
+            </connections>
+        </tapGestureRecognizer>
     </objects>
     <resources>
         <image name="fbperson_blank" width="480" height="360"/>

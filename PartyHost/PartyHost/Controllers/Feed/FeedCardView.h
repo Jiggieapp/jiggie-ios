@@ -8,11 +8,14 @@
 
 #import <UIKit/UIKit.h>
 
+@class Feed;
 @class FeedCardView;
 @protocol FeedCardViewDelegate <NSObject>
 
 @required
-- (void)feedCardView:(FeedCardView *)view didTapButton:(UIButton *)button withFbId:(NSString *)fbId;
+- (void)feedCardView:(FeedCardView *)view didTapButton:(UIButton *)button withFeed:(Feed *)feed;
+- (void)feedCardView:(FeedCardView *)view didTapPersonImageButton:(UIButton *)button withFeed:(Feed *)feed;
+- (void)feedCardView:(FeedCardView *)view didTapEventNameLabel:(UILabel *)label withFeed:(Feed *)feed;
 
 @end
 

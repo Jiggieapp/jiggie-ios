@@ -73,15 +73,27 @@
     }
 }
 
+- (IBAction)didTapPersonImageButton:(id)sender {
+    if (self.delegate) {
+        [self.delegate feedCardView:self didTapPersonImageButton:sender withFeed:self.feed];
+    }
+}
+
+- (IBAction)didTapEventNameLabel:(id)sender {
+    if (self.delegate) {
+        [self.delegate feedCardView:self didTapEventNameLabel:sender withFeed:self.feed];
+    }
+}
+
 - (IBAction)didTapOkButton:(id)sender {
     if (self.delegate) {
-        [self.delegate feedCardView:self didTapButton:sender withFbId:self.feed.fromFbId];
+        [self.delegate feedCardView:self didTapButton:sender withFeed:self.feed];
     }
 }
 
 - (IBAction)didTapCancelButton:(id)sender {
     if (self.delegate) {
-        [self.delegate feedCardView:self didTapButton:sender withFbId:self.feed.fromFbId];
+        [self.delegate feedCardView:self didTapButton:sender withFeed:self.feed];
     }
 }
 

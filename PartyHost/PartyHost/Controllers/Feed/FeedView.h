@@ -10,6 +10,13 @@
 
 @interface FeedView : UIView
 
+@property (strong, nonatomic) IBOutlet UIView *navigationBarView;
+@property (strong, nonatomic) IBOutlet UILabel *navigationBarTitleLabel;
+@property (strong, nonatomic) IBOutlet UIImageView *discoverImageView;
+@property (strong, nonatomic) IBOutlet UILabel *discoverLabel;
+@property (strong, nonatomic) IBOutlet UISwitch *discoverSwitch;
+@property (strong, nonatomic) IBOutlet UIButton *filterButton;
+
 + (FeedView *)instanceFromNib;
 
 - (void)loadDataAndShowHUD:(BOOL)show withCompletionHandler:(PartyFeedCompletionHandler)completion;
