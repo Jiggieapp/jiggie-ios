@@ -323,6 +323,9 @@ int totalPages;
          
      } failure:^(AFHTTPRequestOperation *operation, NSError *error)
      {
+         //Hide spinner
+         [[NSNotificationCenter defaultCenter] postNotificationName:@"HIDE_LOADING" object:self];
+         
          NSLog(@"ERROR :: %@",error);
      }];
 }

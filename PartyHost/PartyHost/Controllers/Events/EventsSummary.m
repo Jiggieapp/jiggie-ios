@@ -85,7 +85,7 @@
     [self.mainScroll addSubview:self.pControl];
     
     UIButton *closeButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [closeButton setFrame:CGRectMake(10.0f, 30.0f, 30.0f, 30.0f)];
+    [closeButton setFrame:CGRectMake(0.0f, 20.0f, 40.0f, 40.0f)];
     [closeButton setImage:[UIImage imageNamed:@"nav_back_shadow"] forState:UIControlStateNormal];
     [closeButton addTarget:self action:@selector(goBack) forControlEvents:UIControlEventTouchUpInside];
     [self.mainScroll addSubview:closeButton];

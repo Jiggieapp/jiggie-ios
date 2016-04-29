@@ -710,9 +710,9 @@ static SharedData *sharedInstance = nil;
             self.gender_interest = ([self.gender isEqualToString:@"female"])?@"male":@"female";
         };
         
-        self.distance = dict[@"distance"];
-        self.from_age = dict[@"from_age"];
-        self.to_age = dict[@"to_age"];
+        self.distance = (dict[@"distance"])?:self.distance;
+        self.from_age = (dict[@"from_age"])?:self.from_age;
+        self.to_age = (dict[@"to_age"])?:self.to_age;
         
         self.notification_feed = [dict[@"notifications"][@"feed"] boolValue];
         self.notification_messages = [dict[@"notifications"][@"chat"] boolValue];

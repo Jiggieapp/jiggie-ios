@@ -60,7 +60,7 @@
     [headerView addSubview:self.eventImage];
     
     UIButton *closeButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [closeButton setFrame:CGRectMake(10.0f, 10.0f, 30.0f, 30.0f)];
+    [closeButton setFrame:CGRectMake(0.0f, 0.0f, 40.0f, 40.0f)];
     [closeButton setImage:[UIImage imageNamed:@"nav_back_shadow"] forState:UIControlStateNormal];
     [closeButton addTarget:self action:@selector(closeButtonDidTap:) forControlEvents:UIControlEventTouchUpInside];
     [headerView addSubview:closeButton];
