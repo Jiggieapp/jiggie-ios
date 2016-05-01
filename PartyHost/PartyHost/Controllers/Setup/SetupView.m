@@ -306,8 +306,6 @@ int totalPages;
     NSDictionary *params = [self.sharedData createSaveSettingsParams];
     [manager POST:url parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject)
      {
-         NSLog(@"WALKTHROUGH_SAVE_RESPONSE :: %@",responseObject);
-         
          //Hide spinner
          [[NSNotificationCenter defaultCenter] postNotificationName:@"HIDE_LOADING" object:self];
          
@@ -326,7 +324,6 @@ int totalPages;
          //Hide spinner
          [[NSNotificationCenter defaultCenter] postNotificationName:@"HIDE_LOADING" object:self];
          
-         NSLog(@"ERROR :: %@",error);
      }];
 }
 
