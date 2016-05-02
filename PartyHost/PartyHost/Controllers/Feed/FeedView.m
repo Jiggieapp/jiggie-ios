@@ -211,6 +211,8 @@
 
 - (IBAction)didTapFilterButton:(id)sender {
     if (self.filterView.alpha == .0f) {
+        self.isFilterChanges = NO;
+        
         [[UIApplication sharedApplication].keyWindow addSubview:self.transparentView];
         [[UIApplication sharedApplication].keyWindow addSubview:self.filterView];
     }
@@ -323,10 +325,11 @@
             self.sharedData.feedBadge.hidden = !self.sharedData.matchMe;
             self.sharedData.feedBadge.canShow = self.sharedData.matchMe;
             
+            [self.swipeableView discardAllViews];
+            
             if (self.sharedData.matchMe) {
                 [self loadDataAndShowHUD:YES withCompletionHandler:nil];
             } else {
-                [self.swipeableView discardAllViews];
                 [self.emptyView setMode:@"hide"];
             }
             
@@ -540,31 +543,27 @@
         
         [self trackViewFeedItem];
     }
+    
+    [self.swipeableView setUserInteractionEnabled:YES];
 }
 
 - (void)swipeableView:(ZLSwipeableView *)swipeableView didCancelSwipe:(UIView *)view {
     self.isSwipedOut = NO;
 
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW,
-                                 (int64_t)(0.7 * NSEC_PER_SEC)),
-                   dispatch_get_main_queue(), ^{
-                       NSInteger feedIndex = view.tag-CARD_VIEW_TAG;
-                       NSInteger numberOfCardsLeft = self.feedData.count - feedIndex;
-                       if (numberOfCardsLeft == 3 || numberOfCardsLeft == 0) {
+    NSInteger feedIndex = view.tag-CARD_VIEW_TAG;
+    NSInteger numberOfCardsLeft = self.feedData.count - feedIndex;
+    if (numberOfCardsLeft == 3 || numberOfCardsLeft == 0) {
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW,
+                                     (int64_t)(0.7 * NSEC_PER_SEC)),
+                       dispatch_get_main_queue(), ^{
                            [self loadDataAndShowHUD:NO withCompletionHandler:nil];
-                       }
-                   });
+                       });
+    }
 }
 
 - (void)swipeableView:(ZLSwipeableView *)swipeableView didSwipeView:(UIView *)view inDirection:(ZLSwipeableViewDirection)direction {
     self.isSwipedOut = YES;
     [self.swipeableView setUserInteractionEnabled:NO];
-    
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW,
-                                 (int64_t)(0.7 * NSEC_PER_SEC)),
-                   dispatch_get_main_queue(), ^{
-                       [self.swipeableView setUserInteractionEnabled:YES];
-                   });
 }
 
 #pragma mark - FeedCardViewDelegate
