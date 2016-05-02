@@ -305,6 +305,9 @@
     [imagePicker dismissViewControllerAnimated:YES completion:nil];
 }
 
+- (void)facebookImagePicker:(OLFacebookImagePickerController *)imagePicker didFailWithError:(NSError *)error {
+}
+
 - (void)facebookImagePicker:(OLFacebookImagePickerController *)imagePicker didFinishPickingImages:(NSArray *)images {
     OLFacebookImage *chosenImage = images.firstObject;
     NSDictionary *facebookPhotos = self.sharedData.facebookImagesDict;
