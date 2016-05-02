@@ -13,9 +13,9 @@
 #import "SVProgressHUD.h"
 #import "SharedData.h"
 
-#define kSmallPhotoTag 1500
+#define kSidePhotoTag 1500
 
-@interface ProfileViewController () <UITextViewDelegate>
+@interface ProfileViewController () <UITextViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 
 @property (strong, nonatomic) IBOutlet UIButton *sidePhoto1Button;
 @property (strong, nonatomic) IBOutlet UIButton *sidePhoto2Button;
@@ -24,6 +24,8 @@
 
 @property (strong, nonatomic) SharedData *sharedData;
 @property (assign, nonatomic) BOOL isProfileChanges;
+
+@property (strong, nonatomic) UIImageView *currentImageView;
 
 @end
 
@@ -74,14 +76,14 @@
     [self.navigationController.navigationBar setBarTintColor:[UIColor phPurpleColor]];
     [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
     [self.navigationController.navigationBar setTranslucent:NO];
+    [self.navigationController.navigationBar setTitleTextAttributes:
+     @{NSForegroundColorAttributeName:[UIColor whiteColor]}];
     
     UIBarButtonItem *doneBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Done"
                                                                           style:UIBarButtonItemStylePlain
                                                                          target:self
                                                                          action:@selector(didTapDoneButton:)];
     [self.navigationItem setRightBarButtonItem:doneBarButtonItem];
-    [self.navigationController.navigationBar setTitleTextAttributes:
-     @{NSForegroundColorAttributeName:[UIColor whiteColor]}];
     
     CGFloat radius = 2;
     
@@ -102,10 +104,29 @@
     self.sidePhoto3Button.layer.cornerRadius = radius;
     self.sidePhoto4Button.layer.cornerRadius = radius;
     
+    self.sidePhoto1Button.tag = kSidePhotoTag+1;
+    self.sidePhoto2Button.tag = kSidePhotoTag+2;
+    self.sidePhoto3Button.tag = kSidePhotoTag+3;
+    self.sidePhoto4Button.tag = kSidePhotoTag+4;
+    
     [self.aboutTextView setText:nil];
     [self.aboutTextView setPlaceholder:@"Write about yourself here..."];
     [self.aboutTextView setPlaceholderColor:[UIColor phDarkGrayColor]];
     [self.aboutTextView setDelegate:self];
+}
+
+- (void)showImagePickerController {
+    UIImagePickerController *imagePickerController = [[UIImagePickerController alloc] init];
+    [imagePickerController setDelegate:self];
+    [imagePickerController setSourceType:UIImagePickerControllerSourceTypePhotoLibrary];
+    [imagePickerController setAllowsEditing:YES];
+    [imagePickerController.navigationBar setTranslucent:NO];
+    [imagePickerController.navigationBar setBarTintColor:[UIColor phPurpleColor]];
+    [imagePickerController.navigationBar setTintColor:[UIColor whiteColor]];
+    [imagePickerController.navigationBar setTitleTextAttributes:
+     @{NSForegroundColorAttributeName:[UIColor whiteColor]}];
+    
+    [self presentViewController:imagePickerController animated:YES completion:nil];
 }
 
 #pragma mark - Action Sheet
@@ -118,7 +139,7 @@
             otherButtonTitles:@[@"Camera Roll", @"Facebook"]
                      tapBlock:^(UIActionSheet * _Nonnull actionSheet, NSInteger buttonIndex) {
                          if (buttonIndex == 0) {
-                             NSLog(@"Camera Roll");
+                             [self showImagePickerController];
                          } else if (buttonIndex == 1) {
                              NSLog(@"Facebook");
                          }
@@ -224,22 +245,22 @@
 }
 
 - (IBAction)didTapMainPhotoImageView:(id)sender {
+    self.currentImageView = self.mainPhotoImageView;
     [self showActionSheet];
 }
 
-- (IBAction)didTapSidePhoto1Button:(id)sender {
-    [self showActionSheet];
-}
-
-- (IBAction)didTapSidePhoto2Button:(id)sender {
-    [self showActionSheet];
-}
-
-- (IBAction)didTapSidePhoto3Button:(id)sender {
-    [self showActionSheet];
-}
-
-- (IBAction)didTapSidePhoto4Button:(id)sender {
+- (IBAction)didTapSidePhotoButton:(UIButton *)sender {
+    NSInteger tag = sender.tag-kSidePhotoTag;
+    if (tag == 1) {
+        self.currentImageView = self.sidePhoto1ImageView;
+    } else if (tag == 2) {
+        self.currentImageView = self.sidePhoto2ImageView;
+    } else if (tag == 3) {
+        self.currentImageView = self.sidePhoto3ImageView;
+    } else {
+        self.currentImageView = self.sidePhoto4ImageView;
+    }
+    
     [self showActionSheet];
 }
 
@@ -248,6 +269,20 @@
     self.isProfileChanges = YES;
     
     return YES;
+}
+
+#pragma mark - UIImagePickerControllerDelegate
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
+    [picker dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(nonnull NSDictionary<NSString *,id> *)info {
+    UIImage *chosenImage = info[UIImagePickerControllerEditedImage];
+    [self.currentImageView setImage:chosenImage];
+    
+    [picker dismissViewControllerAnimated:YES completion:nil];
+    
+    self.isProfileChanges = YES;
 }
 
 @end

@@ -95,7 +95,7 @@
                                             <inset key="imageEdgeInsets" minX="37" minY="36" maxX="0.0" maxY="0.0"/>
                                             <state key="normal" image="add_photo"/>
                                             <connections>
-                                                <action selector="didTapSidePhoto1Button:" destination="-1" eventType="touchUpInside" id="dK3-BP-UXM"/>
+                                                <action selector="didTapSidePhotoButton:" destination="-1" eventType="touchUpInside" id="d4e-xe-A78"/>
                                             </connections>
                                         </button>
                                     </subviews>
@@ -171,7 +171,7 @@
                                             <inset key="imageEdgeInsets" minX="37" minY="36" maxX="0.0" maxY="0.0"/>
                                             <state key="normal" image="add_photo"/>
                                             <connections>
-                                                <action selector="didTapSidePhoto2Button:" destination="-1" eventType="touchUpInside" id="FRI-5Z-3B1"/>
+                                                <action selector="didTapSidePhotoButton:" destination="-1" eventType="touchUpInside" id="DYN-Sq-xnC"/>
                                             </connections>
                                         </button>
                                     </subviews>
@@ -241,7 +241,7 @@
                                             <inset key="imageEdgeInsets" minX="37" minY="36" maxX="0.0" maxY="0.0"/>
                                             <state key="normal" image="add_photo"/>
                                             <connections>
-                                                <action selector="didTapSidePhoto3Button:" destination="-1" eventType="touchUpInside" id="Xyb-zg-21l"/>
+                                                <action selector="didTapSidePhotoButton:" destination="-1" eventType="touchUpInside" id="97b-vC-4tX"/>
                                             </connections>
                                         </button>
                                     </subviews>
@@ -311,7 +311,7 @@
                                             <inset key="imageEdgeInsets" minX="37" minY="36" maxX="0.0" maxY="0.0"/>
                                             <state key="normal" image="add_photo"/>
                                             <connections>
-                                                <action selector="didTapSidePhoto4Button:" destination="-1" eventType="touchUpInside" id="Sbe-g6-zeW"/>
+                                                <action selector="didTapSidePhotoButton:" destination="-1" eventType="touchUpInside" id="lTZ-90-U5W"/>
                                             </connections>
                                         </button>
                                     </subviews>
