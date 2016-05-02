@@ -37,6 +37,7 @@ static SharedData *sharedInstance = nil;
         self.userDict   =   [[NSMutableDictionary alloc] init]; // user login when
         self.photosDict =   [[NSMutableDictionary alloc] init]; // user's photos
         self.imagesDict =   [[NSMutableDictionary alloc] init]; // all photos member profile, events, event detail
+        self.facebookImagesDict = [[NSMutableDictionary alloc] init]; // all photos member profile from facebook image picker
         self.venuesNameList =   [[NSMutableArray alloc] init]; // not use anymore
         self.keyboardsA     =   [[NSMutableArray alloc] init]; // clear for the keyboard.. all object to resign the keyboard
         self.appsFlyerDict  = [[NSMutableDictionary alloc] init]; // dict for appsflyer when login or app launch

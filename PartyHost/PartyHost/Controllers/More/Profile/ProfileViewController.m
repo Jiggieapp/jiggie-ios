@@ -10,12 +10,14 @@
 #import "AnalyticManager.h"
 #import "UIActionSheet+Blocks.h"
 #import "UITextView+Placeholder.h"
+#import "OLFacebookImagePickerController.h"
+#import "OLFacebookImage.h"
 #import "SVProgressHUD.h"
 #import "SharedData.h"
 
 #define kSidePhotoTag 1500
 
-@interface ProfileViewController () <UITextViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate>
+@interface ProfileViewController () <UITextViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, OLFacebookImagePickerControllerDelegate>
 
 @property (strong, nonatomic) IBOutlet UIButton *sidePhoto1Button;
 @property (strong, nonatomic) IBOutlet UIButton *sidePhoto2Button;
@@ -129,6 +131,19 @@
     [self presentViewController:imagePickerController animated:YES completion:nil];
 }
 
+- (void)showFacebookImagePickerController {
+    OLFacebookImagePickerController *imagePickerController = [[OLFacebookImagePickerController alloc] init];
+    [imagePickerController setDelegate:self];
+    [imagePickerController setShouldDisplayLogoutButton:NO];
+    [imagePickerController.navigationBar setTranslucent:NO];
+    [imagePickerController.navigationBar setBarTintColor:[UIColor phFacebookBlueColor]];
+    [imagePickerController.navigationBar setTintColor:[UIColor whiteColor]];
+    [imagePickerController.navigationBar setTitleTextAttributes:
+     @{NSForegroundColorAttributeName:[UIColor whiteColor]}];
+    
+    [self presentViewController:imagePickerController animated:YES completion:nil];
+}
+
 #pragma mark - Action Sheet
 
 - (void)showActionSheet {
@@ -141,7 +156,7 @@
                          if (buttonIndex == 0) {
                              [self showImagePickerController];
                          } else if (buttonIndex == 1) {
-                             NSLog(@"Facebook");
+                             [self showFacebookImagePickerController];
                          }
                      }];
 }
@@ -197,15 +212,15 @@
             if (strongSelf) {
                 dispatch_async(dispatch_get_main_queue(), ^{
                     if (i == 0) {
-                        [strongSelf.mainPhotoImageView setImage:self.sharedData.imagesDict[photos[0]]];
+                        [strongSelf.mainPhotoImageView setImage:strongSelf.sharedData.imagesDict[photos[0]]];
                     } else if (i == 1) {
-                        [strongSelf.sidePhoto1ImageView setImage:self.sharedData.imagesDict[photos[1]]];
+                        [strongSelf.sidePhoto1ImageView setImage:strongSelf.sharedData.imagesDict[photos[1]]];
                     } else if (i == 2) {
-                        [strongSelf.sidePhoto2ImageView setImage:self.sharedData.imagesDict[photos[2]]];
+                        [strongSelf.sidePhoto2ImageView setImage:strongSelf.sharedData.imagesDict[photos[2]]];
                     } else if (i == 3) {
-                        [strongSelf.sidePhoto3ImageView setImage:self.sharedData.imagesDict[photos[3]]];
+                        [strongSelf.sidePhoto3ImageView setImage:strongSelf.sharedData.imagesDict[photos[3]]];
                     } else if (i == 4) {
-                        [strongSelf.sidePhoto4ImageView setImage:self.sharedData.imagesDict[photos[4]]];
+                        [strongSelf.sidePhoto4ImageView setImage:strongSelf.sharedData.imagesDict[photos[4]]];
                     }
                 });
             }
@@ -283,6 +298,19 @@
     [picker dismissViewControllerAnimated:YES completion:nil];
     
     self.isProfileChanges = YES;
+}
+
+#pragma mark - OLFacebookImagePickerControllerDelegate
+- (void)facebookImagePickerDidCancelPickingImages:(OLFacebookImagePickerController *)imagePicker {
+    [imagePicker dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void)facebookImagePicker:(OLFacebookImagePickerController *)imagePicker didFinishPickingImages:(NSArray *)images {
+    OLFacebookImage *chosenImage = images.firstObject;
+    NSDictionary *facebookPhotos = self.sharedData.facebookImagesDict;
+    
+    [self.currentImageView setImage:facebookPhotos[[chosenImage bestURLForSize:CGSizeMake(600, 600)]]];
+    [imagePicker dismissViewControllerAnimated:YES completion:nil];
 }
 
 @end
