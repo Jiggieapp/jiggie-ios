@@ -838,11 +838,17 @@
         Event *event = nil;
         
         if ([tableView isEqual:self.events1List]) {
-            event = [self.eventsToday objectAtIndex:indexPath.row];
+            if (self.eventsToday != nil && indexPath.row < self.eventsToday.count) {
+                event = [self.eventsToday objectAtIndex:indexPath.row];
+            }
         } else if ([tableView isEqual:self.events2List]) {
-            event = [self.eventsTomorrow objectAtIndex:indexPath.row];
+            if (self.eventsTomorrow != nil && indexPath.row < self.eventsTomorrow.count) {
+                event = [self.eventsTomorrow objectAtIndex:indexPath.row];
+            }
         } else if ([tableView isEqual:self.events3List]) {
-            event = [self.eventsUpcoming objectAtIndex:indexPath.row];
+            if (self.eventsUpcoming != nil && indexPath.row < self.eventsUpcoming.count) {
+                event = [self.eventsUpcoming objectAtIndex:indexPath.row];
+            }
         }
         
         if (event != nil) {
