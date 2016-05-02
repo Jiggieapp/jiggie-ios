@@ -146,7 +146,7 @@ static NSString *const SocialMultiSliderTableViewCellIdentifier = @"SocialMultiS
         
         [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
         [cell.titleLabel setText:filter.allKeys.firstObject];
-        [cell.slider setMinimumValue:0];
+        [cell.slider setMinimumValue:1];
         [cell.slider setMaximumValue:160];
         [cell.slider setValue:[self.sharedData.distance intValue]];
         [cell.detailLabel setText:[NSString stringWithFormat:@"%@ KM", self.sharedData.distance]];

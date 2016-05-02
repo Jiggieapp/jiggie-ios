@@ -532,7 +532,9 @@
         UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
         
         if(indexPath.row == 0) {
-            [self goProfile];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"SHOW_PROFILE"
+                                                                object:nil];
+//            [self goProfile];
             
             return;
         }

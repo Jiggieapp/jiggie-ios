@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		936673FC1CD7164A00AC94F3 /* UIActionSheet+Blocks.m in Sources */ = {isa = PBXBuildFile; fileRef = 936673FA1CD7164A00AC94F3 /* UIActionSheet+Blocks.m */; };
+		936674061CD718A800AC94F3 /* TPKeyboardAvoidingScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 936674031CD718A800AC94F3 /* TPKeyboardAvoidingScrollView.m */; };
+		936674071CD718A900AC94F3 /* UIScrollView+TPKeyboardAvoidingAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 936674051CD718A800AC94F3 /* UIScrollView+TPKeyboardAvoidingAdditions.m */; };
+		9366740B1CD7384900AC94F3 /* UITextView+Placeholder.m in Sources */ = {isa = PBXBuildFile; fileRef = 9366740A1CD7384900AC94F3 /* UITextView+Placeholder.m */; };
 		938CE7781CCE2C9900ADDD4C /* ShadowView.m in Sources */ = {isa = PBXBuildFile; fileRef = 938CE7711CCE2C9800ADDD4C /* ShadowView.m */; };
 		938CE7791CCE2C9900ADDD4C /* FeedCardView.m in Sources */ = {isa = PBXBuildFile; fileRef = 938CE7731CCE2C9900ADDD4C /* FeedCardView.m */; };
 		938CE77A1CCE2C9900ADDD4C /* FeedCardView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 938CE7741CCE2C9900ADDD4C /* FeedCardView.xib */; };
@@ -50,6 +54,8 @@
 		938CE8051CD3184300ADDD4C /* SocialMultiSliderTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 938CE8031CD3184300ADDD4C /* SocialMultiSliderTableViewCell.xib */; };
 		938CE80B1CD3435700ADDD4C /* MSRangeSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 938CE8081CD3435700ADDD4C /* MSRangeSlider.m */; };
 		938CE80C1CD3435700ADDD4C /* UIControl+HitTestEdgeInsets.m in Sources */ = {isa = PBXBuildFile; fileRef = 938CE80A1CD3435700ADDD4C /* UIControl+HitTestEdgeInsets.m */; };
+		938CE81E1CD387BC00ADDD4C /* ProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 938CE8191CD387BC00ADDD4C /* ProfileViewController.m */; };
+		938CE81F1CD387BC00ADDD4C /* ProfileViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 938CE81A1CD387BC00ADDD4C /* ProfileViewController.xib */; };
 		9A85A5531CC8B89300C8818B /* JGKeyboardNotificationHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A85A5521CC8B89300C8818B /* JGKeyboardNotificationHelper.m */; };
 		9AF3EEFF1CC9FA9E00CA9497 /* LocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AF3EEFE1CC9FA9E00CA9497 /* LocationManager.m */; };
 		CB3EB6C81B459177003F658F /* App.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CB3EB6C71B459177003F658F /* App.xcassets */; };
@@ -360,6 +366,14 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		936673F91CD7164A00AC94F3 /* UIActionSheet+Blocks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIActionSheet+Blocks.h"; sourceTree = "<group>"; };
+		936673FA1CD7164A00AC94F3 /* UIActionSheet+Blocks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIActionSheet+Blocks.m"; sourceTree = "<group>"; };
+		936674021CD718A800AC94F3 /* TPKeyboardAvoidingScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TPKeyboardAvoidingScrollView.h; sourceTree = "<group>"; };
+		936674031CD718A800AC94F3 /* TPKeyboardAvoidingScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TPKeyboardAvoidingScrollView.m; sourceTree = "<group>"; };
+		936674041CD718A800AC94F3 /* UIScrollView+TPKeyboardAvoidingAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIScrollView+TPKeyboardAvoidingAdditions.h"; sourceTree = "<group>"; };
+		936674051CD718A800AC94F3 /* UIScrollView+TPKeyboardAvoidingAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIScrollView+TPKeyboardAvoidingAdditions.m"; sourceTree = "<group>"; };
+		936674091CD7384900AC94F3 /* UITextView+Placeholder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITextView+Placeholder.h"; sourceTree = "<group>"; };
+		9366740A1CD7384900AC94F3 /* UITextView+Placeholder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITextView+Placeholder.m"; sourceTree = "<group>"; };
 		938CE7701CCE2C9800ADDD4C /* ShadowView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShadowView.h; sourceTree = "<group>"; };
 		938CE7711CCE2C9800ADDD4C /* ShadowView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShadowView.m; sourceTree = "<group>"; };
 		938CE7721CCE2C9800ADDD4C /* FeedCardView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FeedCardView.h; sourceTree = "<group>"; };
@@ -442,6 +456,9 @@
 		938CE8081CD3435700ADDD4C /* MSRangeSlider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSRangeSlider.m; sourceTree = "<group>"; };
 		938CE8091CD3435700ADDD4C /* UIControl+HitTestEdgeInsets.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIControl+HitTestEdgeInsets.h"; sourceTree = "<group>"; };
 		938CE80A1CD3435700ADDD4C /* UIControl+HitTestEdgeInsets.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIControl+HitTestEdgeInsets.m"; sourceTree = "<group>"; };
+		938CE8181CD387BC00ADDD4C /* ProfileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProfileViewController.h; sourceTree = "<group>"; };
+		938CE8191CD387BC00ADDD4C /* ProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProfileViewController.m; sourceTree = "<group>"; };
+		938CE81A1CD387BC00ADDD4C /* ProfileViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ProfileViewController.xib; sourceTree = "<group>"; };
 		9A85A5511CC8B89300C8818B /* JGKeyboardNotificationHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JGKeyboardNotificationHelper.h; sourceTree = "<group>"; };
 		9A85A5521CC8B89300C8818B /* JGKeyboardNotificationHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JGKeyboardNotificationHelper.m; sourceTree = "<group>"; };
 		9AF3EEFD1CC9FA9E00CA9497 /* LocationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationManager.h; sourceTree = "<group>"; };
@@ -1058,6 +1075,35 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		936673F71CD7164A00AC94F3 /* UIActionSheet-Blocks */ = {
+			isa = PBXGroup;
+			children = (
+				936673F91CD7164A00AC94F3 /* UIActionSheet+Blocks.h */,
+				936673FA1CD7164A00AC94F3 /* UIActionSheet+Blocks.m */,
+			);
+			path = "UIActionSheet-Blocks";
+			sourceTree = "<group>";
+		};
+		936674011CD718A800AC94F3 /* TPKeyboardAvoidingScrollView */ = {
+			isa = PBXGroup;
+			children = (
+				936674021CD718A800AC94F3 /* TPKeyboardAvoidingScrollView.h */,
+				936674031CD718A800AC94F3 /* TPKeyboardAvoidingScrollView.m */,
+				936674041CD718A800AC94F3 /* UIScrollView+TPKeyboardAvoidingAdditions.h */,
+				936674051CD718A800AC94F3 /* UIScrollView+TPKeyboardAvoidingAdditions.m */,
+			);
+			path = TPKeyboardAvoidingScrollView;
+			sourceTree = "<group>";
+		};
+		936674081CD7384900AC94F3 /* UITextView+Placeholder */ = {
+			isa = PBXGroup;
+			children = (
+				936674091CD7384900AC94F3 /* UITextView+Placeholder.h */,
+				9366740A1CD7384900AC94F3 /* UITextView+Placeholder.m */,
+			);
+			path = "UITextView+Placeholder";
+			sourceTree = "<group>";
+		};
 		938CE77D1CCE2D2C00ADDD4C /* ZLSwipeableView */ = {
 			isa = PBXGroup;
 			children = (
@@ -1145,6 +1191,16 @@
 				938CE80A1CD3435700ADDD4C /* UIControl+HitTestEdgeInsets.m */,
 			);
 			path = MSRangeSlider;
+			sourceTree = "<group>";
+		};
+		938CE8171CD387BC00ADDD4C /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+				938CE8181CD387BC00ADDD4C /* ProfileViewController.h */,
+				938CE8191CD387BC00ADDD4C /* ProfileViewController.m */,
+				938CE81A1CD387BC00ADDD4C /* ProfileViewController.xib */,
+			);
+			path = Profile;
 			sourceTree = "<group>";
 		};
 		9AF3EEFC1CC9FA9E00CA9497 /* Location */ = {
@@ -1328,6 +1384,9 @@
 		DAABAFE81C1FC6F8004DDCFA /* ExtraLibraries */ = {
 			isa = PBXGroup;
 			children = (
+				936674081CD7384900AC94F3 /* UITextView+Placeholder */,
+				936674011CD718A800AC94F3 /* TPKeyboardAvoidingScrollView */,
+				936673F71CD7164A00AC94F3 /* UIActionSheet-Blocks */,
 				938CE8061CD3435600ADDD4C /* MSRangeSlider */,
 				938CE79C1CCF627D00ADDD4C /* Mantle */,
 				938CE77D1CCE2D2C00ADDD4C /* ZLSwipeableView */,
@@ -1528,6 +1587,7 @@
 				DAABB0561C1FD50E004DDCFA /* Confirmations */,
 				DAABB05B1C1FD50E004DDCFA /* Hostings */,
 				DAABB06C1C1FD50E004DDCFA /* Purchases */,
+				938CE8171CD387BC00ADDD4C /* Profile */,
 				DAABB0661C1FD50E004DDCFA /* More.h */,
 				DAABB0671C1FD50E004DDCFA /* More.m */,
 				DAABB0641C1FD50E004DDCFA /* MemberProfile.h */,
@@ -2383,6 +2443,7 @@
 				DAABB0F61C1FD50E004DDCFA /* Setup.xib in Resources */,
 				DAABB2BF1C1FF5AE004DDCFA /* test_variant.json in Resources */,
 				DAABB2771C1FF5AE004DDCFA /* GSTouchImage@2x.png in Resources */,
+				938CE81F1CD387BC00ADDD4C /* ProfileViewController.xib in Resources */,
 				938CE7C41CCF627D00ADDD4C /* Info.plist in Resources */,
 				938CE7DF1CD1C91700ADDD4C /* SocialOptionTableViewCell.xib in Resources */,
 				DA10F51E1C52149F006090ED /* SVProgressHUD.bundle in Resources */,
@@ -2496,6 +2557,7 @@
 				938CE77B1CCE2C9900ADDD4C /* FeedView.m in Sources */,
 				DA5ED6151C92975100004C7E /* VTCustomerDetails.m in Sources */,
 				DAABB0F41C1FD50E004DDCFA /* WriteReview.m in Sources */,
+				936674071CD718A900AC94F3 /* UIScrollView+TPKeyboardAvoidingAdditions.m in Sources */,
 				DAABB2861C1FF5AE004DDCFA /* MPABTestDesignerDeviceInfoRequestMessage.m in Sources */,
 				DAABB26B1C1FF5AE004DDCFA /* UINavigationBar+FlatUI.m in Sources */,
 				DAE02EA51C6C812200EBAAF0 /* TicketSummaryViewController.m in Sources */,
@@ -2540,6 +2602,7 @@
 				DAABB27B1C1FF5AE004DDCFA /* MGSwipeTableCell.m in Sources */,
 				DAABB26C1C1FF5AE004DDCFA /* UIPopoverController+FlatUI.m in Sources */,
 				DAABB29B1C1FF5AE004DDCFA /* MPEnumDescription.m in Sources */,
+				9366740B1CD7384900AC94F3 /* UITextView+Placeholder.m in Sources */,
 				DAABB0C31C1FD50E004DDCFA /* Dashboard.m in Sources */,
 				DAD2708D1C31110D00546106 /* UserManager.m in Sources */,
 				DAABB0E61C1FD50E004DDCFA /* PhoneVerifyComplete.m in Sources */,
@@ -2556,6 +2619,7 @@
 				DA9E0CF71C61F75000966F16 /* BaseViewController.m in Sources */,
 				DAABB1301C1FF13A004DDCFA /* UserBubble.m in Sources */,
 				DAABB28E1C1FF5AE004DDCFA /* MPBOOLToNSNumberValueTransformer.m in Sources */,
+				938CE81E1CD387BC00ADDD4C /* ProfileViewController.m in Sources */,
 				DAABB0DA1C1FD50E004DDCFA /* VenuesList.m in Sources */,
 				DAABB2CB1C1FF5AE004DDCFA /* TSCoreListenerImpl.m in Sources */,
 				DAABB2601C1FF5AE004DDCFA /* FUIButton.m in Sources */,
@@ -2599,6 +2663,7 @@
 				DA6A7FA71CC755F800A666E8 /* DialCodeListViewController.m in Sources */,
 				DAABB2A41C1FF5AE004DDCFA /* MPObjectSerializer.m in Sources */,
 				DA10F51D1C52149F006090ED /* SVIndefiniteAnimatedView.m in Sources */,
+				936673FC1CD7164A00AC94F3 /* UIActionSheet+Blocks.m in Sources */,
 				DAABB12C1C1FF13A004DDCFA /* RatingView.m in Sources */,
 				DAABB1011C1FD50E004DDCFA /* SignupView.m in Sources */,
 				DAABB2641C1FF5AE004DDCFA /* FUISwitch.m in Sources */,
@@ -2626,6 +2691,7 @@
 				DA10F5201C52149F006090ED /* SVRadialGradientLayer.m in Sources */,
 				DAABB2D21C1FF5AE004DDCFA /* TSUtils.m in Sources */,
 				DAABB2571C1FF5AE004DDCFA /* AFNetworkReachabilityManager.m in Sources */,
+				936674061CD718A800AC94F3 /* TPKeyboardAvoidingScrollView.m in Sources */,
 				DAABB0DF1C1FD50E004DDCFA /* MyPurchases.m in Sources */,
 				DAABB1291C1FF13A004DDCFA /* BadgeView.m in Sources */,
 				DAABB2591C1FF5AE004DDCFA /* AFURLConnectionOperation.m in Sources */,
