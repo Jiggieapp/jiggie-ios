@@ -476,8 +476,6 @@
     
     userFirstName = [userFirstName lowercaseString];
     userLastName = [userLastName lowercaseString];
-    
-    NSLog(@"APN_TOKEN :: %@",self.sharedData.apnToken);
 
     AFHTTPRequestOperationManager *manager = [self.sharedData getOperationManager];
     NSDictionary *params = @{
@@ -497,7 +495,6 @@
                              };
     
     NSLog(@"START_LOGIN");
-    NSLog(@"%@",params);
     
     NSString *urlToLoad = [NSString stringWithFormat:@"%@/login",PHBaseNewURL];
     
@@ -598,7 +595,6 @@
          
      } failure:^(AFHTTPRequestOperation *operation, NSError *error)
      {
-         NSLog(@"APN_SEND_ERROR :: %@",error);
          UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Temporary Maintenance" message:@"We are undergoing maintenance, please try again in a few minutes." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
          [alert show];
          
