@@ -467,7 +467,7 @@ static NSString *const SidePhotoTableViewCellIdentifier = @"SidePhotoTableViewCe
     
     self.isProfileChanges = YES;
     
-    [self reloadPhotoDataWithChosenImage:chosenImage];
+    [self uploadPhotoWithImage:chosenImage];
     [imagePicker dismissViewControllerAnimated:YES completion:nil];
 }
 
