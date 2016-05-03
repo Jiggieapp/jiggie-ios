@@ -200,10 +200,21 @@ static NSString *const SidePhotoTableViewCellIdentifier = @"SidePhotoTableViewCe
                         
                         NSArray *photos = memberinfo[@"photos"];
                         [self.mainPhotoActionImageView setImage:[UIImage imageNamed:@"add_photo"]];
+                        [self.mainPhotoIndicatorView setHidden:YES];
+                        
+                        for (int i=0; i<5; i++) {
+                            SidePhotoTableViewCell *cell = [self.sidePhotoTableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:i]];
+                            [cell.activityIndicatorView setHidden:YES];
+                        }
                         
                         if (photos.count > 0) {
                             [self.mainPhotoIndicatorView setHidden:NO];
                             [self.photosURL addObjectsFromArray:photos];
+                            
+                            for (int i=1; i<photos.count; i++) {
+                                SidePhotoTableViewCell *cell = [self.sidePhotoTableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:i]];
+                                [cell.activityIndicatorView setHidden:NO];
+                            }
                             
                             for (int i=0; i<photos.count; i++) {
                                 __weak typeof(self) weakSelf = self;
@@ -227,13 +238,6 @@ static NSString *const SidePhotoTableViewCellIdentifier = @"SidePhotoTableViewCe
                                         });
                                     }
                                 }];
-                            }
-                        } else {
-                            [self.mainPhotoIndicatorView setHidden:YES];
-                            
-                            for (int i=0; i<5; i++) {
-                                SidePhotoTableViewCell *cell = [self.sidePhotoTableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:i]];
-                                [cell.activityIndicatorView setHidden:YES];
                             }
                         }
                     }
@@ -271,6 +275,11 @@ static NSString *const SidePhotoTableViewCellIdentifier = @"SidePhotoTableViewCe
     
     if (self.currentPhotoIndex == 0) {
         [self.mainPhotoIndicatorView setHidden:NO];
+    } else {
+        SidePhotoTableViewCell *cell = [self.sidePhotoTableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:self.currentPhotoIndex-1]];
+        UIActivityIndicatorView *activityIndicatorView = cell.activityIndicatorView.subviews.firstObject;
+        [cell.activityIndicatorView setHidden:NO];
+        [activityIndicatorView startAnimating];
     }
     
     [manager POST:url parameters:@{} constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
@@ -301,6 +310,11 @@ static NSString *const SidePhotoTableViewCellIdentifier = @"SidePhotoTableViewCe
     
     if (self.currentPhotoIndex == 0) {
         [self.mainPhotoIndicatorView setHidden:NO];
+    } else {
+        SidePhotoTableViewCell *cell = [self.sidePhotoTableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:self.currentPhotoIndex-1]];
+        UIActivityIndicatorView *activityIndicatorView = cell.activityIndicatorView.subviews.firstObject;
+        [cell.activityIndicatorView setHidden:NO];
+        [activityIndicatorView startAnimating];
     }
     
     [manager POST:url parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
