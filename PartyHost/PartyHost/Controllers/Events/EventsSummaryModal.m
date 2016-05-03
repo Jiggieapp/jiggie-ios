@@ -345,23 +345,6 @@
      }];
 }
 
--(void)showViewed:(NSString *)event_id
-{
-    AFHTTPRequestOperationManager *manager = [self.sharedData getOperationManager];
-    NSString *url = [Constants guestListingsURL:event_id fb_id:self.sharedData.fb_id];
-    url = [NSString stringWithFormat:@"%@/event/details/%@/%@/%@",PHBaseURL,event_id,self.sharedData.fb_id,self.sharedData.gender];
-    
-    NSLog(@"EVENTS_GUEST_LIST_URL :: %@",url);
-    
-    [manager GET:url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject)
-     {
-         
-     }  failure:^(AFHTTPRequestOperation *operation, NSError *error)
-     {
-         
-     }];
-}
-
 -(void)populateData:(NSDictionary *)dict
 {
     NSLog(@"EVENTS_DICT :: %@",self.sharedData.mixPanelCEventDict);
