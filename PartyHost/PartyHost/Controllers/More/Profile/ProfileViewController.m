@@ -14,20 +14,21 @@
 #import "OLFacebookImage.h"
 #import "SVProgressHUD.h"
 #import "SharedData.h"
+#import "SidePhotoTableViewCell.h"
 
-#define kSidePhotoTag 1500
+static NSString *const SidePhotoTableViewCellIdentifier = @"SidePhotoTableViewCellIdentifier";
 
-@interface ProfileViewController () <UITextViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, OLFacebookImagePickerControllerDelegate>
+@interface ProfileViewController () <UITextViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, OLFacebookImagePickerControllerDelegate, UITableViewDelegate, UITableViewDataSource>
 
-@property (strong, nonatomic) IBOutlet UIButton *sidePhoto1Button;
-@property (strong, nonatomic) IBOutlet UIButton *sidePhoto2Button;
-@property (strong, nonatomic) IBOutlet UIButton *sidePhoto3Button;
-@property (strong, nonatomic) IBOutlet UIButton *sidePhoto4Button;
+@property (strong, nonatomic) IBOutlet UIView *mainPhotoIndicatorView;
+@property (strong, nonatomic) IBOutlet UIImageView *mainPhotoActionImageView;
 
 @property (strong, nonatomic) SharedData *sharedData;
 @property (assign, nonatomic) BOOL isProfileChanges;
-
-@property (strong, nonatomic) UIImageView *currentImageView;
+@property (assign, nonatomic) BOOL isFromSidePhoto;
+@property (strong, nonatomic) NSMutableArray *photos;
+@property (assign, nonatomic) NSInteger currentPhotoIndex;
+@property (strong, nonatomic) UIImage *defaultImage;
 
 @end
 
@@ -87,34 +88,28 @@
                                                                          action:@selector(didTapDoneButton:)];
     [self.navigationItem setRightBarButtonItem:doneBarButtonItem];
     
-    CGFloat radius = 2;
-    
-    self.mainPhotoImageView.layer.cornerRadius = radius;
-    self.sidePhoto1ImageView.layer.cornerRadius = radius;
-    self.sidePhoto2ImageView.layer.cornerRadius = radius;
-    self.sidePhoto3ImageView.layer.cornerRadius = radius;
-    self.sidePhoto4ImageView.layer.cornerRadius = radius;
-    
+    self.mainPhotoImageView.layer.cornerRadius = 2;
     self.mainPhotoImageView.layer.masksToBounds = YES;
-    self.sidePhoto1ImageView.layer.masksToBounds = YES;
-    self.sidePhoto2ImageView.layer.masksToBounds = YES;
-    self.sidePhoto3ImageView.layer.masksToBounds = YES;
-    self.sidePhoto4ImageView.layer.masksToBounds = YES;
-    
-    self.sidePhoto1Button.layer.cornerRadius = radius;
-    self.sidePhoto2Button.layer.cornerRadius = radius;
-    self.sidePhoto3Button.layer.cornerRadius = radius;
-    self.sidePhoto4Button.layer.cornerRadius = radius;
-    
-    self.sidePhoto1Button.tag = kSidePhotoTag+1;
-    self.sidePhoto2Button.tag = kSidePhotoTag+2;
-    self.sidePhoto3Button.tag = kSidePhotoTag+3;
-    self.sidePhoto4Button.tag = kSidePhotoTag+4;
     
     [self.aboutTextView setText:nil];
     [self.aboutTextView setPlaceholder:@"Write about yourself here..."];
     [self.aboutTextView setPlaceholderColor:[UIColor phDarkGrayColor]];
     [self.aboutTextView setDelegate:self];
+    
+    [self.sidePhotoTableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
+    [self.sidePhotoTableView setDataSource:self];
+    [self.sidePhotoTableView setDelegate:self];
+    [self.sidePhotoTableView registerNib:[SidePhotoTableViewCell nib]
+                  forCellReuseIdentifier:SidePhotoTableViewCellIdentifier];
+    
+    self.defaultImage = [UIImage new];
+    
+    self.photos = [[NSMutableArray alloc] init];
+    [self.photos addObject:self.defaultImage];
+    [self.photos addObject:self.defaultImage];
+    [self.photos addObject:self.defaultImage];
+    [self.photos addObject:self.defaultImage];
+    [self.photos addObject:self.defaultImage];
 }
 
 - (void)showImagePickerController {
@@ -157,6 +152,26 @@
                              [self showImagePickerController];
                          } else if (buttonIndex == 1) {
                              [self showFacebookImagePickerController];
+                         }
+                     }];
+}
+
+- (void)showDeleteActionSheet {
+    [UIActionSheet showInView:self.view
+                    withTitle:nil
+            cancelButtonTitle:@"Cancel"
+       destructiveButtonTitle:nil
+            otherButtonTitles:@[@"Delete"]
+                     tapBlock:^(UIActionSheet * _Nonnull actionSheet, NSInteger buttonIndex) {
+                         if (buttonIndex == 0) {
+                             if (self.currentPhotoIndex == 0) {
+                                 [self.photos replaceObjectAtIndex:0 withObject:self.defaultImage];
+                                 [self.mainPhotoImageView setImage:nil];
+                             } else {
+                                 [self.photos replaceObjectAtIndex:self.currentPhotoIndex
+                                                        withObject:self.defaultImage];
+                                 [self.sidePhotoTableView reloadData];
+                             }
                          }
                      }];
 }
@@ -204,6 +219,10 @@
 
 - (void)loadPhotos {
     NSArray *photos = self.sharedData.photosDict[@"photos"];
+    
+    [self.mainPhotoActionImageView setImage:[UIImage imageNamed:@"add_photo"]];
+    [self.mainPhotoImageView setHidden:NO];
+    
     for (int i=0; i<photos.count; i++) {
         __weak typeof(self) weakSelf = self;
         NSString *photoURL = photos[i];
@@ -211,16 +230,15 @@
             __strong typeof(self) strongSelf = weakSelf;
             if (strongSelf) {
                 dispatch_async(dispatch_get_main_queue(), ^{
+                    [strongSelf.photos replaceObjectAtIndex:i
+                                                 withObject:strongSelf.sharedData.imagesDict[photos[i]]];
+                    
                     if (i == 0) {
+                        [strongSelf.mainPhotoIndicatorView setHidden:YES];
+                        [strongSelf.mainPhotoActionImageView setImage:[UIImage imageNamed:@"delete_photo"]];
                         [strongSelf.mainPhotoImageView setImage:strongSelf.sharedData.imagesDict[photos[0]]];
-                    } else if (i == 1) {
-                        [strongSelf.sidePhoto1ImageView setImage:strongSelf.sharedData.imagesDict[photos[1]]];
-                    } else if (i == 2) {
-                        [strongSelf.sidePhoto2ImageView setImage:strongSelf.sharedData.imagesDict[photos[2]]];
-                    } else if (i == 3) {
-                        [strongSelf.sidePhoto3ImageView setImage:strongSelf.sharedData.imagesDict[photos[3]]];
-                    } else if (i == 4) {
-                        [strongSelf.sidePhoto4ImageView setImage:strongSelf.sharedData.imagesDict[photos[4]]];
+                    } else {
+                        [strongSelf.sidePhotoTableView reloadData];
                     }
                 });
             }
@@ -260,23 +278,79 @@
 }
 
 - (IBAction)didTapMainPhotoImageView:(id)sender {
-    self.currentImageView = self.mainPhotoImageView;
-    [self showActionSheet];
+    self.isFromSidePhoto = NO;
+    self.currentPhotoIndex = 0;
+    
+    if (self.mainPhotoImageView.image) {
+        [self showDeleteActionSheet];
+    } else {
+        [self showActionSheet];
+    }
 }
 
-- (IBAction)didTapSidePhotoButton:(UIButton *)sender {
-    NSInteger tag = sender.tag-kSidePhotoTag;
-    if (tag == 1) {
-        self.currentImageView = self.sidePhoto1ImageView;
-    } else if (tag == 2) {
-        self.currentImageView = self.sidePhoto2ImageView;
-    } else if (tag == 3) {
-        self.currentImageView = self.sidePhoto3ImageView;
+#pragma mark - UITableViewDataSource
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    return self.photos.count;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return 1;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    SidePhotoTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:SidePhotoTableViewCellIdentifier
+                                                                   forIndexPath:indexPath];
+    
+    UIImage *photo = self.photos[indexPath.section+1];
+    
+    if (photo != self.defaultImage) {
+        [cell.photoActionImageView setImage:[UIImage imageNamed:@"delete_photo"]];
+        [cell.activityIndicatorView setHidden:YES];
+        [cell.photoImageView setImage:photo];
     } else {
-        self.currentImageView = self.sidePhoto4ImageView;
+        [cell.photoActionImageView setImage:[UIImage imageNamed:@"add_photo"]];
+        
+        UIActivityIndicatorView *acitivityIndicatorView = cell.activityIndicatorView.subviews.firstObject;
+        if (acitivityIndicatorView.isAnimating) {
+            [cell.activityIndicatorView setHidden:NO];
+        } else {
+            [cell.activityIndicatorView setHidden:YES];
+        }
+        
+        [cell.photoImageView setImage:nil];
     }
     
-    [self showActionSheet];
+    return cell;
+}
+
+#pragma mark - UITableViewDelegate
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    if (section == 0) {
+        return .0f;
+    }
+    
+    return 15.0f;
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    return [UIView new];
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return 62.0f;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    self.isFromSidePhoto = YES;
+    self.currentPhotoIndex = indexPath.section+1;
+    
+    if (self.photos[indexPath.section+1] == self.defaultImage) {
+        [self showActionSheet];
+    } else {
+        [self showDeleteActionSheet];
+    }
 }
 
 #pragma mark - UITextViewDelegate
@@ -293,11 +367,17 @@
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(nonnull NSDictionary<NSString *,id> *)info {
     UIImage *chosenImage = info[UIImagePickerControllerEditedImage];
-    [self.currentImageView setImage:chosenImage];
+    [self.photos replaceObjectAtIndex:self.currentPhotoIndex withObject:chosenImage];
     
-    [picker dismissViewControllerAnimated:YES completion:nil];
+    if (self.isFromSidePhoto) {
+        [self.sidePhotoTableView reloadData];
+    } else {
+        [self.mainPhotoImageView setImage:chosenImage];
+    }
     
     self.isProfileChanges = YES;
+    
+    [picker dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark - OLFacebookImagePickerControllerDelegate
@@ -309,10 +389,19 @@
 }
 
 - (void)facebookImagePicker:(OLFacebookImagePickerController *)imagePicker didFinishPickingImages:(NSArray *)images {
-    OLFacebookImage *chosenImage = images.firstObject;
     NSDictionary *facebookPhotos = self.sharedData.facebookImagesDict;
+    UIImage *chosenImage = facebookPhotos[[images.firstObject bestURLForSize:CGSizeMake(600, 600)]];
     
-    [self.currentImageView setImage:facebookPhotos[[chosenImage bestURLForSize:CGSizeMake(600, 600)]]];
+    [self.photos replaceObjectAtIndex:self.currentPhotoIndex withObject:chosenImage];
+    
+    if (self.isFromSidePhoto) {
+        [self.sidePhotoTableView reloadData];
+    } else {
+        [self.mainPhotoImageView setImage:chosenImage];
+    }
+    
+    self.isProfileChanges = YES;
+    
     [imagePicker dismissViewControllerAnimated:YES completion:nil];
 }
 

@@ -37,6 +37,8 @@
 		936674581CD7627500AC94F3 /* UIImageView+HighlightedWebCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 936674481CD7627500AC94F3 /* UIImageView+HighlightedWebCache.m */; };
 		936674591CD7627500AC94F3 /* UIImageView+WebCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 9366744A1CD7627500AC94F3 /* UIImageView+WebCache.m */; };
 		9366745A1CD7627500AC94F3 /* UIView+WebCacheOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 9366744C1CD7627500AC94F3 /* UIView+WebCacheOperation.m */; };
+		9366745E1CD8562300AC94F3 /* SidePhotoTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9366745C1CD8562300AC94F3 /* SidePhotoTableViewCell.m */; };
+		9366745F1CD8562300AC94F3 /* SidePhotoTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9366745D1CD8562300AC94F3 /* SidePhotoTableViewCell.xib */; };
 		938CE7781CCE2C9900ADDD4C /* ShadowView.m in Sources */ = {isa = PBXBuildFile; fileRef = 938CE7711CCE2C9800ADDD4C /* ShadowView.m */; };
 		938CE7791CCE2C9900ADDD4C /* FeedCardView.m in Sources */ = {isa = PBXBuildFile; fileRef = 938CE7731CCE2C9900ADDD4C /* FeedCardView.m */; };
 		938CE77A1CCE2C9900ADDD4C /* FeedCardView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 938CE7741CCE2C9900ADDD4C /* FeedCardView.xib */; };
@@ -451,6 +453,9 @@
 		9366744A1CD7627500AC94F3 /* UIImageView+WebCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImageView+WebCache.m"; sourceTree = "<group>"; };
 		9366744B1CD7627500AC94F3 /* UIView+WebCacheOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+WebCacheOperation.h"; sourceTree = "<group>"; };
 		9366744C1CD7627500AC94F3 /* UIView+WebCacheOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+WebCacheOperation.m"; sourceTree = "<group>"; };
+		9366745B1CD8562300AC94F3 /* SidePhotoTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SidePhotoTableViewCell.h; sourceTree = "<group>"; };
+		9366745C1CD8562300AC94F3 /* SidePhotoTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SidePhotoTableViewCell.m; sourceTree = "<group>"; };
+		9366745D1CD8562300AC94F3 /* SidePhotoTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SidePhotoTableViewCell.xib; sourceTree = "<group>"; };
 		938CE7701CCE2C9800ADDD4C /* ShadowView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShadowView.h; sourceTree = "<group>"; };
 		938CE7711CCE2C9800ADDD4C /* ShadowView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShadowView.m; sourceTree = "<group>"; };
 		938CE7721CCE2C9800ADDD4C /* FeedCardView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FeedCardView.h; sourceTree = "<group>"; };
@@ -1341,6 +1346,9 @@
 				938CE8181CD387BC00ADDD4C /* ProfileViewController.h */,
 				938CE8191CD387BC00ADDD4C /* ProfileViewController.m */,
 				938CE81A1CD387BC00ADDD4C /* ProfileViewController.xib */,
+				9366745B1CD8562300AC94F3 /* SidePhotoTableViewCell.h */,
+				9366745C1CD8562300AC94F3 /* SidePhotoTableViewCell.m */,
+				9366745D1CD8562300AC94F3 /* SidePhotoTableViewCell.xib */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -2553,6 +2561,7 @@
 				DAABB2E71C1FF993004DDCFA /* FaktPro-Thin.ttf in Resources */,
 				DAABB2AB1C1FF5AE004DDCFA /* MPSurvey.storyboard in Resources */,
 				938CE77A1CCE2C9900ADDD4C /* FeedCardView.xib in Resources */,
+				9366745F1CD8562300AC94F3 /* SidePhotoTableViewCell.xib in Resources */,
 				DAABB1001C1FD50E004DDCFA /* SignupPages.xib in Resources */,
 				DAABB2E91C1FF993004DDCFA /* Lato-Italic.ttf in Resources */,
 				DAABB0EB1C1FD50E004DDCFA /* EventsPopup.xcassets in Resources */,
@@ -2749,6 +2758,7 @@
 				DAABB0B91C1FD50E004DDCFA /* BookTableHostingComplete.m in Sources */,
 				DAABB25D1C1FF5AE004DDCFA /* AsyncImageView.m in Sources */,
 				DAABB29A1C1FF5AE004DDCFA /* MPDesignerTrackMessage.m in Sources */,
+				9366745E1CD8562300AC94F3 /* SidePhotoTableViewCell.m in Sources */,
 				DAABB0EA1C1FD50E004DDCFA /* ChatPopupView.m in Sources */,
 				DAABB2D31C1FF5AE004DDCFA /* UICollectionViewLeftAlignedLayout.m in Sources */,
 				DAABB12D1C1FF13A004DDCFA /* SelectionButton.m in Sources */,
