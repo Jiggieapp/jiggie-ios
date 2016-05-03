@@ -52,6 +52,8 @@ static NSString *const SocialMultiSliderTableViewCellIdentifier = @"SocialMultiS
 
 #pragma mark - Data
 - (void)reloadData {
+    [self.discoverSwitch setOn:self.sharedData.matchMe];
+    
     NSString *genderInterest = @"";
     if ([self.sharedData.gender_interest isEqualToString:@"female"]) {
         genderInterest = @"Women";
