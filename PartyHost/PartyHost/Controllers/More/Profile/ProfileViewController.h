@@ -11,10 +11,7 @@
 @interface ProfileViewController : UIViewController
 
 @property (strong, nonatomic) IBOutlet UIImageView *mainPhotoImageView;
-@property (strong, nonatomic) IBOutlet UIImageView *sidePhoto1ImageView;
-@property (strong, nonatomic) IBOutlet UIImageView *sidePhoto2ImageView;
-@property (strong, nonatomic) IBOutlet UIImageView *sidePhoto3ImageView;
-@property (strong, nonatomic) IBOutlet UIImageView *sidePhoto4ImageView;
+@property (strong, nonatomic) IBOutlet UITableView *sidePhotoTableView;
 @property (strong, nonatomic) IBOutlet UITextView *aboutTextView;
 
 @end
