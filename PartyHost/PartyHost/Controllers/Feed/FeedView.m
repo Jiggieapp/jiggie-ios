@@ -530,8 +530,6 @@
 - (void)swipeableView:(ZLSwipeableView *)swipeableView didEndSwipingView:(UIView *)view atLocation:(CGPoint)location {
     if (self.isSwipedOut) {
         Feed *feed = [self getFeedFromCardView:view];
-        
-        [self.feedData removeObject:feed];
     
         [Feed archiveObject:self.feedData];
         
@@ -543,27 +541,30 @@
         
         [self trackViewFeedItem];
     }
-    
-    [self.swipeableView setUserInteractionEnabled:YES];
 }
 
 - (void)swipeableView:(ZLSwipeableView *)swipeableView didCancelSwipe:(UIView *)view {
     self.isSwipedOut = NO;
-
-    NSInteger feedIndex = view.tag-CARD_VIEW_TAG;
-    NSInteger numberOfCardsLeft = self.feedData.count - feedIndex;
-    if (numberOfCardsLeft == 3 || numberOfCardsLeft == 0) {
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW,
-                                     (int64_t)(0.7 * NSEC_PER_SEC)),
-                       dispatch_get_main_queue(), ^{
-                           [self loadDataAndShowHUD:NO withCompletionHandler:nil];
-                       });
-    }
 }
 
 - (void)swipeableView:(ZLSwipeableView *)swipeableView didSwipeView:(UIView *)view inDirection:(ZLSwipeableViewDirection)direction {
     self.isSwipedOut = YES;
     [self.swipeableView setUserInteractionEnabled:NO];
+    
+    Feed *feed = [self getFeedFromCardView:view];
+    [self.feedData removeObject:feed];
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW,
+                                 (int64_t)(0.7 * NSEC_PER_SEC)),
+                   dispatch_get_main_queue(), ^{
+                       NSInteger feedIndex = view.tag-CARD_VIEW_TAG;
+                       NSInteger numberOfCardsLeft = self.feedData.count - feedIndex;
+                       if (numberOfCardsLeft <= 0) {
+                           [self loadDataAndShowHUD:NO withCompletionHandler:nil];
+                       }
+                       
+                       [self.swipeableView setUserInteractionEnabled:YES];
+                   });
 }
 
 #pragma mark - FeedCardViewDelegate
