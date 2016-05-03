@@ -25,7 +25,6 @@ static NSString *const SidePhotoTableViewCellIdentifier = @"SidePhotoTableViewCe
 
 @property (strong, nonatomic) SharedData *sharedData;
 @property (assign, nonatomic) BOOL isProfileChanges;
-@property (assign, nonatomic) BOOL isFromSidePhoto;
 @property (strong, nonatomic) NSMutableArray *photos;
 @property (assign, nonatomic) NSInteger currentPhotoIndex;
 @property (strong, nonatomic) UIImage *defaultImage;
@@ -88,6 +87,9 @@ static NSString *const SidePhotoTableViewCellIdentifier = @"SidePhotoTableViewCe
                                                                          action:@selector(didTapDoneButton:)];
     [self.navigationItem setRightBarButtonItem:doneBarButtonItem];
     
+    self.mainPhotoActionImageView.layer.cornerRadius = 2;
+    self.mainPhotoActionImageView.layer.masksToBounds = YES;
+    
     self.mainPhotoImageView.layer.cornerRadius = 2;
     self.mainPhotoImageView.layer.masksToBounds = YES;
     
@@ -103,6 +105,8 @@ static NSString *const SidePhotoTableViewCellIdentifier = @"SidePhotoTableViewCe
                   forCellReuseIdentifier:SidePhotoTableViewCellIdentifier];
     
     self.defaultImage = [UIImage new];
+    
+    [self.mainPhotoImageView setImage:self.defaultImage];
     
     self.photos = [[NSMutableArray alloc] init];
     [self.photos addObject:self.defaultImage];
@@ -164,14 +168,24 @@ static NSString *const SidePhotoTableViewCellIdentifier = @"SidePhotoTableViewCe
             otherButtonTitles:@[@"Delete"]
                      tapBlock:^(UIActionSheet * _Nonnull actionSheet, NSInteger buttonIndex) {
                          if (buttonIndex == 0) {
-                             if (self.currentPhotoIndex == 0) {
-                                 [self.photos replaceObjectAtIndex:0 withObject:self.defaultImage];
-                                 [self.mainPhotoImageView setImage:nil];
-                             } else {
-                                 [self.photos replaceObjectAtIndex:self.currentPhotoIndex
-                                                        withObject:self.defaultImage];
-                                 [self.sidePhotoTableView reloadData];
+                             for (NSInteger i=self.currentPhotoIndex; i<=self.photos.count-1; i++) {
+                                 if (i==self.photos.count-1) {
+                                     [self.photos replaceObjectAtIndex:i
+                                                            withObject:self.defaultImage];
+                                 } else {
+                                     [self.photos replaceObjectAtIndex:i
+                                                            withObject:self.photos[i+1]];
+                                 }
+                                 
+                                 if (i==0) {
+                                     [self.mainPhotoImageView setImage:self.photos[i+1]];
+                                     if (self.mainPhotoImageView.image == self.defaultImage) {
+                                         [self.mainPhotoActionImageView setImage:[UIImage imageNamed:@"add_photo"]];
+                                     }
+                                 }
                              }
+                             
+                             [self.sidePhotoTableView reloadData];
                          }
                      }];
 }
@@ -267,6 +281,26 @@ static NSString *const SidePhotoTableViewCellIdentifier = @"SidePhotoTableViewCe
      }];
 }
 
+- (void)reloadPhotoDataWithChosenImage:(UIImage *)chosenImage {
+    for (int i=0; i<=self.currentPhotoIndex; i++) {
+        if (self.photos[i] == self.defaultImage) {
+            [self.photos replaceObjectAtIndex:i
+                                   withObject:chosenImage];
+            if (i==0 && self.photos[i] != self.defaultImage) {
+                [self.mainPhotoImageView setImage:self.photos[i]];
+                [self.mainPhotoActionImageView setImage:[UIImage imageNamed:@"delete_photo"]];
+            }
+            
+            break;
+        }
+    }
+    
+    if (self.currentPhotoIndex != 0) {
+        [self.sidePhotoTableView reloadData];
+    }
+    
+}
+
 #pragma mark - Action
 - (void)didTapDoneButton:(id)sender {
     if (self.isProfileChanges) {
@@ -278,10 +312,9 @@ static NSString *const SidePhotoTableViewCellIdentifier = @"SidePhotoTableViewCe
 }
 
 - (IBAction)didTapMainPhotoImageView:(id)sender {
-    self.isFromSidePhoto = NO;
     self.currentPhotoIndex = 0;
     
-    if (self.mainPhotoImageView.image) {
+    if (self.mainPhotoImageView.image != self.defaultImage) {
         [self showDeleteActionSheet];
     } else {
         [self showActionSheet];
@@ -343,7 +376,6 @@ static NSString *const SidePhotoTableViewCellIdentifier = @"SidePhotoTableViewCe
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    self.isFromSidePhoto = YES;
     self.currentPhotoIndex = indexPath.section+1;
     
     if (self.photos[indexPath.section+1] == self.defaultImage) {
@@ -367,16 +399,10 @@ static NSString *const SidePhotoTableViewCellIdentifier = @"SidePhotoTableViewCe
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(nonnull NSDictionary<NSString *,id> *)info {
     UIImage *chosenImage = info[UIImagePickerControllerEditedImage];
-    [self.photos replaceObjectAtIndex:self.currentPhotoIndex withObject:chosenImage];
-    
-    if (self.isFromSidePhoto) {
-        [self.sidePhotoTableView reloadData];
-    } else {
-        [self.mainPhotoImageView setImage:chosenImage];
-    }
     
     self.isProfileChanges = YES;
     
+    [self reloadPhotoDataWithChosenImage:chosenImage];
     [picker dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -392,16 +418,9 @@ static NSString *const SidePhotoTableViewCellIdentifier = @"SidePhotoTableViewCe
     NSDictionary *facebookPhotos = self.sharedData.facebookImagesDict;
     UIImage *chosenImage = facebookPhotos[[images.firstObject bestURLForSize:CGSizeMake(600, 600)]];
     
-    [self.photos replaceObjectAtIndex:self.currentPhotoIndex withObject:chosenImage];
-    
-    if (self.isFromSidePhoto) {
-        [self.sidePhotoTableView reloadData];
-    } else {
-        [self.mainPhotoImageView setImage:chosenImage];
-    }
-    
     self.isProfileChanges = YES;
     
+    [self reloadPhotoDataWithChosenImage:chosenImage];
     [imagePicker dismissViewControllerAnimated:YES completion:nil];
 }
 

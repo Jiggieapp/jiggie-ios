@@ -19,13 +19,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="62" height="62"/>
                         <color key="backgroundColor" red="0.66666666669999997" green="0.68235294120000001" blue="0.71372549019999998" alpha="1" colorSpace="calibratedRGB"/>
                     </imageView>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="add_photo" translatesAutoresizingMaskIntoConstraints="NO" id="0dv-5a-hqx">
-                        <rect key="frame" x="36" y="37" width="26" height="25"/>
-                        <constraints>
-                            <constraint firstAttribute="height" constant="25" id="Tzm-Ho-ULH"/>
-                            <constraint firstAttribute="width" constant="26" id="vQi-G9-vZ4"/>
-                        </constraints>
-                    </imageView>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oUU-kj-fHB">
                         <rect key="frame" x="0.0" y="0.0" width="62" height="62"/>
                         <subviews>
@@ -40,6 +33,13 @@
                             <constraint firstItem="0kT-BM-sy8" firstAttribute="centerY" secondItem="oUU-kj-fHB" secondAttribute="centerY" id="BQa-LE-JJW"/>
                         </constraints>
                     </view>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="add_photo" translatesAutoresizingMaskIntoConstraints="NO" id="0dv-5a-hqx">
+                        <rect key="frame" x="36" y="37" width="26" height="25"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="25" id="Tzm-Ho-ULH"/>
+                            <constraint firstAttribute="width" constant="26" id="vQi-G9-vZ4"/>
+                        </constraints>
+                    </imageView>
                 </subviews>
                 <constraints>
                     <constraint firstItem="oUU-kj-fHB" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="-8" id="9sh-aw-dB3"/>

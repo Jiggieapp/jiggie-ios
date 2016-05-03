@@ -42,9 +42,6 @@
                                                 <outletCollection property="gestureRecognizers" destination="3Ej-bg-7zB" appends="YES" id="Z5m-fk-LOc"/>
                                             </connections>
                                         </imageView>
-                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="delete_photo" translatesAutoresizingMaskIntoConstraints="NO" id="sLB-wY-cjD">
-                                            <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
-                                        </imageView>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="R4d-Nd-Odj">
                                             <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
                                             <subviews>
@@ -76,6 +73,9 @@
                                                 </mask>
                                             </variation>
                                         </view>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="delete_photo" translatesAutoresizingMaskIntoConstraints="NO" id="sLB-wY-cjD">
+                                            <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                                        </imageView>
                                     </subviews>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     <constraints>
@@ -94,8 +94,8 @@
                                     <variation key="default">
                                         <mask key="subviews">
                                             <exclude reference="Edi-Jz-esr"/>
-                                            <exclude reference="sLB-wY-cjD"/>
                                             <exclude reference="R4d-Nd-Odj"/>
+                                            <exclude reference="sLB-wY-cjD"/>
                                         </mask>
                                         <mask key="constraints">
                                             <exclude reference="2wg-eG-vFV"/>
@@ -114,8 +114,8 @@
                                     <variation key="heightClass=regular-widthClass=compact">
                                         <mask key="subviews">
                                             <include reference="Edi-Jz-esr"/>
-                                            <include reference="sLB-wY-cjD"/>
                                             <include reference="R4d-Nd-Odj"/>
+                                            <include reference="sLB-wY-cjD"/>
                                         </mask>
                                         <mask key="constraints">
                                             <include reference="2wg-eG-vFV"/>

@@ -26,6 +26,9 @@
     
     self.photoImageView.layer.cornerRadius = 2;
     self.photoImageView.layer.masksToBounds = YES;
+    
+    self.activityIndicatorView.layer.cornerRadius = 2;
+    self.activityIndicatorView.layer.masksToBounds = YES;
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
