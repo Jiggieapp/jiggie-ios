@@ -54,11 +54,12 @@
         self.dimView.hidden = YES;
         [self addSubview:self.dimView];
         
-        self.title = [[UILabel alloc] initWithFrame:CGRectMake(10, CGRectGetMaxY(self.mainImg.frame) + 14, self.sharedData.screenWidth - 20 - 70, 20)];
+        self.title = [[UILabel alloc] initWithFrame:CGRectMake(10, CGRectGetMaxY(self.mainImg.frame) + 14, self.sharedData.screenWidth - 20 - 70, 70)];
         self.title.textColor = [UIColor blackColor];
         self.title.textAlignment = NSTextAlignmentLeft;
         self.title.adjustsFontSizeToFitWidth = YES;
         self.title.font = [UIFont phBlond:16];
+        self.title.numberOfLines = 3;
         [self addSubview:self.title];
         
         self.likeButton = [[UIButton alloc] initWithFrame:CGRectMake(self.sharedData.screenWidth - 70, CGRectGetMaxY(self.mainImg.frame) + 8, 40, 40)];
@@ -169,23 +170,25 @@
 {
     
     self.title.text = [event.title uppercaseString];
-    self.subtitle.text = [event.venue capitalizedString];
-    
-    self.likeCount.text = [NSString stringWithFormat:@"%@", event.likes];
+    self.title.frame = CGRectMake(10, CGRectGetMaxY(self.mainImg.frame) + 14, self.sharedData.screenWidth - 20 - 70, 70);
+    [self.title sizeToFit];
     
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     [formatter setDateFormat:PHDateFormatApp];
     [formatter setLocale:[NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"]];
     [formatter setTimeZone:[NSTimeZone localTimeZone]];
     self.date.text = [formatter stringFromDate:event.startDatetime];
+    self.date.frame = CGRectMake(10, CGRectGetMaxY(self.title.frame) + 4, self.sharedData.screenWidth - 20, 20);
     
-//    self.picURL = [Constants eventImageURL:dict[@"_id"]];
+    self.subtitle.text = [event.venue capitalizedString];
+    self.subtitle.frame = CGRectMake(10, CGRectGetMaxY(self.date.frame), self.sharedData.screenWidth - 20, 20);
+    
+    self.likeCount.text = [NSString stringWithFormat:@"%@", event.likes];
     
     if (event.photo && event.photo != nil) {
         self.picURL = [self.sharedData picURL:event.photo];
         
         //Load venue image
-//        [self.mainImg loadImage:self.picURL defaultImageNamed:@"nightclub_default"]; //This will load and can be cancelled?
         [self.mainImg loadImage:self.picURL defaultImageNamed:@""]; //This will load and can be cancelled?
 
     } else {
@@ -205,6 +208,8 @@
         [tags insertObject:@"Featured" atIndex:0];
     }
     
+    self.tagsView.frame = CGRectMake(10, CGRectGetMaxY(self.subtitle.frame) + 8, self.sharedData.screenWidth, 20);
+    
     int currX = 0;
     for (NSString *tag in tags) {
         UIButton *tagPil = [[UIButton alloc] initWithFrame:CGRectMake(currX, 0, 80, 20)];
@@ -212,8 +217,6 @@
         tagPil.titleLabel.font = [UIFont phBlond:11];
         tagPil.titleEdgeInsets = UIEdgeInsetsMake(0, 0, 2, 0);
         [tagPil setTitle:tag forState:UIControlStateNormal];
-        //        tagPil.layer.borderWidth = 1.0;
-        //        tagPil.layer.borderColor = [UIColor darkGrayColor].CGColor;
         [tagPil setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         tagPil.layer.cornerRadius = 10;
         

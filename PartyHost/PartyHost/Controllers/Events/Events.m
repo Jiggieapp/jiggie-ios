@@ -751,7 +751,35 @@
     }
     
     CGFloat pictureHeightRatio = 3.0 / 4.0;
-    CGFloat cellHeight = pictureHeightRatio * tableView.bounds.size.width + 120;
+    CGFloat cellHeight = pictureHeightRatio * tableView.bounds.size.width + 100;
+    
+    
+    Event *event = nil;
+    if ([tableView isEqual:self.events1List]) {
+        if (self.eventsToday != nil && indexPath.row < self.eventsToday.count) {
+            event = [self.eventsToday objectAtIndex:indexPath.row];
+        }
+    } else if ([tableView isEqual:self.events2List]) {
+        if (self.eventsTomorrow != nil && indexPath.row < self.eventsTomorrow.count) {
+            event = [self.eventsTomorrow objectAtIndex:indexPath.row];
+        }
+    } else if ([tableView isEqual:self.events3List]) {
+        if (self.eventsUpcoming != nil && indexPath.row < self.eventsUpcoming.count) {
+            event = [self.eventsUpcoming objectAtIndex:indexPath.row];
+        }
+    }
+    
+    if (event != nil) {
+        NSString *eventTitle = [event.title uppercaseString];
+        
+        CGRect eventTitleFrame = [eventTitle boundingRectWithSize:CGSizeMake(self.sharedData.screenWidth - 20 - 70, 70)
+                                                         options:NSStringDrawingUsesLineFragmentOrigin
+                                                      attributes:@{NSFontAttributeName:[UIFont phBlond:16]}
+                                                         context:nil];
+        
+        cellHeight += eventTitleFrame.size.height;
+    }
+    
     return cellHeight;
 }
 

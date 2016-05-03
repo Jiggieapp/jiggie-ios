@@ -883,7 +883,11 @@
                 message = @"";
             }
             
-            self.errorType = [responseObject objectForKey:@"type"];
+            if ([responseObject objectForKey:@"type"]) {
+                self.errorType = [responseObject objectForKey:@"type"];
+            } else {
+                self.errorType = @"";
+            }
             
             if (([[[UIDevice currentDevice] systemVersion] compare:@"8.0" options:NSNumericSearch] == NSOrderedAscending)) {
                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Payment Failed"
