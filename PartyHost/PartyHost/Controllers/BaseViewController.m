@@ -32,6 +32,9 @@
     
     [[self navigationItem] setLeftBarButtonItem:backBarButtonItem];
     
+    [self.navigationController.navigationBar setTitleTextAttributes:
+     @{NSForegroundColorAttributeName:[UIColor whiteColor]}];
+    
     [self loadVisibleSize];
 }
 

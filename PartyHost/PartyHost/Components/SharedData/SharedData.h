@@ -56,6 +56,7 @@
 @property(nonatomic,strong) Events              *eventsPage;
 @property(nonatomic,strong) BookTable           *bookTable;
 @property(nonatomic,strong) NSMutableDictionary *imagesDict;
+@property(nonatomic,strong) NSMutableDictionary *facebookImagesDict;
 @property(nonatomic,strong) NSString            *appKey;
 @property(nonatomic,strong) NSString            *fromMailId;
 @property(nonatomic,strong) NSString            *fromMailName;

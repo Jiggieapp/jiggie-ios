@@ -15,6 +15,7 @@
 #import "TicketSuccessViewController.h"
 #import "PaymentSelectionViewController.h"
 #import "PurchaseHistoryViewController.h"
+#import "ProfileViewController.h"
 
 @interface ViewController ()
 
@@ -145,6 +146,11 @@
      name:@"SHOW_PURCHASE_HISTORY"
      object:nil];
     
+    [[NSNotificationCenter defaultCenter]
+     addObserver:self
+     selector:@selector(showProfile:)
+     name:@"SHOW_PROFILE"
+     object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserverForName:
      UIApplicationDidReceiveMemoryWarningNotification
@@ -656,6 +662,12 @@
     PurchaseHistoryViewController *purchaseHistoryViewController = [[PurchaseHistoryViewController alloc] init];
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:purchaseHistoryViewController];
     [self presentViewController:navigationController animated:YES completion:nil];
+}
+
+#pragma mark - Profile Notification
+- (void)showProfile:(NSNotification *)notification {
+    UINavigationController *profileNavigationController = [[UINavigationController alloc] initWithRootViewController:[[ProfileViewController alloc] init]];
+    [self presentViewController:profileNavigationController animated:YES completion:nil];
 }
 
 - (void)didReceiveMemoryWarning
