@@ -93,6 +93,42 @@
     return [self loadImage:[sharedData profileImg:self.fb_id]];
 }
 
+- (void)loadProfileImage:(NSString *)fb_id {
+    self.fb_id = fb_id;
+    NSString *url = [NSString stringWithFormat:@"%@/memberinfo/%@", PHBaseNewURL, self.fb_id];
+    SharedData *sharedData = [SharedData sharedInstance];
+    AFHTTPRequestOperationManager *manager = [sharedData getOperationManager];
+    
+    [manager GET:url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSInteger responseStatusCode = operation.response.statusCode;
+        if (responseStatusCode != 200) {
+            return;
+        }
+        
+        NSString *responseString = operation.responseString;
+        NSError *error;
+        NSDictionary *json = (NSDictionary *)[NSJSONSerialization
+                                              JSONObjectWithData:[responseString dataUsingEncoding:NSUTF8StringEncoding]
+                                              options:kNilOptions
+                                              error:&error];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (json && json != nil) {
+                NSDictionary *data = [json objectForKey:@"data"];
+                if (data && data != nil) {
+                    NSDictionary *memberinfo = [data objectForKey:@"memberinfo"];
+                    if (memberinfo && memberinfo != nil) {
+                        NSArray *photos = memberinfo[@"photos"];
+                        if (photos && photos != nil) {
+                            [self loadImage:photos[0]];
+                        }
+                    }
+                }
+            }
+        });
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+    }];
+}
+
 - (void)cancel {
     if(self.connection!=nil) {
         [self.connection cancel];

@@ -175,10 +175,10 @@ static NSString *const SidePhotoTableViewCellIdentifier = @"SidePhotoTableViewCe
 
 #pragma mark - Data
 - (void)loadData {
-    NSString *urlToLoad = [NSString stringWithFormat:@"%@/memberinfo/%@", PHBaseNewURL, self.sharedData.fb_id];
+    NSString *url = [NSString stringWithFormat:@"%@/memberinfo/%@", PHBaseNewURL, self.sharedData.fb_id];
     AFHTTPRequestOperationManager *manager = [self.sharedData getOperationManager];
     
-    [manager GET:urlToLoad parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [manager GET:url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSInteger responseStatusCode = operation.response.statusCode;
         if (responseStatusCode != 200) {
             return;

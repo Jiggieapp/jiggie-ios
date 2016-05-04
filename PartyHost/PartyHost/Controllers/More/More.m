@@ -181,7 +181,7 @@
     [self.hostingsPage goQuickBack];
     [self.confirmationsPage goQuickBack];
     
-    [self.userProfilePicture loadFacebookImage:self.sharedData.fb_id];
+    [self.userProfilePicture loadProfileImage:self.sharedData.fb_id];
     self.userProfileName.text = self.sharedData.userDict[@"first_name"];
     if([self.sharedData.phone length]>0)
     {

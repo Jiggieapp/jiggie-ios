@@ -273,7 +273,7 @@
             UserBubble *friend = [[UserBubble alloc] initWithFrame:CGRectMake(20 + (i * 65), 0, 50, 50)];
             friend.layer.borderColor = [UIColor colorWithWhite:0 alpha:0.50].CGColor;
             friend.userInteractionEnabled = NO;
-            [friend loadFacebookImage:[self.mutualFriends objectAtIndex:i]];
+            [friend loadProfileImage:[self.mutualFriends objectAtIndex:i]];
             [self.mutualFriendsCon addSubview:friend];
         }
         
