@@ -28,6 +28,7 @@ static NSString *const SidePhotoTableViewCellIdentifier = @"SidePhotoTableViewCe
 @property (strong, nonatomic) NSMutableArray *photos;
 @property (strong, nonatomic) NSMutableArray *photosURL;
 @property (assign, nonatomic) NSInteger currentPhotoIndex;
+@property (strong, nonatomic) NSMutableArray *photoIndexs;
 @property (strong, nonatomic) UIImage *defaultImage;
 
 @end
@@ -112,6 +113,7 @@ static NSString *const SidePhotoTableViewCellIdentifier = @"SidePhotoTableViewCe
     [self.photos addObject:self.defaultImage];
     
     self.photosURL = [NSMutableArray arrayWithCapacity:5];
+    self.photoIndexs = [NSMutableArray arrayWithCapacity:5];
 }
 
 - (void)showImagePickerController {
@@ -202,7 +204,7 @@ static NSString *const SidePhotoTableViewCellIdentifier = @"SidePhotoTableViewCe
                         [self.mainPhotoActionImageView setImage:[UIImage imageNamed:@"add_photo"]];
                         [self.mainPhotoIndicatorView setHidden:YES];
                         
-                        for (int i=0; i<5; i++) {
+                        for (int i=1; i<5; i++) {
                             SidePhotoTableViewCell *cell = [self.sidePhotoTableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:i]];
                             [cell.activityIndicatorView setHidden:YES];
                         }
@@ -260,16 +262,12 @@ static NSString *const SidePhotoTableViewCellIdentifier = @"SidePhotoTableViewCe
         [self.sharedData.userDict setValue:self.aboutTextView.text forKey:@"about"];
         
      } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-//         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
-//                                                         message:@"There was an error updating your about info. Please try again"
-//                                                        delegate:nil
-//                                               cancelButtonTitle:@"OK"
-//                                               otherButtonTitles:nil];
-//         [alert show];
      }];
 }
 
 - (void)uploadPhotoWithImage:(UIImage *)image {
+    [self.photoIndexs addObject:@(self.currentPhotoIndex)];
+    
     NSString *url = [NSString stringWithFormat:@"%@/member/upload", PHBaseNewURL];
     AFHTTPRequestOperationManager *manager = [self.sharedData getOperationManager];
     
@@ -294,18 +292,35 @@ static NSString *const SidePhotoTableViewCellIdentifier = @"SidePhotoTableViewCe
         [formData appendPartWithFileData:imageData name:@"filefield" fileName:@"photo.jpg" mimeType:@"image/jpeg"];
         [formData appendPartWithFormData:fbIdData name:@"fb_id"];
     } success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        [self reloadPhotoDataWithChosenImage:image];
-        [self.mainPhotoIndicatorView setHidden:YES];
+        [self.photoIndexs removeObjectAtIndex:0];
+        
+        NSString *responseString = operation.responseString;
+        NSError *error;
+        NSDictionary *json = (NSDictionary *)[NSJSONSerialization
+                                              JSONObjectWithData:[responseString dataUsingEncoding:NSUTF8StringEncoding]
+                                              options:kNilOptions
+                                              error:&error];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (json && json != nil) {
+                [self.photosURL addObject:json[@"url"]];
+                [self reloadPhotoDataWithChosenImage:image];
+                [self.mainPhotoIndicatorView setHidden:YES];
+            }
+        });
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        [self reloadPhotoDataWithChosenImage:image];
-        [self.mainPhotoIndicatorView setHidden:YES];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.photoIndexs removeObjectAtIndex:0];
+            [self reloadPhotoDataWithChosenImage:image];
+            [self.mainPhotoIndicatorView setHidden:YES];
+        });
     }];
 }
 
 - (void)removeSelectedPhoto {
     NSString *url = [NSString stringWithFormat:@"%@/remove_profileimage", PHBaseNewURL];
+    NSString *photoURL = self.currentPhotoIndex < self.photosURL.count ? self.photosURL[self.currentPhotoIndex] : self.photosURL[self.photosURL.count-1];
     NSDictionary *parameters = @{@"fb_id" : self.sharedData.fb_id,
-                                 @"url" : self.photosURL[self.currentPhotoIndex]};
+                                 @"url" : photoURL};
     AFHTTPRequestOperationManager *manager = [self.sharedData getOperationManager];
     
     if (self.currentPhotoIndex == 0) {
@@ -318,27 +333,37 @@ static NSString *const SidePhotoTableViewCellIdentifier = @"SidePhotoTableViewCe
     }
     
     [manager POST:url parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        for (NSInteger i=self.currentPhotoIndex; i<=self.photos.count-1; i++) {
-            if (i==self.photos.count-1) {
-                [self.photos replaceObjectAtIndex:i
-                                       withObject:self.defaultImage];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (self.currentPhotoIndex < self.photosURL.count) {
+                [self.photosURL removeObjectAtIndex:self.currentPhotoIndex];
             } else {
-                [self.photos replaceObjectAtIndex:i
-                                       withObject:self.photos[i+1]];
+                [self.photosURL removeObjectAtIndex:self.photosURL.count-1];
             }
             
-            if (i==0) {
-                [self.mainPhotoImageView setImage:self.photos[i+1]];
-                if (self.mainPhotoImageView.image == self.defaultImage) {
-                    [self.mainPhotoActionImageView setImage:[UIImage imageNamed:@"add_photo"]];
+            for (NSInteger i=self.currentPhotoIndex; i<=self.photos.count-1; i++) {
+                if (i==self.photos.count-1) {
+                    [self.photos replaceObjectAtIndex:i
+                                           withObject:self.defaultImage];
+                } else {
+                    [self.photos replaceObjectAtIndex:i
+                                           withObject:self.photos[i+1]];
+                }
+                
+                if (i==0) {
+                    [self.mainPhotoImageView setImage:self.photos[i+1]];
+                    if (self.mainPhotoImageView.image == self.defaultImage) {
+                        [self.mainPhotoActionImageView setImage:[UIImage imageNamed:@"add_photo"]];
+                    }
                 }
             }
-        }
-        
-        [self.sidePhotoTableView reloadData];
-        [self.mainPhotoIndicatorView setHidden:YES];
+            
+            [self.sidePhotoTableView reloadData];
+            [self.mainPhotoIndicatorView setHidden:YES];
+        });
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        [self.mainPhotoIndicatorView setHidden:YES];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.mainPhotoIndicatorView setHidden:YES];
+        });
     }];
 }
 
@@ -396,18 +421,21 @@ static NSString *const SidePhotoTableViewCellIdentifier = @"SidePhotoTableViewCe
                                                                    forIndexPath:indexPath];
     
     UIImage *photo = self.photos[indexPath.section+1];
+    UIActivityIndicatorView *activityIndicatorView = cell.activityIndicatorView.subviews.firstObject;
     
     if (photo != self.defaultImage) {
         [cell.photoActionImageView setImage:[UIImage imageNamed:@"delete_photo"]];
+        [activityIndicatorView stopAnimating];
         [cell.activityIndicatorView setHidden:YES];
         [cell.photoImageView setImage:photo];
     } else {
         [cell.photoActionImageView setImage:[UIImage imageNamed:@"add_photo"]];
         
-        UIActivityIndicatorView *activityIndicatorView = cell.activityIndicatorView.subviews.firstObject;
         if (activityIndicatorView.isAnimating) {
+            [activityIndicatorView startAnimating];
             [cell.activityIndicatorView setHidden:NO];
         } else {
+            [activityIndicatorView stopAnimating];
             [cell.activityIndicatorView setHidden:YES];
         }
         
@@ -439,10 +467,15 @@ static NSString *const SidePhotoTableViewCellIdentifier = @"SidePhotoTableViewCe
     
     self.currentPhotoIndex = indexPath.section+1;
     
-    if (self.photos[indexPath.section+1] == self.defaultImage) {
-        [self showActionSheet];
-    } else {
-        [self showDeleteActionSheet];
+    SidePhotoTableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+    UIActivityIndicatorView *activityIndicatorView = cell.activityIndicatorView.subviews.firstObject;
+
+    if (!activityIndicatorView.isAnimating) {
+        if (self.photos[indexPath.section+1] == self.defaultImage) {
+            [self showActionSheet];
+        } else {
+            [self showDeleteActionSheet];
+        }
     }
 }
 
