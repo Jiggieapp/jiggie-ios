@@ -307,4 +307,6 @@
 - (NSString *)formatCurrencyString:(NSString *)price;
 - (BOOL)validateEmailWithString:(NSString*)checkString;
 
+- (NSInteger)calculateAge:(NSString *)birthDate;
+
 @end

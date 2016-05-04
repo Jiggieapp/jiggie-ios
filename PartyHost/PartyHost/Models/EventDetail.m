@@ -28,5 +28,6 @@
 @dynamic venueName;
 @dynamic likes;
 @dynamic isLiked;
+@dynamic lowestPrice;
 
 @end

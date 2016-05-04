@@ -124,7 +124,7 @@
                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                     <nil key="highlightedColor"/>
                                 </label>
-                                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" text="Get detail information on events and book your ticket" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1nd-0X-zzc">
+                                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" text="Get detail information on events and book your ticket or table" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1nd-0X-zzc">
                                     <rect key="frame" x="39" y="60" width="242" height="54"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="54" id="7jY-NO-yyz"/>

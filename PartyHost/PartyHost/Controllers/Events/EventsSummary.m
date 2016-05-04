@@ -116,6 +116,18 @@
     shareLabel.font = [UIFont phBlond:15];
     [self.mainScroll addSubview:shareLabel];
     
+    self.startFromLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, CGRectGetMaxY(self.picScroll.frame) - 50, self.sharedData.screenWidth - 32, 18)];
+    self.startFromLabel.textColor = [UIColor whiteColor];
+    self.startFromLabel.text = @"Starts From";
+    self.startFromLabel.font = [UIFont phBlond:12];
+    [self addSubview:self.startFromLabel];
+    
+    self.minimumPrice = [[UILabel alloc] initWithFrame:CGRectMake(16, CGRectGetMaxY(self.picScroll.frame) - 32, self.sharedData.screenWidth - 32, 20)];
+    self.minimumPrice.textColor = [UIColor whiteColor];
+    self.minimumPrice.text = @"Rp400K";
+    self.minimumPrice.font = [UIFont phBold:18];
+    [self addSubview:self.minimumPrice];
+    
     self.eventName = [[UILabel alloc] init];
     self.eventName.textAlignment = NSTextAlignmentLeft;
     self.eventName.textColor = [UIColor blackColor];
@@ -369,6 +381,25 @@
     }
 }
 
+-(void)initClassWithEventID:(NSString *)eventID
+{
+    self.cEvent = nil;
+    
+    if (eventID) {
+        self.event_id = eventID;
+    }
+    
+    [self reset];
+    
+    if ([self reloadFetch:nil]) {
+        if ([[self.fetchedResultsController fetchedObjects] count]>0) {
+            [self populateData:nil];
+        } else if (eventID) {
+           [self loadData:eventID];
+        }
+    }
+}
+
 -(void)goBack
 {
     [[NSNotificationCenter defaultCenter]
@@ -616,6 +647,19 @@
     //ID
     self.sharedData.cEventId_Summary = self.cEvent.eventID;
     
+    if (self.cEvent.lowestPrice.integerValue > 0) {
+        SharedData *sharedData = [SharedData sharedInstance];
+        NSString *formattedPrice = [sharedData formatCurrencyString:self.cEvent.lowestPrice.stringValue];
+        [self.minimumPrice setText:[NSString stringWithFormat:@"Rp%@", formattedPrice]];
+        
+        self.minimumPrice.hidden = NO;
+        self.startFromLabel.hidden = NO;
+        
+    } else {
+        self.minimumPrice.hidden = YES;
+        self.startFromLabel.hidden = YES;
+    }
+        
     //Title
     self.title.text = [self.cEvent.title uppercaseString];
 
@@ -761,6 +805,13 @@
                          item.likes = [NSNumber numberWithInteger:0];
                      }
                      
+                     NSNumber *lowest_price = [eventDetail objectForKey:@"lowest_price"];
+                     if (lowest_price && ![lowest_price isEqual:[NSNull null]]) {
+                         item.lowestPrice = lowest_price;
+                     } else {
+                         item.lowestPrice = [NSNumber numberWithInteger:0];
+                     }
+                     
                      NSNumber *is_liked = [eventDetail objectForKey:@"is_liked"];
                      if (is_liked && ![is_liked isEqual:[NSNull null]]) {
                          item.isLiked = is_liked;
@@ -891,6 +942,19 @@
     EventDetail *eventDetail = [[self fetchedResultsController] objectAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
     if (!eventDetail || eventDetail == nil) {
         return;
+    }
+    
+    if (eventDetail.lowestPrice.integerValue > 0) {
+        SharedData *sharedData = [SharedData sharedInstance];
+        NSString *formattedPrice = [sharedData formatCurrencyString:eventDetail.lowestPrice.stringValue];
+        [self.minimumPrice setText:[NSString stringWithFormat:@"Rp%@", formattedPrice]];
+        
+        self.minimumPrice.hidden = NO;
+        self.startFromLabel.hidden = NO;
+        
+    } else {
+        self.minimumPrice.hidden = YES;
+        self.startFromLabel.hidden = YES;
     }
     
     //Title

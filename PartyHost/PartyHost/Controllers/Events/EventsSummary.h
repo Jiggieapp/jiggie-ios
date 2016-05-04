@@ -49,6 +49,9 @@
 @property (nonatomic, strong) UIView *userContainer;
 @property (nonatomic, strong) UIView *listingContainer;
 
+@property(nonatomic,strong) UILabel *startFromLabel;
+@property(nonatomic,strong) UILabel *minimumPrice;
+
 @property (nonatomic, strong) NSMutableArray *tagArray;
 @property (nonatomic, strong) UICollectionView *tagCollection;
 
@@ -79,6 +82,7 @@
 -(void)loadData:(NSString*)event_id;
 -(void)populateData:(NSDictionary *)dict;
 -(void)initClassWithEvent:(Event *)event;
+-(void)initClassWithEventID:(NSString *)eventID;
 -(void)reset;
 
 @end

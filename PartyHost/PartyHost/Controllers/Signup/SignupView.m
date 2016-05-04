@@ -490,6 +490,7 @@
                              @"birthday": birthday,
                              @"location": location,
                              @"about":about,
+                             @"age":[NSString stringWithFormat:@"%li", [self.sharedData calculateAge:birthday]],
                              @"version":PHVersion,
                              @"device_type":@"1" // 1 for iOS
                              };

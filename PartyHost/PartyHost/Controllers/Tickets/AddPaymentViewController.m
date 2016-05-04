@@ -251,6 +251,13 @@
         
         NSData *newToken = (NSData *)token;
         
+        if (newToken == nil) {
+            [self.cardNumberTextField setTextColor:[UIColor redColor]];
+            [self.cardNumberAlert setHidden:NO];
+            
+            return ;
+        }
+        
         NSError *error;
         NSDictionary *json = (NSDictionary *)[NSJSONSerialization
                                               JSONObjectWithData:newToken

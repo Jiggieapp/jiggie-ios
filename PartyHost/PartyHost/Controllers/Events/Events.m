@@ -594,6 +594,13 @@
                                  item.likes = [NSNumber numberWithInteger:0];
                              }
                              
+                             NSNumber *lowest_price = [eventRow objectForKey:@"lowest_price"];
+                             if (lowest_price && ![lowest_price isEqual:[NSNull null]]) {
+                                 item.lowestPrice = lowest_price;
+                             } else {
+                                 item.lowestPrice = [NSNumber numberWithInteger:0];
+                             }
+                             
                              NSArray *tags = [eventRow objectForKey:@"tags"];
                              if (tags && ![tags isEqual:[NSNull null]]) {
                                  item.tags = [NSKeyedArchiver archivedDataWithRootObject:tags];
@@ -1147,6 +1154,18 @@ shouldDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
     } completion:^(BOOL finished)
     {
     }];
+}
+
+
+//2nd Screen (VENUE+LIST)
+-(void)goToSummaryModal
+{
+    [UIView animateWithDuration:0 animations:^()
+     {
+         self.mainCon.frame = CGRectMake(-self.sharedData.screenWidth, 20, self.sharedData.screenWidth * SCREENS_DEEP, self.sharedData.screenHeight - 20);
+     } completion:^(BOOL finished)
+     {
+     }];
 }
 
 //3rd Screen (HOST LIST)

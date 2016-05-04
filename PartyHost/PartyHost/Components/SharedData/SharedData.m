@@ -805,5 +805,21 @@ static SharedData *sharedInstance = nil;
     return [emailTest evaluateWithObject:checkString];
 }
 
+- (NSInteger)calculateAge:(NSString *)birthDate {
+    if (birthDate == nil || [birthDate isEqual:[NSNull null]] || [birthDate isEqualToString:@""]) {
+        return 0;
+    }
+    
+    NSDate *todayDate = [NSDate date];
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US"]];
+    [dateFormatter setDateFormat:@"MM/dd/yyyy"];
+    NSInteger time = [todayDate timeIntervalSinceDate:[dateFormatter dateFromString:birthDate]];
+    NSInteger allDays = (((time/60)/60)/24);
+    NSInteger days = allDays%365;
+    NSInteger years = (allDays-days)/365;
+    
+    return years;
+}
 
 @end

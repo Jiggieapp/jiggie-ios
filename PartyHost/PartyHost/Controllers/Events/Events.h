@@ -67,5 +67,6 @@
 
 -(void)initClass;
 -(void)resetApp;
+-(void)goToSummaryModal;
 
 @end

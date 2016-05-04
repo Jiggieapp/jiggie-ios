@@ -266,21 +266,13 @@
 
 -(void)loadProfile
 {
-    self.aboutBody.text     =  [self.sharedData clipSpace:[self.sharedData.userDict objectForKey:@"about"]];
-    NSString *birthDate = [self.sharedData.userDict objectForKey:@"birthday"];
-    NSDate *todayDate = [NSDate date];
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US"]];
-    [dateFormatter setDateFormat:@"MM/dd/yyyy"];
-    int time = [todayDate timeIntervalSinceDate:[dateFormatter dateFromString:birthDate]];
-    int allDays = (((time/60)/60)/24);
-    int days = allDays%365;
-    int years = (allDays-days)/365;
+    self.aboutBody.text = [self.sharedData clipSpace:[self.sharedData.userDict objectForKey:@"about"]];
+    NSInteger years = [self.sharedData calculateAge:[self.sharedData.userDict objectForKey:@"birthday"]];
     
     NSLog(@"FIRST_NAME :: %@",[self.sharedData.userDict objectForKey:@"first_name"]);
     
     self.toLabel.text = [self.sharedData.userDict[@"first_name"] uppercaseString];
-    self.nameLabel.text = [NSString stringWithFormat:@"%@, %d",[self.sharedData.userDict[@"first_name"] uppercaseString],years];
+    self.nameLabel.text = [NSString stringWithFormat:@"%@, %li",[self.sharedData.userDict[@"first_name"] uppercaseString],years];
     
     //Location is empty?
     if([self.sharedData.userDict[@"location"] length]==0)

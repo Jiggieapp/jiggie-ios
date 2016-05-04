@@ -54,6 +54,17 @@
         self.dimView.hidden = YES;
         [self addSubview:self.dimView];
         
+        self.startFromLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, CGRectGetMaxY(self.mainImg.frame) - 50, self.sharedData.screenWidth - 20, 18)];
+        self.startFromLabel.textColor = [UIColor whiteColor];
+        self.startFromLabel.text = @"Starts From";
+        self.startFromLabel.font = [UIFont phBlond:12];
+        [self addSubview:self.startFromLabel];
+        
+        self.minimumPrice = [[UILabel alloc] initWithFrame:CGRectMake(10, CGRectGetMaxY(self.mainImg.frame) - 32, self.sharedData.screenWidth - 20, 20)];
+        self.minimumPrice.textColor = [UIColor whiteColor];
+        self.minimumPrice.font = [UIFont phBold:18];
+        [self addSubview:self.minimumPrice];
+        
         self.title = [[UILabel alloc] initWithFrame:CGRectMake(10, CGRectGetMaxY(self.mainImg.frame) + 14, self.sharedData.screenWidth - 20 - 70, 70)];
         self.title.textColor = [UIColor blackColor];
         self.title.textAlignment = NSTextAlignmentLeft;
@@ -172,6 +183,19 @@
     self.title.text = [event.title uppercaseString];
     self.title.frame = CGRectMake(10, CGRectGetMaxY(self.mainImg.frame) + 14, self.sharedData.screenWidth - 20 - 70, 70);
     [self.title sizeToFit];
+    
+    if (event.lowestPrice.integerValue > 0) {
+        SharedData *sharedData = [SharedData sharedInstance];
+        NSString *formattedPrice = [sharedData formatCurrencyString:event.lowestPrice.stringValue];
+        [self.minimumPrice setText:[NSString stringWithFormat:@"Rp%@", formattedPrice]];
+        
+        self.minimumPrice.hidden = NO;
+        self.startFromLabel.hidden = NO;
+        
+    } else {
+        self.minimumPrice.hidden = YES;
+        self.startFromLabel.hidden = YES;
+    }
     
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     [formatter setDateFormat:PHDateFormatApp];
