@@ -177,6 +177,20 @@
 
 - (AFHTTPRequestOperation *)POST:(NSString *)URLString
                       parameters:(id)parameters
+                        userInfo:(NSDictionary *)userInfo
+                         success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
+                         failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
+{
+    AFHTTPRequestOperation *operation = [self HTTPRequestOperationWithHTTPMethod:@"POST" URLString:URLString parameters:parameters success:success failure:failure];
+    [operation setUserInfo:userInfo];
+    
+    [self.operationQueue addOperation:operation];
+    
+    return operation;
+}
+
+- (AFHTTPRequestOperation *)POST:(NSString *)URLString
+                      parameters:(id)parameters
        constructingBodyWithBlock:(void (^)(id <AFMultipartFormData> formData))block
                          success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
                          failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
@@ -200,6 +214,36 @@
 
     [self.operationQueue addOperation:operation];
 
+    return operation;
+}
+
+- (AFHTTPRequestOperation *)POST:(NSString *)URLString
+                      parameters:(id)parameters
+                        userInfo:(NSDictionary *)userInfo
+       constructingBodyWithBlock:(void (^)(id <AFMultipartFormData> formData))block
+                         success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
+                         failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
+{
+    NSError *serializationError = nil;
+    NSMutableURLRequest *request = [self.requestSerializer multipartFormRequestWithMethod:@"POST" URLString:[[NSURL URLWithString:URLString relativeToURL:self.baseURL] absoluteString] parameters:parameters constructingBodyWithBlock:block error:&serializationError];
+    if (serializationError) {
+        if (failure) {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wgnu"
+            dispatch_async(self.completionQueue ?: dispatch_get_main_queue(), ^{
+                failure(nil, serializationError);
+            });
+#pragma clang diagnostic pop
+        }
+        
+        return nil;
+    }
+    
+    AFHTTPRequestOperation *operation = [self HTTPRequestOperationWithRequest:request success:success failure:failure];
+    [operation setUserInfo:userInfo];
+    
+    [self.operationQueue addOperation:operation];
+    
     return operation;
 }
 
