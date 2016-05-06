@@ -19,6 +19,8 @@
 @property (nonatomic, retain) id tags;
 @property (nonatomic, retain) NSString *title;
 @property (nonatomic, retain) NSString *venue;
+@property (nonatomic, retain) NSNumber *likes;
+@property (nonatomic, retain) NSNumber *lowestPrice;
 @property (nonatomic, retain) NSDate *modified;
 @property (nonatomic, retain) NSDate *startDatetime;
 @property (nonatomic, retain) NSDate *endDatetime;

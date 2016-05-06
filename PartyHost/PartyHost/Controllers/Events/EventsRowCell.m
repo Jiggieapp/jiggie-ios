@@ -54,28 +54,54 @@
         self.dimView.hidden = YES;
         [self addSubview:self.dimView];
         
-        self.date = [[UILabel alloc] initWithFrame:CGRectMake(10, CGRectGetMaxY(self.mainImg.frame) + 6, self.sharedData.screenWidth - 20, 18)];
-        self.date.textColor = [UIColor blackColor];
-        self.date.adjustsFontSizeToFitWidth = YES;
-        self.date.textAlignment = NSTextAlignmentLeft;
-        self.date.font = [UIFont phThin:15];
-        [self addSubview:self.date];
+        self.startFromLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, CGRectGetMaxY(self.mainImg.frame) - 50, self.sharedData.screenWidth - 20, 18)];
+        self.startFromLabel.textColor = [UIColor whiteColor];
+        self.startFromLabel.text = @"Starts From";
+        self.startFromLabel.font = [UIFont phBlond:12];
+        [self addSubview:self.startFromLabel];
         
-        self.title = [[UILabel alloc] initWithFrame:CGRectMake(10, CGRectGetMaxY(self.date.frame) , self.sharedData.screenWidth - 20, 20)];
+        self.minimumPrice = [[UILabel alloc] initWithFrame:CGRectMake(10, CGRectGetMaxY(self.mainImg.frame) - 32, self.sharedData.screenWidth - 20, 20)];
+        self.minimumPrice.textColor = [UIColor whiteColor];
+        self.minimumPrice.font = [UIFont phBold:18];
+        [self addSubview:self.minimumPrice];
+        
+        self.title = [[UILabel alloc] initWithFrame:CGRectMake(10, CGRectGetMaxY(self.mainImg.frame) + 14, self.sharedData.screenWidth - 20 - 70, 70)];
         self.title.textColor = [UIColor blackColor];
         self.title.textAlignment = NSTextAlignmentLeft;
         self.title.adjustsFontSizeToFitWidth = YES;
-        self.title.font = [UIFont phBold:17];
+        self.title.font = [UIFont phBlond:16];
+        self.title.numberOfLines = 3;
         [self addSubview:self.title];
         
-        self.subtitle = [[UILabel alloc] initWithFrame:CGRectMake(10, CGRectGetMaxY(self.title.frame), self.sharedData.screenWidth - 20, 18)];
-        self.subtitle.textColor = [UIColor blackColor];
+        self.likeButton = [[UIButton alloc] initWithFrame:CGRectMake(self.sharedData.screenWidth - 70, CGRectGetMaxY(self.mainImg.frame) + 8, 40, 40)];
+        [self.likeButton setImage:[UIImage imageNamed:@"icon_love_on"] forState:UIControlStateNormal];
+        [self.likeButton setImageEdgeInsets:UIEdgeInsetsMake(5, 5, 5, 5)];
+        [self.likeButton setAdjustsImageWhenDisabled:NO];
+        [self.likeButton setEnabled:NO];
+        [self addSubview:self.likeButton];
+        
+        self.likeCount = [[UILabel alloc] initWithFrame:CGRectMake(self.sharedData.screenWidth - 34, CGRectGetMaxY(self.mainImg.frame) + 16, 28, 20)];
+        self.likeCount.textColor = [UIColor darkGrayColor];
+        self.likeCount.adjustsFontSizeToFitWidth = YES;
+        self.likeCount.textAlignment = NSTextAlignmentCenter;
+        self.likeCount.font = [UIFont phBlond:13];
+        [self addSubview:self.likeCount];
+        
+        self.date = [[UILabel alloc] initWithFrame:CGRectMake(10, CGRectGetMaxY(self.title.frame), self.sharedData.screenWidth - 20, 20)];
+        self.date.textColor = [UIColor darkGrayColor];
+        self.date.adjustsFontSizeToFitWidth = YES;
+        self.date.textAlignment = NSTextAlignmentLeft;
+        self.date.font = [UIFont phBlond:15];
+        [self addSubview:self.date];
+        
+        self.subtitle = [[UILabel alloc] initWithFrame:CGRectMake(10, CGRectGetMaxY(self.date.frame), self.sharedData.screenWidth - 20, 20)];
+        self.subtitle.textColor = [UIColor darkGrayColor];
         self.subtitle.adjustsFontSizeToFitWidth = YES;
         self.subtitle.textAlignment = NSTextAlignmentLeft;
-        self.subtitle.font = [UIFont phThin:15];
+        self.subtitle.font = [UIFont phBlond:15];
         [self addSubview:self.subtitle];
         
-        self.tagsView = [[UIView alloc] initWithFrame:CGRectMake(10, CGRectGetMaxY(self.subtitle.frame) + 6, self.sharedData.screenWidth, 20)];
+        self.tagsView = [[UIView alloc] initWithFrame:CGRectMake(10, CGRectGetMaxY(self.subtitle.frame) + 8, self.sharedData.screenWidth, 20)];
         self.tagsView.backgroundColor = [UIColor clearColor];
         [self addSubview:self.tagsView];
         
@@ -155,21 +181,38 @@
 {
     
     self.title.text = [event.title uppercaseString];
-    self.subtitle.text = [event.venue capitalizedString];
+    self.title.frame = CGRectMake(10, CGRectGetMaxY(self.mainImg.frame) + 14, self.sharedData.screenWidth - 20 - 70, 70);
+    [self.title sizeToFit];
+    
+    if (event.lowestPrice.integerValue > 0) {
+        SharedData *sharedData = [SharedData sharedInstance];
+        NSString *formattedPrice = [sharedData formatCurrencyString:event.lowestPrice.stringValue];
+        [self.minimumPrice setText:[NSString stringWithFormat:@"Rp%@", formattedPrice]];
+        
+        self.minimumPrice.hidden = NO;
+        self.startFromLabel.hidden = NO;
+        
+    } else {
+        self.minimumPrice.hidden = YES;
+        self.startFromLabel.hidden = YES;
+    }
     
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     [formatter setDateFormat:PHDateFormatApp];
     [formatter setLocale:[NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"]];
     [formatter setTimeZone:[NSTimeZone localTimeZone]];
     self.date.text = [formatter stringFromDate:event.startDatetime];
+    self.date.frame = CGRectMake(10, CGRectGetMaxY(self.title.frame) + 4, self.sharedData.screenWidth - 20, 20);
     
-//    self.picURL = [Constants eventImageURL:dict[@"_id"]];
+    self.subtitle.text = [event.venue capitalizedString];
+    self.subtitle.frame = CGRectMake(10, CGRectGetMaxY(self.date.frame), self.sharedData.screenWidth - 20, 20);
+    
+    self.likeCount.text = [NSString stringWithFormat:@"%@", event.likes];
     
     if (event.photo && event.photo != nil) {
         self.picURL = [self.sharedData picURL:event.photo];
         
         //Load venue image
-//        [self.mainImg loadImage:self.picURL defaultImageNamed:@"nightclub_default"]; //This will load and can be cancelled?
         [self.mainImg loadImage:self.picURL defaultImageNamed:@""]; //This will load and can be cancelled?
 
     } else {
@@ -189,6 +232,8 @@
         [tags insertObject:@"Featured" atIndex:0];
     }
     
+    self.tagsView.frame = CGRectMake(10, CGRectGetMaxY(self.subtitle.frame) + 8, self.sharedData.screenWidth, 20);
+    
     int currX = 0;
     for (NSString *tag in tags) {
         UIButton *tagPil = [[UIButton alloc] initWithFrame:CGRectMake(currX, 0, 80, 20)];
@@ -196,8 +241,6 @@
         tagPil.titleLabel.font = [UIFont phBlond:11];
         tagPil.titleEdgeInsets = UIEdgeInsetsMake(0, 0, 2, 0);
         [tagPil setTitle:tag forState:UIControlStateNormal];
-        //        tagPil.layer.borderWidth = 1.0;
-        //        tagPil.layer.borderColor = [UIColor darkGrayColor].CGColor;
         [tagPil setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         tagPil.layer.cornerRadius = 10;
         

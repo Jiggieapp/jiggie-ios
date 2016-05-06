@@ -8,6 +8,7 @@
 
 #import "Dashboard.h"
 #import "AnalyticManager.h"
+#import "JGTooltipHelper.h"
 
 @implementation Dashboard
 
@@ -183,7 +184,8 @@
     self.hostVenueDetailFromShare = [[HostVenueDetailFromShare alloc] initWithFrame:CGRectMake(0, self.sharedData.screenHeight, self.sharedData.screenWidth, self.sharedData.screenHeight)];
     
     
-    self.feedPage       = [[Feed alloc] initWithFrame:pageRect];
+    self.feedPage       = [FeedView instanceFromNib];
+    self.feedPage.frame = pageRect;
     self.feedPage.layer.masksToBounds = YES;
     
     self.morePage       = [[More alloc] initWithFrame:pageRect];
@@ -225,6 +227,7 @@
     self.sharedData.memberProfile = self.memberProfile;
     self.sharedData.morePage = self.morePage;
     self.sharedData.eventsPage = self.eventsPage;
+    self.sharedData.feedPage = self.feedPage;
     
     [self.pagesA addObject:self.eventsPage];
     [self.pagesA addObject:self.chatPage];
@@ -655,6 +658,7 @@
         //[self.feedPage goBack];
     }
     
+    [JGTooltipHelper setShowed:@"Tooltip_SocialTab_isShowed"];
     [[AnalyticManager sharedManager] trackMixPanelWithDict:@"View Social Feed" withDict:@{}];
 }
 
@@ -1005,14 +1009,30 @@
 
 -(void)showEventModal
 {
-    self.eventModal.frame = CGRectMake(0, self.sharedData.screenHeight, self.sharedData.screenWidth, self.sharedData.screenHeight);
-    self.eventModal.hidden = NO;
-    [self.eventModal reset];
-    [self.eventModal initClass];
-    [UIView animateWithDuration:0.30 animations:^()
-     {
-         self.eventModal.frame = CGRectMake(0, 0, self.sharedData.screenWidth, self.sharedData.screenHeight);
-     }];
+//    self.eventModal.frame = CGRectMake(0, self.sharedData.screenHeight, self.sharedData.screenWidth, self.sharedData.screenHeight);
+//    self.eventModal.hidden = NO;
+//    [self.eventModal reset];
+//    [self.eventModal initClass];
+//    [UIView animateWithDuration:0.30 animations:^()
+//     {
+//         self.eventModal.frame = CGRectMake(0, 0, self.sharedData.screenWidth, self.sharedData.screenHeight);
+//     }];
+
+    self.cIndex = 0;
+    [self updatePages];
+    
+    [self.sharedData.selectedEvent removeAllObjects];
+    self.sharedData.selectedEvent[@"_id"] = self.sharedData.cEventId_Modal;
+
+    self.sharedData.cEventId = self.sharedData.cEventId_Modal;
+    self.sharedData.mostRecentEventSelectedId = self.sharedData.cEventId_Modal;
+    
+    [self.eventsPage.eventsSummary initClassWithEventID:self.sharedData.cEventId];
+    self.eventsPage.eventsSummary.hidden = NO;
+    self.eventsPage.eventsGuestList.hidden = YES;
+    self.eventsPage.eventsHostingsList.hidden = NO;
+    
+    [self.eventsPage goToSummaryModal];
 }
 
 -(void)exitEventModal

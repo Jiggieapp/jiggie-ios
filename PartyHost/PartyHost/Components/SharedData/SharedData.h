@@ -16,7 +16,7 @@
 #import "MPTweakInline.h"
 
 @class Messages;
-@class Feed;
+@class FeedView;
 @class Profile;
 @class More;
 @class Settings;
@@ -51,11 +51,12 @@
 @property(nonatomic,strong) More                *morePage;
 @property(nonatomic,strong) Settings            *settingsPage;
 //@property(nonatomic,strong) Hostings            *hostingsPage;
-@property(nonatomic,strong) Feed                *feedPage;
+@property(nonatomic,strong) FeedView            *feedPage;
 //@property(nonatomic,strong) Confirmations       *confirmationsPage;
 @property(nonatomic,strong) Events              *eventsPage;
 @property(nonatomic,strong) BookTable           *bookTable;
 @property(nonatomic,strong) NSMutableDictionary *imagesDict;
+@property(nonatomic,strong) NSMutableDictionary *facebookImagesDict;
 @property(nonatomic,strong) NSString            *appKey;
 @property(nonatomic,strong) NSString            *fromMailId;
 @property(nonatomic,strong) NSString            *fromMailName;
@@ -279,9 +280,12 @@
 -(void)saveSettingsResponse;
 
 //===================================================================================================//
-//GENDER
+//SOCIAL FILTER
 @property(nonatomic,strong) NSString *gender;
 @property(nonatomic,strong) NSString *gender_interest;
+@property(nonatomic,strong) NSString *distance;
+@property(nonatomic,strong) NSString *from_age;
+@property(nonatomic,strong) NSString *to_age;
 -(BOOL)isGuest;
 -(BOOL)isHost;
 -(BOOL)isMember;
@@ -302,5 +306,7 @@
 
 - (NSString *)formatCurrencyString:(NSString *)price;
 - (BOOL)validateEmailWithString:(NSString*)checkString;
+
+- (NSInteger)calculateAge:(NSString *)birthDate;
 
 @end

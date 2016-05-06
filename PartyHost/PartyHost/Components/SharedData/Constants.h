@@ -9,6 +9,19 @@
 #ifndef PartyHost_Constants_h
 #define PartyHost_Constants_h
 #define PHVersion [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"]
+#define PHBaseURL [[[NSBundle mainBundle] infoDictionary] objectForKey:@"JGBaseURL"]
+#define PHBaseNewURL [[[NSBundle mainBundle] infoDictionary] objectForKey:@"JGBaseNewURL"]
+#define PHBaseDomain [[[NSBundle mainBundle] infoDictionary] objectForKey:@"JGBaseDomain"]
+
+#define VeritransClientKey [[[NSBundle mainBundle] infoDictionary] objectForKey:@"VTClient"]
+#define isVeritransInProducion [[[[NSBundle mainBundle] infoDictionary] objectForKey:@"VTEnableProd"] boolValue]
+
+//API Completion Handler
+typedef void (^PartyFeedCompletionHandler)(NSArray *feeds,
+                                           NSInteger statusCode,
+                                           NSError *error);
+
+typedef void (^MatchFeedCompletionHandler)(NSError *error);
 
 //Others
 extern BOOL const PHDebugOn; //Pretend we are a new user in debug mode, they will see walkthrough, alerts etc.
@@ -22,13 +35,7 @@ extern NSString *const AppsFlyerDevKey;
 
 extern NSString *const JiggieItunesID;
 
-extern NSString *const VeritransClientKey;
-extern BOOL const isVeritransInProducion;
-
 //URL
-extern NSString *const PHBaseURL;
-extern NSString *const PHBaseNewURL;
-extern NSString *const PHBaseDomain;
 extern NSString *const PHGuestListingsURL;
 extern NSString *const PHHostListingsURL;
 extern NSString *const PHEventsURL;

@@ -77,7 +77,6 @@
     [self.scrollView addSubview:tmpPurpleView];
     
     UILabel *ticketInfoLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, 16, 120, 20)];
-    [ticketInfoLabel setText:@"TICKET INFO"];
     [ticketInfoLabel setFont:[UIFont phBlond:12]];
     [ticketInfoLabel setTextColor:[UIColor blackColor]];
     [ticketInfoLabel setBackgroundColor:[UIColor clearColor]];
@@ -168,8 +167,10 @@
     
     if (self.isTicketProduct) {
         [ticketLabel setText:@"TICKETS"];
+        [ticketInfoLabel setText:@"TICKET INFO"];
     } else {
         [ticketLabel setText:@"NUMBER OF GUEST"];
+        [ticketInfoLabel setText:@"TABLE INFO"];
     }
     
     UIButton *plusButton = [[UIButton alloc] initWithFrame:CGRectMake(self.visibleSize.width - 34 - 16, 19, 34, 34)];

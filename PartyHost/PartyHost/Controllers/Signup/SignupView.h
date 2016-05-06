@@ -19,6 +19,9 @@
 @property (strong, nonatomic) SharedData    *sharedData;
 
 @property (weak, nonatomic) IBOutlet UIButton *buttonFacebook;
+@property (weak, nonatomic) IBOutlet UIButton *buttonNext;
+@property (weak, nonatomic) IBOutlet UIButton *buttonHelp;
+
 @property (weak, nonatomic) IBOutlet UIPageControl *pageControl;
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 @property (weak, nonatomic) IBOutlet UIImageView *backgroundImage1;

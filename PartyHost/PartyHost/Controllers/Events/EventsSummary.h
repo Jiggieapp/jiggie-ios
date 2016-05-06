@@ -16,6 +16,7 @@
 #import "EmptyView.h"
 #import "Event.h"
 
+@class JDFSequentialTooltipManager;
 @interface EventsSummary : UIView<UIScrollViewDelegate,CLLocationManagerDelegate,MKMapViewDelegate,UICollectionViewDataSource,UICollectionViewDelegate,UICollectionViewDelegateFlowLayout,NSFetchedResultsControllerDelegate>
 {
     NSFetchedResultsController *fetchedResultsController;
@@ -30,25 +31,33 @@
 
 //Nav top
 @property (nonatomic,strong) UILabel *title;
-@property (nonatomic,strong) UIView *tabBar;
+@property (nonatomic,strong) UIView *navBar;
 @property (nonatomic,strong) UIButton *btnBack;
 @property (nonatomic, strong) UIButton *btnShare;
+@property (nonatomic, assign) BOOL isNavBarShowing;
 
 @property (nonatomic, strong) EmptyView *emptyView;
 
 @property (nonatomic, strong) UIButton *btnHostHere;
+@property (nonatomic, strong) UIButton *likeButton;
+@property (nonatomic, strong) UILabel *likeCount;
+@property (nonatomic, strong) UIButton *shareButton;
+@property (nonatomic, strong) UILabel *eventName;
 @property (nonatomic, strong) UILabel *venueName;
 @property (nonatomic, strong) UIView *separator1;
+@property (nonatomic, strong) UILabel *guestInterestedLabel;
 @property (nonatomic, strong) UILabel *hostNum;
 @property (nonatomic, strong) UIView *userContainer;
 @property (nonatomic, strong) UIView *listingContainer;
-@property (nonatomic, strong) UIView *seeAllView;
-@property (nonatomic, strong) UILabel *seeAllLabel;
-@property (nonatomic, strong) UIImageView *seeAllCaret;
+
+@property(nonatomic,strong) UILabel *startFromLabel;
+@property(nonatomic,strong) UILabel *minimumPrice;
 
 @property (nonatomic, strong) NSMutableArray *tagArray;
 @property (nonatomic, strong) UICollectionView *tagCollection;
 
+@property (nonatomic, strong) UIView *separator2;
+@property (nonatomic, strong) UILabel *descriptionLabel;
 @property (nonatomic, strong) UILabel *eventDate;
 @property (nonatomic, strong) UITextView *aboutBody;
 @property (nonatomic, strong) UIScrollView *mainScroll;
@@ -70,10 +79,12 @@
 @property (nonatomic, retain) NSFetchedResultsController *fetchedResultsController;
 @property (nonatomic, retain) NSManagedObjectContext *managedObjectContext;
 
+@property(nonatomic,strong) JDFSequentialTooltipManager *tooltip;
 
 -(void)loadData:(NSString*)event_id;
 -(void)populateData:(NSDictionary *)dict;
 -(void)initClassWithEvent:(Event *)event;
+-(void)initClassWithEventID:(NSString *)eventID;
 -(void)reset;
 
 @end

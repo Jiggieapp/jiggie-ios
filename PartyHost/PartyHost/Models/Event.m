@@ -16,6 +16,8 @@
 @dynamic tags;
 @dynamic title;
 @dynamic venue;
+@dynamic likes;
+@dynamic lowestPrice;
 @dynamic modified;
 @dynamic startDatetime;
 @dynamic endDatetime;
