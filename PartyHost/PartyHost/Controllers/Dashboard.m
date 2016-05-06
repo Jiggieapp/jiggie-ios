@@ -8,6 +8,7 @@
 
 #import "Dashboard.h"
 #import "AnalyticManager.h"
+#import "JGTooltipHelper.h"
 
 @implementation Dashboard
 
@@ -657,6 +658,7 @@
         //[self.feedPage goBack];
     }
     
+    [JGTooltipHelper setShowed:@"Tooltip_SocialTab_isShowed"];
     [[AnalyticManager sharedManager] trackMixPanelWithDict:@"View Social Feed" withDict:@{}];
 }
 

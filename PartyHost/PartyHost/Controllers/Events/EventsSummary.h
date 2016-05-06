@@ -16,6 +16,7 @@
 #import "EmptyView.h"
 #import "Event.h"
 
+@class JDFSequentialTooltipManager;
 @interface EventsSummary : UIView<UIScrollViewDelegate,CLLocationManagerDelegate,MKMapViewDelegate,UICollectionViewDataSource,UICollectionViewDelegate,UICollectionViewDelegateFlowLayout,NSFetchedResultsControllerDelegate>
 {
     NSFetchedResultsController *fetchedResultsController;
@@ -78,6 +79,7 @@
 @property (nonatomic, retain) NSFetchedResultsController *fetchedResultsController;
 @property (nonatomic, retain) NSManagedObjectContext *managedObjectContext;
 
+@property(nonatomic,strong) JDFSequentialTooltipManager *tooltip;
 
 -(void)loadData:(NSString*)event_id;
 -(void)populateData:(NSDictionary *)dict;

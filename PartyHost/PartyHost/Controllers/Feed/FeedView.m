@@ -17,6 +17,8 @@
 #import "AnalyticManager.h"
 #import "SVProgressHUD.h"
 #import "MSRangeSlider.h"
+#import "JDFTooltips.h"
+#import "JGTooltipHelper.h"
 
 #define POLL_SECONDS 25
 #define CARD_VIEW_TAG 1900
@@ -36,6 +38,8 @@
 
 @property (assign, nonatomic) BOOL isLoadedUserSetting;
 @property (assign, nonatomic) BOOL isFilterChanges;
+
+@property (nonatomic,strong) JDFSequentialTooltipManager *tooltip;
 
 @end
 
@@ -345,6 +349,7 @@
         switch (feed.type) {
             case FeedTypeApproved: {
                 [self trackApprovedFeedItemWithType:feed.type];
+//                [JGTooltipHelper setShowed:@"Tooltip_AcceptRequest_isShowed"];
                 
                 [SVProgressHUD show];
                 [Feed approveFeed:approved withFbId:feed.fromFbId andCompletionHandler:^(NSError *error) {
@@ -370,6 +375,8 @@
             }
             case FeedTypeViewed: {
                 [self trackDeniedFeedItemWithType:feed.type];
+//                [JGTooltipHelper setShowed:@"Tooltip_AcceptSuggestion_isShowed"];
+                
                 [Feed approveFeed:YES withFbId:feed.fromFbId andCompletionHandler:^(NSError *error) {
                     if (self.feedData.count == 0) {
                         [self showEmptyView];
@@ -427,6 +434,29 @@
     } else {
         [self.discoverImageView setImage:[UIImage imageNamed:@"discover_off"]];
         [self.discoverLabel setText:@"Turn on if you wish to be seen by others"];
+    }
+}
+
+#pragma mark - Tooltip
+- (void)showTooltip {
+    if (self.tooltip == nil) {
+        self.tooltip = [[JDFSequentialTooltipManager alloc] initWithHostView:self];
+    }
+    
+    if ([JGTooltipHelper isAcceptSuggestionTooltipValid]) {
+        [self.tooltip addTooltipWithTargetView:self.swipeableView
+                                      hostView:self
+                                   tooltipText:@"Go ahead and tap here to let others know you like an event. This will also help teach Jiggie what events you like."
+                                arrowDirection:JDFTooltipViewArrowDirectionUp
+                                         width:self.sharedData.screenWidth - 20];
+        [self.tooltip setBackgroundColourForAllTooltips:[UIColor phBlueColor]];
+        [self.tooltip setFontForAllTooltips:[UIFont phBlond:14]];
+        self.tooltip.showsBackdropView = YES;
+        self.tooltip.backdropTapActionEnabled = YES;
+        [self.tooltip showAllTooltips];
+        
+        [JGTooltipHelper setLastDateShowed:@"Tooltip_LikeEvent_LastDateShowed"];
+        
     }
 }
 

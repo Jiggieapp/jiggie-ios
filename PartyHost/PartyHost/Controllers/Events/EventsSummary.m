@@ -12,6 +12,8 @@
 #import "EventDetail.h"
 #import "BaseModel.h"
 #import "SVProgressHUD.h"
+#import "JDFTooltips.h"
+#import "JGTooltipHelper.h"
 
 #define PROFILE_PICS 4 //If more than 4 then last is +MORE
 #define PROFILE_SIZE 40
@@ -479,12 +481,13 @@
             self.sharedData.shareHostingVenueName = self.cEvent.title;
             
             self.sharedData.cHostVenuePicURL = self.cEvent.photo;
-            NSLog(@"AAAAA : %@", self.sharedData.cHostVenuePicURL);
         } else {
             self.sharedData.shareHostingVenueName = self.sharedData.eventDict[@"venue_name"];
             
             self.sharedData.cHostVenuePicURL = self.sharedData.eventDict[@"photos"][0];
         }
+        
+        [JGTooltipHelper setShowed:@"Tooltip_ShareEvent_isShowed"];
         
         [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Share Event" withDict:self.sharedData.mixPanelCEventDict];
         
@@ -939,6 +942,8 @@
 -(void)populateData:(NSDictionary *)dict {
     [self.emptyView setMode:@"hide"];
     
+    [self showTooltip];
+    
     EventDetail *eventDetail = [[self fetchedResultsController] objectAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
     if (!eventDetail || eventDetail == nil) {
         return;
@@ -1224,7 +1229,8 @@
     
     [manager GET:url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject)
      {
-         
+         [JGTooltipHelper setShowed:@"Tooltip_LikeEvent_isShowed"];
+         [self showTooltip];
      } failure:^(AFHTTPRequestOperation *operation, NSError *error)
      {
      }];
@@ -1239,6 +1245,67 @@
         
         NSError *error;
         if (![self.managedObjectContext save:&error]) NSLog(@"Error: %@", [error localizedDescription]);
+    }
+}
+
+#pragma mark - Tooltip
+- (void)showTooltip {
+    
+    if (self.tooltip == nil) {
+        self.tooltip = [[JDFSequentialTooltipManager alloc] initWithHostView:self];
+    }
+    
+    if ([JGTooltipHelper isLikeEventTooltipValid]) {
+        [self.tooltip addTooltipWithTargetView:self.likeButton
+                                      hostView:self
+                                   tooltipText:@"Go ahead and tap here to let others know you like an event. This will also help teach Jiggie what events you like."
+                                arrowDirection:JDFTooltipViewArrowDirectionUp
+                                         width:self.sharedData.screenWidth - 20];
+        [self.tooltip setBackgroundColourForAllTooltips:[UIColor phBlueColor]];
+        [self.tooltip setFontForAllTooltips:[UIFont phBlond:14]];
+        self.tooltip.showsBackdropView = YES;
+        self.tooltip.backdropTapActionEnabled = YES;
+        [self.tooltip showAllTooltips];
+        
+        [JGTooltipHelper setLastDateShowed:@"Tooltip_LikeEvent_LastDateShowed"];
+        
+    } else if ([JGTooltipHelper isSocialTabTooltipValidAfter:@"Tooltip_LikeEvent_isShowed"]) {
+        if (self.tooltip != nil) {
+            self.tooltip = nil;
+            self.tooltip = [[JDFSequentialTooltipManager alloc] initWithHostView:self];
+        }
+        
+        [self.tooltip addTooltipWithTargetPoint:CGPointMake(self.bounds.size.width * 3/8, self.bounds.size.height)
+                                    tooltipText:@"Lucky you, we found other guests who also like this event. Connect now!"
+                                 arrowDirection:JDFTooltipViewArrowDirectionDown
+                                       hostView:self
+                                          width:self.sharedData.screenWidth - 20];
+        [self.tooltip setBackgroundColourForAllTooltips:[UIColor phBlueColor]];
+        [self.tooltip setFontForAllTooltips:[UIFont phBlond:14]];
+        self.tooltip.showsBackdropView = YES;
+        self.tooltip.backdropTapActionEnabled = YES;
+        [self.tooltip showAllTooltips];
+        
+        [JGTooltipHelper setLastDateShowed:@"Tooltip_SocialTab_LastDateShowed"];
+    } else if ([JGTooltipHelper isShareEventTooltipValid]) {
+        if (self.tooltip != nil) {
+            self.tooltip = nil;
+            self.tooltip = [[JDFSequentialTooltipManager alloc] initWithHostView:self];
+        }
+        
+        [self.tooltip addTooltipWithTargetView:self.shareButton
+                                      hostView:self
+                                   tooltipText:@"Share this event with your friends and see who wants to go."
+                                arrowDirection:JDFTooltipViewArrowDirectionUp
+                                         width:self.sharedData.screenWidth - 20];
+        [self.tooltip setBackgroundColourForAllTooltips:[UIColor phBlueColor]];
+        [self.tooltip setFontForAllTooltips:[UIFont phBlond:14]];
+        self.tooltip.showsBackdropView = YES;
+        self.tooltip.backdropTapActionEnabled = YES;
+        [self.tooltip showNextTooltip];
+        
+        [JGTooltipHelper setLastDateShowed:@"Tooltip_ShareEvent_LastDateShowed"];
+        
     }
 }
 

@@ -95,6 +95,12 @@
 		DA10F51E1C52149F006090ED /* SVProgressHUD.bundle in Resources */ = {isa = PBXBuildFile; fileRef = DA10F5181C52149F006090ED /* SVProgressHUD.bundle */; };
 		DA10F51F1C52149F006090ED /* SVProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = DA10F51A1C52149F006090ED /* SVProgressHUD.m */; };
 		DA10F5201C52149F006090ED /* SVRadialGradientLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = DA10F51C1C52149F006090ED /* SVRadialGradientLayer.m */; };
+		DA3306991CDA61A500A4126D /* JDFSequentialTooltipManager.m in Sources */ = {isa = PBXBuildFile; fileRef = DA33068F1CDA61A500A4126D /* JDFSequentialTooltipManager.m */; };
+		DA33069A1CDA61A500A4126D /* JDFTooltipManager.m in Sources */ = {isa = PBXBuildFile; fileRef = DA3306911CDA61A500A4126D /* JDFTooltipManager.m */; };
+		DA33069B1CDA61A500A4126D /* JDFTooltipView.m in Sources */ = {isa = PBXBuildFile; fileRef = DA3306941CDA61A500A4126D /* JDFTooltipView.m */; };
+		DA33069C1CDA61A500A4126D /* UILabel+JDFTooltips.m in Sources */ = {isa = PBXBuildFile; fileRef = DA3306961CDA61A500A4126D /* UILabel+JDFTooltips.m */; };
+		DA33069D1CDA61A500A4126D /* UIView+JDFTooltips.m in Sources */ = {isa = PBXBuildFile; fileRef = DA3306981CDA61A500A4126D /* UIView+JDFTooltips.m */; };
+		DA3306A01CDA733700A4126D /* JGTooltipHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = DA33069F1CDA733700A4126D /* JGTooltipHelper.m */; };
 		DA34D80E1C69C794008162DA /* jiggie.cer in Resources */ = {isa = PBXBuildFile; fileRef = DA34D80D1C69C794008162DA /* jiggie.cer */; };
 		DA4305611C22823700ED6C54 /* Jiggie.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = DA43055F1C22823700ED6C54 /* Jiggie.xcdatamodeld */; };
 		DA4305691C22916E00ED6C54 /* Event.m in Sources */ = {isa = PBXBuildFile; fileRef = DA4305671C22916E00ED6C54 /* Event.m */; };
@@ -561,6 +567,19 @@
 		DA10F51A1C52149F006090ED /* SVProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SVProgressHUD.m; sourceTree = "<group>"; };
 		DA10F51B1C52149F006090ED /* SVRadialGradientLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVRadialGradientLayer.h; sourceTree = "<group>"; };
 		DA10F51C1C52149F006090ED /* SVRadialGradientLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SVRadialGradientLayer.m; sourceTree = "<group>"; };
+		DA33068E1CDA61A500A4126D /* JDFSequentialTooltipManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JDFSequentialTooltipManager.h; sourceTree = "<group>"; };
+		DA33068F1CDA61A500A4126D /* JDFSequentialTooltipManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JDFSequentialTooltipManager.m; sourceTree = "<group>"; };
+		DA3306901CDA61A500A4126D /* JDFTooltipManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JDFTooltipManager.h; sourceTree = "<group>"; };
+		DA3306911CDA61A500A4126D /* JDFTooltipManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JDFTooltipManager.m; sourceTree = "<group>"; };
+		DA3306921CDA61A500A4126D /* JDFTooltips.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JDFTooltips.h; sourceTree = "<group>"; };
+		DA3306931CDA61A500A4126D /* JDFTooltipView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JDFTooltipView.h; sourceTree = "<group>"; };
+		DA3306941CDA61A500A4126D /* JDFTooltipView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JDFTooltipView.m; sourceTree = "<group>"; };
+		DA3306951CDA61A500A4126D /* UILabel+JDFTooltips.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UILabel+JDFTooltips.h"; sourceTree = "<group>"; };
+		DA3306961CDA61A500A4126D /* UILabel+JDFTooltips.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UILabel+JDFTooltips.m"; sourceTree = "<group>"; };
+		DA3306971CDA61A500A4126D /* UIView+JDFTooltips.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+JDFTooltips.h"; sourceTree = "<group>"; };
+		DA3306981CDA61A500A4126D /* UIView+JDFTooltips.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+JDFTooltips.m"; sourceTree = "<group>"; };
+		DA33069E1CDA733700A4126D /* JGTooltipHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JGTooltipHelper.h; sourceTree = "<group>"; };
+		DA33069F1CDA733700A4126D /* JGTooltipHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JGTooltipHelper.m; sourceTree = "<group>"; };
 		DA34D80D1C69C794008162DA /* jiggie.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = jiggie.cer; sourceTree = SOURCE_ROOT; };
 		DA4305601C22823700ED6C54 /* Jiggie.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Jiggie.xcdatamodel; sourceTree = "<group>"; };
 		DA4305661C22916E00ED6C54 /* Event.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Event.h; sourceTree = "<group>"; };
@@ -1377,6 +1396,24 @@
 			path = SVProgressHUD;
 			sourceTree = "<group>";
 		};
+		DA33068D1CDA61A500A4126D /* JDFTooltip */ = {
+			isa = PBXGroup;
+			children = (
+				DA33068E1CDA61A500A4126D /* JDFSequentialTooltipManager.h */,
+				DA33068F1CDA61A500A4126D /* JDFSequentialTooltipManager.m */,
+				DA3306901CDA61A500A4126D /* JDFTooltipManager.h */,
+				DA3306911CDA61A500A4126D /* JDFTooltipManager.m */,
+				DA3306921CDA61A500A4126D /* JDFTooltips.h */,
+				DA3306931CDA61A500A4126D /* JDFTooltipView.h */,
+				DA3306941CDA61A500A4126D /* JDFTooltipView.m */,
+				DA3306951CDA61A500A4126D /* UILabel+JDFTooltips.h */,
+				DA3306961CDA61A500A4126D /* UILabel+JDFTooltips.m */,
+				DA3306971CDA61A500A4126D /* UIView+JDFTooltips.h */,
+				DA3306981CDA61A500A4126D /* UIView+JDFTooltips.m */,
+			);
+			path = JDFTooltip;
+			sourceTree = "<group>";
+		};
 		DA4305631C22915000ED6C54 /* Models */ = {
 			isa = PBXGroup;
 			children = (
@@ -1527,6 +1564,8 @@
 				DA43056B1C23E7D000ED6C54 /* BaseModel.m */,
 				9A85A5511CC8B89300C8818B /* JGKeyboardNotificationHelper.h */,
 				9A85A5521CC8B89300C8818B /* JGKeyboardNotificationHelper.m */,
+				DA33069E1CDA733700A4126D /* JGTooltipHelper.h */,
+				DA33069F1CDA733700A4126D /* JGTooltipHelper.m */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -1534,6 +1573,7 @@
 		DAABAFE81C1FC6F8004DDCFA /* ExtraLibraries */ = {
 			isa = PBXGroup;
 			children = (
+				DA33068D1CDA61A500A4126D /* JDFTooltip */,
 				9366742F1CD7627500AC94F3 /* SDWebImage */,
 				9366740C1CD7621500AC94F3 /* OLFacebookImagePicker */,
 				936674081CD7384900AC94F3 /* UITextView+Placeholder */,
@@ -2696,6 +2736,7 @@
 				DAABB0D81C1FD50E004DDCFA /* MyHostingsCell.m in Sources */,
 				DAABB0DB1C1FD50E004DDCFA /* MemberProfile.m in Sources */,
 				DAABB0BA1C1FD50E004DDCFA /* BookTableOffering.m in Sources */,
+				DA3306991CDA61A500A4126D /* JDFSequentialTooltipManager.m in Sources */,
 				DA5ED5EC1C90A34400004C7E /* AddPaymentViewController.m in Sources */,
 				DAABB2711C1FF5AE004DDCFA /* UITableViewCell+FlatUI.m in Sources */,
 				DAABB29F1C1FF5AE004DDCFA /* MPNotificationViewController.m in Sources */,
@@ -2739,6 +2780,7 @@
 				936674261CD7621500AC94F3 /* OLFacebookAlbumRequest.m in Sources */,
 				DAABB1021C1FD50E004DDCFA /* UpgradeScreen.m in Sources */,
 				DAABB2B41C1FF5AE004DDCFA /* MPUIColorToNSStringValueTransformer.m in Sources */,
+				DA33069C1CDA61A500A4126D /* UILabel+JDFTooltips.m in Sources */,
 				DAABB26A1C1FF5AE004DDCFA /* UIImage+FlatUI.m in Sources */,
 				DAABB2A51C1FF5AE004DDCFA /* MPObjectSerializerConfig.m in Sources */,
 				DAABB0E01C1FD50E004DDCFA /* MyPurchasesCell.m in Sources */,
@@ -2889,6 +2931,7 @@
 				DAABB0B61C1FD50E004DDCFA /* BookTableConfirmCreditCell.m in Sources */,
 				DAABB2CF1C1FF5AE004DDCFA /* TSPlatformImpl.m in Sources */,
 				DAABB2B01C1FF5AE004DDCFA /* MPTweak.m in Sources */,
+				DA3306A01CDA733700A4126D /* JGTooltipHelper.m in Sources */,
 				DAABB2651C1FF5AE004DDCFA /* FUITextField.m in Sources */,
 				DAABB2C81C1FF5AE004DDCFA /* TSAppEventSourceImpl.m in Sources */,
 				DAABB29C1C1FF5AE004DDCFA /* MPEventBinding.m in Sources */,
@@ -2914,6 +2957,7 @@
 				DAABB2841C1FF5AE004DDCFA /* MPABTestDesignerClearResponseMessage.m in Sources */,
 				DAABB0C01C1FD50E004DDCFA /* Messages.m in Sources */,
 				DAABB2621C1FF5AE004DDCFA /* FUIPopoverBackgroundView.m in Sources */,
+				DA33069D1CDA61A500A4126D /* UIView+JDFTooltips.m in Sources */,
 				DAABB2AD1C1FF5AE004DDCFA /* MPSurveyQuestion.m in Sources */,
 				DAABB2C11C1FF5AE004DDCFA /* UIImage+MPAverageColor.m in Sources */,
 				DAABB2C01C1FF5AE004DDCFA /* UIColor+MPColor.m in Sources */,
@@ -2922,6 +2966,7 @@
 				DAABB2D41C1FF5AE004DDCFA /* UIImageViewAligned.m in Sources */,
 				DAABB12F1C1FF13A004DDCFA /* TrendButton.m in Sources */,
 				DAABB0D51C1FD50E004DDCFA /* MyConfirmations.m in Sources */,
+				DA33069A1CDA61A500A4126D /* JDFTooltipManager.m in Sources */,
 				DAABB0BB1C1FD50E004DDCFA /* BookTableOfferingCell.m in Sources */,
 				938CE7921CCE2D2C00ADDD4C /* DefaultDirectionInterpretor.m in Sources */,
 				FA4D2EF21A4D9A77006828E7 /* main.m in Sources */,
@@ -2938,6 +2983,7 @@
 				DAABB0F11C1FD50E004DDCFA /* PopupView.m in Sources */,
 				DAABB2921C1FF5AE004DDCFA /* MPCGPointToNSDictionaryValueTransformer.m in Sources */,
 				DAABB2951C1FF5AE004DDCFA /* MPClassDescription.m in Sources */,
+				DA33069B1CDA61A500A4126D /* JDFTooltipView.m in Sources */,
 				936674551CD7627500AC94F3 /* UIButton+WebCache.m in Sources */,
 				936674511CD7627500AC94F3 /* SDWebImageDownloader.m in Sources */,
 				DAABB2B11C1FF5AE004DDCFA /* MPTweakInline.m in Sources */,

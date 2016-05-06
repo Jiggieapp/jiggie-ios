@@ -14,6 +14,8 @@
 #import "BaseModel.h"
 #import "UserManager.h"
 #import "SVProgressHUD.h"
+#import "JDFTooltips.h"
+#import "JGTooltipHelper.h"
 
 
 #define SCREENS_DEEP 4
@@ -705,6 +707,8 @@
     [self.events1List reloadData];
     [self.events2List reloadData];
     [self.events3List reloadData];
+    
+    [self showTooltip];
 }
 
 -(void)loadImages
@@ -984,6 +988,48 @@
     }
 }
 
+#pragma mark - Tooltip
+- (void)showTooltip {
+    
+    if (self.tooltip == nil) {
+        self.tooltip = [[JDFSequentialTooltipManager alloc] initWithHostView:self];
+    }
+   
+    if ([JGTooltipHelper isLoadEventTooltipValid]) {
+        [self.tooltip addTooltipWithTargetPoint:CGPointMake(40, 200)
+                                    tooltipText:@"Explore more! Tap an event to see more info and booking options."
+                                 arrowDirection:JDFTooltipViewArrowDirectionUp
+                                       hostView:self
+                                          width:self.sharedData.screenWidth - 20];
+        [self.tooltip setBackgroundColourForAllTooltips:[UIColor phBlueColor]];
+        [self.tooltip setFontForAllTooltips:[UIFont phBlond:14]];
+        self.tooltip.showsBackdropView = YES;
+        self.tooltip.backdropTapActionEnabled = YES;
+        [self.tooltip showNextTooltip];
+        
+        [JGTooltipHelper setLastDateShowed:@"Tooltip_LoadEvent_LastDateShowed"];
+        
+    } else if ([JGTooltipHelper isSocialTabTooltipValidAfter:@"Tooltip_LoadEvent_isShowed"]) {
+        if (self.tooltip != nil) {
+            self.tooltip = nil;
+            self.tooltip = [[JDFSequentialTooltipManager alloc] initWithHostView:self];
+        }
+        
+        [self.tooltip addTooltipWithTargetPoint:CGPointMake(self.bounds.size.width * 3/8, self.bounds.size.height)
+                                    tooltipText:@"Lucky you, we found other guests who also like this event. Connect now!"
+                                 arrowDirection:JDFTooltipViewArrowDirectionDown
+                                       hostView:self
+                                          width:self.sharedData.screenWidth - 20];
+        [self.tooltip setBackgroundColourForAllTooltips:[UIColor phBlueColor]];
+        [self.tooltip setFontForAllTooltips:[UIFont phBlond:14]];
+        self.tooltip.showsBackdropView = YES;
+        self.tooltip.backdropTapActionEnabled = YES;
+        [self.tooltip showNextTooltip];
+        
+        [JGTooltipHelper setLastDateShowed:@"Tooltip_SocialTab_LastDateShowed"];
+    }
+}
+
 #pragma mark - Filter
 -(void)showFilter {
     
@@ -1153,6 +1199,7 @@ shouldDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
         self.mainCon.frame = CGRectMake(-self.sharedData.screenWidth, 20, self.sharedData.screenWidth * SCREENS_DEEP, self.sharedData.screenHeight - 20);
     } completion:^(BOOL finished)
     {
+        [JGTooltipHelper setShowed:@"Tooltip_LoadEvent_isShowed"];
     }];
 }
 

@@ -12,6 +12,8 @@
 #import "UserManager.h"
 #import "VTConfig.h"
 #import "LocationManager.h"
+#import "JGTooltipHelper.h"
+
 
 ///REMOVE THIS WHEN LIVE
 //#import "GSTouchesShowingWindow.h"
@@ -222,6 +224,9 @@ static NSString *const kAllowTracking = @"allowTracking";
     [VTConfig setVT_IsProduction:isVeritransInProducion];
     
     //[self performSelector:@selector(testApp) withObject:nil afterDelay:5.0];
+    
+    // set up tooltip
+    [JGTooltipHelper setUpTooltip];
 
     return YES;
 }
