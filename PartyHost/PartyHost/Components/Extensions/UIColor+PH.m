@@ -68,6 +68,13 @@
     return phPurple;
 }
 
++ (UIColor *) phFacebookBlueColor {
+    static UIColor *phPurple = nil;
+    static dispatch_once_t dispatchToken;
+    dispatch_once(&dispatchToken, ^{phPurple = [UIColor colorFromHexCode:@"3B5998"];});
+    return phPurple;
+}
+
 + (UIColor *) phBlueColor {
     static UIColor *phBlue = nil;
     static dispatch_once_t dispatchToken;

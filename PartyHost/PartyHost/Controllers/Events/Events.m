@@ -14,6 +14,8 @@
 #import "BaseModel.h"
 #import "UserManager.h"
 #import "SVProgressHUD.h"
+#import "JDFTooltips.h"
+#import "JGTooltipHelper.h"
 
 
 #define SCREENS_DEEP 4
@@ -55,10 +57,10 @@
     [self.mainCon addSubview:self.tabBar];
     
     self.title = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.sharedData.screenWidth, 40)];
-    self.title.text = @"THIS WEEK";
+    self.title.text = @"This Week";
     self.title.textColor = [UIColor whiteColor];
     self.title.textAlignment = NSTextAlignmentCenter;
-    self.title.font = [UIFont phBold:18];
+    self.title.font = [UIFont phBlond:16];
     [self.tabBar addSubview:self.title];
     
     //Cancel button
@@ -586,6 +588,20 @@
                              } else {
                                  item.venue = @"";
                              }
+                            
+                             NSNumber *likes = [eventRow objectForKey:@"likes"];
+                             if (likes && ![likes isEqual:[NSNull null]]) {
+                                 item.likes = likes;
+                             } else {
+                                 item.likes = [NSNumber numberWithInteger:0];
+                             }
+                             
+                             NSNumber *lowest_price = [eventRow objectForKey:@"lowest_price"];
+                             if (lowest_price && ![lowest_price isEqual:[NSNull null]]) {
+                                 item.lowestPrice = lowest_price;
+                             } else {
+                                 item.lowestPrice = [NSNumber numberWithInteger:0];
+                             }
                              
                              NSArray *tags = [eventRow objectForKey:@"tags"];
                              if (tags && ![tags isEqual:[NSNull null]]) {
@@ -625,7 +641,7 @@
 
                  }
                  @catch (NSException *exception) {
-                     
+
                  }
                  @finally {
                      
@@ -691,6 +707,8 @@
     [self.events1List reloadData];
     [self.events2List reloadData];
     [self.events3List reloadData];
+    
+    [self showTooltip];
 }
 
 -(void)loadImages
@@ -698,8 +716,8 @@
     int count = 0;
     for (Event *event in [self.fetchedResultsController fetchedObjects]) {
         if (event.photo && event.photo!=nil) {
-            NSString *picURL = [self.sharedData picURL:event.photo];
-            [self.sharedData loadTimeImage:picURL withTimeOut:count * .25];
+            NSString *picURl = [self.sharedData picURL:event.photo];
+            [self.sharedData loadTimeImage:picURl withTimeOut:count * .25];
         }
         count++;
     }
@@ -744,7 +762,35 @@
     }
     
     CGFloat pictureHeightRatio = 3.0 / 4.0;
-    CGFloat cellHeight = pictureHeightRatio * tableView.bounds.size.width + 98;
+    CGFloat cellHeight = pictureHeightRatio * tableView.bounds.size.width + 100;
+    
+    
+    Event *event = nil;
+    if ([tableView isEqual:self.events1List]) {
+        if (self.eventsToday != nil && indexPath.row < self.eventsToday.count) {
+            event = [self.eventsToday objectAtIndex:indexPath.row];
+        }
+    } else if ([tableView isEqual:self.events2List]) {
+        if (self.eventsTomorrow != nil && indexPath.row < self.eventsTomorrow.count) {
+            event = [self.eventsTomorrow objectAtIndex:indexPath.row];
+        }
+    } else if ([tableView isEqual:self.events3List]) {
+        if (self.eventsUpcoming != nil && indexPath.row < self.eventsUpcoming.count) {
+            event = [self.eventsUpcoming objectAtIndex:indexPath.row];
+        }
+    }
+    
+    if (event != nil) {
+        NSString *eventTitle = [event.title uppercaseString];
+        
+        CGRect eventTitleFrame = [eventTitle boundingRectWithSize:CGSizeMake(self.sharedData.screenWidth - 20 - 70, 70)
+                                                         options:NSStringDrawingUsesLineFragmentOrigin
+                                                      attributes:@{NSFontAttributeName:[UIFont phBlond:16]}
+                                                         context:nil];
+        
+        cellHeight += eventTitleFrame.size.height;
+    }
+    
     return cellHeight;
 }
 
@@ -831,11 +877,17 @@
         Event *event = nil;
         
         if ([tableView isEqual:self.events1List]) {
-            event = [self.eventsToday objectAtIndex:indexPath.row];
+            if (self.eventsToday != nil && indexPath.row < self.eventsToday.count) {
+                event = [self.eventsToday objectAtIndex:indexPath.row];
+            }
         } else if ([tableView isEqual:self.events2List]) {
-            event = [self.eventsTomorrow objectAtIndex:indexPath.row];
+            if (self.eventsTomorrow != nil && indexPath.row < self.eventsTomorrow.count) {
+                event = [self.eventsTomorrow objectAtIndex:indexPath.row];
+            }
         } else if ([tableView isEqual:self.events3List]) {
-            event = [self.eventsUpcoming objectAtIndex:indexPath.row];
+            if (self.eventsUpcoming != nil && indexPath.row < self.eventsUpcoming.count) {
+                event = [self.eventsUpcoming objectAtIndex:indexPath.row];
+            }
         }
         
         if (event != nil) {
@@ -933,6 +985,48 @@
          } completion:^(BOOL finished) {
              
          }];
+    }
+}
+
+#pragma mark - Tooltip
+- (void)showTooltip {
+    
+    if (self.tooltip == nil) {
+        self.tooltip = [[JDFSequentialTooltipManager alloc] initWithHostView:self];
+    }
+   
+    if ([JGTooltipHelper isLoadEventTooltipValid]) {
+        [self.tooltip addTooltipWithTargetPoint:CGPointMake(40, 200)
+                                    tooltipText:@"Explore more! Tap an event to see more info and booking options."
+                                 arrowDirection:JDFTooltipViewArrowDirectionUp
+                                       hostView:self
+                                          width:self.sharedData.screenWidth - 20];
+        [self.tooltip setBackgroundColourForAllTooltips:[UIColor phBlueColor]];
+        [self.tooltip setFontForAllTooltips:[UIFont phBlond:14]];
+        self.tooltip.showsBackdropView = YES;
+        self.tooltip.backdropTapActionEnabled = YES;
+        [self.tooltip showNextTooltip];
+        
+        [JGTooltipHelper setLastDateShowed:@"Tooltip_LoadEvent_LastDateShowed"];
+        
+    } else if ([JGTooltipHelper isSocialTabTooltipValidAfter:@"Tooltip_LoadEvent_isShowed"]) {
+        if (self.tooltip != nil) {
+            self.tooltip = nil;
+            self.tooltip = [[JDFSequentialTooltipManager alloc] initWithHostView:self];
+        }
+        
+        [self.tooltip addTooltipWithTargetPoint:CGPointMake(self.bounds.size.width * 3/8, self.bounds.size.height)
+                                    tooltipText:@"Lucky you, we found other guests who also like this event. Connect now!"
+                                 arrowDirection:JDFTooltipViewArrowDirectionDown
+                                       hostView:self
+                                          width:self.sharedData.screenWidth - 20];
+        [self.tooltip setBackgroundColourForAllTooltips:[UIColor phBlueColor]];
+        [self.tooltip setFontForAllTooltips:[UIFont phBlond:14]];
+        self.tooltip.showsBackdropView = YES;
+        self.tooltip.backdropTapActionEnabled = YES;
+        [self.tooltip showNextTooltip];
+        
+        [JGTooltipHelper setLastDateShowed:@"Tooltip_SocialTab_LastDateShowed"];
     }
 }
 
@@ -1105,7 +1199,20 @@ shouldDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
         self.mainCon.frame = CGRectMake(-self.sharedData.screenWidth, 20, self.sharedData.screenWidth * SCREENS_DEEP, self.sharedData.screenHeight - 20);
     } completion:^(BOOL finished)
     {
+        [JGTooltipHelper setShowed:@"Tooltip_LoadEvent_isShowed"];
     }];
+}
+
+
+//2nd Screen (VENUE+LIST)
+-(void)goToSummaryModal
+{
+    [UIView animateWithDuration:0 animations:^()
+     {
+         self.mainCon.frame = CGRectMake(-self.sharedData.screenWidth, 20, self.sharedData.screenWidth * SCREENS_DEEP, self.sharedData.screenHeight - 20);
+     } completion:^(BOOL finished)
+     {
+     }];
 }
 
 //3rd Screen (HOST LIST)

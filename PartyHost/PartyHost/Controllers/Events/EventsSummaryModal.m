@@ -245,24 +245,6 @@
     [[NSNotificationCenter defaultCenter]
      postNotificationName:@"EVENTS_GO_GUEST_LIST"
      object:self];
-    
-    
-    
-    
-    
-    /*
-     if([self.sharedData isGuest] && ![self.sharedData isMember])
-     {
-     [[NSNotificationCenter defaultCenter]
-     postNotificationName:@"EVENTS_GO_HOST_LIST"
-     object:self];
-     }
-     else{
-     [[NSNotificationCenter defaultCenter]
-     postNotificationName:@"EVENTS_GO_GUEST_LIST"
-     object:self];
-     }
-     */
 }
 
 //Go to the ADD HOSTING screen
@@ -360,23 +342,6 @@
          [[NSNotificationCenter defaultCenter]
           postNotificationName:@"HIDE_LOADING"
           object:self];
-     }];
-}
-
--(void)showViewed:(NSString *)event_id
-{
-    AFHTTPRequestOperationManager *manager = [self.sharedData getOperationManager];
-    NSString *url = [Constants guestListingsURL:event_id fb_id:self.sharedData.fb_id];
-    url = [NSString stringWithFormat:@"%@/event/details/%@/%@/%@",PHBaseURL,event_id,self.sharedData.fb_id,self.sharedData.gender];
-    
-    NSLog(@"EVENTS_GUEST_LIST_URL :: %@",url);
-    
-    [manager GET:url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject)
-     {
-         
-     }  failure:^(AFHTTPRequestOperation *operation, NSError *error)
-     {
-         
      }];
 }
 
@@ -719,9 +684,6 @@
      postNotificationName:@"SHOW_LOADING"
      object:self];
     
-    //Add to view count if guest
-    //[self addViewCount];
-    
     self.btnInfo.hidden = YES;
     
     //Clear text
@@ -846,29 +808,6 @@
      [cell.button buttonSelect:NO animated:YES];
      [self updateSelected];
      */
-}
-
--(void)addViewCount
-{
-    //Guests only
-    //if(self.sharedData.isHost) return;
-    
-    NSLog(@"VIEW_COUNT :: %@",self.event_id);
-    
-    AFHTTPRequestOperationManager *manager = [self.sharedData getOperationManager];
-    
-    NSString *url = [Constants guestEventsViewedURL:self.event_id fb_id:self.sharedData.fb_id];
-    
-    NSLog(@"VIEW_COUNT_URL :: %@",url);
-    
-    [manager GET:url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject)
-     {
-         NSLog(@"VIEW_COUNT_UPDATED");
-         
-     } failure:^(AFHTTPRequestOperation *operation, NSError *error)
-     {
-         NSLog(@"VIEW_COUNT_ERROR :: %@",error);
-     }];
 }
 
 @end

@@ -182,8 +182,7 @@
     self.bgView.frame = CGRectMake(0, self.picScroll.frame.origin.y + self.picScroll.frame.size.height, self.sharedData.screenWidth, self.mainScroll.contentSize.height);
 }
 
--(void)initClass
-{
+-(void)initClass {
     //[self.sharedData trackMixPanel:@"display_profile"];
     
     [self.mainScroll setContentOffset:CGPointMake(0, 0) animated:NO];
@@ -192,11 +191,10 @@
     self.pControl.currentPage = 0;
     
     if(!self.startPhotosLoad) self.startPhotosLoad = YES;
-    [self loadProfilePhotos];
     
     self.aboutBody.text = [self.sharedData.userDict[@"about"] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     
-    [self getAboutInfo];
+    [self getMemberInfo];
     [self.btnEdit setTitle:@"Edit" forState:UIControlStateNormal];
     [self.aboutBody resignFirstResponder];
     self.aboutBody.userInteractionEnabled = NO;
@@ -266,21 +264,13 @@
 
 -(void)loadProfile
 {
-    self.aboutBody.text     =  [self.sharedData clipSpace:[self.sharedData.userDict objectForKey:@"about"]];
-    NSString *birthDate = [self.sharedData.userDict objectForKey:@"birthday"];
-    NSDate *todayDate = [NSDate date];
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US"]];
-    [dateFormatter setDateFormat:@"MM/dd/yyyy"];
-    int time = [todayDate timeIntervalSinceDate:[dateFormatter dateFromString:birthDate]];
-    int allDays = (((time/60)/60)/24);
-    int days = allDays%365;
-    int years = (allDays-days)/365;
+    self.aboutBody.text = [self.sharedData clipSpace:[self.sharedData.userDict objectForKey:@"about"]];
+    NSInteger years = [self.sharedData calculateAge:[self.sharedData.userDict objectForKey:@"birthday"]];
     
     NSLog(@"FIRST_NAME :: %@",[self.sharedData.userDict objectForKey:@"first_name"]);
     
     self.toLabel.text = [self.sharedData.userDict[@"first_name"] uppercaseString];
-    self.nameLabel.text = [NSString stringWithFormat:@"%@, %d",[self.sharedData.userDict[@"first_name"] uppercaseString],years];
+    self.nameLabel.text = [NSString stringWithFormat:@"%@, %li",[self.sharedData.userDict[@"first_name"] uppercaseString],years];
     
     //Location is empty?
     if([self.sharedData.userDict[@"location"] length]==0)
@@ -296,28 +286,24 @@
     //NSLog(@"You live since %i years and %i days",years,days);
 }
 
--(void)loadProfilePhotos
-{
+-(void)loadProfilePhotosWithPhotos:(NSArray *)photos {
     [self.picScroll.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
     self.picScroll.contentOffset = CGPointMake(0, 0);
-    self.pControl.numberOfPages = [[self.sharedData.photosDict objectForKey:@"photos"] count];
+    self.pControl.numberOfPages = [photos count];
     
-    
-    if(self.pControl.numberOfPages == 0)
-    {
+    if (self.pControl.numberOfPages == 0) {
         self.pControl.numberOfPages = 1;
-        [[self.sharedData.photosDict objectForKey:@"photos"] addObject:[self.sharedData profileImgLarge:self.sharedData.fb_id]];
+//        [[self.sharedData.photosDict objectForKey:@"photos"] addObject:[self.sharedData profileImgLarge:self.sharedData.fb_id]];
     }
-    NSLog(@"%@", [self.sharedData.photosDict objectForKey:@"photos"]);
-    for (int i = 0; i < [[self.sharedData.photosDict objectForKey:@"photos"] count]; i++)
-    {
+    
+    for (int i = 0; i < [photos count]; i++) {
         UIView *picCon = [[UIView alloc] initWithFrame:CGRectMake(self.frame.size.width * i, 0, self.frame.size.width, self.picScroll.frame.size.height)];
         picCon.layer.masksToBounds = YES;
         PHImage *pic = [[PHImage alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.picScroll.frame.size.height)];
         pic.contentMode = UIViewContentModeScaleAspectFill;
         pic.alignTop = true;
         pic.showLoading = YES;
-        [pic loadImage:[[self.sharedData.photosDict objectForKey:@"photos"] objectAtIndex:i] defaultImageNamed:nil];
+        [pic loadImage:[photos objectAtIndex:i] defaultImageNamed:nil];
         /*
          dispatch_async(dispatch_get_global_queue(0,0), ^{
          NSData * data = [[NSData alloc] initWithContentsOfURL: [NSURL URLWithString: [[self.sharedData.photosDict objectForKey:@"photos"] objectAtIndex:i]]];
@@ -395,7 +381,7 @@
      }];
 }
 
--(void)getAboutInfo
+-(void)getMemberInfo
 {
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     manager.requestSerializer = [AFJSONRequestSerializer serializer];
@@ -422,8 +408,13 @@
                      if (memberinfo && memberinfo != nil) {
                          self.aboutBody.text = [self.sharedData clipSpace:memberinfo[@"about"]];
                          [self.sharedData.userDict setValue:memberinfo[@"about"] forKey:@"about"];
-                         
                          [self updateAboutPanel];
+                         
+                         NSArray *photos = memberinfo[@"photos"];
+                         
+                         if (photos && photos != nil) {
+                             [self loadProfilePhotosWithPhotos:photos];
+                         }
                      }
                  }
              }

@@ -7,7 +7,7 @@
 //
 
 #import "Settings.h"
-#import "Feed.h"
+#import "FeedView.h"
 #import "UserManager.h"
 
 @implementation Settings
@@ -472,15 +472,23 @@
         [self.sharedData saveSettingsResponse];
         [self.settingsList reloadData];
         [self.sharedData.eventsPage resetApp];
-        [self.sharedData.feedPage forceReload];
         
-        //Start spinner
         [[NSNotificationCenter defaultCenter]
          postNotificationName:@"EVENTS_GO_HOME"
          object:self];
         
-        [self saveSettings];
+        //Start spinner
+        [[NSNotificationCenter defaultCenter]
+         postNotificationName:@"SHOW_LOADING"
+         object:self];
+        [self.sharedData.feedPage loadDataAndShowHUD:NO withCompletionHandler:^(NSArray *feeds, NSInteger statusCode, NSError *error) {
+            //Hide spinner
+            [[NSNotificationCenter defaultCenter]
+             postNotificationName:@"HIDE_LOADING"
+             object:self];
+        }];
         
+        [self saveSettings];
     }
     else if (indexPath.section==3) //Delete
     {

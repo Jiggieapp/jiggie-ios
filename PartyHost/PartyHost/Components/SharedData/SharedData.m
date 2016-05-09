@@ -37,6 +37,7 @@ static SharedData *sharedInstance = nil;
         self.userDict   =   [[NSMutableDictionary alloc] init]; // user login when
         self.photosDict =   [[NSMutableDictionary alloc] init]; // user's photos
         self.imagesDict =   [[NSMutableDictionary alloc] init]; // all photos member profile, events, event detail
+        self.facebookImagesDict = [[NSMutableDictionary alloc] init]; // all photos member profile from facebook image picker
         self.venuesNameList =   [[NSMutableArray alloc] init]; // not use anymore
         self.keyboardsA     =   [[NSMutableArray alloc] init]; // clear for the keyboard.. all object to resign the keyboard
         self.appsFlyerDict  = [[NSMutableDictionary alloc] init]; // dict for appsflyer when login or app launch
@@ -47,7 +48,7 @@ static SharedData *sharedInstance = nil;
         self.profilePage  = nil; // profile
         self.memberProfile = nil; // memberprofile
         self.messageFontSize    = 14;
-        self.maxProfilePics     = 4;
+        self.maxProfilePics     = 5;
         self.appKey             =   @"kT7bgkacbx73i3yxma09su0u901nu209mnuu30akhkpHJJ"; // not use anymore
         self.fb_id              =   @""; // user's fb id
         self.isInConversation = NO; // if in the user conversation
@@ -195,9 +196,12 @@ static SharedData *sharedInstance = nil;
         //Location setting
         self.location_on = NO;
         
-        //Gender preferences
+        //Social Filter preferences
         self.gender = @"male";
         self.gender_interest = @"female";
+        self.distance = @"160";
+        self.from_age = @"18";
+        self.to_age = @"60";
         
         //Credit card
         self.ccType = @"";
@@ -245,7 +249,7 @@ static SharedData *sharedInstance = nil;
     */
     
     NSString *newUrl = [url stringByReplacingOccurrencesOfString:@"_original.png" withString:@"_540.jpg"];
-    return [NSString stringWithFormat:@"%@/image?url=%@",PHBaseURL,newUrl];
+    return newUrl;
 }
 
 -(NSString *)profileImg:(NSString *)fb_id
@@ -526,8 +530,6 @@ static SharedData *sharedInstance = nil;
     manager.requestSerializer = [AFJSONRequestSerializer serializer];
     manager.responseSerializer = [AFJSONResponseSerializer serializer];
     
-    NSLog(@"token: %@", self.ph_token);
-    
     [manager.requestSerializer setValue:self.ph_token forHTTPHeaderField:@"Authorization"];
     
 //    AFSecurityPolicy *policy = [AFSecurityPolicy policyWithPinningMode:AFSSLPinningModeCertificate];
@@ -656,6 +658,9 @@ static SharedData *sharedInstance = nil;
                          @"account_type": self.account_type,
                          @"gender": self.gender,
                          @"gender_interest": self.gender_interest,
+                         @"distance": self.distance,
+                         @"from_age": self.from_age,
+                         @"to_age": self.to_age,
                          @"feed": [NSNumber numberWithInt:(self.notification_feed)?1:0],
                          @"chat": [NSNumber numberWithInt:(self.notification_messages)?1:0],
                          @"location": [NSNumber numberWithInt:(self.location_on)?1:0],
@@ -706,6 +711,10 @@ static SharedData *sharedInstance = nil;
             self.gender_interest = ([self.gender isEqualToString:@"female"])?@"male":@"female";
         };
         
+        self.distance = (dict[@"distance"])?:self.distance;
+        self.from_age = (dict[@"from_age"])?:self.from_age;
+        self.to_age = (dict[@"to_age"])?:self.to_age;
+        
         self.notification_feed = [dict[@"notifications"][@"feed"] boolValue];
         self.notification_messages = [dict[@"notifications"][@"chat"] boolValue];
         
@@ -740,19 +749,22 @@ static SharedData *sharedInstance = nil;
         NSDictionary *dict = [prefs objectForKey:@"user.setting"];
         
         NSDictionary *newDict = @{@"_id":dict[@"_id"],
-                                    @"account_type":dict[@"account_type"],
-                                    @"experiences":self.experiences,
-                                    @"fb_id":dict[@"fb_id"],
-                                    @"gender":dict[@"gender"],
-                                    @"gender_interest":self.gender_interest,
-                                    @"matchme":dict[@"matchme"],
-                                    @"notifications":@{
-                                            @"chat":[NSNumber numberWithBool:self.notification_messages],
-                                            @"feed":[NSNumber numberWithBool:self.notification_feed],
-                                            @"location":[NSNumber numberWithBool:self.location_on]},
-                                    @"payment":dict[@"payment"],
-                                    @"phone":self.phone,
-                                    @"updated_at":dict[@"updated_at"]
+                                  @"account_type":dict[@"account_type"],
+                                  @"experiences":self.experiences,
+                                  @"fb_id":dict[@"fb_id"],
+                                  @"gender":dict[@"gender"],
+                                  @"gender_interest":self.gender_interest,
+                                  @"distance": self.distance,
+                                  @"from_age": self.from_age,
+                                  @"to_age": self.to_age,
+                                  @"matchme":dict[@"matchme"],
+                                  @"notifications":@{
+                                          @"chat":[NSNumber numberWithBool:self.notification_messages],
+                                          @"feed":[NSNumber numberWithBool:self.notification_feed],
+                                          @"location":[NSNumber numberWithBool:self.location_on]},
+                                  @"payment":dict[@"payment"],
+                                  @"phone":self.phone,
+                                  @"updated_at":dict[@"updated_at"]
                                   };
         
         [prefs setObject:newDict forKey:@"user.setting"];
@@ -793,5 +805,21 @@ static SharedData *sharedInstance = nil;
     return [emailTest evaluateWithObject:checkString];
 }
 
+- (NSInteger)calculateAge:(NSString *)birthDate {
+    if (birthDate == nil || [birthDate isEqual:[NSNull null]] || [birthDate isEqualToString:@""]) {
+        return 0;
+    }
+    
+    NSDate *todayDate = [NSDate date];
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US"]];
+    [dateFormatter setDateFormat:@"MM/dd/yyyy"];
+    NSInteger time = [todayDate timeIntervalSinceDate:[dateFormatter dateFromString:birthDate]];
+    NSInteger allDays = (((time/60)/60)/24);
+    NSInteger days = allDays%365;
+    NSInteger years = (allDays-days)/365;
+    
+    return years;
+}
 
 @end

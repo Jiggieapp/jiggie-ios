@@ -12,10 +12,12 @@
 #import "EventDetail.h"
 #import "BaseModel.h"
 #import "SVProgressHUD.h"
+#import "JDFTooltips.h"
+#import "JGTooltipHelper.h"
 
 #define PROFILE_PICS 4 //If more than 4 then last is +MORE
 #define PROFILE_SIZE 40
-#define PROFILE_PADDING 8
+#define PROFILE_PADDING 4
 
 @implementation EventsSummary {
     NSString *lastEventId;
@@ -32,36 +34,10 @@
     
     self.sharedData = [SharedData sharedInstance];
     
-    self.tabBar = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.sharedData.screenWidth, 60)];
-    self.tabBar.backgroundColor = [UIColor phPurpleColor];
-    [self addSubview:self.tabBar];
-    
-    self.btnBack = [UIButton buttonWithType:UIButtonTypeCustom];
-    self.btnBack.frame = CGRectMake(0, 20, 40, 40);
-    [self.btnBack setImage:[UIImage imageNamed:@"nav_back"] forState:UIControlStateNormal];
-    [self.btnBack setImageEdgeInsets:UIEdgeInsetsMake(8, 14, 8, 14)];
-    [self.btnBack addTarget:self action:@selector(goBack) forControlEvents:UIControlEventTouchUpInside];
-    [self.tabBar addSubview:self.btnBack];
-    
-    self.btnShare = [UIButton buttonWithType:UIButtonTypeCustom];
-    self.btnShare.frame = CGRectMake(self.sharedData.screenWidth - (93/4) - 8, 2 + 20, 28, 36);
-    [self.btnShare setImage:[UIImage imageNamed:@"share_action"] forState:UIControlStateNormal];
-    self.btnShare.imageView.contentMode = UIViewContentModeScaleAspectFit;
-    self.btnShare.imageEdgeInsets = UIEdgeInsetsMake(4, 4, 4, 4);
-    [self.btnShare addTarget:self action:@selector(goShareHandler) forControlEvents:UIControlEventTouchUpInside];
-    [self.tabBar addSubview:self.btnShare];
-    
-    self.title = [[UILabel alloc] initWithFrame:CGRectMake(40, 20, self.sharedData.screenWidth - 80, 40)];
-    self.title.textAlignment = NSTextAlignmentCenter;
-    self.title.textColor = [UIColor whiteColor];
-    self.title.adjustsFontSizeToFitWidth = YES;
-    self.title.font = [UIFont phBold:15];
-    [self.tabBar addSubview:self.title];
-    
     self.mainScroll = [[UIScrollView alloc] initWithFrame:CGRectMake(0,
-                                                                     self.tabBar.bounds.size.height,
+                                                                     0,
                                                                      self.sharedData.screenWidth,
-                                                                     self.sharedData.screenHeight - self.tabBar.bounds.size.height - PHTabHeight)];
+                                                                     self.sharedData.screenHeight - PHTabHeight)];
     self.mainScroll.showsVerticalScrollIndicator    = NO;
     self.mainScroll.showsHorizontalScrollIndicator  = NO;
     self.mainScroll.scrollEnabled                   = YES;
@@ -70,6 +46,10 @@
     self.mainScroll.backgroundColor                 = [UIColor whiteColor];
     self.mainScroll.contentSize                     = CGSizeMake(self.sharedData.screenWidth, 1000);
     [self addSubview:self.mainScroll];
+    
+    UIView *tmpPurpleView = [[UIView alloc] initWithFrame:CGRectMake(0, -300, self.sharedData.screenWidth, 300)];
+    tmpPurpleView.backgroundColor = [UIColor phPurpleColor];
+    [self.mainScroll addSubview:tmpPurpleView];
     
     //Inner bg
     self.innerBg = [[UIView alloc] init];
@@ -106,25 +86,80 @@
     self.pControl.userInteractionEnabled = NO;
     [self.mainScroll addSubview:self.pControl];
     
-    self.eventDate = [[UILabel alloc] initWithFrame:CGRectMake(40, self.picScroll.frame.origin.y + self.picScroll.frame.size.height + 16 + 8, self.sharedData.screenWidth-80, 24)];
-    self.eventDate.textAlignment = NSTextAlignmentCenter;
-    self.eventDate.textColor = [UIColor blackColor];
-    self.eventDate.font = [UIFont phBlond:16];
+    UIButton *closeButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [closeButton setFrame:CGRectMake(0.0f, 20.0f, 40.0f, 40.0f)];
+    [closeButton setImage:[UIImage imageNamed:@"nav_back_shadow"] forState:UIControlStateNormal];
+    [closeButton addTarget:self action:@selector(goBack) forControlEvents:UIControlEventTouchUpInside];
+    [self.mainScroll addSubview:closeButton];
+    
+    self.likeButton = [[UIButton alloc] initWithFrame:CGRectMake(11, CGRectGetMaxY(self.picScroll.frame) + 10, 40, 40)];
+    [self.likeButton setImage:[UIImage imageNamed:@"icon_love_off"] forState:UIControlStateNormal];
+    [self.likeButton setImage:[UIImage imageNamed:@"icon_love_on"] forState:UIControlStateSelected];
+    [self.likeButton setImageEdgeInsets:UIEdgeInsetsMake(5, 5, 5, 5)];
+    [self.likeButton addTarget:self action:@selector(likeButtonDidTap:) forControlEvents:UIControlEventTouchUpInside];
+    [self.mainScroll addSubview:self.likeButton];
+    
+    self.likeCount = [[UILabel alloc] initWithFrame:CGRectMake(11 + 40 + 6, CGRectGetMaxY(self.picScroll.frame) + 20, 40, 20)];
+    self.likeCount.textColor = [UIColor darkGrayColor];
+    self.likeCount.adjustsFontSizeToFitWidth = YES;
+    self.likeCount.font = [UIFont phBlond:15];
+    [self.mainScroll addSubview:self.likeCount];
+    
+    self.shareButton = [[UIButton alloc] initWithFrame:CGRectMake(11 + 80 + 16, CGRectGetMaxY(self.picScroll.frame) + 10, 40, 40)];
+    [self.shareButton setImage:[UIImage imageNamed:@"icon_share"] forState:UIControlStateNormal];
+    [self.shareButton setImageEdgeInsets:UIEdgeInsetsMake(5, 5, 5, 5)];
+    [self.shareButton addTarget:self action:@selector(goShareHandler) forControlEvents:UIControlEventTouchUpInside];
+    [self.mainScroll addSubview:self.shareButton];
+    
+    UILabel *shareLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(self.shareButton.frame) + 8, CGRectGetMaxY(self.picScroll.frame) + 20, 40, 20)];
+    shareLabel.text = @"Share";
+    shareLabel.textColor = [UIColor darkGrayColor];
+    shareLabel.adjustsFontSizeToFitWidth = YES;
+    shareLabel.font = [UIFont phBlond:15];
+    [self.mainScroll addSubview:shareLabel];
+    
+    self.startFromLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, CGRectGetMaxY(self.picScroll.frame) - 50, self.sharedData.screenWidth - 32, 18)];
+    self.startFromLabel.textColor = [UIColor whiteColor];
+    self.startFromLabel.text = @"Starts From";
+    self.startFromLabel.font = [UIFont phBlond:12];
+    [self addSubview:self.startFromLabel];
+    
+    self.minimumPrice = [[UILabel alloc] initWithFrame:CGRectMake(16, CGRectGetMaxY(self.picScroll.frame) - 32, self.sharedData.screenWidth - 32, 20)];
+    self.minimumPrice.textColor = [UIColor whiteColor];
+    self.minimumPrice.text = @"Rp400K";
+    self.minimumPrice.font = [UIFont phBold:18];
+    [self addSubview:self.minimumPrice];
+    
+    self.eventName = [[UILabel alloc] init];
+    self.eventName.textAlignment = NSTextAlignmentLeft;
+    self.eventName.textColor = [UIColor blackColor];
+    self.eventName.font = [UIFont phBold:16];
+    self.eventName.userInteractionEnabled = NO;
+    self.eventName.adjustsFontSizeToFitWidth = YES;
+    self.eventName.numberOfLines = 3;
+    [self.mainScroll addSubview:self.eventName];
+    
+    self.eventDate = [[UILabel alloc] init];
+    self.eventDate.textAlignment = NSTextAlignmentLeft;
+    self.eventDate.textColor = [UIColor darkGrayColor];
+    self.eventDate.font = [UIFont phBlond:13];
     self.eventDate.userInteractionEnabled = NO;
     self.eventDate.adjustsFontSizeToFitWidth = YES;
+    self.eventDate.numberOfLines = 2;
     [self.mainScroll addSubview:self.eventDate];
     
-    self.venueName = [[UILabel alloc] initWithFrame:CGRectMake(30, self.eventDate.frame.origin.y + self.eventDate.frame.size.height + 4, self.sharedData.screenWidth - 60, 20)];
-    self.venueName.font = [UIFont phBold:13];
-    self.venueName.textAlignment = NSTextAlignmentCenter;
+    self.venueName = [[UILabel alloc] init];
+    self.venueName.font = [UIFont phBlond:13];
+    self.venueName.textAlignment = NSTextAlignmentLeft;
     self.venueName.textColor = [UIColor darkGrayColor];
     self.venueName.userInteractionEnabled = NO;
     self.venueName.backgroundColor = [UIColor clearColor];
     self.venueName.adjustsFontSizeToFitWidth = YES;
+    self.venueName.numberOfLines = 3;
     [self.mainScroll addSubview:self.venueName];
     
     self.separator1 = [[UIView alloc] init];
-    self.separator1.backgroundColor = [UIColor phDarkGrayColor];
+    self.separator1.backgroundColor = [UIColor phLightGrayColor];
     [self.mainScroll addSubview:self.separator1];
     
     self.listingContainer = [[UIView alloc] init];
@@ -132,34 +167,23 @@
     UITapGestureRecognizer *seeAllTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(infoButtonClicked)];
     [self.listingContainer addGestureRecognizer:seeAllTap];
     
+    self.guestInterestedLabel = [[UILabel alloc] init];
+    self.guestInterestedLabel.text = @"GUEST INTERESTED";
+    self.guestInterestedLabel.textAlignment = NSTextAlignmentLeft;
+    self.guestInterestedLabel.textColor = [UIColor blackColor];
+    self.guestInterestedLabel.font = [UIFont phBold:13];
+    self.guestInterestedLabel.userInteractionEnabled = NO;
+    self.guestInterestedLabel.adjustsFontSizeToFitWidth = YES;
+    [self.listingContainer addSubview:self.guestInterestedLabel];
+    
     self.hostNum = [[UILabel alloc] init];
-    self.hostNum.textColor = [UIColor blackColor];
-    self.hostNum.font = [UIFont phBold:9];
+    self.hostNum.textColor = [UIColor phBlueColor];
+    self.hostNum.font = [UIFont phBold:12];
     [self.listingContainer addSubview:self.hostNum];
     
     self.userContainer = [[UIView alloc] init];
     self.userContainer.backgroundColor = [UIColor clearColor];
     [self.listingContainer addSubview:self.userContainer];
-    
-    self.seeAllView = [[UIView alloc] init];
-    self.seeAllView.backgroundColor = [UIColor colorFromHexCode:@"F0F0F0"];
-    self.seeAllView.layer.borderColor = [UIColor colorFromHexCode:@"E8E8E8"].CGColor;
-    self.seeAllView.layer.borderWidth = 1;
-    [self.listingContainer addSubview:self.seeAllView];
-    
-    self.seeAllLabel = [[UILabel alloc] init];
-    self.seeAllLabel.font = [UIFont phBold:11];
-    self.seeAllLabel.textAlignment = NSTextAlignmentCenter;
-    self.seeAllLabel.textColor = [UIColor blackColor];
-    self.seeAllLabel.userInteractionEnabled = NO;
-    self.seeAllLabel.backgroundColor = [UIColor clearColor];
-    self.seeAllLabel.adjustsFontSizeToFitWidth = YES;
-    [self.listingContainer addSubview:self.seeAllLabel];
-    
-    self.seeAllCaret = [[UIImageView alloc] init];
-    self.seeAllCaret.image = [[UIImage imageNamed:@"btn_forward"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-    self.seeAllCaret.tintColor = [UIColor lightGrayColor];
-    [self.listingContainer addSubview:self.seeAllCaret];
     
     KTCenterFlowLayout *layout = [KTCenterFlowLayout new];
     layout.minimumInteritemSpacing = 8.f;
@@ -172,26 +196,37 @@
     self.tagCollection.backgroundColor = [UIColor clearColor];
     [self.mainScroll addSubview:self.tagCollection];
     
+    self.separator2 = [[UIView alloc] init];
+    self.separator2.backgroundColor = [UIColor phLightGrayColor];
+    [self.mainScroll addSubview:self.separator2];
+    
+    self.descriptionLabel = [[UILabel alloc] init];
+    self.descriptionLabel.text = @"DESCRIPTION";
+    self.descriptionLabel.textAlignment = NSTextAlignmentLeft;
+    self.descriptionLabel.textColor = [UIColor blackColor];
+    self.descriptionLabel.font = [UIFont phBold:13];
+    self.descriptionLabel.userInteractionEnabled = NO;
+    self.descriptionLabel.adjustsFontSizeToFitWidth = YES;
+    [self.mainScroll addSubview:self.descriptionLabel];
+    
     self.aboutBody = [[UITextView alloc] init];
-    self.aboutBody.font = [UIFont phBlond:12];
-    self.aboutBody.textColor = [UIColor blackColor];
+    self.aboutBody.font = [UIFont phBlond:13];
+    self.aboutBody.textColor = [UIColor darkGrayColor];
     self.aboutBody.textAlignment = NSTextAlignmentLeft;
     self.aboutBody.userInteractionEnabled = NO;
     self.aboutBody.backgroundColor = [UIColor clearColor];
     [self.mainScroll addSubview:self.aboutBody];
     
     self.seeMapView = [[UIView alloc] init];
-    self.seeMapView.backgroundColor = [UIColor colorFromHexCode:@"F0F0F0"];
-    self.seeMapView.layer.borderColor = [UIColor colorFromHexCode:@"E8E8E8"].CGColor;
-    self.seeMapView.layer.borderWidth = 1;
+    self.seeMapView.backgroundColor = [UIColor clearColor];
     UITapGestureRecognizer *seeMapTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showAddressInMap)];
     [self.seeMapView addGestureRecognizer:seeMapTap];
     [self.mainScroll addSubview:self.seeMapView];
     
     self.seeMapLabel = [[UILabel alloc] init];
-    self.seeMapLabel.font = [UIFont phBold:11];
+    self.seeMapLabel.font = [UIFont phBlond:13];
     self.seeMapLabel.textAlignment = NSTextAlignmentCenter;
-    self.seeMapLabel.textColor = [UIColor blackColor];
+    self.seeMapLabel.textColor = [UIColor darkGrayColor];
     self.seeMapLabel.userInteractionEnabled = NO;
     self.seeMapLabel.backgroundColor = [UIColor clearColor];
     self.seeMapLabel.adjustsFontSizeToFitWidth = YES;
@@ -229,12 +264,34 @@
     [self.btnHostHere addSubview:self.externalSiteLabel];
     
     self.emptyView = [[EmptyView alloc] initWithFrame:CGRectMake(0,
-                                                                self.tabBar.bounds.size.height,
+                                                                0,
                                                                 self.sharedData.screenWidth,
-                                                                self.sharedData.screenHeight - self.tabBar.bounds.size.height - PHTabHeight)];
+                                                                self.sharedData.screenHeight - PHTabHeight)];
     [self.emptyView setData:@"The event is no longer available" subtitle:@"" imageNamed:@""];
     self.emptyView.backgroundColor = [UIColor whiteColor];
     [self addSubview:self.emptyView];
+    
+    //Nav Bar
+    self.navBar = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.sharedData.screenWidth, 60)];
+    self.navBar.backgroundColor = [UIColor phPurpleColor];
+    [self addSubview:self.navBar];
+    
+    self.btnBack = [UIButton buttonWithType:UIButtonTypeCustom];
+    self.btnBack.frame = CGRectMake(0, 20, 40, 40);
+    [self.btnBack setImage:[UIImage imageNamed:@"nav_back"] forState:UIControlStateNormal];
+    [self.btnBack setImageEdgeInsets:UIEdgeInsetsMake(8, 14, 8, 14)];
+    [self.btnBack addTarget:self action:@selector(goBack) forControlEvents:UIControlEventTouchUpInside];
+    [self.navBar addSubview:self.btnBack];
+    
+    self.title = [[UILabel alloc] initWithFrame:CGRectMake(40, 20, self.sharedData.screenWidth - 80, 40)];
+    self.title.textAlignment = NSTextAlignmentCenter;
+    self.title.textColor = [UIColor whiteColor];
+    self.title.adjustsFontSizeToFitWidth = YES;
+    self.title.font = [UIFont phBlond:15];
+    [self.navBar addSubview:self.title];
+    
+    // hides navbar
+    [self showNavBar:NO withAnimation:NO];
     
     //version_3.0
     return self;
@@ -249,13 +306,20 @@
     
     [self.emptyView setMode:@"load"];
     
-    //Add to view count if guest
-    [self addViewCount];
-    
     //Clear NavBar
     self.title.text = @"";
+    self.eventName.text = @"";
+    
+    [self.likeButton setEnabled:NO];
+    [self.likeButton setSelected:NO];
+    
+    [self.likeCount setText:@"0"];
     
     self.separator1.hidden = YES;
+    
+    self.separator2.hidden = YES;
+    
+    self.descriptionLabel.hidden = YES;
     
     //Clear text
     [self.btnHostHere setTitle:@"" forState:UIControlStateNormal];
@@ -274,13 +338,10 @@
     //Title
     self.venueName.text = @"";
     self.aboutBody.text = @"";
-    self.seeAllLabel.text = @"";
     self.hostNum.text = @"";
     self.eventDate.text = @"";
     
     //See map
-    self.seeAllView.hidden = YES;
-    self.seeAllCaret.hidden = YES;
     self.seeMapView.hidden = YES;
     self.seeMapCaret.hidden = YES;
     self.seeMapLabel.text = @"";
@@ -291,9 +352,9 @@
     //Rescroll
     self.mainScroll.contentOffset = CGPointMake(0, 0);
     [self.mainScroll setFrame:CGRectMake(0,
-                                         self.tabBar.bounds.size.height,
+                                         0,
                                          self.sharedData.screenWidth,
-                                         self.sharedData.screenHeight - self.tabBar.bounds.size.height - PHTabHeight)];
+                                         self.sharedData.screenHeight - PHTabHeight)];
     
     self.isLoaded = NO;
 }
@@ -322,11 +383,53 @@
     }
 }
 
+-(void)initClassWithEventID:(NSString *)eventID
+{
+    self.cEvent = nil;
+    
+    if (eventID) {
+        self.event_id = eventID;
+    }
+    
+    [self reset];
+    
+    if ([self reloadFetch:nil]) {
+        if ([[self.fetchedResultsController fetchedObjects] count]>0) {
+            [self populateData:nil];
+        } else if (eventID) {
+           [self loadData:eventID];
+        }
+    }
+}
+
 -(void)goBack
 {
     [[NSNotificationCenter defaultCenter]
      postNotificationName:@"EVENTS_GO_HOME"
      object:self];
+}
+
+- (void)showNavBar:(BOOL)isShow withAnimation:(BOOL)isAnimated {
+    self.isNavBarShowing = isShow;
+    
+    CGFloat animateDuration = 0.0;
+    if (isAnimated) {
+        animateDuration = 0.25;
+    }
+    
+    if (isShow) {
+        [UIView animateWithDuration:animateDuration delay:0.0 options:UIViewAnimationOptionCurveEaseIn animations:^{
+            [self.navBar setFrame:CGRectMake(0, 0, self.navBar.bounds.size.width, self.navBar.bounds.size.height)];
+        } completion:^(BOOL finished) {
+            
+        }];
+    } else {
+        [UIView animateWithDuration:animateDuration delay:0.0 options:UIViewAnimationOptionCurveEaseIn animations:^{
+            [self.navBar setFrame:CGRectMake(0, - self.navBar.bounds.size.height, self.navBar.bounds.size.width, self.navBar.bounds.size.height)];
+        } completion:^(BOOL finished) {
+            
+        }];
+    }
 }
 
 #pragma mark - Button Action
@@ -378,12 +481,13 @@
             self.sharedData.shareHostingVenueName = self.cEvent.title;
             
             self.sharedData.cHostVenuePicURL = self.cEvent.photo;
-            NSLog(@"AAAAA : %@", self.sharedData.cHostVenuePicURL);
         } else {
             self.sharedData.shareHostingVenueName = self.sharedData.eventDict[@"venue_name"];
             
             self.sharedData.cHostVenuePicURL = self.sharedData.eventDict[@"photos"][0];
         }
+        
+        [JGTooltipHelper setShowed:@"Tooltip_ShareEvent_isShowed"];
         
         [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Share Event" withDict:self.sharedData.mixPanelCEventDict];
         
@@ -407,20 +511,6 @@
     [[NSNotificationCenter defaultCenter]
      postNotificationName:@"EVENTS_GO_GUEST_LIST"
      object:self];
-    
-    /*
-    if([self.sharedData isGuest] && ![self.sharedData isMember])
-    {
-        [[NSNotificationCenter defaultCenter]
-         postNotificationName:@"EVENTS_GO_HOST_LIST"
-         object:self];
-    }
-    else{
-        [[NSNotificationCenter defaultCenter]
-         postNotificationName:@"EVENTS_GO_GUEST_LIST"
-         object:self];
-    }
-    */
 }
 
 //Go to the ADD HOSTING screen
@@ -467,7 +557,28 @@
          object:self.event_id];
 
     }
+}
+
+- (void)likeButtonDidTap:(id)sender {
+    UIButton *likeButton = (UIButton *)sender;
     
+    if ([likeButton isSelected]) {
+        [likeButton setSelected:NO];
+        
+        NSInteger likeCount = [self.likeCount.text integerValue];
+        likeCount--;
+        [self.likeCount setText:[NSString stringWithFormat:@"%li", likeCount]];
+        
+        [self postLikeEvent:NO];
+    } else {
+        [likeButton setSelected:YES];
+
+        NSInteger likeCount = [self.likeCount.text integerValue];
+        likeCount++;
+        [self.likeCount setText:[NSString stringWithFormat:@"%li", likeCount]];
+        
+        [self postLikeEvent:YES];
+    }
 }
 
 #pragma mark - Fetch
@@ -532,19 +643,43 @@
     [self.emptyView setMode:@"hide"];
     
     [self.mainScroll setFrame:CGRectMake(0,
-                                         self.tabBar.bounds.size.height,
+                                         0,
                                          self.sharedData.screenWidth,
-                                         self.sharedData.screenHeight - self.tabBar.bounds.size.height - PHTabHeight)];
+                                         self.sharedData.screenHeight - PHTabHeight)];
     
     //ID
     self.sharedData.cEventId_Summary = self.cEvent.eventID;
     
+    if (self.cEvent.lowestPrice.integerValue > 0) {
+        SharedData *sharedData = [SharedData sharedInstance];
+        NSString *formattedPrice = [sharedData formatCurrencyString:self.cEvent.lowestPrice.stringValue];
+        [self.minimumPrice setText:[NSString stringWithFormat:@"Rp%@", formattedPrice]];
+        
+        self.minimumPrice.hidden = NO;
+        self.startFromLabel.hidden = NO;
+        
+    } else {
+        self.minimumPrice.hidden = YES;
+        self.startFromLabel.hidden = YES;
+    }
+        
     //Title
     self.title.text = [self.cEvent.title uppercaseString];
-    self.eventDate.text = [Constants toTitleDate:self.cEvent.startDatetime dbEndDate:self.cEvent.endDatetime];
+
+    self.eventName.text = [self.cEvent.title uppercaseString];
+    self.eventName.frame = CGRectMake(16, CGRectGetMaxY(self.likeButton.frame) + 16, self.sharedData.screenWidth - 32, 60);
+    [self.eventName sizeToFit];
     
-    //Venue
+    self.eventDate.text = [Constants toTitleDate:self.cEvent.startDatetime dbEndDate:self.cEvent.endDatetime];
+    self.eventDate.frame = CGRectMake(16, CGRectGetMaxY(self.eventName.frame) + 12, self.sharedData.screenWidth-80, 40);
+    [self.eventDate sizeToFit];
+
     self.venueName.text = [self.cEvent.venue uppercaseString];
+    self.venueName.frame = CGRectMake(16, CGRectGetMaxY(self.eventDate.frame) + 12, self.sharedData.screenWidth - 32, 60);
+    [self.venueName sizeToFit];
+    
+    //Likes
+    self.likeCount.text = [NSString stringWithFormat:@"%@", self.cEvent.likes];
     
     //Page control
     self.pControl.currentPage = 0;
@@ -559,47 +694,24 @@
     PHImage *img = [[PHImage alloc] initWithFrame:CGRectMake(0, 0, picSize.width, picSize.height)];
     img.contentMode = UIViewContentModeScaleAspectFill;
     NSString *picURL = self.cEvent.photo;
-    picURL = [self.sharedData picURL:picURL];
     img.showLoading = YES;
     [img loadImage:picURL defaultImageNamed:nil];
     [imgCon addSubview:img];
     [self.picScroll addSubview:imgCon];
     
     self.picScroll.contentSize = CGSizeMake(picSize.width, picSize.height);
-    
-    //Get tags
-    self.tagArray = [[NSMutableArray alloc] init];
-    [self.tagArray removeAllObjects];
-    
-    NSMutableArray *tags = (NSMutableArray *)[NSKeyedUnarchiver unarchiveObjectWithData:self.cEvent.tags];
-//    if (self.cEvent.isFeatured) {
-//        [tags insertObject:@"Featured" atIndex:0];
-//    }
-    
-    [self.tagArray addObjectsFromArray:tags];
-    
-    //Tags!!!
-    if([self.tagArray count]>0)
-    {
-        self.tagCollection.frame = CGRectMake(20, self.venueName.frame.size.height + self.venueName.frame.origin.y + 16, self.sharedData.screenWidth - 40, 44);
-        [self.tagCollection reloadData];
-        self.tagCollection.frame = CGRectMake(20, self.venueName.frame.size.height + self.venueName .frame.origin.y + 16, self.sharedData.screenWidth - 40, self.tagCollection.collectionViewLayout.collectionViewContentSize.height);
-    }
-    else
-    {
-        self.tagCollection.frame = CGRectMake(20, self.venueName.frame.size.height + self.venueName.frame.origin.y, self.sharedData.screenWidth - 40, 0);
-    }
+
+    self.tagCollection.frame = CGRectMake(20, self.venueName.frame.size.height + self.venueName.frame.origin.y, self.sharedData.screenWidth - 40, 0);
     
     //Separator 1
-    self.separator1.frame = CGRectMake(20,self.tagCollection.frame.size.height + self.tagCollection.frame.origin.y + 16, self.sharedData.screenWidth - 40, 1);
+    self.separator1.frame = CGRectMake(0,self.tagCollection.frame.size.height + self.tagCollection.frame.origin.y + 20, self.sharedData.screenWidth, 1);
     self.separator1.hidden = NO;
     
     self.mainScroll.contentSize = CGSizeMake(self.sharedData.screenWidth, self.separator1.frame.origin.y + 30);
     
 }
 
--(void)loadData:(NSString*)event_id
-{
+- (void)loadData:(NSString*)event_id {
     self.event_id = event_id;
     self.sharedData.cEventId_Summary = event_id;
     
@@ -687,6 +799,27 @@
                          item.title = title;
                      } else {
                          item.title = @"";
+                     }
+                     
+                     NSNumber *likes = [eventDetail objectForKey:@"likes"];
+                     if (likes && ![likes isEqual:[NSNull null]]) {
+                         item.likes = likes;
+                     } else {
+                         item.likes = [NSNumber numberWithInteger:0];
+                     }
+                     
+                     NSNumber *lowest_price = [eventDetail objectForKey:@"lowest_price"];
+                     if (lowest_price && ![lowest_price isEqual:[NSNull null]]) {
+                         item.lowestPrice = lowest_price;
+                     } else {
+                         item.lowestPrice = [NSNumber numberWithInteger:0];
+                     }
+                     
+                     NSNumber *is_liked = [eventDetail objectForKey:@"is_liked"];
+                     if (is_liked && ![is_liked isEqual:[NSNull null]]) {
+                         item.isLiked = is_liked;
+                     } else {
+                        item.isLiked = [NSNumber numberWithBool:NO];
                      }
                      
                      NSString *_id = [eventDetail objectForKey:@"_id"];
@@ -787,7 +920,7 @@
                  }
              }
              @catch (NSException *exception) {
-                 
+
              }
              @finally {
                  
@@ -806,24 +939,49 @@
      }];
 }
 
--(void)populateData:(NSDictionary *)dict
-{
-    NSLog(@"EVENTS_DICT :: %@",self.sharedData.mixPanelCEventDict);
-    //[self.sharedData trackMixPanel:@"display_venue_details"];
-    
+-(void)populateData:(NSDictionary *)dict {
     [self.emptyView setMode:@"hide"];
+    
+    [self showTooltip];
     
     EventDetail *eventDetail = [[self fetchedResultsController] objectAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
     if (!eventDetail || eventDetail == nil) {
         return;
     }
     
+    if (eventDetail.lowestPrice.integerValue > 0) {
+        SharedData *sharedData = [SharedData sharedInstance];
+        NSString *formattedPrice = [sharedData formatCurrencyString:eventDetail.lowestPrice.stringValue];
+        [self.minimumPrice setText:[NSString stringWithFormat:@"Rp%@", formattedPrice]];
+        
+        self.minimumPrice.hidden = NO;
+        self.startFromLabel.hidden = NO;
+        
+    } else {
+        self.minimumPrice.hidden = YES;
+        self.startFromLabel.hidden = YES;
+    }
+    
     //Title
     self.title.text = [eventDetail.title uppercaseString];
-    self.eventDate.text = [Constants toTitleDate:eventDetail.startDatetime dbEndDate:eventDetail.endDatetime];
     
-    //Venue
-    self.venueName.text = [eventDetail.venueName uppercaseString];
+    self.eventName.text = [eventDetail.title uppercaseString];
+    self.eventName.frame = CGRectMake(16, CGRectGetMaxY(self.likeButton.frame) + 16, self.sharedData.screenWidth - 32, 60);
+    [self.eventName sizeToFit];
+    
+    self.eventDate.text = [Constants toTitleDate:eventDetail.startDatetime dbEndDate:eventDetail.endDatetime];
+    self.eventDate.frame = CGRectMake(16, CGRectGetMaxY(self.eventName.frame) + 12, self.sharedData.screenWidth-80, 40);
+    [self.eventDate sizeToFit];
+    
+    self.venueName.text = [self.cEvent.venue uppercaseString];
+    self.venueName.frame = CGRectMake(16, CGRectGetMaxY(self.eventDate.frame) + 12, self.sharedData.screenWidth - 32, 60);
+    [self.venueName sizeToFit];
+    
+    //Likes
+    self.likeButton.enabled = YES;
+    [self.likeButton setSelected:[eventDetail.isLiked boolValue]];
+    
+    self.likeCount.text = [NSString stringWithFormat:@"%@", eventDetail.likes];
     
     //Get list of users
     NSArray *userList;
@@ -838,52 +996,41 @@
     [self.tagArray addObjectsFromArray:(NSMutableArray *)[NSKeyedUnarchiver unarchiveObjectWithData:eventDetail.tags]];
     
     //Tags!!!
-    if([self.tagArray count]>0)
-    {
-        self.tagCollection.frame = CGRectMake(20, self.venueName.frame.size.height + self.venueName.frame.origin.y + 16, self.sharedData.screenWidth - 40, 44);
-        [self.tagCollection reloadData];
-        self.tagCollection.frame = CGRectMake(20, self.venueName.frame.size.height + self.venueName .frame.origin.y + 16, self.sharedData.screenWidth - 40, self.tagCollection.collectionViewLayout.collectionViewContentSize.height);
-    }
-    else
-    {
-        self.tagCollection.frame = CGRectMake(20, self.venueName.frame.size.height + self.venueName.frame.origin.y, self.sharedData.screenWidth - 40, 0);
-    }
+//    if([self.tagArray count]>0)
+//    {
+//        self.tagCollection.frame = CGRectMake(20, self.venueName.frame.size.height + self.venueName.frame.origin.y + 16, self.sharedData.screenWidth - 40, 44);
+//        [self.tagCollection reloadData];
+//        self.tagCollection.frame = CGRectMake(20, self.venueName.frame.size.height + self.venueName .frame.origin.y + 16, self.sharedData.screenWidth - 40, self.tagCollection.collectionViewLayout.collectionViewContentSize.height);
+//    }
+//    else
+//    {
+//        self.tagCollection.frame = CGRectMake(20, self.venueName.frame.size.height + self.venueName.frame.origin.y, self.sharedData.screenWidth - 40, 0);
+//    }
+    
+    self.tagCollection.frame = CGRectMake(20, self.venueName.frame.size.height + self.venueName.frame.origin.y, self.sharedData.screenWidth - 40, 0);
     
     //Separator 1
-    self.separator1.frame = CGRectMake(20,self.tagCollection.frame.size.height + self.tagCollection.frame.origin.y + 16, self.sharedData.screenWidth - 40, 1);
+    self.separator1.frame = CGRectMake(0,self.tagCollection.frame.size.height + self.tagCollection.frame.origin.y + 20, self.sharedData.screenWidth, 1);
     self.separator1.hidden = NO;
     
     long totalUsers = [userList count];
     if(totalUsers>0)
     {
-        self.listingContainer.frame = CGRectMake(0, self.separator1.frame.origin.y + self.separator1.frame.size.height + 16, self.sharedData.screenWidth, PROFILE_SIZE + 56 + 16);
+        self.listingContainer.frame = CGRectMake(0, self.separator1.frame.origin.y + self.separator1.frame.size.height + 16, self.sharedData.screenWidth, PROFILE_SIZE + 56 + 12);
         self.listingContainer.hidden = NO;
+     
+        self.guestInterestedLabel.frame = CGRectMake(16, 0, self.sharedData.screenWidth - 32, 20);
         
         //Hosts or Guests COUNT
-        self.hostNum.frame = CGRectMake(20, 0, self.sharedData.screenWidth - 40, PROFILE_SIZE);
-        if([self.sharedData isHost] || [self.sharedData isMember])
-        {
-            self.hostNum.textAlignment = NSTextAlignmentLeft;
-            self.hostNum.text = [NSString stringWithFormat:@"%d GUEST%@\nINTERESTED",(int)[userList count],([userList count] > 1)?@"S":@""];
-            self.hostNum.numberOfLines = 2;
-        }
-        else if([self.sharedData isGuest])
-        {
-            self.hostNum.textAlignment = NSTextAlignmentLeft;
-            self.hostNum.text = [NSString stringWithFormat:@"%d HOST%@",(int)[userList count],([userList count] > 1)?@"S":@""];
-            self.hostNum.numberOfLines = 1;
-        }
+        self.hostNum.frame = CGRectMake(16, CGRectGetMaxY(self.guestInterestedLabel.frame) + 16, self.sharedData.screenWidth - 32, PROFILE_SIZE);
+        self.hostNum.textAlignment = NSTextAlignmentRight;
+        self.hostNum.text = @"SEE ALL GUESTS";
+        self.hostNum.numberOfLines = 2;
         
         [self.userContainer.subviews makeObjectsPerformSelector: @selector(removeFromSuperview)];
         self.userContainer.frame = self.hostNum.frame;
         
-        //Get starting location
-        long hostingWidth = (PROFILE_PICS * (PROFILE_SIZE+PROFILE_PADDING)) - PROFILE_PADDING;
-        long x1 = self.hostNum.frame.size.width - hostingWidth;
-        if([userList count]<PROFILE_PICS) {
-            x1 += (PROFILE_PICS - [userList count]) * (PROFILE_SIZE+PROFILE_PADDING);
-        }
-        
+        long x1 = 0;
         //Get total pics
         if(totalUsers > PROFILE_PICS) totalUsers = PROFILE_PICS - 1;
         
@@ -899,79 +1046,64 @@
         }
         
         //Show +MORE button
-        if([userList count] > PROFILE_PICS)
-        {
+        if([userList count] > PROFILE_PICS) {
             UIButton *btnPic = [UIButton buttonWithType:UIButtonTypeRoundedRect];
             btnPic.userInteractionEnabled = NO;
             btnPic.frame = CGRectMake( x1, 0, PROFILE_SIZE, PROFILE_SIZE);
 
             btnPic.layer.cornerRadius = PROFILE_SIZE/2;
             btnPic.layer.masksToBounds = YES;
-            btnPic.layer.borderColor = [UIColor phBlueColor].CGColor;
-            btnPic.layer.borderWidth = 2.0;
-            btnPic.backgroundColor = [UIColor clearColor];
-            [btnPic setTitleEdgeInsets:UIEdgeInsetsMake(0,0,0,2)];
-            [btnPic setTitle:[NSString stringWithFormat:@"+%d",(int)[userList count] - PROFILE_PICS + 1] forState:UIControlStateNormal];
-            btnPic.titleLabel.font = [UIFont phBold:18];
-            [btnPic setTitleColor:[UIColor phBlueColor] forState:UIControlStateNormal];
+            btnPic.backgroundColor = [UIColor phBlueColor];
+            [btnPic setTitle:[NSString stringWithFormat:@"%d+",(int)[userList count] - PROFILE_PICS + 1] forState:UIControlStateNormal];
+            btnPic.titleLabel.font = [UIFont phBlond:16];
+            [btnPic setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
             [self.userContainer addSubview:btnPic];
         }
-    
-        //See all button
-        self.seeAllView.frame = CGRectMake(-4,self.hostNum.frame.size.height + self.hostNum.frame.origin.y + 16, self.sharedData.screenWidth + 8, 56);
-        self.seeAllView.hidden = NO;
+    } else {
         
-        //See all label
-        self.seeAllLabel.frame = CGRectMake(-4,self.hostNum.frame.size.height + self.hostNum.frame.origin.y + 17, self.seeAllView.frame.size.width, self.seeAllView.frame.size.height);
-        if([self.sharedData isHost] || [self.sharedData isMember]) {self.seeAllLabel.text = @"SEE ALL GUESTS";}
-        else {self.seeAllLabel.text = @"SEE ALL HOSTS";}
-        
-        //See all caret
-        self.seeAllCaret.frame = CGRectMake(self.sharedData.screenWidth-20-32,self.seeAllView.frame.origin.y + 12, 32, 32);
-        self.seeAllCaret.hidden = NO;
-        
-    }
-    else
-    {
         self.listingContainer.frame = CGRectMake(0, self.separator1.frame.origin.y + self.separator1.frame.size.height, self.sharedData.screenWidth, 0);
         self.listingContainer.hidden = YES;
-        
     }
  
-//    //Separator 3
-//    self.separator3.frame = CGRectMake(20,self.eventDate.frame.size.height + self.eventDate.frame.origin.y + 14, self.sharedData.screenWidth - 40, 1);
+    //Separator 2
+    self.separator2.frame = CGRectMake(0, CGRectGetMaxY(self.listingContainer.frame), self.sharedData.screenWidth, 1);
+    self.separator2.hidden = NO;
+    
+    self.descriptionLabel.frame = CGRectMake(16, CGRectGetMaxY(self.separator2.frame) + 20, self.sharedData.screenWidth - 32, 20);
+    if (eventDetail.eventDescription.length > 0) {
+        self.descriptionLabel.hidden = NO;
+    }
     
     NSDictionary *venue = (NSDictionary *)[NSKeyedUnarchiver unarchiveObjectWithData:eventDetail.venue];
     
     //About body
-    self.aboutBody.frame = CGRectMake(16, self.listingContainer.frame.size.height + self.listingContainer.frame.origin.y + 10, self.sharedData.screenWidth - 32, 0);
+    self.aboutBody.frame = CGRectMake(14, CGRectGetMaxY(self.descriptionLabel.frame) + 4, self.sharedData.screenWidth - 28, 0);
     self.aboutBody.text = eventDetail.eventDescription;
     [self.aboutBody sizeToFit];
     
     //White inner bg
     self.innerBg.frame = CGRectMake(0, self.picScroll.frame.origin.y + self.picScroll.frame.size.height, self.sharedData.screenWidth, 20+ self.aboutBody.frame.origin.y + self.aboutBody.frame.size.height -(self.picScroll.frame.origin.y + self.picScroll.frame.size.height));
     
-    //See map button
-    self.seeMapView.frame = CGRectMake(-4,self.aboutBody.frame.size.height + self.aboutBody.frame.origin.y + 16, self.sharedData.screenWidth + 8, 56);
-    self.seeMapView.hidden = NO;
-    
-    //See all label
-    self.seeMapLabel.frame = CGRectMake(52,self.aboutBody.frame.size.height + self.aboutBody.frame.origin.y + 16, self.sharedData.screenWidth-40-64, 56);
-    self.seeMapLabel.text = [venue[@"address"] uppercaseString];
-    
-    //See all caret
-    self.seeMapCaret.frame = CGRectMake(self.sharedData.screenWidth-20-32,self.seeMapView.frame.origin.y + 12, 32, 32);
-    self.seeMapCaret.hidden = NO;
-    
     //Config map
-    self.mapView.frame = CGRectMake(0, self.seeMapView.frame.size.height + self.seeMapView.frame.origin.y, self.sharedData.screenWidth, 200);
+    self.mapView.frame = CGRectMake(0, CGRectGetMaxY(self.aboutBody.frame) + 16, self.sharedData.screenWidth, 200);
     //[self.mapView setCenterCoordinate:location zoomLevel:10 animated:YES];
     [self.mapView removeAnnotations:self.mapView.annotations];
     self.mapView.hidden = NO;
     
+    //See map button
+    self.seeMapView.frame = CGRectMake(-4, CGRectGetMaxY(self.mapView.frame), self.sharedData.screenWidth + 8, 56);
+    self.seeMapView.hidden = NO;
+    
+    //See all label
+    self.seeMapLabel.frame = CGRectMake(52, CGRectGetMaxY(self.mapView.frame), self.sharedData.screenWidth-40-64, 56);
+    self.seeMapLabel.text = venue[@"address"];
+    
+    //See all caret
+    self.seeMapCaret.frame = CGRectMake(self.sharedData.screenWidth-20-32,self.seeMapView.frame.origin.y + 12, 32, 32);
+    self.seeMapCaret.hidden = YES;
+    
     //Get photos from event then venue
     NSArray *photos = (NSArray *)[NSKeyedUnarchiver unarchiveObjectWithData:eventDetail.photos];
-    NSLog(@"VENUE_PHOTOS :: %@",photos);
     
     //Page control
     self.pControl.currentPage = 0;
@@ -994,6 +1126,13 @@
         [imgCon addSubview:img];
         [self.picScroll addSubview:imgCon];
     }
+    
+    if (photos.count > 1) {
+        self.pControl.hidden = NO;
+    } else {
+        self.pControl.hidden = YES;
+    }
+    
     self.picScroll.contentSize = CGSizeMake([photos count] * picSize.width, picSize.height);
     
     //Map
@@ -1017,7 +1156,7 @@
         }
     }];
     
-    self.mainScroll.contentSize = CGSizeMake(self.sharedData.screenWidth, self.mapView.frame.origin.y + self.mapView.frame.size.height);
+    self.mainScroll.contentSize = CGSizeMake(self.sharedData.screenWidth, self.seeMapView.frame.origin.y + self.seeMapView.frame.size.height);
     
     self.isLoaded = YES;
     
@@ -1031,15 +1170,15 @@
     
     if([self.fillType isEqualToString:@"none"]) {
         [self.mainScroll setFrame:CGRectMake(0,
-                                             self.tabBar.bounds.size.height,
+                                             0,
                                              self.sharedData.screenWidth,
-                                             self.sharedData.screenHeight - self.tabBar.bounds.size.height - PHTabHeight)];
+                                             self.sharedData.screenHeight - PHTabHeight)];
     } else
     {
         [self.mainScroll setFrame:CGRectMake(0,
-                                             self.tabBar.bounds.size.height,
+                                             0,
                                              self.sharedData.screenWidth,
-                                             self.sharedData.screenHeight - self.tabBar.bounds.size.height - PHTabHeight - 44)];
+                                             self.sharedData.screenHeight - PHTabHeight - 44)];
     }
 
     if([self.fillType isEqualToString:@"none"])
@@ -1070,69 +1209,124 @@
         self.btnHostHere.hidden = NO;
         [self.btnHostHere setTitle:@"BOOK NOW" forState:UIControlStateNormal];
     }
-
 }
 
--(void)showViewed:(NSString *)event_id
-{
-    AFHTTPRequestOperationManager *manager = [self.sharedData getOperationManager];
-    NSString *url = [Constants guestListingsURL:event_id fb_id:self.sharedData.fb_id];
-    url = [NSString stringWithFormat:@"%@/event/details/%@/%@/%@",PHBaseURL,event_id,self.sharedData.fb_id,self.sharedData.gender];
-    
-    NSLog(@"EVENTS_GUEST_LIST_URL :: %@",url);
-    
-    [manager GET:url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject)
-     {
-         
-     }  failure:^(AFHTTPRequestOperation *operation, NSError *error)
-     {
-         
-     }];
-}
-
--(void)showAddressInMap
-{
+- (void)showAddressInMap {
     MKPlacemark *placemark = [[MKPlacemark alloc] initWithPlacemark:self.cPlaceMark];
     MKMapItem *endingItem = [[MKMapItem alloc] initWithPlacemark:placemark];
     NSMutableDictionary *launchOptions = [[NSMutableDictionary alloc] init];
     [endingItem openInMapsWithLaunchOptions:launchOptions];
 }
 
--(void)addViewCount
-{
-    //Guests only
-    //if(self.sharedData.isHost) return;
-    
-    NSLog(@"VIEW_COUNT :: %@",self.event_id);
-    
+- (void)postLikeEvent:(BOOL)isLike {
     if (!self.event_id || self.event_id == nil) {
         return;
     }
     
     AFHTTPRequestOperationManager *manager = [self.sharedData getOperationManager];
     
-    NSString *url = [Constants guestEventsViewedURL:self.event_id fb_id:self.sharedData.fb_id];
-    
-    NSLog(@"VIEW_COUNT_URL :: %@",url);
+    NSString *url = [NSString stringWithFormat:@"%@/event/likes/%@/%@/%@",PHBaseNewURL,self.event_id, self.sharedData.fb_id, (isLike)?@"yes":@"no"];
     
     [manager GET:url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject)
      {
-         NSLog(@"VIEW_COUNT_UPDATED");
-         
+         [JGTooltipHelper setShowed:@"Tooltip_LikeEvent_isShowed"];
+         [self showTooltip];
      } failure:^(AFHTTPRequestOperation *operation, NSError *error)
      {
-         NSLog(@"VIEW_COUNT_ERROR :: %@",error);
      }];
+    
+    
+    EventDetail *eventDetail = [[self fetchedResultsController] objectAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
+    if (eventDetail && eventDetail != nil) {
+        eventDetail.isLiked = [NSNumber numberWithBool:isLike];
+        eventDetail.likes = [NSNumber numberWithInteger:[self.likeCount.text integerValue]];
+        
+        self.cEvent.likes = [NSNumber numberWithInteger:[self.likeCount.text integerValue]];
+        
+        NSError *error;
+        if (![self.managedObjectContext save:&error]) NSLog(@"Error: %@", [error localizedDescription]);
+    }
+}
+
+#pragma mark - Tooltip
+- (void)showTooltip {
+    
+    if (self.tooltip == nil) {
+        self.tooltip = [[JDFSequentialTooltipManager alloc] initWithHostView:self];
+    }
+    
+    if ([JGTooltipHelper isLikeEventTooltipValid]) {
+        [self.tooltip addTooltipWithTargetView:self.likeButton
+                                      hostView:self
+                                   tooltipText:@"Go ahead and tap here to let others know you like an event. This will also help teach Jiggie what events you like."
+                                arrowDirection:JDFTooltipViewArrowDirectionUp
+                                         width:self.sharedData.screenWidth - 20];
+        [self.tooltip setBackgroundColourForAllTooltips:[UIColor phBlueColor]];
+        [self.tooltip setFontForAllTooltips:[UIFont phBlond:14]];
+        self.tooltip.showsBackdropView = YES;
+        self.tooltip.backdropTapActionEnabled = YES;
+        [self.tooltip showAllTooltips];
+        
+        [JGTooltipHelper setLastDateShowed:@"Tooltip_LikeEvent_LastDateShowed"];
+        
+    } else if ([JGTooltipHelper isSocialTabTooltipValidAfter:@"Tooltip_LikeEvent_isShowed"]) {
+        if (self.tooltip != nil) {
+            self.tooltip = nil;
+            self.tooltip = [[JDFSequentialTooltipManager alloc] initWithHostView:self];
+        }
+        
+        [self.tooltip addTooltipWithTargetPoint:CGPointMake(self.bounds.size.width * 3/8, self.bounds.size.height)
+                                    tooltipText:@"Lucky you, we found other guests who also like this event. Connect now!"
+                                 arrowDirection:JDFTooltipViewArrowDirectionDown
+                                       hostView:self
+                                          width:self.sharedData.screenWidth - 20];
+        [self.tooltip setBackgroundColourForAllTooltips:[UIColor phBlueColor]];
+        [self.tooltip setFontForAllTooltips:[UIFont phBlond:14]];
+        self.tooltip.showsBackdropView = YES;
+        self.tooltip.backdropTapActionEnabled = YES;
+        [self.tooltip showAllTooltips];
+        
+        [JGTooltipHelper setLastDateShowed:@"Tooltip_SocialTab_LastDateShowed"];
+    } else if ([JGTooltipHelper isShareEventTooltipValid]) {
+        if (self.tooltip != nil) {
+            self.tooltip = nil;
+            self.tooltip = [[JDFSequentialTooltipManager alloc] initWithHostView:self];
+        }
+        
+        [self.tooltip addTooltipWithTargetView:self.shareButton
+                                      hostView:self
+                                   tooltipText:@"Share this event with your friends and see who wants to go."
+                                arrowDirection:JDFTooltipViewArrowDirectionUp
+                                         width:self.sharedData.screenWidth - 20];
+        [self.tooltip setBackgroundColourForAllTooltips:[UIColor phBlueColor]];
+        [self.tooltip setFontForAllTooltips:[UIFont phBlond:14]];
+        self.tooltip.showsBackdropView = YES;
+        self.tooltip.backdropTapActionEnabled = YES;
+        [self.tooltip showNextTooltip];
+        
+        [JGTooltipHelper setLastDateShowed:@"Tooltip_ShareEvent_LastDateShowed"];
+        
+    }
 }
 
 #pragma mark - UIScrollViewDelegate
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView
-{
-    int width = self.picScroll.frame.size.width;
-    float xPos = scrollView.contentOffset.x+10;
-    
-    //Calculate the page we are on based on x coordinate position and width of scroll view
-    self.pControl.currentPage = (int)xPos/width;
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    if ([scrollView isEqual:self.mainScroll]) {
+        CGPoint offset = scrollView.contentOffset;
+        if (offset.y > 180) {
+            if (!self.isNavBarShowing) {
+                [self showNavBar:YES withAnimation:YES];
+            }
+        } else if (self.isNavBarShowing) {
+            [self showNavBar:NO withAnimation:YES];
+        }
+    } else {
+        int width = self.picScroll.frame.size.width;
+        float xPos = scrollView.contentOffset.x+10;
+        
+        //Calculate the page we are on based on x coordinate position and width of scroll view
+        self.pControl.currentPage = (int)xPos/width;
+    }
 }
 
 #pragma mark - MKMapViewDelegate

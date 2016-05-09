@@ -28,6 +28,9 @@
 @property (nullable, nonatomic, retain) id venue;
 @property (nullable, nonatomic, retain) NSString *venueID;
 @property (nullable, nonatomic, retain) NSString *venueName;
+@property (nullable, nonatomic, retain) NSNumber *likes;
+@property (nullable, nonatomic, retain) NSNumber *isLiked;
+@property (nullable, nonatomic, retain) NSNumber *lowestPrice;
 
 @end
 

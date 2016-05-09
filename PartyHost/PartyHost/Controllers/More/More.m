@@ -7,7 +7,6 @@
 //
 
 #import "More.h"
-#import "Feed.h"
 #import "AnalyticManager.h"
 #import "UserManager.h"
 
@@ -182,7 +181,7 @@
     [self.hostingsPage goQuickBack];
     [self.confirmationsPage goQuickBack];
     
-    [self.userProfilePicture loadFacebookImage:self.sharedData.fb_id];
+    [self.userProfilePicture loadProfileImage:self.sharedData.fb_id];
     self.userProfileName.text = self.sharedData.userDict[@"first_name"];
     if([self.sharedData.phone length]>0)
     {
@@ -533,7 +532,9 @@
         UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
         
         if(indexPath.row == 0) {
-            [self goProfile];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"SHOW_PROFILE"
+                                                                object:nil];
+//            [self goProfile];
             
             return;
         }
@@ -707,7 +708,6 @@
         if (indexPath.row==0) {
             if (self.sharedData.isHost == NO) {
                 [self.sharedData.eventsPage resetApp];
-                [self.sharedData.feedPage forceReload];
                 guestCell.accessoryType = UITableViewCellAccessoryNone;
                 hostCell.accessoryType = UITableViewCellAccessoryCheckmark;
                 self.sharedData.account_type = @"host";
@@ -724,7 +724,6 @@
         else if (indexPath.row==1) {
             if (self.sharedData.isGuest == NO) {
                 [self.sharedData.eventsPage resetApp];
-                [self.sharedData.feedPage forceReload];
                 guestCell.accessoryType = UITableViewCellAccessoryCheckmark;
                 hostCell.accessoryType = UITableViewCellAccessoryNone;
                 self.sharedData.account_type = @"guest";

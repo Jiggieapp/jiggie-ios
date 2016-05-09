@@ -16,6 +16,7 @@
 #import "EventsSummary.h"
 #import "PHImage.h"
 
+@class JDFSequentialTooltipManager;
 @interface Events : UIView
 <UITableViewDelegate,UITableViewDataSource,UITextViewDelegate,UIAlertViewDelegate,NSFetchedResultsControllerDelegate,UICollectionViewDataSource,UICollectionViewDelegate,UICollectionViewDelegateFlowLayout, UIScrollViewDelegate> {
     NSFetchedResultsController *fetchedResultsController;
@@ -47,6 +48,8 @@
 @property(nonatomic,strong) EventsHostDetail    *eventsHostDetail;
 @property(nonatomic,strong) NSString            *cName;
 
+@property(nonatomic,strong) JDFSequentialTooltipManager   *tooltip;
+
 @property(nonatomic,strong) UIView              *whiteBK;
 
 //When there are no entries to see
@@ -67,5 +70,6 @@
 
 -(void)initClass;
 -(void)resetApp;
+-(void)goToSummaryModal;
 
 @end

@@ -26,13 +26,8 @@ NSString *const JiggieItunesID = @"1047291489";
 //NSString *const VeritransClientKey = @"VT-client-gJRBbRZC0t_-JXUD"; // Dev
 //BOOL const isVeritransInProducion = false; // Dev
 
-NSString *const VeritransClientKey = @"VT-client-tHEKcD0xJGsm6uwH"; // Live
-BOOL const isVeritransInProducion = true; // Live
-
-//URLs with substitution
-NSString *const PHBaseURL = @"https://jiggie.herokuapp.com/app/v3";
-NSString *const PHBaseNewURL = @"https://api.jiggieapp.com/app/v3";
-NSString *const PHBaseDomain = @"https://jiggie.herokuapp.com";
+//NSString *const VeritransClientKey = @"VT-client-tHEKcD0xJGsm6uwH"; // Live
+//BOOL const isVeritransInProducion = true; // Live
 
 
 //NSString *const PHBaseDomain = @"https://partyhostapp.herokuapp.com";
@@ -61,7 +56,7 @@ NSString *const PHBlankImgURL = @"https://partyhostapp.herokuapp.com/img/fbperso
 //Date formats
 NSString *const PHDateFormatShort = @"MMM d, yyyy h:mm a"; //This is the format for date_str from API
 NSString *const PHDateFormatServer = @"yyyy-MM-dd'T'HH:mm:ss.SSSZ"; //Native server usually sends this
-NSString *const PHDateFormatApp = @"EEEE MMM dd, yyyy hh:mm a"; //Native server usually sends this
+NSString *const PHDateFormatApp = @"EE, MMM dd yyyy / hh:mm a"; //Native server usually sends this
 NSString *const PHDateFormatAppShort = @"EE, dd MMM yyyy"; //Native server usually sends this
 
 
@@ -307,42 +302,25 @@ int const PHButtonHeight = 50; //This is the button at bottom of screen
     //Do start date
     [format setDateFormat:@"EEEE, MMMM d"];
     NSString *startDatePart1 = [format stringFromDate:startDate];
-    NSDateComponents *startComponents = [calendar components:(NSCalendarUnitHour | NSCalendarUnitMinute) fromDate:startDate];
+//    NSDateComponents *startComponents = [calendar components:(NSCalendarUnitHour | NSCalendarUnitMinute) fromDate:startDate];
     NSString *startDatePart2;
-    if ([startComponents minute]>0)
-    {
-        [format setDateFormat:@"h:mma"];
-        startDatePart2 = [format stringFromDate:startDate];
-    }
-    else
-    {
-        [format setDateFormat:@"ha"];
-        startDatePart2 = [format stringFromDate:startDate];
-    }
+    [format setDateFormat:@"hh:mm a"];
+    startDatePart2 = [format stringFromDate:startDate];
     
     //Do end date
     //[format setDateFormat:@"EEEE MMMM d"];
     //NSString *endDatePart1 = [format stringFromDate:endDate];
-    NSDateComponents *endComponents = [calendar components:(NSCalendarUnitHour | NSCalendarUnitMinute) fromDate:endDate];
+//    NSDateComponents *endComponents = [calendar components:(NSCalendarUnitHour | NSCalendarUnitMinute) fromDate:endDate];
     NSString *endDatePart2;
-    if ([endComponents minute]>0)
-    {
-        [format setDateFormat:@"h:mma"];
-        endDatePart2 = [format stringFromDate:endDate];
-    }
-    else
-    {
-        [format setDateFormat:@"ha"];
-        endDatePart2 = [format stringFromDate:endDate];
-    }
+    [format setDateFormat:@"hh:mm a"];
+    endDatePart2 = [format stringFromDate:endDate];
     
     
     return [NSString stringWithFormat:@"%@ At %@ to %@",startDatePart1,startDatePart2,endDatePart2];
 }
 
 //Convert dates from the server to a nicer display string
-+(NSString*)toTitleDate:(NSDate *)dbStartDate dbEndDate:(NSDate *)dbEndDate
-{
++(NSString*)toTitleDate:(NSDate *)dbStartDate dbEndDate:(NSDate *)dbEndDate {
     NSDateFormatter *format = [[NSDateFormatter alloc] init];
     [format setLocale:[NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"]];
     [format setTimeZone:[NSTimeZone localTimeZone]];
@@ -351,38 +329,24 @@ int const PHButtonHeight = 50; //This is the button at bottom of screen
     NSCalendar *calendar = [NSCalendar currentCalendar];
     
     //Do start date
-    [format setDateFormat:@"EEEE, MMMM d"];
+    [format setDateFormat:@"EEEE, MMMM d yyyy"];
     NSString *startDatePart1 = [format stringFromDate:dbStartDate];
-    NSDateComponents *startComponents = [calendar components:(NSCalendarUnitHour | NSCalendarUnitMinute) fromDate:dbStartDate];
+//    NSDateComponents *startComponents = [calendar components:(NSCalendarUnitHour | NSCalendarUnitMinute) fromDate:dbStartDate];
     NSString *startDatePart2;
-    if ([startComponents minute]>0)
-    {
-        [format setDateFormat:@"h:mma"];
-        startDatePart2 = [format stringFromDate:dbStartDate];
-    }
-    else
-    {
-        [format setDateFormat:@"ha"];
-        startDatePart2 = [format stringFromDate:dbStartDate];
-    }
+    [format setDateFormat:@"hh:mm a"];
+    startDatePart2 = [format stringFromDate:dbStartDate];
+
     
     //Do end date
     //[format setDateFormat:@"EEEE MMMM d"];
     //NSString *endDatePart1 = [format stringFromDate:endDate];
-    NSDateComponents *endComponents = [calendar components:(NSCalendarUnitHour | NSCalendarUnitMinute) fromDate:dbEndDate];
+//    NSDateComponents *endComponents = [calendar components:(NSCalendarUnitHour | NSCalendarUnitMinute) fromDate:dbEndDate];
     NSString *endDatePart2;
-    if ([endComponents minute]>0)
-    {
-        [format setDateFormat:@"h:mma"];
-        endDatePart2 = [format stringFromDate:dbEndDate];
-    }
-    else
-    {
-        [format setDateFormat:@"ha"];
-        endDatePart2 = [format stringFromDate:dbEndDate];
-    }
+    [format setDateFormat:@"hh:mm a"];
+    endDatePart2 = [format stringFromDate:dbEndDate];
     
-    return [NSString stringWithFormat:@"%@ At %@ to %@",startDatePart1,startDatePart2,endDatePart2];
+    
+    return [NSString stringWithFormat:@"%@ \n %@ - %@",startDatePart1,startDatePart2,endDatePart2];
 }
 
 +(NSString*)formatPhoneNumber:(NSString*)simpleNumber {

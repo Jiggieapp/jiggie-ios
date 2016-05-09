@@ -19,8 +19,14 @@
 @property(nonatomic,strong) UILabel         *subtitle;
 @property(nonatomic,strong) UILabel         *date;
 
+@property(nonatomic,strong) UIButton         *likeButton;
+@property(nonatomic,strong) UILabel         *likeCount;
+
 @property(nonatomic,strong) PHImage         *mainImg;
 @property(nonatomic,strong) NSString        *picURL;
+
+@property(nonatomic,strong) UILabel         *startFromLabel;
+@property(nonatomic,strong) UILabel         *minimumPrice;
 
 @property(nonatomic, strong) UIView         *dimView;
 

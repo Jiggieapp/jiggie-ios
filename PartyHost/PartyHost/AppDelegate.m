@@ -12,6 +12,8 @@
 #import "UserManager.h"
 #import "VTConfig.h"
 #import "LocationManager.h"
+#import "JGTooltipHelper.h"
+
 
 ///REMOVE THIS WHEN LIVE
 //#import "GSTouchesShowingWindow.h"
@@ -34,7 +36,7 @@ static NSString *const kAllowTracking = @"allowTracking";
 - (GSTouchesShowingWindow *)window {
     static GSTouchesShowingWindow *window = nil;
     if (!window) {
-        window = [[GSTouchesShowingWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+        window = [[GSTouchesShwingWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     }
     return window;
 }
@@ -79,51 +81,11 @@ static NSString *const kAllowTracking = @"allowTracking";
     [[AnalyticManager sharedManager] startAnalytics];
     
     // AFNetworking Debug Setting:
-//    [[AFNetworkActivityLogger sharedLogger] startLogging];
-//    [[AFNetworkActivityLogger sharedLogger] setLevel:AFLoggerLevelDebug];
-    
-    
+    [[AFNetworkActivityLogger sharedLogger] startLogging];
+    [[AFNetworkActivityLogger sharedLogger] setLevel:AFLoggerLevelDebug];
     
     //[Crashlytics startWithAPIKey:@"1714fcc893d2312cb2b248ed57743517e718c399"];
     [Fabric with:@[[Crashlytics class]]];
-    
-    //TSConfig *config = [TSConfig configWithDefaults];
-    //[TSTapstream createWithAccountName:@"partyhost" developerSecret:@"a5FxhL0zS9Wwqrq1dBQruw" config:config];
-    
-    
-    
-    
-    
-    //config.odin1 = @"82a53f1222f8781a5063a773231d4a7ee41bdd6f";
-    
-    //TSTapstream *tracker = [TSTapstream instance];
-    /*
-    [tracker getConversionData:^(NSData *jsonInfo) {
-        if(jsonInfo == nil)
-        {
-            // No conversion data available
-        }
-        else
-        {
-            NSError *error = nil;
-            NSArray *json = [NSJSONSerialization JSONObjectWithData:jsonInfo options:kNilOptions error:&error];
-            if(json && !error)
-            {
-                // Read some data from this json object, and modify your application's behavior accordingly
-                // ...
-                NSLog(@"TAPSTREAM_INFO_START");
-                NSLog(@"%@",json);
-                NSLog(@"TAPSTREAM_INFO_END");
-                
-                [self.sharedData.tapDict setObject:json forKey:@"info"];
-            }
-        }
-    }];
-    */
-    //[self.sharedData trackMixPanel:@"APP_LOADED"];
-    //Mixpanel *mixpanel = [Mixpanel sharedInstance];
-    //[mixpanel track:@"APP_LOADED" properties:@{@"Prop": @"Value",}];
-    NSLog(@"APP_LAUNCH");
     
     NSURL *launchUrl = [launchOptions objectForKey:UIApplicationLaunchOptionsURLKey];
     if(launchUrl)
@@ -191,7 +153,6 @@ static NSString *const kAllowTracking = @"allowTracking";
         }
     }
     
-    NSLog(@"%@", self.sharedData.apnToken);
     //For debug mode clear out all ONE-TIME popups
     if(PHDebugOn==YES) {
         NSLog(@">>> PhDebugOn==YES: Clearing all ONE-TIME helpers.");
@@ -221,10 +182,11 @@ static NSString *const kAllowTracking = @"allowTracking";
     [VTConfig setCLIENT_KEY:VeritransClientKey];
     [VTConfig setVT_IsProduction:isVeritransInProducion];
     
-//    [VTConfig setCLIENT_KEY:@"VT-client-tHEKcD0xJGsm6uwH"];
-//    [VTConfig setVT_IsProduction:true];
-    
     //[self performSelector:@selector(testApp) withObject:nil afterDelay:5.0];
+    
+    // set up tooltip
+    [JGTooltipHelper setUpTooltip];
+
     return YES;
 }
 
@@ -1021,7 +983,13 @@ continueUserActivity:(NSUserActivity *)userActivity
     if (managedObjectModel != nil) {
         return managedObjectModel;
     }
-    managedObjectModel = [NSManagedObjectModel mergedModelFromBundles:nil];
+//    managedObjectModel = [NSManagedObjectModel mergedModelFromBundles:nil];
+    
+    // use this code on versioned models:
+    NSString *path = [[NSBundle mainBundle] pathForResource:@"Jiggie" ofType:@"momd"];
+    NSURL *momURL = [NSURL fileURLWithPath:path];
+    managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:momURL];
+    
     return managedObjectModel;
 }
 
@@ -1037,10 +1005,13 @@ continueUserActivity:(NSUserActivity *)userActivity
     }
     
     NSURL *storeUrl = [NSURL fileURLWithPath: [[self applicationDocumentsDirectory] stringByAppendingPathComponent: @"Jiggie.sqlite"]];
+    NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:
+                             [NSNumber numberWithBool:YES], NSMigratePersistentStoresAutomaticallyOption,
+                             [NSNumber numberWithBool:YES], NSInferMappingModelAutomaticallyOption, nil];
     
     NSError *error = nil;
     persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
-    if (![persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeUrl options:nil error:&error]) {
+    if (![persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeUrl options:options error:&error]) {
         /*
          Replace this implementation with code to handle the error appropriately.
          

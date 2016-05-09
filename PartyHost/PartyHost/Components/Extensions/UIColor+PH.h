@@ -13,6 +13,7 @@
 + (UIColor *) phGoldColor;
 + (UIColor *) phCyanColor;
 + (UIColor *) phPurpleColor;
++ (UIColor *) phFacebookBlueColor;
 + (UIColor *) phBlueColor;
 + (UIColor *) phNavyColor;
 + (UIColor *) phGreenColor;
