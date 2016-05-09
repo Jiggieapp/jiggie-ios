@@ -21,12 +21,16 @@
 
 @property (strong, nonatomic) SharedData    *sharedData;
 @property(nonatomic,strong) UITableView *conversationsList;
+@property(nonatomic,strong) UIView *segmentationView;
+@property(nonatomic,strong) UIView *segmentationIndicator;
 @property(nonatomic,assign) BOOL isConvosLoaded;
 @property(nonatomic,assign) BOOL isLoading;
 @property(nonatomic,assign) BOOL needUpdateContents;
 
 @property(nonatomic,assign) BOOL isInBlockMode;
 @property(nonatomic,assign) BOOL isInDeleteMode;
+
+@property (nonatomic, assign) NSInteger currentSegmentationIndex;
 
 //When there are no entries to see
 @property(nonatomic,strong) EmptyView *emptyView;

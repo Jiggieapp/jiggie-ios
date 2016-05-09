@@ -40,7 +40,38 @@
     title.font = [UIFont phBold:18];
     [tabBar addSubview:title];
     
-    self.conversationsList = [[UITableView alloc] initWithFrame:CGRectMake(0, 60, self.sharedData.screenWidth, self.sharedData.screenHeight - 60 - 50)];
+    self.segmentationView = [[UIView alloc] initWithFrame:CGRectMake(0, 60, frame.size.width, 34)];
+    [self.segmentationView setBackgroundColor:[UIColor colorFromHexCode:@"B238DE"]];
+    [self addSubview:self.segmentationView];
+    
+    CGFloat buttonSegmentationWidth = frame.size.width/2;
+    UIButton *activeButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [activeButton setFrame:CGRectMake(0, 0, buttonSegmentationWidth, 32)];
+    [activeButton setBackgroundColor:[UIColor clearColor]];
+    [activeButton setTitle:@"Active" forState:UIControlStateNormal];
+    [activeButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [[activeButton titleLabel] setFont:[UIFont phBlond:14]];
+    [activeButton setTag:1];
+    [activeButton addTarget:self action:@selector(segmentationButtonDidTap:) forControlEvents:UIControlEventTouchUpInside];
+    [self.segmentationView addSubview:activeButton];
+    
+    UIButton *friendButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [friendButton setFrame:CGRectMake(buttonSegmentationWidth, 0, buttonSegmentationWidth, 32)];
+    [friendButton setBackgroundColor:[UIColor clearColor]];
+    [friendButton setTitle:@"Friends" forState:UIControlStateNormal];
+    [friendButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [[friendButton titleLabel] setFont:[UIFont phBlond:14]];
+    [friendButton setTag:2];
+    [friendButton addTarget:self action:@selector(segmentationButtonDidTap:) forControlEvents:UIControlEventTouchUpInside];
+    [self.segmentationView addSubview:friendButton];
+    
+    self.segmentationIndicator = [[UIView alloc] initWithFrame:CGRectMake(0, 32, buttonSegmentationWidth, 2)];
+    [self.segmentationIndicator setBackgroundColor:[UIColor whiteColor]];
+    [self.segmentationView addSubview:self.segmentationIndicator];
+    
+    self.currentSegmentationIndex = 1;
+    
+    self.conversationsList = [[UITableView alloc] initWithFrame:CGRectMake(0, 60 + 34, self.sharedData.screenWidth, self.sharedData.screenHeight - 60 - 50 - 34)];
     self.conversationsList.delegate = self;
     self.conversationsList.dataSource = self;
     self.conversationsList.allowsMultipleSelectionDuringEditing = NO;
@@ -568,6 +599,39 @@
     [alert addButtonWithTitle:@"Yes"];
     [alert show];
 }
+
+#pragma mark - Segmentation
+-(void)segmentationButtonDidTap:(id)sender {
+    NSInteger senderTag = (NSInteger)[sender tag];
+    
+    if (senderTag == self.currentSegmentationIndex) {
+        return;
+    }
+    
+    self.currentSegmentationIndex = senderTag;
+    
+    CGFloat buttonSegmentationWidth = self.frame.size.width/2;
+    
+    [UIView animateWithDuration:0.25 animations:^()
+     {
+         self.segmentationIndicator.frame = CGRectMake((senderTag - 1) * buttonSegmentationWidth,
+                                                       self.segmentationIndicator.frame.origin.y,
+                                                       self.segmentationIndicator.bounds.size.width,
+                                                       self.segmentationIndicator.bounds.size.height);
+         
+     } completion:^(BOOL finished){
+         
+     }];
+    
+    [UIView animateWithDuration:0.5 animations:^()
+     {
+//         [self.tableScrollView setContentOffset:CGPointMake((senderTag - 1) * self.tableScrollView.bounds.size.width, 0)];
+         
+     } completion:^(BOOL finished){
+         
+     }];
+}
+
 
 #pragma mark - UITableViewDataSource
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
