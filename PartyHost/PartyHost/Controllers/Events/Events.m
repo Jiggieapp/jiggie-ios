@@ -708,7 +708,9 @@
     [self.events2List reloadData];
     [self.events3List reloadData];
     
-    [self showTooltip];
+    if ([[self.fetchedResultsController fetchedObjects] count] > 0) {
+        [self showTooltip];
+    }
 }
 
 -(void)loadImages

@@ -455,8 +455,12 @@
         self.tooltip.backdropTapActionEnabled = YES;
         [self.tooltip showAllTooltips];
         
-        [JGTooltipHelper setLastDateShowed:@"Tooltip_LikeEvent_LastDateShowed"];
+        [JGTooltipHelper setLastDateShowed:@"Tooltip_AcceptSuggestion_LastDateShowed"];
         
+    } else if ([JGTooltipHelper isAcceptRequestTooltipValid]) {
+        
+        
+        [JGTooltipHelper setLastDateShowed:@"Tooltip_AcceptRequest_LastDateShowed"];
     }
 }
 
