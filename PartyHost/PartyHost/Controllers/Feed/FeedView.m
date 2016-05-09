@@ -296,7 +296,7 @@
                 
                 return;
             }
-        
+            
             [self.emptyView setMode:@"hide"];
             [self.feedData addObjectsFromArray:feeds];
             
@@ -349,7 +349,7 @@
         switch (feed.type) {
             case FeedTypeApproved: {
                 [self trackApprovedFeedItemWithType:feed.type];
-//                [JGTooltipHelper setShowed:@"Tooltip_AcceptRequest_isShowed"];
+                [JGTooltipHelper setShowed:@"Tooltip_AcceptRequest_isShowed"];
                 
                 [SVProgressHUD show];
                 [Feed approveFeed:approved withFbId:feed.fromFbId andCompletionHandler:^(NSError *error) {
@@ -375,7 +375,7 @@
             }
             case FeedTypeViewed: {
                 [self trackDeniedFeedItemWithType:feed.type];
-//                [JGTooltipHelper setShowed:@"Tooltip_AcceptSuggestion_isShowed"];
+                [JGTooltipHelper setShowed:@"Tooltip_AcceptSuggestion_isShowed"];
                 
                 [Feed approveFeed:YES withFbId:feed.fromFbId andCompletionHandler:^(NSError *error) {
                     if (self.feedData.count == 0) {
@@ -438,36 +438,56 @@
 }
 
 #pragma mark - Tooltip
-- (void)showTooltip {
-    if (self.tooltip == nil) {
-        self.tooltip = [[JDFSequentialTooltipManager alloc] initWithHostView:self];
-    }
+- (void)showTooltipWithFeedType:(FeedType)type {
+    CGFloat xPos = CGRectGetWidth(self.swipeableView.bounds) / 2;
+    CGFloat yPos = CGRectGetHeight([UIScreen mainScreen].bounds) - 80;
+    CGPoint targetPoint = CGPointMake(xPos + (xPos / 2), yPos);
     
-    if ([JGTooltipHelper isAcceptSuggestionTooltipValid]) {
-        [self.tooltip addTooltipWithTargetView:self.swipeableView
-                                      hostView:self
-                                   tooltipText:@"Go ahead and tap here to let others know you like an event. This will also help teach Jiggie what events you like."
-                                arrowDirection:JDFTooltipViewArrowDirectionUp
-                                         width:self.sharedData.screenWidth - 20];
-        [self.tooltip setBackgroundColourForAllTooltips:[UIColor phBlueColor]];
-        [self.tooltip setFontForAllTooltips:[UIFont phBlond:14]];
-        self.tooltip.showsBackdropView = YES;
-        self.tooltip.backdropTapActionEnabled = YES;
-        [self.tooltip showAllTooltips];
-        
-        [JGTooltipHelper setLastDateShowed:@"Tooltip_AcceptSuggestion_LastDateShowed"];
-        
-    } else if ([JGTooltipHelper isAcceptRequestTooltipValid]) {
-        
-        
-        [JGTooltipHelper setLastDateShowed:@"Tooltip_AcceptRequest_LastDateShowed"];
+    if (type == FeedTypeViewed) {
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            if ([JGTooltipHelper isAcceptSuggestionTooltipValid]) {
+                self.tooltip = [[JDFSequentialTooltipManager alloc] initWithHostView:self];
+                
+                [self.tooltip addTooltipWithTargetPoint:targetPoint
+                                            tooltipText:@"Don't be shy! Tap “Connect” (or swipe card right) to let this person know you want to connect."
+                                         arrowDirection:JDFTooltipViewArrowDirectionUp
+                                               hostView:self
+                                                  width:self.sharedData.screenWidth - 20];
+                [self.tooltip setBackgroundColourForAllTooltips:[UIColor phBlueColor]];
+                [self.tooltip setFontForAllTooltips:[UIFont phBlond:14]];
+                self.tooltip.showsBackdropView = YES;
+                self.tooltip.backdropTapActionEnabled = YES;
+                
+                [self.tooltip showAllTooltips];
+                
+                [JGTooltipHelper setLastDateShowed:@"Tooltip_AcceptSuggestion_LastDateShowed"];
+            }
+        });
+    } else {
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            if ([JGTooltipHelper isAcceptRequestTooltipValid]) {
+                self.tooltip = [[JDFSequentialTooltipManager alloc] initWithHostView:self];
+                
+                [self.tooltip addTooltipWithTargetPoint:targetPoint
+                                            tooltipText:@"Congrats! Someone wants to connect with you. “Tap here to begin chatting.”"
+                                         arrowDirection:JDFTooltipViewArrowDirectionUp
+                                               hostView:self
+                                                  width:self.sharedData.screenWidth - 20];
+                [self.tooltip setBackgroundColourForAllTooltips:[UIColor phBlueColor]];
+                [self.tooltip setFontForAllTooltips:[UIFont phBlond:14]];
+                self.tooltip.showsBackdropView = YES;
+                self.tooltip.backdropTapActionEnabled = YES;
+                
+                [self.tooltip showAllTooltips];
+                
+                [JGTooltipHelper setLastDateShowed:@"Tooltip_AcceptRequest_LastDateShowed"];
+            }
+        });
     }
 }
 
 #pragma mark - MixPanel
-- (void)trackViewFeedItem {
-    Feed *feed = [self getFeedFromCardView:self.swipeableView.topView];
-    
+- (void)trackViewFeedItemWithFeed:(Feed *)feed {
     NSString *val = @"";
     if ([self.sharedData.ABTestChat isEqualToString:@"YES"]) {
         val = @"Connect";
@@ -524,13 +544,15 @@
         ShadowView *cardView = [[ShadowView alloc] initWithFrame:frame];
         cardView.tag = CARD_VIEW_TAG+self.feedIndex;
         FeedCardView *contentView = [FeedCardView instanceFromNib];
+        Feed *feed = self.feedData[self.feedIndex];
+        
         if (!contentView.delegate) {
             [contentView setDelegate:self];
         }
         [cardView addSubview:contentView];
         
         [contentView setTranslatesAutoresizingMaskIntoConstraints:NO];
-        [contentView configureCardWithFeed:self.feedData[self.feedIndex]];
+        [contentView configureCardWithFeed:feed];
         
         NSDictionary *metrics = @{ @"width" : @(cardView.bounds.size.width),
                                    @"height" : @(cardView.bounds.size.height)};
@@ -547,9 +569,10 @@
                                   metrics:metrics
                                   views:views]];
         
-        // track first top view item
-        if (self.feedIndex == 1) {
-            [self trackViewFeedItem];
+        // track top view item
+        if (self.feedIndex == 0) {
+            [self trackViewFeedItemWithFeed:feed];
+            [self showTooltipWithFeedType:feed.type];
         }
         
         self.feedIndex++;
@@ -564,7 +587,8 @@
 - (void)swipeableView:(ZLSwipeableView *)swipeableView didEndSwipingView:(UIView *)view atLocation:(CGPoint)location {
     if (self.isSwipedOut) {
         Feed *feed = [self getFeedFromCardView:view];
-    
+        
+        [self.feedData removeObject:feed];
         [Feed archiveObject:self.feedData];
         
         if (location.x > CGRectGetWidth(self.bounds) / 2 ) {
@@ -573,7 +597,14 @@
             [self approveFeed:NO withFeed:feed];
         }
         
-        [self trackViewFeedItem];
+        ShadowView *shadowView = (ShadowView*)self.swipeableView.topView;
+        FeedCardView *cardView = (FeedCardView *)shadowView.subviews.lastObject;
+        feed = cardView.feed;
+        
+        if (feed) {
+            [self trackViewFeedItemWithFeed:feed];
+            [self showTooltipWithFeedType:feed.type];
+        }
     }
 }
 
@@ -584,9 +615,6 @@
 - (void)swipeableView:(ZLSwipeableView *)swipeableView didSwipeView:(UIView *)view inDirection:(ZLSwipeableViewDirection)direction {
     self.isSwipedOut = YES;
     [self.swipeableView setUserInteractionEnabled:NO];
-    
-    Feed *feed = [self getFeedFromCardView:view];
-    [self.feedData removeObject:feed];
     
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW,
                                  (int64_t)(0.7 * NSEC_PER_SEC)),
@@ -615,6 +643,18 @@
     } else {
         [self.swipeableView swipeTopViewToLeft];
         [self approveFeed:NO withFeed:feed];
+    }
+    
+    [self.feedData removeObject:feed];
+    [Feed archiveObject:self.feedData];
+    
+    ShadowView *shadowView = (ShadowView*)self.swipeableView.topView;
+    FeedCardView *cardView = (FeedCardView *)shadowView.subviews.lastObject;
+    feed = cardView.feed;
+    
+    if (feed) {
+        [self trackViewFeedItemWithFeed:feed];
+        [self showTooltipWithFeedType:feed.type];
     }
 }
 
