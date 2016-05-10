@@ -215,29 +215,11 @@
     FBSDKLoginManager *logMeOut = [[FBSDKLoginManager alloc] init];
     [logMeOut logOut];
     
-    /*
-    [[[FBSDKGraphRequest alloc] initWithGraphPath:@"me" parameters:nil]
-     startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
-         if (!error) {
-             NSLog(@"Fetched User Information:%@", result);
-             NSLog(@"Fetched User Information:%@", result);
-             [[NSNotificationCenter defaultCenter]
-              postNotificationName:@"HIDE_LOADING"
-              object:self];
-         }
-         else {
-             NSLog(@"Error %@",error);
-         }
-     }];
-    */
-    
-    
     FBSDKLoginManager *login = [[FBSDKLoginManager alloc] init];
     [login
      logInWithReadPermissions: @[@"public_profile",@"user_birthday", @"email", @"user_photos",@"user_friends",@"user_about_me",@"user_location"]
      fromViewController:self.window.rootViewController
      handler:^(FBSDKLoginManagerLoginResult *result, NSError *error) {
-         NSLog(@"RESULT___ :: %@",result);
          if (error) {
              NSLog(@"FB Process error :: %@",error);
              [[NSNotificationCenter defaultCenter]
@@ -254,32 +236,6 @@
              [self autoLogin];
          }
      }];
-    
-    /*
-    FBSession *session = [[FBSession alloc] initWithPermissions:@[@"public_profile",@"user_birthday", @"email", @"user_photos",@"user_friends",@"user_likes",@"user_relationships",@"user_about_me",@"user_location",@"user_photos",@"user_status",@"user_friends"]];
-    
-    // Set the active session
-    [FBSession setActiveSession:session];
-    // Open the session
-    [session openWithBehavior:FBSessionLoginBehaviorForcingWebView
-            completionHandler:^(FBSession *session,
-                                FBSessionState status,
-                                NSError *error) {
-                
-                if(error == nil)
-                {
-                    NSLog(@"login successful :: %@",session);
-                    // Respond to session state changes,
-                    // ex: updating the view
-                }
-                else
-                {
-                    NSLog(@"login unsuccessful");
-                }
-                
-            }];
-    */
-
 }
 
 #pragma mark -
@@ -324,12 +280,12 @@
 
 -(void)loginWithToken {
     [self.sharedData loginWithFBToken:^(AFHTTPRequestOperation *operation, id responseObject) {
-        if([responseObject[@"response"] boolValue])
-        {
+        if([responseObject[@"response"] boolValue]) {
             self.didFBLogin = YES;
             self.sharedData.ph_token = responseObject[@"data"][@"token"];
             [self checkIfAPNisLoaded];
-        }else{
+        } else {
+            
             [[NSNotificationCenter defaultCenter] postNotificationName:@"HIDE_LOADING" object:self];
             
             [FBSDKAccessToken setCurrentAccessToken:nil];
@@ -375,7 +331,6 @@
                   permission = [self.sharedData capitalizeFirstLetter:permission];
                   errorMessage = [NSString stringWithFormat:@"%@ %@,",errorMessage,permission];
               }
-              
           }
           
           if(!canDo)
@@ -490,7 +445,7 @@
                              @"birthday": birthday,
                              @"location": location,
                              @"about":about,
-                             @"age":[NSString stringWithFormat:@"%li", [self.sharedData calculateAge:birthday]],
+                             @"age":[NSString stringWithFormat:@"%li", (long)[self.sharedData calculateAge:birthday]],
                              @"version":PHVersion,
                              @"device_type":@"1" // 1 for iOS
                              };

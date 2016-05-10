@@ -998,7 +998,7 @@
     }
    
     if ([JGTooltipHelper isLoadEventTooltipValid]) {
-        [self.tooltip addTooltipWithTargetPoint:CGPointMake(40, 200)
+        [self.tooltip addTooltipWithTargetPoint:CGPointMake(80, 200)
                                     tooltipText:@"Explore more! Tap an event to see more info and booking options."
                                  arrowDirection:JDFTooltipViewArrowDirectionUp
                                        hostView:self

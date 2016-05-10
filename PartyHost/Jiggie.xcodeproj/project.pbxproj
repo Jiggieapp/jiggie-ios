@@ -103,6 +103,7 @@
 		DA33069C1CDA61A500A4126D /* UILabel+JDFTooltips.m in Sources */ = {isa = PBXBuildFile; fileRef = DA3306961CDA61A500A4126D /* UILabel+JDFTooltips.m */; };
 		DA33069D1CDA61A500A4126D /* UIView+JDFTooltips.m in Sources */ = {isa = PBXBuildFile; fileRef = DA3306981CDA61A500A4126D /* UIView+JDFTooltips.m */; };
 		DA3306A01CDA733700A4126D /* JGTooltipHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = DA33069F1CDA733700A4126D /* JGTooltipHelper.m */; };
+		DA3306A31CE1B58F00A4126D /* Friend.m in Sources */ = {isa = PBXBuildFile; fileRef = DA3306A21CE1B58E00A4126D /* Friend.m */; };
 		DA34D80E1C69C794008162DA /* jiggie.cer in Resources */ = {isa = PBXBuildFile; fileRef = DA34D80D1C69C794008162DA /* jiggie.cer */; };
 		DA4305611C22823700ED6C54 /* Jiggie.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = DA43055F1C22823700ED6C54 /* Jiggie.xcdatamodeld */; };
 		DA4305691C22916E00ED6C54 /* Event.m in Sources */ = {isa = PBXBuildFile; fileRef = DA4305671C22916E00ED6C54 /* Event.m */; };
@@ -585,6 +586,8 @@
 		DA3306981CDA61A500A4126D /* UIView+JDFTooltips.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+JDFTooltips.m"; sourceTree = "<group>"; };
 		DA33069E1CDA733700A4126D /* JGTooltipHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JGTooltipHelper.h; sourceTree = "<group>"; };
 		DA33069F1CDA733700A4126D /* JGTooltipHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JGTooltipHelper.m; sourceTree = "<group>"; };
+		DA3306A11CE1B58E00A4126D /* Friend.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Friend.h; sourceTree = "<group>"; };
+		DA3306A21CE1B58E00A4126D /* Friend.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Friend.m; sourceTree = "<group>"; };
 		DA34D80D1C69C794008162DA /* jiggie.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = jiggie.cer; sourceTree = SOURCE_ROOT; };
 		DA4305601C22823700ED6C54 /* Jiggie.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Jiggie.xcdatamodel; sourceTree = "<group>"; };
 		DA4305661C22916E00ED6C54 /* Event.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Event.h; sourceTree = "<group>"; };
@@ -1430,6 +1433,8 @@
 				DAB3AF9F1C29541E00AA7E25 /* Chat.m */,
 				938CE7D31CCF629700ADDD4C /* Feed.h */,
 				938CE7D41CCF629700ADDD4C /* Feed.m */,
+				DA3306A11CE1B58E00A4126D /* Friend.h */,
+				DA3306A21CE1B58E00A4126D /* Friend.m */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -1682,10 +1687,10 @@
 				DAABB0221C1FD50E004DDCFA /* ConvoCell.m */,
 				DAABB0231C1FD50E004DDCFA /* MessageBubbleTriangle.h */,
 				DAABB0241C1FD50E004DDCFA /* MessageBubbleTriangle.m */,
-				DAABB0251C1FD50E004DDCFA /* MessageCell.h */,
-				DAABB0261C1FD50E004DDCFA /* MessageCell.m */,
 				DAABB0271C1FD50E004DDCFA /* Messages.h */,
 				DAABB0281C1FD50E004DDCFA /* Messages.m */,
+				DAABB0251C1FD50E004DDCFA /* MessageCell.h */,
+				DAABB0261C1FD50E004DDCFA /* MessageCell.m */,
 			);
 			path = Chat;
 			sourceTree = "<group>";
@@ -2929,6 +2934,7 @@
 				DAABB2A11C1FF5AE004DDCFA /* MPNSNumberToCGFloatValueTransformer.m in Sources */,
 				938CE7C21CCF627D00ADDD4C /* EXTRuntimeExtensions.m in Sources */,
 				DAABB2891C1FF5AE004DDCFA /* MPABTestDesignerSnapshotRequestMessage.m in Sources */,
+				DA3306A31CE1B58F00A4126D /* Friend.m in Sources */,
 				DAABB2811C1FF5AE004DDCFA /* MPABTestDesignerChangeRequestMessage.m in Sources */,
 				DA5ED6101C92975100004C7E /* VTAddress.m in Sources */,
 				DAABB28C1C1FF5AE004DDCFA /* MPABTestDesignerTweakResponseMessage.m in Sources */,

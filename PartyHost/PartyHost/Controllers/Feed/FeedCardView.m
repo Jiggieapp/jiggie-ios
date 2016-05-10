@@ -44,7 +44,7 @@
     switch (feed.type) {
         case FeedTypeViewed: {
             [self.messageIconView setHidden:YES];
-            [self.cancelButton setTitle:@"NO" forState:UIControlStateNormal];
+            [self.cancelButton setTitle:@"SKIP" forState:UIControlStateNormal];
             [self.okButton setTitle:@"CONNECT" forState:UIControlStateNormal];
             [self.interestLabel setText:[NSString stringWithFormat:@"%@ is also interested in", feed.fromFirstName]];
             [self.eventNameLabel setText:[NSString stringWithFormat:@"%@", [feed.eventName uppercaseString]]];
