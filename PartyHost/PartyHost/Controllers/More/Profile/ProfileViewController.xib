@@ -214,18 +214,18 @@
                                     <exclude reference="XKV-pf-zWc"/>
                                 </mask>
                                 <mask key="constraints">
-                                    <exclude reference="4Ss-N4-JVY"/>
-                                    <exclude reference="Lyn-nf-I4W"/>
+                                    <exclude reference="1Ke-4R-q8B"/>
+                                    <exclude reference="eQG-x8-yJk"/>
                                     <exclude reference="Pkb-ve-FFB"/>
                                     <exclude reference="XIj-VZ-GQF"/>
                                     <exclude reference="ZgZ-3R-ChE"/>
                                     <exclude reference="skh-bW-lln"/>
-                                    <exclude reference="1Ke-4R-q8B"/>
-                                    <exclude reference="eQG-x8-yJk"/>
                                     <exclude reference="4dK-TR-Sj9"/>
                                     <exclude reference="9Gx-p7-8Dy"/>
                                     <exclude reference="Hfx-cQ-bPL"/>
                                     <exclude reference="mng-D0-VLc"/>
+                                    <exclude reference="4Ss-N4-JVY"/>
+                                    <exclude reference="Lyn-nf-I4W"/>
                                 </mask>
                             </variation>
                             <variation key="heightClass=regular-widthClass=compact">
@@ -236,18 +236,18 @@
                                     <include reference="XKV-pf-zWc"/>
                                 </mask>
                                 <mask key="constraints">
-                                    <include reference="4Ss-N4-JVY"/>
-                                    <include reference="Lyn-nf-I4W"/>
+                                    <include reference="1Ke-4R-q8B"/>
+                                    <include reference="eQG-x8-yJk"/>
                                     <include reference="Pkb-ve-FFB"/>
                                     <include reference="XIj-VZ-GQF"/>
                                     <include reference="ZgZ-3R-ChE"/>
                                     <include reference="skh-bW-lln"/>
-                                    <include reference="1Ke-4R-q8B"/>
-                                    <include reference="eQG-x8-yJk"/>
                                     <include reference="4dK-TR-Sj9"/>
                                     <include reference="9Gx-p7-8Dy"/>
                                     <include reference="Hfx-cQ-bPL"/>
                                     <include reference="mng-D0-VLc"/>
+                                    <include reference="4Ss-N4-JVY"/>
+                                    <include reference="Lyn-nf-I4W"/>
                                 </mask>
                             </variation>
                         </view>

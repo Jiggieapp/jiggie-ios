@@ -570,9 +570,8 @@
         {
             [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Share App" withDict:@{@"origin":@"More"}];
             
-            [[NSNotificationCenter defaultCenter]
-             postNotificationName:@"SHOW_GENERAL_INVITE"
-             object:self];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"SHOW_INVITE_FRIENDS"
+                                                                object:nil];
             
             return;
         }

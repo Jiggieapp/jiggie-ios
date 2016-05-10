@@ -39,6 +39,8 @@
 		9366745A1CD7627500AC94F3 /* UIView+WebCacheOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 9366744C1CD7627500AC94F3 /* UIView+WebCacheOperation.m */; };
 		9366745E1CD8562300AC94F3 /* SidePhotoTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9366745C1CD8562300AC94F3 /* SidePhotoTableViewCell.m */; };
 		9366745F1CD8562300AC94F3 /* SidePhotoTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9366745D1CD8562300AC94F3 /* SidePhotoTableViewCell.xib */; };
+		936674631CE18F3000AC94F3 /* InviteViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 936674611CE18F3000AC94F3 /* InviteViewController.m */; };
+		936674641CE18F3000AC94F3 /* InviteViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 936674621CE18F3000AC94F3 /* InviteViewController.xib */; };
 		938CE7781CCE2C9900ADDD4C /* ShadowView.m in Sources */ = {isa = PBXBuildFile; fileRef = 938CE7711CCE2C9800ADDD4C /* ShadowView.m */; };
 		938CE7791CCE2C9900ADDD4C /* FeedCardView.m in Sources */ = {isa = PBXBuildFile; fileRef = 938CE7731CCE2C9900ADDD4C /* FeedCardView.m */; };
 		938CE77A1CCE2C9900ADDD4C /* FeedCardView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 938CE7741CCE2C9900ADDD4C /* FeedCardView.xib */; };
@@ -462,6 +464,9 @@
 		9366745B1CD8562300AC94F3 /* SidePhotoTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SidePhotoTableViewCell.h; sourceTree = "<group>"; };
 		9366745C1CD8562300AC94F3 /* SidePhotoTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SidePhotoTableViewCell.m; sourceTree = "<group>"; };
 		9366745D1CD8562300AC94F3 /* SidePhotoTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SidePhotoTableViewCell.xib; sourceTree = "<group>"; };
+		936674601CE18F3000AC94F3 /* InviteViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InviteViewController.h; sourceTree = "<group>"; };
+		936674611CE18F3000AC94F3 /* InviteViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InviteViewController.m; sourceTree = "<group>"; };
+		936674621CE18F3000AC94F3 /* InviteViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = InviteViewController.xib; sourceTree = "<group>"; };
 		938CE7701CCE2C9800ADDD4C /* ShadowView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShadowView.h; sourceTree = "<group>"; };
 		938CE7711CCE2C9800ADDD4C /* ShadowView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShadowView.m; sourceTree = "<group>"; };
 		938CE7721CCE2C9800ADDD4C /* FeedCardView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FeedCardView.h; sourceTree = "<group>"; };
@@ -1790,6 +1795,9 @@
 				DAABB06B1C1FD50E004DDCFA /* Profile.m */,
 				DAABB0711C1FD50E004DDCFA /* Settings.h */,
 				DAABB0721C1FD50E004DDCFA /* Settings.m */,
+				936674601CE18F3000AC94F3 /* InviteViewController.h */,
+				936674611CE18F3000AC94F3 /* InviteViewController.m */,
+				936674621CE18F3000AC94F3 /* InviteViewController.xib */,
 			);
 			path = More;
 			sourceTree = "<group>";
@@ -2595,6 +2603,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DAABB2E21C1FF993004DDCFA /* Calibre-Light.ttf in Resources */,
+				936674641CE18F3000AC94F3 /* InviteViewController.xib in Resources */,
 				DAABB2EA1C1FF993004DDCFA /* Lato-Light.ttf in Resources */,
 				DAABB29E1C1FF5AE004DDCFA /* MPNotification.storyboard in Resources */,
 				DAABB2E31C1FF993004DDCFA /* Calibre-Regular.ttf in Resources */,
@@ -2719,6 +2728,7 @@
 				DA5ED6211C968A1E00004C7E /* VirtualAccountViewController.m in Sources */,
 				938CE7CD1CCF627D00ADDD4C /* NSDictionary+MTLManipulationAdditions.m in Sources */,
 				DAABB0CF1C1FD50E004DDCFA /* EventsHostMessage.m in Sources */,
+				936674631CE18F3000AC94F3 /* InviteViewController.m in Sources */,
 				DAABB0B51C1FD50E004DDCFA /* BookTableConfirm.m in Sources */,
 				DAABB0BD1C1FD50E004DDCFA /* ConvoCell.m in Sources */,
 				DAABB2721C1FF5AE004DDCFA /* UIToolbar+FlatUI.m in Sources */,
