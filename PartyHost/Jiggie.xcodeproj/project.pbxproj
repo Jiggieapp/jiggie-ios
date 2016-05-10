@@ -43,6 +43,9 @@
 		936674721CE1DCFE00AC94F3 /* InviteViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9366746D1CE1DCFE00AC94F3 /* InviteViewController.xib */; };
 		936674731CE1DCFE00AC94F3 /* PromotionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9366746F1CE1DCFE00AC94F3 /* PromotionsViewController.m */; };
 		936674741CE1DCFE00AC94F3 /* PromotionsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 936674701CE1DCFE00AC94F3 /* PromotionsViewController.xib */; };
+		936674781CE1EAC500AC94F3 /* SuccessPromotionsView.m in Sources */ = {isa = PBXBuildFile; fileRef = 936674761CE1EAC500AC94F3 /* SuccessPromotionsView.m */; };
+		936674791CE1EAC500AC94F3 /* SuccessPromotionsView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 936674771CE1EAC500AC94F3 /* SuccessPromotionsView.xib */; };
+		9366747C1CE1EE6700AC94F3 /* UIView+Animation.m in Sources */ = {isa = PBXBuildFile; fileRef = 9366747B1CE1EE6700AC94F3 /* UIView+Animation.m */; };
 		938CE7781CCE2C9900ADDD4C /* ShadowView.m in Sources */ = {isa = PBXBuildFile; fileRef = 938CE7711CCE2C9800ADDD4C /* ShadowView.m */; };
 		938CE7791CCE2C9900ADDD4C /* FeedCardView.m in Sources */ = {isa = PBXBuildFile; fileRef = 938CE7731CCE2C9900ADDD4C /* FeedCardView.m */; };
 		938CE77A1CCE2C9900ADDD4C /* FeedCardView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 938CE7741CCE2C9900ADDD4C /* FeedCardView.xib */; };
@@ -473,6 +476,11 @@
 		9366746E1CE1DCFE00AC94F3 /* PromotionsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PromotionsViewController.h; sourceTree = "<group>"; };
 		9366746F1CE1DCFE00AC94F3 /* PromotionsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PromotionsViewController.m; sourceTree = "<group>"; };
 		936674701CE1DCFE00AC94F3 /* PromotionsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PromotionsViewController.xib; sourceTree = "<group>"; };
+		936674751CE1EAC500AC94F3 /* SuccessPromotionsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SuccessPromotionsView.h; sourceTree = "<group>"; };
+		936674761CE1EAC500AC94F3 /* SuccessPromotionsView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SuccessPromotionsView.m; sourceTree = "<group>"; };
+		936674771CE1EAC500AC94F3 /* SuccessPromotionsView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SuccessPromotionsView.xib; sourceTree = "<group>"; };
+		9366747A1CE1EE6700AC94F3 /* UIView+Animation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Animation.h"; sourceTree = "<group>"; };
+		9366747B1CE1EE6700AC94F3 /* UIView+Animation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Animation.m"; sourceTree = "<group>"; };
 		938CE7701CCE2C9800ADDD4C /* ShadowView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShadowView.h; sourceTree = "<group>"; };
 		938CE7711CCE2C9800ADDD4C /* ShadowView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShadowView.m; sourceTree = "<group>"; };
 		938CE7721CCE2C9800ADDD4C /* FeedCardView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FeedCardView.h; sourceTree = "<group>"; };
@@ -1292,6 +1300,9 @@
 				9366746E1CE1DCFE00AC94F3 /* PromotionsViewController.h */,
 				9366746F1CE1DCFE00AC94F3 /* PromotionsViewController.m */,
 				936674701CE1DCFE00AC94F3 /* PromotionsViewController.xib */,
+				936674751CE1EAC500AC94F3 /* SuccessPromotionsView.h */,
+				936674761CE1EAC500AC94F3 /* SuccessPromotionsView.m */,
+				936674771CE1EAC500AC94F3 /* SuccessPromotionsView.xib */,
 			);
 			path = "Invite Friends";
 			sourceTree = "<group>";
@@ -1594,6 +1605,8 @@
 				9A85A5521CC8B89300C8818B /* JGKeyboardNotificationHelper.m */,
 				DA33069E1CDA733700A4126D /* JGTooltipHelper.h */,
 				DA33069F1CDA733700A4126D /* JGTooltipHelper.m */,
+				9366747A1CE1EE6700AC94F3 /* UIView+Animation.h */,
+				9366747B1CE1EE6700AC94F3 /* UIView+Animation.m */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -2671,6 +2684,7 @@
 				DAABB2771C1FF5AE004DDCFA /* GSTouchImage@2x.png in Resources */,
 				938CE81F1CD387BC00ADDD4C /* ProfileViewController.xib in Resources */,
 				938CE7C41CCF627D00ADDD4C /* Info.plist in Resources */,
+				936674791CE1EAC500AC94F3 /* SuccessPromotionsView.xib in Resources */,
 				938CE7DF1CD1C91700ADDD4C /* SocialOptionTableViewCell.xib in Resources */,
 				DA10F51E1C52149F006090ED /* SVProgressHUD.bundle in Resources */,
 				CB3EB6CA1B459184003F658F /* LaunchScreen.xib in Resources */,
@@ -2812,6 +2826,7 @@
 				936674261CD7621500AC94F3 /* OLFacebookAlbumRequest.m in Sources */,
 				DAABB1021C1FD50E004DDCFA /* UpgradeScreen.m in Sources */,
 				DAABB2B41C1FF5AE004DDCFA /* MPUIColorToNSStringValueTransformer.m in Sources */,
+				936674781CE1EAC500AC94F3 /* SuccessPromotionsView.m in Sources */,
 				DA33069C1CDA61A500A4126D /* UILabel+JDFTooltips.m in Sources */,
 				DAABB26A1C1FF5AE004DDCFA /* UIImage+FlatUI.m in Sources */,
 				DAABB2A51C1FF5AE004DDCFA /* MPObjectSerializerConfig.m in Sources */,
@@ -2972,6 +2987,7 @@
 				DAABB1121C1FF0F3004DDCFA /* AnalyticManager.m in Sources */,
 				DAABB2A81C1FF5AE004DDCFA /* MPPropertyDescription.m in Sources */,
 				DA0CEC8D1C9C181B00C0DA44 /* PurchaseHistoryViewController.m in Sources */,
+				9366747C1CE1EE6700AC94F3 /* UIView+Animation.m in Sources */,
 				938CE79A1CCE2D2C00ADDD4C /* ZLSwipeableViewMovement.m in Sources */,
 				DAABB0CC1C1FD50E004DDCFA /* EventsHostDetail.m in Sources */,
 				DAABB2C91C1FF5AE004DDCFA /* TSConfig.m in Sources */,

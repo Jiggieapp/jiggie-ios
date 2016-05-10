@@ -7,8 +7,12 @@
 //
 
 #import "PromotionsViewController.h"
+#import "SuccessPromotionsView.h"
+#import "UIView+Animation.h"
 
-@interface PromotionsViewController ()
+@interface PromotionsViewController () <SuccessPromotionsViewDelegate>
+
+@property (strong, nonatomic) SuccessPromotionsView *successPromotionView;
 
 @end
 
@@ -30,6 +34,21 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+#pragma mark - Lazy Instantiation
+- (SuccessPromotionsView *)successPromotionView {
+    if (!_successPromotionView) {
+        _successPromotionView = [SuccessPromotionsView instanceFromNib];
+        _successPromotionView.frame = CGRectMake(.0f,
+                                                 .0f,
+                                                 CGRectGetWidth([UIScreen mainScreen].bounds) - 40,
+                                                 400.f);
+        _successPromotionView.layer.cornerRadius = 2.0f;
+        _successPromotionView.delegate = self;
+    }
+    
+    return _successPromotionView;
 }
 
 #pragma mark - View
@@ -61,9 +80,19 @@
 
 #pragma mark - Action
 - (IBAction)didTapApplyButton:(id)sender {
+    [self.view presentView:self.successPromotionView animated:YES completion:nil];
 }
 
 - (IBAction)didTapInviteFriendsButton:(id)sender {
+}
+
+#pragma mark - SuccessPromotionsViewDelegate
+- (void)successPromotionsView:(SuccessPromotionsView *)view didTapUseNowButton:(UIButton *)sender {
+    [view dismissViewAnimated:YES completion:nil];
+}
+
+- (void)successPromotionsView:(SuccessPromotionsView *)view didTapRemindMeLaterButton:(UIButton *)sender {
+    [view dismissViewAnimated:YES completion:nil];
 }
 
 @end
