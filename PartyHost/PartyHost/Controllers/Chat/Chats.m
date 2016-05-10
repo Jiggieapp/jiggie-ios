@@ -12,6 +12,8 @@
 #import "BaseModel.h"
 #import "Chat.h"
 #import "SVProgressHUD.h"
+#import "Friend.h"
+
 
 @implementation Chats
 
@@ -133,18 +135,7 @@
     [self reloadFetch:nil];
     [self loadConvos];
     
-//    if(!self.isLoading)
-//    {
-//        //self.isLoading = YES;
-//        dispatch_queue_t someQueue = dispatch_queue_create("com.partyhost.app.chat_section", nil);
-//        dispatch_async(someQueue,
-//                       ^{
-//                           [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Conversations List" withDict:@{}];
-//                           
-//                           [self reloadFetch:nil];
-//                           [self loadConvos];
-//                       });
-//    }
+    [Friend retrieveFacebookFriendsWithCompletionHandler:nil];
 }
 
 #pragma mark - Button Action
