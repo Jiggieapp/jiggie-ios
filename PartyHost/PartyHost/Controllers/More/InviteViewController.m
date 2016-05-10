@@ -8,12 +8,8 @@
 
 #import "InviteViewController.h"
 #import <FBSDKShareKit/FBSDKShareKit.h>
-#import <FBSDKCoreKit/FBSDKCoreKit.h>
-#import <FBSDKLoginKit/FBSDKLoginKit.h>
 
-#define kCornerRadius 3.f
-
-@interface InviteViewController () <FBSDKSharingDelegate> {
+@interface InviteViewController () {
     CAShapeLayer *borderLayer;
 }
 
@@ -44,7 +40,7 @@
     [super viewDidLayoutSubviews];
     
     borderLayer.path = [UIBezierPath bezierPathWithRoundedRect:self.promoCodeLabel.bounds
-                                                  cornerRadius:kCornerRadius].CGPath;
+                                                  cornerRadius:2.f].CGPath;
     borderLayer.frame = self.promoCodeLabel.bounds;
 }
 
@@ -70,17 +66,24 @@
     
     [self.promoCodeLabel.layer addSublayer:borderLayer];
     
-    self.shareFacebookButton.layer.cornerRadius = kCornerRadius;
-    self.shareContactButton.layer.cornerRadius = kCornerRadius;
-    self.shareMessageButton.layer.cornerRadius = kCornerRadius;
-    self.shareCopyButton.layer.cornerRadius = kCornerRadius;
+    CGFloat cornerRadius = 4.f;
+    
+    self.shareFacebookButton.layer.cornerRadius = cornerRadius;
+    self.shareContactButton.layer.cornerRadius = cornerRadius;
+    self.shareMessageButton.layer.cornerRadius = cornerRadius;
+    self.shareCopyButton.layer.cornerRadius = cornerRadius;
 }
 
 #pragma mark - Action
 - (IBAction)didTapShareFacebookButton:(id)sender {
-    if ([self checkFacebookPermissions:[FBSDKAccessToken currentAccessToken]]) {
-        [self sharePromoCodeToFacebook];
-    }
+    FBSDKShareLinkContent *shareContent = [[FBSDKShareLinkContent alloc] init];
+    shareContent.contentTitle = @"title";
+    shareContent.contentDescription = @"description";
+    shareContent.contentURL = [NSURL URLWithString:@"https://www.jiggieapp.com"];
+    
+    [FBSDKShareDialog showFromViewController:self
+                                 withContent:shareContent
+                                    delegate:nil];
 }
 
 - (IBAction)didTapShareContactButton:(id)sender {
@@ -103,66 +106,6 @@
 - (IBAction)didTapShareCopyButton:(id)sender {
     UIPasteboard *pasteBoard = [UIPasteboard generalPasteboard];
     [pasteBoard setString:self.promoCodeLabel.text];
-}
-
-#pragma mark - Facebook
-- (void)sharePromoCodeToFacebook {
-    FBSDKShareLinkContent *shareContent = [[FBSDKShareLinkContent alloc] init];
-    shareContent.contentTitle = @"title";
-    shareContent.contentDescription = @"description";
-    shareContent.contentURL = [NSURL URLWithString:@"https://www.jiggieapp.com"];
-    
-    FBSDKShareAPI *shareAPI = [[FBSDKShareAPI alloc] init];
-    shareAPI.message = self.promoCodeLabel.text;
-    shareAPI.shareContent = shareContent;
-    shareAPI.delegate = self;
-    
-    [shareAPI share];
-}
-
-- (BOOL)checkFacebookPermissions:(FBSDKAccessToken *)currentAccessToken {
-    NSSet *permissions = [currentAccessToken permissions];
-    NSArray *requiredPermissions = @[@"publish_actions"];
-    
-    for (NSString *permission in requiredPermissions) {
-        if (![permissions containsObject:permission]) {
-            FBSDKLoginManager *loginManager = [[FBSDKLoginManager alloc] init];
-            [loginManager logInWithPublishPermissions:requiredPermissions
-                                   fromViewController:self
-                                              handler:^(FBSDKLoginManagerLoginResult *result, NSError *error) {
-                                                  if (error) {
-                                                      NSLog(@"FB Process error :: %@",error);
-                                                      [[NSNotificationCenter defaultCenter]
-                                                       postNotificationName:@"HIDE_LOADING"
-                                                       object:self];
-                                                  } else if (result.isCancelled) {
-                                                      NSLog(@"FB Cancelled");
-                                                      [[NSNotificationCenter defaultCenter]
-                                                       postNotificationName:@"HIDE_LOADING"
-                                                       object:self];
-                                                  } else {
-                                                      [self sharePromoCodeToFacebook];
-                                                  }
-                                              }];
-            
-            return NO;
-        }
-    }
-    
-    return YES;
-}
-
-#pragma mark - FBSDKSharingDelegate
-- (void)sharer:(id<FBSDKSharing>)sharer didCompleteWithResults:(NSDictionary *)results {
-    NSLog(@"%@", results);
-}
-
-- (void)sharer:(id<FBSDKSharing>)sharer didFailWithError:(NSError *)error {
-    NSLog(@"%@", error);
-}
-
-- (void)sharerDidCancel:(id<FBSDKSharing>)sharer {
-    NSLog(@"cancel");
 }
 
 @end
