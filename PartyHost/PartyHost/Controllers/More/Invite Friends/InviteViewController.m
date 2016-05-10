@@ -7,6 +7,7 @@
 //
 
 #import "InviteViewController.h"
+#import "PromotionsViewController.h"
 #import <FBSDKShareKit/FBSDKShareKit.h>
 
 @interface InviteViewController () {
@@ -90,17 +91,13 @@
 }
 
 - (IBAction)didTapShareMessageButton:(id)sender {
-    UIActivityViewController *activityViewController = [[UIActivityViewController alloc]
-                                                        initWithActivityItems:@[self.promoCodeLabel.text]
-                                                        applicationActivities:nil];
-    activityViewController.excludedActivityTypes = @[UIActivityTypePostToFacebook,
-                                                     UIActivityTypeCopyToPasteboard,
-                                                     UIActivityTypeOpenInIBooks,
-                                                     UIActivityTypePrint];
+    self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@""
+                                                                             style:UIBarButtonItemStylePlain
+                                                                            target:nil
+                                                                            action:nil];
     
-    [self.navigationController presentViewController:activityViewController
-                                            animated:YES
-                                          completion:nil];
+    [self.navigationController pushViewController:[PromotionsViewController new]
+                                         animated:YES];
 }
 
 - (IBAction)didTapShareCopyButton:(id)sender {
