@@ -135,7 +135,11 @@
     [self reloadFetch:nil];
     [self loadConvos];
     
-    [Friend retrieveFacebookFriendsWithCompletionHandler:nil];
+    [Friend retrieveFacebookFriendsWithCompletionHandler:^(NSArray *friendIDs, NSError *error) {
+        if (error == nil) {
+            
+        }
+    }];
 }
 
 #pragma mark - Button Action
