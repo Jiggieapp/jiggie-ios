@@ -8,6 +8,7 @@
 
 #import "InviteViewController.h"
 #import "PromotionsViewController.h"
+#import "InviteFriendsViewController.h"
 #import <FBSDKShareKit/FBSDKShareKit.h>
 
 @interface InviteViewController () {
@@ -88,6 +89,13 @@
 }
 
 - (IBAction)didTapShareContactButton:(id)sender {
+    self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@""
+                                                                             style:UIBarButtonItemStylePlain
+                                                                            target:nil
+                                                                            action:nil];
+    
+    [self.navigationController pushViewController:[InviteFriendsViewController new]
+                                         animated:YES];
 }
 
 - (IBAction)didTapShareMessageButton:(id)sender {
