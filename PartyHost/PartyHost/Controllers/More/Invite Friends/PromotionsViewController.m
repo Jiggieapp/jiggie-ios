@@ -8,6 +8,7 @@
 
 #import "PromotionsViewController.h"
 #import "SuccessPromotionsView.h"
+#import "InviteFriendsViewController.h"
 #import "UIView+Animation.h"
 
 @interface PromotionsViewController () <SuccessPromotionsViewDelegate>
@@ -84,6 +85,13 @@
 }
 
 - (IBAction)didTapInviteFriendsButton:(id)sender {
+    self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@""
+                                                                             style:UIBarButtonItemStylePlain
+                                                                            target:nil
+                                                                            action:nil];
+    
+    [self.navigationController pushViewController:[InviteFriendsViewController new]
+                                         animated:YES];
 }
 
 #pragma mark - SuccessPromotionsViewDelegate
