@@ -7,6 +7,7 @@
 //
 
 #import "InviteFriendsTableViewCell.h"
+#import "APContact.h"
 
 @implementation InviteFriendsTableViewCell
 
@@ -44,6 +45,21 @@
 
 #pragma mark - Action
 - (IBAction)didTapInviteButton:(id)sender {
+    if (self.delegate) {
+        [self.delegate InviteFriendsTableViewCell:self didTapInviteButton:sender];
+    }
+}
+
+#pragma mark - Configuration
+- (void)configureContact:(APContact *)contact {
+    [self.profileImageView setImage:contact.thumbnail];
+    [self.nameLabel setText:[NSString stringWithFormat:@"%@ %@", contact.name.firstName, contact.name.lastName]];
+    
+    APPhone *phone = contact.phones.firstObject;
+    APEmail *email = contact.emails.firstObject;
+    
+    [self.phoneNumberLabel setText:phone.number];
+    [self.emailLabel setText:email.address];
 }
 
 @end
