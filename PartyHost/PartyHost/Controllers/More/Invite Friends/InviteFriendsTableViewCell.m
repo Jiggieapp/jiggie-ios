@@ -46,7 +46,8 @@
 #pragma mark - Action
 - (IBAction)didTapInviteButton:(id)sender {
     if (self.delegate) {
-        [self.delegate InviteFriendsTableViewCell:self didTapInviteButton:sender];
+        [self.delegate InviteFriendsTableViewCell:self
+                               didTapInviteButton:sender];
     }
 }
 

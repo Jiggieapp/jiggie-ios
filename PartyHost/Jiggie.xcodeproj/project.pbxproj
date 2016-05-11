@@ -73,6 +73,7 @@
 		9366752C1CE30EB200AC94F3 /* APRelatedPerson.m in Sources */ = {isa = PBXBuildFile; fileRef = 936675121CE30EB200AC94F3 /* APRelatedPerson.m */; };
 		9366752D1CE30EB200AC94F3 /* APSocialProfile.m in Sources */ = {isa = PBXBuildFile; fileRef = 936675141CE30EB200AC94F3 /* APSocialProfile.m */; };
 		9366752E1CE30EB200AC94F3 /* APSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 936675161CE30EB200AC94F3 /* APSource.m */; };
+		936675311CE3381100AC94F3 /* Contact.m in Sources */ = {isa = PBXBuildFile; fileRef = 936675301CE3381100AC94F3 /* Contact.m */; };
 		938CE7781CCE2C9900ADDD4C /* ShadowView.m in Sources */ = {isa = PBXBuildFile; fileRef = 938CE7711CCE2C9800ADDD4C /* ShadowView.m */; };
 		938CE7791CCE2C9900ADDD4C /* FeedCardView.m in Sources */ = {isa = PBXBuildFile; fileRef = 938CE7731CCE2C9900ADDD4C /* FeedCardView.m */; };
 		938CE77A1CCE2C9900ADDD4C /* FeedCardView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 938CE7741CCE2C9900ADDD4C /* FeedCardView.xib */; };
@@ -563,6 +564,8 @@
 		936675151CE30EB200AC94F3 /* APSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APSource.h; sourceTree = "<group>"; };
 		936675161CE30EB200AC94F3 /* APSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APSource.m; sourceTree = "<group>"; };
 		936675171CE30EB200AC94F3 /* APTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APTypes.h; sourceTree = "<group>"; };
+		9366752F1CE3381100AC94F3 /* Contact.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Contact.h; sourceTree = "<group>"; };
+		936675301CE3381100AC94F3 /* Contact.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Contact.m; sourceTree = "<group>"; };
 		938CE7701CCE2C9800ADDD4C /* ShadowView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShadowView.h; sourceTree = "<group>"; };
 		938CE7711CCE2C9800ADDD4C /* ShadowView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShadowView.m; sourceTree = "<group>"; };
 		938CE7721CCE2C9800ADDD4C /* FeedCardView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FeedCardView.h; sourceTree = "<group>"; };
@@ -1696,6 +1699,8 @@
 				938CE7D41CCF629700ADDD4C /* Feed.m */,
 				DA3306A11CE1B58E00A4126D /* Friend.h */,
 				DA3306A21CE1B58E00A4126D /* Friend.m */,
+				9366752F1CE3381100AC94F3 /* Contact.h */,
+				936675301CE3381100AC94F3 /* Contact.m */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -2987,6 +2992,7 @@
 				DA5ED6181C92975100004C7E /* VTItemDetails.m in Sources */,
 				DAABB2BA1C1FF5AE004DDCFA /* MPVariant.m in Sources */,
 				9366751E1CE30EB200AC94F3 /* APAddressBookContactsRoutine.m in Sources */,
+				936675311CE3381100AC94F3 /* Contact.m in Sources */,
 				938CE80B1CD3435700ADDD4C /* MSRangeSlider.m in Sources */,
 				DA5ED6191C92975100004C7E /* VTTransactionDetails.m in Sources */,
 				DAABB2821C1FF5AE004DDCFA /* MPABTestDesignerChangeResponseMessage.m in Sources */,

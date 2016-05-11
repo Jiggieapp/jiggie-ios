@@ -14,7 +14,8 @@
 @protocol InviteFriendsTableViewCellDelegate <NSObject>
 
 @required
-- (void)InviteFriendsTableViewCell:(InviteFriendsTableViewCell *)cell didTapInviteButton:(UIButton *)sender;
+- (void)InviteFriendsTableViewCell:(InviteFriendsTableViewCell *)cell
+                didTapInviteButton:(UIButton *)sender;
 
 @end
 

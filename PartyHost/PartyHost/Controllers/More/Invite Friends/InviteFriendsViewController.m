@@ -11,6 +11,7 @@
 #import "APAddressBook.h"
 #import "SVProgressHUD.h"
 #import "APContact.h"
+#import "Contact.h"
 
 static NSString *const InviteFriendsTableViewCellIdentifier = @"InviteFriendsTableViewCellIdentifier";
 
@@ -18,6 +19,7 @@ static NSString *const InviteFriendsTableViewCellIdentifier = @"InviteFriendsTab
 
 @property (strong, nonatomic) APAddressBook *addressBook;
 @property (strong, nonatomic) NSMutableArray *contacts;
+@property (strong, nonatomic) NSMutableArray *invitedFriendsRecordIDs;
 
 @end
 
@@ -27,6 +29,12 @@ static NSString *const InviteFriendsTableViewCellIdentifier = @"InviteFriendsTab
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     [self setupView];
+    
+    if ([Contact unarchiveRecordIDs]) {
+        self.invitedFriendsRecordIDs = [NSMutableArray arrayWithArray:[Contact unarchiveRecordIDs]];
+    } else {
+        self.invitedFriendsRecordIDs = [NSMutableArray array];
+    }
     
     __weak typeof(self) weakSelf = self;
     [self.addressBook startObserveChangesWithCallback:^{
@@ -134,6 +142,16 @@ static NSString *const InviteFriendsTableViewCellIdentifier = @"InviteFriendsTab
         APContact *contact = self.contacts[indexPath.row];
         [cell configureContact:contact];
         [cell setDelegate:self];
+        
+        if (self.invitedFriendsRecordIDs) {
+            for (NSNumber *recordID in self.invitedFriendsRecordIDs) {
+                if ([recordID isEqualToNumber:contact.recordID]) {
+                    [self setInviteFriendsTableViewCell:cell asInvited:YES];
+                }
+            }
+        } else {
+            [self setInviteFriendsTableViewCell:cell asInvited:NO];
+        }
     }
     
     return cell;
@@ -157,10 +175,65 @@ static NSString *const InviteFriendsTableViewCellIdentifier = @"InviteFriendsTab
 
 }
 
+#pragma mark - 
+- (void)setInviteFriendsTableViewCell:(InviteFriendsTableViewCell *)cell asInvited:(BOOL)invited {
+    if (invited) {
+        cell.inviteButton.backgroundColor = [UIColor phGrayColor];
+        [cell.inviteButton setTitle:@"SENT" forState:UIControlStateNormal];
+        [cell.inviteButton setEnabled:NO];
+    } else {
+        cell.inviteButton.backgroundColor = [UIColor phBlueColor];
+        [cell.inviteButton setTitle:@"INVITE" forState:UIControlStateNormal];
+        [cell.inviteButton setEnabled:YES];
+    }
+}
+
 #pragma mark - InviteFriendsTableViewCellDelegate
 - (void)InviteFriendsTableViewCell:(InviteFriendsTableViewCell *)cell didTapInviteButton:(UIButton *)sender {
-    sender.backgroundColor = [UIColor phGrayColor];
-    [sender setTitle:@"SENT" forState:UIControlStateNormal];
+    SharedData *sharedData = [SharedData sharedInstance];
+    AFHTTPRequestOperationManager *manager = [sharedData getOperationManager];
+    NSString *url = [NSString stringWithFormat:@"%@/credit/invite", PHBaseNewURL];
+    Contact *contact = [[Contact alloc] initWithContact:self.contacts[[self.tableView indexPathForCell:cell].row]];
+    NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithDictionary:@{@"fb_id" : sharedData.fb_id,
+                                                                                      @"contact" : @{
+                                                                                              @"name" : contact.name
+                                                                                              }
+                                                                                      }];
+    
+    if (contact.phones) {
+        [parameters setObject:@{@"phone" : contact.phones} forKey:@"contact"];
+    }
+    
+    if (contact.emails) {
+        [parameters setObject:@{@"email" : contact.emails} forKey:@"contact"];
+    }
+    
+    [SVProgressHUD show];
+    [manager POST:url parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        [SVProgressHUD dismiss];
+        
+        NSInteger responseStatusCode = operation.response.statusCode;
+        if (responseStatusCode != 200) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self setInviteFriendsTableViewCell:cell asInvited:NO];
+            });
+            
+            return;
+        }
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (![self.invitedFriendsRecordIDs containsObject:contact.recordID]) {
+                [self.invitedFriendsRecordIDs addObject:contact.recordID];
+                [Contact archiveRecordIDs:self.invitedFriendsRecordIDs];
+            }
+            
+            [self.tableView reloadData];
+        });
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self setInviteFriendsTableViewCell:cell asInvited:NO];
+        });
+    }];
 }
 
 #pragma mark - UIAlertViewDelegate
@@ -172,7 +245,53 @@ static NSString *const InviteFriendsTableViewCellIdentifier = @"InviteFriendsTab
 
 #pragma mark - Action
 - (IBAction)didTapInviteAllButton:(id)sender {
+    SharedData *sharedData = [SharedData sharedInstance];
+    AFHTTPRequestOperationManager *manager = [sharedData getOperationManager];
+    NSString *url = [NSString stringWithFormat:@"%@/credit/invite_all", PHBaseNewURL];
     
+    NSMutableArray *contacts = [NSMutableArray arrayWithCapacity:self.contacts.count];
+    
+    for (APContact *friendContact in self.contacts) {
+        Contact *contact = [[Contact alloc] initWithContact:friendContact];
+        NSMutableDictionary *contactDictionary = [NSMutableDictionary dictionaryWithDictionary:@{@"name" : contact.name}];
+        
+        if (contact.phones) {
+            [contactDictionary setObject:contact.phones forKey:@"phone"];
+        }
+        
+        if (contact.emails) {
+            [contactDictionary setObject:contact.emails forKey:@"email"];
+        }
+        
+        if (![self.invitedFriendsRecordIDs containsObject:contact.recordID]) {
+            [contacts addObject:contactDictionary];
+        }
+    }
+    
+    NSDictionary *parameters = @{@"fb_id" : sharedData.fb_id,
+                                 @"contact" : contacts};
+    
+    [SVProgressHUD show];
+    [manager POST:url parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        [SVProgressHUD dismiss];
+        
+        NSInteger responseStatusCode = operation.response.statusCode;
+        if (responseStatusCode != 200) {
+            return;
+        }
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            for (APContact *contact in self.contacts) {
+                if (![self.invitedFriendsRecordIDs containsObject:contact.recordID]) {
+                    [self.invitedFriendsRecordIDs addObject:contact.recordID];
+                }
+            }
+            
+            [Contact archiveRecordIDs:self.invitedFriendsRecordIDs];
+            [self.tableView reloadData];
+        });
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+    }];
 }
 
 @end
