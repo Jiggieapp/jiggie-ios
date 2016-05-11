@@ -41,4 +41,21 @@
     }];
 }
 
++ (void)enableSocialFeed:(BOOL)enabled withCompletionHandler:(MatchFeedCompletionHandler)completion {
+    SharedData *sharedData = [SharedData sharedInstance];
+    NSString *matchMe = enabled ? @"yes" : @"no";
+    AFHTTPRequestOperationManager *manager = [sharedData getOperationManager];
+    NSString *url = [NSString stringWithFormat:@"%@/partyfeed/settings/%@/%@", PHBaseNewURL, sharedData.fb_id, matchMe];
+    
+    [manager GET:url parameters:@{} success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        if (completion) {
+            completion(nil);
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        if (completion) {
+            completion(error);
+        }
+    }];
+}
+
 @end
