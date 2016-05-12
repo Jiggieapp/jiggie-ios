@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10116" systemVersion="15B42" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
@@ -166,17 +166,17 @@
                     <exclude reference="CzY-r8-DEW"/>
                     <exclude reference="Jdb-X2-0g6"/>
                     <exclude reference="uYA-Cf-pxj"/>
-                    <exclude reference="WQx-Cu-UIJ"/>
-                    <exclude reference="iNd-tp-NJd"/>
-                    <exclude reference="pYA-qG-M5Z"/>
-                    <exclude reference="D9f-qc-ruN"/>
-                    <exclude reference="bYU-VV-zMF"/>
-                    <exclude reference="sGZ-L3-jQl"/>
-                    <exclude reference="F11-Kx-6XN"/>
-                    <exclude reference="ZZj-AT-aNq"/>
                     <exclude reference="96B-yb-x8r"/>
                     <exclude reference="E8c-G1-gUJ"/>
                     <exclude reference="ng7-E0-I4g"/>
+                    <exclude reference="WQx-Cu-UIJ"/>
+                    <exclude reference="iNd-tp-NJd"/>
+                    <exclude reference="pYA-qG-M5Z"/>
+                    <exclude reference="F11-Kx-6XN"/>
+                    <exclude reference="ZZj-AT-aNq"/>
+                    <exclude reference="D9f-qc-ruN"/>
+                    <exclude reference="bYU-VV-zMF"/>
+                    <exclude reference="sGZ-L3-jQl"/>
                 </mask>
             </variation>
             <variation key="heightClass=regular-widthClass=compact">
@@ -191,17 +191,17 @@
                     <include reference="CzY-r8-DEW"/>
                     <include reference="Jdb-X2-0g6"/>
                     <include reference="uYA-Cf-pxj"/>
-                    <include reference="WQx-Cu-UIJ"/>
-                    <include reference="iNd-tp-NJd"/>
-                    <include reference="pYA-qG-M5Z"/>
-                    <include reference="D9f-qc-ruN"/>
-                    <include reference="bYU-VV-zMF"/>
-                    <include reference="sGZ-L3-jQl"/>
-                    <include reference="F11-Kx-6XN"/>
-                    <include reference="ZZj-AT-aNq"/>
                     <include reference="96B-yb-x8r"/>
                     <include reference="E8c-G1-gUJ"/>
                     <include reference="ng7-E0-I4g"/>
+                    <include reference="WQx-Cu-UIJ"/>
+                    <include reference="iNd-tp-NJd"/>
+                    <include reference="pYA-qG-M5Z"/>
+                    <include reference="F11-Kx-6XN"/>
+                    <include reference="ZZj-AT-aNq"/>
+                    <include reference="D9f-qc-ruN"/>
+                    <include reference="bYU-VV-zMF"/>
+                    <include reference="sGZ-L3-jQl"/>
                 </mask>
             </variation>
         </view>
