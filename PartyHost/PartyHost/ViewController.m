@@ -17,6 +17,7 @@
 #import "PurchaseHistoryViewController.h"
 #import "ProfileViewController.h"
 #import "InviteViewController.h"
+#import "PromotionsViewController.h"
 
 @interface ViewController ()
 
@@ -157,6 +158,12 @@
      addObserver:self
      selector:@selector(showInviteFriends:)
      name:@"SHOW_INVITE_FRIENDS"
+     object:nil];
+    
+    [[NSNotificationCenter defaultCenter]
+     addObserver:self
+     selector:@selector(showPromotions:)
+     name:@"SHOW_PROMOTIONS"
      object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserverForName:
@@ -677,7 +684,7 @@
     [self presentViewController:profileNavigationController animated:YES completion:nil];
 }
 
-#pragma mark - Invite Firends Notification
+#pragma mark - Invite Friends Notification
 - (void)showInviteFriends:(NSNotification *)notification {
     self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@""
                                                                              style:UIBarButtonItemStylePlain
@@ -685,6 +692,16 @@
                                                                             action:nil];
     
     [self.navigationController pushViewController:[InviteViewController new] animated:YES];
+}
+
+#pragma mark - Promotions
+- (void)showPromotions:(NSNotification *)notification {
+    self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@""
+                                                                             style:UIBarButtonItemStylePlain
+                                                                            target:nil
+                                                                            action:nil];
+    
+    [self.navigationController pushViewController:[PromotionsViewController new] animated:YES];
 }
 
 - (void)didReceiveMemoryWarning

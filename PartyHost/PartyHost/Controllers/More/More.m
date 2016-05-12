@@ -394,6 +394,33 @@
         }
         else if(indexPath.row==2)
         {
+            cell = [tableView dequeueReusableCellWithIdentifier:@"PromotionsCell"];
+            if (cell == nil) {cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"PromotionsCell"];}
+            
+            UILabel *textLabel = [[UILabel alloc] initWithFrame:CGRectMake(70, 20, 180, 20)];
+            textLabel.backgroundColor = [UIColor clearColor];
+            textLabel.font = [UIFont phBlond:16];
+            textLabel.text = @"Promotions";
+            [[cell contentView] addSubview:textLabel];
+            
+            UIImageView *cellImage = [[UIImageView alloc] initWithFrame:CGRectMake(14, 10, 40, 40)];
+            cellImage.backgroundColor = [UIColor colorFromHexCode:@"68CE49"];
+            cellImage.layer.cornerRadius = 20;
+            [[cell contentView] addSubview:cellImage];
+            
+            UIImageView *iconImage = [[UIImageView alloc] initWithFrame:CGRectMake(10, 10, 20, 20)];
+            [iconImage setImage:[UIImage imageNamed:@"icon_friends.png"]];
+            [cellImage addSubview:iconImage];
+            
+            UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0.0, 0.0, 11.0, 21.0)];
+            [imageView setBackgroundColor:[UIColor clearColor]];
+            [imageView setImage:[UIImage imageNamed:@"forward.png"]];
+            [cell setAccessoryView:imageView];
+            [[cell accessoryView] setBackgroundColor:[UIColor clearColor]];
+            
+        }
+        else if(indexPath.row==3)
+        {
             cell = [tableView dequeueReusableCellWithIdentifier:@"SettingsCell"];
             if (cell == nil) {cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"SettingsCell"];}
             
@@ -422,7 +449,7 @@
             [cell setAccessoryView:imageView];
             [[cell accessoryView] setBackgroundColor:[UIColor clearColor]];
         }
-        else if(indexPath.row==3)
+        else if(indexPath.row==4)
         {
             cell = [tableView dequeueReusableCellWithIdentifier:@"InviteFriendsCell"];
             if (cell == nil) {cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"InviteFriendsCell"];}
@@ -449,7 +476,7 @@
             [[cell accessoryView] setBackgroundColor:[UIColor clearColor]];
 
         }
-        else if(indexPath.row==4)
+        else if(indexPath.row==5)
         {
             cell = [tableView dequeueReusableCellWithIdentifier:@"EmailSupportCell"];
             if (cell == nil) {cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"EmailSupportCell"];}
@@ -476,8 +503,7 @@
             [[cell accessoryView] setBackgroundColor:[UIColor clearColor]];
 
         }
-        
-        else if (indexPath.row==5)
+        else if (indexPath.row==6)
         {
             cell = [tableView dequeueReusableCellWithIdentifier:@"LogOutCell"];
             if (cell == nil) {cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"LogOutCell"];}
@@ -549,8 +575,17 @@
             return;
         }
         
+        //Promotions
+        else if(indexPath.row == 2)
+        {
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"SHOW_PROMOTIONS"
+                                                                object:nil];
+            
+            return;
+        }
+        
         //Settings
-        else if(indexPath.row == 2 && [UserManager updateLocalSetting])
+        else if(indexPath.row == 3 && [UserManager updateLocalSetting])
         {
             self.settingsPage.hidden = NO;
             self.profilePage.hidden = YES;
@@ -566,7 +601,7 @@
         }
 
         //Invite friends
-        else if(indexPath.row == 3)
+        else if(indexPath.row == 4)
         {
             [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Share App" withDict:@{@"origin":@"More"}];
             
@@ -577,7 +612,7 @@
         }
         
         //Email support
-        else if(indexPath.row == 4)
+        else if(indexPath.row == 5)
         {
             [[NSNotificationCenter defaultCenter]
              postNotificationName:@"SHOW_MAIL_MESSAGE"
@@ -587,7 +622,7 @@
         }
         
         //Log Out
-        else if(indexPath.row == 5)
+        else if(indexPath.row == 6)
         {
             
             [[UserManager sharedManager] clearAllUserData];

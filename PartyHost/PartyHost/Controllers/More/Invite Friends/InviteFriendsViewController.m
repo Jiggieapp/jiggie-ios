@@ -1,0 +1,296 @@
+//
+//  InviteFriendsViewController.m
+//  Jiggie
+//
+//  Created by Jiggie - Mohammad Nuruddin Effendi on 5/11/16.
+//  Copyright © 2016 Jiggie. All rights reserved.
+//
+
+#import "InviteFriendsViewController.h"
+#import "InviteFriendsTableViewCell.h"
+#import "APAddressBook.h"
+#import "SVProgressHUD.h"
+#import "APContact.h"
+#import "Contact.h"
+
+static NSString *const InviteFriendsTableViewCellIdentifier = @"InviteFriendsTableViewCellIdentifier";
+
+@interface InviteFriendsViewController () <UITableViewDataSource, UITableViewDelegate, UIAlertViewDelegate, InviteFriendsTableViewCellDelegate>
+
+@property (strong, nonatomic) APAddressBook *addressBook;
+@property (strong, nonatomic) NSMutableArray *contacts;
+@property (strong, nonatomic) NSMutableArray *invitedFriendsRecordIDs;
+
+@end
+
+@implementation InviteFriendsViewController
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    // Do any additional setup after loading the view from its nib.
+    [self setupView];
+    
+    if ([Contact unarchiveRecordIDs]) {
+        self.invitedFriendsRecordIDs = [NSMutableArray arrayWithArray:[Contact unarchiveRecordIDs]];
+    } else {
+        self.invitedFriendsRecordIDs = [NSMutableArray array];
+    }
+    
+    __weak typeof(self) weakSelf = self;
+    [self.addressBook startObserveChangesWithCallback:^{
+        [weakSelf loadContacts];
+    }];
+    
+    [self checkAddressBookAccess];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    [self.navigationController setNavigationBarHidden:NO];
+}
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+#pragma mark - Lazy Instantiation
+- (APAddressBook *)addressBook {
+    if (!_addressBook) {
+        _addressBook = [[APAddressBook alloc] init];
+    }
+    
+    return _addressBook;
+}
+
+#pragma mark - View
+- (void)setupView {
+    self.title = @"Invite Friends";
+    [self.tableView registerNib:[InviteFriendsTableViewCell nib]
+         forCellReuseIdentifier:InviteFriendsTableViewCellIdentifier];
+}
+
+#pragma mark - Contacts
+- (void)checkAddressBookAccess {
+    switch ([APAddressBook access]) {
+        case APAddressBookAccessDenied: {
+            [self.contacts removeAllObjects];
+            
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"App Permission Denied"
+                                                            message:@"Please go to Settings and turn on Contacts Service for this app."
+                                                           delegate:self
+                                                  cancelButtonTitle:@"Cancel"
+                                                  otherButtonTitles:@"OK",nil];
+            [alert setDelegate:self];
+            [alert show];
+            
+            break;
+        }
+            
+        default: {
+            [self loadContacts];
+            
+            break;
+        }
+    }
+}
+
+- (void)loadContacts {
+    __weak typeof(self) weakSelf = self;
+    
+    [SVProgressHUD show];
+    
+    [self.addressBook setFieldsMask:APContactFieldName |
+     APContactFieldPhonesOnly |
+     APContactFieldEmailsOnly |
+     APContactFieldThumbnail];
+    
+    [self.addressBook setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"name.firstName" ascending:YES],
+                                           [NSSortDescriptor sortDescriptorWithKey:@"name.lastName" ascending:YES]]];
+    [self.addressBook setFilterBlock:^BOOL(APContact *contact) {
+        if (contact.phones.count > 0) {
+            return contact.phones.count > 0;
+        }
+        
+        return contact.emails.count > 0;
+    }];
+    [self.addressBook loadContacts:^(NSArray<APContact *> * _Nullable contacts, NSError * _Nullable error) {
+        [SVProgressHUD dismiss];
+        if (contacts) {
+            weakSelf.contacts = [NSMutableArray arrayWithArray:contacts];
+            [weakSelf.tableView reloadData];
+        }
+    }];
+}
+
+#pragma mark - UITableViewDataSource
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    return 1;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return self.contacts.count;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    InviteFriendsTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:InviteFriendsTableViewCellIdentifier
+                                                                       forIndexPath:indexPath];
+    [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
+    
+    if (self.contacts) {
+        APContact *contact = self.contacts[indexPath.row];
+        [cell configureContact:[[Contact alloc] initWithContact:contact]];
+        [cell setDelegate:self];
+        
+        if ([self.invitedFriendsRecordIDs containsObject:contact.recordID]) {
+            [self setInviteFriendsTableViewCell:cell asInvited:YES];
+        } else {
+            [self setInviteFriendsTableViewCell:cell asInvited:NO];
+        }
+    }
+    
+    return cell;
+}
+
+#pragma mark UITableViewDelegate
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
+    return [UIView new];
+}
+
+- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return 76;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    if ([[[UIDevice currentDevice] systemVersion] compare:@"8.0" options:NSNumericSearch] != NSOrderedAscending) {
+        return UITableViewAutomaticDimension;
+    }
+    
+    return 76;
+
+}
+
+#pragma mark - 
+- (void)setInviteFriendsTableViewCell:(InviteFriendsTableViewCell *)cell asInvited:(BOOL)invited {
+    if (invited) {
+        cell.inviteButton.backgroundColor = [UIColor phGrayColor];
+        [cell.inviteButton setTitle:@"SENT" forState:UIControlStateNormal];
+        [cell.inviteButton setEnabled:NO];
+    } else {
+        cell.inviteButton.backgroundColor = [UIColor phBlueColor];
+        [cell.inviteButton setTitle:@"INVITE" forState:UIControlStateNormal];
+        [cell.inviteButton setEnabled:YES];
+    }
+}
+
+#pragma mark - InviteFriendsTableViewCellDelegate
+- (void)InviteFriendsTableViewCell:(InviteFriendsTableViewCell *)cell didTapInviteButton:(UIButton *)sender {
+    SharedData *sharedData = [SharedData sharedInstance];
+    AFHTTPRequestOperationManager *manager = [sharedData getOperationManager];
+    NSString *url = [NSString stringWithFormat:@"%@/credit/invite", PHBaseNewURL];
+    Contact *contact = [[Contact alloc] initWithContact:self.contacts[[self.tableView indexPathForCell:cell].row]];
+    NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithDictionary:@{@"fb_id" : sharedData.fb_id,
+                                                                                      @"contact" : @{
+                                                                                              @"name" : contact.name
+                                                                                              }
+                                                                                      }];
+    
+    if (contact.phones) {
+        [parameters setObject:@{@"phone" : contact.phones} forKey:@"contact"];
+    }
+    
+    if (contact.emails) {
+        [parameters setObject:@{@"email" : contact.emails} forKey:@"contact"];
+    }
+    
+    [SVProgressHUD show];
+    [manager POST:url parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        [SVProgressHUD dismiss];
+        
+        NSInteger responseStatusCode = operation.response.statusCode;
+        if (responseStatusCode != 200) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self setInviteFriendsTableViewCell:cell asInvited:NO];
+            });
+            
+            return;
+        }
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (![self.invitedFriendsRecordIDs containsObject:contact.recordID]) {
+                [self.invitedFriendsRecordIDs addObject:contact.recordID];
+                [Contact archiveRecordIDs:self.invitedFriendsRecordIDs];
+            }
+            
+            [self.tableView reloadData];
+        });
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        [SVProgressHUD dismiss];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self setInviteFriendsTableViewCell:cell asInvited:NO];
+        });
+    }];
+}
+
+#pragma mark - UIAlertViewDelegate
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if (buttonIndex == 1) {
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
+    }
+}
+
+#pragma mark - Action
+- (IBAction)didTapInviteAllButton:(id)sender {
+    SharedData *sharedData = [SharedData sharedInstance];
+    AFHTTPRequestOperationManager *manager = [sharedData getOperationManager];
+    NSString *url = [NSString stringWithFormat:@"%@/credit/invite_all", PHBaseNewURL];
+    
+    NSMutableArray *contacts = [NSMutableArray arrayWithCapacity:self.contacts.count];
+    
+    for (APContact *friendContact in self.contacts) {
+        Contact *contact = [[Contact alloc] initWithContact:friendContact];
+        NSMutableDictionary *contactDictionary = [NSMutableDictionary dictionaryWithDictionary:@{@"name" : contact.name}];
+        
+        if (contact.phones) {
+            [contactDictionary setObject:contact.phones forKey:@"phone"];
+        }
+        
+        if (contact.emails) {
+            [contactDictionary setObject:contact.emails forKey:@"email"];
+        }
+        
+        if (![self.invitedFriendsRecordIDs containsObject:contact.recordID]) {
+            [contacts addObject:contactDictionary];
+        }
+    }
+    
+    NSDictionary *parameters = @{@"fb_id" : sharedData.fb_id,
+                                 @"contact" : contacts};
+    
+    [SVProgressHUD show];
+    [manager POST:url parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        [SVProgressHUD dismiss];
+        
+        NSInteger responseStatusCode = operation.response.statusCode;
+        if (responseStatusCode != 200) {
+            return;
+        }
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            for (APContact *contact in self.contacts) {
+                if (![self.invitedFriendsRecordIDs containsObject:contact.recordID]) {
+                    [self.invitedFriendsRecordIDs addObject:contact.recordID];
+                }
+            }
+            
+            [Contact archiveRecordIDs:self.invitedFriendsRecordIDs];
+            [self.tableView reloadData];
+        });
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        [SVProgressHUD dismiss];
+    }];
+}
+
+@end

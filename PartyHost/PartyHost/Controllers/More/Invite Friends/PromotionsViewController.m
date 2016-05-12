@@ -8,6 +8,7 @@
 
 #import "PromotionsViewController.h"
 #import "SuccessPromotionsView.h"
+#import "InviteFriendsViewController.h"
 #import "UIView+Animation.h"
 
 @interface PromotionsViewController () <SuccessPromotionsViewDelegate>
@@ -29,6 +30,12 @@
     [super viewWillAppear:animated];
     
     [self.navigationController setNavigationBarHidden:NO];
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    
+    [self.navigationController setNavigationBarHidden:YES];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -53,6 +60,12 @@
 
 #pragma mark - View
 - (void)setupView {
+    [self.navigationController.navigationBar setBarTintColor:[UIColor phPurpleColor]];
+    [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
+    [self.navigationController.navigationBar setTranslucent:NO];
+    [self.navigationController.navigationBar setTitleTextAttributes:
+     @{NSForegroundColorAttributeName:[UIColor whiteColor]}];
+    
     self.title = @"Promotions";
     
     CGFloat cornerRadius = 4.f;
@@ -84,6 +97,13 @@
 }
 
 - (IBAction)didTapInviteFriendsButton:(id)sender {
+    self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@""
+                                                                             style:UIBarButtonItemStylePlain
+                                                                            target:nil
+                                                                            action:nil];
+    
+    [self.navigationController pushViewController:[InviteFriendsViewController new]
+                                         animated:YES];
 }
 
 #pragma mark - SuccessPromotionsViewDelegate
