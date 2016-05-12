@@ -7,7 +7,7 @@
 //
 
 #import "InviteFriendsTableViewCell.h"
-#import "APContact.h"
+#import "Contact.h"
 
 @implementation InviteFriendsTableViewCell
 
@@ -52,15 +52,11 @@
 }
 
 #pragma mark - Configuration
-- (void)configureContact:(APContact *)contact {
+- (void)configureContact:(Contact *)contact {
     [self.profileImageView setImage:contact.thumbnail];
-    [self.nameLabel setText:[NSString stringWithFormat:@"%@ %@", contact.name.firstName, contact.name.lastName]];
-    
-    APPhone *phone = contact.phones.firstObject;
-    APEmail *email = contact.emails.firstObject;
-    
-    [self.phoneNumberLabel setText:phone.number];
-    [self.emailLabel setText:email.address];
+    [self.nameLabel setText:[NSString stringWithFormat:@"%@", contact.name]];
+    [self.phoneNumberLabel setText:contact.phones.lastObject];
+    [self.emailLabel setText:contact.emails.lastObject];
 }
 
 @end

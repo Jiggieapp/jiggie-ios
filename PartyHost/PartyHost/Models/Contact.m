@@ -11,6 +11,8 @@
 
 @interface Contact ()
 
+@property (strong, nonatomic) NSNumber *recordID;
+@property (strong, nonatomic) UIImage *thumbnail;
 @property (copy, nonatomic) NSString *name;
 @property (strong, nonatomic) NSArray *phones;
 @property (strong, nonatomic) NSArray *emails;
@@ -22,7 +24,19 @@
 - (instancetype)initWithContact:(APContact *)contact {
     if (self = [super init]) {
         self.recordID = contact.recordID;
-        self.name = [NSString stringWithFormat:@"%@ %@", contact.name.firstName, contact.name.lastName];
+        
+        NSString *firstName = @"";
+        NSString *lastName = @"";
+        
+        if (contact.name.firstName) {
+            firstName = contact.name.firstName;
+        }
+        
+        if (contact.name.lastName) {
+            lastName = contact.name.lastName;
+        }
+        
+        self.name = [NSString stringWithFormat:@"%@ %@", firstName, lastName];
         
         NSArray *phonesNumber = [contact.phones valueForKeyPath:@"@distinctUnionOfObjects.number"];
         NSArray *emailsAddress = [contact.emails valueForKeyPath:@"@distinctUnionOfObjects.address"];

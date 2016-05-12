@@ -140,15 +140,11 @@ static NSString *const InviteFriendsTableViewCellIdentifier = @"InviteFriendsTab
     
     if (self.contacts) {
         APContact *contact = self.contacts[indexPath.row];
-        [cell configureContact:contact];
+        [cell configureContact:[[Contact alloc] initWithContact:contact]];
         [cell setDelegate:self];
         
-        if (self.invitedFriendsRecordIDs) {
-            for (NSNumber *recordID in self.invitedFriendsRecordIDs) {
-                if ([recordID isEqualToNumber:contact.recordID]) {
-                    [self setInviteFriendsTableViewCell:cell asInvited:YES];
-                }
-            }
+        if ([self.invitedFriendsRecordIDs containsObject:contact.recordID]) {
+            [self setInviteFriendsTableViewCell:cell asInvited:YES];
         } else {
             [self setInviteFriendsTableViewCell:cell asInvited:NO];
         }

@@ -12,7 +12,8 @@
 
 @interface Contact : NSObject
 
-@property (strong, nonatomic) NSNumber *recordID;
+@property (strong, nonatomic, readonly) NSNumber *recordID;
+@property (strong, nonatomic, readonly) UIImage *thumbnail;
 @property (copy, nonatomic, readonly) NSString *name;
 @property (strong, nonatomic, readonly) NSArray *phones;
 @property (strong, nonatomic, readonly) NSArray *emails;

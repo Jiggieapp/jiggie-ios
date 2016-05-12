@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@class APContact;
+@class Contact;
 @class InviteFriendsTableViewCell;
 
 @protocol InviteFriendsTableViewCellDelegate <NSObject>
@@ -31,6 +31,6 @@
 
 + (UINib *)nib;
 
-- (void)configureContact:(APContact *)contact;
+- (void)configureContact:(Contact *)contact;
 
 @end
