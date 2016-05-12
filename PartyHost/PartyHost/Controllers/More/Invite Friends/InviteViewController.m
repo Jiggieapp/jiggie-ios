@@ -7,7 +7,6 @@
 //
 
 #import "InviteViewController.h"
-#import "PromotionsViewController.h"
 #import "InviteFriendsViewController.h"
 #import "SVProgressHUD.h"
 #import <FBSDKShareKit/FBSDKShareKit.h>
@@ -15,6 +14,9 @@
 @interface InviteViewController () {
     CAShapeLayer *borderLayer;
 }
+
+@property (copy, nonatomic) NSString *inviteURL;
+@property (copy, nonatomic) NSString *inviteMessage;
 
 @end
 
@@ -81,9 +83,9 @@
 #pragma mark - Action
 - (IBAction)didTapShareFacebookButton:(id)sender {
     FBSDKShareLinkContent *shareContent = [[FBSDKShareLinkContent alloc] init];
-    shareContent.contentTitle = @"title";
-    shareContent.contentDescription = @"description";
-    shareContent.contentURL = [NSURL URLWithString:@"https://www.jiggieapp.com"];
+    shareContent.contentTitle = @"Jiggie";
+    shareContent.contentDescription = self.promoDescriptionLabel.text;
+    shareContent.contentURL = [NSURL URLWithString:self.inviteURL];
     
     [FBSDKShareDialog showFromViewController:self
                                  withContent:shareContent
@@ -101,18 +103,28 @@
 }
 
 - (IBAction)didTapShareMessageButton:(id)sender {
-    self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@""
-                                                                             style:UIBarButtonItemStylePlain
-                                                                            target:nil
-                                                                            action:nil];
+    UIActivityViewController *activityViewController = [[UIActivityViewController alloc]
+                                                        initWithActivityItems:@[self.inviteMessage]
+                                                        applicationActivities:nil];
+    [activityViewController setExcludedActivityTypes:@[UIActivityTypePostToFacebook,
+                                                       UIActivityTypePrint,
+                                                       UIActivityTypeOpenInIBooks,
+                                                       UIActivityTypeAddToReadingList,
+                                                       UIActivityTypeCopyToPasteboard]];
     
-    [self.navigationController pushViewController:[PromotionsViewController new]
-                                         animated:YES];
+    [self presentViewController:activityViewController
+                       animated:YES
+                     completion:nil];
 }
 
 - (IBAction)didTapShareCopyButton:(id)sender {
     UIPasteboard *pasteBoard = [UIPasteboard generalPasteboard];
-    [pasteBoard setString:self.promoCodeLabel.text];
+    [pasteBoard setString:self.inviteURL];
+    
+    [SVProgressHUD showInfoWithStatus:@"Copied to clipboard"];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [SVProgressHUD dismiss];
+    });
 }
 
 #pragma mark - API Calls
@@ -120,10 +132,13 @@
     [self.promoCodeLabel setText:@""];
     [self.promoDescriptionLabel setText:@""];
     
-    NSString *inviteCode = [[NSUserDefaults standardUserDefaults] objectForKey:@"INVITE_CODE"];
+    NSDictionary *invite = [[NSUserDefaults standardUserDefaults] objectForKey:@"INVITE_CREDIT"];
     
-    if (inviteCode) {
-        [self.promoCodeLabel setText:inviteCode];
+    if (invite) {
+        [self.promoCodeLabel setText:invite[@"code"]];
+        [self.promoDescriptionLabel setText:invite[@"description"]];
+        self.inviteMessage = invite[@"message"];
+        self.inviteURL = invite[@"url"];
     } else {
         SharedData *sharedData = [SharedData sharedInstance];
         AFHTTPRequestOperationManager *manager = [sharedData getOperationManager];
@@ -151,10 +166,21 @@
                     if (data && data != nil) {
                         NSDictionary *inviteCode = [data objectForKey:@"invite_code"];
                         NSString *code = inviteCode[@"code"];
+                        NSString *description = inviteCode[@"msg_invite"];
+                        NSString *message = inviteCode[@"msg_share"];
+                        NSString *url = inviteCode[@"invite_url"];
                         
                         [self.promoCodeLabel setText:code];
+                        [self.promoDescriptionLabel setText:description];
+                        self.inviteMessage = message;
+                        self.inviteURL = url;
                         
-                        [[NSUserDefaults standardUserDefaults] setObject:code forKey:@"INVITE_CODE"];
+                        NSDictionary *invite = @{@"code" : code,
+                                                 @"description" : description,
+                                                 @"message" : message,
+                                                 @"url" : url};
+                        
+                        [[NSUserDefaults standardUserDefaults] setObject:invite forKey:@"INVITE_CREDIT"];
                         [[NSUserDefaults standardUserDefaults] synchronize];
                     }
                 }

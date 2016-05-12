@@ -32,6 +32,12 @@
     [self.navigationController setNavigationBarHidden:NO];
 }
 
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    
+    [self.navigationController setNavigationBarHidden:YES];
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -54,6 +60,12 @@
 
 #pragma mark - View
 - (void)setupView {
+    [self.navigationController.navigationBar setBarTintColor:[UIColor phPurpleColor]];
+    [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
+    [self.navigationController.navigationBar setTranslucent:NO];
+    [self.navigationController.navigationBar setTitleTextAttributes:
+     @{NSForegroundColorAttributeName:[UIColor whiteColor]}];
+    
     self.title = @"Promotions";
     
     CGFloat cornerRadius = 4.f;
