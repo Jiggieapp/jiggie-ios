@@ -49,12 +49,12 @@
                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                     <nil key="highlightedColor"/>
                                 </label>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="DISKY8" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ROc-Mk-cU3">
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="CODE8" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ROc-Mk-cU3">
                                     <rect key="frame" x="-42" y="-21" width="42" height="21"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="60" id="Ubh-u3-mZE"/>
                                     </constraints>
-                                    <fontDescription key="fontDescription" name="Lato-Bold" family="Lato" pointSize="36"/>
+                                    <fontDescription key="fontDescription" name="Lato-Bold" family="Lato" pointSize="32"/>
                                     <color key="textColor" red="0.63921568630000003" green="0.18039215689999999" blue="0.81176470590000005" alpha="1" colorSpace="calibratedRGB"/>
                                     <nil key="highlightedColor"/>
                                     <variation key="default">

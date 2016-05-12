@@ -230,6 +230,8 @@ static NSString *const InviteFriendsTableViewCellIdentifier = @"InviteFriendsTab
             [self.tableView reloadData];
         });
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        [SVProgressHUD dismiss];
+        
         dispatch_async(dispatch_get_main_queue(), ^{
             [self setInviteFriendsTableViewCell:cell asInvited:NO];
         });
@@ -291,6 +293,7 @@ static NSString *const InviteFriendsTableViewCellIdentifier = @"InviteFriendsTab
             [self.tableView reloadData];
         });
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        [SVProgressHUD dismiss];
     }];
 }
 

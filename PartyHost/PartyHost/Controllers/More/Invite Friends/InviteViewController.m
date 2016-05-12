@@ -9,6 +9,7 @@
 #import "InviteViewController.h"
 #import "PromotionsViewController.h"
 #import "InviteFriendsViewController.h"
+#import "SVProgressHUD.h"
 #import <FBSDKShareKit/FBSDKShareKit.h>
 
 @interface InviteViewController () {
@@ -24,6 +25,7 @@
     // Do any additional setup after loading the view from its nib.
     
     [self setupView];
+    [self getInvitationCode];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -111,6 +113,59 @@
 - (IBAction)didTapShareCopyButton:(id)sender {
     UIPasteboard *pasteBoard = [UIPasteboard generalPasteboard];
     [pasteBoard setString:self.promoCodeLabel.text];
+}
+
+#pragma mark - API Calls
+- (void)getInvitationCode {
+    [self.promoCodeLabel setText:@""];
+    [self.promoDescriptionLabel setText:@""];
+    
+    NSString *inviteCode = [[NSUserDefaults standardUserDefaults] objectForKey:@"INVITE_CODE"];
+    
+    if (inviteCode) {
+        [self.promoCodeLabel setText:inviteCode];
+    } else {
+        SharedData *sharedData = [SharedData sharedInstance];
+        AFHTTPRequestOperationManager *manager = [sharedData getOperationManager];
+        NSString *url = [NSString stringWithFormat:@"%@/credit/invite_code/%@", PHBaseNewURL, sharedData.fb_id];
+        
+        [SVProgressHUD show];
+        [manager GET:url parameters:@{} success:^(AFHTTPRequestOperation *operation, id responseObject) {
+            [SVProgressHUD dismiss];
+            
+            NSInteger responseStatusCode = operation.response.statusCode;
+            if (responseStatusCode != 200) {
+                return;
+            }
+            
+            NSString *responseString = operation.responseString;
+            NSError *error;
+            NSDictionary *json = (NSDictionary *)[NSJSONSerialization
+                                                  JSONObjectWithData:[responseString dataUsingEncoding:NSUTF8StringEncoding]
+                                                  options:kNilOptions
+                                                  error:&error];
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (json && json != nil) {
+                    NSDictionary *data = [json objectForKey:@"data"];
+                    if (data && data != nil) {
+                        NSDictionary *inviteCode = [data objectForKey:@"invite_code"];
+                        NSString *code = inviteCode[@"code"];
+                        
+                        [self.promoCodeLabel setText:code];
+                        
+                        [[NSUserDefaults standardUserDefaults] setObject:code forKey:@"INVITE_CODE"];
+                        [[NSUserDefaults standardUserDefaults] synchronize];
+                    }
+                }
+            });
+        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+            [SVProgressHUD dismiss];
+            
+            [self.promoCodeLabel setText:@""];
+            [self.promoDescriptionLabel setText:@""];
+        }];
+    }
 }
 
 @end
