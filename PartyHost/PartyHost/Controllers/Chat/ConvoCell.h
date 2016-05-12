@@ -10,7 +10,7 @@
 #import "NSDate+TimeAgo.h"
 #import "MGSwipeTableCell.h"
 
-@class Chat;
+@class Chat, Friend;
 
 @interface ConvoCell : MGSwipeTableCell
 
@@ -24,6 +24,7 @@
 @property(nonatomic,strong) UILabel     *dateLabel;
 
 - (void)clearData;
-- (void)loadData:(Chat *)chat;
+- (void)loadChatData:(Chat *)chat;
+- (void)loadFriendData:(Friend *)friend;
 
 @end

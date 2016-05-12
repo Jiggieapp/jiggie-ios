@@ -35,6 +35,7 @@
     upgradeTxt.text = @"There is a new version of \nJiggie!\n Please tap below to upgrade!";
     upgradeTxt.textAlignment = NSTextAlignmentCenter;
     upgradeTxt.font = [UIFont phBlond:18];
+    [upgradeTxt setEditable:NO];
     [self addSubview:upgradeTxt];
     
     

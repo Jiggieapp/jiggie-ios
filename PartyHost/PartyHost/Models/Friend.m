@@ -12,12 +12,45 @@
 
 @implementation Friend
 
++ (NSDictionary *)JSONKeyPathsByPropertyKey {
+    return @{@"fbID" : @"fb_id",
+             @"imgURL" : @"img_url",
+             @"firstName" : @"first_name",
+             @"lastName" : @"last_name",
+             @"about" : @"about",
+             @"connectState" : @"is_connect"};
+}
 
++ (NSValueTransformer *)connectStateJSONTransformer {
+    return [NSValueTransformer mtl_valueMappingTransformerWithDictionary:@{@(1): @(FriendStateConnected),
+                                                                           @(0): @(FriendStateNotConnected)}];
+}
+
+#pragma mark - Archive
++ (NSString *)pathToArchive {
+    return [[[[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory
+                                                     inDomains:NSUserDomainMask] lastObject]
+             URLByAppendingPathComponent:@"friend.model"] path];
+}
+
++ (void)archiveObject:(NSArray *)object {
+    [NSKeyedArchiver archiveRootObject:object
+                                toFile:[Friend pathToArchive]];
+}
+
++ (NSArray *)unarchiveObject {
+    return [NSKeyedUnarchiver unarchiveObjectWithFile:[Friend pathToArchive]];
+}
+
++ (void)removeArchivedObject {
+    NSError *error = nil;
+    [[NSFileManager defaultManager] removeItemAtPath:[Friend pathToArchive] error:&error];
+}
 
 #pragma mark - API 
 + (void)retrieveFacebookFriendsWithCompletionHandler:(FacebookFriendCompletionHandler)completion {
     FBSDKGraphRequest *request = [[FBSDKGraphRequest alloc]
-                                  initWithGraphPath:@"me/friends"
+                                  initWithGraphPath:@"me/friends?limit=5000"
                                   parameters:nil
                                   HTTPMethod:@"GET"];
     [request startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection,
@@ -41,19 +74,59 @@
     }];
 }
 
-+ (void)enableSocialFeed:(BOOL)enabled withCompletionHandler:(MatchFeedCompletionHandler)completion {
++ (void)generateSocialFriend:(NSArray *)friendIDs WithCompletionHandler:(SocialFriendCompletionHandler)completion {
     SharedData *sharedData = [SharedData sharedInstance];
-    NSString *matchMe = enabled ? @"yes" : @"no";
     AFHTTPRequestOperationManager *manager = [sharedData getOperationManager];
-    NSString *url = [NSString stringWithFormat:@"%@/partyfeed/settings/%@/%@", PHBaseNewURL, sharedData.fb_id, matchMe];
+    NSString *url = [NSString stringWithFormat:@"%@/credit/list_social_friends/", PHBaseNewURL];
     
-    [manager GET:url parameters:@{} success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    NSDictionary *params = @{@"fb_id":sharedData.fb_id,
+                             @"friends_fb_id":friendIDs};
+    
+    [manager POST:url parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSError *error = nil;
+        NSArray *friends = [MTLJSONAdapter modelsOfClass:[Friend class]
+                                           fromJSONArray:responseObject[@"data"][@"list_social_friends"]
+                                                   error:&error];
+        
         if (completion) {
-            completion(nil);
+            completion(friends,
+                       operation.response.statusCode,
+                       nil);
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         if (completion) {
-            completion(error);
+            completion(nil,
+                       operation.response.statusCode,
+                       error);
+        }
+    }];
+}
+
++ (void)connectFriend:(NSArray *)friendIDs WithCompletionHandler:(ConnectFriendCompletionHandler)completion {
+    SharedData *sharedData = [SharedData sharedInstance];
+    AFHTTPRequestOperationManager *manager = [sharedData getOperationManager];
+    NSString *url = [NSString stringWithFormat:@"%@/credit/social_friends/", PHBaseNewURL];
+    
+    NSDictionary *params = @{@"fb_id":sharedData.fb_id,
+                             @"friends_fb_id":friendIDs};
+    
+    [manager POST:url parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        @try {
+            BOOL success = [responseObject[@"response"] boolValue];
+            
+            NSString *msg = responseObject[@"msg"];
+            if (completion) {
+                completion(success, msg, operation.response.statusCode, nil);
+            }
+        } @catch (NSException *exception) {
+            
+        } @finally {
+            
+        }
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        if (completion) {
+            completion(NO, nil, operation.response.statusCode, error);
         }
     }];
 }

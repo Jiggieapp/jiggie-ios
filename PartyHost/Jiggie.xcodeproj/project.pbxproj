@@ -130,6 +130,8 @@
 		DA10F51E1C52149F006090ED /* SVProgressHUD.bundle in Resources */ = {isa = PBXBuildFile; fileRef = DA10F5181C52149F006090ED /* SVProgressHUD.bundle */; };
 		DA10F51F1C52149F006090ED /* SVProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = DA10F51A1C52149F006090ED /* SVProgressHUD.m */; };
 		DA10F5201C52149F006090ED /* SVRadialGradientLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = DA10F51C1C52149F006090ED /* SVRadialGradientLayer.m */; };
+		DA14910F1CE33C3A00566173 /* EmptyCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DA14910D1CE33C3A00566173 /* EmptyCell.m */; };
+		DA1491101CE33C3A00566173 /* EmptyCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA14910E1CE33C3A00566173 /* EmptyCell.xib */; };
 		DA3306991CDA61A500A4126D /* JDFSequentialTooltipManager.m in Sources */ = {isa = PBXBuildFile; fileRef = DA33068F1CDA61A500A4126D /* JDFSequentialTooltipManager.m */; };
 		DA33069A1CDA61A500A4126D /* JDFTooltipManager.m in Sources */ = {isa = PBXBuildFile; fileRef = DA3306911CDA61A500A4126D /* JDFTooltipManager.m */; };
 		DA33069B1CDA61A500A4126D /* JDFTooltipView.m in Sources */ = {isa = PBXBuildFile; fileRef = DA3306941CDA61A500A4126D /* JDFTooltipView.m */; };
@@ -671,6 +673,9 @@
 		DA10F51A1C52149F006090ED /* SVProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SVProgressHUD.m; sourceTree = "<group>"; };
 		DA10F51B1C52149F006090ED /* SVRadialGradientLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVRadialGradientLayer.h; sourceTree = "<group>"; };
 		DA10F51C1C52149F006090ED /* SVRadialGradientLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SVRadialGradientLayer.m; sourceTree = "<group>"; };
+		DA14910C1CE33C3A00566173 /* EmptyCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmptyCell.h; sourceTree = "<group>"; };
+		DA14910D1CE33C3A00566173 /* EmptyCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmptyCell.m; sourceTree = "<group>"; };
+		DA14910E1CE33C3A00566173 /* EmptyCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EmptyCell.xib; sourceTree = "<group>"; };
 		DA33068E1CDA61A500A4126D /* JDFSequentialTooltipManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JDFSequentialTooltipManager.h; sourceTree = "<group>"; };
 		DA33068F1CDA61A500A4126D /* JDFSequentialTooltipManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JDFSequentialTooltipManager.m; sourceTree = "<group>"; };
 		DA3306901CDA61A500A4126D /* JDFTooltipManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JDFTooltipManager.h; sourceTree = "<group>"; };
@@ -2282,6 +2287,9 @@
 				DAABB1261C1FF13A004DDCFA /* TrendButton.m */,
 				DAABB1271C1FF13A004DDCFA /* UserBubble.h */,
 				DAABB1281C1FF13A004DDCFA /* UserBubble.m */,
+				DA14910C1CE33C3A00566173 /* EmptyCell.h */,
+				DA14910D1CE33C3A00566173 /* EmptyCell.m */,
+				DA14910E1CE33C3A00566173 /* EmptyCell.xib */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -2886,6 +2894,7 @@
 				9366745F1CD8562300AC94F3 /* SidePhotoTableViewCell.xib in Resources */,
 				DAABB1001C1FD50E004DDCFA /* SignupPages.xib in Resources */,
 				DAABB2E91C1FF993004DDCFA /* Lato-Italic.ttf in Resources */,
+				DA1491101CE33C3A00566173 /* EmptyCell.xib in Resources */,
 				936674741CE1DCFE00AC94F3 /* PromotionsViewController.xib in Resources */,
 				DAABB0EB1C1FD50E004DDCFA /* EventsPopup.xcassets in Resources */,
 				DAABB2E81C1FF993004DDCFA /* Lato-Bold.ttf in Resources */,
@@ -3293,6 +3302,7 @@
 				DAABB0C41C1FD50E004DDCFA /* Events.m in Sources */,
 				DAABB28B1C1FF5AE004DDCFA /* MPABTestDesignerTweakRequestMessage.m in Sources */,
 				938CE7D51CCF629700ADDD4C /* Feed.m in Sources */,
+				DA14910F1CE33C3A00566173 /* EmptyCell.m in Sources */,
 				936674731CE1DCFE00AC94F3 /* PromotionsViewController.m in Sources */,
 				DAABB29D1C1FF5AE004DDCFA /* MPNotification.m in Sources */,
 				DAABB0F81C1FD50E004DDCFA /* SetupLocationView.m in Sources */,
