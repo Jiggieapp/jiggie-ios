@@ -16,10 +16,32 @@
 @property (copy, nonatomic) NSString *name;
 @property (strong, nonatomic) NSArray *phones;
 @property (strong, nonatomic) NSArray *emails;
+@property (assign, nonatomic) BOOL isActive;
 
 @end
 
 @implementation Contact
+
++ (NSDictionary *)JSONKeyPathsByPropertyKey {
+    return @{@"recordID" : @"record_id",
+             @"name" : @"name",
+             @"emails" : @"email",
+             @"phones" : @"phone",
+             @"isActive" : @"is_active"};
+}
+
++ (NSValueTransformer *)recordIDJSONTransformer {
+    return [MTLValueTransformer transformerUsingForwardBlock:^id(id value, BOOL *success, NSError *__autoreleasing *error) {
+        return value;
+    } reverseBlock:^id(id value, BOOL *success, NSError *__autoreleasing *error) {
+        return [NSNumber numberWithInteger:[value integerValue]];
+    }];
+}
+
++ (NSValueTransformer *)isActiveJSONTransformer {
+    return [NSValueTransformer mtl_valueMappingTransformerWithDictionary:@{@(0) : @(NO),
+                                                                           @(1) : @(YES)}];
+}
 
 - (instancetype)initWithContact:(APContact *)contact {
     if (self = [super init]) {
@@ -43,9 +65,14 @@
         
         self.phones = phonesNumber;
         self.emails = emailsAddress;
+        self.isActive = NO;
     }
     
     return self;
+}
+
+- (void)setThumbnailWithImage:(UIImage *)image {
+    self.thumbnail = image;
 }
 
 #pragma mark - Archive
