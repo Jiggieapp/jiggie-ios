@@ -12,14 +12,17 @@
 #import "SVProgressHUD.h"
 #import "APContact.h"
 #import "Contact.h"
+#import <MessageUI/MessageUI.h>
 
 static NSString *const InviteFriendsTableViewCellIdentifier = @"InviteFriendsTableViewCellIdentifier";
 
-@interface InviteFriendsViewController () <UITableViewDataSource, UITableViewDelegate, UIAlertViewDelegate, InviteFriendsTableViewCellDelegate>
+@interface InviteFriendsViewController () <MFMessageComposeViewControllerDelegate, UITableViewDataSource, UITableViewDelegate, UIAlertViewDelegate, InviteFriendsTableViewCellDelegate>
 
 @property (strong, nonatomic) APAddressBook *addressBook;
 @property (strong, nonatomic) NSMutableArray *contacts;
+@property (strong, nonatomic) Contact *selectedContact;
 @property (strong, nonatomic) NSMutableArray *invitedFriendsRecordIDs;
+@property (copy, nonatomic) NSString *inviteMessage;
 
 @end
 
@@ -31,6 +34,7 @@ static NSString *const InviteFriendsTableViewCellIdentifier = @"InviteFriendsTab
     self.invitedFriendsRecordIDs = [NSMutableArray array];
     
     [self setupView];
+    [self getInvitationMessage];
     
     __weak typeof(self) weakSelf = self;
     [self.addressBook startObserveChangesWithCallback:^{
@@ -154,18 +158,20 @@ static NSString *const InviteFriendsTableViewCellIdentifier = @"InviteFriendsTab
                     NSArray *contactsModel = [MTLJSONAdapter modelsOfClass:[Contact class]
                                                              fromJSONArray:responseObject[@"data"][@"contact"]
                                                                      error:&error];
-                    NSArray *recordIDs = [contactsModel valueForKey:@"recordID"];
+                    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES];
+                    NSArray *sortedContactsModel = [contactsModel sortedArrayUsingDescriptors:@[sortDescriptor]];
+                    NSArray *recordIDs = [sortedContactsModel valueForKey:@"recordID"];
+                    
                     for (Contact *contact in contactsModel) {
-                        if ([recordIDs containsObject:contact.recordID]) {
-                            APContact *apContact = contacts[[recordIDs indexOfObject:contact.recordID]];
-                            [contact setThumbnailWithImage:apContact.thumbnail];
-                        }
+                        APContact *apContact = contacts[[recordIDs indexOfObject:contact.recordID]];
+                        [contact setThumbnailWithImage:apContact.thumbnail];
                     }
                     
                     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.isActive == %@", [NSNumber numberWithBool:YES]];
                     NSArray *contacts = [contactsModel filteredArrayUsingPredicate:predicate];
+                    NSArray *sortedContacts = [contacts sortedArrayUsingDescriptors:@[sortDescriptor]];
                     
-                    weakSelf.contacts = [NSMutableArray arrayWithArray:contacts];
+                    weakSelf.contacts = [NSMutableArray arrayWithArray:sortedContacts];
                     [weakSelf.tableView reloadData];
                 });
             } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -220,7 +226,7 @@ static NSString *const InviteFriendsTableViewCellIdentifier = @"InviteFriendsTab
 
 }
 
-#pragma mark - 
+#pragma mark --
 - (void)setInviteFriendsTableViewCell:(InviteFriendsTableViewCell *)cell asInvited:(BOOL)invited {
     if (invited) {
         cell.inviteButton.backgroundColor = [UIColor phGrayColor];
@@ -235,45 +241,78 @@ static NSString *const InviteFriendsTableViewCellIdentifier = @"InviteFriendsTab
 
 #pragma mark - InviteFriendsTableViewCellDelegate
 - (void)InviteFriendsTableViewCell:(InviteFriendsTableViewCell *)cell didTapInviteButton:(UIButton *)sender {
-    SharedData *sharedData = [SharedData sharedInstance];
-    AFHTTPRequestOperationManager *manager = [sharedData getOperationManager];
-    NSString *url = [NSString stringWithFormat:@"%@/credit/invite", PHBaseNewURL];
     Contact *contact = self.contacts[[self.tableView indexPathForCell:cell].row];
-    NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithDictionary:@{@"fb_id" : sharedData.fb_id,
-                                                                                      @"contact" : @{
-                                                                                              @"name" : contact.name,
-                                                                                              @"phone" : contact.phones ?: @[],
-                                                                                              @"email" : contact.emails ?: @[]
-                                                                                              }
-                                                                                      }];
+    self.selectedContact = contact;
     
-    [SVProgressHUD show];
-    [manager POST:url parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        [SVProgressHUD dismiss];
+    if (!contact.emails || [contact.emails.firstObject isEqualToString:@""]) {
+        if ([MFMessageComposeViewController canSendText]) {
+            MFMessageComposeViewController *messageComposeViewController = [[MFMessageComposeViewController alloc] init];
+            [messageComposeViewController setMessageComposeDelegate:self];
+            [messageComposeViewController setRecipients:contact.phones];
+            [messageComposeViewController setBody:self.inviteMessage];
+            
+            [self presentViewController:messageComposeViewController
+                               animated:YES
+                             completion:nil];
+        }
+    } else {
+        SharedData *sharedData = [SharedData sharedInstance];
+        AFHTTPRequestOperationManager *manager = [sharedData getOperationManager];
+        NSString *url = [NSString stringWithFormat:@"%@/credit/invite", PHBaseNewURL];
+        NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithDictionary:@{@"fb_id" : sharedData.fb_id,
+                                                                                          @"contact" : @{
+                                                                                                  @"name" : contact.name,
+                                                                                                  @"phone" : contact.phones ?: @[],
+                                                                                                  @"email" : contact.emails ?: @[]
+                                                                                                  }
+                                                                                          }];
         
-        NSInteger responseStatusCode = operation.response.statusCode;
-        if (responseStatusCode != 200) {
+        [SVProgressHUD show];
+        [manager POST:url parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+            [SVProgressHUD dismiss];
+            
+            NSInteger responseStatusCode = operation.response.statusCode;
+            if (responseStatusCode != 200) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self setInviteFriendsTableViewCell:cell asInvited:NO];
+                });
+                
+                return;
+            }
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (![self.invitedFriendsRecordIDs containsObject:contact.recordID]) {
+                    [self.invitedFriendsRecordIDs addObject:contact.recordID];
+                }
+                
+                [self.tableView reloadData];
+            });
+        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+            [SVProgressHUD dismiss];
+            
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self setInviteFriendsTableViewCell:cell asInvited:NO];
             });
-            
-            return;
-        }
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if (![self.invitedFriendsRecordIDs containsObject:contact.recordID]) {
-                [self.invitedFriendsRecordIDs addObject:contact.recordID];
+        }];
+    }
+}
+
+#pragma mark - MFMessageComposeViewControllerDelegate
+- (void)messageComposeViewController:(MFMessageComposeViewController *)controller didFinishWithResult:(MessageComposeResult)result {
+    switch (result) {
+        case MessageComposeResultSent:
+            if (![self.invitedFriendsRecordIDs containsObject:self.selectedContact.recordID]) {
+                [self.invitedFriendsRecordIDs addObject:self.selectedContact.recordID];
             }
             
             [self.tableView reloadData];
-        });
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        [SVProgressHUD dismiss];
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self setInviteFriendsTableViewCell:cell asInvited:NO];
-        });
-    }];
+            break;
+            
+        default:
+            break;
+    }
+    
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark - UIAlertViewDelegate
@@ -326,6 +365,62 @@ static NSString *const InviteFriendsTableViewCellIdentifier = @"InviteFriendsTab
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         [SVProgressHUD dismiss];
     }];
+}
+
+#pragma mark --
+- (void)getInvitationMessage {
+    
+    NSDictionary *invite = [[NSUserDefaults standardUserDefaults] objectForKey:@"INVITE_CREDIT"];
+    
+    if (invite) {
+        self.inviteMessage = invite[@"message"];
+    } else {
+        SharedData *sharedData = [SharedData sharedInstance];
+        AFHTTPRequestOperationManager *manager = [sharedData getOperationManager];
+        NSString *url = [NSString stringWithFormat:@"%@/credit/invite_code/%@", PHBaseNewURL, sharedData.fb_id];
+        
+        [SVProgressHUD show];
+        [manager GET:url parameters:@{} success:^(AFHTTPRequestOperation *operation, id responseObject) {
+            [SVProgressHUD dismiss];
+            
+            NSInteger responseStatusCode = operation.response.statusCode;
+            if (responseStatusCode != 200) {
+                return;
+            }
+            
+            NSString *responseString = operation.responseString;
+            NSError *error;
+            NSDictionary *json = (NSDictionary *)[NSJSONSerialization
+                                                  JSONObjectWithData:[responseString dataUsingEncoding:NSUTF8StringEncoding]
+                                                  options:kNilOptions
+                                                  error:&error];
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (json && json != nil) {
+                    NSDictionary *data = [json objectForKey:@"data"];
+                    if (data && data != nil) {
+                        NSDictionary *inviteCode = [data objectForKey:@"invite_code"];
+                        NSString *code = inviteCode[@"code"];
+                        NSString *description = inviteCode[@"msg_invite"];
+                        NSString *message = inviteCode[@"msg_share"];
+                        NSString *url = inviteCode[@"invite_url"];
+                        
+                        self.inviteMessage = message;
+                        
+                        NSDictionary *invite = @{@"code" : code,
+                                                 @"description" : description,
+                                                 @"message" : message,
+                                                 @"url" : url};
+                        
+                        [[NSUserDefaults standardUserDefaults] setObject:invite forKey:@"INVITE_CREDIT"];
+                        [[NSUserDefaults standardUserDefaults] synchronize];
+                    }
+                }
+            });
+        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+            [SVProgressHUD dismiss];
+        }];
+    }
 }
 
 @end
