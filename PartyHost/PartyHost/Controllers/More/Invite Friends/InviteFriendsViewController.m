@@ -66,9 +66,26 @@ static NSString *const InviteFriendsTableViewCellIdentifier = @"InviteFriendsTab
 
 #pragma mark - View
 - (void)setupView {
+    [self.navigationController.navigationBar setBarTintColor:[UIColor phPurpleColor]];
+    [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
+    [self.navigationController.navigationBar setTranslucent:NO];
+    [self.navigationController.navigationBar setTitleTextAttributes:
+     @{NSForegroundColorAttributeName:[UIColor whiteColor]}];
+    
     self.title = @"Invite Friends";
     [self.tableView registerNib:[InviteFriendsTableViewCell nib]
          forCellReuseIdentifier:InviteFriendsTableViewCellIdentifier];
+    
+    if (self.isShowCloseButton) {
+        UIButton *closeButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        [closeButton setFrame:CGRectMake(0.0f, 0.0f, 40.0f, 27.0f)];
+        [closeButton setTitle:@"Done" forState:UIControlStateNormal];
+        [[closeButton titleLabel] setFont:[UIFont phBlond:14.0]];
+        [closeButton addTarget:self action:@selector(closeButtonDidTap:) forControlEvents:UIControlEventTouchUpInside];
+        UIBarButtonItem *closeBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:closeButton];
+        
+        [[self navigationItem] setRightBarButtonItem:closeBarButtonItem];
+    }
 }
 
 #pragma mark - Contacts
@@ -291,6 +308,10 @@ static NSString *const InviteFriendsTableViewCellIdentifier = @"InviteFriendsTab
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         [SVProgressHUD dismiss];
     }];
+}
+
+- (void)closeButtonDidTap:(id)sender {
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 @end
