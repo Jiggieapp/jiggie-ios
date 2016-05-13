@@ -570,6 +570,8 @@
         [self.likeCount setText:[NSString stringWithFormat:@"%li", likeCount]];
         
         [self postLikeEvent:NO];
+        
+        [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Unlike Event Details" withDict:self.sharedData.mixPanelCEventDict];
     } else {
         [likeButton setSelected:YES];
 
@@ -578,6 +580,8 @@
         [self.likeCount setText:[NSString stringWithFormat:@"%li", likeCount]];
         
         [self postLikeEvent:YES];
+        
+        [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Like Event Details" withDict:self.sharedData.mixPanelCEventDict];
     }
 }
 

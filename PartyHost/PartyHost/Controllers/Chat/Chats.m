@@ -44,6 +44,14 @@
     title.font = [UIFont phBlond:16];
     [tabBar addSubview:title];
     
+    UIButton *inviteButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [inviteButton setFrame:CGRectMake(self.sharedData.screenWidth - 50, 20.0f, 40.0f, 40.0f)];
+    [inviteButton setImageEdgeInsets:UIEdgeInsetsMake(10, 10, 10, 10)];
+    [inviteButton setImage:[UIImage imageNamed:@"icon_plus_blue"] forState:UIControlStateNormal];
+    [[inviteButton imageView] setTintColor:[UIColor whiteColor]];
+    [inviteButton addTarget:self action:@selector(inviteButtonDidTap:) forControlEvents:UIControlEventTouchUpInside];
+    [tabBar addSubview:inviteButton];
+    
     self.segmentationView = [[UIView alloc] initWithFrame:CGRectMake(0, 60, frame.size.width, 34)];
     [self.segmentationView setBackgroundColor:[UIColor colorFromHexCode:@"B238DE"]];
     [self addSubview:self.segmentationView];
@@ -173,6 +181,11 @@
     {
         [self initClass];
     }
+}
+
+- (void)inviteButtonDidTap:(id)sender {
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"SHOW_INVITE_CONTACT_FRIENDS"
+                                                        object:nil];
 }
 
 #pragma mark - Fetch
@@ -635,7 +648,7 @@
         }
     } else if ([tableView isEqual:self.friendsList]) {
         if (self.friends && self.friends.count > 0) {
-            return self.friends.count;
+            return self.friends.count + 1;
         }
     }
     return 1;
@@ -692,6 +705,23 @@
         
     } else if ([tableView isEqual:self.friendsList]) {
         if (self.friends && self.friends.count > 0) {
+            if (indexPath.row == self.friends.count) {
+                static NSString *simpleTableIdentifier = @"InviteCell";
+                UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:simpleTableIdentifier];
+                if (cell == nil) {
+                    cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:simpleTableIdentifier];
+                    
+                    UIButton *inviteButton = [[UIButton alloc] initWithFrame:CGRectMake((self.sharedData.screenWidth - 160)/2, 20, 160, 40)];
+                    [inviteButton addTarget:self action:@selector(inviteButtonDidTap:) forControlEvents:UIControlEventTouchUpInside];
+                    [inviteButton setTitle:@"Invite Friends" forState:UIControlStateNormal];
+                    [inviteButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+                    [[inviteButton titleLabel] setFont:[UIFont phBold:14]];
+                    [inviteButton setBackgroundColor:[UIColor phBlueColor]];
+                    [[cell contentView] addSubview:inviteButton];
+                }
+                
+                return cell;
+            }
             static NSString *simpleTableIdentifier = @"Friend-ConvoCell";
             
             ConvoCell *cell = [tableView dequeueReusableCellWithIdentifier:simpleTableIdentifier];
@@ -718,7 +748,7 @@
     if (self.isFriendFirstLoad) {
         [cell setMode:@"load" withMessage:nil];
     } else {
-        [cell setMode:@"empty" withMessage:@"No friends yet"];
+        [cell setMode:@"empty" withMessage:@"Invite more friends"];
     }
     
     return cell;

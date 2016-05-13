@@ -195,6 +195,7 @@
 
 - (void)viewOrderButtonDidTap:(id)sender {
     PurchaseHistoryViewController *purchaseHistoryViewController = [[PurchaseHistoryViewController alloc] init];
+    [purchaseHistoryViewController setIsModalScreen:YES];
     [self.navigationController pushViewController:purchaseHistoryViewController animated:YES];
 }
 

@@ -13,4 +13,5 @@
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
 @property (strong, nonatomic) IBOutlet UIButton *inviteAllButton;
 
+@property (assign, nonatomic) BOOL isShowCloseButton;
 @end

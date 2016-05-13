@@ -68,7 +68,11 @@
 }
 
 - (void)backButtonDidTap:(id)sender {
-    [self dismissViewControllerAnimated:YES completion:nil];
+    if (self.isModalScreen) {
+        [self dismissViewControllerAnimated:YES completion:nil];
+    } else {
+        [self.navigationController popViewControllerAnimated:YES];
+    }
 }
 
 #pragma mark - Data

@@ -18,6 +18,7 @@
 #import "ProfileViewController.h"
 #import "InviteViewController.h"
 #import "PromotionsViewController.h"
+#import "InviteFriendsViewController.h"
 
 @interface ViewController ()
 
@@ -158,6 +159,12 @@
      addObserver:self
      selector:@selector(showInviteFriends:)
      name:@"SHOW_INVITE_FRIENDS"
+     object:nil];
+    
+    [[NSNotificationCenter defaultCenter]
+     addObserver:self
+     selector:@selector(showInviteContactFriends:)
+     name:@"SHOW_INVITE_CONTACT_FRIENDS"
      object:nil];
     
     [[NSNotificationCenter defaultCenter]
@@ -674,8 +681,7 @@
 
 - (void)showPurchaseHistory:(NSNotification *)notification {
     PurchaseHistoryViewController *purchaseHistoryViewController = [[PurchaseHistoryViewController alloc] init];
-    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:purchaseHistoryViewController];
-    [self presentViewController:navigationController animated:YES completion:nil];
+    [self.navigationController pushViewController:purchaseHistoryViewController animated:YES];
 }
 
 #pragma mark - Profile Notification
@@ -692,6 +698,18 @@
                                                                             action:nil];
     
     [self.navigationController pushViewController:[InviteViewController new] animated:YES];
+}
+
+- (void)showInviteContactFriends:(NSNotification *)notification {
+    self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@""
+                                                                             style:UIBarButtonItemStylePlain
+                                                                            target:nil
+                                                                            action:nil];
+    
+    InviteFriendsViewController *inviteFriendsViewController = [[InviteFriendsViewController alloc] init];
+    [inviteFriendsViewController setIsShowCloseButton:YES];
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:inviteFriendsViewController];
+    [self presentViewController:navigationController animated:YES completion:nil];
 }
 
 #pragma mark - Promotions
