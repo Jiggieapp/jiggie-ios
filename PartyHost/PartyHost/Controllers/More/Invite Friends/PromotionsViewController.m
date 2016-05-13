@@ -11,7 +11,7 @@
 #import "InviteFriendsViewController.h"
 #import "UIView+Animation.h"
 
-@interface PromotionsViewController () <SuccessPromotionsViewDelegate>
+@interface PromotionsViewController () <UITextFieldDelegate, SuccessPromotionsViewDelegate>
 
 @property (strong, nonatomic) SuccessPromotionsView *successPromotionView;
 
@@ -92,6 +92,10 @@
 }
 
 #pragma mark - Action
+- (IBAction)didTapRootView:(id)sender {
+    [self.view endEditing:YES];
+}
+
 - (IBAction)didTapApplyButton:(id)sender {
     [self.view presentView:self.successPromotionView animated:YES completion:nil];
 }
@@ -104,6 +108,13 @@
     
     [self.navigationController pushViewController:[InviteFriendsViewController new]
                                          animated:YES];
+}
+
+#pragma mark - UITextFieldDelegate
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    [self.view endEditing:YES];
+    
+    return YES;
 }
 
 #pragma mark - SuccessPromotionsViewDelegate
