@@ -28,13 +28,9 @@ static NSString *const InviteFriendsTableViewCellIdentifier = @"InviteFriendsTab
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
-    [self setupView];
+    self.invitedFriendsRecordIDs = [NSMutableArray array];
     
-    if ([Contact unarchiveRecordIDs]) {
-        self.invitedFriendsRecordIDs = [NSMutableArray arrayWithArray:[Contact unarchiveRecordIDs]];
-    } else {
-        self.invitedFriendsRecordIDs = [NSMutableArray array];
-    }
+    [self setupView];
     
     __weak typeof(self) weakSelf = self;
     [self.addressBook startObserveChangesWithCallback:^{
@@ -116,8 +112,6 @@ static NSString *const InviteFriendsTableViewCellIdentifier = @"InviteFriendsTab
 - (void)loadContacts {
     __weak typeof(self) weakSelf = self;
     
-    [SVProgressHUD show];
-    
     [self.addressBook setFieldsMask:APContactFieldName |
      APContactFieldPhonesOnly |
      APContactFieldEmailsOnly |
@@ -133,10 +127,67 @@ static NSString *const InviteFriendsTableViewCellIdentifier = @"InviteFriendsTab
         return contact.emails.count > 0;
     }];
     [self.addressBook loadContacts:^(NSArray<APContact *> * _Nullable contacts, NSError * _Nullable error) {
-        [SVProgressHUD dismiss];
         if (contacts) {
-            weakSelf.contacts = [NSMutableArray arrayWithArray:contacts];
-            [weakSelf.tableView reloadData];
+            SharedData *sharedData = [SharedData sharedInstance];
+            AFHTTPRequestOperationManager *manager = [sharedData getOperationManager];
+            NSString *url = [NSString stringWithFormat:@"%@/credit/contact", PHBaseNewURL];
+            NSError *error = nil;
+            NSMutableArray *contactsModel = [NSMutableArray arrayWithCapacity:contacts.count];
+            
+            for (APContact *contact in contacts) {
+                [contactsModel addObject:[[Contact alloc] initWithContact:contact]];
+            }
+            
+            NSMutableDictionary *parameters = [NSMutableDictionary
+                                               dictionaryWithDictionary:@{@"fb_id" : sharedData.fb_id,
+                                                                          @"device_type" : @"1",
+                                                                          @"contact" : [MTLJSONAdapter
+                                                                                        JSONArrayFromModels:contactsModel
+                                                                                        error:&error]}];
+            
+            for (NSMutableDictionary *contact in parameters[@"contact"]) {
+                [contact removeObjectForKey:@"is_active"];
+                
+                if ([contact[@"email"] isKindOfClass:[NSNull class]]) {
+                    contact[@"email"] = [@[] mutableCopy];
+                }
+                
+                if ([contact[@"phone"] isKindOfClass:[NSNull class]]) {
+                    contact[@"phone"] = [@[] mutableCopy];
+                }
+            }
+            
+            [SVProgressHUD show];
+            [manager POST:url parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                [SVProgressHUD dismiss];
+                
+                NSInteger responseStatusCode = operation.response.statusCode;
+                if (responseStatusCode != 200) {
+                    return;
+                }
+                
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    NSError *error = nil;
+                    NSArray *contactsModel = [MTLJSONAdapter modelsOfClass:[Contact class]
+                                                             fromJSONArray:responseObject[@"data"][@"contact"]
+                                                                     error:&error];
+                    NSArray *recordIDs = [contactsModel valueForKey:@"recordID"];
+                    for (Contact *contact in contactsModel) {
+                        if ([recordIDs containsObject:contact.recordID]) {
+                            APContact *apContact = contacts[[recordIDs indexOfObject:contact.recordID]];
+                            [contact setThumbnailWithImage:apContact.thumbnail];
+                        }
+                    }
+                    
+                    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.isActive == %@", [NSNumber numberWithBool:YES]];
+                    NSArray *contacts = [contactsModel filteredArrayUsingPredicate:predicate];
+                    
+                    weakSelf.contacts = [NSMutableArray arrayWithArray:contacts];
+                    [weakSelf.tableView reloadData];
+                });
+            } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                [SVProgressHUD dismiss];
+            }];
         }
     }];
 }
@@ -156,15 +207,13 @@ static NSString *const InviteFriendsTableViewCellIdentifier = @"InviteFriendsTab
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
     
     if (self.contacts) {
-        APContact *contact = self.contacts[indexPath.row];
-        [cell configureContact:[[Contact alloc] initWithContact:contact]];
+        Contact *contact = self.contacts[indexPath.row];
+        [cell configureContact:contact];
         [cell setDelegate:self];
         
-        if ([self.invitedFriendsRecordIDs containsObject:contact.recordID]) {
-            [self setInviteFriendsTableViewCell:cell asInvited:YES];
-        } else {
-            [self setInviteFriendsTableViewCell:cell asInvited:NO];
-        }
+        [self setInviteFriendsTableViewCell:cell
+                                  asInvited:[self.invitedFriendsRecordIDs
+                                             containsObject:contact.recordID]];
     }
     
     return cell;
@@ -206,20 +255,14 @@ static NSString *const InviteFriendsTableViewCellIdentifier = @"InviteFriendsTab
     SharedData *sharedData = [SharedData sharedInstance];
     AFHTTPRequestOperationManager *manager = [sharedData getOperationManager];
     NSString *url = [NSString stringWithFormat:@"%@/credit/invite", PHBaseNewURL];
-    Contact *contact = [[Contact alloc] initWithContact:self.contacts[[self.tableView indexPathForCell:cell].row]];
+    Contact *contact = self.contacts[[self.tableView indexPathForCell:cell].row];
     NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithDictionary:@{@"fb_id" : sharedData.fb_id,
                                                                                       @"contact" : @{
-                                                                                              @"name" : contact.name
+                                                                                              @"name" : contact.name,
+                                                                                              @"phone" : contact.phones ?: @[],
+                                                                                              @"email" : contact.emails ?: @[]
                                                                                               }
                                                                                       }];
-    
-    if (contact.phones) {
-        [parameters setObject:@{@"phone" : contact.phones} forKey:@"contact"];
-    }
-    
-    if (contact.emails) {
-        [parameters setObject:@{@"email" : contact.emails} forKey:@"contact"];
-    }
     
     [SVProgressHUD show];
     [manager POST:url parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
@@ -237,7 +280,6 @@ static NSString *const InviteFriendsTableViewCellIdentifier = @"InviteFriendsTab
         dispatch_async(dispatch_get_main_queue(), ^{
             if (![self.invitedFriendsRecordIDs containsObject:contact.recordID]) {
                 [self.invitedFriendsRecordIDs addObject:contact.recordID];
-                [Contact archiveRecordIDs:self.invitedFriendsRecordIDs];
             }
             
             [self.tableView reloadData];
@@ -266,17 +308,11 @@ static NSString *const InviteFriendsTableViewCellIdentifier = @"InviteFriendsTab
     
     NSMutableArray *contacts = [NSMutableArray arrayWithCapacity:self.contacts.count];
     
-    for (APContact *friendContact in self.contacts) {
-        Contact *contact = [[Contact alloc] initWithContact:friendContact];
+    for (Contact *contact in self.contacts) {
         NSMutableDictionary *contactDictionary = [NSMutableDictionary dictionaryWithDictionary:@{@"name" : contact.name}];
         
-        if (contact.phones) {
-            [contactDictionary setObject:contact.phones forKey:@"phone"];
-        }
-        
-        if (contact.emails) {
-            [contactDictionary setObject:contact.emails forKey:@"email"];
-        }
+        [contactDictionary setObject:contact.phones forKey:@"phone"];
+        [contactDictionary setObject:contact.emails forKey:@"email"];
         
         if (![self.invitedFriendsRecordIDs containsObject:contact.recordID]) {
             [contacts addObject:contactDictionary];
@@ -302,7 +338,6 @@ static NSString *const InviteFriendsTableViewCellIdentifier = @"InviteFriendsTab
                 }
             }
             
-            [Contact archiveRecordIDs:self.invitedFriendsRecordIDs];
             [self.tableView reloadData];
         });
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
