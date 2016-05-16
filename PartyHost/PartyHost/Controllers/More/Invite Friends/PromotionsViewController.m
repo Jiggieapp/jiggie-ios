@@ -10,6 +10,7 @@
 #import "SuccessPromotionsView.h"
 #import "InviteFriendsViewController.h"
 #import "UIView+Animation.h"
+#import "SVProgressHUD.h"
 
 @interface PromotionsViewController () <UITextFieldDelegate, SuccessPromotionsViewDelegate>
 
@@ -50,7 +51,7 @@
         _successPromotionView.frame = CGRectMake(.0f,
                                                  .0f,
                                                  CGRectGetWidth([UIScreen mainScreen].bounds) - 40,
-                                                 400.f);
+                                                 350.f);
         _successPromotionView.layer.cornerRadius = 2.0f;
         _successPromotionView.delegate = self;
     }
@@ -97,7 +98,52 @@
 }
 
 - (IBAction)didTapApplyButton:(id)sender {
-    [self.view presentView:self.successPromotionView animated:YES completion:nil];
+    SharedData *sharedData = [SharedData sharedInstance];
+    AFHTTPRequestOperationManager *manager = [sharedData getOperationManager];
+    NSString *url = [NSString stringWithFormat:@"%@/credit/redeem_code", PHBaseNewURL];
+    NSDictionary *parameters = @{@"fb_id" : sharedData.fb_id,
+                                 @"code" : self.promoCodeField.text};
+    
+    [SVProgressHUD show];
+    [manager POST:url parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        [SVProgressHUD dismiss];
+        
+        NSInteger responseStatusCode = operation.response.statusCode;
+        if (responseStatusCode != 200) {
+            return;
+        }
+        
+        NSString *responseString = operation.responseString;
+        NSError *error;
+        NSDictionary *json = (NSDictionary *)[NSJSONSerialization
+                                              JSONObjectWithData:[responseString dataUsingEncoding:NSUTF8StringEncoding]
+                                              options:kNilOptions
+                                              error:&error];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (json && json != nil) {
+                NSDictionary *data = [json objectForKey:@"data"];
+                if (data && data != nil) {
+                    NSDictionary *redeemCode = [data objectForKey:@"redeem_code"];
+                    NSString *message = redeemCode[@"msg"];
+                    NSNumber *isCheck = redeemCode[@"is_check"];
+                    
+                    if ([isCheck boolValue]) {
+                        [self.successPromotionView.promoDescriptionLabel setText:message];
+                        [self.view presentView:self.successPromotionView animated:YES completion:nil];
+                    } else {
+                        [SVProgressHUD showInfoWithStatus:message];
+                        
+                        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                            [SVProgressHUD dismiss];
+                        });
+                    }
+                }
+            }
+        });
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        [SVProgressHUD dismiss];
+    }];
 }
 
 - (IBAction)didTapInviteFriendsButton:(id)sender {

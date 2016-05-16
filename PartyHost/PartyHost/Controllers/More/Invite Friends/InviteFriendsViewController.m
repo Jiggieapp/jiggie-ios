@@ -8,6 +8,7 @@
 
 #import "InviteFriendsViewController.h"
 #import "InviteFriendsTableViewCell.h"
+#import "AnalyticManager.h"
 #import "APAddressBook.h"
 #import "SVProgressHUD.h"
 #import "APContact.h"
@@ -297,6 +298,19 @@ static NSString *const InviteFriendsTableViewCellIdentifier = @"InviteFriendsTab
                 return;
             }
             
+            NSDictionary *invite = [[NSUserDefaults standardUserDefaults] objectForKey:@"INVITE_CREDIT"];
+            
+            if (invite) {
+                NSDictionary *parameters = @{@"Promo Code" : invite[@"code"],
+                                             @"Promo URL" : invite[@"url"],
+                                             @"Contact Full Name" : contact.name,
+                                             @"Contact Email" : contact.emails,
+                                             @"Contact Phone" : contact.phones};
+                
+                [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Share Referral Phone All"
+                                                              withDict:parameters];
+            }
+            
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (![self.invitedFriendsRecordIDs containsObject:contact.recordID]) {
                     [self.invitedFriendsRecordIDs addObject:contact.recordID];
@@ -317,13 +331,28 @@ static NSString *const InviteFriendsTableViewCellIdentifier = @"InviteFriendsTab
 #pragma mark - MFMessageComposeViewControllerDelegate
 - (void)messageComposeViewController:(MFMessageComposeViewController *)controller didFinishWithResult:(MessageComposeResult)result {
     switch (result) {
-        case MessageComposeResultSent:
+        case MessageComposeResultSent: {
             if (![self.invitedFriendsRecordIDs containsObject:self.selectedContact.recordID]) {
                 [self.invitedFriendsRecordIDs addObject:self.selectedContact.recordID];
             }
             
             [self.tableView reloadData];
+            
+            NSDictionary *invite = [[NSUserDefaults standardUserDefaults] objectForKey:@"INVITE_CREDIT"];
+            
+            if (invite) {
+                NSDictionary *parameters = @{@"Promo Code" : invite[@"code"],
+                                             @"Promo URL" : invite[@"url"],
+                                             @"Contact Full Name" : self.selectedContact.name,
+                                             @"Contact Email" : @[],
+                                             @"Contact Phone" : self.selectedContact.phones};
+                
+                [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Share Referral Phone All"
+                                                              withDict:parameters];
+            }
+            
             break;
+        }
             
         default:
             break;
@@ -365,6 +394,16 @@ static NSString *const InviteFriendsTableViewCellIdentifier = @"InviteFriendsTab
     [manager POST:url parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         [SVProgressHUD dismiss];
         
+        NSDictionary *invite = [[NSUserDefaults standardUserDefaults] objectForKey:@"INVITE_CREDIT"];
+        
+        if (invite) {
+            NSDictionary *parameters = @{@"Promo Code" : invite[@"code"],
+                                         @"Promo URL" : invite[@"url"]};
+            
+            [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Share Referral Phone All"
+                                                          withDict:parameters];
+        }
+        
         NSInteger responseStatusCode = operation.response.statusCode;
         if (responseStatusCode != 200) {
             return;
@@ -384,7 +423,7 @@ static NSString *const InviteFriendsTableViewCellIdentifier = @"InviteFriendsTab
     }];
 }
 
-#pragma mark -- Data
+#pragma mark - Data
 - (void)getInvitationMessage {
     
     NSDictionary *invite = [[NSUserDefaults standardUserDefaults] objectForKey:@"INVITE_CREDIT"];
