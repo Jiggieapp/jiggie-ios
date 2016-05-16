@@ -265,8 +265,51 @@
     }
     [self.scrollView addSubview:taxPrice];
     
+    int creditHeight = 0;
+    
+//    UILabel *discountTitle = [[UILabel alloc] initWithFrame:CGRectMake(18, CGRectGetMaxY(line1View.frame) + 14 + 30 + 30 + 30, ticketTitleWidth, 20)];
+//    [discountTitle setFont:[UIFont phBlond:13]];
+//    [discountTitle setTextColor:[UIColor darkGrayColor]];
+//    [discountTitle setBackgroundColor:[UIColor clearColor]];
+//    [discountTitle setText:@"Discount"];
+//    [self.scrollView addSubview:discountTitle];
+//    
+//    UILabel *discountPrice = [[UILabel alloc] initWithFrame:CGRectMake(self.visibleSize.width - 140, CGRectGetMaxY(line1View.frame) + 14 + 30 + 30 + 30, 120, 20)];
+//    [discountPrice setFont:[UIFont phBlond:13]];
+//    [discountPrice setTextColor:[UIColor phPurpleColor]];
+//    [discountPrice setBackgroundColor:[UIColor clearColor]];
+//    [discountPrice setTextAlignment:NSTextAlignmentRight];
+//    [discountPrice setText:@"- Rp300K"];
+//    [self.scrollView addSubview:discountPrice];
+//    creditHeight += 30;
+    
+    NSNumber *creditUsed = self.productSummary[@"credit"][@"credit_used"];
+    
+    if (creditUsed && ![creditUsed isEqual:[NSNull null]] && creditUsed.integerValue > 0) {
+        UILabel *creditTitle = [[UILabel alloc] initWithFrame:CGRectMake(18, CGRectGetMaxY(line1View.frame) + 14 + 30 + 30 + 30 + creditHeight, ticketTitleWidth, 20)];
+        [creditTitle setFont:[UIFont phBlond:13]];
+        [creditTitle setTextColor:[UIColor darkGrayColor]];
+        [creditTitle setBackgroundColor:[UIColor clearColor]];
+        [creditTitle setText:@"Credit"];
+        [self.scrollView addSubview:creditTitle];
+        
+        UILabel *creditPrice = [[UILabel alloc] initWithFrame:CGRectMake(self.visibleSize.width - 140, CGRectGetMaxY(line1View.frame) + 14 + 30 + 30 + 30 + creditHeight, 120, 20)];
+        [creditPrice setFont:[UIFont phBlond:13]];
+        [creditPrice setTextColor:[UIColor phPurpleColor]];
+        [creditPrice setBackgroundColor:[UIColor clearColor]];
+        [creditPrice setTextAlignment:NSTextAlignmentRight];
+        NSString *creditUsedString = [sharedData formatCurrencyString:[NSString stringWithFormat:@"%@", creditUsed]];
+        if ([creditUsedString integerValue] == 0) {
+            [creditPrice setText:@"FREE"];
+        } else {
+            [creditPrice setText:[NSString stringWithFormat:@"- Rp%@",creditUsedString]];
+        }
+        [self.scrollView addSubview:creditPrice];
+        creditHeight += 30;
+    }
+    
     // Line 2
-    UIView *line2View = [[UIView alloc] initWithFrame:CGRectMake(14, CGRectGetMaxY(line1View.frame) + 14 + 30 + 30 + 30, self.visibleSize.width - 28, 1)];
+    UIView *line2View = [[UIView alloc] initWithFrame:CGRectMake(14, CGRectGetMaxY(line1View.frame) + 14 + 30 + 30 + 30 + creditHeight, self.visibleSize.width - 28, 1)];
     [line2View setBackgroundColor:[UIColor phLightGrayColor]];
     [self.scrollView addSubview:line2View];
     
@@ -396,7 +439,33 @@
     [servicePrice setText:[NSString stringWithFormat:@"Rp%@",admin_fee]];
     [self.scrollView addSubview:servicePrice];
     
-    UIImageView *lineDot1View = [[UIImageView alloc] initWithFrame:CGRectMake(self.visibleSize.width - 120, CGRectGetMaxY(line1View.frame) + 14 + 30 + 30 + 30, 100, 1)];
+    int creditHeight = 0;
+    
+    NSNumber *creditUsed = self.productSummary[@"credit"][@"credit_used"];
+    if (creditUsed && ![creditUsed isEqual:[NSNull null]] && creditUsed.integerValue >= 0) {
+        UILabel *creditTitle = [[UILabel alloc] initWithFrame:CGRectMake(18, CGRectGetMaxY(line1View.frame) + 14 + 30 + 30 + 30 + creditHeight, ticketTitleWidth, 20)];
+        [creditTitle setFont:[UIFont phBlond:13]];
+        [creditTitle setTextColor:[UIColor darkGrayColor]];
+        [creditTitle setBackgroundColor:[UIColor clearColor]];
+        [creditTitle setText:@"Credit"];
+        [self.scrollView addSubview:creditTitle];
+        
+        UILabel *creditPrice = [[UILabel alloc] initWithFrame:CGRectMake(self.visibleSize.width - 140, CGRectGetMaxY(line1View.frame) + 14 + 30 + 30 + 30 + creditHeight, 120, 20)];
+        [creditPrice setFont:[UIFont phBlond:13]];
+        [creditPrice setTextColor:[UIColor phPurpleColor]];
+        [creditPrice setBackgroundColor:[UIColor clearColor]];
+        [creditPrice setTextAlignment:NSTextAlignmentRight];
+        NSString *creditUsedString = [sharedData formatCurrencyString:[NSString stringWithFormat:@"%@", creditUsed]];
+        if ([creditUsedString integerValue] == 0) {
+            [creditPrice setText:@"FREE"];
+        } else {
+            [creditPrice setText:[NSString stringWithFormat:@"- Rp%@",creditUsedString]];
+        }
+        [self.scrollView addSubview:creditPrice];
+        creditHeight += 30;
+    }
+    
+    UIImageView *lineDot1View = [[UIImageView alloc] initWithFrame:CGRectMake(self.visibleSize.width - 120, CGRectGetMaxY(line1View.frame) + 14 + 30 + 30 + 30 + creditHeight, 100, 1)];
     [lineDot1View setImage:[UIImage imageNamed:@"line_dot"]];
     [self.scrollView addSubview:lineDot1View];
     
