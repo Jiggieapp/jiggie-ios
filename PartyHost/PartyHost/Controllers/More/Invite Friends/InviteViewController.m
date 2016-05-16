@@ -9,9 +9,10 @@
 #import "InviteViewController.h"
 #import "InviteFriendsViewController.h"
 #import "SVProgressHUD.h"
+#import "AnalyticManager.h"
 #import <FBSDKShareKit/FBSDKShareKit.h>
 
-@interface InviteViewController () {
+@interface InviteViewController () <FBSDKSharingDelegate> {
     CAShapeLayer *borderLayer;
 }
 
@@ -89,10 +90,12 @@
     
     [FBSDKShareDialog showFromViewController:self
                                  withContent:shareContent
-                                    delegate:nil];
+                                    delegate:self];
 }
 
 - (IBAction)didTapShareContactButton:(id)sender {
+    [self trackShareActivityWithEventName:@"Share Referral Phone"];
+    
     self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@""
                                                                              style:UIBarButtonItemStylePlain
                                                                             target:nil
@@ -110,7 +113,11 @@
                                                        UIActivityTypePrint,
                                                        UIActivityTypeAddToReadingList,
                                                        UIActivityTypeCopyToPasteboard]];
-    
+    [activityViewController setCompletionHandler:^(NSString * __nullable activityType, BOOL completed) {
+        if (completed) {
+            [self trackShareActivityWithEventName:@"Share Referral Message"];
+        }
+    }];
     [self presentViewController:activityViewController
                        animated:YES
                      completion:nil];
@@ -119,6 +126,8 @@
 - (IBAction)didTapShareCopyButton:(id)sender {
     UIPasteboard *pasteBoard = [UIPasteboard generalPasteboard];
     [pasteBoard setString:self.inviteURL];
+    
+    [self trackShareActivityWithEventName:@"Share Referral Copy"];
     
     [SVProgressHUD showInfoWithStatus:@"Copied to clipboard"];
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
@@ -191,6 +200,20 @@
             [self.promoDescriptionLabel setText:@""];
         }];
     }
+}
+
+#pragma mark - MixPanel
+- (void)trackShareActivityWithEventName:(NSString *)eventName {
+    NSDictionary *parameters = @{@"Promo Code" : self.promoCodeLabel.text,
+                                 @"Promo URL" : self.inviteURL};
+    
+    [[AnalyticManager sharedManager] trackMixPanelWithDict:eventName
+                                                  withDict:parameters];
+}
+
+#pragma mark - FBSDKSharingDelegate
+- (void)sharer:(id<FBSDKSharing>)sharer didCompleteWithResults:(NSDictionary *)results {
+    [self trackShareActivityWithEventName:@"Share Referral Facebook"];
 }
 
 @end
