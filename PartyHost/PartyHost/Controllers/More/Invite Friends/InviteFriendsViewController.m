@@ -19,6 +19,8 @@ static NSString *const InviteFriendsTableViewCellIdentifier = @"InviteFriendsTab
 
 @interface InviteFriendsViewController () <MFMessageComposeViewControllerDelegate, UITableViewDataSource, UITableViewDelegate, UIAlertViewDelegate, InviteFriendsTableViewCellDelegate>
 
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *inviteAllButtonHeightConstraint;
+
 @property (strong, nonatomic) APAddressBook *addressBook;
 @property (strong, nonatomic) NSMutableArray *contacts;
 @property (strong, nonatomic) Contact *selectedContact;
@@ -76,17 +78,7 @@ static NSString *const InviteFriendsTableViewCellIdentifier = @"InviteFriendsTab
     self.title = @"Invite Friends";
     [self.tableView registerNib:[InviteFriendsTableViewCell nib]
          forCellReuseIdentifier:InviteFriendsTableViewCellIdentifier];
-    
-    if (self.isShowCloseButton) {
-        UIButton *closeButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        [closeButton setFrame:CGRectMake(0.0f, 0.0f, 40.0f, 27.0f)];
-        [closeButton setTitle:@"Done" forState:UIControlStateNormal];
-        [[closeButton titleLabel] setFont:[UIFont phBlond:14.0]];
-        [closeButton addTarget:self action:@selector(closeButtonDidTap:) forControlEvents:UIControlEventTouchUpInside];
-        UIBarButtonItem *closeBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:closeButton];
-        
-        [[self navigationItem] setRightBarButtonItem:closeBarButtonItem];
-    }
+    [self.inviteAllButton setHidden:YES];
 }
 
 #pragma mark - Contacts
@@ -191,9 +183,11 @@ static NSString *const InviteFriendsTableViewCellIdentifier = @"InviteFriendsTab
                     
                     weakSelf.contacts = [NSMutableArray arrayWithArray:sortedContacts];
                     [weakSelf.tableView reloadData];
+                    [weakSelf.inviteAllButton setHidden:NO];
                 });
             } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
                 [SVProgressHUD dismiss];
+                [self.inviteAllButton setHidden:YES];
             }];
         }
     }];
@@ -410,6 +404,11 @@ static NSString *const InviteFriendsTableViewCellIdentifier = @"InviteFriendsTab
         }
         
         dispatch_async(dispatch_get_main_queue(), ^{
+            self.inviteAllButtonHeightConstraint.constant = 0;
+            
+            [self.view setNeedsUpdateConstraints];
+            [self.view layoutIfNeeded];
+            
             for (APContact *contact in self.contacts) {
                 if (![self.invitedFriendsRecordIDs containsObject:contact.recordID]) {
                     [self.invitedFriendsRecordIDs addObject:contact.recordID];
