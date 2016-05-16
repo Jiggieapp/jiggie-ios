@@ -108,7 +108,6 @@
                                                         applicationActivities:nil];
     [activityViewController setExcludedActivityTypes:@[UIActivityTypePostToFacebook,
                                                        UIActivityTypePrint,
-                                                       UIActivityTypeOpenInIBooks,
                                                        UIActivityTypeAddToReadingList,
                                                        UIActivityTypeCopyToPasteboard]];
     
