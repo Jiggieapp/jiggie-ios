@@ -51,7 +51,7 @@
         _successPromotionView.frame = CGRectMake(.0f,
                                                  .0f,
                                                  CGRectGetWidth([UIScreen mainScreen].bounds) - 40,
-                                                 400.f);
+                                                 350.f);
         _successPromotionView.layer.cornerRadius = 2.0f;
         _successPromotionView.delegate = self;
     }
