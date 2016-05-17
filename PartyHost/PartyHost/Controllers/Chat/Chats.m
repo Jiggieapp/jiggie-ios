@@ -45,10 +45,12 @@
     [tabBar addSubview:title];
     
     UIButton *inviteButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [inviteButton setFrame:CGRectMake(self.sharedData.screenWidth - 50, 20.0f, 40.0f, 40.0f)];
-    [inviteButton setImageEdgeInsets:UIEdgeInsetsMake(11, 9, 11, 9)];
-    [inviteButton setImage:[UIImage imageNamed:@"icon_invite"] forState:UIControlStateNormal];
-    [[inviteButton imageView] setTintColor:[UIColor whiteColor]];
+    [inviteButton setFrame:CGRectMake(self.sharedData.screenWidth - 56, 20.0f, 40.0f, 40.0f)];
+//    [inviteButton setImageEdgeInsets:UIEdgeInsetsMake(11, 9, 11, 9)];
+//    [inviteButton setImage:[UIImage imageNamed:@"icon_invite"] forState:UIControlStateNormal];
+//    [[inviteButton imageView] setTintColor:[UIColor whiteColor]];
+    [inviteButton setTitle:@"Invite" forState:UIControlStateNormal];
+    [[inviteButton titleLabel] setFont:[UIFont phBlond:14.0]];
     [inviteButton addTarget:self action:@selector(inviteButtonDidTap:) forControlEvents:UIControlEventTouchUpInside];
     [tabBar addSubview:inviteButton];
     

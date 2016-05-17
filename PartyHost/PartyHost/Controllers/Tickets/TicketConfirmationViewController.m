@@ -285,7 +285,7 @@
     
     NSNumber *creditUsed = self.productSummary[@"credit"][@"credit_used"];
     
-    if (creditUsed && ![creditUsed isEqual:[NSNull null]] && creditUsed.integerValue > 0) {
+    if (creditUsed && ![creditUsed isEqual:[NSNull null]] && creditUsed.integerValue >= 0) {
         UILabel *creditTitle = [[UILabel alloc] initWithFrame:CGRectMake(18, CGRectGetMaxY(line1View.frame) + 14 + 30 + 30 + 30 + creditHeight, ticketTitleWidth, 20)];
         [creditTitle setFont:[UIFont phBlond:13]];
         [creditTitle setTextColor:[UIColor darkGrayColor]];
