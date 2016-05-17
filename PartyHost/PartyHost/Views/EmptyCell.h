@@ -12,10 +12,13 @@ extern NSString *const EmptyTableViewCellIdentifier;
 
 @interface EmptyCell : UITableViewCell
 
-@property (weak, nonatomic) IBOutlet UILabel *messageLabel;
+@property (weak, nonatomic) IBOutlet UIImageView *emptyIcon;
+@property (weak, nonatomic) IBOutlet UILabel *emptyTitle;
+@property (weak, nonatomic) IBOutlet UILabel *emptySubtitle;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicatorView;
 
 + (UINib *)nib;
-- (void)setMode:(NSString *)mode withMessage:(NSString *)message;
+- (void)setTitle:(NSString *)title andSubtitle:(NSString *)subtitle andIcon:(UIImage *)icon;
+- (void)setMode:(NSString *)mode;
 
 @end
