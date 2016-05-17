@@ -348,7 +348,6 @@
     if (approved) {
         switch (feed.type) {
             case FeedTypeApproved: {
-                [self trackApprovedFeedItemWithType:feed.type];
                 [JGTooltipHelper setShowed:@"Tooltip_AcceptRequest_isShowed"];
                 
                 [SVProgressHUD show];
@@ -374,10 +373,9 @@
                 break;
             }
             case FeedTypeViewed: {
-                [self trackDeniedFeedItemWithType:feed.type];
                 [JGTooltipHelper setShowed:@"Tooltip_AcceptSuggestion_isShowed"];
                 
-                [Feed approveFeed:YES withFbId:feed.fromFbId andCompletionHandler:^(NSError *error) {
+                [Feed approveFeed:approved withFbId:feed.fromFbId andCompletionHandler:^(NSError *error) {
                     if (self.feedData.count == 0) {
                         [self showEmptyView];
                     }
@@ -385,7 +383,11 @@
                 break;
             }
         }
+        
+        [self trackApprovedFeedItemWithType:feed.type];
+        
     } else {
+        [self trackDeniedFeedItemWithType:feed.type];
         [Feed approveFeed:approved withFbId:feed.fromFbId andCompletionHandler:^(NSError *error) {
             if (self.feedData.count == 0) {
                 [self showEmptyView];
