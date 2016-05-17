@@ -404,12 +404,11 @@
             [[cell contentView] addSubview:textLabel];
             
             UIImageView *cellImage = [[UIImageView alloc] initWithFrame:CGRectMake(14, 10, 40, 40)];
-            cellImage.backgroundColor = [UIColor colorFromHexCode:@"68CE49"];
             cellImage.layer.cornerRadius = 20;
             [[cell contentView] addSubview:cellImage];
             
-            UIImageView *iconImage = [[UIImageView alloc] initWithFrame:CGRectMake(10, 10, 20, 20)];
-            [iconImage setImage:[UIImage imageNamed:@"icon_friends.png"]];
+            UIImageView *iconImage = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 40, 40)];
+            [iconImage setImage:[UIImage imageNamed:@"promo_icon.png"]];
             [cellImage addSubview:iconImage];
             
             UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0.0, 0.0, 11.0, 21.0)];
