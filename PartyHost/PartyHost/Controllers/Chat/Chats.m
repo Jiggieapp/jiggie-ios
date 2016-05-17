@@ -101,7 +101,6 @@
     self.conversationsList.allowsMultipleSelectionDuringEditing = NO;
     self.conversationsList.backgroundColor = [UIColor whiteColor];
     self.conversationsList.separatorColor = [UIColor lightGrayColor];
-    self.conversationsList.hidden = YES;
     [self.conversationsList registerNib:[EmptyCell nib] forCellReuseIdentifier:EmptyTableViewCellIdentifier];
 
     [self.tableScrollView addSubview:self.conversationsList];
@@ -236,8 +235,6 @@
     BOOL performFetchResult = [[self fetchedResultsController] performFetch:error];
     
     if ([[self.fetchedResultsController fetchedObjects] count]>0) {
-        self.conversationsList.hidden = NO;
-        
         self.isConvosLoaded = YES;
         [self.conversationsList reloadData];
     }
@@ -246,7 +243,6 @@
 }
 
 - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
-    self.conversationsList.hidden = NO;
     
     if (self.needUpdateContents) {
         self.isConvosLoaded = YES;
@@ -319,6 +315,7 @@
                      if (![self.managedObjectContext save:&error]) NSLog(@"Error: %@", [error localizedDescription]);
                  }
                  self.needUpdateContents = YES;
+                 [self.conversationsList reloadData];
                  
                  //Update badges
                  [self.sharedData.chatBadge updateValue:0];
@@ -351,9 +348,6 @@
                  NSDictionary *data = [json objectForKey:@"data"];
                  if (data && data != nil) {
                      NSArray *chat_lists = [data objectForKey:@"chat_lists"];
-                     if(!chat_lists || chat_lists.count <= 0) {
-                         self.conversationsList.hidden = YES;
-                     }
                      
                      for (NSDictionary *chatRow in chat_lists) {
                          Chat *item = (Chat *)[NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([Chat class])
@@ -697,10 +691,12 @@
         }
         
         EmptyCell *cell = (EmptyCell *)[tableView dequeueReusableCellWithIdentifier:EmptyTableViewCellIdentifier];
+        [cell setTitle:@"No chats yet" andSubtitle:nil andIcon:[UIImage imageNamed:@"tab_chat"]];
+        
         if (self.isChatFirstLoad) {
-            [cell setMode:@"load" withMessage:nil];
+            [cell setMode:@"load"];
         } else {
-            [cell setMode:@"empty" withMessage:@"No chats yet"];
+            [cell setMode:@"empty"];
         }
         
         return cell;
@@ -747,10 +743,11 @@
     }
     
     EmptyCell *cell = (EmptyCell *)[tableView dequeueReusableCellWithIdentifier:EmptyTableViewCellIdentifier];
+    [cell setTitle:@"Invite more friends" andSubtitle:nil andIcon:nil];
     if (self.isFriendFirstLoad) {
-        [cell setMode:@"load" withMessage:nil];
+        [cell setMode:@"load"];
     } else {
-        [cell setMode:@"empty" withMessage:@"Invite more friends"];
+        [cell setMode:@"empty"];
     }
     
     return cell;
