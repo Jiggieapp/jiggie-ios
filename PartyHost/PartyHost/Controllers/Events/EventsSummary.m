@@ -122,13 +122,13 @@
     self.startFromLabel.textColor = [UIColor whiteColor];
     self.startFromLabel.text = @"Starts From";
     self.startFromLabel.font = [UIFont phBlond:12];
-    [self addSubview:self.startFromLabel];
+    [self.mainScroll addSubview:self.startFromLabel];
     
     self.minimumPrice = [[UILabel alloc] initWithFrame:CGRectMake(16, CGRectGetMaxY(self.picScroll.frame) - 32, self.sharedData.screenWidth - 32, 20)];
     self.minimumPrice.textColor = [UIColor whiteColor];
     self.minimumPrice.text = @"Rp400K";
     self.minimumPrice.font = [UIFont phBold:18];
-    [self addSubview:self.minimumPrice];
+    [self.mainScroll addSubview:self.minimumPrice];
     
     self.eventName = [[UILabel alloc] init];
     self.eventName.textAlignment = NSTextAlignmentLeft;
