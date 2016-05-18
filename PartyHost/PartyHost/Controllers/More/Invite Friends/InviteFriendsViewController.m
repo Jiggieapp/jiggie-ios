@@ -78,6 +78,18 @@ static NSString *const InviteFriendsTableViewCellIdentifier = @"InviteFriendsTab
     self.title = @"Invite Friends";
     [self.tableView registerNib:[InviteFriendsTableViewCell nib]
          forCellReuseIdentifier:InviteFriendsTableViewCellIdentifier];
+
+    if (self.isShowCloseButton) {
+        UIButton *closeButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        [closeButton setFrame:CGRectMake(0.0f, 0.0f, 40.0f, 27.0f)];
+        [closeButton setTitle:@"Done" forState:UIControlStateNormal];
+        [[closeButton titleLabel] setFont:[UIFont phBlond:14.0]];
+        [closeButton addTarget:self action:@selector(closeButtonDidTap:) forControlEvents:UIControlEventTouchUpInside];
+        UIBarButtonItem *closeBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:closeButton];
+        
+        [[self navigationItem] setRightBarButtonItem:closeBarButtonItem];
+    }
+
     [self.inviteAllButton setHidden:YES];
 }
 
