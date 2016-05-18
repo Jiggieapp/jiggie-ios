@@ -267,25 +267,39 @@
     
     int creditHeight = 0;
     
-//    UILabel *discountTitle = [[UILabel alloc] initWithFrame:CGRectMake(18, CGRectGetMaxY(line1View.frame) + 14 + 30 + 30 + 30, ticketTitleWidth, 20)];
-//    [discountTitle setFont:[UIFont phBlond:13]];
-//    [discountTitle setTextColor:[UIColor darkGrayColor]];
-//    [discountTitle setBackgroundColor:[UIColor clearColor]];
-//    [discountTitle setText:@"Discount"];
-//    [self.scrollView addSubview:discountTitle];
-//    
-//    UILabel *discountPrice = [[UILabel alloc] initWithFrame:CGRectMake(self.visibleSize.width - 140, CGRectGetMaxY(line1View.frame) + 14 + 30 + 30 + 30, 120, 20)];
-//    [discountPrice setFont:[UIFont phBlond:13]];
-//    [discountPrice setTextColor:[UIColor phPurpleColor]];
-//    [discountPrice setBackgroundColor:[UIColor clearColor]];
-//    [discountPrice setTextAlignment:NSTextAlignmentRight];
-//    [discountPrice setText:@"- Rp300K"];
-//    [self.scrollView addSubview:discountPrice];
-//    creditHeight += 30;
+    NSArray *discounts = self.productSummary[@"discount"][@"data"];
+    for (NSDictionary *discount in discounts) {
+        UILabel *discountTitle = [[UILabel alloc] initWithFrame:CGRectMake(18, CGRectGetMaxY(line1View.frame) + 14 + 30 + 30 + 30, ticketTitleWidth + creditHeight, 20)];
+        [discountTitle setFont:[UIFont phBlond:13]];
+        [discountTitle setTextColor:[UIColor darkGrayColor]];
+        [discountTitle setBackgroundColor:[UIColor clearColor]];
+        [self.scrollView addSubview:discountTitle];
+        
+        if ([discount objectForKey:@"name"] && [discount objectForKey:@"name"] != nil) {
+            [discountTitle setText:[discount objectForKey:@"name"]];
+        }
+        
+        UILabel *discountPrice = [[UILabel alloc] initWithFrame:CGRectMake(self.visibleSize.width - 140, CGRectGetMaxY(line1View.frame) + 14 + 30 + 30 + 30 + creditHeight, 120, 20)];
+        [discountPrice setFont:[UIFont phBlond:13]];
+        [discountPrice setTextColor:[UIColor phPurpleColor]];
+        [discountPrice setBackgroundColor:[UIColor clearColor]];
+        [discountPrice setTextAlignment:NSTextAlignmentRight];
+        [self.scrollView addSubview:discountPrice];
+        
+        NSNumber *amount_discount = [discount objectForKey:@"amount_discount"];
+        if (amount_discount && ![amount_discount isEqual:[NSNull null]]) {
+            NSString *amountDiscountString = [sharedData formatCurrencyString:[NSString stringWithFormat:@"%@", amount_discount]];
+            if ([amount_discount integerValue] == 0) {
+                [discountPrice setText:@"FREE"];
+            } else {
+                [discountPrice setText:[NSString stringWithFormat:@"Rp%@",amountDiscountString]];
+            }
+        }
+        creditHeight += 30;
+    }
     
     NSNumber *creditUsed = self.productSummary[@"credit"][@"credit_used"];
-    
-    if (creditUsed && ![creditUsed isEqual:[NSNull null]] && creditUsed.integerValue >= 0) {
+    if (creditUsed && ![creditUsed isEqual:[NSNull null]] && creditUsed.integerValue > 0) {
         UILabel *creditTitle = [[UILabel alloc] initWithFrame:CGRectMake(18, CGRectGetMaxY(line1View.frame) + 14 + 30 + 30 + 30 + creditHeight, ticketTitleWidth, 20)];
         [creditTitle setFont:[UIFont phBlond:13]];
         [creditTitle setTextColor:[UIColor darkGrayColor]];
@@ -441,8 +455,39 @@
     
     int creditHeight = 0;
     
+    NSArray *discounts = self.productSummary[@"discount"][@"data"];
+    for (NSDictionary *discount in discounts) {
+        UILabel *discountTitle = [[UILabel alloc] initWithFrame:CGRectMake(18, CGRectGetMaxY(line1View.frame) + 14 + 30 + 30 + 30 + creditHeight, ticketTitleWidth, 20)];
+        [discountTitle setFont:[UIFont phBlond:13]];
+        [discountTitle setTextColor:[UIColor darkGrayColor]];
+        [discountTitle setBackgroundColor:[UIColor clearColor]];
+        [self.scrollView addSubview:discountTitle];
+        
+        if ([discount objectForKey:@"name"] && [discount objectForKey:@"name"] != nil) {
+            [discountTitle setText:[discount objectForKey:@"name"]];
+        }
+        
+        UILabel *discountPrice = [[UILabel alloc] initWithFrame:CGRectMake(self.visibleSize.width - 140, CGRectGetMaxY(line1View.frame) + 14 + 30 + 30 + 30 + creditHeight, 120, 20)];
+        [discountPrice setFont:[UIFont phBlond:13]];
+        [discountPrice setTextColor:[UIColor phPurpleColor]];
+        [discountPrice setBackgroundColor:[UIColor clearColor]];
+        [discountPrice setTextAlignment:NSTextAlignmentRight];
+        [self.scrollView addSubview:discountPrice];
+        
+        NSNumber *amount_discount = [discount objectForKey:@"amount_discount"];
+        if (amount_discount && ![amount_discount isEqual:[NSNull null]]) {
+            NSString *amountDiscountString = [sharedData formatCurrencyString:[NSString stringWithFormat:@"%@", amount_discount]];
+            if ([amount_discount integerValue] == 0) {
+                [discountPrice setText:@"FREE"];
+            } else {
+                [discountPrice setText:[NSString stringWithFormat:@"- Rp%@",amountDiscountString]];
+            }
+        }
+        creditHeight += 30;
+    }
+    
     NSNumber *creditUsed = self.productSummary[@"credit"][@"credit_used"];
-    if (creditUsed && ![creditUsed isEqual:[NSNull null]] && creditUsed.integerValue >= 0) {
+    if (creditUsed && ![creditUsed isEqual:[NSNull null]] && creditUsed.integerValue > 0) {
         UILabel *creditTitle = [[UILabel alloc] initWithFrame:CGRectMake(18, CGRectGetMaxY(line1View.frame) + 14 + 30 + 30 + 30 + creditHeight, ticketTitleWidth, 20)];
         [creditTitle setFont:[UIFont phBlond:13]];
         [creditTitle setTextColor:[UIColor darkGrayColor]];

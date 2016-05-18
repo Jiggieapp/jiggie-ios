@@ -185,8 +185,11 @@ static NSString *const InviteFriendsTableViewCellIdentifier = @"InviteFriendsTab
                     NSArray *recordIDs = [sortedContactsModel valueForKey:@"recordID"];
                     
                     for (Contact *contact in contactsModel) {
-                        APContact *apContact = contacts[[recordIDs indexOfObject:contact.recordID]];
-                        [contact setThumbnailWithImage:apContact.thumbnail];
+                        if ([recordIDs indexOfObject:contact.recordID] &&
+                            [recordIDs indexOfObject:contact.recordID] < contacts.count) {
+                            APContact *apContact = contacts[[recordIDs indexOfObject:contact.recordID]];
+                            [contact setThumbnailWithImage:apContact.thumbnail];
+                        }
                     }
                     
                     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.isActive == %@", [NSNumber numberWithBool:YES]];
