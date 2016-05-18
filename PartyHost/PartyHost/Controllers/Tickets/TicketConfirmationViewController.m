@@ -135,7 +135,7 @@
         [self loadPurchaseView];
         
         // hide payment for free ticket
-        NSString *total_price = [self.productList objectForKey:@"total_price_all"];
+        NSString *total_price = [self.productSummary objectForKey:@"total_price"];
         if ([total_price integerValue] == 0) {
             [self showPaymentMethod:NO withAnimation:NO];
         }
@@ -237,7 +237,7 @@
     [adminPrice setTextColor:[UIColor phPurpleColor]];
     [adminPrice setBackgroundColor:[UIColor clearColor]];
     [adminPrice setTextAlignment:NSTextAlignmentRight];
-    NSString *admin_fee = [sharedData formatCurrencyString:[self.productList objectForKey:@"admin_fee"]];
+    NSString *admin_fee = [sharedData formatCurrencyString:[self.productSummary objectForKey:@"total_adminfee"]];
     if ([admin_fee integerValue] == 0) {
         [adminPrice setText:@"FREE"];
     } else {
@@ -257,7 +257,7 @@
     [taxPrice setTextColor:[UIColor phPurpleColor]];
     [taxPrice setBackgroundColor:[UIColor clearColor]];
     [taxPrice setTextAlignment:NSTextAlignmentRight];
-    NSString *tax_amount = [sharedData formatCurrencyString:[self.productList objectForKey:@"tax_amount"]];
+    NSString *tax_amount = [sharedData formatCurrencyString:[self.productSummary objectForKey:@"total_tax_amount"]];
     if ([tax_amount integerValue] == 0) {
         [taxPrice setText:@"FREE"];
     } else {
@@ -286,7 +286,7 @@
         [discountPrice setTextAlignment:NSTextAlignmentRight];
         [self.scrollView addSubview:discountPrice];
         
-        NSNumber *amount_discount = [discount objectForKey:@"amount_discount"];
+        NSNumber *amount_discount = [discount objectForKey:@"amount_used"];
         if (amount_discount && ![amount_discount isEqual:[NSNull null]]) {
             NSString *amountDiscountString = [sharedData formatCurrencyString:[NSString stringWithFormat:@"%@", amount_discount]];
             if ([amount_discount integerValue] == 0) {
@@ -339,11 +339,12 @@
     [self.totalPrice setFont:[UIFont phBlond:18]];
     [self.totalPrice setTextColor:[UIColor phPurpleColor]];
     [self.totalPrice setBackgroundColor:[UIColor clearColor]];
-    NSString *total_price = [sharedData formatCurrencyString:[self.productList objectForKey:@"total_price_all"]];
+    NSNumber *total_price = self.productSummary[@"total_price"];
     if ([total_price integerValue] == 0) {
         [self.totalPrice setText:@"FREE"];
     } else {
-        [self.totalPrice setText:[NSString stringWithFormat:@"Rp%@",total_price]];
+        NSString *totalPriceString = [sharedData formatCurrencyString:[NSString stringWithFormat:@"%@", total_price]];
+        [self.totalPrice setText:[NSString stringWithFormat:@"Rp%@",totalPriceString]];
     }
     [self.scrollView addSubview:self.totalPrice];
     
@@ -433,7 +434,7 @@
     [taxPrice setTextColor:[UIColor phPurpleColor]];
     [taxPrice setBackgroundColor:[UIColor clearColor]];
     [taxPrice setTextAlignment:NSTextAlignmentRight];
-    NSString *tax_amount = [sharedData formatCurrencyString:[self.productList objectForKey:@"tax_amount"]];
+    NSString *tax_amount = [sharedData formatCurrencyString:[self.productSummary objectForKey:@"total_tax_amount"]];
     [taxPrice setText:[NSString stringWithFormat:@"Rp%@",tax_amount]];
     [self.scrollView addSubview:taxPrice];
     
@@ -449,7 +450,7 @@
     [servicePrice setTextColor:[UIColor phPurpleColor]];
     [servicePrice setBackgroundColor:[UIColor clearColor]];
     [servicePrice setTextAlignment:NSTextAlignmentRight];
-    NSString *admin_fee = [sharedData formatCurrencyString:[self.productList objectForKey:@"admin_fee"]];
+    NSString *admin_fee = [sharedData formatCurrencyString:[self.productSummary objectForKey:@"total_adminfee"]];
     [servicePrice setText:[NSString stringWithFormat:@"Rp%@",admin_fee]];
     [self.scrollView addSubview:servicePrice];
     
@@ -474,7 +475,7 @@
         [discountPrice setTextAlignment:NSTextAlignmentRight];
         [self.scrollView addSubview:discountPrice];
         
-        NSNumber *amount_discount = [discount objectForKey:@"amount_discount"];
+        NSNumber *amount_discount = [discount objectForKey:@"amount_used"];
         if (amount_discount && ![amount_discount isEqual:[NSNull null]]) {
             NSString *amountDiscountString = [sharedData formatCurrencyString:[NSString stringWithFormat:@"%@", amount_discount]];
             if ([amount_discount integerValue] == 0) {
@@ -526,8 +527,14 @@
     [estimatedPrice setTextColor:[UIColor phPurpleColor]];
     [estimatedPrice setBackgroundColor:[UIColor clearColor]];
     [estimatedPrice setTextAlignment:NSTextAlignmentRight];
-    NSString *total_price_all = [sharedData formatCurrencyString:[self.productList objectForKey:@"total_price_all"]];
-    [estimatedPrice setText:[NSString stringWithFormat:@"Rp%@",total_price_all]];
+    NSNumber *total_price = self.productSummary[@"total_price"];
+    if ([total_price integerValue] == 0) {
+        [estimatedPrice setText:@"FREE"];
+    } else {
+        NSString *totalPriceString = [sharedData formatCurrencyString:[NSString stringWithFormat:@"%@", total_price]];
+        [estimatedPrice setText:[NSString stringWithFormat:@"Rp%@",totalPriceString]];
+    }
+   
     [self.scrollView addSubview:estimatedPrice];
     
     UILabel *requiredLabel = [[UILabel alloc] initWithFrame:CGRectMake(18, CGRectGetMaxY(lineDot1View.frame) + 14 + 30, ticketTitleWidth, 20)];
@@ -542,8 +549,13 @@
     [self.requiredPrice setTextColor:[UIColor blackColor]];
     [self.requiredPrice setBackgroundColor:[UIColor clearColor]];
     [self.requiredPrice setTextAlignment:NSTextAlignmentRight];
-    NSString *min_deposit_amount = [sharedData formatCurrencyString:[self.productList objectForKey:@"min_deposit_amount"]];
-    [self.requiredPrice setText:[NSString stringWithFormat:@"Rp%@",min_deposit_amount]];
+    NSNumber *min_deposit_amount = [self.productSummary objectForKey:@"min_deposit_amount"];
+    if ([min_deposit_amount integerValue] == 0) {
+        [self.requiredPrice setText:@"FREE"];
+    } else {
+        NSString *minDepositString = [sharedData formatCurrencyString:[NSString stringWithFormat:@"%@", min_deposit_amount]];
+        [self.requiredPrice setText:[NSString stringWithFormat:@"Rp%@",minDepositString]];
+    }
     [self.scrollView addSubview:self.requiredPrice];
     
     UIImageView *lineDot2View = [[UIImageView alloc] initWithFrame:CGRectMake(self.visibleSize.width - 120, CGRectGetMaxY(lineDot1View.frame) + 14 + 30 + 30, 100, 1)];
@@ -562,13 +574,13 @@
     [self.balancePrice setTextColor:[UIColor phPurpleColor]];
     [self.balancePrice setBackgroundColor:[UIColor clearColor]];
     [self.balancePrice setTextAlignment:NSTextAlignmentRight];
-    NSInteger balance = [[self.productList objectForKey:@"total_price_all"] integerValue] - [[self.productList objectForKey:@"min_deposit_amount"] integerValue];
+    NSInteger balance = [[self.productSummary objectForKey:@"total_price"] integerValue] - [[self.productSummary objectForKey:@"min_deposit_amount"] integerValue];
     NSString *balanceText = [sharedData formatCurrencyString:[NSString stringWithFormat:@"%li", balance]];
     [self.balancePrice setText:[NSString stringWithFormat:@"Rp%@",balanceText]];
     [self.scrollView addSubview:self.balancePrice];
     
-    self.maxPrice = [[self.productList objectForKey:@"total_price_all"] integerValue];
-    self.minPrice = [[self.productList objectForKey:@"min_deposit_amount"] integerValue];
+    self.maxPrice = [[self.productSummary objectForKey:@"total_price"] integerValue];
+    self.minPrice = [[self.productSummary objectForKey:@"min_deposit_amount"] integerValue];
     self.currentPrice = self.minPrice;
     
     self.scrollView.contentSize = CGSizeMake(self.visibleSize.width, CGRectGetMaxY(self.balancePrice.frame) + 16);
@@ -596,8 +608,7 @@
     [priceBox addSubview:plusButton];
     
     self.totalPrice = [[UILabel alloc] initWithFrame:CGRectMake((priceBox.frame.size.width - 120) /2, 25, 120, 20)];
-    NSString *total_price = [sharedData formatCurrencyString:[self.productList objectForKey:@"min_deposit_amount"]];
-    [self.totalPrice setText:[NSString stringWithFormat:@"Rp%@",total_price]];
+    [self.totalPrice setText:self.requiredPrice.text];
     [self.totalPrice setTextAlignment:NSTextAlignmentCenter];
     [self.totalPrice setFont:[UIFont phBlond:20]];
     [self.totalPrice setTextColor:[UIColor blackColor]];
@@ -660,7 +671,7 @@
         [self.swipeScrollView setScrollEnabled:YES];
         [self.swipeScrollView setBackgroundColor:[UIColor phBlueColor]];
         
-    } else if([[self.productList objectForKey:@"total_price_all"] integerValue] == 0) {
+    } else if([[self.productSummary objectForKey:@"total_price"] integerValue] == 0) {
         // check if free event
         [self.swipeScrollView setScrollEnabled:YES];
         [self.swipeScrollView setBackgroundColor:[UIColor phBlueColor]];
@@ -878,7 +889,7 @@
 #pragma mark - Data
 - (void)readyForPayment {
     
-    if ([[self.productList objectForKey:@"total_price_all"] integerValue] == 0) {
+    if ([[self.productSummary objectForKey:@"total_price"] integerValue] == 0) {
         // Check if free event
         [self postPaymentFree];
         
