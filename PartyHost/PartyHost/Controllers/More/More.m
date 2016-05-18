@@ -408,7 +408,7 @@
             [[cell contentView] addSubview:cellImage];
             
             UIImageView *iconImage = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 40, 40)];
-            [iconImage setImage:[UIImage imageNamed:@"promo_icon.png"]];
+            [iconImage setImage:[UIImage imageNamed:@"promotions_icon.png"]];
             [cellImage addSubview:iconImage];
             
             UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0.0, 0.0, 11.0, 21.0)];
