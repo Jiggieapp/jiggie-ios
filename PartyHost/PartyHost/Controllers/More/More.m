@@ -40,10 +40,10 @@
     int OffSetLargeDevice = 0;
     int OffsetFontLargeDevice = 0;
     if (self.sharedData.isIphone6) {
-        OffSetLargeDevice = 20;
+        OffSetLargeDevice = 10;
         OffsetFontLargeDevice = 1;
     } else if (self.sharedData.isIphone6plus) {
-        OffSetLargeDevice = 40;
+        OffSetLargeDevice = 20;
         OffsetFontLargeDevice = 3;
     }
     
@@ -76,6 +76,7 @@
     self.moreList.backgroundColor = [UIColor whiteColor];
     self.moreList.separatorColor = [UIColor phLightGrayColor];
     self.moreList.showsVerticalScrollIndicator = NO;
+    self.moreList.bounces = NO;
 //    self.moreList.scrollEnabled = (self.sharedData.isIphone4)?YES:NO;
     [self.mainCon addSubview:self.moreList];
     
@@ -408,7 +409,7 @@
             [[cell contentView] addSubview:cellImage];
             
             UIImageView *iconImage = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 40, 40)];
-            [iconImage setImage:[UIImage imageNamed:@"promo_icon.png"]];
+            [iconImage setImage:[UIImage imageNamed:@"promotions_icon.png"]];
             [cellImage addSubview:iconImage];
             
             UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0.0, 0.0, 11.0, 21.0)];
@@ -548,6 +549,30 @@
 }
 
 #pragma mark - UITableViewDelegate
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    return 60.f;
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    UILabel *textLabel = [[UILabel alloc] initWithFrame:CGRectMake(70, 20, 180, 20)];
+    textLabel.backgroundColor = [UIColor clearColor];
+    textLabel.font = [UIFont phBlond:16];
+    textLabel.text = @"Credit:";
+    
+    UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(14, 10, 40, 40)];
+    [imageView setImage:[UIImage imageNamed:@"credit_icon.png"]];
+    
+    UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(.0f,
+                                                                  .0f,
+                                                                  CGRectGetWidth([UIScreen mainScreen].bounds),
+                                                                  60.f)];
+    [headerView setBackgroundColor:[UIColor whiteColor]];
+    [headerView addSubview:textLabel];
+    [headerView addSubview:imageView];
+    
+    return headerView;
+}
+
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     //Change role
