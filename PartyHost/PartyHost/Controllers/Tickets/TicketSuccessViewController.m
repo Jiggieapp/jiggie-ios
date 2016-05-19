@@ -263,25 +263,11 @@
     [self.adminPrice setTextAlignment:NSTextAlignmentRight];
     [self.scrollView addSubview:self.adminPrice];
     
-    UILabel *taxLabel = [[UILabel alloc] initWithFrame:CGRectMake(14, CGRectGetMaxY(line2View.frame) + 50 + 30 + 30, 160, 20)];
-    [taxLabel setText:@"TAX"];
-    [taxLabel setFont:[UIFont phBlond:11]];
-    [taxLabel setTextColor:[UIColor blackColor]];
-    [taxLabel setBackgroundColor:[UIColor clearColor]];
-    [self.scrollView addSubview:taxLabel];
-    
-    self.taxPrice = [[UILabel alloc] initWithFrame:CGRectMake(self.visibleSize.width - 160, CGRectGetMaxY(line2View.frame) + 50 + 30 + 30, 140, 20)];
-    [self.taxPrice setFont:[UIFont phBlond:11]];
-    [self.taxPrice setTextColor:[UIColor phPurpleColor]];
-    [self.taxPrice setBackgroundColor:[UIColor clearColor]];
-    [self.taxPrice setTextAlignment:NSTextAlignmentRight];
-    [self.scrollView addSubview:self.taxPrice];
-    
-    self.discountView = [[UIView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(line2View.frame) + 50 + 30 + 30 + 30, self.visibleSize.width, 0)];
+    self.discountView = [[UIView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(line2View.frame) + 50 + 30 + 30, self.visibleSize.width, 0)];
     [self.discountView setBackgroundColor:[UIColor clearColor]];
     [self.scrollView addSubview:self.discountView];
     
-    self.lineDotView = [[UIImageView alloc] initWithFrame:CGRectMake(self.visibleSize.width - 120, CGRectGetMaxY(line2View.frame) + 50 + 30 + 30 + 30, 100, 1)];
+    self.lineDotView = [[UIImageView alloc] initWithFrame:CGRectMake(self.visibleSize.width - 120, CGRectGetMaxY(line2View.frame) + 50 + 30 + 30, 100, 1)];
     [self.lineDotView setImage:[UIImage imageNamed:@"line_dot"]];
     [self.scrollView addSubview:self.lineDotView];
     
@@ -537,39 +523,25 @@
     [self.bookingTicketPrice setTextAlignment:NSTextAlignmentRight];
     [self.bookingScrollView addSubview:self.bookingTicketPrice];
     
-    UILabel *taxLabel = [[UILabel alloc] initWithFrame:CGRectMake(14, CGRectGetMaxY(line2View.frame) + 50 + 30, 160, 20)];
-    [taxLabel setText:@"TAX"];
-    [taxLabel setFont:[UIFont phBlond:11]];
-    [taxLabel setTextColor:[UIColor blackColor]];
-    [taxLabel setBackgroundColor:[UIColor clearColor]];
-    [self.bookingScrollView addSubview:taxLabel];
-    
-    self.bookingTaxPrice = [[UILabel alloc] initWithFrame:CGRectMake(self.visibleSize.width - 160, CGRectGetMaxY(line2View.frame) + 50 + 30, 140, 20)];
-    [self.bookingTaxPrice setFont:[UIFont phBlond:11]];
-    [self.bookingTaxPrice setTextColor:[UIColor phPurpleColor]];
-    [self.bookingTaxPrice setBackgroundColor:[UIColor clearColor]];
-    [self.bookingTaxPrice setTextAlignment:NSTextAlignmentRight];
-    [self.bookingScrollView addSubview:self.bookingTaxPrice];
-    
-    UILabel *adminLabel = [[UILabel alloc] initWithFrame:CGRectMake(14, CGRectGetMaxY(line2View.frame) + 50 + 30 + 30, 160, 20)];
+    UILabel *adminLabel = [[UILabel alloc] initWithFrame:CGRectMake(14, CGRectGetMaxY(line2View.frame) + 50 + 30, 160, 20)];
     [adminLabel setText:@"SERVICE CHARGE"];
     [adminLabel setFont:[UIFont phBlond:11]];
     [adminLabel setTextColor:[UIColor blackColor]];
     [adminLabel setBackgroundColor:[UIColor clearColor]];
     [self.bookingScrollView addSubview:adminLabel];
     
-    self.bookingServicePrice = [[UILabel alloc] initWithFrame:CGRectMake(self.visibleSize.width - 160, CGRectGetMaxY(line2View.frame) + 50 + 30 + 30, 140, 20)];
+    self.bookingServicePrice = [[UILabel alloc] initWithFrame:CGRectMake(self.visibleSize.width - 160, CGRectGetMaxY(line2View.frame) + 50 + 30, 140, 20)];
     [self.bookingServicePrice setFont:[UIFont phBlond:11]];
     [self.bookingServicePrice setTextColor:[UIColor phPurpleColor]];
     [self.bookingServicePrice setBackgroundColor:[UIColor clearColor]];
     [self.bookingServicePrice setTextAlignment:NSTextAlignmentRight];
     [self.bookingScrollView addSubview:self.bookingServicePrice];
     
-    self.bookingDiscountView = [[UIView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(line2View.frame) + 50 + 30 + 30 + 30, self.visibleSize.width, 0)];
+    self.bookingDiscountView = [[UIView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(line2View.frame) + 50 + 30 + 30, self.visibleSize.width, 0)];
     [self.bookingDiscountView setBackgroundColor:[UIColor clearColor]];
     [self.bookingScrollView addSubview:self.bookingDiscountView];
     
-    self.bookingDepositView = [[UIView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(line2View.frame) + 50 + 30 + 30 + 30 + 30, self.visibleSize.width, 110)];
+    self.bookingDepositView = [[UIView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(line2View.frame) + 50 + 30 + 30 + 30, self.visibleSize.width, 110)];
     [self.bookingDepositView setBackgroundColor:[UIColor clearColor]];
     [self.bookingScrollView addSubview:self.bookingDepositView];
     
@@ -921,7 +893,7 @@
                 }
             }
             
-            NSString *admin_fee = [productList objectForKey:@"admin_fee"];
+            NSString *admin_fee = [summary objectForKey:@"total_adminfee"];
             if (admin_fee && admin_fee != nil) {
                 if ([admin_fee integerValue] == 0) {
                     [self.adminPrice setText:@"FREE"];
@@ -930,24 +902,14 @@
                     [self.adminPrice setText:[NSString stringWithFormat:@"Rp%@", formattedPrice]];
                 }
             }
-            
-            NSString *tax_amount = [productList objectForKey:@"tax_amount"];
-            if (tax_amount && tax_amount != nil) {
-                if ([tax_amount integerValue] == 0) {
-                    [self.taxPrice setText:@"FREE"];
-                } else {
-                    NSString *formattedPrice = [sharedData formatCurrencyString:tax_amount];
-                    [self.taxPrice setText:[NSString stringWithFormat:@"Rp%@", formattedPrice]];
-                }
-            }
         
             int discountHeight = 0;
             
             NSArray *discounts = self.successData[@"discount"][@"data"];
             for (NSDictionary *discount in discounts) {
                 UILabel *discountTitle = [[UILabel alloc] initWithFrame:CGRectMake(14, discountHeight, 160, 20)];
-                [discountTitle setFont:[UIFont phBlond:13]];
-                [discountTitle setTextColor:[UIColor darkGrayColor]];
+                [discountTitle setFont:[UIFont phBlond:11]];
+                [discountTitle setTextColor:[UIColor blackColor]];
                 [discountTitle setBackgroundColor:[UIColor clearColor]];
                 [self.discountView addSubview:discountTitle];
                 
@@ -956,35 +918,60 @@
                 }
                 
                 UILabel *discountPrice = [[UILabel alloc] initWithFrame:CGRectMake(self.visibleSize.width - 160, discountHeight, 140, 20)];
-                [discountPrice setFont:[UIFont phBlond:13]];
+                [discountPrice setFont:[UIFont phBlond:11]];
                 [discountPrice setTextColor:[UIColor phPurpleColor]];
                 [discountPrice setBackgroundColor:[UIColor clearColor]];
                 [discountPrice setTextAlignment:NSTextAlignmentRight];
                 [self.discountView addSubview:discountPrice];
                 
-                NSNumber *amount_discount = [discount objectForKey:@"amount_discount"];
+                NSString *amount_discount = [discount objectForKey:@"amount_used"];
                 if (amount_discount && ![amount_discount isEqual:[NSNull null]]) {
-                    NSString *amountDiscountString = [sharedData formatCurrencyString:[NSString stringWithFormat:@"%@", amount_discount]];
                     if ([amount_discount integerValue] == 0) {
                         [discountPrice setText:@"FREE"];
                     } else {
+                        NSString *amountDiscountString = [sharedData formatCurrencyString:amount_discount];
                         [discountPrice setText:[NSString stringWithFormat:@"- Rp%@",amountDiscountString]];
                     }
                 }
                 discountHeight += 30;
             }
             
-            NSNumber *creditUsed = self.successData[@"credit"][@"credit_used"];
+            UILabel *taxLabel = [[UILabel alloc] initWithFrame:CGRectMake(14, discountHeight, 160, 20)];
+            [taxLabel setText:@"TAX"];
+            [taxLabel setFont:[UIFont phBlond:11]];
+            [taxLabel setTextColor:[UIColor blackColor]];
+            [taxLabel setBackgroundColor:[UIColor clearColor]];
+            [self.discountView addSubview:taxLabel];
+            
+            UILabel *taxPrice = [[UILabel alloc] initWithFrame:CGRectMake(self.visibleSize.width - 160, discountHeight, 140, 20)];
+            [taxPrice setFont:[UIFont phBlond:11]];
+            [taxPrice setTextColor:[UIColor phPurpleColor]];
+            [taxPrice setBackgroundColor:[UIColor clearColor]];
+            [taxPrice setTextAlignment:NSTextAlignmentRight];
+            NSString *tax_amount = [summary objectForKey:@"total_tax_amount"];
+            if (tax_amount && tax_amount != nil) {
+                if ([tax_amount integerValue] == 0) {
+                    [taxPrice setText:@"FREE"];
+                } else {
+                    NSString *formattedPrice = [sharedData formatCurrencyString:tax_amount];
+                    [taxPrice setText:[NSString stringWithFormat:@"Rp%@", formattedPrice]];
+                }
+            }
+            [self.discountView addSubview:taxPrice];
+            
+            discountHeight += 30;
+            
+            NSString *creditUsed = self.successData[@"credit"][@"credit_used"];
             if (creditUsed && ![creditUsed isEqual:[NSNull null]] && creditUsed.integerValue > 0) {
                 UILabel *creditTitle = [[UILabel alloc] initWithFrame:CGRectMake(14, discountHeight, 160, 20)];
-                [creditTitle setFont:[UIFont phBlond:13]];
-                [creditTitle setTextColor:[UIColor darkGrayColor]];
+                [creditTitle setFont:[UIFont phBlond:11]];
+                [creditTitle setTextColor:[UIColor blackColor]];
                 [creditTitle setBackgroundColor:[UIColor clearColor]];
                 [creditTitle setText:@"CREDIT"];
                 [self.discountView addSubview:creditTitle];
                 
                 UILabel *creditPrice = [[UILabel alloc] initWithFrame:CGRectMake(self.visibleSize.width - 160, discountHeight, 140, 20)];
-                [creditPrice setFont:[UIFont phBlond:13]];
+                [creditPrice setFont:[UIFont phBlond:11]];
                 [creditPrice setTextColor:[UIColor phPurpleColor]];
                 [creditPrice setBackgroundColor:[UIColor clearColor]];
                 [creditPrice setTextAlignment:NSTextAlignmentRight];
@@ -1008,7 +995,7 @@
             
             [self.totalPrice setFrame:CGRectMake(self.totalPrice.frame.origin.x, offsetYDiscount + 10, self.totalPrice.bounds.size.width, self.totalPrice.bounds.size.height)];
             
-            NSString *total_price_all = [productList objectForKey:@"total_price_all"];
+            NSString *total_price_all = [summary objectForKey:@"total_price"];
             if (total_price_all && total_price_all != nil) {
                 if ([total_price_all integerValue] == 0) {
                     [self.totalPrice setText:@"FREE"];
@@ -1186,16 +1173,10 @@
                 [self.bookingTicketPrice setText:[NSString stringWithFormat:@"Rp%@", formattedPrice]];
             }
             
-            NSString *admin_fee = [productList objectForKey:@"admin_fee"];
+            NSString *admin_fee = [summary objectForKey:@"total_adminfee"];
             if (admin_fee && admin_fee != nil) {
                 NSString *formattedPrice = [sharedData formatCurrencyString:admin_fee];
                 [self.bookingServicePrice setText:[NSString stringWithFormat:@"Rp%@", formattedPrice]];
-            }
-            
-            NSString *tax_amount = [productList objectForKey:@"tax_amount"];
-            if (tax_amount && tax_amount != nil) {
-                NSString *formattedPrice = [sharedData formatCurrencyString:tax_amount];
-                [self.bookingTaxPrice setText:[NSString stringWithFormat:@"Rp%@", formattedPrice]];
             }
             
             int discountHeight = 0;
@@ -1203,8 +1184,8 @@
             NSArray *discounts = self.successData[@"discount"][@"data"];
             for (NSDictionary *discount in discounts) {
                 UILabel *discountTitle = [[UILabel alloc] initWithFrame:CGRectMake(14, discountHeight, 160, 20)];
-                [discountTitle setFont:[UIFont phBlond:13]];
-                [discountTitle setTextColor:[UIColor darkGrayColor]];
+                [discountTitle setFont:[UIFont phBlond:11]];
+                [discountTitle setTextColor:[UIColor blackColor]];
                 [discountTitle setBackgroundColor:[UIColor clearColor]];
                 [self.bookingDiscountView addSubview:discountTitle];
                 
@@ -1213,35 +1194,56 @@
                 }
                 
                 UILabel *discountPrice = [[UILabel alloc] initWithFrame:CGRectMake(self.visibleSize.width - 160, discountHeight, 140, 20)];
-                [discountPrice setFont:[UIFont phBlond:13]];
+                [discountPrice setFont:[UIFont phBlond:11]];
                 [discountPrice setTextColor:[UIColor phPurpleColor]];
                 [discountPrice setBackgroundColor:[UIColor clearColor]];
                 [discountPrice setTextAlignment:NSTextAlignmentRight];
                 [self.bookingDiscountView addSubview:discountPrice];
                 
-                NSNumber *amount_discount = [discount objectForKey:@"amount_discount"];
+                NSString *amount_discount = [discount objectForKey:@"amount_used"];
                 if (amount_discount && ![amount_discount isEqual:[NSNull null]]) {
-                    NSString *amountDiscountString = [sharedData formatCurrencyString:[NSString stringWithFormat:@"%@", amount_discount]];
                     if ([amount_discount integerValue] == 0) {
                         [discountPrice setText:@"FREE"];
                     } else {
+                        NSString *amountDiscountString = [sharedData formatCurrencyString:amount_discount];
                         [discountPrice setText:[NSString stringWithFormat:@"- Rp%@",amountDiscountString]];
                     }
                 }
                 discountHeight += 30;
             }
             
+            UILabel *taxLabel = [[UILabel alloc] initWithFrame:CGRectMake(14, discountHeight, 160, 20)];
+            [taxLabel setText:@"TAX"];
+            [taxLabel setFont:[UIFont phBlond:11]];
+            [taxLabel setTextColor:[UIColor blackColor]];
+            [taxLabel setBackgroundColor:[UIColor clearColor]];
+            [self.bookingDiscountView addSubview:taxLabel];
+            
+            UILabel *bookingTaxPrice = [[UILabel alloc] initWithFrame:CGRectMake(self.visibleSize.width - 160, discountHeight, 140, 20)];
+            [bookingTaxPrice setFont:[UIFont phBlond:11]];
+            [bookingTaxPrice setTextColor:[UIColor phPurpleColor]];
+            [bookingTaxPrice setBackgroundColor:[UIColor clearColor]];
+            [bookingTaxPrice setTextAlignment:NSTextAlignmentRight];
+            NSString *tax_amount = [summary objectForKey:@"total_tax_amount"];
+            if (tax_amount && tax_amount != nil) {
+                NSString *formattedPrice = [sharedData formatCurrencyString:tax_amount];
+                [bookingTaxPrice setText:[NSString stringWithFormat:@"Rp%@", formattedPrice]];
+            }
+            [self.bookingDiscountView addSubview:bookingTaxPrice];
+            
+            discountHeight += 30;
+            
             NSNumber *creditUsed = self.successData[@"credit"][@"credit_used"];
             if (creditUsed && ![creditUsed isEqual:[NSNull null]] && creditUsed.integerValue > 0) {
                 UILabel *creditTitle = [[UILabel alloc] initWithFrame:CGRectMake(14, discountHeight, 160, 20)];
-                [creditTitle setFont:[UIFont phBlond:13]];
-                [creditTitle setTextColor:[UIColor darkGrayColor]];
+                [creditTitle setFont:[UIFont phBlond:11]];
+                [creditTitle setTextColor:[UIColor blackColor]];
                 [creditTitle setBackgroundColor:[UIColor clearColor]];
                 [creditTitle setText:@"CREDIT"];
                 [self.bookingDiscountView addSubview:creditTitle];
                 
                 UILabel *creditPrice = [[UILabel alloc] initWithFrame:CGRectMake(self.visibleSize.width - 160, discountHeight, 140, 20)];
-                [creditPrice setFont:[UIFont phBlond:13]];
+                [creditPrice setFont:[UIFont phBlond:11]];
                 [creditPrice setTextColor:[UIColor phPurpleColor]];
                 [creditPrice setBackgroundColor:[UIColor clearColor]];
                 [creditPrice setTextAlignment:NSTextAlignmentRight];
@@ -1262,7 +1264,7 @@
             [self.bookingDepositView setFrame:CGRectMake(self.bookingDepositView.frame.origin.x, offsetYDiscount, self.bookingDepositView.bounds.size.width, self.bookingDepositView.bounds.size.height)];
             offsetYDiscount += self.bookingDepositView.bounds.size.height;
             
-            NSString *total_price_all = [productList objectForKey:@"total_price_all"];
+            NSString *total_price_all = [summary objectForKey:@"total_price"];
             if (total_price_all && total_price_all != nil) {
                 NSString *formattedPrice = [sharedData formatCurrencyString:total_price_all];
                 [self.bookingTotalPrice setText:[NSString stringWithFormat:@"Rp%@", formattedPrice]];

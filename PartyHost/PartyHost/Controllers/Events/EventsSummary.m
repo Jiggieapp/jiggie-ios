@@ -654,10 +654,14 @@
     //ID
     self.sharedData.cEventId_Summary = self.cEvent.eventID;
     
-    if (self.cEvent.lowestPrice.integerValue > 0) {
-        SharedData *sharedData = [SharedData sharedInstance];
-        NSString *formattedPrice = [sharedData formatCurrencyString:self.cEvent.lowestPrice.stringValue];
-        [self.minimumPrice setText:[NSString stringWithFormat:@"Rp%@", formattedPrice]];
+    if ([self.cEvent.fullfillmentType isEqualToString:@"ticket"]) {
+        if (self.cEvent.lowestPrice.integerValue > 0) {
+            SharedData *sharedData = [SharedData sharedInstance];
+            NSString *formattedPrice = [sharedData formatCurrencyString:self.cEvent.lowestPrice.stringValue];
+            [self.minimumPrice setText:[NSString stringWithFormat:@"Rp%@", formattedPrice]];
+        } else {
+            [self.minimumPrice setText:@"FREE"];
+        }
         
         self.minimumPrice.hidden = NO;
         self.startFromLabel.hidden = NO;
@@ -974,10 +978,14 @@
         return;
     }
     
-    if (eventDetail.lowestPrice.integerValue > 0) {
-        SharedData *sharedData = [SharedData sharedInstance];
-        NSString *formattedPrice = [sharedData formatCurrencyString:eventDetail.lowestPrice.stringValue];
-        [self.minimumPrice setText:[NSString stringWithFormat:@"Rp%@", formattedPrice]];
+    if ([eventDetail.fullfillmentType isEqualToString:@"ticket"]) {
+        if (eventDetail.lowestPrice.integerValue > 0) {
+            SharedData *sharedData = [SharedData sharedInstance];
+            NSString *formattedPrice = [sharedData formatCurrencyString:eventDetail.lowestPrice.stringValue];
+            [self.minimumPrice setText:[NSString stringWithFormat:@"Rp%@", formattedPrice]];
+        } else {
+            [self.minimumPrice setText:@"FREE"];
+        }
         
         self.minimumPrice.hidden = NO;
         self.startFromLabel.hidden = NO;

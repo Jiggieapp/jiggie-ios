@@ -123,13 +123,13 @@
     
     [[NSNotificationCenter defaultCenter]
      addObserver:self
-     selector:@selector(initClass)
+     selector:@selector(updateConversation)
      name:@"UPDATE_CONVERSATION_LIST"
      object:nil];
     
     [[NSNotificationCenter defaultCenter]
      addObserver:self
-     selector:@selector(initClass)
+     selector:@selector(updateConversation)
      name:@"EXIT_MESSAGES"
      object:nil];
     
@@ -145,8 +145,7 @@
 }
 
 
--(void)initClass
-{
+-(void)initClass {
     [self reloadFetch:nil];
     [self loadConvos];
     
@@ -159,6 +158,10 @@
         }
     }
     [self loadFriends];
+}
+
+-(void)updateConversation {
+    [self loadConvos];
 }
 
 #pragma mark - Button Action

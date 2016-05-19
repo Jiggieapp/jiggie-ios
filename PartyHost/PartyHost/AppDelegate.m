@@ -125,7 +125,7 @@ static NSString *const kAllowTracking = @"allowTracking";
             self.sharedData.hasInitEventSelection = YES;
             
             [[NSNotificationCenter defaultCenter]
-             postNotificationName:@"SHOW_EVENT_MODAL"
+             postNotificationName:@"SHOW_EVENT_DETAIL"
              object:self];
             
         } else if([[userInfo objectForKey:@"type"]  isEqualToString:@"match"])
@@ -408,7 +408,7 @@ continueUserActivity:(NSUserActivity *)userActivity
                     self.sharedData.cEventId_Modal = dict[@"af_sub2"];
                     
                     [[NSNotificationCenter defaultCenter]
-                     postNotificationName:@"SHOW_EVENT_MODAL"
+                     postNotificationName:@"SHOW_EVENT_DETAIL"
                      object:self];
                 }
             }
@@ -444,7 +444,7 @@ continueUserActivity:(NSUserActivity *)userActivity
                 self.sharedData.cEventId_Modal = dict[@"af_sub2"];
                 
                 [[NSNotificationCenter defaultCenter]
-                 postNotificationName:@"SHOW_EVENT_MODAL"
+                 postNotificationName:@"SHOW_EVENT_DETAIL"
                  object:self];
                 
                 /*
@@ -625,7 +625,7 @@ continueUserActivity:(NSUserActivity *)userActivity
             self.sharedData.cEventId_Modal = [userInfo objectForKey:@"event_id"];
             
             [[NSNotificationCenter defaultCenter]
-             postNotificationName:@"SHOW_EVENT_MODAL"
+             postNotificationName:@"SHOW_EVENT_DETAIL"
              object:self];
          
         } else if([[userInfo objectForKey:@"type"]  isEqualToString:@"match"])

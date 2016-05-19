@@ -22,5 +22,6 @@
 @dynamic startDatetime;
 @dynamic endDatetime;
 @dynamic isFeatured;
+@dynamic fullfillmentType;
 
 @end
