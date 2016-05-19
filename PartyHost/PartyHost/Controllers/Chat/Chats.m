@@ -145,8 +145,7 @@
 }
 
 
--(void)initClass
-{
+-(void)initClass {
     [self reloadFetch:nil];
     [self loadConvos];
     
