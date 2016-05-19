@@ -22,7 +22,6 @@
 @property (nonatomic, strong) UILabel *ticketName;
 @property (nonatomic, strong) UILabel *ticketPrice;
 @property (nonatomic, strong) UILabel *adminPrice;
-@property (nonatomic, strong) UILabel *taxPrice;
 @property (nonatomic, strong) UIView *discountView;
 @property (nonatomic, strong) UIImageView *lineDotView;
 @property (nonatomic, strong) UILabel *totalLabel;
@@ -50,7 +49,6 @@
 @property (nonatomic, strong) UILabel *bookingTicketName;
 @property (nonatomic, strong) UILabel *bookingTicketPrice;
 @property (nonatomic, strong) UILabel *bookingServicePrice;
-@property (nonatomic, strong) UILabel *bookingTaxPrice;
 @property (nonatomic, strong) UIView *bookingDiscountView;
 @property (nonatomic, strong) UIView *bookingDepositView;
 @property (nonatomic, strong) UILabel *bookingTotalPrice;

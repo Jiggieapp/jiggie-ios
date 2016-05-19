@@ -184,10 +184,14 @@
     self.title.frame = CGRectMake(10, CGRectGetMaxY(self.mainImg.frame) + 14, self.sharedData.screenWidth - 20 - 70, 70);
     [self.title sizeToFit];
     
-    if (event.lowestPrice.integerValue > 0) {
-        SharedData *sharedData = [SharedData sharedInstance];
-        NSString *formattedPrice = [sharedData formatCurrencyString:event.lowestPrice.stringValue];
-        [self.minimumPrice setText:[NSString stringWithFormat:@"Rp%@", formattedPrice]];
+    if ([event .fullfillmentType isEqualToString:@"ticket"]) {
+        if (event.lowestPrice.integerValue > 0) {
+            SharedData *sharedData = [SharedData sharedInstance];
+            NSString *formattedPrice = [sharedData formatCurrencyString:event.lowestPrice.stringValue];
+            [self.minimumPrice setText:[NSString stringWithFormat:@"Rp%@", formattedPrice]];
+        } else {
+            [self.minimumPrice setText:@"FREE"];
+        }
         
         self.minimumPrice.hidden = NO;
         self.startFromLabel.hidden = NO;
