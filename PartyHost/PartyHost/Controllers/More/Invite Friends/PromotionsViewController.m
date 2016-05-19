@@ -105,6 +105,7 @@
                                  @"code" : self.promoCodeField.text};
     
     [SVProgressHUD show];
+    [self.view endEditing:YES];
     [manager POST:url parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         [SVProgressHUD dismiss];
         
