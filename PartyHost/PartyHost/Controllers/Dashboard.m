@@ -766,8 +766,6 @@
     }
     self.callInit = YES;
     
-    
-    
     [self updateTabState];
 }
 
