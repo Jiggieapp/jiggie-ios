@@ -591,10 +591,17 @@
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
+    [numberFormatter setLocale:[NSLocale localeWithLocaleIdentifier:@"id_ID"]];
+    [numberFormatter setNumberStyle:NSNumberFormatterDecimalStyle];
+    [numberFormatter setMaximumFractionDigits:2];
+    
+    NSString *creditAmount = [numberFormatter stringFromNumber:[NSNumber numberWithInteger:self.creditAmount.integerValue]];
+
     UILabel *textLabel = [[UILabel alloc] initWithFrame:CGRectMake(70, 20, 180, 20)];
     textLabel.backgroundColor = [UIColor clearColor];
     textLabel.font = [UIFont phBlond:16];
-    textLabel.text = [NSString stringWithFormat:@"Credit: Rp %@", self.creditAmount];
+    textLabel.text = [NSString stringWithFormat:@"Credit: Rp %@", creditAmount];
     
     UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(14, 10, 40, 40)];
     [imageView setImage:[UIImage imageNamed:@"credit_icon.png"]];
