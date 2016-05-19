@@ -594,7 +594,7 @@
     UILabel *textLabel = [[UILabel alloc] initWithFrame:CGRectMake(70, 20, 180, 20)];
     textLabel.backgroundColor = [UIColor clearColor];
     textLabel.font = [UIFont phBlond:16];
-    textLabel.text = [NSString stringWithFormat:@"Credit: %@", self.creditAmount];
+    textLabel.text = [NSString stringWithFormat:@"Credit: Rp %@", self.creditAmount];
     
     UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(14, 10, 40, 40)];
     [imageView setImage:[UIImage imageNamed:@"credit_icon.png"]];
