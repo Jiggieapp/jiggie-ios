@@ -193,12 +193,49 @@
        [self.userProfilePhone setTitle:@"Verify Phone Number" forState:UIControlStateNormal];
     }
     
+    self.creditAmount = [[NSUserDefaults standardUserDefaults] objectForKey:@"CURRENT_CREDIT_AMOUNT"] ?: @"0";
+    
+    [self loadCredit];
+    
     //Load settings now
     [self loadSettings];
     [self updateTable];
 }
 
 #pragma mark - API
+- (void)loadCredit {
+    AFHTTPRequestOperationManager *manager = [self.sharedData getOperationManager];
+    NSString *url = [NSString stringWithFormat:@"%@/credit/balance_credit/%@", PHBaseNewURL, self.sharedData.fb_id];
+    
+    [manager GET:url parameters:@{} success:^(AFHTTPRequestOperation *operation, id responseObject) {
+         NSString *responseString = operation.responseString;
+         NSError *error;
+         NSDictionary *json = (NSDictionary *)[NSJSONSerialization
+                                               JSONObjectWithData:[responseString dataUsingEncoding:NSUTF8StringEncoding]
+                                               options:kNilOptions
+                                               error:&error];
+         dispatch_async(dispatch_get_main_queue(), ^{
+             @try {
+                 NSDictionary *data = [json objectForKey:@"data"];
+                 if (data && data != nil) {
+                     NSDictionary *balanceCredit = data[@"balance_credit"];
+                     self.creditAmount = balanceCredit[@"tot_credit_active"];
+                     
+                     [[NSUserDefaults standardUserDefaults] setObject:self.creditAmount forKey:@"CURRENT_CREDIT_AMOUNT"];
+                     [[NSUserDefaults standardUserDefaults] synchronize];
+                 }
+                 
+                 [self.moreList reloadData];
+             }
+             @catch (NSException *exception) {
+             }
+             @finally {
+             }
+         });
+     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+     }];
+}
+
 -(void)loadSettings
 {
     //Start spinner
@@ -557,7 +594,7 @@
     UILabel *textLabel = [[UILabel alloc] initWithFrame:CGRectMake(70, 20, 180, 20)];
     textLabel.backgroundColor = [UIColor clearColor];
     textLabel.font = [UIFont phBlond:16];
-    textLabel.text = @"Credit:";
+    textLabel.text = [NSString stringWithFormat:@"Credit: %@", self.creditAmount];
     
     UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(14, 10, 40, 40)];
     [imageView setImage:[UIImage imageNamed:@"credit_icon.png"]];
