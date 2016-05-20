@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10116" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
@@ -25,6 +25,16 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="79.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wFo-qY-RLK">
+                        <rect key="frame" x="16" y="17" width="45" height="45"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="45" id="0MR-7L-zVe"/>
+                            <constraint firstAttribute="width" constant="45" id="TCY-wa-6Yp"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <nil key="highlightedColor"/>
+                    </label>
                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Sib-1Y-Tvv">
                         <rect key="frame" x="16" y="17" width="45" height="45"/>
                         <constraints>
@@ -33,19 +43,19 @@
                         </constraints>
                     </imageView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Emily Alphabet" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dnL-eG-dca">
-                        <rect key="frame" x="77" y="11" width="154" height="18"/>
+                        <rect key="frame" x="77" y="14" width="154" height="18"/>
                         <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="15"/>
                         <color key="textColor" red="0.011764705882352941" green="0.011764705882352941" blue="0.011764705882352941" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="1-(984)982-6246" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5q7-UA-IcV">
-                        <rect key="frame" x="77" y="36" width="154" height="16"/>
+                        <rect key="frame" x="77" y="34" width="154" height="16"/>
                         <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="13"/>
                         <color key="textColor" red="0.5607843137254902" green="0.55686274509803924" blue="0.58039215686274503" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="emily@alphabet.com" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="A4m-yA-0lh">
-                        <rect key="frame" x="77" y="52" width="118.5" height="16"/>
+                        <rect key="frame" x="77" y="50" width="118.5" height="16"/>
                         <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="13"/>
                         <color key="textColor" red="0.56078431370000004" green="0.5568627451" blue="0.58039215690000001" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
@@ -70,12 +80,14 @@
                     <constraint firstItem="Sib-1Y-Tvv" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="9" id="AP6-ck-cEc"/>
                     <constraint firstItem="A4m-yA-0lh" firstAttribute="leading" secondItem="5q7-UA-IcV" secondAttribute="leading" id="I8H-X2-nbG"/>
                     <constraint firstItem="dnL-eG-dca" firstAttribute="leading" secondItem="Sib-1Y-Tvv" secondAttribute="trailing" constant="16" id="JiW-6y-pil"/>
+                    <constraint firstItem="wFo-qY-RLK" firstAttribute="leading" secondItem="Sib-1Y-Tvv" secondAttribute="leading" id="Jls-Pw-DPW"/>
                     <constraint firstItem="GjZ-KO-DAh" firstAttribute="leading" secondItem="dnL-eG-dca" secondAttribute="trailing" constant="8" id="Mg3-Eh-K1h"/>
-                    <constraint firstAttribute="bottomMargin" secondItem="A4m-yA-0lh" secondAttribute="bottom" constant="3.5" id="Qip-cR-ow4"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="A4m-yA-0lh" secondAttribute="bottom" constant="5.5" id="Qip-cR-ow4"/>
                     <constraint firstItem="A4m-yA-0lh" firstAttribute="top" secondItem="5q7-UA-IcV" secondAttribute="bottom" id="cUp-x8-fyJ"/>
                     <constraint firstItem="5q7-UA-IcV" firstAttribute="leading" secondItem="dnL-eG-dca" secondAttribute="leading" id="ct5-Ap-8hB"/>
-                    <constraint firstItem="5q7-UA-IcV" firstAttribute="top" secondItem="dnL-eG-dca" secondAttribute="bottom" constant="7" id="icg-mP-vME"/>
-                    <constraint firstItem="dnL-eG-dca" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="3" id="kNR-6h-1Zw"/>
+                    <constraint firstItem="wFo-qY-RLK" firstAttribute="top" secondItem="Sib-1Y-Tvv" secondAttribute="top" id="dMR-z2-ONe"/>
+                    <constraint firstItem="5q7-UA-IcV" firstAttribute="top" secondItem="dnL-eG-dca" secondAttribute="bottom" constant="2" id="icg-mP-vME"/>
+                    <constraint firstItem="dnL-eG-dca" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="6" id="kNR-6h-1Zw"/>
                     <constraint firstAttribute="trailingMargin" secondItem="GjZ-KO-DAh" secondAttribute="trailing" constant="8" id="mg5-9K-9qb"/>
                     <constraint firstItem="Sib-1Y-Tvv" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="8" id="qKZ-Zb-7VY"/>
                     <constraint firstAttribute="bottomMargin" secondItem="Sib-1Y-Tvv" secondAttribute="bottom" constant="9.5" id="sh6-L9-wQS"/>
@@ -84,6 +96,7 @@
                 </constraints>
             </tableViewCellContentView>
             <connections>
+                <outlet property="InitialNameLabel" destination="wFo-qY-RLK" id="pUX-AP-bwZ"/>
                 <outlet property="emailLabel" destination="A4m-yA-0lh" id="TYH-pZ-iJy"/>
                 <outlet property="inviteButton" destination="GjZ-KO-DAh" id="h6p-b2-lry"/>
                 <outlet property="nameLabel" destination="dnL-eG-dca" id="46t-PU-Ksv"/>
