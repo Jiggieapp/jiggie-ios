@@ -36,6 +36,7 @@
 @property(nonatomic,strong) UITableView     *moreList;
 @property(nonatomic,assign) BOOL            isLoaded;
 @property(nonatomic,strong) EmptyView *emptyView;
+@property(nonatomic, copy) NSString *creditAmount;
 
 -(void)initClass;
 -(void)goPrivacy;

@@ -40,10 +40,10 @@
     int OffSetLargeDevice = 0;
     int OffsetFontLargeDevice = 0;
     if (self.sharedData.isIphone6) {
-        OffSetLargeDevice = 20;
+        OffSetLargeDevice = 10;
         OffsetFontLargeDevice = 1;
     } else if (self.sharedData.isIphone6plus) {
-        OffSetLargeDevice = 40;
+        OffSetLargeDevice = 20;
         OffsetFontLargeDevice = 3;
     }
     
@@ -76,6 +76,7 @@
     self.moreList.backgroundColor = [UIColor whiteColor];
     self.moreList.separatorColor = [UIColor phLightGrayColor];
     self.moreList.showsVerticalScrollIndicator = NO;
+    self.moreList.bounces = NO;
 //    self.moreList.scrollEnabled = (self.sharedData.isIphone4)?YES:NO;
     [self.mainCon addSubview:self.moreList];
     
@@ -192,12 +193,49 @@
        [self.userProfilePhone setTitle:@"Verify Phone Number" forState:UIControlStateNormal];
     }
     
+    self.creditAmount = [[NSUserDefaults standardUserDefaults] objectForKey:@"CURRENT_CREDIT_AMOUNT"] ?: @"0";
+    
+    [self loadCredit];
+    
     //Load settings now
     [self loadSettings];
     [self updateTable];
 }
 
 #pragma mark - API
+- (void)loadCredit {
+    AFHTTPRequestOperationManager *manager = [self.sharedData getOperationManager];
+    NSString *url = [NSString stringWithFormat:@"%@/credit/balance_credit/%@", PHBaseNewURL, self.sharedData.fb_id];
+    
+    [manager GET:url parameters:@{} success:^(AFHTTPRequestOperation *operation, id responseObject) {
+         NSString *responseString = operation.responseString;
+         NSError *error;
+         NSDictionary *json = (NSDictionary *)[NSJSONSerialization
+                                               JSONObjectWithData:[responseString dataUsingEncoding:NSUTF8StringEncoding]
+                                               options:kNilOptions
+                                               error:&error];
+         dispatch_async(dispatch_get_main_queue(), ^{
+             @try {
+                 NSDictionary *data = [json objectForKey:@"data"];
+                 if (data && data != nil) {
+                     NSDictionary *balanceCredit = data[@"balance_credit"];
+                     self.creditAmount = balanceCredit[@"tot_credit_active"];
+                     
+                     [[NSUserDefaults standardUserDefaults] setObject:self.creditAmount forKey:@"CURRENT_CREDIT_AMOUNT"];
+                     [[NSUserDefaults standardUserDefaults] synchronize];
+                 }
+                 
+                 [self.moreList reloadData];
+             }
+             @catch (NSException *exception) {
+             }
+             @finally {
+             }
+         });
+     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+     }];
+}
+
 -(void)loadSettings
 {
     //Start spinner
@@ -316,7 +354,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if (section==0) {
-        return 6;
+        return 7;
     } else if (section==1) {
         return 0;
     } else {
@@ -394,6 +432,32 @@
         }
         else if(indexPath.row==2)
         {
+            cell = [tableView dequeueReusableCellWithIdentifier:@"PromotionsCell"];
+            if (cell == nil) {cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"PromotionsCell"];}
+            
+            UILabel *textLabel = [[UILabel alloc] initWithFrame:CGRectMake(70, 20, 180, 20)];
+            textLabel.backgroundColor = [UIColor clearColor];
+            textLabel.font = [UIFont phBlond:16];
+            textLabel.text = @"Promotions";
+            [[cell contentView] addSubview:textLabel];
+            
+            UIImageView *cellImage = [[UIImageView alloc] initWithFrame:CGRectMake(14, 10, 40, 40)];
+            cellImage.layer.cornerRadius = 20;
+            [[cell contentView] addSubview:cellImage];
+            
+            UIImageView *iconImage = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 40, 40)];
+            [iconImage setImage:[UIImage imageNamed:@"promotions_icon.png"]];
+            [cellImage addSubview:iconImage];
+            
+            UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0.0, 0.0, 11.0, 21.0)];
+            [imageView setBackgroundColor:[UIColor clearColor]];
+            [imageView setImage:[UIImage imageNamed:@"forward.png"]];
+            [cell setAccessoryView:imageView];
+            [[cell accessoryView] setBackgroundColor:[UIColor clearColor]];
+            
+        }
+        else if(indexPath.row==3)
+        {
             cell = [tableView dequeueReusableCellWithIdentifier:@"SettingsCell"];
             if (cell == nil) {cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"SettingsCell"];}
             
@@ -422,7 +486,7 @@
             [cell setAccessoryView:imageView];
             [[cell accessoryView] setBackgroundColor:[UIColor clearColor]];
         }
-        else if(indexPath.row==3)
+        else if(indexPath.row==4)
         {
             cell = [tableView dequeueReusableCellWithIdentifier:@"InviteFriendsCell"];
             if (cell == nil) {cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"InviteFriendsCell"];}
@@ -430,7 +494,7 @@
             UILabel *textLabel = [[UILabel alloc] initWithFrame:CGRectMake(70, 20, 180, 20)];
             textLabel.backgroundColor = [UIColor clearColor];
             textLabel.font = [UIFont phBlond:16];
-            textLabel.text = @"Invite Friends";
+            textLabel.text = @"Get Free Credits";
             [[cell contentView] addSubview:textLabel];
             
             UIImageView *cellImage = [[UIImageView alloc] initWithFrame:CGRectMake(14, 10, 40, 40)];
@@ -449,7 +513,7 @@
             [[cell accessoryView] setBackgroundColor:[UIColor clearColor]];
 
         }
-        else if(indexPath.row==4)
+        else if(indexPath.row==5)
         {
             cell = [tableView dequeueReusableCellWithIdentifier:@"EmailSupportCell"];
             if (cell == nil) {cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"EmailSupportCell"];}
@@ -476,8 +540,7 @@
             [[cell accessoryView] setBackgroundColor:[UIColor clearColor]];
 
         }
-        
-        else if (indexPath.row==5)
+        else if (indexPath.row==6)
         {
             cell = [tableView dequeueReusableCellWithIdentifier:@"LogOutCell"];
             if (cell == nil) {cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"LogOutCell"];}
@@ -523,6 +586,37 @@
 }
 
 #pragma mark - UITableViewDelegate
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    return 60.f;
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
+    [numberFormatter setLocale:[NSLocale localeWithLocaleIdentifier:@"id_ID"]];
+    [numberFormatter setNumberStyle:NSNumberFormatterDecimalStyle];
+    [numberFormatter setMaximumFractionDigits:2];
+    
+    NSString *creditAmount = [numberFormatter stringFromNumber:[NSNumber numberWithInteger:self.creditAmount.integerValue]];
+
+    UILabel *textLabel = [[UILabel alloc] initWithFrame:CGRectMake(70, 20, 180, 20)];
+    textLabel.backgroundColor = [UIColor clearColor];
+    textLabel.font = [UIFont phBlond:16];
+    textLabel.text = [NSString stringWithFormat:@"Credit: Rp %@", creditAmount];
+    
+    UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(14, 10, 40, 40)];
+    [imageView setImage:[UIImage imageNamed:@"credit_icon.png"]];
+    
+    UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(.0f,
+                                                                  .0f,
+                                                                  CGRectGetWidth([UIScreen mainScreen].bounds),
+                                                                  60.f)];
+    [headerView setBackgroundColor:[UIColor whiteColor]];
+    [headerView addSubview:textLabel];
+    [headerView addSubview:imageView];
+    
+    return headerView;
+}
+
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     //Change role
@@ -549,8 +643,17 @@
             return;
         }
         
+        //Promotions
+        else if(indexPath.row == 2)
+        {
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"SHOW_PROMOTIONS"
+                                                                object:nil];
+            
+            return;
+        }
+        
         //Settings
-        else if(indexPath.row == 2 && [UserManager updateLocalSetting])
+        else if(indexPath.row == 3 && [UserManager updateLocalSetting])
         {
             self.settingsPage.hidden = NO;
             self.profilePage.hidden = YES;
@@ -566,19 +669,18 @@
         }
 
         //Invite friends
-        else if(indexPath.row == 3)
+        else if(indexPath.row == 4)
         {
             [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Share App" withDict:@{@"origin":@"More"}];
             
-            [[NSNotificationCenter defaultCenter]
-             postNotificationName:@"SHOW_GENERAL_INVITE"
-             object:self];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"SHOW_INVITE_FRIENDS"
+                                                                object:nil];
             
             return;
         }
         
         //Email support
-        else if(indexPath.row == 4)
+        else if(indexPath.row == 5)
         {
             [[NSNotificationCenter defaultCenter]
              postNotificationName:@"SHOW_MAIL_MESSAGE"
@@ -588,7 +690,7 @@
         }
         
         //Log Out
-        else if(indexPath.row == 5)
+        else if(indexPath.row == 6)
         {
             
             [[UserManager sharedManager] clearAllUserData];

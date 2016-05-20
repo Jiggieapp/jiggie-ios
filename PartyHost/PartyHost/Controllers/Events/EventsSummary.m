@@ -126,7 +126,7 @@
     
     self.minimumPrice = [[UILabel alloc] initWithFrame:CGRectMake(16, CGRectGetMaxY(self.picScroll.frame) - 32, self.sharedData.screenWidth - 32, 20)];
     self.minimumPrice.textColor = [UIColor whiteColor];
-    self.minimumPrice.text = @"Rp400K";
+    self.minimumPrice.text = @"FREE";
     self.minimumPrice.font = [UIFont phBold:18];
     [self.mainScroll addSubview:self.minimumPrice];
     
@@ -570,6 +570,8 @@
         [self.likeCount setText:[NSString stringWithFormat:@"%li", likeCount]];
         
         [self postLikeEvent:NO];
+        
+        [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Unlike Event Details" withDict:self.sharedData.mixPanelCEventDict];
     } else {
         [likeButton setSelected:YES];
 
@@ -578,6 +580,8 @@
         [self.likeCount setText:[NSString stringWithFormat:@"%li", likeCount]];
         
         [self postLikeEvent:YES];
+        
+        [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Like Event Details" withDict:self.sharedData.mixPanelCEventDict];
     }
 }
 
@@ -650,10 +654,14 @@
     //ID
     self.sharedData.cEventId_Summary = self.cEvent.eventID;
     
-    if (self.cEvent.lowestPrice.integerValue > 0) {
-        SharedData *sharedData = [SharedData sharedInstance];
-        NSString *formattedPrice = [sharedData formatCurrencyString:self.cEvent.lowestPrice.stringValue];
-        [self.minimumPrice setText:[NSString stringWithFormat:@"Rp%@", formattedPrice]];
+    if ([self.cEvent.fullfillmentType isEqualToString:@"ticket"]) {
+        if (self.cEvent.lowestPrice.integerValue > 0) {
+            SharedData *sharedData = [SharedData sharedInstance];
+            NSString *formattedPrice = [sharedData formatCurrencyString:self.cEvent.lowestPrice.stringValue];
+            [self.minimumPrice setText:[NSString stringWithFormat:@"Rp%@", formattedPrice]];
+        } else {
+            [self.minimumPrice setText:@"FREE"];
+        }
         
         self.minimumPrice.hidden = NO;
         self.startFromLabel.hidden = NO;
@@ -916,7 +924,28 @@
                      
                      NSError *error;
                      if (![self.managedObjectContext save:&error]) NSLog(@"Error: %@", [error localizedDescription]);
-
+                     
+                     // Show Invite Friends screen if user already visited Events Detail twice.
+                     NSInteger visitedEventsDetailCount = [[NSUserDefaults standardUserDefaults] integerForKey:@"VISITED_EVENTS_DETAIL"];
+                     
+                     if (visitedEventsDetailCount == 1) {
+                         visitedEventsDetailCount++;
+                         
+                         [[NSUserDefaults standardUserDefaults] setInteger:visitedEventsDetailCount
+                                                                    forKey:@"VISITED_EVENTS_DETAIL"];
+                         [[NSUserDefaults standardUserDefaults] synchronize];
+                         
+                         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                             [[NSNotificationCenter defaultCenter] postNotificationName:@"SHOW_INVITE_CONTACT_FRIENDS"
+                                                                                 object:nil];
+                         });
+                     } else if (visitedEventsDetailCount < 1) {
+                         visitedEventsDetailCount++;
+                         
+                         [[NSUserDefaults standardUserDefaults] setInteger:visitedEventsDetailCount
+                                                                    forKey:@"VISITED_EVENTS_DETAIL"];
+                         [[NSUserDefaults standardUserDefaults] synchronize];
+                     }
                  }
              }
              @catch (NSException *exception) {
@@ -949,10 +978,14 @@
         return;
     }
     
-    if (eventDetail.lowestPrice.integerValue > 0) {
-        SharedData *sharedData = [SharedData sharedInstance];
-        NSString *formattedPrice = [sharedData formatCurrencyString:eventDetail.lowestPrice.stringValue];
-        [self.minimumPrice setText:[NSString stringWithFormat:@"Rp%@", formattedPrice]];
+    if ([eventDetail.fullfillmentType isEqualToString:@"ticket"]) {
+        if (eventDetail.lowestPrice.integerValue > 0) {
+            SharedData *sharedData = [SharedData sharedInstance];
+            NSString *formattedPrice = [sharedData formatCurrencyString:eventDetail.lowestPrice.stringValue];
+            [self.minimumPrice setText:[NSString stringWithFormat:@"Rp%@", formattedPrice]];
+        } else {
+            [self.minimumPrice setText:@"FREE"];
+        }
         
         self.minimumPrice.hidden = NO;
         self.startFromLabel.hidden = NO;

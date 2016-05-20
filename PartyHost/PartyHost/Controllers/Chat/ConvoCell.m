@@ -8,6 +8,7 @@
 
 #import "ConvoCell.h"
 #import "Chat.h"
+#import "Friend.h"
 
 @implementation ConvoCell
 
@@ -98,14 +99,14 @@
     [self.unreadBadge updateValue:0];
 }
 
-- (void)loadData:(Chat *)chat {
+- (void)loadChatData:(Chat *)chat {
     self.iconCon.hidden = NO;
     self.nameLabel.hidden = NO;
     self.lastLabel.hidden = NO;
     self.textLabel.text = @"";
     self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     
-    self.nameLabel.text = [chat.fromName uppercaseString];
+    self.nameLabel.text = [chat.fromName capitalizedString];
     [self.icon setName:chat.fromName lastName:nil];
     
     //Set last message
@@ -121,6 +122,33 @@
     [self.unreadBadge updateValue:chat.unread.intValue];
     
     [self.icon loadFacebookImage:chat.fb_id];
+}
+
+- (void)loadFriendData:(Friend *)friend {
+    self.iconCon.hidden = NO;
+    self.nameLabel.hidden = NO;
+    self.lastLabel.hidden = NO;
+    self.textLabel.text = @"";
+    self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    
+    self.nameLabel.text = [[NSString stringWithFormat:@"%@ %@", friend.firstName, friend.lastName] capitalizedString];
+    [self.icon setName:self.nameLabel.text lastName:nil];
+    
+    //Set about
+    if([friend.about length]==0) {
+        self.lastLabel.text = @"";
+    } else {
+        self.lastLabel.text = friend.about;
+    }
+    
+    //Hide time ago
+    self.dateLabel.text = @"";
+    
+    [self.unreadBadge updateValue:0];
+    
+    if (friend.imgURL) {
+        [self.icon loadImage:friend.imgURL];
+    }
 }
 
 @end

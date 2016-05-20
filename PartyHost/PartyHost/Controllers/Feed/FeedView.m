@@ -285,28 +285,30 @@
             [self.emptyView setMode:@"empty"];
             [SVProgressHUD showInfoWithStatus:@"Please check your internet connection"];
         } else {
-            [self.feedData removeAllObjects];
-            
-            if ((!feeds || feeds.count == 0) && statusCode == 204) {
-                [self showEmptyView];
+            dispatch_async(dispatch_get_main_queue(), ^{
                 [self.feedData removeAllObjects];
-                [self.swipeableView setHidden:YES];
                 
-                [Feed removeArchivedObject];
+                if ((!feeds || feeds.count == 0) && statusCode == 204) {
+                    [self showEmptyView];
+                    [self.feedData removeAllObjects];
+                    [self.swipeableView setHidden:YES];
+                    
+                    [Feed removeArchivedObject];
+                    
+                    return;
+                }
                 
-                return;
-            }
-            
-            [self.emptyView setMode:@"hide"];
-            [self.feedData addObjectsFromArray:feeds];
-            
-            [self.swipeableView setHidden:NO];
-            [self.swipeableView loadViewsIfNeeded];
-            
-            if (self.feedData.count > 0) {
-                [Feed archiveObject:feeds];
-                [[AnalyticManager sharedManager] trackMixPanelWithDict:@"New Feed Item" withDict:@{}];
-            }
+                [self.emptyView setMode:@"hide"];
+                [self.feedData addObjectsFromArray:feeds];
+                
+                [self.swipeableView setHidden:NO];
+                [self.swipeableView loadViewsIfNeeded];
+                
+                if (self.feedData.count > 0) {
+                    [Feed archiveObject:feeds];
+                    [[AnalyticManager sharedManager] trackMixPanelWithDict:@"New Feed Item" withDict:@{}];
+                }
+            });
         }
         
         if (completion) {
@@ -318,27 +320,29 @@
 - (void)toggleMatch {
     [SVProgressHUD show];
     [Feed enableSocialFeed:self.sharedData.matchMe withCompletionHandler:^(NSError *error) {
-        if (error) {
-            [self.discoverSwitch setOn:!self.sharedData.matchMe animated:YES];
-            [self setMatchViewToOn:!self.sharedData.matchMe];
-        } else {
-            [self.swipeableView setHidden:!self.sharedData.matchMe];
-            [self.discoverSwitch setOn:self.sharedData.matchMe animated:YES];
-            [self setMatchViewToOn:self.sharedData.matchMe];
-            
-            self.sharedData.feedBadge.hidden = !self.sharedData.matchMe;
-            self.sharedData.feedBadge.canShow = self.sharedData.matchMe;
-            
-            [self.swipeableView discardAllViews];
-            
-            if (self.sharedData.matchMe) {
-                [self loadDataAndShowHUD:YES withCompletionHandler:nil];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (error) {
+                [self.discoverSwitch setOn:!self.sharedData.matchMe animated:YES];
+                [self setMatchViewToOn:!self.sharedData.matchMe];
             } else {
-                [self.emptyView setMode:@"hide"];
+                [self.swipeableView setHidden:!self.sharedData.matchMe];
+                [self.discoverSwitch setOn:self.sharedData.matchMe animated:YES];
+                [self setMatchViewToOn:self.sharedData.matchMe];
+                
+                self.sharedData.feedBadge.hidden = !self.sharedData.matchMe;
+                self.sharedData.feedBadge.canShow = self.sharedData.matchMe;
+                
+                [self.swipeableView discardAllViews];
+                
+                if (self.sharedData.matchMe) {
+                    [self loadDataAndShowHUD:YES withCompletionHandler:nil];
+                } else {
+                    [self.emptyView setMode:@"hide"];
+                }
+                
+                [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Socialize Toggle" withDict:@{@"toggle":self.sharedData.matchMe ? @"yes" : @"no"}];
             }
-            
-            [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Socialize Toggle" withDict:@{@"toggle":self.sharedData.matchMe ? @"yes" : @"no"}];
-        }
+        });
         
         [SVProgressHUD dismiss];
     }];
@@ -346,6 +350,8 @@
 
 - (void)approveFeed:(BOOL)approved withFeed:(Feed *)feed {
     if (approved) {
+        [self trackApprovedFeedItemWithType:feed.type];
+        
         switch (feed.type) {
             case FeedTypeApproved: {
                 [JGTooltipHelper setShowed:@"Tooltip_AcceptRequest_isShowed"];
@@ -353,32 +359,44 @@
                 [SVProgressHUD show];
                 [Feed approveFeed:approved withFbId:feed.fromFbId andCompletionHandler:^(NSError *error) {
                     [SVProgressHUD dismiss];
-                    if (error == nil) {
-                        self.sharedData.conversationId = feed.fromFbId;
-                        self.sharedData.messagesPage.toId = feed.fromFbId;
-                        self.sharedData.messagesPage.toLabel.text = [feed.fromFirstName uppercaseString];
-                        self.sharedData.feedMatchEvent = feed.eventName;
-                        self.sharedData.feedMatchImage = feed.fromImageURL;
-                        self.sharedData.toImgURL = [self.sharedData profileImg:self.sharedData.fromMailId];
-                        
-                        if (self.feedData.count == 0) {
-                            [self showEmptyView];
+                    
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        if (error == nil) {
+                            self.sharedData.conversationId = feed.fromFbId;
+                            self.sharedData.messagesPage.toId = feed.fromFbId;
+                            self.sharedData.messagesPage.toLabel.text = [feed.fromFirstName uppercaseString];
+                            self.sharedData.feedMatchEvent = feed.eventName;
+                            self.sharedData.feedMatchImage = feed.fromImageURL;
+                            self.sharedData.toImgURL = [self.sharedData profileImg:self.sharedData.fromMailId];
+                            
+                            if (self.feedData.count == 0) {
+                                [self showEmptyView];
+                            }
+                            
+                            [[NSNotificationCenter defaultCenter] postNotificationName:@"SHOW_FEED_MATCH"
+                                                                                object:self];
+                            
                         }
-                        
-                        [[NSNotificationCenter defaultCenter] postNotificationName:@"SHOW_FEED_MATCH"
-                                                                            object:self];
-                        
-                    }
+                    });
                 }];
                 break;
             }
             case FeedTypeViewed: {
                 [JGTooltipHelper setShowed:@"Tooltip_AcceptSuggestion_isShowed"];
                 
+<<<<<<< HEAD
                 [Feed approveFeed:approved withFbId:feed.fromFbId andCompletionHandler:^(NSError *error) {
                     if (self.feedData.count == 0) {
                         [self showEmptyView];
                     }
+=======
+                [Feed approveFeed:YES withFbId:feed.fromFbId andCompletionHandler:^(NSError *error) {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        if (self.feedData.count == 0) {
+                            [self showEmptyView];
+                        }
+                    });
+>>>>>>> feature/grandlaunch
                 }];
                 break;
             }
@@ -388,10 +406,16 @@
         
     } else {
         [self trackDeniedFeedItemWithType:feed.type];
+<<<<<<< HEAD
+=======
+        
+>>>>>>> feature/grandlaunch
         [Feed approveFeed:approved withFbId:feed.fromFbId andCompletionHandler:^(NSError *error) {
-            if (self.feedData.count == 0) {
-                [self showEmptyView];
-            }
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (self.feedData.count == 0) {
+                    [self showEmptyView];
+                }
+            });
         }];
     }
 }

@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10116" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <mutableArray key="Lato-Bold.ttf">
+            <string>Lato-Bold</string>
+        </mutableArray>
+        <mutableArray key="Lato-Regular.ttf">
+            <string>Lato-Regular</string>
+            <string>Lato-Regular</string>
+            <string>Lato-Regular</string>
+        </mutableArray>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="80" id="KGk-i7-Jjw" customClass="InviteFriendsTableViewCell">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="80"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="79.5"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wFo-qY-RLK">
+                        <rect key="frame" x="16" y="17" width="45" height="45"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="45" id="0MR-7L-zVe"/>
+                            <constraint firstAttribute="width" constant="45" id="TCY-wa-6Yp"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Sib-1Y-Tvv">
+                        <rect key="frame" x="16" y="17" width="45" height="45"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="45" id="L4q-yr-u6m"/>
+                            <constraint firstAttribute="width" constant="45" id="rjY-7A-YAO"/>
+                        </constraints>
+                    </imageView>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Emily Alphabet" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dnL-eG-dca">
+                        <rect key="frame" x="77" y="14" width="154" height="18"/>
+                        <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="15"/>
+                        <color key="textColor" red="0.011764705882352941" green="0.011764705882352941" blue="0.011764705882352941" alpha="1" colorSpace="calibratedRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="1-(984)982-6246" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5q7-UA-IcV">
+                        <rect key="frame" x="77" y="34" width="154" height="16"/>
+                        <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="13"/>
+                        <color key="textColor" red="0.5607843137254902" green="0.55686274509803924" blue="0.58039215686274503" alpha="1" colorSpace="calibratedRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="emily@alphabet.com" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="A4m-yA-0lh">
+                        <rect key="frame" x="77" y="50" width="118.5" height="16"/>
+                        <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="13"/>
+                        <color key="textColor" red="0.56078431370000004" green="0.5568627451" blue="0.58039215690000001" alpha="1" colorSpace="calibratedRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GjZ-KO-DAh">
+                        <rect key="frame" x="239" y="25" width="65" height="30"/>
+                        <color key="backgroundColor" red="0.062745098040000002" green="0.73333333329999995" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="65" id="5wa-h0-7yq"/>
+                            <constraint firstAttribute="height" constant="30" id="vcG-uy-jMt"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" name="Lato-Bold" family="Lato" pointSize="14"/>
+                        <state key="normal" title="INVITE">
+                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        </state>
+                        <connections>
+                            <action selector="didTapInviteButton:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="yOa-IA-vck"/>
+                        </connections>
+                    </button>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="Sib-1Y-Tvv" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="9" id="AP6-ck-cEc"/>
+                    <constraint firstItem="A4m-yA-0lh" firstAttribute="leading" secondItem="5q7-UA-IcV" secondAttribute="leading" id="I8H-X2-nbG"/>
+                    <constraint firstItem="dnL-eG-dca" firstAttribute="leading" secondItem="Sib-1Y-Tvv" secondAttribute="trailing" constant="16" id="JiW-6y-pil"/>
+                    <constraint firstItem="wFo-qY-RLK" firstAttribute="leading" secondItem="Sib-1Y-Tvv" secondAttribute="leading" id="Jls-Pw-DPW"/>
+                    <constraint firstItem="GjZ-KO-DAh" firstAttribute="leading" secondItem="dnL-eG-dca" secondAttribute="trailing" constant="8" id="Mg3-Eh-K1h"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="A4m-yA-0lh" secondAttribute="bottom" constant="5.5" id="Qip-cR-ow4"/>
+                    <constraint firstItem="A4m-yA-0lh" firstAttribute="top" secondItem="5q7-UA-IcV" secondAttribute="bottom" id="cUp-x8-fyJ"/>
+                    <constraint firstItem="5q7-UA-IcV" firstAttribute="leading" secondItem="dnL-eG-dca" secondAttribute="leading" id="ct5-Ap-8hB"/>
+                    <constraint firstItem="wFo-qY-RLK" firstAttribute="top" secondItem="Sib-1Y-Tvv" secondAttribute="top" id="dMR-z2-ONe"/>
+                    <constraint firstItem="5q7-UA-IcV" firstAttribute="top" secondItem="dnL-eG-dca" secondAttribute="bottom" constant="2" id="icg-mP-vME"/>
+                    <constraint firstItem="dnL-eG-dca" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="6" id="kNR-6h-1Zw"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="GjZ-KO-DAh" secondAttribute="trailing" constant="8" id="mg5-9K-9qb"/>
+                    <constraint firstItem="Sib-1Y-Tvv" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="8" id="qKZ-Zb-7VY"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="Sib-1Y-Tvv" secondAttribute="bottom" constant="9.5" id="sh6-L9-wQS"/>
+                    <constraint firstItem="GjZ-KO-DAh" firstAttribute="centerY" secondItem="Sib-1Y-Tvv" secondAttribute="centerY" id="ttb-tA-Qi7"/>
+                    <constraint firstItem="GjZ-KO-DAh" firstAttribute="leading" secondItem="5q7-UA-IcV" secondAttribute="trailing" constant="8" id="tza-yH-84o"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="InitialNameLabel" destination="wFo-qY-RLK" id="pUX-AP-bwZ"/>
+                <outlet property="emailLabel" destination="A4m-yA-0lh" id="TYH-pZ-iJy"/>
+                <outlet property="inviteButton" destination="GjZ-KO-DAh" id="h6p-b2-lry"/>
+                <outlet property="nameLabel" destination="dnL-eG-dca" id="46t-PU-Ksv"/>
+                <outlet property="phoneNumberLabel" destination="5q7-UA-IcV" id="nek-2n-9Am"/>
+                <outlet property="profileImageView" destination="Sib-1Y-Tvv" id="Odl-iV-Lch"/>
+            </connections>
+        </tableViewCell>
+    </objects>
+</document>
