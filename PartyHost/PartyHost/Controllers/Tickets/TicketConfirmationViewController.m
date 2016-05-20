@@ -152,7 +152,7 @@
 - (void)loadPurchaseView {
     // SCROLL VIEW
     
-    self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 60, self.visibleSize.width, self.view.bounds.size.height - 60 - 100)];
+    self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 60, self.visibleSize.width, self.view.bounds.size.height - 60 - 64 - 100)];
     self.scrollView.showsVerticalScrollIndicator    = YES;
     self.scrollView.showsHorizontalScrollIndicator  = NO;
     self.scrollView.scrollEnabled                   = YES;
