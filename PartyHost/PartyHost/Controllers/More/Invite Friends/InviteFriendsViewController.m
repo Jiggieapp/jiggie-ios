@@ -310,21 +310,24 @@ static NSString *const InviteFriendsTableViewCellIdentifier = @"InviteFriendsTab
     
     NSMutableArray *contacts = [NSMutableArray arrayWithCapacity:self.contacts.count];
     
-    for (Contact *contact in self.contacts) {
-        NSMutableDictionary *contactDictionary = [NSMutableDictionary dictionaryWithDictionary:@{@"name" : contact.name}];
-        
-        [contactDictionary setObject:contact.phones forKey:@"phone"];
-        [contactDictionary setObject:contact.emails forKey:@"email"];
-        
-        if (![self.invitedFriendsRecordIDs containsObject:contact.recordID]) {
-            [contacts addObject:contactDictionary];
+    [SVProgressHUD show];
+    
+    @autoreleasepool {
+        for (Contact *contact in self.contacts) {
+            NSMutableDictionary *contactDictionary = [NSMutableDictionary dictionaryWithDictionary:@{@"name" : contact.name}];
+            
+            [contactDictionary setObject:contact.phones ?: @[] forKey:@"phone"];
+            [contactDictionary setObject:contact.emails ?: @[] forKey:@"email"];
+            
+            if (![self.invitedFriendsRecordIDs containsObject:contact.recordID]) {
+                [contacts addObject:contactDictionary];
+            }
         }
     }
     
     NSDictionary *parameters = @{@"fb_id" : sharedData.fb_id,
                                  @"contact" : contacts};
     
-    [SVProgressHUD show];
     [manager POST:url parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         [SVProgressHUD dismiss];
         
