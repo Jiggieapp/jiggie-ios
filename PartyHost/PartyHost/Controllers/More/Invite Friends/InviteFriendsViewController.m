@@ -176,12 +176,6 @@ static NSString *const InviteFriendsTableViewCellIdentifier = @"InviteFriendsTab
             NSString *url = [NSString stringWithFormat:@"%@/credit/contact", PHBaseNewURL];
             NSMutableArray *contactsModel = [NSMutableArray arrayWithCapacity:contacts.count];
             
-            @autoreleasepool {
-                for (APContact *contact in contacts) {
-                    [contactsModel addObject:[[Contact alloc] initWithContact:contact]];
-                }
-            }
-            
             NSMutableDictionary *parameters = [NSMutableDictionary
                                                dictionaryWithDictionary:@{@"fb_id" : sharedData.fb_id,
                                                                           @"device_type" : @"1",
@@ -196,6 +190,27 @@ static NSString *const InviteFriendsTableViewCellIdentifier = @"InviteFriendsTab
                 }
                 
                 dispatch_async(dispatch_get_main_queue(), ^{
+                    NSString *responseString = operation.responseString;
+                    NSError *error;
+                    NSDictionary *json = (NSDictionary *)[NSJSONSerialization
+                                                          JSONObjectWithData:[responseString dataUsingEncoding:NSUTF8StringEncoding]
+                                                          options:kNilOptions
+                                                          error:&error];
+                    NSDictionary *data = [json objectForKey:@"data"];
+                    
+                    if (data) {
+                        NSNumber *inviterRewards = [data objectForKey:@"rewards_inviter"];
+                        NSNumber *totalCredits = [NSNumber numberWithInteger:[inviterRewards integerValue] * contacts.count];
+                        
+                        @autoreleasepool {
+                            for (APContact *contact in contacts) {
+                                [contactsModel addObject:[[Contact alloc] initWithContact:contact
+                                                                                andCredit:inviterRewards]];
+                            }
+                        }
+                        [self updateInviteButtonWithCredit:totalCredits];
+                    }
+                    
                     NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES];
                     NSArray *sortedContactsModel = [contactsModel sortedArrayUsingDescriptors:@[sortDescriptor]];
                     
