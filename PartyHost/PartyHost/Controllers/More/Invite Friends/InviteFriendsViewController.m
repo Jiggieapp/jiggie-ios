@@ -240,38 +240,42 @@ static NSString *const InviteFriendsTableViewCellIdentifier = @"InviteFriendsTab
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-    UILabel *creditInfoLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 10, tableView.bounds.size.width, 40)];
-    [creditInfoLabel setNumberOfLines:2];
-    [creditInfoLabel setBackgroundColor:[UIColor clearColor]];
-    
-    NSMutableParagraphStyle *style = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
-    [style setAlignment:NSTextAlignmentCenter];
-    [style setLineBreakMode:NSLineBreakByWordWrapping];
-    
-    UIFont *font1 = [UIFont fontWithName:@"Lato-Regular" size:14.0f];
-    UIFont *font2 = [UIFont fontWithName:@"Lato-Bold" size:15.0f];
-    NSDictionary *dict1 = @{NSFontAttributeName:font1,
-                            NSForegroundColorAttributeName:[UIColor phDarkGrayColor],
-                            NSParagraphStyleAttributeName:style}; // Added line
-    NSDictionary *dict2 = @{NSFontAttributeName:font2,
-                            NSForegroundColorAttributeName:[UIColor phDarkGrayColor],
-                            NSParagraphStyleAttributeName:style}; // Added line
-    
-    NSMutableAttributedString *attString = [[NSMutableAttributedString alloc] init];
-    [attString appendAttributedString:[[NSAttributedString alloc] initWithString:@"You have " attributes:dict1]];
-    [attString appendAttributedString:[[NSAttributedString alloc] initWithString:@"70 contacts " attributes:dict2]];
-    [attString appendAttributedString:[[NSAttributedString alloc] initWithString:@"not yet on Jiggie.\n" attributes:dict1]];
-    [attString appendAttributedString:[[NSAttributedString alloc] initWithString:@"Earn up to " attributes:dict1]];
-    [attString appendAttributedString:[[NSAttributedString alloc] initWithString:@"Rp 350.000.000 " attributes:dict2]];
-    [attString appendAttributedString:[[NSAttributedString alloc] initWithString:@"in free credit!" attributes:dict1]];
-
-    [creditInfoLabel setAttributedText:attString];
-    
-    UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.bounds.size.width, 60)];
-    [headerView setBackgroundColor:[UIColor colorFromHexCode:@"F1F1F1"]];
-    [headerView addSubview:creditInfoLabel];
-    
-    return headerView;
+    if (self.contacts) {
+        UILabel *creditInfoLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 10, tableView.bounds.size.width, 40)];
+        [creditInfoLabel setNumberOfLines:2];
+        [creditInfoLabel setBackgroundColor:[UIColor clearColor]];
+        
+        NSMutableParagraphStyle *style = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
+        [style setAlignment:NSTextAlignmentCenter];
+        [style setLineBreakMode:NSLineBreakByWordWrapping];
+        
+        UIFont *font1 = [UIFont fontWithName:@"Lato-Regular" size:14.0f];
+        UIFont *font2 = [UIFont fontWithName:@"Lato-Bold" size:15.0f];
+        NSDictionary *dict1 = @{NSFontAttributeName:font1,
+                                NSForegroundColorAttributeName:[UIColor phDarkGrayColor],
+                                NSParagraphStyleAttributeName:style}; // Added line
+        NSDictionary *dict2 = @{NSFontAttributeName:font2,
+                                NSForegroundColorAttributeName:[UIColor phDarkGrayColor],
+                                NSParagraphStyleAttributeName:style}; // Added line
+        
+        NSMutableAttributedString *attString = [[NSMutableAttributedString alloc] init];
+        [attString appendAttributedString:[[NSAttributedString alloc] initWithString:@"You have " attributes:dict1]];
+        [attString appendAttributedString:[[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%lu contacts ", (unsigned long)self.contacts.count] attributes:dict2]];
+        [attString appendAttributedString:[[NSAttributedString alloc] initWithString:@"not yet on Jiggie.\n" attributes:dict1]];
+        [attString appendAttributedString:[[NSAttributedString alloc] initWithString:@"Earn up to " attributes:dict1]];
+        [attString appendAttributedString:[[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@ ", [self.inviteAllButton.currentAttributedTitle.string componentsSeparatedByString:@"+"][1]] attributes:dict2]];
+        [attString appendAttributedString:[[NSAttributedString alloc] initWithString:@"in free credit!" attributes:dict1]];
+        
+        [creditInfoLabel setAttributedText:attString];
+        
+        UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.bounds.size.width, 60)];
+        [headerView setBackgroundColor:[UIColor colorFromHexCode:@"F1F1F1"]];
+        [headerView addSubview:creditInfoLabel];
+        
+        return headerView;
+    } else {
+        return [UIView new];
+    }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -368,6 +372,10 @@ static NSString *const InviteFriendsTableViewCellIdentifier = @"InviteFriendsTab
             
             if (![self.invitedFriendsRecordIDs containsObject:contact.recordID]) {
                 [self.invitedFriendsRecordIDs addObject:contact.recordID];
+            }
+            
+            if (self.invitedFriendsRecordIDs.count == self.contacts.count) {
+                self.inviteAllButtonHeightConstraint.constant = 0;
             }
             
             [self.tableView reloadData];
