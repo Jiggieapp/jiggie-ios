@@ -165,6 +165,7 @@
 		DA5ED6241C96D10700004C7E /* TicketSuccessViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5ED6231C96D10700004C7E /* TicketSuccessViewController.m */; };
 		DA6A7FA71CC755F800A666E8 /* DialCodeListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA6A7FA61CC755F800A666E8 /* DialCodeListViewController.m */; };
 		DA700E0E1C63561300E5D945 /* Jiggie.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = DA700E0D1C63515D00E5D945 /* Jiggie.entitlements */; };
+		DA89B2461CF2FC7D0010EDE2 /* JGInviteHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = DA89B2451CF2FC7D0010EDE2 /* JGInviteHelper.m */; };
 		DA9B10A01CB4D7B7001FB798 /* GTMNSString+HTML.m in Sources */ = {isa = PBXBuildFile; fileRef = DA9B108F1CB4D7B7001FB798 /* GTMNSString+HTML.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		DA9B10A51CB4D7B7001FB798 /* NSString+HTML.m in Sources */ = {isa = PBXBuildFile; fileRef = DA9B109A1CB4D7B7001FB798 /* NSString+HTML.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		DA9B10A61CB4D7B7001FB798 /* NSString+XMLEntities.m in Sources */ = {isa = PBXBuildFile; fileRef = DA9B109C1CB4D7B7001FB798 /* NSString+XMLEntities.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -754,6 +755,8 @@
 		DA6A7FA61CC755F800A666E8 /* DialCodeListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DialCodeListViewController.m; sourceTree = "<group>"; };
 		DA700E0D1C63515D00E5D945 /* Jiggie.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Jiggie.entitlements; sourceTree = SOURCE_ROOT; };
 		DA832D7F1CED999700277721 /* Jiggie 3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Jiggie 3.xcdatamodel"; sourceTree = "<group>"; };
+		DA89B2441CF2FC7D0010EDE2 /* JGInviteHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JGInviteHelper.h; sourceTree = "<group>"; };
+		DA89B2451CF2FC7D0010EDE2 /* JGInviteHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JGInviteHelper.m; sourceTree = "<group>"; };
 		DA9B108D1CB4D7B7001FB798 /* GTMDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTMDefines.h; sourceTree = "<group>"; };
 		DA9B108E1CB4D7B7001FB798 /* GTMNSString+HTML.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "GTMNSString+HTML.h"; sourceTree = "<group>"; };
 		DA9B108F1CB4D7B7001FB798 /* GTMNSString+HTML.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GTMNSString+HTML.m"; sourceTree = "<group>"; };
@@ -1850,6 +1853,8 @@
 				DA33069F1CDA733700A4126D /* JGTooltipHelper.m */,
 				9366747A1CE1EE6700AC94F3 /* UIView+Animation.h */,
 				9366747B1CE1EE6700AC94F3 /* UIView+Animation.m */,
+				DA89B2441CF2FC7D0010EDE2 /* JGInviteHelper.h */,
+				DA89B2451CF2FC7D0010EDE2 /* JGInviteHelper.m */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -3017,6 +3022,7 @@
 				936675221CE30EB200AC94F3 /* APAddressBookRefWrapper.m in Sources */,
 				DAABB0D41C1FD50E004DDCFA /* HostVenueDetailFromShare.m in Sources */,
 				DAB3AF951C27D66900AA7E25 /* EventDetail.m in Sources */,
+				DA89B2461CF2FC7D0010EDE2 /* JGInviteHelper.m in Sources */,
 				DA5ED6211C968A1E00004C7E /* VirtualAccountViewController.m in Sources */,
 				938CE7CD1CCF627D00ADDD4C /* NSDictionary+MTLManipulationAdditions.m in Sources */,
 				DAABB0CF1C1FD50E004DDCFA /* EventsHostMessage.m in Sources */,

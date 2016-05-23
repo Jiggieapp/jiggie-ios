@@ -29,6 +29,7 @@
 @property (strong, nonatomic) IBOutlet UILabel *emailLabel;
 @property (strong, nonatomic) IBOutlet UIButton *inviteButton;
 @property (weak, nonatomic) IBOutlet UILabel *InitialNameLabel;
+@property (weak, nonatomic) IBOutlet UILabel *creditLabel;
 
 + (UINib *)nib;
 

@@ -17,7 +17,7 @@
 
 static NSString *const InviteFriendsTableViewCellIdentifier = @"InviteFriendsTableViewCellIdentifier";
 
-@interface InviteFriendsViewController () <MFMessageComposeViewControllerDelegate, UITableViewDataSource, UITableViewDelegate, UIAlertViewDelegate, InviteFriendsTableViewCellDelegate>
+@interface InviteFriendsViewController () <UITableViewDataSource, UITableViewDelegate, UIAlertViewDelegate, InviteFriendsTableViewCellDelegate>
 
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *inviteAllButtonHeightConstraint;
 
@@ -93,6 +93,38 @@ static NSString *const InviteFriendsTableViewCellIdentifier = @"InviteFriendsTab
     [self.inviteAllButton setHidden:YES];
 }
 
+- (void)updateInviteButtonWithCredit:(NSNumber *)totalCredit {
+    if (totalCredit == nil) {
+        return;
+    }
+    
+    NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
+    [numberFormatter setLocale:[NSLocale localeWithLocaleIdentifier:@"id_ID"]];
+    [numberFormatter setNumberStyle:NSNumberFormatterDecimalStyle];
+    [numberFormatter setMaximumFractionDigits:2];
+    
+    NSString *totalCreditFormatted = [numberFormatter stringFromNumber:totalCredit];
+    
+    NSMutableParagraphStyle *style = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
+    [style setAlignment:NSTextAlignmentCenter];
+    [style setLineBreakMode:NSLineBreakByWordWrapping];
+    
+    UIFont *font1 = [UIFont fontWithName:@"Lato-Regular" size:11.0f];
+    UIFont *font2 = [UIFont fontWithName:@"Lato-Bold" size:16.0f];
+    NSDictionary *dict1 = @{NSFontAttributeName:font1,
+                            NSParagraphStyleAttributeName:style}; // Added line
+    NSDictionary *dict2 = @{NSFontAttributeName:font2,
+                            NSParagraphStyleAttributeName:style}; // Added line
+    
+    NSMutableAttributedString *attString = [[NSMutableAttributedString alloc] init];
+    [attString appendAttributedString:[[NSAttributedString alloc] initWithString:@"INVITE ALL\n" attributes:dict1]];
+    [attString appendAttributedString:[[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"+Rp %@", totalCreditFormatted] attributes:dict2]];
+    
+    [[self.inviteAllButton titleLabel] setNumberOfLines:2];
+    [[self.inviteAllButton titleLabel] setLineBreakMode:NSLineBreakByWordWrapping];
+    [self.inviteAllButton setAttributedTitle:attString forState:UIControlStateNormal];
+}
+
 #pragma mark - Contacts
 - (void)checkAddressBookAccess {
     switch ([APAddressBook access]) {
@@ -121,6 +153,8 @@ static NSString *const InviteFriendsTableViewCellIdentifier = @"InviteFriendsTab
 - (void)loadContacts {
     __weak typeof(self) weakSelf = self;
     
+    [SVProgressHUD show];
+    
     [self.addressBook setFieldsMask:APContactFieldName |
      APContactFieldPhonesOnly |
      APContactFieldEmailsOnly |
@@ -140,33 +174,13 @@ static NSString *const InviteFriendsTableViewCellIdentifier = @"InviteFriendsTab
             SharedData *sharedData = [SharedData sharedInstance];
             AFHTTPRequestOperationManager *manager = [sharedData getOperationManager];
             NSString *url = [NSString stringWithFormat:@"%@/credit/contact", PHBaseNewURL];
-            NSError *error = nil;
             NSMutableArray *contactsModel = [NSMutableArray arrayWithCapacity:contacts.count];
-            
-            for (APContact *contact in contacts) {
-                [contactsModel addObject:[[Contact alloc] initWithContact:contact]];
-            }
             
             NSMutableDictionary *parameters = [NSMutableDictionary
                                                dictionaryWithDictionary:@{@"fb_id" : sharedData.fb_id,
                                                                           @"device_type" : @"1",
-                                                                          @"contact" : [MTLJSONAdapter
-                                                                                        JSONArrayFromModels:contactsModel
-                                                                                        error:&error]}];
+                                                                          @"contact" : @[]}];
             
-            for (NSMutableDictionary *contact in parameters[@"contact"]) {
-                [contact removeObjectForKey:@"is_active"];
-                
-                if ([contact[@"email"] isKindOfClass:[NSNull class]]) {
-                    contact[@"email"] = [@[] mutableCopy];
-                }
-                
-                if ([contact[@"phone"] isKindOfClass:[NSNull class]]) {
-                    contact[@"phone"] = [@[] mutableCopy];
-                }
-            }
-            
-            [SVProgressHUD show];
             [manager POST:url parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
                 [SVProgressHUD dismiss];
                 
@@ -176,27 +190,31 @@ static NSString *const InviteFriendsTableViewCellIdentifier = @"InviteFriendsTab
                 }
                 
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    NSError *error = nil;
-                    NSArray *contactsModel = [MTLJSONAdapter modelsOfClass:[Contact class]
-                                                             fromJSONArray:responseObject[@"data"][@"contact"]
-                                                                     error:&error];
-                    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES];
-                    NSArray *sortedContactsModel = [contactsModel sortedArrayUsingDescriptors:@[sortDescriptor]];
-                    NSArray *recordIDs = [sortedContactsModel valueForKey:@"recordID"];
+                    NSString *responseString = operation.responseString;
+                    NSError *error;
+                    NSDictionary *json = (NSDictionary *)[NSJSONSerialization
+                                                          JSONObjectWithData:[responseString dataUsingEncoding:NSUTF8StringEncoding]
+                                                          options:kNilOptions
+                                                          error:&error];
+                    NSDictionary *data = [json objectForKey:@"data"];
                     
-                    for (Contact *contact in contactsModel) {
-                        if ([recordIDs indexOfObject:contact.recordID] &&
-                            [recordIDs indexOfObject:contact.recordID] < contacts.count) {
-                            APContact *apContact = contacts[[recordIDs indexOfObject:contact.recordID]];
-                            [contact setThumbnailWithImage:apContact.thumbnail];
+                    if (data) {
+                        NSNumber *inviterRewards = [data objectForKey:@"rewards_inviter"];
+                        NSNumber *totalCredits = [NSNumber numberWithInteger:[inviterRewards integerValue] * contacts.count];
+                        
+                        @autoreleasepool {
+                            for (APContact *contact in contacts) {
+                                [contactsModel addObject:[[Contact alloc] initWithContact:contact
+                                                                                andCredit:inviterRewards]];
+                            }
                         }
+                        [self updateInviteButtonWithCredit:totalCredits];
                     }
                     
-                    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.isActive == %@", [NSNumber numberWithBool:YES]];
-                    NSArray *contacts = [contactsModel filteredArrayUsingPredicate:predicate];
-                    NSArray *sortedContacts = [contacts sortedArrayUsingDescriptors:@[sortDescriptor]];
+                    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES];
+                    NSArray *sortedContactsModel = [contactsModel sortedArrayUsingDescriptors:@[sortDescriptor]];
                     
-                    weakSelf.contacts = [NSMutableArray arrayWithArray:sortedContacts];
+                    weakSelf.contacts = [NSMutableArray arrayWithArray:sortedContactsModel];
                     [weakSelf.tableView reloadData];
                     [weakSelf.inviteAllButton setHidden:NO];
                 });
@@ -216,6 +234,49 @@ static NSString *const InviteFriendsTableViewCellIdentifier = @"InviteFriendsTab
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return self.contacts.count;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    return 60;
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    if (self.contacts) {
+        UILabel *creditInfoLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 10, tableView.bounds.size.width, 40)];
+        [creditInfoLabel setNumberOfLines:2];
+        [creditInfoLabel setBackgroundColor:[UIColor clearColor]];
+        
+        NSMutableParagraphStyle *style = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
+        [style setAlignment:NSTextAlignmentCenter];
+        [style setLineBreakMode:NSLineBreakByWordWrapping];
+        
+        UIFont *font1 = [UIFont fontWithName:@"Lato-Regular" size:14.0f];
+        UIFont *font2 = [UIFont fontWithName:@"Lato-Bold" size:15.0f];
+        NSDictionary *dict1 = @{NSFontAttributeName:font1,
+                                NSForegroundColorAttributeName:[UIColor phDarkGrayColor],
+                                NSParagraphStyleAttributeName:style}; // Added line
+        NSDictionary *dict2 = @{NSFontAttributeName:font2,
+                                NSForegroundColorAttributeName:[UIColor phDarkGrayColor],
+                                NSParagraphStyleAttributeName:style}; // Added line
+        
+        NSMutableAttributedString *attString = [[NSMutableAttributedString alloc] init];
+        [attString appendAttributedString:[[NSAttributedString alloc] initWithString:@"You have " attributes:dict1]];
+        [attString appendAttributedString:[[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%lu contacts ", (unsigned long)self.contacts.count] attributes:dict2]];
+        [attString appendAttributedString:[[NSAttributedString alloc] initWithString:@"not yet on Jiggie.\n" attributes:dict1]];
+        [attString appendAttributedString:[[NSAttributedString alloc] initWithString:@"Earn up to " attributes:dict1]];
+        [attString appendAttributedString:[[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@ ", [self.inviteAllButton.currentAttributedTitle.string componentsSeparatedByString:@"+"][1]] attributes:dict2]];
+        [attString appendAttributedString:[[NSAttributedString alloc] initWithString:@"in free credit!" attributes:dict1]];
+        
+        [creditInfoLabel setAttributedText:attString];
+        
+        UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.bounds.size.width, 60)];
+        [headerView setBackgroundColor:[UIColor colorFromHexCode:@"F1F1F1"]];
+        [headerView addSubview:creditInfoLabel];
+        
+        return headerView;
+    } else {
+        return [UIView new];
+    }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -272,103 +333,61 @@ static NSString *const InviteFriendsTableViewCellIdentifier = @"InviteFriendsTab
     Contact *contact = self.contacts[[self.tableView indexPathForCell:cell].row];
     self.selectedContact = contact;
     
-    if (!contact.emails || [contact.emails.firstObject isEqualToString:@""]) {
-        if ([MFMessageComposeViewController canSendText]) {
-            MFMessageComposeViewController *messageComposeViewController = [[MFMessageComposeViewController alloc] init];
-            [messageComposeViewController setMessageComposeDelegate:self];
-            [messageComposeViewController setRecipients:contact.phones];
-            [messageComposeViewController setBody:self.inviteMessage];
-            
-            [self presentViewController:messageComposeViewController
-                               animated:YES
-                             completion:nil];
-        }
-    } else {
-        SharedData *sharedData = [SharedData sharedInstance];
-        AFHTTPRequestOperationManager *manager = [sharedData getOperationManager];
-        NSString *url = [NSString stringWithFormat:@"%@/credit/invite", PHBaseNewURL];
-        NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithDictionary:@{@"fb_id" : sharedData.fb_id,
-                                                                                          @"contact" : @{
-                                                                                                  @"name" : contact.name,
-                                                                                                  @"phone" : contact.phones ?: @[],
-                                                                                                  @"email" : contact.emails ?: @[]
-                                                                                                  }
-                                                                                          }];
+    SharedData *sharedData = [SharedData sharedInstance];
+    AFHTTPRequestOperationManager *manager = [sharedData getOperationManager];
+    NSString *url = [NSString stringWithFormat:@"%@/credit/invite", PHBaseNewURL];
+    NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithDictionary:@{@"fb_id" : sharedData.fb_id,
+                                                                                      @"contact" : @{
+                                                                                              @"name" : contact.name,
+                                                                                              @"phone" : contact.phones ?: @[],
+                                                                                              @"email" : contact.emails ?: @[]
+                                                                                              }
+                                                                                      }];
+    
+    [SVProgressHUD show];
+    [manager POST:url parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        [SVProgressHUD dismiss];
         
-        [SVProgressHUD show];
-        [manager POST:url parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
-            [SVProgressHUD dismiss];
-            
-            NSInteger responseStatusCode = operation.response.statusCode;
-            if (responseStatusCode != 200) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [self setInviteFriendsTableViewCell:cell asInvited:NO];
-                });
-                
-                return;
-            }
-            
-            NSDictionary *invite = [[NSUserDefaults standardUserDefaults] objectForKey:@"INVITE_CREDIT"];
-            
-            if (invite) {
-                NSDictionary *parameters = @{@"Promo Code" : invite[@"code"],
-                                             @"Promo URL" : invite[@"url"],
-                                             @"Contact Full Name" : contact.name,
-                                             @"Contact Email" : contact.emails,
-                                             @"Contact Phone" : contact.phones};
-                
-                [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Share Referral Phone All"
-                                                              withDict:parameters];
-            }
-            
-            dispatch_async(dispatch_get_main_queue(), ^{
-                if (![self.invitedFriendsRecordIDs containsObject:contact.recordID]) {
-                    [self.invitedFriendsRecordIDs addObject:contact.recordID];
-                }
-                
-                [self.tableView reloadData];
-            });
-        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-            [SVProgressHUD dismiss];
-            
+        NSInteger responseStatusCode = operation.response.statusCode;
+        if (responseStatusCode != 200) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self setInviteFriendsTableViewCell:cell asInvited:NO];
             });
-        }];
-    }
-}
-
-#pragma mark - MFMessageComposeViewControllerDelegate
-- (void)messageComposeViewController:(MFMessageComposeViewController *)controller didFinishWithResult:(MessageComposeResult)result {
-    switch (result) {
-        case MessageComposeResultSent: {
-            if (![self.invitedFriendsRecordIDs containsObject:self.selectedContact.recordID]) {
-                [self.invitedFriendsRecordIDs addObject:self.selectedContact.recordID];
-            }
             
-            [self.tableView reloadData];
-            
+            return;
+        }
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
             NSDictionary *invite = [[NSUserDefaults standardUserDefaults] objectForKey:@"INVITE_CREDIT"];
             
             if (invite) {
                 NSDictionary *parameters = @{@"Promo Code" : invite[@"code"],
                                              @"Promo URL" : invite[@"url"],
                                              @"Contact Full Name" : self.selectedContact.name,
-                                             @"Contact Email" : @[],
-                                             @"Contact Phone" : self.selectedContact.phones};
+                                             @"Contact Email" : self.selectedContact.emails ?: @[],
+                                             @"Contact Phone" : self.selectedContact.phones ?: @[]};
                 
-                [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Share Referral Phone All"
+                [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Share Referral Phone Singular"
                                                               withDict:parameters];
             }
             
-            break;
-        }
+            if (![self.invitedFriendsRecordIDs containsObject:contact.recordID]) {
+                [self.invitedFriendsRecordIDs addObject:contact.recordID];
+            }
             
-        default:
-            break;
-    }
-    
-    [self dismissViewControllerAnimated:YES completion:nil];
+            if (self.invitedFriendsRecordIDs.count == self.contacts.count) {
+                self.inviteAllButtonHeightConstraint.constant = 0;
+            }
+            
+            [self.tableView reloadData];
+        });
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        [SVProgressHUD dismiss];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self setInviteFriendsTableViewCell:cell asInvited:NO];
+        });
+    }];
 }
 
 #pragma mark - UIAlertViewDelegate
@@ -386,21 +405,24 @@ static NSString *const InviteFriendsTableViewCellIdentifier = @"InviteFriendsTab
     
     NSMutableArray *contacts = [NSMutableArray arrayWithCapacity:self.contacts.count];
     
-    for (Contact *contact in self.contacts) {
-        NSMutableDictionary *contactDictionary = [NSMutableDictionary dictionaryWithDictionary:@{@"name" : contact.name}];
-        
-        [contactDictionary setObject:contact.phones forKey:@"phone"];
-        [contactDictionary setObject:contact.emails forKey:@"email"];
-        
-        if (![self.invitedFriendsRecordIDs containsObject:contact.recordID]) {
-            [contacts addObject:contactDictionary];
+    [SVProgressHUD show];
+    
+    @autoreleasepool {
+        for (Contact *contact in self.contacts) {
+            NSMutableDictionary *contactDictionary = [NSMutableDictionary dictionaryWithDictionary:@{@"name" : contact.name}];
+            
+            [contactDictionary setObject:contact.phones ?: @[] forKey:@"phone"];
+            [contactDictionary setObject:contact.emails ?: @[] forKey:@"email"];
+            
+            if (![self.invitedFriendsRecordIDs containsObject:contact.recordID]) {
+                [contacts addObject:contactDictionary];
+            }
         }
     }
     
     NSDictionary *parameters = @{@"fb_id" : sharedData.fb_id,
                                  @"contact" : contacts};
     
-    [SVProgressHUD show];
     [manager POST:url parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         [SVProgressHUD dismiss];
         
