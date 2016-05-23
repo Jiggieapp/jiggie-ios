@@ -384,19 +384,12 @@
             case FeedTypeViewed: {
                 [JGTooltipHelper setShowed:@"Tooltip_AcceptSuggestion_isShowed"];
                 
-<<<<<<< HEAD
                 [Feed approveFeed:approved withFbId:feed.fromFbId andCompletionHandler:^(NSError *error) {
-                    if (self.feedData.count == 0) {
-                        [self showEmptyView];
-                    }
-=======
-                [Feed approveFeed:YES withFbId:feed.fromFbId andCompletionHandler:^(NSError *error) {
                     dispatch_async(dispatch_get_main_queue(), ^{
                         if (self.feedData.count == 0) {
                             [self showEmptyView];
                         }
                     });
->>>>>>> feature/grandlaunch
                 }];
                 break;
             }
@@ -406,10 +399,7 @@
         
     } else {
         [self trackDeniedFeedItemWithType:feed.type];
-<<<<<<< HEAD
-=======
         
->>>>>>> feature/grandlaunch
         [Feed approveFeed:approved withFbId:feed.fromFbId andCompletionHandler:^(NSError *error) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (self.feedData.count == 0) {

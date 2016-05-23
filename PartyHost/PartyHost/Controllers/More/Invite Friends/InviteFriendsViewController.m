@@ -121,6 +121,8 @@ static NSString *const InviteFriendsTableViewCellIdentifier = @"InviteFriendsTab
 - (void)loadContacts {
     __weak typeof(self) weakSelf = self;
     
+    [SVProgressHUD show];
+    
     [self.addressBook setFieldsMask:APContactFieldName |
      APContactFieldPhonesOnly |
      APContactFieldEmailsOnly |
@@ -143,8 +145,10 @@ static NSString *const InviteFriendsTableViewCellIdentifier = @"InviteFriendsTab
             NSError *error = nil;
             NSMutableArray *contactsModel = [NSMutableArray arrayWithCapacity:contacts.count];
             
-            for (APContact *contact in contacts) {
-                [contactsModel addObject:[[Contact alloc] initWithContact:contact]];
+            @autoreleasepool {
+                for (APContact *contact in contacts) {
+                    [contactsModel addObject:[[Contact alloc] initWithContact:contact]];
+                }
             }
             
             NSMutableDictionary *parameters = [NSMutableDictionary
@@ -154,19 +158,20 @@ static NSString *const InviteFriendsTableViewCellIdentifier = @"InviteFriendsTab
                                                                                         JSONArrayFromModels:contactsModel
                                                                                         error:&error]}];
             
-            for (NSMutableDictionary *contact in parameters[@"contact"]) {
-                [contact removeObjectForKey:@"is_active"];
-                
-                if ([contact[@"email"] isKindOfClass:[NSNull class]]) {
-                    contact[@"email"] = [@[] mutableCopy];
-                }
-                
-                if ([contact[@"phone"] isKindOfClass:[NSNull class]]) {
-                    contact[@"phone"] = [@[] mutableCopy];
+            @autoreleasepool {
+                for (NSMutableDictionary *contact in parameters[@"contact"]) {
+                    [contact removeObjectForKey:@"is_active"];
+                    
+                    if ([contact[@"email"] isKindOfClass:[NSNull class]]) {
+                        contact[@"email"] = [@[] mutableCopy];
+                    }
+                    
+                    if ([contact[@"phone"] isKindOfClass:[NSNull class]]) {
+                        contact[@"phone"] = [@[] mutableCopy];
+                    }
                 }
             }
             
-            [SVProgressHUD show];
             [manager POST:url parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
                 [SVProgressHUD dismiss];
                 
@@ -184,11 +189,13 @@ static NSString *const InviteFriendsTableViewCellIdentifier = @"InviteFriendsTab
                     NSArray *sortedContactsModel = [contactsModel sortedArrayUsingDescriptors:@[sortDescriptor]];
                     NSArray *recordIDs = [sortedContactsModel valueForKey:@"recordID"];
                     
-                    for (Contact *contact in contactsModel) {
-                        if ([recordIDs indexOfObject:contact.recordID] &&
-                            [recordIDs indexOfObject:contact.recordID] < contacts.count) {
-                            APContact *apContact = contacts[[recordIDs indexOfObject:contact.recordID]];
-                            [contact setThumbnailWithImage:apContact.thumbnail];
+                    @autoreleasepool {
+                        for (Contact *contact in contactsModel) {
+                            if ([recordIDs indexOfObject:contact.recordID] &&
+                                [recordIDs indexOfObject:contact.recordID] < contacts.count) {
+                                APContact *apContact = contacts[[recordIDs indexOfObject:contact.recordID]];
+                                [contact setThumbnailWithImage:apContact.thumbnail];
+                            }
                         }
                     }
                     
