@@ -72,6 +72,14 @@
     [self.nameLabel setText:[NSString stringWithFormat:@"%@", contact.name]];
     [self.phoneNumberLabel setText:contact.phones.lastObject];
     [self.emailLabel setText:contact.emails.lastObject];
+    
+    NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
+    [numberFormatter setLocale:[NSLocale localeWithLocaleIdentifier:@"id_ID"]];
+    [numberFormatter setNumberStyle:NSNumberFormatterDecimalStyle];
+    [numberFormatter setMaximumFractionDigits:2];
+    
+    NSString *creditAmount = [numberFormatter stringFromNumber:[NSNumber numberWithInteger:contact.credit.integerValue]];
+    [self.creditLabel setText:[NSString stringWithFormat:@"+ Rp%@", creditAmount]];
 }
 
 @end
