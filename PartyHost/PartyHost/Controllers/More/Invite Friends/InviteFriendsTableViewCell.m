@@ -78,7 +78,7 @@
     [numberFormatter setNumberStyle:NSNumberFormatterDecimalStyle];
     [numberFormatter setMaximumFractionDigits:2];
     
-    NSString *creditAmount = [numberFormatter stringFromNumber:[NSNumber numberWithInteger:contact.credit.integerValue]];
+    NSString *creditAmount = [numberFormatter stringFromNumber:contact.credit];
     [self.creditLabel setText:[NSString stringWithFormat:@"+ Rp%@", creditAmount]];
 }
 

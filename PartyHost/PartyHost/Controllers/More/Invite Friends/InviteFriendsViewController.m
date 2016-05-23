@@ -93,6 +93,38 @@ static NSString *const InviteFriendsTableViewCellIdentifier = @"InviteFriendsTab
     [self.inviteAllButton setHidden:YES];
 }
 
+- (void)updateInviteButtonWithCredit:(NSNumber *)totalCredit {
+    if (totalCredit == nil) {
+        return;
+    }
+    
+    NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
+    [numberFormatter setLocale:[NSLocale localeWithLocaleIdentifier:@"id_ID"]];
+    [numberFormatter setNumberStyle:NSNumberFormatterDecimalStyle];
+    [numberFormatter setMaximumFractionDigits:2];
+    
+    NSString *totalCreditFormatted = [numberFormatter stringFromNumber:totalCredit];
+    
+    NSMutableParagraphStyle *style = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
+    [style setAlignment:NSTextAlignmentCenter];
+    [style setLineBreakMode:NSLineBreakByWordWrapping];
+    
+    UIFont *font1 = [UIFont fontWithName:@"Lato-Regular" size:11.0f];
+    UIFont *font2 = [UIFont fontWithName:@"Lato-Bold" size:16.0f];
+    NSDictionary *dict1 = @{NSFontAttributeName:font1,
+                            NSParagraphStyleAttributeName:style}; // Added line
+    NSDictionary *dict2 = @{NSFontAttributeName:font2,
+                            NSParagraphStyleAttributeName:style}; // Added line
+    
+    NSMutableAttributedString *attString = [[NSMutableAttributedString alloc] init];
+    [attString appendAttributedString:[[NSAttributedString alloc] initWithString:@"INVITE ALL\n" attributes:dict1]];
+    [attString appendAttributedString:[[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"+Rp %@", totalCreditFormatted] attributes:dict2]];
+    
+    [[self.inviteAllButton titleLabel] setNumberOfLines:2];
+    [[self.inviteAllButton titleLabel] setLineBreakMode:NSLineBreakByWordWrapping];
+    [self.inviteAllButton setAttributedTitle:attString forState:UIControlStateNormal];
+}
+
 #pragma mark - Contacts
 - (void)checkAddressBookAccess {
     switch ([APAddressBook access]) {
