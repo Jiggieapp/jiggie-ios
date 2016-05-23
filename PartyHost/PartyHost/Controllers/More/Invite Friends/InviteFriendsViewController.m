@@ -267,29 +267,17 @@ static NSString *const InviteFriendsTableViewCellIdentifier = @"InviteFriendsTab
         }
         
         dispatch_async(dispatch_get_main_queue(), ^{
-            if (!contact.emails || [contact.emails.firstObject isEqualToString:@""]) {
-                NSDictionary *invite = [[NSUserDefaults standardUserDefaults] objectForKey:@"INVITE_CREDIT"];
+            NSDictionary *invite = [[NSUserDefaults standardUserDefaults] objectForKey:@"INVITE_CREDIT"];
+            
+            if (invite) {
+                NSDictionary *parameters = @{@"Promo Code" : invite[@"code"],
+                                             @"Promo URL" : invite[@"url"],
+                                             @"Contact Full Name" : self.selectedContact.name,
+                                             @"Contact Email" : self.selectedContact.emails ?: @[],
+                                             @"Contact Phone" : self.selectedContact.phones ?: @[]};
                 
-                if (invite) {
-                    NSDictionary *parameters = @{@"Promo Code" : invite[@"code"],
-                                                 @"Promo URL" : invite[@"url"],
-                                                 @"Contact Full Name" : self.selectedContact.name,
-                                                 @"Contact Email" : self.selectedContact.emails,
-                                                 @"Contact Phone" : self.selectedContact.phones};
-                    
-                    [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Share Referral Phone Singular"
-                                                                  withDict:parameters];
-                }
-            } else {
-                NSDictionary *invite = [[NSUserDefaults standardUserDefaults] objectForKey:@"INVITE_CREDIT"];
-                
-                if (invite) {
-                    NSDictionary *parameters = @{@"Promo Code" : invite[@"code"],
-                                                 @"Promo URL" : invite[@"url"]};
-                    
-                    [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Share Referral Phone All"
-                                                                  withDict:parameters];
-                }
+                [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Share Referral Phone Singular"
+                                                              withDict:parameters];
             }
             
             if (![self.invitedFriendsRecordIDs containsObject:contact.recordID]) {
