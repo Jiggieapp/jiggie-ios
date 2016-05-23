@@ -201,6 +201,7 @@ static NSString *const InviteFriendsTableViewCellIdentifier = @"InviteFriendsTab
                     [weakSelf.inviteAllButton setHidden:NO];
                 });
             } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                
                 [SVProgressHUD dismiss];
                 [self.inviteAllButton setHidden:YES];
             }];
