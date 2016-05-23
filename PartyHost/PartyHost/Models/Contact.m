@@ -17,6 +17,7 @@
 @property (strong, nonatomic) NSArray *phones;
 @property (strong, nonatomic) NSArray *emails;
 @property (assign, nonatomic) BOOL isActive;
+@property (strong, nonatomic) NSNumber *credit;
 
 @end
 
@@ -44,7 +45,7 @@
                                                                            @(1) : @(YES)}];
 }
 
-- (instancetype)initWithContact:(APContact *)contact {
+- (instancetype)initWithContact:(APContact *)contact andCredit:(NSNumber *)credit {
     if (self = [super init]) {
         self.recordID = contact.recordID;
         
@@ -68,6 +69,7 @@
         self.emails = emailsAddress;
         self.thumbnail = contact.thumbnail;
         self.isActive = NO;
+        self.credit = credit;
     }
     
     return self;

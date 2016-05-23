@@ -21,7 +21,7 @@
 @property (assign, nonatomic, readonly) BOOL isActive;
 @property (strong, nonatomic, readonly) NSNumber *credit;
 
-- (instancetype)initWithContact:(APContact *)contact;
+- (instancetype)initWithContact:(APContact *)contact andCredit:(NSNumber *)credit;
 - (void)setThumbnailWithImage:(UIImage *)image;
 
 + (NSString *)pathToArchiveRecordID;
