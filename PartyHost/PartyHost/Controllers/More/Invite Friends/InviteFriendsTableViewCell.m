@@ -57,19 +57,24 @@
 
 #pragma mark - Configuration
 - (void)configureContact:(Contact *)contact {
-    [self.profileImageView setImage:contact.thumbnail];
-    NSMutableString * firstCharacters = [NSMutableString string];
-    NSArray * words = [contact.name componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-    NSInteger ctr = 0;
-    for (NSString * word in words) {
-        if ([word length] > 0 && ctr < 2) {
-            NSString * firstLetter = [word substringToIndex:1];
-            [firstCharacters appendString:[firstLetter uppercaseString]];
-            ctr ++;
+    if (contact.thumbnail) {
+        [self.profileImageView setImage:contact.thumbnail];
+    } else {
+        NSMutableString * firstCharacters = [NSMutableString string];
+        NSArray * words = [contact.name componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+        NSInteger ctr = 0;
+        
+        for (NSString * word in words) {
+            if ([word length] > 0 && ctr < 2) {
+                NSString * firstLetter = [word substringToIndex:1];
+                [firstCharacters appendString:[firstLetter uppercaseString]];
+                ctr ++;
+            }
+            [self.InitialNameLabel setText:firstCharacters];
         }
-        [self.InitialNameLabel setText:firstCharacters];
+        [self.nameLabel setText:[NSString stringWithFormat:@"%@", contact.name]];
     }
-    [self.nameLabel setText:[NSString stringWithFormat:@"%@", contact.name]];
+    
     [self.phoneNumberLabel setText:contact.phones.lastObject];
     [self.emailLabel setText:contact.emails.lastObject];
     
