@@ -27,7 +27,8 @@
              @"name" : @"name",
              @"emails" : @"email",
              @"phones" : @"phone",
-             @"isActive" : @"is_active"};
+             @"isActive" : @"is_active",
+             @"credit" : @"credit"};
 }
 
 + (NSValueTransformer *)recordIDJSONTransformer {
