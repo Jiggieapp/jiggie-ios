@@ -14,6 +14,7 @@
 #import "SVProgressHUD.h"
 #import "JDFTooltips.h"
 #import "JGTooltipHelper.h"
+#import "JGInviteHelper.h"
 
 #define PROFILE_PICS 4 //If more than 4 then last is +MORE
 #define PROFILE_SIZE 40
@@ -926,25 +927,11 @@
                      if (![self.managedObjectContext save:&error]) NSLog(@"Error: %@", [error localizedDescription]);
                      
                      // Show Invite Friends screen if user already visited Events Detail twice.
-                     NSInteger visitedEventsDetailCount = [[NSUserDefaults standardUserDefaults] integerForKey:@"VISITED_EVENTS_DETAIL"];
-                     
-                     if (visitedEventsDetailCount == 1) {
-                         visitedEventsDetailCount++;
-                         
-                         [[NSUserDefaults standardUserDefaults] setInteger:visitedEventsDetailCount
-                                                                    forKey:@"VISITED_EVENTS_DETAIL"];
-                         [[NSUserDefaults standardUserDefaults] synchronize];
-                         
+                     if ([JGInviteHelper isValidShowInvite]) {
                          dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                              [[NSNotificationCenter defaultCenter] postNotificationName:@"SHOW_INVITE_CONTACT_FRIENDS"
                                                                                  object:nil];
                          });
-                     } else if (visitedEventsDetailCount < 1) {
-                         visitedEventsDetailCount++;
-                         
-                         [[NSUserDefaults standardUserDefaults] setInteger:visitedEventsDetailCount
-                                                                    forKey:@"VISITED_EVENTS_DETAIL"];
-                         [[NSUserDefaults standardUserDefaults] synchronize];
                      }
                  }
              }
