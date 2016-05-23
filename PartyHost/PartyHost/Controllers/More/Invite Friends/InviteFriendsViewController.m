@@ -142,7 +142,6 @@ static NSString *const InviteFriendsTableViewCellIdentifier = @"InviteFriendsTab
             SharedData *sharedData = [SharedData sharedInstance];
             AFHTTPRequestOperationManager *manager = [sharedData getOperationManager];
             NSString *url = [NSString stringWithFormat:@"%@/credit/contact", PHBaseNewURL];
-            NSError *error = nil;
             NSMutableArray *contactsModel = [NSMutableArray arrayWithCapacity:contacts.count];
             
             @autoreleasepool {
@@ -154,23 +153,7 @@ static NSString *const InviteFriendsTableViewCellIdentifier = @"InviteFriendsTab
             NSMutableDictionary *parameters = [NSMutableDictionary
                                                dictionaryWithDictionary:@{@"fb_id" : sharedData.fb_id,
                                                                           @"device_type" : @"1",
-                                                                          @"contact" : [MTLJSONAdapter
-                                                                                        JSONArrayFromModels:contactsModel
-                                                                                        error:&error]}];
-            
-            @autoreleasepool {
-                for (NSMutableDictionary *contact in parameters[@"contact"]) {
-                    [contact removeObjectForKey:@"is_active"];
-                    
-                    if ([contact[@"email"] isKindOfClass:[NSNull class]]) {
-                        contact[@"email"] = [@[] mutableCopy];
-                    }
-                    
-                    if ([contact[@"phone"] isKindOfClass:[NSNull class]]) {
-                        contact[@"phone"] = [@[] mutableCopy];
-                    }
-                }
-            }
+                                                                          @"contact" : @[]}];
             
             [manager POST:url parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
                 [SVProgressHUD dismiss];
@@ -181,29 +164,10 @@ static NSString *const InviteFriendsTableViewCellIdentifier = @"InviteFriendsTab
                 }
                 
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    NSError *error = nil;
-                    NSArray *contactsModel = [MTLJSONAdapter modelsOfClass:[Contact class]
-                                                             fromJSONArray:responseObject[@"data"][@"contact"]
-                                                                     error:&error];
                     NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES];
                     NSArray *sortedContactsModel = [contactsModel sortedArrayUsingDescriptors:@[sortDescriptor]];
-                    NSArray *recordIDs = [sortedContactsModel valueForKey:@"recordID"];
                     
-                    @autoreleasepool {
-                        for (Contact *contact in contactsModel) {
-                            if ([recordIDs indexOfObject:contact.recordID] &&
-                                [recordIDs indexOfObject:contact.recordID] < contacts.count) {
-                                APContact *apContact = contacts[[recordIDs indexOfObject:contact.recordID]];
-                                [contact setThumbnailWithImage:apContact.thumbnail];
-                            }
-                        }
-                    }
-                    
-                    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.isActive == %@", [NSNumber numberWithBool:YES]];
-                    NSArray *contacts = [contactsModel filteredArrayUsingPredicate:predicate];
-                    NSArray *sortedContacts = [contacts sortedArrayUsingDescriptors:@[sortDescriptor]];
-                    
-                    weakSelf.contacts = [NSMutableArray arrayWithArray:sortedContacts];
+                    weakSelf.contacts = [NSMutableArray arrayWithArray:sortedContactsModel];
                     [weakSelf.tableView reloadData];
                     [weakSelf.inviteAllButton setHidden:NO];
                 });
