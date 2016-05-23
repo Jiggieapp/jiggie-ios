@@ -65,6 +65,7 @@
         
         self.phones = phonesNumber;
         self.emails = emailsAddress;
+        self.thumbnail = contact.thumbnail;
         self.isActive = NO;
     }
     
