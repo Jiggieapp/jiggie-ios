@@ -455,7 +455,9 @@ static NSString *const SidePhotoTableViewCellIdentifier = @"SidePhotoTableViewCe
     self.currentPhotoIndex = 0;
     
     if (self.mainPhotoImageView.image != self.defaultImage) {
-        [self showDeleteActionSheet];
+        if (self.photosURL.count > 1) {
+            [self showDeleteActionSheet];
+        }
     } else {
         [self showActionSheet];
     }
