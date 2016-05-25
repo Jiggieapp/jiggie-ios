@@ -20,4 +20,6 @@
 
 + (void)retrieveMemberInfoWithCompletionHandler:(MemberInfoCompletionHandler)completion;
 
+- (void)setAboutInfo:(NSString *)about;
+
 @end

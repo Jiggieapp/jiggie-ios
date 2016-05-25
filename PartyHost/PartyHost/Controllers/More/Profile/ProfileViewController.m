@@ -30,6 +30,11 @@ static NSString *const AboutTableViewCellIdentifier = @"AboutTableViewCellIdenti
     
     self.title = @"Your Profile";
     
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(loadNewData:)
+                                                 name:@"EDIT_PROFILE_DONE"
+                                               object:nil];
+    
     [self setupView];
     
     [SVProgressHUD show];
@@ -53,6 +58,37 @@ static NSString *const AboutTableViewCellIdentifier = @"AboutTableViewCellIdenti
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+#pragma mark - Observer
+- (void)loadNewData:(NSNotification *)notification {
+    UIScrollView *photoScrollView = [[UIScrollView alloc] initWithFrame: CGRectMake(.0f,
+                                                                                    .0f,
+                                                                                    CGRectGetWidth(self.tableView.bounds),
+                                                                                    ProfileHeaderHeight)];
+    
+    photoScrollView.backgroundColor = [UIColor blackColor];
+    [photoScrollView setShowsHorizontalScrollIndicator:NO];
+    [photoScrollView setBounces:NO];
+    [photoScrollView setPagingEnabled:YES];
+    
+    NSArray *photos = notification.object[@"photos"];
+    
+    for (int i = 0; i < [photos count]; i++) {
+        UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(CGRectGetWidth(photoScrollView.bounds) * i, 0, CGRectGetWidth(photoScrollView.bounds), CGRectGetHeight(photoScrollView.bounds))];
+        [imageView setImage:photos[i]];
+        [imageView setContentMode:UIViewContentModeScaleAspectFill];
+        [imageView setClipsToBounds:YES];
+        
+        [photoScrollView addSubview:imageView];
+    }
+    
+    photoScrollView.contentSize = CGSizeMake(CGRectGetWidth(photoScrollView.bounds) * [photos count], CGRectGetHeight(photoScrollView.bounds));
+    
+    self.tableView.tableHeaderView = photoScrollView;
+    [self.memberInfo setAboutInfo:notification.object[@"about"]];
+    
+    [self.tableView reloadData];
 }
 
 #pragma mark - View
@@ -84,6 +120,7 @@ static NSString *const AboutTableViewCellIdentifier = @"AboutTableViewCellIdenti
                                                                                     CGRectGetWidth(self.tableView.bounds),
                                                                                     ProfileHeaderHeight)];
     
+    photoScrollView.backgroundColor = [UIColor blackColor];
     [photoScrollView setShowsHorizontalScrollIndicator:NO];
     [photoScrollView setBounces:NO];
     [photoScrollView setPagingEnabled:YES];
