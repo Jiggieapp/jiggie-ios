@@ -15,7 +15,7 @@
 #import "TicketSuccessViewController.h"
 #import "PaymentSelectionViewController.h"
 #import "PurchaseHistoryViewController.h"
-#import "ProfileViewController.h"
+#import "EditProfileViewController.h"
 #import "InviteViewController.h"
 #import "PromotionsViewController.h"
 #import "InviteFriendsViewController.h"
@@ -686,7 +686,7 @@
 
 #pragma mark - Profile Notification
 - (void)showProfile:(NSNotification *)notification {
-    UINavigationController *profileNavigationController = [[UINavigationController alloc] initWithRootViewController:[[ProfileViewController alloc] init]];
+    UINavigationController *profileNavigationController = [[UINavigationController alloc] initWithRootViewController:[[EditProfileViewController alloc] init]];
     [self presentViewController:profileNavigationController animated:YES completion:nil];
 }
 

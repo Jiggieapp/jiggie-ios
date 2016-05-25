@@ -117,8 +117,8 @@
 		938CE8051CD3184300ADDD4C /* SocialMultiSliderTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 938CE8031CD3184300ADDD4C /* SocialMultiSliderTableViewCell.xib */; };
 		938CE80B1CD3435700ADDD4C /* MSRangeSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 938CE8081CD3435700ADDD4C /* MSRangeSlider.m */; };
 		938CE80C1CD3435700ADDD4C /* UIControl+HitTestEdgeInsets.m in Sources */ = {isa = PBXBuildFile; fileRef = 938CE80A1CD3435700ADDD4C /* UIControl+HitTestEdgeInsets.m */; };
-		938CE81E1CD387BC00ADDD4C /* ProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 938CE8191CD387BC00ADDD4C /* ProfileViewController.m */; };
-		938CE81F1CD387BC00ADDD4C /* ProfileViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 938CE81A1CD387BC00ADDD4C /* ProfileViewController.xib */; };
+		938CE81E1CD387BC00ADDD4C /* EditProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 938CE8191CD387BC00ADDD4C /* EditProfileViewController.m */; };
+		938CE81F1CD387BC00ADDD4C /* EditProfileViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 938CE81A1CD387BC00ADDD4C /* EditProfileViewController.xib */; };
 		9A85A5531CC8B89300C8818B /* JGKeyboardNotificationHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A85A5521CC8B89300C8818B /* JGKeyboardNotificationHelper.m */; };
 		9AF3EEFF1CC9FA9E00CA9497 /* LocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AF3EEFE1CC9FA9E00CA9497 /* LocationManager.m */; };
 		CB3EB6C81B459177003F658F /* App.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CB3EB6C71B459177003F658F /* App.xcassets */; };
@@ -651,9 +651,9 @@
 		938CE8081CD3435700ADDD4C /* MSRangeSlider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSRangeSlider.m; sourceTree = "<group>"; };
 		938CE8091CD3435700ADDD4C /* UIControl+HitTestEdgeInsets.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIControl+HitTestEdgeInsets.h"; sourceTree = "<group>"; };
 		938CE80A1CD3435700ADDD4C /* UIControl+HitTestEdgeInsets.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIControl+HitTestEdgeInsets.m"; sourceTree = "<group>"; };
-		938CE8181CD387BC00ADDD4C /* ProfileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProfileViewController.h; sourceTree = "<group>"; };
-		938CE8191CD387BC00ADDD4C /* ProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProfileViewController.m; sourceTree = "<group>"; };
-		938CE81A1CD387BC00ADDD4C /* ProfileViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ProfileViewController.xib; sourceTree = "<group>"; };
+		938CE8181CD387BC00ADDD4C /* EditProfileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditProfileViewController.h; sourceTree = "<group>"; };
+		938CE8191CD387BC00ADDD4C /* EditProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditProfileViewController.m; sourceTree = "<group>"; };
+		938CE81A1CD387BC00ADDD4C /* EditProfileViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EditProfileViewController.xib; sourceTree = "<group>"; };
 		9A85A5511CC8B89300C8818B /* JGKeyboardNotificationHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JGKeyboardNotificationHelper.h; sourceTree = "<group>"; };
 		9A85A5521CC8B89300C8818B /* JGKeyboardNotificationHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JGKeyboardNotificationHelper.m; sourceTree = "<group>"; };
 		9AF3EEFD1CC9FA9E00CA9497 /* LocationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationManager.h; sourceTree = "<group>"; };
@@ -1643,9 +1643,9 @@
 		938CE8171CD387BC00ADDD4C /* Profile */ = {
 			isa = PBXGroup;
 			children = (
-				938CE8181CD387BC00ADDD4C /* ProfileViewController.h */,
-				938CE8191CD387BC00ADDD4C /* ProfileViewController.m */,
-				938CE81A1CD387BC00ADDD4C /* ProfileViewController.xib */,
+				938CE8181CD387BC00ADDD4C /* EditProfileViewController.h */,
+				938CE8191CD387BC00ADDD4C /* EditProfileViewController.m */,
+				938CE81A1CD387BC00ADDD4C /* EditProfileViewController.xib */,
 				9366745B1CD8562300AC94F3 /* SidePhotoTableViewCell.h */,
 				9366745C1CD8562300AC94F3 /* SidePhotoTableViewCell.m */,
 				9366745D1CD8562300AC94F3 /* SidePhotoTableViewCell.xib */,
@@ -2936,7 +2936,7 @@
 				DAABB0F61C1FD50E004DDCFA /* Setup.xib in Resources */,
 				DAABB2BF1C1FF5AE004DDCFA /* test_variant.json in Resources */,
 				DAABB2771C1FF5AE004DDCFA /* GSTouchImage@2x.png in Resources */,
-				938CE81F1CD387BC00ADDD4C /* ProfileViewController.xib in Resources */,
+				938CE81F1CD387BC00ADDD4C /* EditProfileViewController.xib in Resources */,
 				938CE7C41CCF627D00ADDD4C /* Info.plist in Resources */,
 				936674791CE1EAC500AC94F3 /* SuccessPromotionsView.xib in Resources */,
 				938CE7DF1CD1C91700ADDD4C /* SocialOptionTableViewCell.xib in Resources */,
@@ -3142,7 +3142,7 @@
 				DA9E0CF71C61F75000966F16 /* BaseViewController.m in Sources */,
 				DAABB1301C1FF13A004DDCFA /* UserBubble.m in Sources */,
 				DAABB28E1C1FF5AE004DDCFA /* MPBOOLToNSNumberValueTransformer.m in Sources */,
-				938CE81E1CD387BC00ADDD4C /* ProfileViewController.m in Sources */,
+				938CE81E1CD387BC00ADDD4C /* EditProfileViewController.m in Sources */,
 				936675261CE30EB200AC94F3 /* APContactDate.m in Sources */,
 				DAABB0DA1C1FD50E004DDCFA /* VenuesList.m in Sources */,
 				DAABB2CB1C1FF5AE004DDCFA /* TSCoreListenerImpl.m in Sources */,

@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ProfileViewController : UIViewController
+@interface EditProfileViewController : UIViewController
 
 @property (strong, nonatomic) IBOutlet UIImageView *mainPhotoImageView;
 @property (strong, nonatomic) IBOutlet UITableView *sidePhotoTableView;

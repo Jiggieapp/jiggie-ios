@@ -6,7 +6,7 @@
 //  Copyright © 2016 Sunny Clark. All rights reserved.
 //
 
-#import "ProfileViewController.h"
+#import "EditProfileViewController.h"
 #import "AnalyticManager.h"
 #import "UIActionSheet+Blocks.h"
 #import "UITextView+Placeholder.h"
@@ -19,7 +19,7 @@
 
 static NSString *const SidePhotoTableViewCellIdentifier = @"SidePhotoTableViewCellIdentifier";
 
-@interface ProfileViewController () <UITextViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, OLFacebookImagePickerControllerDelegate, UITableViewDelegate, UITableViewDataSource>
+@interface EditProfileViewController () <UITextViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, OLFacebookImagePickerControllerDelegate, UITableViewDelegate, UITableViewDataSource>
 
 @property (strong, nonatomic) IBOutlet UIView *mainPhotoIndicatorView;
 @property (strong, nonatomic) IBOutlet UIImageView *mainPhotoActionImageView;
@@ -34,7 +34,7 @@ static NSString *const SidePhotoTableViewCellIdentifier = @"SidePhotoTableViewCe
 
 @end
 
-@implementation ProfileViewController
+@implementation EditProfileViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
