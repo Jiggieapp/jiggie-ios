@@ -441,10 +441,15 @@
     
     [[NSNotificationCenter defaultCenter]
      addObserver:self
+     selector:@selector(showEventDetail)
+     name:@"SHOW_EVENT_DETAIL"
+     object:nil];
+    
+    [[NSNotificationCenter defaultCenter]
+     addObserver:self
      selector:@selector(showEventModal)
      name:@"SHOW_EVENT_MODAL"
      object:nil];
-    
     
     [[NSNotificationCenter defaultCenter]
      addObserver:self
@@ -761,8 +766,6 @@
     }
     self.callInit = YES;
     
-    
-    
     [self updateTabState];
 }
 
@@ -1006,24 +1009,13 @@
      }];
 }
 
-
--(void)showEventModal
-{
-//    self.eventModal.frame = CGRectMake(0, self.sharedData.screenHeight, self.sharedData.screenWidth, self.sharedData.screenHeight);
-//    self.eventModal.hidden = NO;
-//    [self.eventModal reset];
-//    [self.eventModal initClass];
-//    [UIView animateWithDuration:0.30 animations:^()
-//     {
-//         self.eventModal.frame = CGRectMake(0, 0, self.sharedData.screenWidth, self.sharedData.screenHeight);
-//     }];
-
+-(void)showEventDetail {
     self.cIndex = 0;
     [self updatePages];
     
     [self.sharedData.selectedEvent removeAllObjects];
     self.sharedData.selectedEvent[@"_id"] = self.sharedData.cEventId_Modal;
-
+    
     self.sharedData.cEventId = self.sharedData.cEventId_Modal;
     self.sharedData.mostRecentEventSelectedId = self.sharedData.cEventId_Modal;
     
@@ -1033,6 +1025,18 @@
     self.eventsPage.eventsHostingsList.hidden = NO;
     
     [self.eventsPage goToSummaryModal];
+}
+
+-(void)showEventModal
+{
+    self.eventModal.frame = CGRectMake(0, self.sharedData.screenHeight, self.sharedData.screenWidth, self.sharedData.screenHeight);
+    self.eventModal.hidden = NO;
+    [self.eventModal reset];
+    [self.eventModal initClass];
+    [UIView animateWithDuration:0.30 animations:^()
+     {
+         self.eventModal.frame = CGRectMake(0, 0, self.sharedData.screenWidth, self.sharedData.screenHeight);
+     }];
 }
 
 -(void)exitEventModal

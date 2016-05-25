@@ -14,25 +14,30 @@
 #import "MGSwipeTableCell.h"
 #import "PHImage.h"
 
-@interface Chats : UIView <UITableViewDelegate,UITableViewDataSource,MGSwipeTableCellDelegate,NSFetchedResultsControllerDelegate>{
+@interface Chats : UIView <UITableViewDelegate,UITableViewDataSource,UIScrollViewDelegate,MGSwipeTableCellDelegate,NSFetchedResultsControllerDelegate>{
     NSFetchedResultsController *fetchedResultsController;
     NSManagedObjectContext *managedObjectContext;
 }
 
 @property (strong, nonatomic) SharedData    *sharedData;
+@property(nonatomic,strong) UIScrollView *tableScrollView;
 @property(nonatomic,strong) UITableView *conversationsList;
+@property(nonatomic,strong) UITableView *friendsList;
+@property(nonatomic,strong) UIView *segmentationView;
+@property(nonatomic,strong) UIView *segmentationIndicator;
 @property(nonatomic,assign) BOOL isConvosLoaded;
-@property(nonatomic,assign) BOOL isLoading;
+@property(nonatomic,assign) BOOL isChatFirstLoad;
+@property(nonatomic,assign) BOOL isFriendFirstLoad;
 @property(nonatomic,assign) BOOL needUpdateContents;
 
 @property(nonatomic,assign) BOOL isInBlockMode;
 @property(nonatomic,assign) BOOL isInDeleteMode;
 
-//When there are no entries to see
-@property(nonatomic,strong) EmptyView *emptyView;
+@property (nonatomic, assign) NSInteger currentSegmentationIndex;
 
 @property (nonatomic, retain) NSFetchedResultsController *fetchedResultsController;
 @property (nonatomic, retain) NSManagedObjectContext *managedObjectContext;
+@property (nonatomic, strong) NSArray *friends;
 
 -(void)initClass;
 -(void)forceReload;

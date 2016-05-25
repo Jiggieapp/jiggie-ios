@@ -15,5 +15,6 @@
 @property (nonatomic, strong) EmptyView *emptyView;
 
 @property (nonatomic, strong) NSArray *orderList;
+@property (nonatomic, assign) BOOL isModalScreen;
 
 @end

@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10116" systemVersion="15B42" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <mutableArray key="Lato-Bold.ttf">
+            <string>Lato-Bold</string>
+            <string>Lato-Bold</string>
+            <string>Lato-Bold</string>
+        </mutableArray>
+        <mutableArray key="Lato-Regular.ttf">
+            <string>Lato-Regular</string>
+        </mutableArray>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="PromotionsViewController">
+            <connections>
+                <outlet property="applyCodeButton" destination="zZq-wr-4SO" id="HUt-nz-Ijv"/>
+                <outlet property="inviteFriendsButton" destination="zTJ-Cb-IFW" id="tKS-1O-Cwl"/>
+                <outlet property="promoCodeField" destination="Ibu-Fh-Z65" id="yqe-HR-i1I"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" minimumFontSize="36" translatesAutoresizingMaskIntoConstraints="NO" id="Ibu-Fh-Z65">
+                    <rect key="frame" x="-25" y="-30" width="97" height="30"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="60" id="QRa-BG-qXA"/>
+                    </constraints>
+                    <color key="textColor" red="0.71372549019999998" green="0.0" blue="0.81568627449999997" alpha="1" colorSpace="calibratedRGB"/>
+                    <fontDescription key="fontDescription" name="Lato-Bold" family="Lato" pointSize="36"/>
+                    <textInputTraits key="textInputTraits" autocapitalizationType="allCharacters" returnKeyType="done"/>
+                    <variation key="default">
+                        <mask key="constraints">
+                            <exclude reference="QRa-BG-qXA"/>
+                        </mask>
+                    </variation>
+                    <variation key="heightClass=regular-widthClass=compact">
+                        <mask key="constraints">
+                            <include reference="QRa-BG-qXA"/>
+                        </mask>
+                    </variation>
+                    <connections>
+                        <outlet property="delegate" destination="-1" id="cvg-7K-zeE"/>
+                    </connections>
+                </textField>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zZq-wr-4SO">
+                    <rect key="frame" x="-23" y="-15" width="46" height="30"/>
+                    <color key="backgroundColor" red="0.062745098039215685" green="0.73333333333333328" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="45" id="F9V-58-g2C"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" name="Lato-Bold" family="Lato" pointSize="15"/>
+                    <state key="normal" title="APPLY CODE">
+                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <variation key="default">
+                        <mask key="constraints">
+                            <exclude reference="F9V-58-g2C"/>
+                        </mask>
+                    </variation>
+                    <variation key="heightClass=regular-widthClass=compact">
+                        <mask key="constraints">
+                            <include reference="F9V-58-g2C"/>
+                        </mask>
+                    </variation>
+                    <connections>
+                        <action selector="didTapApplyButton:" destination="-1" eventType="touchUpInside" id="r1g-cQ-QZY"/>
+                    </connections>
+                </button>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ell-y1-8r1">
+                    <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                    <color key="backgroundColor" red="0.59215686274509804" green="0.59215686274509804" blue="0.59215686274509804" alpha="1" colorSpace="calibratedRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="1.5" id="XUy-XA-sdj"/>
+                    </constraints>
+                    <variation key="default">
+                        <mask key="constraints">
+                            <exclude reference="XUy-XA-sdj"/>
+                        </mask>
+                    </variation>
+                    <variation key="heightClass=regular-widthClass=compact">
+                        <mask key="constraints">
+                            <include reference="XUy-XA-sdj"/>
+                        </mask>
+                    </variation>
+                </view>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Want a free ticket" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7Nc-WQ-dcJ">
+                    <rect key="frame" x="-42" y="-21" width="42" height="21"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="30" id="RAD-wT-3kU"/>
+                        <constraint firstAttribute="width" constant="180" id="oOJ-YO-mr8"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="15"/>
+                    <color key="textColor" red="0.44705882352941173" green="0.44705882352941173" blue="0.44705882352941173" alpha="1" colorSpace="calibratedRGB"/>
+                    <nil key="highlightedColor"/>
+                    <variation key="default">
+                        <mask key="constraints">
+                            <exclude reference="RAD-wT-3kU"/>
+                            <exclude reference="oOJ-YO-mr8"/>
+                        </mask>
+                    </variation>
+                    <variation key="heightClass=regular-widthClass=compact">
+                        <mask key="constraints">
+                            <include reference="RAD-wT-3kU"/>
+                            <include reference="oOJ-YO-mr8"/>
+                        </mask>
+                    </variation>
+                </label>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zTJ-Cb-IFW">
+                    <rect key="frame" x="-23" y="-15" width="46" height="30"/>
+                    <color key="backgroundColor" red="0.062745098039215685" green="0.73333333333333328" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="45" id="mgc-4i-SpZ"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" name="Lato-Bold" family="Lato" pointSize="15"/>
+                    <state key="normal" title="INVITE YOUR FRIENDS">
+                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <variation key="default">
+                        <mask key="constraints">
+                            <exclude reference="mgc-4i-SpZ"/>
+                        </mask>
+                    </variation>
+                    <variation key="heightClass=regular-widthClass=compact">
+                        <mask key="constraints">
+                            <include reference="mgc-4i-SpZ"/>
+                        </mask>
+                    </variation>
+                    <connections>
+                        <action selector="didTapInviteFriendsButton:" destination="-1" eventType="touchUpInside" id="4KS-9x-BSp"/>
+                    </connections>
+                </button>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <gestureRecognizers/>
+            <constraints>
+                <constraint firstItem="zTJ-Cb-IFW" firstAttribute="trailing" secondItem="ell-y1-8r1" secondAttribute="trailing" id="96B-yb-x8r"/>
+                <constraint firstItem="Ibu-Fh-Z65" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="30" id="CzY-r8-DEW"/>
+                <constraint firstItem="ell-y1-8r1" firstAttribute="trailing" secondItem="zZq-wr-4SO" secondAttribute="trailing" id="D9f-qc-ruN"/>
+                <constraint firstItem="zTJ-Cb-IFW" firstAttribute="leading" secondItem="ell-y1-8r1" secondAttribute="leading" id="E8c-G1-gUJ"/>
+                <constraint firstItem="7Nc-WQ-dcJ" firstAttribute="centerY" secondItem="ell-y1-8r1" secondAttribute="centerY" id="F11-Kx-6XN"/>
+                <constraint firstAttribute="trailing" secondItem="Ibu-Fh-Z65" secondAttribute="trailing" constant="30" id="Jdb-X2-0g6"/>
+                <constraint firstItem="zZq-wr-4SO" firstAttribute="trailing" secondItem="Ibu-Fh-Z65" secondAttribute="trailing" id="WQx-Cu-UIJ"/>
+                <constraint firstItem="7Nc-WQ-dcJ" firstAttribute="centerX" secondItem="ell-y1-8r1" secondAttribute="centerX" id="ZZj-AT-aNq"/>
+                <constraint firstItem="ell-y1-8r1" firstAttribute="leading" secondItem="zZq-wr-4SO" secondAttribute="leading" id="bYU-VV-zMF"/>
+                <constraint firstItem="zZq-wr-4SO" firstAttribute="leading" secondItem="Ibu-Fh-Z65" secondAttribute="leading" id="iNd-tp-NJd"/>
+                <constraint firstItem="zTJ-Cb-IFW" firstAttribute="top" secondItem="ell-y1-8r1" secondAttribute="bottom" constant="55" id="ng7-E0-I4g"/>
+                <constraint firstItem="zZq-wr-4SO" firstAttribute="top" secondItem="Ibu-Fh-Z65" secondAttribute="bottom" constant="15" id="pYA-qG-M5Z"/>
+                <constraint firstItem="ell-y1-8r1" firstAttribute="top" secondItem="zZq-wr-4SO" secondAttribute="bottom" constant="53.5" id="sGZ-L3-jQl"/>
+                <constraint firstItem="Ibu-Fh-Z65" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="30" id="uYA-Cf-pxj"/>
+            </constraints>
+            <nil key="simulatedStatusBarMetrics"/>
+            <variation key="default">
+                <mask key="subviews">
+                    <exclude reference="Ibu-Fh-Z65"/>
+                    <exclude reference="zZq-wr-4SO"/>
+                    <exclude reference="ell-y1-8r1"/>
+                    <exclude reference="7Nc-WQ-dcJ"/>
+                    <exclude reference="zTJ-Cb-IFW"/>
+                </mask>
+                <mask key="constraints">
+                    <exclude reference="CzY-r8-DEW"/>
+                    <exclude reference="Jdb-X2-0g6"/>
+                    <exclude reference="uYA-Cf-pxj"/>
+                    <exclude reference="96B-yb-x8r"/>
+                    <exclude reference="E8c-G1-gUJ"/>
+                    <exclude reference="ng7-E0-I4g"/>
+                    <exclude reference="WQx-Cu-UIJ"/>
+                    <exclude reference="iNd-tp-NJd"/>
+                    <exclude reference="pYA-qG-M5Z"/>
+                    <exclude reference="F11-Kx-6XN"/>
+                    <exclude reference="ZZj-AT-aNq"/>
+                    <exclude reference="D9f-qc-ruN"/>
+                    <exclude reference="bYU-VV-zMF"/>
+                    <exclude reference="sGZ-L3-jQl"/>
+                </mask>
+            </variation>
+            <variation key="heightClass=regular-widthClass=compact">
+                <mask key="subviews">
+                    <include reference="Ibu-Fh-Z65"/>
+                    <include reference="zZq-wr-4SO"/>
+                    <include reference="ell-y1-8r1"/>
+                    <include reference="7Nc-WQ-dcJ"/>
+                    <include reference="zTJ-Cb-IFW"/>
+                </mask>
+                <mask key="constraints">
+                    <include reference="CzY-r8-DEW"/>
+                    <include reference="Jdb-X2-0g6"/>
+                    <include reference="uYA-Cf-pxj"/>
+                    <include reference="96B-yb-x8r"/>
+                    <include reference="E8c-G1-gUJ"/>
+                    <include reference="ng7-E0-I4g"/>
+                    <include reference="WQx-Cu-UIJ"/>
+                    <include reference="iNd-tp-NJd"/>
+                    <include reference="pYA-qG-M5Z"/>
+                    <include reference="F11-Kx-6XN"/>
+                    <include reference="ZZj-AT-aNq"/>
+                    <include reference="D9f-qc-ruN"/>
+                    <include reference="bYU-VV-zMF"/>
+                    <include reference="sGZ-L3-jQl"/>
+                </mask>
+            </variation>
+            <connections>
+                <outletCollection property="gestureRecognizers" destination="XPs-N1-Gji" appends="YES" id="zRE-rV-dbc"/>
+            </connections>
+        </view>
+        <tapGestureRecognizer id="XPs-N1-Gji">
+            <connections>
+                <action selector="didTapRootView:" destination="-1" id="5Aq-UP-DPD"/>
+            </connections>
+        </tapGestureRecognizer>
+    </objects>
+</document>

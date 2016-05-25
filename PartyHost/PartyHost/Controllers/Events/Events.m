@@ -575,6 +575,13 @@
                                  item.eventID = @"";
                              }
                              
+                             NSString *venue_name = [eventRow objectForKey:@"venue_name"];
+                             if (venue_name && ![venue_name isEqual:[NSNull null]]) {
+                                 item.venue = venue_name;
+                             } else {
+                                 item.venue = @"";
+                             }
+                             
                              NSString *start_datetime_str = [eventRow objectForKey:@"start_datetime_str"];
                              if (start_datetime_str && ![start_datetime_str isEqual:[NSNull null]]) {
                                  item.startDatetimeStr = start_datetime_str;
@@ -582,11 +589,11 @@
                                  item.startDatetimeStr = @"";
                              }
                              
-                             NSString *venue_name = [eventRow objectForKey:@"venue_name"];
-                             if (venue_name && ![venue_name isEqual:[NSNull null]]) {
-                                 item.venue = venue_name;
+                             NSString *fullfillment_type = [eventRow objectForKey:@"fullfillment_type"];
+                             if (fullfillment_type && ![fullfillment_type isEqual:[NSNull null]]) {
+                                 item.fullfillmentType = fullfillment_type;
                              } else {
-                                 item.venue = @"";
+                                 item.fullfillmentType = @"";
                              }
                             
                              NSNumber *likes = [eventRow objectForKey:@"likes"];

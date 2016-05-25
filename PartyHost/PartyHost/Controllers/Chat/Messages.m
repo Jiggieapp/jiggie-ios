@@ -267,12 +267,12 @@
                      
                      self.confirmMode = 0;
                      
-                     if (!self.messagesList.tableHeaderView) {
+                     if (![[chat_conversations[@"event_name"] lowercaseString] isEqualToString:@"generic"]) {
                          UIView *view = [self headerViewWithText:chat_conversations[@"event_name"]];
                          UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(.0f, .0f, CGRectGetWidth(self.messagesList.bounds), CGRectGetHeight(view.bounds) + 20.0f)];
                          [headerView addSubview:view];
                          [view setCenter:headerView.center];
-                         
+                      
                          [self.messagesList setTableHeaderView:headerView];
                      }
                      

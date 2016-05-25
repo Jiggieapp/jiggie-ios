@@ -45,8 +45,6 @@
     self.settingsList.separatorColor = [UIColor phDarkGrayColor];
     [self.mainCon addSubview:self.settingsList];
     
-    
-    
     return self;
 }
 
