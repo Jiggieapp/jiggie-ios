@@ -39,7 +39,7 @@ static NSString *const SidePhotoTableViewCellIdentifier = @"SidePhotoTableViewCe
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
-    self.title = @"EDIT PROFILE";
+    self.title = @"Edit Profile";
     
     [self setupView];
     [self loadData];

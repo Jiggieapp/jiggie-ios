@@ -6,6 +6,8 @@
 //  Copyright (c) 2015 Sunny Clark. All rights reserved.
 //
 
+@class MemberInfo;
+
 #ifndef PartyHost_Constants_h
 #define PartyHost_Constants_h
 #define PHVersion [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"]
@@ -22,6 +24,10 @@ typedef void (^PartyFeedCompletionHandler)(NSArray *feeds,
                                            NSError *error);
 
 typedef void (^MatchFeedCompletionHandler)(NSError *error);
+
+typedef void (^MemberInfoCompletionHandler)(MemberInfo *memberInfo,
+                                            NSInteger statusCode,
+                                            NSError *error);
 
 //Others
 extern BOOL const PHDebugOn; //Pretend we are a new user in debug mode, they will see walkthrough, alerts etc.

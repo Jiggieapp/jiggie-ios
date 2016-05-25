@@ -15,6 +15,7 @@
 #import "TicketSuccessViewController.h"
 #import "PaymentSelectionViewController.h"
 #import "PurchaseHistoryViewController.h"
+#import "ProfileViewController.h"
 #import "EditProfileViewController.h"
 #import "InviteViewController.h"
 #import "PromotionsViewController.h"
@@ -153,6 +154,12 @@
      addObserver:self
      selector:@selector(showProfile:)
      name:@"SHOW_PROFILE"
+     object:nil];
+    
+    [[NSNotificationCenter defaultCenter]
+     addObserver:self
+     selector:@selector(showEditProfile:)
+     name:@"SHOW_EDIT_PROFILE"
      object:nil];
     
     [[NSNotificationCenter defaultCenter]
@@ -686,6 +693,11 @@
 
 #pragma mark - Profile Notification
 - (void)showProfile:(NSNotification *)notification {
+    UINavigationController *profileNavigationController = [[UINavigationController alloc] initWithRootViewController:[[ProfileViewController alloc] init]];
+    [self presentViewController:profileNavigationController animated:YES completion:nil];
+}
+
+- (void)showEditProfile:(NSNotification *)notification {
     UINavigationController *profileNavigationController = [[UINavigationController alloc] initWithRootViewController:[[EditProfileViewController alloc] init]];
     [self presentViewController:profileNavigationController animated:YES completion:nil];
 }

@@ -9,7 +9,6 @@
 #import <UIKit/UIKit.h>
 #import "Events.h"
 #import "Chats.h"
-#import "Profile.h"
 #import "Messages.h"
 #import "More.h"
 #import "MemberProfile.h"
