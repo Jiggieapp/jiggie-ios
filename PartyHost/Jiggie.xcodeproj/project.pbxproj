@@ -117,8 +117,13 @@
 		938CE8051CD3184300ADDD4C /* SocialMultiSliderTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 938CE8031CD3184300ADDD4C /* SocialMultiSliderTableViewCell.xib */; };
 		938CE80B1CD3435700ADDD4C /* MSRangeSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 938CE8081CD3435700ADDD4C /* MSRangeSlider.m */; };
 		938CE80C1CD3435700ADDD4C /* UIControl+HitTestEdgeInsets.m in Sources */ = {isa = PBXBuildFile; fileRef = 938CE80A1CD3435700ADDD4C /* UIControl+HitTestEdgeInsets.m */; };
-		938CE81E1CD387BC00ADDD4C /* ProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 938CE8191CD387BC00ADDD4C /* ProfileViewController.m */; };
-		938CE81F1CD387BC00ADDD4C /* ProfileViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 938CE81A1CD387BC00ADDD4C /* ProfileViewController.xib */; };
+		938CE81E1CD387BC00ADDD4C /* EditProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 938CE8191CD387BC00ADDD4C /* EditProfileViewController.m */; };
+		938CE81F1CD387BC00ADDD4C /* EditProfileViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 938CE81A1CD387BC00ADDD4C /* EditProfileViewController.xib */; };
+		93AF8BA11CF55EAB008BFA94 /* ProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93AF8B9F1CF55EAB008BFA94 /* ProfileViewController.m */; };
+		93AF8BA21CF55EAB008BFA94 /* ProfileViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 93AF8BA01CF55EAB008BFA94 /* ProfileViewController.xib */; };
+		93AF8BA61CF5603F008BFA94 /* AboutTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 93AF8BA41CF5603F008BFA94 /* AboutTableViewCell.m */; };
+		93AF8BA71CF5603F008BFA94 /* AboutTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 93AF8BA51CF5603F008BFA94 /* AboutTableViewCell.xib */; };
+		93AF8BAA1CF565CC008BFA94 /* MemberInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 93AF8BA91CF565CC008BFA94 /* MemberInfo.m */; };
 		9A85A5531CC8B89300C8818B /* JGKeyboardNotificationHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A85A5521CC8B89300C8818B /* JGKeyboardNotificationHelper.m */; };
 		9AF3EEFF1CC9FA9E00CA9497 /* LocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AF3EEFE1CC9FA9E00CA9497 /* LocationManager.m */; };
 		CB3EB6C81B459177003F658F /* App.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CB3EB6C71B459177003F658F /* App.xcassets */; };
@@ -214,7 +219,6 @@
 		DAABB0DB1C1FD50E004DDCFA /* MemberProfile.m in Sources */ = {isa = PBXBuildFile; fileRef = DAABB0651C1FD50E004DDCFA /* MemberProfile.m */; };
 		DAABB0DC1C1FD50E004DDCFA /* More.m in Sources */ = {isa = PBXBuildFile; fileRef = DAABB0671C1FD50E004DDCFA /* More.m */; };
 		DAABB0DD1C1FD50E004DDCFA /* Privacy.m in Sources */ = {isa = PBXBuildFile; fileRef = DAABB0691C1FD50E004DDCFA /* Privacy.m */; };
-		DAABB0DE1C1FD50E004DDCFA /* Profile.m in Sources */ = {isa = PBXBuildFile; fileRef = DAABB06B1C1FD50E004DDCFA /* Profile.m */; };
 		DAABB0DF1C1FD50E004DDCFA /* MyPurchases.m in Sources */ = {isa = PBXBuildFile; fileRef = DAABB06E1C1FD50E004DDCFA /* MyPurchases.m */; };
 		DAABB0E01C1FD50E004DDCFA /* MyPurchasesCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DAABB0701C1FD50E004DDCFA /* MyPurchasesCell.m */; };
 		DAABB0E11C1FD50E004DDCFA /* Settings.m in Sources */ = {isa = PBXBuildFile; fileRef = DAABB0721C1FD50E004DDCFA /* Settings.m */; };
@@ -651,9 +655,17 @@
 		938CE8081CD3435700ADDD4C /* MSRangeSlider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSRangeSlider.m; sourceTree = "<group>"; };
 		938CE8091CD3435700ADDD4C /* UIControl+HitTestEdgeInsets.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIControl+HitTestEdgeInsets.h"; sourceTree = "<group>"; };
 		938CE80A1CD3435700ADDD4C /* UIControl+HitTestEdgeInsets.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIControl+HitTestEdgeInsets.m"; sourceTree = "<group>"; };
-		938CE8181CD387BC00ADDD4C /* ProfileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProfileViewController.h; sourceTree = "<group>"; };
-		938CE8191CD387BC00ADDD4C /* ProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProfileViewController.m; sourceTree = "<group>"; };
-		938CE81A1CD387BC00ADDD4C /* ProfileViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ProfileViewController.xib; sourceTree = "<group>"; };
+		938CE8181CD387BC00ADDD4C /* EditProfileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditProfileViewController.h; sourceTree = "<group>"; };
+		938CE8191CD387BC00ADDD4C /* EditProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditProfileViewController.m; sourceTree = "<group>"; };
+		938CE81A1CD387BC00ADDD4C /* EditProfileViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EditProfileViewController.xib; sourceTree = "<group>"; };
+		93AF8B9E1CF55EAB008BFA94 /* ProfileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProfileViewController.h; sourceTree = "<group>"; };
+		93AF8B9F1CF55EAB008BFA94 /* ProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProfileViewController.m; sourceTree = "<group>"; };
+		93AF8BA01CF55EAB008BFA94 /* ProfileViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ProfileViewController.xib; sourceTree = "<group>"; };
+		93AF8BA31CF5603F008BFA94 /* AboutTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AboutTableViewCell.h; sourceTree = "<group>"; };
+		93AF8BA41CF5603F008BFA94 /* AboutTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AboutTableViewCell.m; sourceTree = "<group>"; };
+		93AF8BA51CF5603F008BFA94 /* AboutTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AboutTableViewCell.xib; sourceTree = "<group>"; };
+		93AF8BA81CF565CC008BFA94 /* MemberInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MemberInfo.h; sourceTree = "<group>"; };
+		93AF8BA91CF565CC008BFA94 /* MemberInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MemberInfo.m; sourceTree = "<group>"; };
 		9A85A5511CC8B89300C8818B /* JGKeyboardNotificationHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JGKeyboardNotificationHelper.h; sourceTree = "<group>"; };
 		9A85A5521CC8B89300C8818B /* JGKeyboardNotificationHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JGKeyboardNotificationHelper.m; sourceTree = "<group>"; };
 		9AF3EEFD1CC9FA9E00CA9497 /* LocationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationManager.h; sourceTree = "<group>"; };
@@ -853,8 +865,6 @@
 		DAABB0671C1FD50E004DDCFA /* More.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = More.m; sourceTree = "<group>"; };
 		DAABB0681C1FD50E004DDCFA /* Privacy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Privacy.h; sourceTree = "<group>"; };
 		DAABB0691C1FD50E004DDCFA /* Privacy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Privacy.m; sourceTree = "<group>"; };
-		DAABB06A1C1FD50E004DDCFA /* Profile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Profile.h; sourceTree = "<group>"; };
-		DAABB06B1C1FD50E004DDCFA /* Profile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Profile.m; sourceTree = "<group>"; };
 		DAABB06D1C1FD50E004DDCFA /* MyPurchases.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyPurchases.h; sourceTree = "<group>"; };
 		DAABB06E1C1FD50E004DDCFA /* MyPurchases.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyPurchases.m; sourceTree = "<group>"; };
 		DAABB06F1C1FD50E004DDCFA /* MyPurchasesCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyPurchasesCell.h; sourceTree = "<group>"; };
@@ -1643,12 +1653,18 @@
 		938CE8171CD387BC00ADDD4C /* Profile */ = {
 			isa = PBXGroup;
 			children = (
-				938CE8181CD387BC00ADDD4C /* ProfileViewController.h */,
-				938CE8191CD387BC00ADDD4C /* ProfileViewController.m */,
-				938CE81A1CD387BC00ADDD4C /* ProfileViewController.xib */,
+				938CE8181CD387BC00ADDD4C /* EditProfileViewController.h */,
+				938CE8191CD387BC00ADDD4C /* EditProfileViewController.m */,
+				938CE81A1CD387BC00ADDD4C /* EditProfileViewController.xib */,
+				93AF8B9E1CF55EAB008BFA94 /* ProfileViewController.h */,
+				93AF8B9F1CF55EAB008BFA94 /* ProfileViewController.m */,
+				93AF8BA01CF55EAB008BFA94 /* ProfileViewController.xib */,
 				9366745B1CD8562300AC94F3 /* SidePhotoTableViewCell.h */,
 				9366745C1CD8562300AC94F3 /* SidePhotoTableViewCell.m */,
 				9366745D1CD8562300AC94F3 /* SidePhotoTableViewCell.xib */,
+				93AF8BA31CF5603F008BFA94 /* AboutTableViewCell.h */,
+				93AF8BA41CF5603F008BFA94 /* AboutTableViewCell.m */,
+				93AF8BA51CF5603F008BFA94 /* AboutTableViewCell.xib */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -1710,6 +1726,8 @@
 				DA3306A21CE1B58E00A4126D /* Friend.m */,
 				9366752F1CE3381100AC94F3 /* Contact.h */,
 				936675301CE3381100AC94F3 /* Contact.m */,
+				93AF8BA81CF565CC008BFA94 /* MemberInfo.h */,
+				93AF8BA91CF565CC008BFA94 /* MemberInfo.m */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -2077,8 +2095,6 @@
 				DAABB0651C1FD50E004DDCFA /* MemberProfile.m */,
 				DAABB0681C1FD50E004DDCFA /* Privacy.h */,
 				DAABB0691C1FD50E004DDCFA /* Privacy.m */,
-				DAABB06A1C1FD50E004DDCFA /* Profile.h */,
-				DAABB06B1C1FD50E004DDCFA /* Profile.m */,
 				DAABB0711C1FD50E004DDCFA /* Settings.h */,
 				DAABB0721C1FD50E004DDCFA /* Settings.m */,
 			);
@@ -2906,6 +2922,7 @@
 				DAABB2E81C1FF993004DDCFA /* Lato-Bold.ttf in Resources */,
 				DAABB2EB1C1FF993004DDCFA /* Lato-Regular.ttf in Resources */,
 				DAABB2961C1FF5AE004DDCFA /* MPCloseBtn.png in Resources */,
+				93AF8BA21CF55EAB008BFA94 /* ProfileViewController.xib in Resources */,
 				936674241CD7621500AC94F3 /* OLAlbumViewController.xib in Resources */,
 				DAABB2761C1FF5AE004DDCFA /* GSTouchImage.png in Resources */,
 				DAABB2BE1C1FF5AE004DDCFA /* snapshot_config.json in Resources */,
@@ -2936,11 +2953,12 @@
 				DAABB0F61C1FD50E004DDCFA /* Setup.xib in Resources */,
 				DAABB2BF1C1FF5AE004DDCFA /* test_variant.json in Resources */,
 				DAABB2771C1FF5AE004DDCFA /* GSTouchImage@2x.png in Resources */,
-				938CE81F1CD387BC00ADDD4C /* ProfileViewController.xib in Resources */,
+				938CE81F1CD387BC00ADDD4C /* EditProfileViewController.xib in Resources */,
 				938CE7C41CCF627D00ADDD4C /* Info.plist in Resources */,
 				936674791CE1EAC500AC94F3 /* SuccessPromotionsView.xib in Resources */,
 				938CE7DF1CD1C91700ADDD4C /* SocialOptionTableViewCell.xib in Resources */,
 				DA10F51E1C52149F006090ED /* SVProgressHUD.bundle in Resources */,
+				93AF8BA71CF5603F008BFA94 /* AboutTableViewCell.xib in Resources */,
 				CB3EB6CA1B459184003F658F /* LaunchScreen.xib in Resources */,
 				DAABB0F51C1FD50E004DDCFA /* Setup.xcassets in Resources */,
 				DAABB2E41C1FF993004DDCFA /* Calibre-Semibold.ttf in Resources */,
@@ -2982,7 +3000,6 @@
 				DAABB0C81C1FD50E004DDCFA /* EventsSummaryModal.m in Sources */,
 				DAABB0CA1C1FD50E004DDCFA /* EventsGuestList.m in Sources */,
 				9366751B1CE30EB200AC94F3 /* APImageExtractor.m in Sources */,
-				DAABB0DE1C1FD50E004DDCFA /* Profile.m in Sources */,
 				DA9B10A61CB4D7B7001FB798 /* NSString+XMLEntities.m in Sources */,
 				DAABB2671C1FF5AE004DDCFA /* UIBarButtonItem+FlatUI.m in Sources */,
 				938CE7D01CCF627D00ADDD4C /* NSObject+MTLComparisonAdditions.m in Sources */,
@@ -3142,7 +3159,7 @@
 				DA9E0CF71C61F75000966F16 /* BaseViewController.m in Sources */,
 				DAABB1301C1FF13A004DDCFA /* UserBubble.m in Sources */,
 				DAABB28E1C1FF5AE004DDCFA /* MPBOOLToNSNumberValueTransformer.m in Sources */,
-				938CE81E1CD387BC00ADDD4C /* ProfileViewController.m in Sources */,
+				938CE81E1CD387BC00ADDD4C /* EditProfileViewController.m in Sources */,
 				936675261CE30EB200AC94F3 /* APContactDate.m in Sources */,
 				DAABB0DA1C1FD50E004DDCFA /* VenuesList.m in Sources */,
 				DAABB2CB1C1FF5AE004DDCFA /* TSCoreListenerImpl.m in Sources */,
@@ -3170,6 +3187,7 @@
 				DAABB26E1C1FF5AE004DDCFA /* UISlider+FlatUI.m in Sources */,
 				DAABB2931C1FF5AE004DDCFA /* MPCGRectToNSDictionaryValueTransformer.m in Sources */,
 				9366752A1CE30EB200AC94F3 /* APPhone.m in Sources */,
+				93AF8BAA1CF565CC008BFA94 /* MemberInfo.m in Sources */,
 				DAABB0BC1C1FD50E004DDCFA /* Chats.m in Sources */,
 				938CE7CF1CCF627D00ADDD4C /* NSError+MTLModelException.m in Sources */,
 				9366745A1CD7627500AC94F3 /* UIView+WebCacheOperation.m in Sources */,
@@ -3224,6 +3242,7 @@
 				938CE7C51CCF627D00ADDD4C /* MTLJSONAdapter.m in Sources */,
 				DA52379C1C805D9A00E140C1 /* TicketListCell.m in Sources */,
 				DAABB2BC1C1FF5AE004DDCFA /* NSData+MPBase64.m in Sources */,
+				93AF8BA61CF5603F008BFA94 /* AboutTableViewCell.m in Sources */,
 				DA10F5201C52149F006090ED /* SVRadialGradientLayer.m in Sources */,
 				936675231CE30EB200AC94F3 /* APAddressBook.m in Sources */,
 				DAABB2D21C1FF5AE004DDCFA /* TSUtils.m in Sources */,
@@ -3283,6 +3302,7 @@
 				DAABB28D1C1FF5AE004DDCFA /* MPApplicationStateSerializer.m in Sources */,
 				FA4D2EF81A4D9A77006828E7 /* ViewController.m in Sources */,
 				FA4D2EF51A4D9A77006828E7 /* AppDelegate.m in Sources */,
+				93AF8BA11CF55EAB008BFA94 /* ProfileViewController.m in Sources */,
 				DAABB2AC1C1FF5AE004DDCFA /* MPSurveyNavigationController.m in Sources */,
 				9366742A1CD7621500AC94F3 /* OLFacebookImagePickerController.m in Sources */,
 				DAABB2841C1FF5AE004DDCFA /* MPABTestDesignerClearResponseMessage.m in Sources */,

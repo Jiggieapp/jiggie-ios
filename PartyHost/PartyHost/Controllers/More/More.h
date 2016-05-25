@@ -7,7 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "Profile.h"
 #import "Privacy.h"
 #import "Settings.h"
 #import "MyHostings.h"
