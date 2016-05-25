@@ -14,6 +14,7 @@
 #import "OLFacebookImage.h"
 #import "SVProgressHUD.h"
 #import "SharedData.h"
+#import "AnalyticManager.h"
 #import "SidePhotoTableViewCell.h"
 
 static NSString *const SidePhotoTableViewCellIdentifier = @"SidePhotoTableViewCellIdentifier";
@@ -326,6 +327,11 @@ static NSString *const SidePhotoTableViewCellIdentifier = @"SidePhotoTableViewCe
                 [self reloadPhotoDataWithChosenImage:image andIndex:[index integerValue]];
                 [self.mainPhotoIndicatorView setHidden:YES];
             }
+            
+            NSDictionary *parameters = @{@"Image URL" : json[@"url"]};
+            
+            [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Picture Upload"
+                                                          withDict:parameters];
         });
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -394,6 +400,11 @@ static NSString *const SidePhotoTableViewCellIdentifier = @"SidePhotoTableViewCe
                       }
                   }
                   
+                  NSDictionary *parameters = @{@"Image URL" : photoURL};
+                  
+                  [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Picture Delete"
+                                                                withDict:parameters];
+                  
                   [self.photoIndexs removeObject:index];
                   [self.mainPhotoIndicatorView setHidden:YES];
               });
@@ -444,7 +455,9 @@ static NSString *const SidePhotoTableViewCellIdentifier = @"SidePhotoTableViewCe
     self.currentPhotoIndex = 0;
     
     if (self.mainPhotoImageView.image != self.defaultImage) {
-        [self showDeleteActionSheet];
+        if (self.photosURL.count > 1) {
+            [self showDeleteActionSheet];
+        }
     } else {
         [self showActionSheet];
     }
