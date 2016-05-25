@@ -447,6 +447,20 @@ static NSString *const SidePhotoTableViewCellIdentifier = @"SidePhotoTableViewCe
         [self updateAboutInfo];
     }
     
+    NSMutableArray *photos = [NSMutableArray array];
+    
+    for (UIImage *photo in self.photos) {
+        if (photo != self.defaultImage) {
+            [photos addObject:photo];
+        }
+    }
+    
+    NSDictionary *object = @{@"photos" : photos,
+                             @"about" : self.aboutTextView.text};
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"EDIT_PROFILE_DONE"
+                                                        object:object];
+    
     [self.view endEditing:YES];
     [self dismissViewControllerAnimated:YES completion:nil];
 }

@@ -11,6 +11,8 @@
 
 @interface MemberInfo () <MTLJSONSerializing>
 
+@property (copy, nonatomic) NSString *about;
+
 @end
 
 @implementation MemberInfo
@@ -53,6 +55,10 @@
                        error);
         }
     }];
+}
+
+- (void)setAboutInfo:(NSString *)about {
+    self.about = about;
 }
 
 @end

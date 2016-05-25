@@ -30,6 +30,7 @@
 @property(nonatomic,strong) MyConfirmations *confirmationsPage;
 @property(nonatomic,strong) NSMutableArray  *dataA;
 @property(nonatomic,strong) UserBubble      *userProfilePicture;
+@property(nonatomic,strong) UIButton        *editProfileButton;
 @property(nonatomic,strong) UILabel         *userProfileName;
 @property(nonatomic,strong) UIButton        *userProfilePhone;
 @property(nonatomic,strong) UITableView     *moreList;

@@ -51,6 +51,17 @@
     [self.userProfilePicture addTarget:self action:@selector(goProfile) forControlEvents:UIControlEventTouchUpInside];
     [self.mainCon addSubview:self.userProfilePicture];
     
+    UIImage *editProfileImage = [UIImage imageNamed:@"edit-profile-icon"];
+    
+    self.editProfileButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    self.editProfileButton.frame = CGRectMake(CGRectGetMaxX(self.userProfilePicture.frame) - editProfileImage.size.width,
+                                              CGRectGetMaxY(self.userProfilePicture.frame) - editProfileImage.size.height,
+                                              editProfileImage.size.width,
+                                              editProfileImage.size.height);
+    [self.editProfileButton setImage:editProfileImage forState:UIControlStateNormal];
+    [self.editProfileButton addTarget:self action:@selector(goEditProfile) forControlEvents:UIControlEventTouchUpInside];
+    [self.mainCon addSubview:self.editProfileButton];
+    
     self.userProfileName = [[UILabel alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(self.userProfilePicture.frame) + 12, self.sharedData.screenWidth, 20)];
     self.userProfileName.textAlignment = NSTextAlignmentCenter;
     self.userProfileName.font = [UIFont phBlond:17];
@@ -840,6 +851,11 @@
 
 -(void)goProfile {
     [[NSNotificationCenter defaultCenter] postNotificationName:@"SHOW_PROFILE"
+                                                        object:nil];
+}
+
+-(void)goEditProfile {
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"SHOW_EDIT_PROFILE"
                                                         object:nil];
 }
 
