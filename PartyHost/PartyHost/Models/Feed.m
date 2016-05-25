@@ -11,14 +11,6 @@
 
 @interface Feed ()
 
-@property (copy, nonatomic) NSString *eventId;
-@property (copy, nonatomic) NSString *eventName;
-@property (copy, nonatomic) NSString *fbId;
-@property (copy, nonatomic) NSString *fromFbId;
-@property (copy, nonatomic) NSString *fromFirstName;
-@property (copy, nonatomic) NSString *fromImageURL;
-@property (assign, nonatomic) FeedType type;
-
 @end
 
 @implementation Feed
