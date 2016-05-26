@@ -124,6 +124,7 @@
 		93AF8BA61CF5603F008BFA94 /* AboutTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 93AF8BA41CF5603F008BFA94 /* AboutTableViewCell.m */; };
 		93AF8BA71CF5603F008BFA94 /* AboutTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 93AF8BA51CF5603F008BFA94 /* AboutTableViewCell.xib */; };
 		93AF8BAA1CF565CC008BFA94 /* MemberInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 93AF8BA91CF565CC008BFA94 /* MemberInfo.m */; };
+		93FDBA1C1CF6E725000344F2 /* MemberInfoEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 93FDBA1B1CF6E725000344F2 /* MemberInfoEvent.m */; };
 		9A85A5531CC8B89300C8818B /* JGKeyboardNotificationHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A85A5521CC8B89300C8818B /* JGKeyboardNotificationHelper.m */; };
 		9AF3EEFF1CC9FA9E00CA9497 /* LocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AF3EEFE1CC9FA9E00CA9497 /* LocationManager.m */; };
 		CB3EB6C81B459177003F658F /* App.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CB3EB6C71B459177003F658F /* App.xcassets */; };
@@ -666,6 +667,8 @@
 		93AF8BA51CF5603F008BFA94 /* AboutTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AboutTableViewCell.xib; sourceTree = "<group>"; };
 		93AF8BA81CF565CC008BFA94 /* MemberInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MemberInfo.h; sourceTree = "<group>"; };
 		93AF8BA91CF565CC008BFA94 /* MemberInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MemberInfo.m; sourceTree = "<group>"; };
+		93FDBA1A1CF6E725000344F2 /* MemberInfoEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MemberInfoEvent.h; sourceTree = "<group>"; };
+		93FDBA1B1CF6E725000344F2 /* MemberInfoEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MemberInfoEvent.m; sourceTree = "<group>"; };
 		9A85A5511CC8B89300C8818B /* JGKeyboardNotificationHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JGKeyboardNotificationHelper.h; sourceTree = "<group>"; };
 		9A85A5521CC8B89300C8818B /* JGKeyboardNotificationHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JGKeyboardNotificationHelper.m; sourceTree = "<group>"; };
 		9AF3EEFD1CC9FA9E00CA9497 /* LocationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationManager.h; sourceTree = "<group>"; };
@@ -1728,6 +1731,8 @@
 				936675301CE3381100AC94F3 /* Contact.m */,
 				93AF8BA81CF565CC008BFA94 /* MemberInfo.h */,
 				93AF8BA91CF565CC008BFA94 /* MemberInfo.m */,
+				93FDBA1A1CF6E725000344F2 /* MemberInfoEvent.h */,
+				93FDBA1B1CF6E725000344F2 /* MemberInfoEvent.m */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -3105,6 +3110,7 @@
 				DAABB2B51C1FF5AE004DDCFA /* MPUIControlBinding.m in Sources */,
 				938CE7CE1CCF627D00ADDD4C /* NSDictionary+MTLMappingAdditions.m in Sources */,
 				DAABB0E31C1FD50E004DDCFA /* GenericOverlayView.m in Sources */,
+				93FDBA1C1CF6E725000344F2 /* MemberInfoEvent.m in Sources */,
 				936674261CD7621500AC94F3 /* OLFacebookAlbumRequest.m in Sources */,
 				DAABB1021C1FD50E004DDCFA /* UpgradeScreen.m in Sources */,
 				DAABB2B41C1FF5AE004DDCFA /* MPUIColorToNSStringValueTransformer.m in Sources */,

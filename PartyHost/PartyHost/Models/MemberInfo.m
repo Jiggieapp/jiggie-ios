@@ -8,6 +8,7 @@
 
 #import "MemberInfo.h"
 #import "Mantle.h"
+#import "MemberInfoEvent.h"
 
 @interface MemberInfo () <MTLJSONSerializing>
 
@@ -17,12 +18,27 @@
 
 @implementation MemberInfo
 
++ (NSValueTransformer *)bookingsJSONTransformer {
+    return [MTLJSONAdapter arrayTransformerWithModelClass:[MemberInfoEvent class]];
+}
+
++ (NSValueTransformer *)ticketsJSONTransformer {
+    return [MTLJSONAdapter arrayTransformerWithModelClass:[MemberInfoEvent class]];
+}
+
++ (NSValueTransformer *)likesEventJSONTransformer {
+    return [MTLJSONAdapter arrayTransformerWithModelClass:[MemberInfoEvent class]];
+}
+
 + (NSDictionary *)JSONKeyPathsByPropertyKey {
     return @{@"about" : @"about",
              @"age" :@"age",
              @"firstName" : @"first_name",
              @"lastName" : @"last_name",
-             @"photos" : @"photos"};
+             @"photos" : @"photos",
+             @"bookings" : @"list_bookings",
+             @"tickets" : @"list_tickets",
+             @"likesEvent" : @"likes_event"};
 }
 
 + (void)retrieveMemberInfoWithCompletionHandler:(MemberInfoCompletionHandler)completion {
