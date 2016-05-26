@@ -98,53 +98,58 @@
 }
 
 - (IBAction)didTapApplyButton:(id)sender {
-    SharedData *sharedData = [SharedData sharedInstance];
-    AFHTTPRequestOperationManager *manager = [sharedData getOperationManager];
-    NSString *url = [NSString stringWithFormat:@"%@/credit/redeem_code", PHBaseNewURL];
-    NSDictionary *parameters = @{@"fb_id" : sharedData.fb_id,
-                                 @"code" : self.promoCodeField.text};
+    NSString *promoCode = [self.promoCodeField.text stringByTrimmingCharactersInSet:
+                           [NSCharacterSet whitespaceAndNewlineCharacterSet]];
     
-    [SVProgressHUD show];
-    [self.view endEditing:YES];
-    [manager POST:url parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        [SVProgressHUD dismiss];
+    if (![promoCode isEqualToString:@""]) {
+        SharedData *sharedData = [SharedData sharedInstance];
+        AFHTTPRequestOperationManager *manager = [sharedData getOperationManager];
+        NSString *url = [NSString stringWithFormat:@"%@/credit/redeem_code", PHBaseNewURL];
+        NSDictionary *parameters = @{@"fb_id" : sharedData.fb_id,
+                                     @"code" : self.promoCodeField.text};
         
-        NSInteger responseStatusCode = operation.response.statusCode;
-        if (responseStatusCode != 200) {
-            return;
-        }
-        
-        NSString *responseString = operation.responseString;
-        NSError *error;
-        NSDictionary *json = (NSDictionary *)[NSJSONSerialization
-                                              JSONObjectWithData:[responseString dataUsingEncoding:NSUTF8StringEncoding]
-                                              options:kNilOptions
-                                              error:&error];
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if (json && json != nil) {
-                NSDictionary *data = [json objectForKey:@"data"];
-                if (data && data != nil) {
-                    NSDictionary *redeemCode = [data objectForKey:@"redeem_code"];
-                    NSString *message = redeemCode[@"msg"];
-                    NSNumber *isCheck = redeemCode[@"is_check"];
-                    
-                    if ([isCheck boolValue]) {
-                        [self.successPromotionView.promoDescriptionLabel setText:message];
-                        [self.view presentView:self.successPromotionView animated:YES completion:nil];
-                    } else {
-                        [SVProgressHUD showInfoWithStatus:message];
+        [SVProgressHUD show];
+        [self.view endEditing:YES];
+        [manager POST:url parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+            [SVProgressHUD dismiss];
+            
+            NSInteger responseStatusCode = operation.response.statusCode;
+            if (responseStatusCode != 200) {
+                return;
+            }
+            
+            NSString *responseString = operation.responseString;
+            NSError *error;
+            NSDictionary *json = (NSDictionary *)[NSJSONSerialization
+                                                  JSONObjectWithData:[responseString dataUsingEncoding:NSUTF8StringEncoding]
+                                                  options:kNilOptions
+                                                  error:&error];
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (json && json != nil) {
+                    NSDictionary *data = [json objectForKey:@"data"];
+                    if (data && data != nil) {
+                        NSDictionary *redeemCode = [data objectForKey:@"redeem_code"];
+                        NSString *message = redeemCode[@"msg"];
+                        NSNumber *isCheck = redeemCode[@"is_check"];
                         
-                        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                            [SVProgressHUD dismiss];
-                        });
+                        if ([isCheck boolValue]) {
+                            [self.successPromotionView.promoDescriptionLabel setText:message];
+                            [self.view presentView:self.successPromotionView animated:YES completion:nil];
+                        } else {
+                            [SVProgressHUD showInfoWithStatus:message];
+                            
+                            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                                [SVProgressHUD dismiss];
+                            });
+                        }
                     }
                 }
-            }
-        });
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        [SVProgressHUD dismiss];
-    }];
+            });
+        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+            [SVProgressHUD dismiss];
+        }];
+    }
 }
 
 - (IBAction)didTapInviteFriendsButton:(id)sender {
