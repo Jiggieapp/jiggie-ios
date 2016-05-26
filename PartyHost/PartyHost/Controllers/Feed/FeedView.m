@@ -664,11 +664,11 @@
     if ([[button.titleLabel.text lowercaseString] isEqualToString:@"connect"] ||
         [[button.titleLabel.text lowercaseString] isEqualToString:@"yes"]) {
         [self.swipeableView swipeTopViewToRight];
-//        [self approveFeed:YES withFeed:feed];
+        [self approveFeed:YES withFeed:feed];
         [view showConnectOverlayView];
     } else {
         [self.swipeableView swipeTopViewToLeft];
-//        [self approveFeed:NO withFeed:feed];
+        [self approveFeed:NO withFeed:feed];
         [view showSkipOverlayView];
     }
     
