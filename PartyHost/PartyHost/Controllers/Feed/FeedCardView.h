@@ -35,6 +35,8 @@
 @property (strong, nonatomic) IBOutlet UIView *messageIconView;
 @property (strong, nonatomic) IBOutlet UIView *overlayView;
 @property (strong, nonatomic) IBOutlet UIImageView *connectIconImageView;
+@property (strong, nonatomic) IBOutlet UIImageView *hasTableImageView;
+@property (strong, nonatomic) IBOutlet UIImageView *hasTicketImageView;
 
 + (FeedCardView *)instanceFromNib;
 

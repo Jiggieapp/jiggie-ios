@@ -22,7 +22,9 @@
              @"fromFbId" : @"from_fb_id",
              @"fromFirstName" : @"from_first_name",
              @"fromImageURL" : @"image",
-             @"type" : @"type"};
+             @"type" : @"type",
+             @"hasBooking" : @"badge_booking",
+             @"hasTicket" : @"badge_ticket"};
 }
 
 + (NSValueTransformer *)typeJSONTransformer {

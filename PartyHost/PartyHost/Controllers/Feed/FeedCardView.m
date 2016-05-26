@@ -69,6 +69,18 @@
         [self.personImageButton.imageView setContentMode:UIViewContentModeScaleAspectFill];
     }];
     
+    if ([feed.hasBooking boolValue]) {
+        [self.hasTableImageView setImage:[UIImage imageNamed:@"feed-table-icon"]];
+    } else {
+        [self.hasTableImageView setImage:nil];
+    }
+    
+    if ([feed.hasTicket boolValue]) {
+        [self.hasTicketImageView setImage:[UIImage imageNamed:@"feed-ticket-icon"]];
+    } else {
+        [self.hasTicketImageView setImage:nil];
+    }
+    
     switch (feed.type) {
         case FeedTypeViewed: {
             [self.messageIconView setHidden:YES];

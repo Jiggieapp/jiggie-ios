@@ -123,6 +123,12 @@
                         <constraint firstItem="J09-Xh-824" firstAttribute="leading" secondItem="n47-AQ-kdJ" secondAttribute="leading" constant="16" id="baG-ew-fFF"/>
                     </constraints>
                 </view>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="feed-table-icon" translatesAutoresizingMaskIntoConstraints="NO" id="DR5-k1-Mn1">
+                    <rect key="frame" x="288" y="8" width="44" height="50"/>
+                </imageView>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="feed-ticket-icon" translatesAutoresizingMaskIntoConstraints="NO" id="ziF-G3-vF4">
+                    <rect key="frame" x="288" y="66" width="44" height="50"/>
+                </imageView>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="r4D-Bv-Ndm">
                     <rect key="frame" x="0.0" y="0.0" width="340" height="440"/>
                     <subviews>
@@ -142,6 +148,8 @@
                 <constraint firstAttribute="bottom" secondItem="wfC-ub-vE0" secondAttribute="bottom" id="4co-5F-Ywk"/>
                 <constraint firstItem="kMH-zE-awb" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="8fm-sb-ZhL"/>
                 <constraint firstItem="wfC-ub-vE0" firstAttribute="top" secondItem="n47-AQ-kdJ" secondAttribute="bottom" constant="-15" id="8oC-Dd-EUv"/>
+                <constraint firstItem="ziF-G3-vF4" firstAttribute="top" secondItem="DR5-k1-Mn1" secondAttribute="bottom" constant="8" id="EsE-tc-Mbv"/>
+                <constraint firstItem="DR5-k1-Mn1" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="8" id="Fpy-uV-awf"/>
                 <constraint firstItem="n47-AQ-kdJ" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="Loc-Wa-ULR"/>
                 <constraint firstItem="r4D-Bv-Ndm" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="Ogf-ew-CRT"/>
                 <constraint firstAttribute="trailing" secondItem="kMH-zE-awb" secondAttribute="trailing" id="S2e-Qi-qel"/>
@@ -149,7 +157,9 @@
                 <constraint firstItem="wfC-ub-vE0" firstAttribute="top" secondItem="kMH-zE-awb" secondAttribute="bottom" id="Ygx-71-onb"/>
                 <constraint firstItem="wfC-ub-vE0" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="apO-75-LuI"/>
                 <constraint firstAttribute="trailing" secondItem="wfC-ub-vE0" secondAttribute="trailing" id="ddW-Qj-Rjx"/>
+                <constraint firstAttribute="trailing" secondItem="ziF-G3-vF4" secondAttribute="trailing" constant="8" id="g2u-Kz-JhC"/>
                 <constraint firstAttribute="bottom" secondItem="r4D-Bv-Ndm" secondAttribute="bottom" id="gd6-Wg-JrI"/>
+                <constraint firstAttribute="trailing" secondItem="DR5-k1-Mn1" secondAttribute="trailing" constant="8" id="nlh-sj-Lpv"/>
                 <constraint firstAttribute="trailing" secondItem="r4D-Bv-Ndm" secondAttribute="trailing" id="okF-zz-6cg"/>
                 <constraint firstItem="r4D-Bv-Ndm" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="w39-PH-Jqb"/>
             </constraints>
@@ -160,6 +170,8 @@
                 <outlet property="connectIconImageView" destination="eLL-9g-Bu7" id="68J-cQ-IRk"/>
                 <outlet property="connectLabel" destination="Sad-af-9Rg" id="uI9-K9-Jc8"/>
                 <outlet property="eventNameLabel" destination="Edr-6s-zPg" id="b96-OX-YoO"/>
+                <outlet property="hasTableImageView" destination="DR5-k1-Mn1" id="iGS-19-v1e"/>
+                <outlet property="hasTicketImageView" destination="ziF-G3-vF4" id="zcX-aU-xPA"/>
                 <outlet property="interestLabel" destination="RGJ-gd-Ub3" id="2cF-qf-o55"/>
                 <outlet property="messageIconView" destination="n47-AQ-kdJ" id="olc-My-YgB"/>
                 <outlet property="okButton" destination="fGB-LR-Agb" id="U4Z-IO-NWW"/>
@@ -175,6 +187,8 @@
     </objects>
     <resources>
         <image name="fbperson_blank_square" width="360" height="360"/>
+        <image name="feed-table-icon" width="44" height="50"/>
+        <image name="feed-ticket-icon" width="44" height="50"/>
         <image name="social-connect-overlay-icon" width="109" height="109"/>
         <image name="text-icon" width="24" height="25"/>
     </resources>
