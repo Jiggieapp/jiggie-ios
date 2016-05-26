@@ -43,24 +43,40 @@
                         <color key="textColor" red="0.57647058823529407" green="0.57647058823529407" blue="0.57647058823529407" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="feed-ticket-icon" translatesAutoresizingMaskIntoConstraints="NO" id="u6W-up-ZYv">
+                        <rect key="frame" x="261" y="8" width="44" height="50"/>
+                    </imageView>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="feed-table-icon" translatesAutoresizingMaskIntoConstraints="NO" id="3Kd-dn-Fhn">
+                        <rect key="frame" x="212" y="8" width="44" height="50"/>
+                    </imageView>
                 </subviews>
                 <constraints>
                     <constraint firstItem="uv1-2N-Jyi" firstAttribute="leading" secondItem="5fU-HT-xR1" secondAttribute="leading" id="2ee-ug-NTh"/>
                     <constraint firstAttribute="bottomMargin" secondItem="uv1-2N-Jyi" secondAttribute="bottom" constant="4.5" id="8eM-i7-sBI"/>
                     <constraint firstItem="ldp-nj-tIb" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="7" id="96H-eY-4E7"/>
                     <constraint firstItem="5fU-HT-xR1" firstAttribute="leading" secondItem="ldp-nj-tIb" secondAttribute="leading" id="Brs-Oe-M0u"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="u6W-up-ZYv" secondAttribute="trailing" constant="7" id="FmE-vH-8ed"/>
+                    <constraint firstItem="u6W-up-ZYv" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" id="H1Y-bg-Yfz"/>
                     <constraint firstAttribute="trailingMargin" secondItem="uv1-2N-Jyi" secondAttribute="trailing" constant="7" id="Nim-w1-8zY"/>
                     <constraint firstItem="ldp-nj-tIb" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="8" id="Npw-tr-XHi"/>
+                    <constraint firstItem="u6W-up-ZYv" firstAttribute="leading" secondItem="3Kd-dn-Fhn" secondAttribute="trailing" constant="5" id="PwR-Gv-46g"/>
+                    <constraint firstItem="3Kd-dn-Fhn" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" id="ajc-hi-FZP"/>
                     <constraint firstItem="5fU-HT-xR1" firstAttribute="top" secondItem="ldp-nj-tIb" secondAttribute="bottom" constant="2" id="kUa-CO-38J"/>
                     <constraint firstItem="uv1-2N-Jyi" firstAttribute="top" secondItem="5fU-HT-xR1" secondAttribute="bottom" constant="13.5" id="ufI-7J-9Zf"/>
                 </constraints>
             </tableViewCellContentView>
             <connections>
                 <outlet property="aboutLabel" destination="uv1-2N-Jyi" id="cj0-CI-XM8"/>
+                <outlet property="hasTableImageView" destination="3Kd-dn-Fhn" id="1fo-mp-0nt"/>
+                <outlet property="hasTicketImageView" destination="u6W-up-ZYv" id="0sZ-Kh-B4R"/>
                 <outlet property="locationLabel" destination="5fU-HT-xR1" id="ur4-Mg-64q"/>
                 <outlet property="nameLabel" destination="ldp-nj-tIb" id="kz3-0G-92f"/>
             </connections>
             <point key="canvasLocation" x="309" y="395"/>
         </tableViewCell>
     </objects>
+    <resources>
+        <image name="feed-table-icon" width="44" height="50"/>
+        <image name="feed-ticket-icon" width="44" height="50"/>
+    </resources>
 </document>

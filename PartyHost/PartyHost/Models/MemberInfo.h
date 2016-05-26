@@ -12,6 +12,7 @@
 
 @interface MemberInfo : MTLModel
 
+@property (copy, nonatomic, readonly) NSString *fbId;
 @property (copy, nonatomic, readonly) NSString *about;
 @property (copy, nonatomic, readonly) NSString *age;
 @property (copy, nonatomic, readonly) NSString *firstName;
@@ -22,6 +23,7 @@
 @property (strong, nonatomic, readonly) NSArray *likesEvent;
 
 + (void)retrieveMemberInfoWithCompletionHandler:(MemberInfoCompletionHandler)completion;
++ (void)retrieveMemberInfoWithFbId:(NSString *)fbId andCompletionHandler:(MemberInfoCompletionHandler)completion;
 
 - (void)setAboutInfo:(NSString *)about;
 

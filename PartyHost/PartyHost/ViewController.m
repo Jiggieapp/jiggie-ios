@@ -158,6 +158,12 @@
     
     [[NSNotificationCenter defaultCenter]
      addObserver:self
+     selector:@selector(showMemberProfile:)
+     name:@"SHOW_MEMBER_PROFILE"
+     object:nil];
+    
+    [[NSNotificationCenter defaultCenter]
+     addObserver:self
      selector:@selector(showEditProfile:)
      name:@"SHOW_EDIT_PROFILE"
      object:nil];
@@ -694,6 +700,11 @@
 #pragma mark - Profile Notification
 - (void)showProfile:(NSNotification *)notification {
     UINavigationController *profileNavigationController = [[UINavigationController alloc] initWithRootViewController:[[ProfileViewController alloc] init]];
+    [self presentViewController:profileNavigationController animated:YES completion:nil];
+}
+
+- (void)showMemberProfile:(NSNotification *)notification {
+    UINavigationController *profileNavigationController = [[UINavigationController alloc] initWithRootViewController:[[ProfileViewController alloc] initWithFbId:notification.object]];
     [self presentViewController:profileNavigationController animated:YES completion:nil];
 }
 

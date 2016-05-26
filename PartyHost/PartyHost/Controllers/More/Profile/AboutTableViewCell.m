@@ -35,6 +35,23 @@
                                  memberInfo.firstName, memberInfo.lastName]];
     }
     
+    if ([memberInfo.fbId isEqualToString:[SharedData sharedInstance].fb_id]) {
+        [self.hasTableImageView setImage:nil];
+        [self.hasTicketImageView setImage:nil];
+    } else {
+        if (memberInfo.bookings.count > 0) {
+            [self.hasTableImageView setImage:[UIImage imageNamed:@"feed-table-icon"]];
+        } else {
+            [self.hasTableImageView setImage:nil];
+        }
+        
+        if (memberInfo.tickets.count > 0) {
+            [self.hasTicketImageView setImage:[UIImage imageNamed:@"feed-ticket-icon"]];
+        } else {
+            [self.hasTicketImageView setImage:nil];
+        }
+    }
+    
     [self.aboutLabel setText:memberInfo.about];
 }
 

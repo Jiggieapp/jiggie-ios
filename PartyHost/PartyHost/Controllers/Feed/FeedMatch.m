@@ -116,9 +116,8 @@
     self.sharedData.member_fb_id = self.fromFBId;
     self.sharedData.member_user_id = self.fromFBId;
     
-    [[NSNotificationCenter defaultCenter]
-     postNotificationName:@"SHOW_MEMBER_PROFILE"
-     object:self];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"SHOW_MEMBER_PROFILE"
+                                                        object:self.fromFBId];
 }
 
 - (void)startChatButtonDidTap {

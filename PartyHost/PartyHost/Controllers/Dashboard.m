@@ -357,12 +357,6 @@
     
     [[NSNotificationCenter defaultCenter]
      addObserver:self
-     selector:@selector(showMemberProfile)
-     name:@"SHOW_MEMBER_PROFILE"
-     object:nil];
-    
-    [[NSNotificationCenter defaultCenter]
-     addObserver:self
      selector:@selector(showMemberReviews)
      name:@"SHOW_MEMBER_REVIEWS"
      object:nil];
@@ -779,37 +773,6 @@
     {
         [self.messagesPage initClass];
     }];
-}
-
--(void)showMemberProfile
-{
-    
-    [self.memberProfile initClass];
-    /*
-    if(self.sharedData.isInConversation)
-    {
-        self.memberProfile.hidden = NO;
-        [self.memberProfile initClass];
-        
-        [UIView transitionWithView:self.outsideCon
-                          duration:0.6
-                           options:UIViewAnimationOptionTransitionFlipFromLeft | UIViewAnimationOptionCurveEaseOut
-                        animations:^{ [self.messagesPage removeFromSuperview]; [self.outsideCon addSubview:self.memberProfile]; }
-                        completion:NULL];
-    }else{
-        self.memberProfile.hidden = NO;
-        self.messagesPage.hidden = YES;
-        [self.memberProfile initClass];
-        [self.outsideCon addSubview:self.memberProfile];
-        [UIView animateWithDuration:0.25 animations:^()
-         {
-             self.mainCon.frame = CGRectMake(-self.frame.size.width, 0, self.frame.size.width * 2, self.frame.size.height);
-         } completion:^(BOOL finished)
-         {
-             
-         }];
-    }
-    */
 }
 
 -(void)exitMemberProfile

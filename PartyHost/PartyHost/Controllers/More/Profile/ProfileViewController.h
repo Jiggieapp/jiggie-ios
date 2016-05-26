@@ -12,4 +12,6 @@
 
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
 
+- (instancetype)initWithFbId:(NSString *)fbId;
+
 @end

@@ -19,10 +19,19 @@ static NSString *const AboutTableViewCellIdentifier = @"AboutTableViewCellIdenti
 @interface ProfileViewController () <UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate>
 
 @property (strong, nonatomic) MemberInfo *memberInfo;
+@property (copy, nonatomic) NSString *fbId;
 
 @end
 
 @implementation ProfileViewController
+
+- (instancetype)initWithFbId:(NSString *)fbId {
+    if (self == [super init]) {
+        self.fbId = fbId;
+    }
+    
+    return self;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -38,21 +47,40 @@ static NSString *const AboutTableViewCellIdentifier = @"AboutTableViewCellIdenti
     [self setupView];
     
     [SVProgressHUD show];
-    [MemberInfo retrieveMemberInfoWithCompletionHandler:^(MemberInfo *memberInfo,
-                                                          NSInteger statusCode,
-                                                          NSError *error) {
-        [SVProgressHUD dismiss];
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if (memberInfo) {
-                self.memberInfo = memberInfo;
-                
-                [self.tableView setDataSource:self];
-                [self setupTableHeaderView];
-                [self.tableView reloadData];
-            }
-        });
-    }];
+    if (self.fbId) {
+        [MemberInfo retrieveMemberInfoWithFbId:self.fbId
+                          andCompletionHandler:^(MemberInfo *memberInfo,
+                                                 NSInteger statusCode,
+                                                 NSError *error) {
+                              [SVProgressHUD dismiss];
+                              
+                              dispatch_async(dispatch_get_main_queue(), ^{
+                                  if (memberInfo) {
+                                      self.memberInfo = memberInfo;
+                                      
+                                      [self.tableView setDataSource:self];
+                                      [self setupTableHeaderView];
+                                      [self.tableView reloadData];
+                                  }
+                              });
+        }];
+    } else {
+        [MemberInfo retrieveMemberInfoWithCompletionHandler:^(MemberInfo *memberInfo,
+                                                              NSInteger statusCode,
+                                                              NSError *error) {
+            [SVProgressHUD dismiss];
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (memberInfo) {
+                    self.memberInfo = memberInfo;
+                    
+                    [self.tableView setDataSource:self];
+                    [self setupTableHeaderView];
+                    [self.tableView reloadData];
+                }
+            });
+        }];
+    }
 }
 
 - (void)didReceiveMemoryWarning {
@@ -99,18 +127,21 @@ static NSString *const AboutTableViewCellIdentifier = @"AboutTableViewCellIdenti
     [self.navigationController.navigationBar setTitleTextAttributes:
      @{NSForegroundColorAttributeName:[UIColor whiteColor]}];
     
-    UIBarButtonItem *editBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Edit"
-                                                                          style:UIBarButtonItemStylePlain
-                                                                         target:self
-                                                                         action:@selector(didTapEditButton:)];
     
     UIBarButtonItem *closeBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"nav_close"]
                                                                            style:UIBarButtonItemStylePlain
                                                                           target:self
                                                                           action:@selector(didTapCloseButton:)];
-    [self.navigationItem setRightBarButtonItem:editBarButtonItem];
     [self.navigationItem setLeftBarButtonItem:closeBarButtonItem];
     
+    if (!self.fbId) {
+        UIBarButtonItem *editBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Edit"
+                                                                              style:UIBarButtonItemStylePlain
+                                                                             target:self
+                                                                             action:@selector(didTapEditButton:)];
+        [self.navigationItem setRightBarButtonItem:editBarButtonItem];
+    }
+
     [self.tableView registerNib:[AboutTableViewCell nib] forCellReuseIdentifier:AboutTableViewCellIdentifier];
 }
 

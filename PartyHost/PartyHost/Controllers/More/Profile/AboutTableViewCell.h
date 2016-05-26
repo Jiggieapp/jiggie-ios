@@ -15,6 +15,8 @@
 @property (strong, nonatomic) IBOutlet UILabel *nameLabel;
 @property (strong, nonatomic) IBOutlet UILabel *locationLabel;
 @property (strong, nonatomic) IBOutlet UILabel *aboutLabel;
+@property (strong, nonatomic) IBOutlet UIImageView *hasTableImageView;
+@property (strong, nonatomic) IBOutlet UIImageView *hasTicketImageView;
 
 + (UINib *)nib;
 

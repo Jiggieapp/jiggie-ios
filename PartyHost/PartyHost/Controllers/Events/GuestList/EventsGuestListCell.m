@@ -155,9 +155,8 @@
     [self.sharedData.cHostDict addEntriesFromDictionary:self.mainDict];
     self.sharedData.member_fb_id = self.userDict[@"fb_id"];
     
-    [[NSNotificationCenter defaultCenter]
-     postNotificationName:@"SHOW_MEMBER_PROFILE"
-     object:self];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"SHOW_MEMBER_PROFILE"
+                                                        object:self.userDict[@"fb_id"]];
 }
 
 -(void)inviteGuestButtonClicked:(UIButton *)button
