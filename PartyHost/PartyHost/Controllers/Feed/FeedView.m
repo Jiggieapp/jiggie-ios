@@ -626,13 +626,20 @@
 
 - (void)swipeableView:(ZLSwipeableView *)swipeableView didCancelSwipe:(UIView *)view {
     self.isSwipedOut = NO;
+    
+    ShadowView *shadowView = (ShadowView*)self.swipeableView.topView;
+    FeedCardView *cardView = (FeedCardView *)shadowView.subviews.lastObject;
+    
+    [cardView showOverlayViewAtLocation:shadowView.center
+                              withAlpha:.0f];
 }
 
 - (void)swipeableView:(ZLSwipeableView *)swipeableView swipingView:(UIView *)view atLocation:(CGPoint)location translation:(CGPoint)translation {
     ShadowView *shadowView = (ShadowView*)self.swipeableView.topView;
     FeedCardView *cardView = (FeedCardView *)shadowView.subviews.lastObject;
     
-    [cardView showOverlayViewAtLocation:shadowView.center withAlpha:fabs(translation.x) / 100];
+    [cardView showOverlayViewAtLocation:shadowView.center
+                              withAlpha:fabs(translation.x) / 100];
 }
 
 - (void)swipeableView:(ZLSwipeableView *)swipeableView didSwipeView:(UIView *)view inDirection:(ZLSwipeableViewDirection)direction {
@@ -657,11 +664,11 @@
     if ([[button.titleLabel.text lowercaseString] isEqualToString:@"connect"] ||
         [[button.titleLabel.text lowercaseString] isEqualToString:@"yes"]) {
         [self.swipeableView swipeTopViewToRight];
-        [self approveFeed:YES withFeed:feed];
+//        [self approveFeed:YES withFeed:feed];
         [view showConnectOverlayView];
     } else {
         [self.swipeableView swipeTopViewToLeft];
-        [self approveFeed:NO withFeed:feed];
+//        [self approveFeed:NO withFeed:feed];
         [view showSkipOverlayView];
     }
     

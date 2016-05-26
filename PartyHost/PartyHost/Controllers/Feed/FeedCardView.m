@@ -49,7 +49,7 @@
         [self.overlayView setAlpha:alpha];
     }
     
-    if (location.x > CGRectGetWidth([UIScreen mainScreen].bounds) / 2) {
+    if (location.x > (CGRectGetWidth([UIScreen mainScreen].bounds) / 2) - 10) {
         [self.overlayView setBackgroundColor:[[UIColor phBlueColor] colorWithAlphaComponent:0.7f]];
         [self.connectIconImageView setImage:[UIImage imageNamed:@"social-connect-overlay-icon"]];
     } else {
