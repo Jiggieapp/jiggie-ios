@@ -649,9 +649,7 @@
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW,
                                  (int64_t)(0.7 * NSEC_PER_SEC)),
                    dispatch_get_main_queue(), ^{
-                       NSInteger feedIndex = view.tag-CARD_VIEW_TAG;
-                       NSInteger numberOfCardsLeft = self.feedData.count - feedIndex;
-                       if (numberOfCardsLeft <= 0) {
+                       if (!self.swipeableView.topView) {
                            [self loadDataAndShowHUD:NO withCompletionHandler:nil];
                        }
                        
@@ -686,11 +684,8 @@
 }
 
 - (void)feedCardView:(FeedCardView *)view didTapPersonImageButton:(UIButton *)button withFeed:(Feed *)feed {
-    self.sharedData.member_fb_id = feed.fromFbId;
-    self.sharedData.member_user_id = feed.fromFbId;
-    
     [[NSNotificationCenter defaultCenter] postNotificationName:@"SHOW_MEMBER_PROFILE"
-                                                        object:self];
+                                                        object:feed.fromFbId];
 }
 
 - (void)feedCardView:(FeedCardView *)view didTapEventNameLabel:(UILabel *)label withFeed:(Feed *)feed {
