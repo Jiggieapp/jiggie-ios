@@ -8,6 +8,7 @@
 
 #import "ProfileViewController.h"
 #import "AboutTableViewCell.h"
+#import "ProfileEventTableViewCell.h"
 #import "MemberInfo.h"
 #import "SVProgressHUD.h"
 #import "EditProfileViewController.h"
@@ -15,11 +16,13 @@
 #define ProfileHeaderHeight 300.0f
 
 static NSString *const AboutTableViewCellIdentifier = @"AboutTableViewCellIdentifier";
+static NSString *const ProfileEventTableViewCellIdentifier = @"ProfileEventTableViewCellIdentifier";
 
 @interface ProfileViewController () <UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate>
 
 @property (strong, nonatomic) MemberInfo *memberInfo;
 @property (copy, nonatomic) NSString *fbId;
+@property (strong, nonatomic) NSMutableArray *memberEvents;
 
 @end
 
@@ -38,6 +41,8 @@ static NSString *const AboutTableViewCellIdentifier = @"AboutTableViewCellIdenti
     // Do any additional setup after loading the view from its nib.
     
     self.title = @"Your Profile";
+    
+    self.memberEvents = [NSMutableArray array];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(loadNewData:)
@@ -58,6 +63,16 @@ static NSString *const AboutTableViewCellIdentifier = @"AboutTableViewCellIdenti
                                   if (memberInfo) {
                                       self.memberInfo = memberInfo;
                                       
+                                      if (memberInfo.bookings.count > 0) {
+                                          [self.memberEvents addObjectsFromArray:memberInfo.bookings];
+                                      }
+                                      if (memberInfo.tickets.count > 0) {
+                                          [self.memberEvents addObjectsFromArray:memberInfo.tickets];
+                                      }
+                                      if (memberInfo.likesEvent.count > 0) {
+                                          [self.memberEvents addObjectsFromArray:memberInfo.likesEvent];
+                                      }
+                                      
                                       [self.tableView setDataSource:self];
                                       [self setupTableHeaderView];
                                       [self.tableView reloadData];
@@ -73,6 +88,16 @@ static NSString *const AboutTableViewCellIdentifier = @"AboutTableViewCellIdenti
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (memberInfo) {
                     self.memberInfo = memberInfo;
+                    
+                    if (memberInfo.bookings.count > 0) {
+                        [self.memberEvents addObjectsFromArray:memberInfo.bookings];
+                    }
+                    if (memberInfo.tickets.count > 0) {
+                        [self.memberEvents addObjectsFromArray:memberInfo.tickets];
+                    }
+                    if (memberInfo.likesEvent.count > 0) {
+                        [self.memberEvents addObjectsFromArray:memberInfo.likesEvent];
+                    }
                     
                     [self.tableView setDataSource:self];
                     [self setupTableHeaderView];
@@ -142,7 +167,11 @@ static NSString *const AboutTableViewCellIdentifier = @"AboutTableViewCellIdenti
         [self.navigationItem setRightBarButtonItem:editBarButtonItem];
     }
 
-    [self.tableView registerNib:[AboutTableViewCell nib] forCellReuseIdentifier:AboutTableViewCellIdentifier];
+    [self.tableView registerNib:[AboutTableViewCell nib]
+         forCellReuseIdentifier:AboutTableViewCellIdentifier];
+    [self.tableView registerNib:[ProfileEventTableViewCell nib]
+         forCellReuseIdentifier:ProfileEventTableViewCellIdentifier];
+    [self.tableView setTableFooterView:[UIView new]];
 }
 
 - (void)setupTableHeaderView {
@@ -171,6 +200,38 @@ static NSString *const AboutTableViewCellIdentifier = @"AboutTableViewCellIdenti
     self.tableView.tableHeaderView = photoScrollView;
 }
 
+- (UIView *)headerViewWithText:(NSString *)text {
+    UILabel *label = [UILabel new];
+    [label setNumberOfLines:0];
+    [label setTextAlignment:NSTextAlignmentCenter];
+    [label setTextColor:[UIColor blackColor]];
+    [label setText:text];
+    [label setFont:[UIFont phBlond:17]];
+    
+    CGSize textSize = [text boundingRectWithSize:CGSizeMake(CGRectGetWidth([UIScreen mainScreen].bounds) - 80, 60)
+                                         options:NSStringDrawingUsesFontLeading
+                                      attributes:@{ NSFontAttributeName : label.font }
+                                         context:nil].size;
+    [label setFrame:CGRectMake(.0f,
+                               .0f,
+                               textSize.width,
+                               textSize.height)];
+    [label sizeToFit];
+    
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(5.0f,
+                                                            5.0f,
+                                                            CGRectGetWidth(label.bounds) + 10,
+                                                            CGRectGetHeight(label.bounds) + 10)];
+    
+    [label setCenter:view.center];
+    
+    [view.layer setCornerRadius:5.0f];
+    
+    [view addSubview:label];
+    
+    return view;
+}
+
 #pragma mark - Action
 - (void)didTapEditButton:(id)sender {
     [self presentViewController:[[UINavigationController alloc] initWithRootViewController:[EditProfileViewController new]]
@@ -184,30 +245,70 @@ static NSString *const AboutTableViewCellIdentifier = @"AboutTableViewCellIdenti
 
 #pragma mark - UITableViewDataSource
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    if (self.memberInfo.bookings.count > 0 ||
+        self.memberInfo.tickets.count > 0 ||
+        self.memberInfo.likesEvent.count > 0) {
+        return 2;
+    }
+    
     return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    if (section == 1) {
+        return self.memberInfo.bookings.count+self.memberInfo.tickets.count+self.memberInfo.likesEvent.count;
+    }
+    
     return 1;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    AboutTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:AboutTableViewCellIdentifier
-                                                               forIndexPath:indexPath];
-    
-    [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
-    [cell configureMemberInfo:self.memberInfo];
-    
-    return cell;
+    if (indexPath.section == 0) {
+        AboutTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:AboutTableViewCellIdentifier
+                                                                   forIndexPath:indexPath];
+        
+        [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
+        [cell configureMemberInfo:self.memberInfo];
+        
+        return cell;
+    } else {
+        ProfileEventTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:ProfileEventTableViewCellIdentifier
+                                                                   forIndexPath:indexPath];
+        
+        [cell configureMemberEvent:self.memberEvents[indexPath.row]
+                    withMemberInfo:self.memberInfo];
+        
+        return cell;
+    }
 }
 
 #pragma mark - UITableViewDelegate
-- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    if (section == 1) {
+        UIView *view = [self headerViewWithText:[NSString stringWithFormat:@"Events %@ interested in",
+                                                 [self.memberInfo.gender isEqualToString:@"male"] ? @"he's" : @"she's"]];
+        UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(.0f,
+                                                                      .0f,
+                                                                      CGRectGetWidth(self.tableView.bounds),
+                                                                      55.f)];
+        [headerView addSubview:view];
+        
+        return headerView;
+    }
+    
     return [UIView new];
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    if (section == 1) {
+        return 55.f;
+    }
+    
+    return 0;
+}
+
 - (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 100;
+    return 90;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {

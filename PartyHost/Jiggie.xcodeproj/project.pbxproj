@@ -125,6 +125,8 @@
 		93AF8BA71CF5603F008BFA94 /* AboutTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 93AF8BA51CF5603F008BFA94 /* AboutTableViewCell.xib */; };
 		93AF8BAA1CF565CC008BFA94 /* MemberInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 93AF8BA91CF565CC008BFA94 /* MemberInfo.m */; };
 		93FDBA1C1CF6E725000344F2 /* MemberInfoEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 93FDBA1B1CF6E725000344F2 /* MemberInfoEvent.m */; };
+		93FDBA201CF708A6000344F2 /* ProfileEventTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 93FDBA1E1CF708A6000344F2 /* ProfileEventTableViewCell.m */; };
+		93FDBA211CF708A6000344F2 /* ProfileEventTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 93FDBA1F1CF708A6000344F2 /* ProfileEventTableViewCell.xib */; };
 		9A85A5531CC8B89300C8818B /* JGKeyboardNotificationHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A85A5521CC8B89300C8818B /* JGKeyboardNotificationHelper.m */; };
 		9AF3EEFF1CC9FA9E00CA9497 /* LocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AF3EEFE1CC9FA9E00CA9497 /* LocationManager.m */; };
 		CB3EB6C81B459177003F658F /* App.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CB3EB6C71B459177003F658F /* App.xcassets */; };
@@ -669,6 +671,9 @@
 		93AF8BA91CF565CC008BFA94 /* MemberInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MemberInfo.m; sourceTree = "<group>"; };
 		93FDBA1A1CF6E725000344F2 /* MemberInfoEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MemberInfoEvent.h; sourceTree = "<group>"; };
 		93FDBA1B1CF6E725000344F2 /* MemberInfoEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MemberInfoEvent.m; sourceTree = "<group>"; };
+		93FDBA1D1CF708A6000344F2 /* ProfileEventTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProfileEventTableViewCell.h; sourceTree = "<group>"; };
+		93FDBA1E1CF708A6000344F2 /* ProfileEventTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProfileEventTableViewCell.m; sourceTree = "<group>"; };
+		93FDBA1F1CF708A6000344F2 /* ProfileEventTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ProfileEventTableViewCell.xib; sourceTree = "<group>"; };
 		9A85A5511CC8B89300C8818B /* JGKeyboardNotificationHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JGKeyboardNotificationHelper.h; sourceTree = "<group>"; };
 		9A85A5521CC8B89300C8818B /* JGKeyboardNotificationHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JGKeyboardNotificationHelper.m; sourceTree = "<group>"; };
 		9AF3EEFD1CC9FA9E00CA9497 /* LocationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationManager.h; sourceTree = "<group>"; };
@@ -1668,6 +1673,9 @@
 				93AF8BA31CF5603F008BFA94 /* AboutTableViewCell.h */,
 				93AF8BA41CF5603F008BFA94 /* AboutTableViewCell.m */,
 				93AF8BA51CF5603F008BFA94 /* AboutTableViewCell.xib */,
+				93FDBA1D1CF708A6000344F2 /* ProfileEventTableViewCell.h */,
+				93FDBA1E1CF708A6000344F2 /* ProfileEventTableViewCell.m */,
+				93FDBA1F1CF708A6000344F2 /* ProfileEventTableViewCell.xib */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -2955,6 +2963,7 @@
 				938CE7DA1CD1BE8600ADDD4C /* SocialFilterView.xib in Resources */,
 				DAABB0EE1C1FD50E004DDCFA /* FeedPopup.xcassets in Resources */,
 				DAABB2C41C1FF5AE004DDCFA /* NSDateTimeAgo.bundle in Resources */,
+				93FDBA211CF708A6000344F2 /* ProfileEventTableViewCell.xib in Resources */,
 				DAABB0F61C1FD50E004DDCFA /* Setup.xib in Resources */,
 				DAABB2BF1C1FF5AE004DDCFA /* test_variant.json in Resources */,
 				DAABB2771C1FF5AE004DDCFA /* GSTouchImage@2x.png in Resources */,
@@ -3183,6 +3192,7 @@
 				DAABB28F1C1FF5AE004DDCFA /* MPCATransform3DToNSDictionaryValueTransformer.m in Sources */,
 				936674541CD7627500AC94F3 /* SDWebImagePrefetcher.m in Sources */,
 				DAABB26F1C1FF5AE004DDCFA /* UIStepper+FlatUI.m in Sources */,
+				93FDBA201CF708A6000344F2 /* ProfileEventTableViewCell.m in Sources */,
 				DAABB0FC1C1FD50E004DDCFA /* SetupPickViewCell.m in Sources */,
 				DAABB0B71C1FD50E004DDCFA /* BookTableDetails.m in Sources */,
 				DAABB0DD1C1FD50E004DDCFA /* Privacy.m in Sources */,
