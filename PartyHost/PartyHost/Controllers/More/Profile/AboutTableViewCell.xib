@@ -25,19 +25,19 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Uuds, 20" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ldp-nj-tIb">
-                        <rect key="frame" x="8" y="16" width="58.5" height="18"/>
+                        <rect key="frame" x="15" y="16" width="58.5" height="18"/>
                         <fontDescription key="fontDescription" name="Lato-Bold" family="Lato" pointSize="15"/>
                         <color key="textColor" red="0.078431372549019607" green="0.078431372549019607" blue="0.078431372549019607" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="Jakarta Indonesia" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5fU-HT-xR1">
-                        <rect key="frame" x="8" y="36" width="116" height="29.5"/>
+                        <rect key="frame" x="15" y="36" width="116" height="29.5"/>
                         <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="15"/>
                         <color key="textColor" red="0.57647058823529407" green="0.57647058823529407" blue="0.57647058823529407" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uv1-2N-Jyi">
-                        <rect key="frame" x="8" y="79" width="304" height="108"/>
+                        <rect key="frame" x="15" y="79" width="290" height="108"/>
                         <string key="text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</string>
                         <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="15"/>
                         <color key="textColor" red="0.57647058823529407" green="0.57647058823529407" blue="0.57647058823529407" alpha="1" colorSpace="calibratedRGB"/>
@@ -47,9 +47,9 @@
                 <constraints>
                     <constraint firstItem="uv1-2N-Jyi" firstAttribute="leading" secondItem="5fU-HT-xR1" secondAttribute="leading" id="2ee-ug-NTh"/>
                     <constraint firstAttribute="bottomMargin" secondItem="uv1-2N-Jyi" secondAttribute="bottom" constant="4.5" id="8eM-i7-sBI"/>
+                    <constraint firstItem="ldp-nj-tIb" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="7" id="96H-eY-4E7"/>
                     <constraint firstItem="5fU-HT-xR1" firstAttribute="leading" secondItem="ldp-nj-tIb" secondAttribute="leading" id="Brs-Oe-M0u"/>
-                    <constraint firstAttribute="leadingMargin" secondItem="ldp-nj-tIb" secondAttribute="leading" id="Mzh-pT-XTL"/>
-                    <constraint firstAttribute="trailingMargin" secondItem="uv1-2N-Jyi" secondAttribute="trailing" id="Nim-w1-8zY"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="uv1-2N-Jyi" secondAttribute="trailing" constant="7" id="Nim-w1-8zY"/>
                     <constraint firstItem="ldp-nj-tIb" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="8" id="Npw-tr-XHi"/>
                     <constraint firstItem="5fU-HT-xR1" firstAttribute="top" secondItem="ldp-nj-tIb" secondAttribute="bottom" constant="2" id="kUa-CO-38J"/>
                     <constraint firstItem="uv1-2N-Jyi" firstAttribute="top" secondItem="5fU-HT-xR1" secondAttribute="bottom" constant="13.5" id="ufI-7J-9Zf"/>

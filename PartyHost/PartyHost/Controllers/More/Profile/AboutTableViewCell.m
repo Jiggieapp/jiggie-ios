@@ -27,8 +27,14 @@
 }
 
 - (void)configureMemberInfo:(MemberInfo *)memberInfo {
-    [self.nameLabel setText:[NSString stringWithFormat:@"%@ %@, %@",
-                             memberInfo.firstName, memberInfo.lastName, memberInfo.age]];
+    if (memberInfo.age) {
+        [self.nameLabel setText:[NSString stringWithFormat:@"%@ %@, %@",
+                                 memberInfo.firstName, memberInfo.lastName, memberInfo.age]];
+    } else {
+        [self.nameLabel setText:[NSString stringWithFormat:@"%@ %@",
+                                 memberInfo.firstName, memberInfo.lastName]];
+    }
+    
     [self.aboutLabel setText:memberInfo.about];
 }
 
