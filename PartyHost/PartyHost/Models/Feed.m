@@ -75,9 +75,15 @@
                                          fromJSONArray:responseObject[@"data"][@"social_feeds"]
                                                  error:&error];
         if (completion) {
-            completion(feeds,
-                       operation.response.statusCode,
-                       nil);
+            if (feeds) {
+                completion(feeds,
+                           operation.response.statusCode,
+                           nil);
+            } else {
+                completion(nil,
+                           operation.response.statusCode,
+                           error);
+            }
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         if (completion) {
