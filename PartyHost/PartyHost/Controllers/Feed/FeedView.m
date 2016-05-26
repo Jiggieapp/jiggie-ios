@@ -607,7 +607,7 @@
         [self.feedData removeObject:feed];
         [Feed archiveObject:self.feedData];
         
-        if (location.x > CGRectGetWidth(self.bounds) / 2 ) {
+        if (location.x > CGRectGetWidth(self.bounds) / 2) {
             [self approveFeed:YES withFeed:feed];
         } else {
             [self approveFeed:NO withFeed:feed];
@@ -626,6 +626,13 @@
 
 - (void)swipeableView:(ZLSwipeableView *)swipeableView didCancelSwipe:(UIView *)view {
     self.isSwipedOut = NO;
+}
+
+- (void)swipeableView:(ZLSwipeableView *)swipeableView swipingView:(UIView *)view atLocation:(CGPoint)location translation:(CGPoint)translation {
+    ShadowView *shadowView = (ShadowView*)self.swipeableView.topView;
+    FeedCardView *cardView = (FeedCardView *)shadowView.subviews.lastObject;
+    
+    [cardView showOverlayViewAtLocation:shadowView.center withAlpha:fabs(translation.x) / 100];
 }
 
 - (void)swipeableView:(ZLSwipeableView *)swipeableView didSwipeView:(UIView *)view inDirection:(ZLSwipeableViewDirection)direction {
@@ -647,18 +654,15 @@
 
 #pragma mark - FeedCardViewDelegate
 - (void)feedCardView:(FeedCardView *)view didTapButton:(UIButton *)button withFeed:(Feed *)feed {
-    if ([[button.titleLabel.text lowercaseString] isEqualToString:@"connect"]) {
+    if ([[button.titleLabel.text lowercaseString] isEqualToString:@"connect"] ||
+        [[button.titleLabel.text lowercaseString] isEqualToString:@"yes"]) {
         [self.swipeableView swipeTopViewToRight];
         [self approveFeed:YES withFeed:feed];
-    } else if ([[button.titleLabel.text lowercaseString] isEqualToString:@"skip"]) {
-        [self.swipeableView swipeTopViewToLeft];
-        [self approveFeed:NO withFeed:feed];
-    } else if ([[button.titleLabel.text lowercaseString] isEqualToString:@"yes"]) {
-        [self.swipeableView swipeTopViewToRight];
-        [self approveFeed:YES withFeed:feed];
+        [view showConnectOverlayView];
     } else {
         [self.swipeableView swipeTopViewToLeft];
         [self approveFeed:NO withFeed:feed];
+        [view showSkipOverlayView];
     }
     
     [self.feedData removeObject:feed];
