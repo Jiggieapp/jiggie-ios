@@ -18,7 +18,7 @@
 
 @class JDFSequentialTooltipManager;
 @interface Events : UIView
-<UITableViewDelegate,UITableViewDataSource,UITextViewDelegate,UIAlertViewDelegate,NSFetchedResultsControllerDelegate,UICollectionViewDataSource,UICollectionViewDelegate,UICollectionViewDelegateFlowLayout, UIScrollViewDelegate> {
+<UITableViewDelegate,UITableViewDataSource,UITextViewDelegate,UIAlertViewDelegate,NSFetchedResultsControllerDelegate,UICollectionViewDataSource,UICollectionViewDelegate,UICollectionViewDelegateFlowLayout, UIScrollViewDelegate, UISearchBarDelegate> {
     NSFetchedResultsController *fetchedResultsController;
     NSManagedObjectContext *managedObjectContext;
 }
@@ -37,16 +37,19 @@
 @property(nonatomic,strong) UITableView         *events1List;
 @property(nonatomic,strong) UITableView         *events2List;
 @property(nonatomic,strong) UITableView         *events3List;
+@property(nonatomic,strong) UIRefreshControl    *refreshControl;
 @property(nonatomic,assign) BOOL                needUpdateContents;
 @property(nonatomic,assign) BOOL                isEventsLoaded;
 @property(nonatomic,assign) BOOL                didLoadFromHostings;
 @property(nonatomic,assign) BOOL                didLoadFromInvite;
+@property(nonatomic,assign) BOOL                isSearchMode;
+@property(nonatomic,assign) BOOL                isReloadMode;
 @property(nonatomic,strong) EventsSummary       *eventsSummary;
 @property(nonatomic,strong) EventsHostingsList  *eventsHostingsList;
 @property(nonatomic,strong) EventsGuestList     *eventsGuestList;
 @property(nonatomic,strong) EventsVenueDetail   *eventsVenueDetail;
 @property(nonatomic,strong) EventsHostDetail    *eventsHostDetail;
-@property(nonatomic,strong) NSString            *cName;
+@property(nonatomic,copy) NSString            *cName;
 
 @property(nonatomic,strong) JDFSequentialTooltipManager   *tooltip;
 

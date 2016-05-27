@@ -574,7 +574,7 @@
             self.sharedData.hasInitEventSelection = NO;
             
             [[NSNotificationCenter defaultCenter]
-             postNotificationName:@"SHOW_EVENT_MODAL"
+             postNotificationName:@"SHOW_EVENT_DETAIL"
              object:self];
         }
     }
