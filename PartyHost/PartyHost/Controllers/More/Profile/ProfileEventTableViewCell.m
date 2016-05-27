@@ -24,6 +24,11 @@
     self.categoryView.layer.borderColor = [UIColor whiteColor].CGColor;
     self.categoryView.layer.borderWidth = 1;
     
+    if ([[[UIDevice currentDevice] systemVersion] compare:@"8.0" options:NSNumericSearch] == NSOrderedAscending) {
+        [self.contentView setTranslatesAutoresizingMaskIntoConstraints:YES];
+        self.contentView.frame = self.bounds;
+        self.contentView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleRightMargin |UIViewAutoresizingFlexibleTopMargin |UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleBottomMargin;
+    }
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
