@@ -15,6 +15,8 @@
 #import "JDFTooltips.h"
 #import "JGTooltipHelper.h"
 #import "JGInviteHelper.h"
+#import "EventsGuestList.h"
+#import "UIView+Animation.h"
 
 #define PROFILE_PICS 4 //If more than 4 then last is +MORE
 #define PROFILE_SIZE 40
@@ -403,11 +405,20 @@
     }
 }
 
+- (void)initClassModalWithEventID:(NSString *)eventID {
+    [self initClassWithEventID:eventID];
+    self.isModal = YES;
+}
+
 -(void)goBack
 {
-    [[NSNotificationCenter defaultCenter]
-     postNotificationName:@"EVENTS_GO_HOME"
-     object:self];
+    if (self.isModal) {
+        [self dismissViewAnimated:YES completion:nil];
+    } else {
+        [[NSNotificationCenter defaultCenter]
+         postNotificationName:@"EVENTS_GO_HOME"
+         object:self];
+    }
 }
 
 - (void)showNavBar:(BOOL)isShow withAnimation:(BOOL)isAnimated {
@@ -508,10 +519,18 @@
 -(void)infoButtonClicked
 {
     //[self.sharedData trackMixPanelWithDict:@"Share Hosting" withDict:@{@"origin":@"HostDetails"}];
-    
-    [[NSNotificationCenter defaultCenter]
-     postNotificationName:@"EVENTS_GO_GUEST_LIST"
-     object:self];
+    if (self.isModal) {
+        EventsGuestList *guestList = [[EventsGuestList alloc] initWithFrame:[UIScreen mainScreen].bounds];
+        [guestList loadModalData:self.sharedData.selectedEvent[@"_id"]];
+        
+        [self presentView:guestList
+              withOverlay:NO
+                 animated:YES
+               completion:nil];
+    } else {
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"EVENTS_GO_GUEST_LIST"
+                                                            object:self];
+    }
 }
 
 //Go to the ADD HOSTING screen

@@ -10,8 +10,11 @@
 #import "AboutTableViewCell.h"
 #import "ProfileEventTableViewCell.h"
 #import "MemberInfo.h"
+#import "MemberInfoEvent.h"
 #import "SVProgressHUD.h"
 #import "EditProfileViewController.h"
+#import "EventsSummary.h"
+#import "UIView+Animation.h"
 
 #define ProfileHeaderHeight 300.0f
 
@@ -341,6 +344,32 @@ static NSString *const ProfileEventTableViewCellIdentifier = @"ProfileEventTable
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    if (indexPath.section == 1) {
+        SharedData *sharedData = [SharedData sharedInstance];
+
+        MemberInfoEvent *memberEvent = self.memberEvents[indexPath.row];
+        
+        sharedData.selectedEvent[@"_id"] = memberEvent.eventId;
+        sharedData.selectedEvent[@"venue_name"] = memberEvent.title;
+        
+        EventsSummary *eventDetail = [[EventsSummary alloc] initWithFrame:[UIScreen mainScreen].bounds];
+        [eventDetail initClassModalWithEventID:sharedData.selectedEvent[@"_id"]];
+        
+        eventDetail.mainScroll.frame = CGRectMake(0,
+                                                  0,
+                                                  CGRectGetWidth([UIScreen mainScreen].bounds),
+                                                  CGRectGetHeight([UIScreen mainScreen].bounds) - 50);
+        
+        eventDetail.btnHostHere.frame = CGRectMake(0,
+                                                   sharedData.screenHeight - 44,
+                                                   sharedData.screenWidth, 44);
+        
+        [self.view presentView:eventDetail
+                   withOverlay:NO
+                      animated:YES
+                    completion:nil];
+    }
 }
 
 @end

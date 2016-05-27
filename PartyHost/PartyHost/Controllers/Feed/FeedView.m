@@ -689,11 +689,13 @@
 }
 
 - (void)feedCardView:(FeedCardView *)view didTapEventNameLabel:(UILabel *)label withFeed:(Feed *)feed {
-    self.sharedData.cEventId_Feed = feed.eventId;
-    self.sharedData.cEventId_Modal = feed.eventId;
+    SharedData *sharedData = [SharedData sharedInstance];
+    
+    sharedData.selectedEvent[@"_id"] = feed.eventId;
+    sharedData.selectedEvent[@"venue_name"] = feed.eventName;
     
     [[NSNotificationCenter defaultCenter] postNotificationName:@"SHOW_EVENT_MODAL"
-                                                        object:self];
+                                                        object:nil];
 }
 
 #pragma mark - SocialFilterViewDelegate
