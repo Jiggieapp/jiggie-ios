@@ -262,6 +262,23 @@ static NSString *const ProfileEventTableViewCellIdentifier = @"ProfileEventTable
     return 1;
 }
 
+-(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
+    // Remove seperator inset
+    if ([cell respondsToSelector:@selector(setSeparatorInset:)]) {
+        [cell setSeparatorInset:UIEdgeInsetsZero];
+    }
+    
+    // Prevent the cell from inheriting the Table View's margin settings
+    if ([cell respondsToSelector:@selector(setPreservesSuperviewLayoutMargins:)]) {
+        [cell setPreservesSuperviewLayoutMargins:NO];
+    }
+    
+    // Explictly set your cell's layout margins
+    if ([cell respondsToSelector:@selector(setLayoutMargins:)]) {
+        [cell setLayoutMargins:UIEdgeInsetsZero];
+    }
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.section == 0) {
         AboutTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:AboutTableViewCellIdentifier
@@ -275,6 +292,7 @@ static NSString *const ProfileEventTableViewCellIdentifier = @"ProfileEventTable
         ProfileEventTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:ProfileEventTableViewCellIdentifier
                                                                    forIndexPath:indexPath];
         
+        [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
         [cell configureMemberEvent:self.memberEvents[indexPath.row]
                     withMemberInfo:self.memberInfo];
         
@@ -291,6 +309,12 @@ static NSString *const ProfileEventTableViewCellIdentifier = @"ProfileEventTable
                                                                       .0f,
                                                                       CGRectGetWidth(self.tableView.bounds),
                                                                       55.f)];
+        
+        CALayer *upperBorder = [CALayer layer];
+        upperBorder.backgroundColor = [[UIColor phGrayColor] CGColor];
+        upperBorder.frame = CGRectMake(0, 0, CGRectGetWidth(headerView.bounds), .5f);
+        
+        [headerView.layer addSublayer:upperBorder];
         [headerView addSubview:view];
         
         return headerView;

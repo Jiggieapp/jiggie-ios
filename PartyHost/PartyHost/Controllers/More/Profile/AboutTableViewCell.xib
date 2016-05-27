@@ -42,13 +42,6 @@
                         <color key="textColor" red="0.57647058823529407" green="0.57647058823529407" blue="0.57647058823529407" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="79R-Z1-M5A">
-                        <rect key="frame" x="0.0" y="220" width="320" height="0.5"/>
-                        <color key="backgroundColor" red="0.76078431372549016" green="0.76078431372549016" blue="0.76078431372549016" alpha="1" colorSpace="calibratedRGB"/>
-                        <constraints>
-                            <constraint firstAttribute="height" constant="0.5" id="LzW-md-Cee"/>
-                        </constraints>
-                    </view>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uv1-2N-Jyi">
                         <rect key="frame" x="15" y="88.5" width="290" height="108"/>
                         <string key="text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</string>
@@ -61,15 +54,12 @@
                     <constraint firstItem="uv1-2N-Jyi" firstAttribute="leading" secondItem="5fU-HT-xR1" secondAttribute="leading" id="2ee-ug-NTh"/>
                     <constraint firstAttribute="bottomMargin" secondItem="uv1-2N-Jyi" secondAttribute="bottom" constant="15" id="8eM-i7-sBI"/>
                     <constraint firstItem="ldp-nj-tIb" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="7" id="96H-eY-4E7"/>
-                    <constraint firstAttribute="trailingMargin" secondItem="79R-Z1-M5A" secondAttribute="trailing" constant="-8" id="Bl2-wd-ZDx"/>
                     <constraint firstItem="5fU-HT-xR1" firstAttribute="leading" secondItem="ldp-nj-tIb" secondAttribute="leading" id="Brs-Oe-M0u"/>
                     <constraint firstAttribute="trailingMargin" secondItem="u6W-up-ZYv" secondAttribute="trailing" constant="7" id="FmE-vH-8ed"/>
                     <constraint firstItem="u6W-up-ZYv" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" id="H1Y-bg-Yfz"/>
-                    <constraint firstAttribute="bottomMargin" secondItem="79R-Z1-M5A" secondAttribute="bottom" constant="-9" id="KCn-lE-gU8"/>
                     <constraint firstAttribute="trailingMargin" secondItem="uv1-2N-Jyi" secondAttribute="trailing" constant="7" id="Nim-w1-8zY"/>
                     <constraint firstItem="ldp-nj-tIb" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="8" id="Npw-tr-XHi"/>
                     <constraint firstItem="u6W-up-ZYv" firstAttribute="leading" secondItem="3Kd-dn-Fhn" secondAttribute="trailing" constant="5" id="PwR-Gv-46g"/>
-                    <constraint firstItem="79R-Z1-M5A" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="-8" id="Saa-Cm-cJX"/>
                     <constraint firstItem="3Kd-dn-Fhn" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" id="ajc-hi-FZP"/>
                     <constraint firstItem="5fU-HT-xR1" firstAttribute="top" secondItem="ldp-nj-tIb" secondAttribute="bottom" constant="2" id="kUa-CO-38J"/>
                     <constraint firstItem="uv1-2N-Jyi" firstAttribute="top" secondItem="5fU-HT-xR1" secondAttribute="bottom" constant="13.5" id="ufI-7J-9Zf"/>
