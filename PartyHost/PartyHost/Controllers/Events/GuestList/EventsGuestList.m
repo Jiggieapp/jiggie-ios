@@ -10,6 +10,7 @@
 #import "EventsGuestList.h"
 #import "EventsGuestListCell.h"
 #import "AnalyticManager.h"
+#import "UIView+Animation.h"
 
 @implementation EventsGuestList {
     NSString *lastEventId;
@@ -59,7 +60,8 @@
     self.hostersList.allowsMultipleSelectionDuringEditing = NO;
     self.hostersList.allowsSelection = NO;
     self.hostersList.backgroundColor = [UIColor whiteColor];
-    self.hostersList.hidden = YES;
+//    self.hostersList.hidden = YES;
+    self.hostersList.tableFooterView = [UIView new];
     [self addSubview:self.hostersList];
     
     //Create empty label
@@ -107,9 +109,13 @@
 {
     self.sharedData.isGuestListingsShowing = NO;
     
-    [[NSNotificationCenter defaultCenter]
-     postNotificationName:@"EVENTS_GO_HOST_SUMMARY"
-     object:self];
+    if (self.isModal) {
+        [self dismissViewAnimated:YES completion:nil];
+    } else {
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"EVENTS_GO_HOST_SUMMARY"
+                                                            object:self];
+    }
+    
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -165,7 +171,7 @@
 //     object:self];
     
     self.isLoaded = NO;
-    self.hostersList.hidden = YES;
+//    self.hostersList.hidden = YES;
     [self.hostersA removeAllObjects];
     [self.hostersList reloadData];
     
@@ -212,6 +218,16 @@
      {
          
      }];
+}
+
+- (void)loadModalData:(NSString *)event_id {
+    [self loadData:event_id];
+    self.isModal = YES;
+    
+    self.hostersList.frame = CGRectMake(0,
+                                        self.tabBar.frame.size.height,
+                                        CGRectGetWidth([UIScreen mainScreen].bounds),
+                                        CGRectGetHeight([UIScreen mainScreen].bounds) - self.tabBar.frame.size.height);
 }
 
 -(void)populateData:(NSMutableArray *)array

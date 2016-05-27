@@ -33,9 +33,16 @@
 @property (strong, nonatomic) IBOutlet UIButton *cancelButton;
 @property (strong, nonatomic) IBOutlet UIButton *okButton;
 @property (strong, nonatomic) IBOutlet UIView *messageIconView;
+@property (strong, nonatomic) IBOutlet UIView *overlayView;
+@property (strong, nonatomic) IBOutlet UIImageView *connectIconImageView;
+@property (strong, nonatomic) IBOutlet UIImageView *hasTableImageView;
+@property (strong, nonatomic) IBOutlet UIImageView *hasTicketImageView;
 
 + (FeedCardView *)instanceFromNib;
 
+- (void)showConnectOverlayView;
+- (void)showSkipOverlayView;
+- (void)showOverlayViewAtLocation:(CGPoint)location withAlpha:(CGFloat)alpha;
 - (void)configureCardWithFeed:(Feed *)feed;
 
 @end

@@ -16,6 +16,8 @@
 #import "EventsSummary.h"
 #import "PHImage.h"
 
+@class EventsGuestList;
+
 @class JDFSequentialTooltipManager;
 @interface Events : UIView
 <UITableViewDelegate,UITableViewDataSource,UITextViewDelegate,UIAlertViewDelegate,NSFetchedResultsControllerDelegate,UICollectionViewDataSource,UICollectionViewDelegate,UICollectionViewDelegateFlowLayout, UIScrollViewDelegate, UISearchBarDelegate> {

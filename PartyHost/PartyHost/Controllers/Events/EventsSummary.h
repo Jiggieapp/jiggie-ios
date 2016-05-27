@@ -81,10 +81,13 @@
 
 @property(nonatomic,strong) JDFSequentialTooltipManager *tooltip;
 
+@property (assign, nonatomic) BOOL isModal;
+
 -(void)loadData:(NSString*)event_id;
 -(void)populateData:(NSDictionary *)dict;
 -(void)initClassWithEvent:(Event *)event;
 -(void)initClassWithEventID:(NSString *)eventID;
+-(void)initClassModalWithEventID:(NSString *)eventID;
 -(void)reset;
 
 @end

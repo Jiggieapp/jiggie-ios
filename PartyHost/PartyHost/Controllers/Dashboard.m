@@ -9,6 +9,7 @@
 #import "Dashboard.h"
 #import "AnalyticManager.h"
 #import "JGTooltipHelper.h"
+#import "UIView+Animation.h"
 
 @implementation Dashboard
 
@@ -353,12 +354,6 @@
      addObserver:self
      selector:@selector(resetApp)
      name:@"APP_UNLOADED"
-     object:nil];
-    
-    [[NSNotificationCenter defaultCenter]
-     addObserver:self
-     selector:@selector(showMemberProfile)
-     name:@"SHOW_MEMBER_PROFILE"
      object:nil];
     
     [[NSNotificationCenter defaultCenter]
@@ -781,37 +776,6 @@
     }];
 }
 
--(void)showMemberProfile
-{
-    
-    [self.memberProfile initClass];
-    /*
-    if(self.sharedData.isInConversation)
-    {
-        self.memberProfile.hidden = NO;
-        [self.memberProfile initClass];
-        
-        [UIView transitionWithView:self.outsideCon
-                          duration:0.6
-                           options:UIViewAnimationOptionTransitionFlipFromLeft | UIViewAnimationOptionCurveEaseOut
-                        animations:^{ [self.messagesPage removeFromSuperview]; [self.outsideCon addSubview:self.memberProfile]; }
-                        completion:NULL];
-    }else{
-        self.memberProfile.hidden = NO;
-        self.messagesPage.hidden = YES;
-        [self.memberProfile initClass];
-        [self.outsideCon addSubview:self.memberProfile];
-        [UIView animateWithDuration:0.25 animations:^()
-         {
-             self.mainCon.frame = CGRectMake(-self.frame.size.width, 0, self.frame.size.width * 2, self.frame.size.height);
-         } completion:^(BOOL finished)
-         {
-             
-         }];
-    }
-    */
-}
-
 -(void)exitMemberProfile
 {
     [self.memberProfile exit];
@@ -1029,14 +993,30 @@
 
 -(void)showEventModal
 {
-    self.eventModal.frame = CGRectMake(0, self.sharedData.screenHeight, self.sharedData.screenWidth, self.sharedData.screenHeight);
-    self.eventModal.hidden = NO;
-    [self.eventModal reset];
-    [self.eventModal initClass];
-    [UIView animateWithDuration:0.30 animations:^()
-     {
-         self.eventModal.frame = CGRectMake(0, 0, self.sharedData.screenWidth, self.sharedData.screenHeight);
-     }];
+    EventsSummary *eventDetail = [[EventsSummary alloc] initWithFrame:[UIScreen mainScreen].bounds];
+    [eventDetail initClassModalWithEventID:self.sharedData.selectedEvent[@"_id"]];
+    
+    eventDetail.mainScroll.frame = CGRectMake(0,
+                                              0,
+                                              CGRectGetWidth([UIScreen mainScreen].bounds),
+                                              CGRectGetHeight([UIScreen mainScreen].bounds) - 50);
+    
+    eventDetail.btnHostHere.frame = CGRectMake(0,
+                                               self.sharedData.screenHeight - 44,
+                                               self.sharedData.screenWidth, 44);
+    
+    [self presentView:eventDetail withOverlay:NO
+             animated:YES
+           completion:nil];
+    
+//    self.eventModal.frame = CGRectMake(0, self.sharedData.screenHeight, self.sharedData.screenWidth, self.sharedData.screenHeight);
+//    self.eventModal.hidden = NO;
+//    [self.eventModal reset];
+//    [self.eventModal initClass];
+//    [UIView animateWithDuration:0.30 animations:^()
+//     {
+//         self.eventModal.frame = CGRectMake(0, 0, self.sharedData.screenWidth, self.sharedData.screenHeight);
+//     }];
 }
 
 -(void)exitEventModal

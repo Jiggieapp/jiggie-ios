@@ -305,9 +305,9 @@
 {
     self.sharedData.member_fb_id = self.sharedData.selectedHost[@"fb_id"];
     self.sharedData.member_user_id = self.sharedData.selectedHost[@"fb_id"];
-    [[NSNotificationCenter defaultCenter]
-     postNotificationName:@"SHOW_MEMBER_PROFILE"
-     object:self];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"SHOW_MEMBER_PROFILE"
+                                                        object:self.sharedData.selectedHost[@"fb_id"]];
 }
 
 -(void)button1Handler:(UITapGestureRecognizer *)sender

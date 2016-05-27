@@ -942,9 +942,8 @@
 
 -(void)showMemberProfile
 {
-    [[NSNotificationCenter defaultCenter]
-     postNotificationName:@"SHOW_MEMBER_PROFILE"
-     object:self];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"SHOW_MEMBER_PROFILE"
+                                                        object:self.toId];
 }
 
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex

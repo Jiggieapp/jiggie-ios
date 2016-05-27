@@ -607,7 +607,7 @@
         [self.feedData removeObject:feed];
         [Feed archiveObject:self.feedData];
         
-        if (location.x > CGRectGetWidth(self.bounds) / 2 ) {
+        if (location.x > CGRectGetWidth(self.bounds) / 2) {
             [self approveFeed:YES withFeed:feed];
         } else {
             [self approveFeed:NO withFeed:feed];
@@ -626,6 +626,20 @@
 
 - (void)swipeableView:(ZLSwipeableView *)swipeableView didCancelSwipe:(UIView *)view {
     self.isSwipedOut = NO;
+    
+    ShadowView *shadowView = (ShadowView*)self.swipeableView.topView;
+    FeedCardView *cardView = (FeedCardView *)shadowView.subviews.lastObject;
+    
+    [cardView showOverlayViewAtLocation:shadowView.center
+                              withAlpha:.0f];
+}
+
+- (void)swipeableView:(ZLSwipeableView *)swipeableView swipingView:(UIView *)view atLocation:(CGPoint)location translation:(CGPoint)translation {
+    ShadowView *shadowView = (ShadowView*)self.swipeableView.topView;
+    FeedCardView *cardView = (FeedCardView *)shadowView.subviews.lastObject;
+    
+    [cardView showOverlayViewAtLocation:shadowView.center
+                              withAlpha:fabs(translation.x) / 100];
 }
 
 - (void)swipeableView:(ZLSwipeableView *)swipeableView didSwipeView:(UIView *)view inDirection:(ZLSwipeableViewDirection)direction {
@@ -635,9 +649,7 @@
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW,
                                  (int64_t)(0.7 * NSEC_PER_SEC)),
                    dispatch_get_main_queue(), ^{
-                       NSInteger feedIndex = view.tag-CARD_VIEW_TAG;
-                       NSInteger numberOfCardsLeft = self.feedData.count - feedIndex;
-                       if (numberOfCardsLeft <= 0) {
+                       if (!self.swipeableView.topView) {
                            [self loadDataAndShowHUD:NO withCompletionHandler:nil];
                        }
                        
@@ -647,18 +659,15 @@
 
 #pragma mark - FeedCardViewDelegate
 - (void)feedCardView:(FeedCardView *)view didTapButton:(UIButton *)button withFeed:(Feed *)feed {
-    if ([[button.titleLabel.text lowercaseString] isEqualToString:@"connect"]) {
+    if ([[button.titleLabel.text lowercaseString] isEqualToString:@"connect"] ||
+        [[button.titleLabel.text lowercaseString] isEqualToString:@"yes"]) {
         [self.swipeableView swipeTopViewToRight];
         [self approveFeed:YES withFeed:feed];
-    } else if ([[button.titleLabel.text lowercaseString] isEqualToString:@"skip"]) {
-        [self.swipeableView swipeTopViewToLeft];
-        [self approveFeed:NO withFeed:feed];
-    } else if ([[button.titleLabel.text lowercaseString] isEqualToString:@"yes"]) {
-        [self.swipeableView swipeTopViewToRight];
-        [self approveFeed:YES withFeed:feed];
+        [view showConnectOverlayView];
     } else {
         [self.swipeableView swipeTopViewToLeft];
         [self approveFeed:NO withFeed:feed];
+        [view showSkipOverlayView];
     }
     
     [self.feedData removeObject:feed];
@@ -675,19 +684,18 @@
 }
 
 - (void)feedCardView:(FeedCardView *)view didTapPersonImageButton:(UIButton *)button withFeed:(Feed *)feed {
-    self.sharedData.member_fb_id = feed.fromFbId;
-    self.sharedData.member_user_id = feed.fromFbId;
-    
     [[NSNotificationCenter defaultCenter] postNotificationName:@"SHOW_MEMBER_PROFILE"
-                                                        object:self];
+                                                        object:feed.fromFbId];
 }
 
 - (void)feedCardView:(FeedCardView *)view didTapEventNameLabel:(UILabel *)label withFeed:(Feed *)feed {
-    self.sharedData.cEventId_Feed = feed.eventId;
-    self.sharedData.cEventId_Modal = feed.eventId;
+    SharedData *sharedData = [SharedData sharedInstance];
+    
+    sharedData.selectedEvent[@"_id"] = feed.eventId;
+    sharedData.selectedEvent[@"venue_name"] = feed.eventName;
     
     [[NSNotificationCenter defaultCenter] postNotificationName:@"SHOW_EVENT_MODAL"
-                                                        object:self];
+                                                        object:nil];
 }
 
 #pragma mark - SocialFilterViewDelegate
