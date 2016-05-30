@@ -11,6 +11,7 @@
 #import "InviteFriendsViewController.h"
 #import "UIView+Animation.h"
 #import "SVProgressHUD.h"
+#import "AnalyticManager.h"
 
 @interface PromotionsViewController () <UITextFieldDelegate, SuccessPromotionsViewDelegate>
 
@@ -146,6 +147,9 @@
                                 [SVProgressHUD dismiss];
                             });
                         }
+                        
+                        [self trackPromotionCodeWithMessage:message
+                                           andSuccessStatus:[isCheck boolValue]];
                     }
                 }
             });
@@ -179,6 +183,17 @@
 
 - (void)successPromotionsView:(SuccessPromotionsView *)view didTapRemindMeLaterButton:(UIButton *)sender {
     [view dismissViewAnimated:YES completion:nil];
+}
+
+#pragma mark - MixPanel
+- (void)trackPromotionCodeWithMessage:(NSString *)message andSuccessStatus:(BOOL)successStatus {
+    
+    NSDictionary *parameters = @{@"Code" : self.promoCodeField.text,
+                                 @"Status" : successStatus ? @"success" : @"fail",
+                                 @"Response Message" : message};
+    
+    [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Use Promo Code"
+                                                  withDict:parameters];
 }
 
 @end
