@@ -326,12 +326,12 @@ static NSString *const SidePhotoTableViewCellIdentifier = @"SidePhotoTableViewCe
                 [self.photosURL addObject:json[@"url"]];
                 [self reloadPhotoDataWithChosenImage:image andIndex:[index integerValue]];
                 [self.mainPhotoIndicatorView setHidden:YES];
+                
+                NSDictionary *parameters = @{@"Image URL" : json[@"url"]};
+                
+                [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Picture Upload"
+                                                              withDict:parameters];
             }
-            
-            NSDictionary *parameters = @{@"Image URL" : json[@"url"]};
-            
-            [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Picture Upload"
-                                                          withDict:parameters];
         });
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         dispatch_async(dispatch_get_main_queue(), ^{

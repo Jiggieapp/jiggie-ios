@@ -11,6 +11,7 @@
 #import "InviteFriendsViewController.h"
 #import "UIView+Animation.h"
 #import "SVProgressHUD.h"
+#import "AnalyticManager.h"
 
 @interface PromotionsViewController () <UITextFieldDelegate, SuccessPromotionsViewDelegate>
 
@@ -133,19 +134,22 @@
                         NSString *message = redeemCode[@"msg"];
                         NSNumber *isCheck = redeemCode[@"is_check"];
                         
-//                        if ([isCheck boolValue]) {
+                        if ([isCheck boolValue]) {
                             [self.successPromotionView.promoDescriptionLabel setText:message];
                             [self.view presentView:self.successPromotionView
                                        withOverlay:YES
                                           animated:YES
                                         completion:nil];
-//                        } else {
-//                            [SVProgressHUD showInfoWithStatus:message];
-//                            
-//                            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-//                                [SVProgressHUD dismiss];
-//                            });
-//                        }
+                        } else {
+                            [SVProgressHUD showInfoWithStatus:message];
+                            
+                            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                                [SVProgressHUD dismiss];
+                            });
+                        }
+                        
+                        [self trackPromotionCodeWithMessage:message
+                                           andSuccessStatus:[isCheck boolValue]];
                     }
                 }
             });
@@ -179,6 +183,17 @@
 
 - (void)successPromotionsView:(SuccessPromotionsView *)view didTapRemindMeLaterButton:(UIButton *)sender {
     [view dismissViewAnimated:YES completion:nil];
+}
+
+#pragma mark - MixPanel
+- (void)trackPromotionCodeWithMessage:(NSString *)message andSuccessStatus:(BOOL)successStatus {
+    
+    NSDictionary *parameters = @{@"Code" : self.promoCodeField.text,
+                                 @"Status" : successStatus ? @"success" : @"fail",
+                                 @"Response Message" : message};
+    
+    [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Use Promo Code"
+                                                  withDict:parameters];
 }
 
 @end
