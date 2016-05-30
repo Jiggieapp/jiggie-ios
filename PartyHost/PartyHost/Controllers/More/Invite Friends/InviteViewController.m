@@ -216,4 +216,10 @@
     [self trackShareActivityWithEventName:@"Share Referral Facebook"];
 }
 
+- (void)sharer:(id<FBSDKSharing>)sharer didFailWithError:(NSError *)error {
+}
+
+- (void)sharerDidCancel:(id<FBSDKSharing>)sharer {
+}
+
 @end
