@@ -41,9 +41,6 @@ static NSString *const ProfileEventTableViewCellIdentifier = @"ProfileEventTable
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view from its nib.
-    
-    self.title = @"Your Profile";
     
     self.memberEvents = [NSMutableArray array];
     
@@ -64,15 +61,29 @@ static NSString *const ProfileEventTableViewCellIdentifier = @"ProfileEventTable
                               
                               dispatch_async(dispatch_get_main_queue(), ^{
                                   if (memberInfo) {
+                                      self.title = memberInfo.firstName;
+                                      
                                       self.memberInfo = memberInfo;
                                       
                                       if (memberInfo.bookings.count > 0) {
+                                          for (MemberInfoEvent *memberEvent in memberInfo.bookings) {
+                                              [memberEvent setEventType:EventTypeTable];
+                                          }
+                                          
                                           [self.memberEvents addObjectsFromArray:memberInfo.bookings];
                                       }
                                       if (memberInfo.tickets.count > 0) {
+                                          for (MemberInfoEvent *memberEvent in memberInfo.tickets) {
+                                              [memberEvent setEventType:EventTypeTicket];
+                                          }
+                                          
                                           [self.memberEvents addObjectsFromArray:memberInfo.tickets];
                                       }
                                       if (memberInfo.likesEvent.count > 0) {
+                                          for (MemberInfoEvent *memberEvent in memberInfo.likesEvent) {
+                                              [memberEvent setEventType:EventTypeLike];
+                                          }
+                                          
                                           [self.memberEvents addObjectsFromArray:memberInfo.likesEvent];
                                       }
                                       
@@ -83,6 +94,8 @@ static NSString *const ProfileEventTableViewCellIdentifier = @"ProfileEventTable
                               });
         }];
     } else {
+        self.title = @"Your Profile";
+        
         [MemberInfo retrieveMemberInfoWithCompletionHandler:^(MemberInfo *memberInfo,
                                                               NSInteger statusCode,
                                                               NSError *error) {
@@ -93,12 +106,24 @@ static NSString *const ProfileEventTableViewCellIdentifier = @"ProfileEventTable
                     self.memberInfo = memberInfo;
                     
                     if (memberInfo.bookings.count > 0) {
+                        for (MemberInfoEvent *memberEvent in memberInfo.bookings) {
+                            [memberEvent setEventType:EventTypeTable];
+                        }
+                        
                         [self.memberEvents addObjectsFromArray:memberInfo.bookings];
                     }
                     if (memberInfo.tickets.count > 0) {
+                        for (MemberInfoEvent *memberEvent in memberInfo.tickets) {
+                            [memberEvent setEventType:EventTypeTicket];
+                        }
+                        
                         [self.memberEvents addObjectsFromArray:memberInfo.tickets];
                     }
                     if (memberInfo.likesEvent.count > 0) {
+                        for (MemberInfoEvent *memberEvent in memberInfo.likesEvent) {
+                            [memberEvent setEventType:EventTypeLike];
+                        }
+                        
                         [self.memberEvents addObjectsFromArray:memberInfo.likesEvent];
                     }
                     
@@ -306,8 +331,16 @@ static NSString *const ProfileEventTableViewCellIdentifier = @"ProfileEventTable
 #pragma mark - UITableViewDelegate
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     if (section == 1) {
-        UIView *view = [self headerViewWithText:[NSString stringWithFormat:@"Events %@ interested in",
-                                                 [self.memberInfo.gender isEqualToString:@"male"] ? @"he's" : @"she's"]];
+        SharedData *sharedData = [SharedData sharedInstance];
+        NSString *text = @"Events you're interested in";
+        
+        if ([self.memberInfo.fbId isEqualToString:sharedData.fb_id]) {
+            text = @"Events you're interested in";
+        } else {
+            text = [NSString stringWithFormat:@"%@'s Events", self.memberInfo.firstName];
+        }
+        
+        UIView *view = [self headerViewWithText:text];
         UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(.0f,
                                                                       .0f,
                                                                       CGRectGetWidth(self.tableView.bounds),

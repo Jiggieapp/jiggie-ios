@@ -8,10 +8,17 @@
 
 #import "MTLModel.h"
 
+typedef enum {
+    EventTypeTable,
+    EventTypeTicket,
+    EventTypeLike
+} EventType;
+
 @interface MemberInfoEvent : MTLModel
 
-@property(copy, nonatomic, readonly) NSString *eventId;
-@property(copy, nonatomic, readonly) NSString *title;
-@property(strong, nonatomic, readonly) NSArray *photos;
+@property (copy, nonatomic, readonly) NSString *eventId;
+@property (copy, nonatomic, readonly) NSString *title;
+@property (strong, nonatomic, readonly) NSArray *photos;
+@property (assign, nonatomic) EventType eventType;
 
 @end

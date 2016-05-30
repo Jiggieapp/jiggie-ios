@@ -48,12 +48,18 @@
     
     [self.eventNameLabel setText:event.title];
     
-    if ([member.bookings containsObject:event]) {
-        [self.categoryLabel setText:@"Has table"];
-    } else if ([member.tickets containsObject:event]) {
-        [self.categoryLabel setText:@"Has ticket"];
-    } else {
-        [self.categoryLabel setText:@"Liked"];
+    switch (event.eventType) {
+        case EventTypeTable:
+            [self.categoryLabel setText:@"Has table"];
+            break;
+            
+        case EventTypeTicket:
+            [self.categoryLabel setText:@"Has ticket"];
+            break;
+            
+        case EventTypeLike:
+            [self.categoryLabel setText:@"Liked"];
+            break;
     }
 }
 
