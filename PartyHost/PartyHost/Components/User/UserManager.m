@@ -32,6 +32,16 @@ static UserManager *_sharedManager = nil;
 + (NSDictionary *)loadUserTicketInfo {
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     NSDictionary *UserInfo = [prefs objectForKey:@"user.ticketInfo"];
+    
+    if (UserInfo == nil) {
+        SharedData *sharedData = [SharedData sharedInstance];
+        NSString *name = [NSString stringWithFormat:@"%@ %@", sharedData.userDict[@"first_name"], sharedData.userDict[@"last_name"]];
+        UserInfo = @{@"name":name,
+                     @"email":sharedData.userDict[@"email"],
+                     @"dial_code":@"",
+                     @"phone":@""};
+    }
+    
     return UserInfo;
 }
 
