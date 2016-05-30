@@ -133,19 +133,19 @@
                         NSString *message = redeemCode[@"msg"];
                         NSNumber *isCheck = redeemCode[@"is_check"];
                         
-//                        if ([isCheck boolValue]) {
+                        if ([isCheck boolValue]) {
                             [self.successPromotionView.promoDescriptionLabel setText:message];
                             [self.view presentView:self.successPromotionView
                                        withOverlay:YES
                                           animated:YES
                                         completion:nil];
-//                        } else {
-//                            [SVProgressHUD showInfoWithStatus:message];
-//                            
-//                            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-//                                [SVProgressHUD dismiss];
-//                            });
-//                        }
+                        } else {
+                            [SVProgressHUD showInfoWithStatus:message];
+                            
+                            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                                [SVProgressHUD dismiss];
+                            });
+                        }
                     }
                 }
             });
