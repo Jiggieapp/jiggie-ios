@@ -30,10 +30,10 @@
     [self.mainCon addSubview:tabBar];
     
     UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(0, 20, frame.size.width, 40)];
-    title.text = @"SETTINGS";
+    title.text = @"Settings";
     title.textAlignment = NSTextAlignmentCenter;
     title.textColor = [UIColor whiteColor];
-    title.font = [UIFont phBold:18];
+    title.font = [UIFont phBlond:16];
     [tabBar addSubview:title];
     
     self.settingsList = [[UITableView alloc] initWithFrame:CGRectMake(0, 60, frame.size.width, frame.size.height - 60) style:UITableViewStyleGrouped];
