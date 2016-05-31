@@ -23,7 +23,6 @@
 @property (strong, nonatomic, readonly) NSArray *tickets;
 @property (strong, nonatomic, readonly) NSArray *likesEvent;
 
-+ (void)retrieveMemberInfoWithCompletionHandler:(MemberInfoCompletionHandler)completion;
 + (void)retrieveMemberInfoWithFbId:(NSString *)fbId andCompletionHandler:(MemberInfoCompletionHandler)completion;
 
 - (void)setAboutInfo:(NSString *)about;

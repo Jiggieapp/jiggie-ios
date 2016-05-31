@@ -23,6 +23,8 @@
         [self.contentView setTranslatesAutoresizingMaskIntoConstraints:YES];
         self.contentView.frame = self.bounds;
         self.contentView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleRightMargin |UIViewAutoresizingFlexibleTopMargin |UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleBottomMargin;
+        
+        [self.aboutLabel setPreferredMaxLayoutWidth:290];
     }
 }
 
