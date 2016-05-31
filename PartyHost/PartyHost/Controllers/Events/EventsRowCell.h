@@ -22,7 +22,7 @@
 @property(nonatomic,strong) UIButton         *likeButton;
 @property(nonatomic,strong) UILabel         *likeCount;
 
-@property(nonatomic,strong) PHImage         *mainImg;
+@property(nonatomic,strong) UIImageView     *mainImg;
 @property(nonatomic,strong) NSString        *picURL;
 
 @property(nonatomic,strong) UIView          *infoView;
@@ -57,6 +57,5 @@
 -(void)showLoading;
 -(void)hideLoading;
 -(void)goPreselect;
--(void)wentOffscreen;
 
 @end

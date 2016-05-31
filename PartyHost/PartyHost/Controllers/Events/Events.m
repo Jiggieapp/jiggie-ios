@@ -700,7 +700,8 @@
                              
                              NSArray *photos = [eventRow objectForKey:@"photos"];
                              if (photos && ![photos isEqual:[NSNull null]] && photos.count > 0) {
-                                 item.photo = [photos objectAtIndex:0];
+                                 NSString *picUrl = [self.sharedData picURL:[photos objectAtIndex:0]];
+                                 item.photo = picUrl;
                              }
                              
                              item.isFeatured = [NSNumber numberWithBool:isFeatured];
@@ -740,8 +741,6 @@
                  [self reloadTables];
                  
                  self.needUpdateContents = YES;
-                 
-                 [self performSelector:@selector(loadImages) withObject:nil afterDelay:1.0];
                  
              } else {
                  [self.emptyView setMode:@"empty"];
@@ -820,18 +819,6 @@
 
     if ([[self.fetchedResultsController fetchedObjects] count] > 0) {
         [self showTooltip];
-    }
-}
-
--(void)loadImages
-{
-    int count = 0;
-    for (Event *event in [self.fetchedResultsController fetchedObjects]) {
-        if (event.photo && event.photo!=nil) {
-            NSString *picURl = [self.sharedData picURL:event.photo];
-            [self.sharedData loadTimeImage:picURl withTimeOut:count * .25];
-        }
-        count++;
     }
 }
 
@@ -1149,14 +1136,6 @@
     }
     @finally {
         
-    }
-}
-
-- (void)tableView:(UITableView *)tableView didEndDisplayingCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if ([cell isKindOfClass:[EventsRowCell class]]) {
-        EventsRowCell *eventsRowCell = (EventsRowCell*)cell;
-        [eventsRowCell wentOffscreen];
     }
 }
 

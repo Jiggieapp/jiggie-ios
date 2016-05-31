@@ -7,6 +7,7 @@
 //
 
 #import "EventsRowCell.h"
+#import "UIImageView+WebCache.h"
 
 @implementation EventsRowCell
 
@@ -43,7 +44,7 @@
         self.cPicIndex = -1;
         
         CGFloat heightRatio = 3.0 / 4.0;
-        self.mainImg = [[PHImage alloc] initWithFrame:CGRectMake(0, 0, self.sharedData.screenWidth, self.sharedData.screenWidth * heightRatio)];
+        self.mainImg = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.sharedData.screenWidth, self.sharedData.screenWidth * heightRatio)];
         self.mainImg.contentMode = UIViewContentModeScaleAspectFill;
         self.mainImg.layer.masksToBounds = YES;
         [self addSubview:self.mainImg];
@@ -237,10 +238,10 @@
         self.picURL = [self.sharedData picURL:event.photo];
         
         //Load venue image
-        [self.mainImg loadImage:self.picURL defaultImageNamed:@""]; //This will load and can be cancelled?
-
+        [self.mainImg sd_setImageWithURL:[NSURL URLWithString:self.picURL]
+                        placeholderImage:nil];
     } else {
-        [self.mainImg setImage:[UIImage imageNamed:@""]];
+        [self.mainImg setImage:nil];
     }
     
     NSLog(@"LOADING_IMG_URL :: %@ - %@",self.title.text, self.picURL);
@@ -327,15 +328,6 @@
 {
     [self.visiblePopTipViews removeObject:popTipView];
     self.currentPopTipViewTarget = nil;
-}
-
--(void)wentOffscreen
-{
-    [self.mainImg cancelImage];
-    for (int i=0; i<[self.cancelImagesA count]; i++) {
-        NWURLConnection *connection = self.cancelImagesA[i];
-        [connection cancel];
-    }
 }
 
 @end
