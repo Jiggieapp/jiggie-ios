@@ -199,7 +199,6 @@ static NSString *const ProfileEventTableViewCellIdentifier = @"ProfileEventTable
          forCellReuseIdentifier:AboutTableViewCellIdentifier];
     [self.tableView registerNib:[ProfileEventTableViewCell nib]
          forCellReuseIdentifier:ProfileEventTableViewCellIdentifier];
-    [self.tableView setTableFooterView:[UIView new]];
 }
 
 - (void)setupTableHeaderView {
@@ -246,8 +245,8 @@ static NSString *const ProfileEventTableViewCellIdentifier = @"ProfileEventTable
                                textSize.height)];
     [label sizeToFit];
     
-    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(5.0f,
-                                                            5.0f,
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(.0f,
+                                                            .0f,
                                                             CGRectGetWidth(label.bounds) + 10,
                                                             CGRectGetHeight(label.bounds) + 10)];
     
@@ -329,6 +328,10 @@ static NSString *const ProfileEventTableViewCellIdentifier = @"ProfileEventTable
 }
 
 #pragma mark - UITableViewDelegate
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
+    return CGFLOAT_MIN;
+}
+
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     if (section == 1) {
         SharedData *sharedData = [SharedData sharedInstance];
@@ -341,38 +344,56 @@ static NSString *const ProfileEventTableViewCellIdentifier = @"ProfileEventTable
         }
         
         UIView *view = [self headerViewWithText:text];
-        UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(.0f,
-                                                                      .0f,
+        
+        CGRect frame = view.frame;
+        frame.origin.x = 10;
+        frame.origin.y = 10;
+        view.frame = frame;
+        
+        UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0.0f,
+                                                                      0.0f,
                                                                       CGRectGetWidth(self.tableView.bounds),
                                                                       55.f)];
-        
-        CALayer *upperBorder = [CALayer layer];
-        upperBorder.backgroundColor = [[UIColor phGrayColor] CGColor];
-        upperBorder.frame = CGRectMake(0, 0, CGRectGetWidth(headerView.bounds), .5f);
-        
-        [headerView.layer addSublayer:upperBorder];
         [headerView addSubview:view];
         
         return headerView;
     }
     
-    return [UIView new];
+    return nil;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
     if (section == 1) {
-        return 55.f;
+        return 55;
     }
     
     return 0;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 90;
+    return 100;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return UITableViewAutomaticDimension;
+    if ([[[UIDevice currentDevice] systemVersion] compare:@"8.0" options:NSNumericSearch] != NSOrderedAscending) {
+        return UITableViewAutomaticDimension;
+    } else {
+        if (indexPath.section == 0) {
+            AboutTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:AboutTableViewCellIdentifier];
+            [cell configureMemberInfo:self.memberInfo];
+            
+            [cell setNeedsUpdateConstraints];
+            [cell updateConstraintsIfNeeded];
+            [cell setNeedsLayout];
+            [cell layoutIfNeeded];
+            
+            CGFloat height = [cell.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize].height;
+            
+            return height += 1;
+        }
+        
+        return 90;
+    }
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
