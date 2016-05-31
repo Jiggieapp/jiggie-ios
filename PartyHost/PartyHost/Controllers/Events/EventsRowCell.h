@@ -25,6 +25,7 @@
 @property(nonatomic,strong) PHImage         *mainImg;
 @property(nonatomic,strong) NSString        *picURL;
 
+@property(nonatomic,strong) UIView          *infoView;
 @property(nonatomic,strong) UILabel         *startFromLabel;
 @property(nonatomic,strong) UILabel         *minimumPrice;
 

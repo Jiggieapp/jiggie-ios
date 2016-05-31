@@ -524,7 +524,8 @@
                              
                              NSString *isFirst = ([defaults objectForKey:@"FIRST_RUN"])?@"NO":@"YES";
                              
-                             [analyticManager trackMixPanelWithDict:@"Log In" withDict:@{@"new_device":isFirst}];
+                             [analyticManager trackMixPanelWithDict:@"Log In" withDict:@{@"new_device":isFirst,
+                                                                                         @"invite_code":login[@"invite_code"]}];
                              [analyticManager trackMixPanelIncrementWithDict:@{@"login_count":@1}];
                          }
                          [analyticManager setMixPanelUserProfile];
