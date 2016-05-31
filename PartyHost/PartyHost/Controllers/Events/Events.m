@@ -168,6 +168,7 @@
     [searchBar1 setShowsCancelButton:YES];
     [searchBar1 setDelegate:self];
     [searchBar1 setBarTintColor:[UIColor colorFromHexCode:@"B238DE"]];
+    [searchBar1 setPlaceholder:@"Search..."];
     [self.events1List setTableHeaderView:searchBar1];
     [self.events1List setContentOffset:CGPointMake(0, 44)];
     
@@ -194,6 +195,7 @@
     [searchBar2 setShowsCancelButton:YES];
     [searchBar2 setDelegate:self];
     [searchBar2 setBarTintColor:[UIColor colorFromHexCode:@"B238DE"]];
+    [searchBar2 setPlaceholder:@"Search..."];
     [self.events2List setTableHeaderView:searchBar2];
     [self.events2List setContentOffset:CGPointMake(0, 44)];
     
@@ -220,6 +222,7 @@
     [searchBar3 setShowsCancelButton:YES];
     [searchBar3 setDelegate:self];
     [searchBar3 setBarTintColor:[UIColor colorFromHexCode:@"B238DE"]];
+    [searchBar3 setPlaceholder:@"Search..."];
     [self.events3List setTableHeaderView:searchBar3];
     [self.events3List setContentOffset:CGPointMake(0, 44)];
     
@@ -867,7 +870,7 @@
     self.isSearchMode = YES;
     [self.tableScrollView setScrollEnabled:NO];
     
-    [UIView animateWithDuration:0.3 animations:^()
+    [UIView animateWithDuration:0.3 delay:0.2 options:UIViewAnimationOptionCurveEaseIn animations:^()
      {
          self.segmentationView.frame = CGRectMake(0,
                                                   0,
@@ -889,8 +892,8 @@
 
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
     if (searchText.length > 2) {
-        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(title CONTAINS[cd] %@)",
-                                  searchText];
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(title CONTAINS[cd] %@) or (venue CONTAINS[cd] %@)",
+                                  searchText, searchText];
         NSArray *searchArray = [BaseModel fetchManagedObject:self.managedObjectContext
                                                     inEntity:NSStringFromClass([Event class])
                                                 andPredicate:predicate];

@@ -50,6 +50,7 @@
 @property (nonatomic, strong) UIView *userContainer;
 @property (nonatomic, strong) UIView *listingContainer;
 
+@property(nonatomic,strong) UIView *infoView;
 @property(nonatomic,strong) UILabel *startFromLabel;
 @property(nonatomic,strong) UILabel *minimumPrice;
 

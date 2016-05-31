@@ -179,7 +179,7 @@
         NSDictionary *order = [reservation objectForKey:@"order"];
         if (order && order != nil) {
             NSString *payment_status = [order objectForKey:@"payment_status"];
-            if ([payment_status isEqualToString:@"paid"]) {
+            if ([payment_status isEqualToString:@"paid"] || [payment_status isEqualToString:@"reserved"]) {
                 TicketSuccessViewController *ticketSuccessViewController = [[TicketSuccessViewController alloc] init];
                 [ticketSuccessViewController setOrderID:[order objectForKey:@"order_id"]];
                 [ticketSuccessViewController setShowCloseButton:YES];

@@ -121,6 +121,24 @@
     shareLabel.font = [UIFont phBlond:15];
     [self.mainScroll addSubview:shareLabel];
     
+    self.infoView = [[UIView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(self.picScroll.frame) - 60, self.sharedData.screenWidth, 60)];
+    [self.mainScroll addSubview:self.infoView];
+    
+    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 8.0 &&
+        !UIAccessibilityIsReduceTransparencyEnabled()) {
+        self.infoView.backgroundColor = [UIColor clearColor];
+        
+        UIBlurEffect *blurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleDark];
+        UIVisualEffectView *blurEffectView = [[UIVisualEffectView alloc] initWithEffect:blurEffect];
+        blurEffectView.frame = self.infoView.bounds;
+        blurEffectView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        
+        [self.infoView addSubview:blurEffectView];
+    } else {
+        self.infoView.backgroundColor = [UIColor blackColor];
+        self.infoView.alpha = 0.4;
+    }
+    
     self.startFromLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, CGRectGetMaxY(self.picScroll.frame) - 50, self.sharedData.screenWidth - 32, 18)];
     self.startFromLabel.textColor = [UIColor whiteColor];
     self.startFromLabel.text = @"Starts From";
@@ -683,10 +701,12 @@
             [self.minimumPrice setText:@"FREE"];
         }
         
+        self.infoView.hidden = NO;
         self.minimumPrice.hidden = NO;
         self.startFromLabel.hidden = NO;
         
     } else {
+        self.infoView.hidden = YES;
         self.minimumPrice.hidden = YES;
         self.startFromLabel.hidden = YES;
     }
@@ -993,10 +1013,12 @@
             [self.minimumPrice setText:@"FREE"];
         }
         
+        self.infoView.hidden = NO;
         self.minimumPrice.hidden = NO;
         self.startFromLabel.hidden = NO;
         
     } else {
+        self.infoView.hidden = YES;
         self.minimumPrice.hidden = YES;
         self.startFromLabel.hidden = YES;
     }
