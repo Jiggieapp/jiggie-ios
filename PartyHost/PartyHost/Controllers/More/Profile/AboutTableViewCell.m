@@ -61,6 +61,7 @@
     }
     
     [self.aboutLabel setText:memberInfo.about];
+    [self.locationLabel setText:[memberInfo.location capitalizedString]];
 }
 
 @end

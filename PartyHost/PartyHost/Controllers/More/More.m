@@ -30,10 +30,10 @@
     tabBar.backgroundColor = [UIColor phPurpleColor];
     
     UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(0, 20, frame.size.width, 40)];
-    title.text = @"MORE";
+    title.text = @"More";
     title.textAlignment = NSTextAlignmentCenter;
     title.textColor = [UIColor whiteColor];
-    title.font = [UIFont phBold:18];
+    title.font = [UIFont phBlond:16];
     [tabBar addSubview:title];
     
     int OffSet = (self.sharedData.isIphone4)?18:0;

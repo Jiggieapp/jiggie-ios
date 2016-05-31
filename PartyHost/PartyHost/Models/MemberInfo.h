@@ -18,6 +18,7 @@
 @property (copy, nonatomic, readonly) NSString *firstName;
 @property (copy, nonatomic, readonly) NSString *lastName;
 @property (copy, nonatomic, readonly) NSString *gender;
+@property (copy, nonatomic, readonly) NSString *location;
 @property (strong, nonatomic, readonly) NSArray *photos;
 @property (strong, nonatomic, readonly) NSArray *bookings;
 @property (strong, nonatomic, readonly) NSArray *tickets;

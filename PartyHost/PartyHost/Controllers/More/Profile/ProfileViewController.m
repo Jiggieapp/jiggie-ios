@@ -142,7 +142,8 @@ static NSString *const ProfileEventTableViewCellIdentifier = @"ProfileEventTable
     [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
     [self.navigationController.navigationBar setTranslucent:NO];
     [self.navigationController.navigationBar setTitleTextAttributes:
-     @{NSForegroundColorAttributeName:[UIColor whiteColor]}];
+     @{NSForegroundColorAttributeName:[UIColor whiteColor],
+       NSFontAttributeName : [UIFont phBlond:16]}];
     
     
     UIBarButtonItem *closeBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"nav_close"]

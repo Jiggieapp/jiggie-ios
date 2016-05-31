@@ -73,7 +73,8 @@ static NSString *const InviteFriendsTableViewCellIdentifier = @"InviteFriendsTab
     [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
     [self.navigationController.navigationBar setTranslucent:NO];
     [self.navigationController.navigationBar setTitleTextAttributes:
-     @{NSForegroundColorAttributeName:[UIColor whiteColor]}];
+     @{NSForegroundColorAttributeName:[UIColor whiteColor],
+       NSFontAttributeName : [UIFont phBlond:16]}];
     
     self.title = @"Invite Friends";
     [self.tableView registerNib:[InviteFriendsTableViewCell nib]

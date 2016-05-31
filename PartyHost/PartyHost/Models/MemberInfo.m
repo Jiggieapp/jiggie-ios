@@ -37,6 +37,7 @@
              @"firstName" : @"first_name",
              @"lastName" : @"last_name",
              @"gender" : @"gender",
+             @"location" : @"location",
              @"photos" : @"photos",
              @"bookings" : @"list_bookings",
              @"tickets" : @"list_tickets",
