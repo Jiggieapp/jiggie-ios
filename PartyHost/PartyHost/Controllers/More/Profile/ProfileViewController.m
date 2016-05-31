@@ -51,89 +51,53 @@ static NSString *const ProfileEventTableViewCellIdentifier = @"ProfileEventTable
     
     [self setupView];
     
+    SharedData *sharedData = [SharedData sharedInstance];
+    
     [SVProgressHUD show];
-    if (self.fbId) {
-        [MemberInfo retrieveMemberInfoWithFbId:self.fbId
-                          andCompletionHandler:^(MemberInfo *memberInfo,
-                                                 NSInteger statusCode,
-                                                 NSError *error) {
-                              [SVProgressHUD dismiss];
-                              
-                              dispatch_async(dispatch_get_main_queue(), ^{
-                                  if (memberInfo) {
+    [MemberInfo retrieveMemberInfoWithFbId:self.fbId ?: sharedData.fb_id
+                      andCompletionHandler:^(MemberInfo *memberInfo,
+                                             NSInteger statusCode,
+                                             NSError *error) {
+                          [SVProgressHUD dismiss];
+                          
+                          dispatch_async(dispatch_get_main_queue(), ^{
+                              if (memberInfo) {
+                                  if (self.fbId) {
                                       self.title = memberInfo.firstName;
-                                      
-                                      self.memberInfo = memberInfo;
-                                      
-                                      if (memberInfo.bookings.count > 0) {
-                                          for (MemberInfoEvent *memberEvent in memberInfo.bookings) {
-                                              [memberEvent setEventType:EventTypeTable];
-                                          }
-                                          
-                                          [self.memberEvents addObjectsFromArray:memberInfo.bookings];
-                                      }
-                                      if (memberInfo.tickets.count > 0) {
-                                          for (MemberInfoEvent *memberEvent in memberInfo.tickets) {
-                                              [memberEvent setEventType:EventTypeTicket];
-                                          }
-                                          
-                                          [self.memberEvents addObjectsFromArray:memberInfo.tickets];
-                                      }
-                                      if (memberInfo.likesEvent.count > 0) {
-                                          for (MemberInfoEvent *memberEvent in memberInfo.likesEvent) {
-                                              [memberEvent setEventType:EventTypeLike];
-                                          }
-                                          
-                                          [self.memberEvents addObjectsFromArray:memberInfo.likesEvent];
-                                      }
-                                      
-                                      [self.tableView setDataSource:self];
-                                      [self setupTableHeaderView];
-                                      [self.tableView reloadData];
+                                  } else {
+                                      self.title = @"Your Profile";
                                   }
-                              });
-        }];
-    } else {
-        self.title = @"Your Profile";
-        
-        [MemberInfo retrieveMemberInfoWithCompletionHandler:^(MemberInfo *memberInfo,
-                                                              NSInteger statusCode,
-                                                              NSError *error) {
-            [SVProgressHUD dismiss];
-            
-            dispatch_async(dispatch_get_main_queue(), ^{
-                if (memberInfo) {
-                    self.memberInfo = memberInfo;
-                    
-                    if (memberInfo.bookings.count > 0) {
-                        for (MemberInfoEvent *memberEvent in memberInfo.bookings) {
-                            [memberEvent setEventType:EventTypeTable];
-                        }
-                        
-                        [self.memberEvents addObjectsFromArray:memberInfo.bookings];
-                    }
-                    if (memberInfo.tickets.count > 0) {
-                        for (MemberInfoEvent *memberEvent in memberInfo.tickets) {
-                            [memberEvent setEventType:EventTypeTicket];
-                        }
-                        
-                        [self.memberEvents addObjectsFromArray:memberInfo.tickets];
-                    }
-                    if (memberInfo.likesEvent.count > 0) {
-                        for (MemberInfoEvent *memberEvent in memberInfo.likesEvent) {
-                            [memberEvent setEventType:EventTypeLike];
-                        }
-                        
-                        [self.memberEvents addObjectsFromArray:memberInfo.likesEvent];
-                    }
-                    
-                    [self.tableView setDataSource:self];
-                    [self setupTableHeaderView];
-                    [self.tableView reloadData];
-                }
-            });
-        }];
-    }
+                                  
+                                  self.memberInfo = memberInfo;
+                                  
+                                  if (memberInfo.bookings.count > 0) {
+                                      for (MemberInfoEvent *memberEvent in memberInfo.bookings) {
+                                          [memberEvent setEventType:EventTypeTable];
+                                      }
+                                      
+                                      [self.memberEvents addObjectsFromArray:memberInfo.bookings];
+                                  }
+                                  if (memberInfo.tickets.count > 0) {
+                                      for (MemberInfoEvent *memberEvent in memberInfo.tickets) {
+                                          [memberEvent setEventType:EventTypeTicket];
+                                      }
+                                      
+                                      [self.memberEvents addObjectsFromArray:memberInfo.tickets];
+                                  }
+                                  if (memberInfo.likesEvent.count > 0) {
+                                      for (MemberInfoEvent *memberEvent in memberInfo.likesEvent) {
+                                          [memberEvent setEventType:EventTypeLike];
+                                      }
+                                      
+                                      [self.memberEvents addObjectsFromArray:memberInfo.likesEvent];
+                                  }
+                                  
+                                  [self.tableView setDataSource:self];
+                                  [self setupTableHeaderView];
+                                  [self.tableView reloadData];
+                              }
+                          });
+                      }];
 }
 
 - (void)didReceiveMemoryWarning {
