@@ -99,7 +99,7 @@
                 [self.orderState setBackgroundColor:[UIColor phBlueColor]];
                 [self.orderState setText:@"Paid"];
             } else if ([payment_status isEqualToString:@"reserved"]) {
-                [self.orderState setBackgroundColor:[UIColor colorFromHexCode:@"FFB51E"]];
+                [self.orderState setBackgroundColor:[UIColor phBlueColor]];
                 [self.orderState setText:@"Reserved"];
             } else if ([payment_status isEqualToString:@"awaiting_payment"]) {
                 [self.orderState setBackgroundColor:[UIColor colorFromHexCode:@"FFB51E"]];

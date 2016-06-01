@@ -9,8 +9,6 @@
 #import "ConvoCell.h"
 #import "Chat.h"
 #import "Friend.h"
-#import "UIImageView+WebCache.h"
-
 
 @implementation ConvoCell
 
@@ -110,6 +108,7 @@
     
     self.nameLabel.text = [chat.fromName capitalizedString];
     [self.icon setName:chat.fromName lastName:nil];
+    [self.icon loadPicture:chat.profileImage];
     
     //Set last message
     if([chat.lastMessage length]==0) {
@@ -122,8 +121,6 @@
     self.dateLabel.text = [chat.lastUpdated timeAgo];
     
     [self.unreadBadge updateValue:chat.unread.intValue];
-    
-    [self.icon loadFacebookImage:chat.fb_id];
 }
 
 - (void)loadFriendData:(Friend *)friend {
@@ -134,7 +131,10 @@
     self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     
     self.nameLabel.text = [[NSString stringWithFormat:@"%@ %@", friend.firstName, friend.lastName] capitalizedString];
-    [self.icon setName:self.nameLabel.text lastName:nil];
+    [self.icon setName:friend.firstName lastName:friend.lastName];
+    if (friend.imgURL) {
+        [self.icon loadPicture:friend.imgURL];
+    }
     
     //Set about
     if([friend.about length]==0) {
@@ -145,12 +145,7 @@
     
     //Hide time ago
     self.dateLabel.text = @"";
-    
     [self.unreadBadge updateValue:0];
-    
-    if (friend.imgURL) {
-        [self.icon loadImage:friend.imgURL];
-    }
 }
 
 @end

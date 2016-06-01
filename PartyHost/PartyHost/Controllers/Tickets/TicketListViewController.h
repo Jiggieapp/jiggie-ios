@@ -15,6 +15,7 @@
 @property (nonatomic, strong) UIView *navBar;
 @property (nonatomic, strong) UILabel *navTitle;
 @property (nonatomic, strong) UITableView *tableView;
+@property (nonatomic, strong) UIView *infoView;
 @property (nonatomic, strong) UILabel *eventTitle;
 @property (nonatomic, strong) UILabel *eventVenue;
 @property (nonatomic, strong) UILabel *eventDate;

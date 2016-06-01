@@ -7,6 +7,8 @@
 //
 
 #import "UserBubble.h"
+#import "UIImageView+WebCache.h"
+
 
 @implementation UserBubble
 
@@ -53,44 +55,55 @@
     }
     
     self.initials = [NSString stringWithFormat:@"%@%@",firstInitial,lastInitial];
+    [self setTitle:self.initials forState:UIControlStateNormal];
 }
 
 - (void)reset {
     [self cancel];
 }
 
-- (NWURLConnection*)loadImage:(NSString*)url {
-    SharedData *sharedData = [SharedData sharedInstance];
-    self.url = url;
-    
-    //Already exists
-    UIImage *img = sharedData.imagesDict[url];
-    if(img) {
-        [self cancel];
-        [self setImage:img forState:UIControlStateNormal];
-        [self setTitle:@"" forState:UIControlStateNormal];
-        self.layer.borderWidth = 0;
-        return [[NWURLConnection alloc] init];
+- (void)loadPicture:(NSString *)picURL {
+    if (picURL == nil || picURL.length == 0) {
+        return;
     }
     
-    //Show default image and wait
-    [self reset];
-    [self setImage:nil forState:UIControlStateNormal];
-    [self setTitle:self.initials forState:UIControlStateNormal];
-    self.layer.borderWidth = 0;
-    self.connection = [sharedData loadImageCancelable:self.url completionBlock:^(UIImage *image)
-   {
-       [self setImage:image forState:UIControlStateNormal];
-       [self setTitle:@"" forState:UIControlStateNormal];
-       self.layer.borderWidth = 0;
-   }];
-    return self.connection;
+    SDWebImageManager *manager = [SDWebImageManager sharedManager];
+    [manager downloadImageWithURL:[NSURL URLWithString:picURL]
+                          options:0
+                         progress:^(NSInteger receivedSize, NSInteger expectedSize) {
+                             // progression tracking code
+                         }
+                        completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
+                            if (image) {
+                                // do something with image
+                                [self setImage:image forState:UIControlStateNormal];
+                                [self setTitle:@"" forState:UIControlStateNormal];
+                            }
+                        }];
 }
 
-- (NWURLConnection*)loadFacebookImage:(NSString*)fb_id {
+- (void)loadImage:(NSString*)url {
+    self.url = url;
+    
+    SDWebImageManager *manager = [SDWebImageManager sharedManager];
+    [manager downloadImageWithURL:[NSURL URLWithString:url]
+                          options:0
+                         progress:^(NSInteger receivedSize, NSInteger expectedSize) {
+                             // progression tracking code
+                         }
+                        completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
+                            if (image) {
+                                // do something with image
+                                [self setImage:image forState:UIControlStateNormal];
+                                [self setTitle:@"" forState:UIControlStateNormal];
+                            }
+                        }];
+}
+
+- (void)loadFacebookImage:(NSString*)fb_id {
     SharedData *sharedData = [SharedData sharedInstance];
     self.fb_id = fb_id;
-    return [self loadImage:[sharedData profileImg:self.fb_id]];
+    [self loadImage:[sharedData profileImg:self.fb_id]];
 }
 
 - (void)loadProfileImage:(NSString *)fb_id {
