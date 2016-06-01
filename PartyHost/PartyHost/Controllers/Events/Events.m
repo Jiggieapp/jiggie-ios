@@ -700,8 +700,7 @@
                              
                              NSArray *photos = [eventRow objectForKey:@"photos"];
                              if (photos && ![photos isEqual:[NSNull null]] && photos.count > 0) {
-                                 NSString *picUrl = [self.sharedData picURL:[photos objectAtIndex:0]];
-                                 item.photo = picUrl;
+                                 item.photo = [photos objectAtIndex:0];
                              }
                              
                              item.isFeatured = [NSNumber numberWithBool:isFeatured];

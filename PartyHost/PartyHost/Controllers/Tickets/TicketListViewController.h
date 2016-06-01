@@ -18,7 +18,7 @@
 @property (nonatomic, strong) UILabel *eventTitle;
 @property (nonatomic, strong) UILabel *eventVenue;
 @property (nonatomic, strong) UILabel *eventDate;
-@property (nonatomic, strong) PHImage *eventImage;
+@property (nonatomic, strong) UIImageView *eventImage;
 @property (nonatomic, strong) EmptyView *emptyView;
 
 @property (nonatomic, strong) NSString *eventID;

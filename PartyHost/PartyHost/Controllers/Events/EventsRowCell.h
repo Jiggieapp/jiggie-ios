@@ -23,7 +23,6 @@
 @property(nonatomic,strong) UILabel         *likeCount;
 
 @property(nonatomic,strong) UIImageView     *mainImg;
-@property(nonatomic,strong) NSString        *picURL;
 
 @property(nonatomic,strong) UIView          *infoView;
 @property(nonatomic,strong) UILabel         *startFromLabel;

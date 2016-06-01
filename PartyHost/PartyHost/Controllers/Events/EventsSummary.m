@@ -17,6 +17,7 @@
 #import "JGInviteHelper.h"
 #import "EventsGuestList.h"
 #import "UIView+Animation.h"
+#import "UIImageView+WebCache.h"
 
 #define PROFILE_PICS 4 //If more than 4 then last is +MORE
 #define PROFILE_SIZE 40
@@ -739,11 +740,15 @@
     UIView *imgCon = [[UIView alloc] initWithFrame:CGRectMake(0, 0, picSize.width, picSize.height)];
     imgCon.layer.masksToBounds = YES;
     
-    PHImage *img = [[PHImage alloc] initWithFrame:CGRectMake(0, 0, picSize.width, picSize.height)];
+    UIActivityIndicatorView *indicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+    [indicatorView setFrame:CGRectMake(0, 0, picSize.width, picSize.height)];
+    [imgCon addSubview:indicatorView];
+    
+    UIImageView *img = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, picSize.width, picSize.height)];
     img.contentMode = UIViewContentModeScaleAspectFill;
     NSString *picURL = self.cEvent.photo;
-    img.showLoading = YES;
-    [img loadImage:picURL defaultImageNamed:nil];
+    [img sd_setImageWithURL:[NSURL URLWithString:picURL]
+           placeholderImage:nil];
     [imgCon addSubview:img];
     [self.picScroll addSubview:imgCon];
     
@@ -1178,12 +1183,15 @@
         UIView *imgCon = [[UIView alloc] initWithFrame:CGRectMake(i * self.sharedData.screenWidth, 0, picSize.width, picSize.height)];
         imgCon.layer.masksToBounds = YES;
         
-        PHImage *img = [[PHImage alloc] initWithFrame:CGRectMake(0, 0, picSize.width, picSize.height)];
+        UIActivityIndicatorView *indicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+        [indicatorView setFrame:CGRectMake(0, 0, picSize.width, picSize.height)];
+        [imgCon addSubview:indicatorView];
+        
+        UIImageView *img = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, picSize.width, picSize.height)];
         img.contentMode = UIViewContentModeScaleAspectFill;
         NSString *picURL = photos[i];
-        picURL = [self.sharedData picURL:picURL];
-        img.showLoading = YES;
-        [img loadImage:picURL defaultImageNamed:nil];
+        [img sd_setImageWithURL:[NSURL URLWithString:picURL]
+               placeholderImage:nil];
         [imgCon addSubview:img];
         [self.picScroll addSubview:imgCon];
     }

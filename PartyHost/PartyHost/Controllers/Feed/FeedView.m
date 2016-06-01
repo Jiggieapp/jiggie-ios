@@ -283,7 +283,9 @@
         
         if (error) {
             [self.emptyView setMode:@"empty"];
-            [SVProgressHUD showInfoWithStatus:@"Please check your internet connection"];
+            if (error.code == -1009 || error.code == -1005) {
+                [SVProgressHUD showInfoWithStatus:@"Please check your internet connection"];
+            }
         } else {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self.feedData removeAllObjects];

@@ -9,6 +9,8 @@
 #import "ConvoCell.h"
 #import "Chat.h"
 #import "Friend.h"
+#import "UIImageView+WebCache.h"
+
 
 @implementation ConvoCell
 

@@ -14,6 +14,7 @@
 #import "TicketListCell.h"
 #import "AnalyticManager.h"
 #import "UserManager.h"
+#import "UIImageView+WebCache.h"
 
 
 @interface TicketListViewController ()
@@ -52,11 +53,14 @@
     UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 240)];
     [headerView setBackgroundColor:[UIColor colorFromHexCode:@"F1F1F1"]];
     
-    self.eventImage = [[PHImage alloc] initWithFrame:CGRectMake(0, 0, self.visibleSize.width, 240)];
+    UIActivityIndicatorView *indicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+    [indicatorView setFrame:CGRectMake(0, 0, self.visibleSize.width, 240)];
+    [headerView addSubview:indicatorView];
+    
+    self.eventImage = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.visibleSize.width, 240)];
     [self.eventImage setContentMode:UIViewContentModeScaleAspectFill];
     self.eventImage.layer.masksToBounds = YES;
     [self.eventImage setBackgroundColor:[UIColor phDarkGrayColor]];
-    [self.eventImage setShowLoading:YES];
     [headerView addSubview:self.eventImage];
     
     UIButton *closeButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -239,8 +243,8 @@
                             NSArray *photos = [product_lists objectForKey:@"photos"];
                             if (photos && photos!= nil && photos.count > 0) {
                                 NSString *picURL = [photos objectAtIndex:0];
-                                picURL = [self.sharedData picURL:picURL];
-                                [self.eventImage loadImage:picURL defaultImageNamed:nil];
+                                [self.eventImage sd_setImageWithURL:[NSURL URLWithString:picURL]
+                                                   placeholderImage:nil];
                             }
                             
                             NSString *event_name = [product_lists objectForKey:@"event_name"];
