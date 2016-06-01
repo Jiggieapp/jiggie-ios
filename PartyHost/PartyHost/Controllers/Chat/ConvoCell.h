@@ -19,7 +19,7 @@
 @property(nonatomic,strong) UILabel     *nameLabel;
 @property(nonatomic,strong) UILabel     *lastLabel;
 @property(nonatomic,strong) BadgeView   *unreadBadge;
-@property(nonatomic,strong) UIImageView  *icon;
+@property(nonatomic,strong) UserBubble  *icon;
 @property(nonatomic,strong) UIView      *iconCon;
 @property(nonatomic,strong) UILabel     *dateLabel;
 

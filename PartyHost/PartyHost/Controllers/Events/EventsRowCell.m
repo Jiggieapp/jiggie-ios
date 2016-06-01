@@ -63,11 +63,13 @@
             self.infoView.backgroundColor = [UIColor clearColor];
             
             UIBlurEffect *blurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleDark];
+            
             UIVisualEffectView *blurEffectView = [[UIVisualEffectView alloc] initWithEffect:blurEffect];
             blurEffectView.frame = self.infoView.bounds;
             blurEffectView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
             
             [self.infoView addSubview:blurEffectView];
+            self.infoView.alpha = 0.6;
         } else {
             self.infoView.backgroundColor = [UIColor blackColor];
             self.infoView.alpha = 0.4;
