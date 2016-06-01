@@ -67,6 +67,8 @@
         return;
     }
     
+    [self setImage:nil forState:UIControlStateNormal];
+    
     SDWebImageManager *manager = [SDWebImageManager sharedManager];
     [manager downloadImageWithURL:[NSURL URLWithString:picURL]
                           options:0

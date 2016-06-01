@@ -236,12 +236,11 @@
     
     self.likeCount.text = [NSString stringWithFormat:@"%@", event.likes];
     
+    [self.mainImg setImage:nil];
     if (event.photo && event.photo != nil) {
         //Load venue image
         [self.mainImg sd_setImageWithURL:[NSURL URLWithString:event.photo]
                         placeholderImage:nil];
-    } else {
-        [self.mainImg setImage:nil];
     }
     
     NSLog(@"LOADING_IMG_URL :: %@ - %@", self.title.text, event.photo);

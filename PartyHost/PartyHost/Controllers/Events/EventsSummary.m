@@ -1107,7 +1107,7 @@
             UserBubble *btnPic = [[UserBubble alloc] initWithFrame:CGRectMake(x1, 0, PROFILE_SIZE, PROFILE_SIZE)];
             btnPic.userInteractionEnabled = NO;
             [btnPic setName:user[@"first_name"] lastName:nil];
-            [btnPic loadFacebookImage:user[@"fb_id"]];
+            [btnPic loadPicture:user[@"profile_image"]];
             [self.userContainer addSubview:btnPic];
             x1 += PROFILE_SIZE + PROFILE_PADDING;
         }

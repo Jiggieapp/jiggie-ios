@@ -3509,8 +3509,8 @@
 				BUNDLE_APP_NAME = "Jiggie Dev";
 				BUNDLE_ID = com.partyhost.jiggiedev;
 				CODE_SIGN_ENTITLEMENTS = Jiggie.entitlements;
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -3536,7 +3536,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "$(BUNDLE_ID)";
 				PRODUCT_NAME = Jiggie;
-				PROVISIONING_PROFILE = "7b035a3d-e7a5-4bce-8ef4-b8b16f6dd00e";
+				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = 1;
 				VT_CLIENT = "VT-client-gJRBbRZC0t_-JXUD";
 				VT_ENABLE_PROD = 0;
