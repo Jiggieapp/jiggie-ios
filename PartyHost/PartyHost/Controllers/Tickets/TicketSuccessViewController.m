@@ -1132,7 +1132,7 @@
             }
             
             if ([self.bookingPaymentMethod.text isEqualToString:@"FREE"]) {
-                [self.bookingStatus setText:@"BOOKED"];
+                [self.bookingStatus setText:@"RESERVED"];
                 [self.paymentLabel setHidden:YES];
                 [self.bookingPaymentMethod setHidden:YES];
             }
