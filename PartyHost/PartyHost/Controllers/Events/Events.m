@@ -165,7 +165,6 @@
     [self.events1List addSubview:refreshControl1];
     
     UISearchBar *searchBar1 = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, self.sharedData.screenWidth, 44)];
-    [searchBar1 setShowsCancelButton:YES];
     [searchBar1 setDelegate:self];
     [searchBar1 setBarTintColor:[UIColor colorFromHexCode:@"B238DE"]];
     [searchBar1 setPlaceholder:@"Search..."];
@@ -192,7 +191,6 @@
     [self.events2List addSubview:refreshControl2];
     
     UISearchBar *searchBar2 = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, self.sharedData.screenWidth, 44)];
-    [searchBar2 setShowsCancelButton:YES];
     [searchBar2 setDelegate:self];
     [searchBar2 setBarTintColor:[UIColor colorFromHexCode:@"B238DE"]];
     [searchBar2 setPlaceholder:@"Search..."];
@@ -219,7 +217,6 @@
     [self.events3List addSubview:refreshControl3];
     
     UISearchBar *searchBar3 = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, self.sharedData.screenWidth, 44)];
-    [searchBar3 setShowsCancelButton:YES];
     [searchBar3 setDelegate:self];
     [searchBar3 setBarTintColor:[UIColor colorFromHexCode:@"B238DE"]];
     [searchBar3 setPlaceholder:@"Search..."];
@@ -855,6 +852,7 @@
 - (BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar {
     self.isSearchMode = YES;
     [self.tableScrollView setScrollEnabled:NO];
+    [searchBar setShowsCancelButton:YES animated:YES];
     
     [UIView animateWithDuration:0.3 delay:0.2 options:UIViewAnimationOptionCurveEaseIn animations:^()
      {
@@ -872,6 +870,12 @@
      } completion:^(BOOL finished){
          
      }];
+    
+    return YES;
+}
+
+- (BOOL)searchBarShouldEndEditing:(UISearchBar *)searchBar {
+    [searchBar setShowsCancelButton:NO animated:YES];
     
     return YES;
 }

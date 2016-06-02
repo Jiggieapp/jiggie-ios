@@ -63,11 +63,11 @@
 }
 
 - (void)loadPicture:(NSString *)picURL {
+    [self setImage:nil forState:UIControlStateNormal];
+    
     if (picURL == nil || picURL.length == 0) {
         return;
     }
-    
-    [self setImage:nil forState:UIControlStateNormal];
     
     SDWebImageManager *manager = [SDWebImageManager sharedManager];
     [manager downloadImageWithURL:[NSURL URLWithString:picURL]

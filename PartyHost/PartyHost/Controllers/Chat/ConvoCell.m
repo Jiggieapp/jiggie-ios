@@ -132,9 +132,7 @@
     
     self.nameLabel.text = [[NSString stringWithFormat:@"%@ %@", friend.firstName, friend.lastName] capitalizedString];
     [self.icon setName:friend.firstName lastName:friend.lastName];
-    if (friend.imgURL) {
-        [self.icon loadPicture:friend.imgURL];
-    }
+    [self.icon loadPicture:friend.imgURL];
     
     //Set about
     if([friend.about length]==0) {

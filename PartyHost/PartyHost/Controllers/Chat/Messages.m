@@ -1185,12 +1185,11 @@
         NSMutableDictionary *dict = [[self.mainDataA objectForKey:cKey] objectAtIndex:indexPath.row];
         cell.isMe = [[dict objectForKey:@"isFromYou"] boolValue];
         cell.textLabel.text = @"";//[dict objectForKey:@"message"];
-        [cell loadData:dict];
+        [cell loadData:dict andMainData:self.dataDict];
     }else{
         [cell showLoading:YES];
         cell.textLabel.text = @"Loading";
     }
-    
     
     return cell;
 }
