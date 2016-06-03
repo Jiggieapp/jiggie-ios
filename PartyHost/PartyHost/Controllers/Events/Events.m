@@ -850,26 +850,8 @@
 }
 
 - (BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar {
-    self.isSearchMode = YES;
-    [self.tableScrollView setScrollEnabled:NO];
     [searchBar setShowsCancelButton:YES animated:YES];
-    
-    [UIView animateWithDuration:0.3 delay:0.2 options:UIViewAnimationOptionCurveEaseIn animations:^()
-     {
-         self.segmentationView.frame = CGRectMake(0,
-                                                  0,
-                                                  self.segmentationView.bounds.size.width,
-                                                  self.segmentationView.bounds.size.height);
-         
-         [self.tableScrollView setFrame:CGRectMake(0, 40, self.frame.size.width, self.frame.size.height - self.tabBar.bounds.size.height - 20)];
-         
-         [self.events1List setFrame:CGRectMake(self.tableScrollView.bounds.size.width * 0, 0, self.tableScrollView.bounds.size.width, self.tableScrollView.bounds.size.height)];
-         [self.events2List setFrame:CGRectMake(self.tableScrollView.bounds.size.width * 1, 0, self.tableScrollView.bounds.size.width, self.tableScrollView.bounds.size.height)];
-         [self.events3List setFrame:CGRectMake(self.tableScrollView.bounds.size.width * 2, 0, self.tableScrollView.bounds.size.width, self.tableScrollView.bounds.size.height)];
-         
-     } completion:^(BOOL finished){
-         
-     }];
+    [self changeSearchMode:YES];
     
     return YES;
 }
@@ -910,35 +892,59 @@
 }
 
 - (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {
-    self.isSearchMode = NO;
-    [self.tableScrollView setScrollEnabled:YES];
-    [self endEditing:YES];
-    [self reloadTables];
-    
-    [UIView animateWithDuration:0.3 animations:^()
-     {
-         if (self.currentSegmentationIndex == 1) {
-             [self.events1List setContentOffset:CGPointMake(0, 44) animated:YES];
-         } else if (self.currentSegmentationIndex == 2) {
-             [self.events2List setContentOffset:CGPointMake(0, 44) animated:YES];
-         } else if (self.currentSegmentationIndex == 3) {
-             [self.events3List setContentOffset:CGPointMake(0, 44) animated:YES];
-         }
-         
-         self.segmentationView.frame = CGRectMake(0,
-                                                  40,
-                                                  self.segmentationView.bounds.size.width,
-                                                  self.segmentationView.bounds.size.height);
-         
-         [self.tableScrollView setFrame:CGRectMake(0, 40 + 34, self.frame.size.width, self.frame.size.height - self.tabBar.bounds.size.height - 34 - 20)];
-         
-         [self.events1List setFrame:CGRectMake(self.tableScrollView.bounds.size.width * 0, 0, self.tableScrollView.bounds.size.width, self.tableScrollView.bounds.size.height)];
-         [self.events2List setFrame:CGRectMake(self.tableScrollView.bounds.size.width * 1, 0, self.tableScrollView.bounds.size.width, self.tableScrollView.bounds.size.height)];
-         [self.events3List setFrame:CGRectMake(self.tableScrollView.bounds.size.width * 2, 0, self.tableScrollView.bounds.size.width, self.tableScrollView.bounds.size.height)];
+    [self changeSearchMode:NO];
+}
 
-     } completion:^(BOOL finished){
-         
-     }];
+- (void)changeSearchMode:(BOOL)isSearchMode {
+    self.isSearchMode = isSearchMode;
+    [self.tableScrollView setScrollEnabled:!isSearchMode];
+    
+    if (isSearchMode) {
+        [UIView animateWithDuration:0.3 delay:0.2 options:UIViewAnimationOptionCurveEaseIn animations:^()
+         {
+             self.segmentationView.frame = CGRectMake(0,
+                                                      0,
+                                                      self.segmentationView.bounds.size.width,
+                                                      self.segmentationView.bounds.size.height);
+             
+             [self.tableScrollView setFrame:CGRectMake(0, 40, self.frame.size.width, self.frame.size.height - self.tabBar.bounds.size.height - 20)];
+             
+             [self.events1List setFrame:CGRectMake(self.tableScrollView.bounds.size.width * 0, 0, self.tableScrollView.bounds.size.width, self.tableScrollView.bounds.size.height)];
+             [self.events2List setFrame:CGRectMake(self.tableScrollView.bounds.size.width * 1, 0, self.tableScrollView.bounds.size.width, self.tableScrollView.bounds.size.height)];
+             [self.events3List setFrame:CGRectMake(self.tableScrollView.bounds.size.width * 2, 0, self.tableScrollView.bounds.size.width, self.tableScrollView.bounds.size.height)];
+             
+         } completion:^(BOOL finished){
+             
+         }];
+    } else {
+        [self endEditing:YES];
+        [self reloadTables];
+        
+        [UIView animateWithDuration:0.3 animations:^()
+         {
+             if (self.currentSegmentationIndex == 1) {
+                 [self.events1List setContentOffset:CGPointMake(0, 44) animated:YES];
+             } else if (self.currentSegmentationIndex == 2) {
+                 [self.events2List setContentOffset:CGPointMake(0, 44) animated:YES];
+             } else if (self.currentSegmentationIndex == 3) {
+                 [self.events3List setContentOffset:CGPointMake(0, 44) animated:YES];
+             }
+             
+             self.segmentationView.frame = CGRectMake(0,
+                                                      40,
+                                                      self.segmentationView.bounds.size.width,
+                                                      self.segmentationView.bounds.size.height);
+             
+             [self.tableScrollView setFrame:CGRectMake(0, 40 + 34, self.frame.size.width, self.frame.size.height - self.tabBar.bounds.size.height - 34 - 20)];
+             
+             [self.events1List setFrame:CGRectMake(self.tableScrollView.bounds.size.width * 0, 0, self.tableScrollView.bounds.size.width, self.tableScrollView.bounds.size.height)];
+             [self.events2List setFrame:CGRectMake(self.tableScrollView.bounds.size.width * 1, 0, self.tableScrollView.bounds.size.width, self.tableScrollView.bounds.size.height)];
+             [self.events3List setFrame:CGRectMake(self.tableScrollView.bounds.size.width * 2, 0, self.tableScrollView.bounds.size.width, self.tableScrollView.bounds.size.height)];
+             
+         } completion:^(BOOL finished){
+             
+         }];
+    }
 }
 
 #pragma mark - UITableViewDataSource
@@ -1087,6 +1093,7 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:[tableView indexPathForSelectedRow] animated:YES];
+    [self endEditing:YES];
     
     @try {
         Event *event = nil;
@@ -1239,6 +1246,10 @@
 
 #pragma mark - Filter
 -(void)showFilter {
+    
+    if (self.isSearchMode) {
+        [self changeSearchMode:NO];
+    }
     
     [UIView animateWithDuration:0.2 delay:0.0 options:UIViewAnimationOptionCurveEaseIn animations:^{
         if (self.filterView.alpha == 1.0) {
