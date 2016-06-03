@@ -16,7 +16,7 @@
 #import "EventsSummary.h"
 #import "UIView+Animation.h"
 
-#define ProfileHeaderHeight 300.0f
+#define ProfileHeaderHeight 364.0f
 
 static NSString *const AboutTableViewCellIdentifier = @"AboutTableViewCellIdentifier";
 static NSString *const ProfileEventTableViewCellIdentifier = @"ProfileEventTableViewCellIdentifier";
@@ -138,13 +138,20 @@ static NSString *const ProfileEventTableViewCellIdentifier = @"ProfileEventTable
 
 #pragma mark - View
 - (void)setupView {
-    [self.navigationController.navigationBar setBarTintColor:[UIColor phPurpleColor]];
+    UIView *statusBarView = [[UIView alloc] initWithFrame:CGRectMake(0, -20, CGRectGetWidth([UIScreen mainScreen].bounds), 20)];
+    statusBarView.backgroundColor = [[UIColor phPurpleColor] colorWithAlphaComponent:0.5];
+    
+    [self.navigationController.navigationBar addSubview:statusBarView];
+    [self.navigationController.navigationBar setShadowImage:[UIImage new]];
+    [self.navigationController.navigationBar setTranslucent:YES];
+    [self.navigationController.view setBackgroundColor:[UIColor clearColor]];
+    [self.navigationController.navigationBar setBackgroundColor:[[UIColor phPurpleColor] colorWithAlphaComponent:0.5]];
+    [self.navigationController.navigationBar setBackgroundImage:[UIImage new]
+                                                  forBarMetrics:UIBarMetricsDefault];
     [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
-    [self.navigationController.navigationBar setTranslucent:NO];
     [self.navigationController.navigationBar setTitleTextAttributes:
      @{NSForegroundColorAttributeName:[UIColor whiteColor],
        NSFontAttributeName : [UIFont phBlond:16]}];
-    
     
     UIBarButtonItem *closeBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"nav_close"]
                                                                            style:UIBarButtonItemStylePlain
