@@ -98,7 +98,7 @@
 }
 
 
--(void)loadData:(NSMutableDictionary *)dict
+-(void)loadData:(NSMutableDictionary *)dict andMainData:(NSDictionary *)mainDict
 {
     self.toIconCon.hidden = self.toMessage.hidden = self.dateLabel.hidden = (self.isMe);
     self.myDateLabel.hidden = self.fromMessage.hidden = !self.toMessage.hidden;
@@ -225,7 +225,7 @@
         self.dateLabel.text = [formatter stringFromDate:dte];
         self.dateLabel.frame = CGRectMake(self.dateLabel.frame.origin.x, self.toMessage.frame.size.height, 60, 45);
 
-        [self.toIcon loadImage:self.sharedData.toImgURL];
+        [self.toIcon loadPicture:mainDict[@"to_profile_image"]];
     }
 }
 

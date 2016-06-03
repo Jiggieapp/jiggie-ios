@@ -57,14 +57,14 @@
 @property(nonatomic,strong) BookTable           *bookTable;
 @property(nonatomic,strong) NSMutableDictionary *imagesDict;
 @property(nonatomic,strong) NSMutableDictionary *facebookImagesDict;
-@property(nonatomic,strong) NSString            *appKey;
-@property(nonatomic,strong) NSString            *fromMailId;
-@property(nonatomic,strong) NSString            *fromMailName;
-@property(nonatomic,strong) NSString            *conversationId;
+@property(nonatomic,copy) NSString            *appKey;
+@property(nonatomic,copy) NSString            *fromMailId;
+@property(nonatomic,copy) NSString            *fromMailName;
+@property(nonatomic,copy) NSString            *conversationId;
 
 @property(nonatomic,strong) UIButton            *morePageBtnBack;
 
-@property(nonatomic,strong) NSString            *baseAPIURL;
+@property(nonatomic,copy) NSString            *baseAPIURL;
 
 @property(nonatomic,strong) NSMutableArray      *venuesNameList;
 
@@ -76,57 +76,57 @@
 @property(nonatomic,strong) UIImageView         *feedIcon;
 @property(nonatomic,strong) BadgeView           *feedBadge;
 
-@property(nonatomic,strong) NSString            *fb_id;
-@property(nonatomic,strong) NSString            *fb_access_token;
-@property(nonatomic,strong) NSString            *ph_token;
-@property(nonatomic,strong) NSString            *user_id;
-@property(nonatomic,strong) NSString            *account_type;
+@property(nonatomic,copy) NSString            *fb_id;
+@property(nonatomic,copy) NSString            *fb_access_token;
+@property(nonatomic,copy) NSString            *ph_token;
+@property(nonatomic,copy) NSString            *user_id;
+@property(nonatomic,copy) NSString            *account_type;
 @property(nonatomic,strong) NSMutableArray      *experiences;
 
-@property(nonatomic,strong) NSString            *review_fb_id;
+@property(nonatomic,copy) NSString            *review_fb_id;
 
-@property(nonatomic,strong) NSString            *member_fb_id;
-@property(nonatomic,strong) NSString            *member_user_id;
-@property(nonatomic,strong) NSString            *member_first_name;
+@property(nonatomic,copy) NSString            *member_fb_id;
+@property(nonatomic,copy) NSString            *member_user_id;
+@property(nonatomic,copy) NSString            *member_first_name;
 
 @property(nonatomic,strong) NSString            *imdowntext;
 
 @property(nonatomic,strong) NSMutableDictionary *cHostDict;
-@property(nonatomic,strong) NSString            *cHostVenuePicURL;
-@property(nonatomic,strong) NSString            *cEventsDatesStrg;
-@property(nonatomic,strong) NSString            *cVenueName;
+@property(nonatomic,copy) NSString            *cHostVenuePicURL;
+@property(nonatomic,copy) NSString            *cEventsDatesStrg;
+@property(nonatomic,copy) NSString            *cVenueName;
 @property(nonatomic,strong) UIImage             *cVenueImage;
 
-@property(nonatomic,strong) NSString            *cHost_fb_id;
-@property(nonatomic,strong) NSString            *cHosting_id;
+@property(nonatomic,copy) NSString            *cHost_fb_id;
+@property(nonatomic,copy) NSString            *cHosting_id;
 @property(nonatomic,assign) int                 cHost_index;
 @property(nonatomic,strong) NSIndexPath         *cHost_index_path;
 
-@property(nonatomic,strong) NSString            *cInitHosting_id;
+@property(nonatomic,copy) NSString            *cInitHosting_id;
 
 
-@property(nonatomic,strong) NSString            *cEventId_toLoad;
+@property(nonatomic,copy) NSString            *cEventId_toLoad;
 
-@property(nonatomic,strong) NSString            *cEventId_Feed;
+@property(nonatomic,copy) NSString            *cEventId_Feed;
 
-@property(nonatomic,strong) NSString            *cEventId_Modal;
+@property(nonatomic,copy) NSString            *cEventId_Modal;
 
-@property(nonatomic,strong) NSString            *cEventId_Summary;
+@property(nonatomic,copy) NSString            *cEventId_Summary;
 
 
 
-@property(nonatomic,strong) NSString            *btnYesTxt;
-@property(nonatomic,strong) NSString            *btnNOTxt;
+@property(nonatomic,copy) NSString            *btnYesTxt;
+@property(nonatomic,copy) NSString            *btnNOTxt;
 
 @property(nonatomic,strong) UIButton            *btnPhoneVerifyCancel;
 
-@property(nonatomic,strong) NSString            *ABTestChat;
+@property(nonatomic,copy) NSString            *ABTestChat;
 
-@property(nonatomic,strong) NSString            *cFillType;
-@property(nonatomic,strong) NSString            *cFillValue;
+@property(nonatomic,copy) NSString            *cFillType;
+@property(nonatomic,copy) NSString            *cFillValue;
 
 
-@property(nonatomic,strong) NSString            *cEventId;
+@property(nonatomic,copy) NSString            *cEventId;
 
 @property(nonatomic,assign) int                 messageFontSize;
 @property(nonatomic,assign) int                 osVersion;
@@ -147,18 +147,18 @@
 @property(nonatomic,strong) NSMutableDictionary *mixPanelCEventDict;
 @property(nonatomic,strong) NSMutableDictionary *mixPanelCTicketDict;
 
-@property(nonatomic,strong) NSString            *mostRecentEventSelectedId;
+@property(nonatomic,copy) NSString            *mostRecentEventSelectedId;
 
-@property(nonatomic,strong) NSString            *cGuestId;
-@property(nonatomic,strong) NSString            *cHostingIdFromInvite;
+@property(nonatomic,copy) NSString            *cGuestId;
+@property(nonatomic,copy) NSString            *cHostingIdFromInvite;
 
-@property(nonatomic,strong) NSString            *cInviteName;
+@property(nonatomic,copy) NSString            *cInviteName;
 @property(nonatomic,assign) BOOL                cameFromEventsTab;
 
-@property(nonatomic,strong) NSString            *APN_STATE;
+@property(nonatomic,copy) NSString            *APN_STATE;
 
 
-@property(nonatomic,strong) NSString            *APN_PERMISSION_STATE;
+@property(nonatomic,copy) NSString            *APN_PERMISSION_STATE;
 
 
 @property(nonatomic,assign) int                 maxProfilePics;
@@ -190,7 +190,7 @@
 @property(nonatomic,assign) BOOL                isIphone5;
 @property(nonatomic,assign) BOOL                isIphone6;
 @property(nonatomic,assign) BOOL                isIphone6plus;
-@property(nonatomic,strong) NSString            *deviceType;
+@property(nonatomic,copy) NSString            *deviceType;
 
 @property(nonatomic,assign) BOOL                hasInitEventSelection;
 
@@ -198,11 +198,11 @@
 
 @property(nonatomic,strong) NSMutableDictionary *appsFlyerDict;
 
-@property(nonatomic,strong) NSString            *toImgURL;
+@property(nonatomic,copy) NSString            *toImgURL;
 
 
 
-@property(nonatomic,strong) NSString            *cShareHostingId;
+@property(nonatomic,copy) NSString            *cShareHostingId;
 
 //Feed cell height
 @property(nonatomic,assign) int                 feedCellHeightShort; //No image or buttons
@@ -227,15 +227,15 @@
 @property(nonatomic,strong) CLLocationManager     *locationManager;
 
 //Just for shared link
-@property(nonatomic,strong) NSString            *shareHostingId; //hosting_id
-@property(nonatomic,strong) NSString            *shareHostingHostFbId; //host fb_id
-@property(nonatomic,strong) NSString            *shareHostingHostName; //host first_name
-@property(nonatomic,strong) NSString            *shareHostingVenueName; //venue_name
-@property(nonatomic,strong) NSString            *shareHostingHostDate; //hosting date
+@property(nonatomic,copy) NSString            *shareHostingId; //hosting_id
+@property(nonatomic,copy) NSString            *shareHostingHostFbId; //host fb_id
+@property(nonatomic,copy) NSString            *shareHostingHostName; //host first_name
+@property(nonatomic,copy) NSString            *shareHostingVenueName; //venue_name
+@property(nonatomic,copy) NSString            *shareHostingHostDate; //hosting date
 
 //feed match
-@property(nonatomic,strong) NSString            *feedMatchEvent;
-@property(nonatomic,strong) NSString            *feedMatchImage;
+@property(nonatomic,copy) NSString            *feedMatchEvent;
+@property(nonatomic,copy) NSString            *feedMatchImage;
 
 -(NSString*)capitalizeFirstLetter:(NSString *)strg;
 
@@ -271,21 +271,21 @@
 @property(nonatomic,assign) BOOL notification_messages;
 @property(nonatomic,assign) BOOL location_on;
 @property(nonatomic,assign) BOOL has_phone;
-@property(nonatomic,strong) NSString *phone;
-@property(nonatomic,strong) NSString *ccType;
-@property(nonatomic,strong) NSString *ccLast4;
-@property(nonatomic,strong) NSString *ccName;
+@property(nonatomic,copy) NSString *phone;
+@property(nonatomic,copy) NSString *ccType;
+@property(nonatomic,copy) NSString *ccLast4;
+@property(nonatomic,copy) NSString *ccName;
 -(NSDictionary*)createSaveSettingsParams;
 -(void)loadSettingsResponse:(NSDictionary *)dict;
 -(void)saveSettingsResponse;
 
 //===================================================================================================//
 //SOCIAL FILTER
-@property(nonatomic,strong) NSString *gender;
-@property(nonatomic,strong) NSString *gender_interest;
-@property(nonatomic,strong) NSString *distance;
-@property(nonatomic,strong) NSString *from_age;
-@property(nonatomic,strong) NSString *to_age;
+@property(nonatomic,copy) NSString *gender;
+@property(nonatomic,copy) NSString *gender_interest;
+@property(nonatomic,copy) NSString *distance;
+@property(nonatomic,copy) NSString *from_age;
+@property(nonatomic,copy) NSString *to_age;
 -(BOOL)isGuest;
 -(BOOL)isHost;
 -(BOOL)isMember;

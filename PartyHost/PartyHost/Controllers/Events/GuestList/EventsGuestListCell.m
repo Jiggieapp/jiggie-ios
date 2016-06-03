@@ -92,7 +92,7 @@
     
     //Get profile image
     [self.userImg setName:self.userDict[@"first_name"] lastName:nil];
-    [self.userImg loadFacebookImage:self.userDict[@"fb_id"]];
+    [self.userImg loadPicture:self.userDict[@"profile_image"]];
     
     //Show invite button?
     if([self.userDict[@"fb_id"] isEqualToString:self.sharedData.fb_id])
@@ -155,9 +155,8 @@
     [self.sharedData.cHostDict addEntriesFromDictionary:self.mainDict];
     self.sharedData.member_fb_id = self.userDict[@"fb_id"];
     
-    [[NSNotificationCenter defaultCenter]
-     postNotificationName:@"SHOW_MEMBER_PROFILE"
-     object:self];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"SHOW_MEMBER_PROFILE"
+                                                        object:self.userDict[@"fb_id"]];
 }
 
 -(void)inviteGuestButtonClicked:(UIButton *)button

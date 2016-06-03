@@ -22,6 +22,8 @@ typedef enum : NSUInteger {
 @property (copy, nonatomic, readonly) NSString *fromFirstName;
 @property (copy, nonatomic, readonly) NSString *fromImageURL;
 @property (assign, nonatomic, readonly) FeedType type;
+@property (strong, nonatomic, readonly) NSNumber *hasBooking;
+@property (strong, nonatomic, readonly) NSNumber *hasTicket;
 
 + (NSString *)feedTypeAsString:(FeedType)type;
 

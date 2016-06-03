@@ -33,9 +33,12 @@
 @property(nonatomic,assign) BOOL            hasMemberToLoad;
 @property(nonatomic,assign) BOOL isLoaded;
 
+@property (assign, nonatomic) BOOL isModal;
+
 -(void)initClass;
 -(void)reset;
 -(void)loadData:(NSString*)event_id;
+-(void)loadModalData:(NSString*)event_id;
 -(void)populateData:(NSMutableArray *)array;
 -(void)refreshFeed;
 

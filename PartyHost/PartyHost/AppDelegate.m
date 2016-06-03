@@ -50,6 +50,12 @@ static NSString *const kAllowTracking = @"allowTracking";
     [[UINavigationBar appearance] setBackIndicatorTransitionMaskImage:[UIImage imageNamed:@"nav_back_new"]];
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     
+    [[UIBarButtonItem appearanceWhenContainedIn:[UISearchBar class], nil] setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
+                                                                                                  [UIColor whiteColor],NSForegroundColorAttributeName,
+                                                                                                  [UIFont phBlond:14],
+                                                                                                  NSFontAttributeName,
+                                                                                                  nil]
+                                                                                        forState:UIControlStateNormal];
     // Override point for customization after application launch.
     self.sharedData = [SharedData sharedInstance];
     self.inAskingAPNMode = NO;
@@ -110,7 +116,6 @@ static NSString *const kAllowTracking = @"allowTracking";
     NSDictionary *userInfo = [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
 //    NSDictionary *userInfo = @{@"type":@"social", @"event_id":@"56cd3a2cf96cf103001ecd81", @"fromFBId":@"10153311635578981", @"fromName":@"Setiady"};
     if (userInfo && userInfo != nil) {
-        NSLog(@"USER INFO : %@", userInfo);
         if([[userInfo objectForKey:@"type"]  isEqualToString:@"general"])
         {
             // app was just brought from background to foreground

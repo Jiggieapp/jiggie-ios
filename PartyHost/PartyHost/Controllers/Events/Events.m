@@ -16,9 +16,15 @@
 #import "SVProgressHUD.h"
 #import "JDFTooltips.h"
 #import "JGTooltipHelper.h"
-
+#import "JGKeyboardNotificationHelper.h"
 
 #define SCREENS_DEEP 4
+
+@interface Events()
+
+@property (nonatomic, strong) JGKeyboardNotificationHelper *keyboardNotification;
+
+@end
 
 @implementation Events
 
@@ -52,6 +58,14 @@
     
     [self addSubview:self.mainCon];
     
+    UIView *purpleBackground = [[UIView alloc] initWithFrame:CGRectMake(0, 40, frame.size.width, 34)];
+    [purpleBackground setBackgroundColor:[UIColor colorFromHexCode:@"B238DE"]];
+    [self.mainCon addSubview:purpleBackground];
+    
+    self.segmentationView = [[UIView alloc] initWithFrame:CGRectMake(0, 40, frame.size.width, 34)];
+    [self.segmentationView setBackgroundColor:[UIColor colorFromHexCode:@"B238DE"]];
+    [self.mainCon addSubview:self.segmentationView];
+    
     self.tabBar = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.sharedData.screenWidth, 40)];
     self.tabBar.backgroundColor = [UIColor phPurpleColor];
     [self.mainCon addSubview:self.tabBar];
@@ -80,10 +94,6 @@
     self.btnFilter.imageView.contentMode = UIViewContentModeScaleAspectFit;
     [self.btnFilter addTarget:self action:@selector(showFilter) forControlEvents:UIControlEventTouchUpInside];
     [self.tabBar addSubview:self.btnFilter];
-    
-    self.segmentationView = [[UIView alloc] initWithFrame:CGRectMake(0, 40, frame.size.width, 34)];
-    [self.segmentationView setBackgroundColor:[UIColor colorFromHexCode:@"B238DE"]];
-    [self.mainCon addSubview:self.segmentationView];
     
     CGFloat buttonSegmentationWidth = frame.size.width/3;
     UIButton *todayButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -149,6 +159,18 @@
     tmpPurple1View.backgroundColor = [UIColor phPurpleColor];
     [self.events1List addSubview:tmpPurple1View];
     
+    UIRefreshControl *refreshControl1 = [[UIRefreshControl alloc] init];
+    [refreshControl1 setTintColor:[UIColor whiteColor]];
+    [refreshControl1 addTarget:self action:@selector(refreshControlDidChange:) forControlEvents:UIControlEventValueChanged];
+    [self.events1List addSubview:refreshControl1];
+    
+    UISearchBar *searchBar1 = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, self.sharedData.screenWidth, 44)];
+    [searchBar1 setDelegate:self];
+    [searchBar1 setBarTintColor:[UIColor colorFromHexCode:@"B238DE"]];
+    [searchBar1 setPlaceholder:@"Search..."];
+    [self.events1List setTableHeaderView:searchBar1];
+    [self.events1List setContentOffset:CGPointMake(0, 44)];
+    
     self.events2List = [[UITableView alloc] initWithFrame:CGRectMake(self.tableScrollView.bounds.size.width * 1, 0, self.tableScrollView.bounds.size.width, self.tableScrollView.bounds.size.height)];
     self.events2List.backgroundColor = [UIColor whiteColor];
     self.events2List.delegate = self;
@@ -163,6 +185,18 @@
     tmpPurple2View.backgroundColor = [UIColor phPurpleColor];
     [self.events2List addSubview:tmpPurple2View];
     
+    UIRefreshControl *refreshControl2 = [[UIRefreshControl alloc] init];
+    [refreshControl2 setTintColor:[UIColor whiteColor]];
+    [refreshControl2 addTarget:self action:@selector(refreshControlDidChange:) forControlEvents:UIControlEventValueChanged];
+    [self.events2List addSubview:refreshControl2];
+    
+    UISearchBar *searchBar2 = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, self.sharedData.screenWidth, 44)];
+    [searchBar2 setDelegate:self];
+    [searchBar2 setBarTintColor:[UIColor colorFromHexCode:@"B238DE"]];
+    [searchBar2 setPlaceholder:@"Search..."];
+    [self.events2List setTableHeaderView:searchBar2];
+    [self.events2List setContentOffset:CGPointMake(0, 44)];
+    
     self.events3List = [[UITableView alloc] initWithFrame:CGRectMake(self.tableScrollView.bounds.size.width * 2, 0, self.tableScrollView.bounds.size.width, self.tableScrollView.bounds.size.height)];
     self.events3List.backgroundColor = [UIColor whiteColor];
     self.events3List.delegate = self;
@@ -176,6 +210,18 @@
     UIView *tmpPurple3View = [[UIView alloc] initWithFrame:CGRectMake(0, -300, self.sharedData.screenWidth, 300)];
     tmpPurple3View.backgroundColor = [UIColor phPurpleColor];
     [self.events3List addSubview:tmpPurple3View];
+    
+    UIRefreshControl *refreshControl3 = [[UIRefreshControl alloc] init];
+    [refreshControl3 setTintColor:[UIColor whiteColor]];
+    [refreshControl3 addTarget:self action:@selector(refreshControlDidChange:) forControlEvents:UIControlEventValueChanged];
+    [self.events3List addSubview:refreshControl3];
+    
+    UISearchBar *searchBar3 = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, self.sharedData.screenWidth, 44)];
+    [searchBar3 setDelegate:self];
+    [searchBar3 setBarTintColor:[UIColor colorFromHexCode:@"B238DE"]];
+    [searchBar3 setPlaceholder:@"Search..."];
+    [self.events3List setTableHeaderView:searchBar3];
+    [self.events3List setContentOffset:CGPointMake(0, 44)];
     
     //When there are no entries
     self.emptyView = [[EmptyView alloc] initWithFrame:CGRectMake(0, 40, frame.size.width, frame.size.height - 60)];
@@ -237,6 +283,8 @@
     //4th screen
     self.eventsHostDetail = [[EventsHostDetail alloc] initWithFrame:CGRectMake(self.sharedData.screenWidth * 3, -20, self.sharedData.screenWidth, self.mainCon.frame.size.height)];
     [self.mainCon addSubview:self.eventsHostDetail];
+    
+    [self observeKeyboardNotification];
     
     [[NSNotificationCenter defaultCenter]
      addObserver:self
@@ -330,6 +378,15 @@
     [self.emptyView setMode:@"load"];
 }
 
+- (JGKeyboardNotificationHelper *)keyboardNotification {
+    if (!_keyboardNotification) {
+        _keyboardNotification = [JGKeyboardNotificationHelper new];
+    }
+    
+    return _keyboardNotification;
+}
+
+
 
 -(void)initClass
 {
@@ -384,6 +441,10 @@
     }
 }
 
+- (void)dealloc {
+    [self.keyboardNotification removeObserser:self];
+}
+
 -(void)eventsTappedHandler
 {
     if(self.mainCon.frame.origin.x < 0) //Not on events page
@@ -391,13 +452,19 @@
         [self goHome];
     }else{ //Scroll to top
         if (self.currentSegmentationIndex == 1) {
-            [self.events1List setContentOffset:CGPointZero animated:YES];
+            [self.events1List setContentOffset:CGPointMake(0, 44) animated:YES];
         } else if (self.currentSegmentationIndex == 2) {
-            [self.events2List setContentOffset:CGPointZero animated:YES];
+            [self.events2List setContentOffset:CGPointMake(0, 44) animated:YES];
         } else if (self.currentSegmentationIndex == 3) {
-            [self.events3List setContentOffset:CGPointZero animated:YES];
+            [self.events3List setContentOffset:CGPointMake(0, 44) animated:YES];
         }
     }
+}
+
+- (void)refreshControlDidChange:(UIRefreshControl *)refreshControl {
+    self.isReloadMode = YES;
+    self.refreshControl = refreshControl;
+    [self loadData];
 }
 
 #pragma mark - Fetch
@@ -508,6 +575,12 @@
              [self.emptyView setData:@"No events found" subtitle:@"Try to add more categories to see more events." imageNamed:@""];
              [self.emptyView setMode:@"empty"];
              
+             if (self.isReloadMode) {
+                 // Do your job, when done:
+                 [self.refreshControl endRefreshing];
+                 self.isReloadMode = NO;
+             }
+             
              return;
          } else if (responseStatusCode != 200) {
              NSArray *fetchEvents = [BaseModel fetchManagedObject:self.managedObjectContext
@@ -517,6 +590,13 @@
                  [self.emptyView setData:@"No events found" subtitle:@"Try to add more categories to see more events." imageNamed:@""];
                  [self.emptyView setMode:@"empty"];
              }
+             
+             if (self.isReloadMode) {
+                 // Do your job, when done:
+                 [self.refreshControl endRefreshing];
+                 self.isReloadMode = NO;
+             }
+             
              return;
          }
          
@@ -658,8 +738,6 @@
                  
                  self.needUpdateContents = YES;
                  
-                 [self performSelector:@selector(loadImages) withObject:nil afterDelay:1.0];
-                 
              } else {
                  [self.emptyView setMode:@"empty"];
              }
@@ -667,6 +745,12 @@
          
      } failure:^(AFHTTPRequestOperation *operation, NSError *error)
      {
+         if (self.isReloadMode) {
+             // Do your job, when done:
+             [self.refreshControl endRefreshing];
+             self.isReloadMode = NO;
+         }
+         
          if (error.code == -1009 || error.code == -1005) {
              [SVProgressHUD showInfoWithStatus:@"Please check your internet connection"];
              return;
@@ -715,31 +799,160 @@
     [self.events2List reloadData];
     [self.events3List reloadData];
     
+    if (self.isReloadMode) {
+        // Do your job, when done:
+        [self.refreshControl endRefreshing];
+        self.isReloadMode = NO;
+        
+        if (self.currentSegmentationIndex == 1) {
+            [self.events1List setContentOffset:CGPointMake(0, 44) animated:YES];
+        } else if (self.currentSegmentationIndex == 2) {
+            [self.events2List setContentOffset:CGPointMake(0, 44) animated:YES];
+        } else if (self.currentSegmentationIndex == 3) {
+            [self.events3List setContentOffset:CGPointMake(0, 44) animated:YES];
+        }
+    }
+
     if ([[self.fetchedResultsController fetchedObjects] count] > 0) {
         [self showTooltip];
     }
 }
 
--(void)loadImages
-{
-    int count = 0;
-    for (Event *event in [self.fetchedResultsController fetchedObjects]) {
-        if (event.photo && event.photo!=nil) {
-            NSString *picURl = [self.sharedData picURL:event.photo];
-            [self.sharedData loadTimeImage:picURl withTimeOut:count * .25];
+#pragma mark - Observer
+- (void)observeKeyboardNotification {
+    [self.keyboardNotification handleKeyboardNotificationWithCompletion:^(UIViewAnimationOptions animation, NSTimeInterval duration, CGRect frame) {
+        [UIView animateWithDuration:duration
+                              delay:.4f
+                            options:animation
+                         animations:^{
+                             
+                             UIEdgeInsets contentInsets = UIEdgeInsetsMake(0.0, 0.0, frame.size.height, 0.0);
+                             if (self.currentSegmentationIndex == 1) {
+                                 self.events1List.contentInset = contentInsets;
+                                 self.events1List.scrollIndicatorInsets = contentInsets;
+                             } else if (self.currentSegmentationIndex == 2) {
+                                 self.events2List.contentInset = contentInsets;
+                                 self.events2List.scrollIndicatorInsets = contentInsets;
+                             } else if (self.currentSegmentationIndex == 3) {
+                                 self.events3List.contentInset = contentInsets;
+                                 self.events3List.scrollIndicatorInsets = contentInsets;
+                             }
+    
+                         } completion:nil];
+    }];
+    
+    [self.keyboardNotification addObserser];
+}
+
+#pragma mark - UISearchBarDelegate
+- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
+    [self endEditing:YES];
+}
+
+- (BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar {
+    [searchBar setShowsCancelButton:YES animated:YES];
+    [self changeSearchMode:YES];
+    
+    return YES;
+}
+
+- (BOOL)searchBarShouldEndEditing:(UISearchBar *)searchBar {
+    [searchBar setShowsCancelButton:NO animated:YES];
+    
+    return YES;
+}
+
+- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
+    if (searchText.length > 2) {
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(title CONTAINS[cd] %@) or (venue CONTAINS[cd] %@)",
+                                  searchText, searchText];
+        NSArray *searchArray = [BaseModel fetchManagedObject:self.managedObjectContext
+                                                    inEntity:NSStringFromClass([Event class])
+                                                andPredicate:predicate];
+        if (self.currentSegmentationIndex == 1) {
+            [self.eventsToday removeAllObjects];
+            if (searchArray.count > 0) {
+                [self.eventsToday addObjectsFromArray:searchArray];
+            }
+            [self.events1List reloadData];
+        } else if (self.currentSegmentationIndex == 2) {
+            [self.eventsTomorrow removeAllObjects];
+            if (searchArray.count > 0) {
+                [self.eventsTomorrow addObjectsFromArray:searchArray];
+            }
+            [self.events2List reloadData];
+        } else if (self.currentSegmentationIndex == 3) {
+            [self.eventsUpcoming removeAllObjects];
+            if (searchArray.count > 0) {
+                [self.eventsUpcoming addObjectsFromArray:searchArray];
+            }
+            [self.events3List reloadData];
         }
-        count++;
+    }
+}
+
+- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {
+    [self changeSearchMode:NO];
+}
+
+- (void)changeSearchMode:(BOOL)isSearchMode {
+    self.isSearchMode = isSearchMode;
+    [self.tableScrollView setScrollEnabled:!isSearchMode];
+    
+    if (isSearchMode) {
+        [UIView animateWithDuration:0.3 delay:0.2 options:UIViewAnimationOptionCurveEaseIn animations:^()
+         {
+             self.segmentationView.frame = CGRectMake(0,
+                                                      0,
+                                                      self.segmentationView.bounds.size.width,
+                                                      self.segmentationView.bounds.size.height);
+             
+             [self.tableScrollView setFrame:CGRectMake(0, 40, self.frame.size.width, self.frame.size.height - self.tabBar.bounds.size.height - 20)];
+             
+             [self.events1List setFrame:CGRectMake(self.tableScrollView.bounds.size.width * 0, 0, self.tableScrollView.bounds.size.width, self.tableScrollView.bounds.size.height)];
+             [self.events2List setFrame:CGRectMake(self.tableScrollView.bounds.size.width * 1, 0, self.tableScrollView.bounds.size.width, self.tableScrollView.bounds.size.height)];
+             [self.events3List setFrame:CGRectMake(self.tableScrollView.bounds.size.width * 2, 0, self.tableScrollView.bounds.size.width, self.tableScrollView.bounds.size.height)];
+             
+         } completion:^(BOOL finished){
+             
+         }];
+    } else {
+        [self endEditing:YES];
+        [self reloadTables];
+        
+        [UIView animateWithDuration:0.3 animations:^()
+         {
+             if (self.currentSegmentationIndex == 1) {
+                 [self.events1List setContentOffset:CGPointMake(0, 44) animated:YES];
+             } else if (self.currentSegmentationIndex == 2) {
+                 [self.events2List setContentOffset:CGPointMake(0, 44) animated:YES];
+             } else if (self.currentSegmentationIndex == 3) {
+                 [self.events3List setContentOffset:CGPointMake(0, 44) animated:YES];
+             }
+             
+             self.segmentationView.frame = CGRectMake(0,
+                                                      40,
+                                                      self.segmentationView.bounds.size.width,
+                                                      self.segmentationView.bounds.size.height);
+             
+             [self.tableScrollView setFrame:CGRectMake(0, 40 + 34, self.frame.size.width, self.frame.size.height - self.tabBar.bounds.size.height - 34 - 20)];
+             
+             [self.events1List setFrame:CGRectMake(self.tableScrollView.bounds.size.width * 0, 0, self.tableScrollView.bounds.size.width, self.tableScrollView.bounds.size.height)];
+             [self.events2List setFrame:CGRectMake(self.tableScrollView.bounds.size.width * 1, 0, self.tableScrollView.bounds.size.width, self.tableScrollView.bounds.size.height)];
+             [self.events3List setFrame:CGRectMake(self.tableScrollView.bounds.size.width * 2, 0, self.tableScrollView.bounds.size.width, self.tableScrollView.bounds.size.height)];
+             
+         } completion:^(BOOL finished){
+             
+         }];
     }
 }
 
 #pragma mark - UITableViewDataSource
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 1;
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if ([tableView isEqual:self.events1List]) {
         if (self.eventsToday.count == 0) {
             return 1;
@@ -760,8 +973,7 @@
     return 0;
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     if ([tableView isEqual:self.events1List] && self.eventsToday.count == 0) {
         return tableView.bounds.size.height;
     } else if ([tableView isEqual:self.events2List] && self.eventsTomorrow.count == 0) {
@@ -881,6 +1093,7 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:[tableView indexPathForSelectedRow] animated:YES];
+    [self endEditing:YES];
     
     @try {
         Event *event = nil;
@@ -933,14 +1146,6 @@
     }
     @finally {
         
-    }
-}
-
-- (void)tableView:(UITableView *)tableView didEndDisplayingCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if ([cell isKindOfClass:[EventsRowCell class]]) {
-        EventsRowCell *eventsRowCell = (EventsRowCell*)cell;
-        [eventsRowCell wentOffscreen];
     }
 }
 
@@ -1041,6 +1246,10 @@
 
 #pragma mark - Filter
 -(void)showFilter {
+    
+    if (self.isSearchMode) {
+        [self changeSearchMode:NO];
+    }
     
     [UIView animateWithDuration:0.2 delay:0.0 options:UIViewAnimationOptionCurveEaseIn animations:^{
         if (self.filterView.alpha == 1.0) {

@@ -14,6 +14,7 @@
 #import "TicketListCell.h"
 #import "AnalyticManager.h"
 #import "UserManager.h"
+#import "UIImageView+WebCache.h"
 
 
 @interface TicketListViewController ()
@@ -52,11 +53,14 @@
     UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 240)];
     [headerView setBackgroundColor:[UIColor colorFromHexCode:@"F1F1F1"]];
     
-    self.eventImage = [[PHImage alloc] initWithFrame:CGRectMake(0, 0, self.visibleSize.width, 240)];
+    UIActivityIndicatorView *indicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+    [indicatorView setFrame:CGRectMake(0, 0, self.visibleSize.width, 240)];
+    [headerView addSubview:indicatorView];
+    
+    self.eventImage = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.visibleSize.width, 240)];
     [self.eventImage setContentMode:UIViewContentModeScaleAspectFill];
     self.eventImage.layer.masksToBounds = YES;
     [self.eventImage setBackgroundColor:[UIColor phDarkGrayColor]];
-    [self.eventImage setShowLoading:YES];
     [headerView addSubview:self.eventImage];
     
     UIButton *closeButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -70,6 +74,25 @@
     [helpButton setImage:[UIImage imageNamed:@"button_help_shadow"] forState:UIControlStateNormal];
     [helpButton addTarget:self action:@selector(helpButtonDidTap:) forControlEvents:UIControlEventTouchUpInside];
     [headerView addSubview:helpButton];
+    
+    self.infoView = [[UIView alloc] initWithFrame:CGRectMake(0, 160, self.sharedData.screenWidth, headerView.bounds.size.height - 160)];
+    [headerView addSubview:self.infoView];
+    
+    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 8.0 &&
+        !UIAccessibilityIsReduceTransparencyEnabled()) {
+        self.infoView.backgroundColor = [UIColor clearColor];
+        
+        UIBlurEffect *blurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleDark];
+        UIVisualEffectView *blurEffectView = [[UIVisualEffectView alloc] initWithEffect:blurEffect];
+        blurEffectView.frame = self.infoView.bounds;
+        blurEffectView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        
+        [self.infoView addSubview:blurEffectView];
+        self.infoView.alpha = 0.6;
+    } else {
+        self.infoView.backgroundColor = [UIColor blackColor];
+        self.infoView.alpha = 0.4;
+    }
     
     self.eventTitle = [[UILabel alloc] initWithFrame:CGRectMake(14, 170, self.view.bounds.size.width - 28, 20)];
     [self.eventTitle setNumberOfLines:2];
@@ -239,8 +262,8 @@
                             NSArray *photos = [product_lists objectForKey:@"photos"];
                             if (photos && photos!= nil && photos.count > 0) {
                                 NSString *picURL = [photos objectAtIndex:0];
-                                picURL = [self.sharedData picURL:picURL];
-                                [self.eventImage loadImage:picURL defaultImageNamed:nil];
+                                [self.eventImage sd_setImageWithURL:[NSURL URLWithString:picURL]
+                                                   placeholderImage:nil];
                             }
                             
                             NSString *event_name = [product_lists objectForKey:@"event_name"];
@@ -256,6 +279,8 @@
                                 CGFloat diff = eventFrame.size.height - self.eventTitle.bounds.size.height;
                                 if (diff > 0) {
                                     [self.eventTitle setFrame:CGRectMake(self.eventTitle.frame.origin.x, self.eventTitle.frame.origin.y - diff, self.eventTitle.bounds.size.width, eventFrame.size.height)];
+                                    
+                                    [self.infoView setFrame:CGRectMake(self.infoView.frame.origin.x, self.infoView.frame.origin.y - diff, self.infoView.bounds.size.width, self.infoView.bounds.size.height + diff)];
                                 }
                             }
                             

@@ -28,6 +28,34 @@
     
     [self.personImageButton setContentMode:UIViewContentModeScaleAspectFill];
     [self.personImageButton.imageView setContentMode:UIViewContentModeScaleAspectFill];
+    
+    [self.overlayView setAlpha:0];
+}
+
+- (void)showConnectOverlayView {
+    [self.overlayView setAlpha:1.0f];
+    [self.overlayView setBackgroundColor:[[UIColor phBlueColor] colorWithAlphaComponent:0.7f]];
+    [self.connectIconImageView setImage:[UIImage imageNamed:@"social-connect-overlay-icon"]];
+}
+
+- (void)showSkipOverlayView {
+    [self.overlayView setAlpha:1.0f];
+    [self.overlayView setBackgroundColor:[[UIColor colorFromHexCode:@"B4B4B4"] colorWithAlphaComponent:0.8f]];
+    [self.connectIconImageView setImage:[UIImage imageNamed:@"skip-connect-overlay-icon"]];
+}
+
+- (void)showOverlayViewAtLocation:(CGPoint)location withAlpha:(CGFloat)alpha {
+    if (alpha <= 1.0f) {
+        [self.overlayView setAlpha:alpha];
+    }
+    
+    if (location.x > (CGRectGetWidth([UIScreen mainScreen].bounds) / 2) - 10) {
+        [self.overlayView setBackgroundColor:[[UIColor phBlueColor] colorWithAlphaComponent:0.7f]];
+        [self.connectIconImageView setImage:[UIImage imageNamed:@"social-connect-overlay-icon"]];
+    } else {
+        [self.overlayView setBackgroundColor:[[UIColor colorFromHexCode:@"B4B4B4"] colorWithAlphaComponent:0.8f]];
+        [self.connectIconImageView setImage:[UIImage imageNamed:@"skip-connect-overlay-icon"]];
+    }
 }
 
 - (void)configureCardWithFeed:(Feed *)feed {
@@ -40,6 +68,18 @@
         [self.personImageButton setContentMode:UIViewContentModeScaleAspectFill];
         [self.personImageButton.imageView setContentMode:UIViewContentModeScaleAspectFill];
     }];
+    
+    if ([feed.hasBooking boolValue]) {
+        [self.hasTableImageView setImage:[UIImage imageNamed:@"feed-table-icon"]];
+    } else {
+        [self.hasTableImageView setImage:nil];
+    }
+    
+    if ([feed.hasTicket boolValue]) {
+        [self.hasTicketImageView setImage:[UIImage imageNamed:@"feed-ticket-icon"]];
+    } else {
+        [self.hasTicketImageView setImage:nil];
+    }
     
     switch (feed.type) {
         case FeedTypeViewed: {
