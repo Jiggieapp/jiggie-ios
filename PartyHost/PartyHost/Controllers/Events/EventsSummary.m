@@ -15,6 +15,9 @@
 #import "JDFTooltips.h"
 #import "JGTooltipHelper.h"
 #import "JGInviteHelper.h"
+#import "EventsGuestList.h"
+#import "UIView+Animation.h"
+#import "UIImageView+WebCache.h"
 
 #define PROFILE_PICS 4 //If more than 4 then last is +MORE
 #define PROFILE_SIZE 40
@@ -118,6 +121,25 @@
     shareLabel.adjustsFontSizeToFitWidth = YES;
     shareLabel.font = [UIFont phBlond:15];
     [self.mainScroll addSubview:shareLabel];
+    
+    self.infoView = [[UIView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(self.picScroll.frame) - 60, self.sharedData.screenWidth, 60)];
+    [self.mainScroll addSubview:self.infoView];
+    
+    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 8.0 &&
+        !UIAccessibilityIsReduceTransparencyEnabled()) {
+        self.infoView.backgroundColor = [UIColor clearColor];
+        
+        UIBlurEffect *blurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleDark];
+        UIVisualEffectView *blurEffectView = [[UIVisualEffectView alloc] initWithEffect:blurEffect];
+        blurEffectView.frame = self.infoView.bounds;
+        blurEffectView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        
+        [self.infoView addSubview:blurEffectView];
+        self.infoView.alpha = 0.6;
+    } else {
+        self.infoView.backgroundColor = [UIColor blackColor];
+        self.infoView.alpha = 0.4;
+    }
     
     self.startFromLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, CGRectGetMaxY(self.picScroll.frame) - 50, self.sharedData.screenWidth - 32, 18)];
     self.startFromLabel.textColor = [UIColor whiteColor];
@@ -403,11 +425,20 @@
     }
 }
 
+- (void)initClassModalWithEventID:(NSString *)eventID {
+    [self initClassWithEventID:eventID];
+    self.isModal = YES;
+}
+
 -(void)goBack
 {
-    [[NSNotificationCenter defaultCenter]
-     postNotificationName:@"EVENTS_GO_HOME"
-     object:self];
+    if (self.isModal) {
+        [self dismissViewAnimated:YES completion:nil];
+    } else {
+        [[NSNotificationCenter defaultCenter]
+         postNotificationName:@"EVENTS_GO_HOME"
+         object:self];
+    }
 }
 
 - (void)showNavBar:(BOOL)isShow withAnimation:(BOOL)isAnimated {
@@ -508,10 +539,18 @@
 -(void)infoButtonClicked
 {
     //[self.sharedData trackMixPanelWithDict:@"Share Hosting" withDict:@{@"origin":@"HostDetails"}];
-    
-    [[NSNotificationCenter defaultCenter]
-     postNotificationName:@"EVENTS_GO_GUEST_LIST"
-     object:self];
+    if (self.isModal) {
+        EventsGuestList *guestList = [[EventsGuestList alloc] initWithFrame:[UIScreen mainScreen].bounds];
+        [guestList loadModalData:self.sharedData.selectedEvent[@"_id"]];
+        
+        [self presentView:guestList
+              withOverlay:NO
+                 animated:YES
+               completion:nil];
+    } else {
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"EVENTS_GO_GUEST_LIST"
+                                                            object:self];
+    }
 }
 
 //Go to the ADD HOSTING screen
@@ -664,10 +703,12 @@
             [self.minimumPrice setText:@"FREE"];
         }
         
+        self.infoView.hidden = NO;
         self.minimumPrice.hidden = NO;
         self.startFromLabel.hidden = NO;
         
     } else {
+        self.infoView.hidden = YES;
         self.minimumPrice.hidden = YES;
         self.startFromLabel.hidden = YES;
     }
@@ -700,11 +741,15 @@
     UIView *imgCon = [[UIView alloc] initWithFrame:CGRectMake(0, 0, picSize.width, picSize.height)];
     imgCon.layer.masksToBounds = YES;
     
-    PHImage *img = [[PHImage alloc] initWithFrame:CGRectMake(0, 0, picSize.width, picSize.height)];
+    UIActivityIndicatorView *indicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+    [indicatorView setFrame:CGRectMake(0, 0, picSize.width, picSize.height)];
+    [imgCon addSubview:indicatorView];
+    
+    UIImageView *img = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, picSize.width, picSize.height)];
     img.contentMode = UIViewContentModeScaleAspectFill;
     NSString *picURL = self.cEvent.photo;
-    img.showLoading = YES;
-    [img loadImage:picURL defaultImageNamed:nil];
+    [img sd_setImageWithURL:[NSURL URLWithString:picURL]
+           placeholderImage:nil];
     [imgCon addSubview:img];
     [self.picScroll addSubview:imgCon];
     
@@ -974,10 +1019,12 @@
             [self.minimumPrice setText:@"FREE"];
         }
         
+        self.infoView.hidden = NO;
         self.minimumPrice.hidden = NO;
         self.startFromLabel.hidden = NO;
         
     } else {
+        self.infoView.hidden = YES;
         self.minimumPrice.hidden = YES;
         self.startFromLabel.hidden = YES;
     }
@@ -1060,7 +1107,7 @@
             UserBubble *btnPic = [[UserBubble alloc] initWithFrame:CGRectMake(x1, 0, PROFILE_SIZE, PROFILE_SIZE)];
             btnPic.userInteractionEnabled = NO;
             [btnPic setName:user[@"first_name"] lastName:nil];
-            [btnPic loadFacebookImage:user[@"fb_id"]];
+            [btnPic loadPicture:user[@"profile_image"]];
             [self.userContainer addSubview:btnPic];
             x1 += PROFILE_SIZE + PROFILE_PADDING;
         }
@@ -1137,12 +1184,15 @@
         UIView *imgCon = [[UIView alloc] initWithFrame:CGRectMake(i * self.sharedData.screenWidth, 0, picSize.width, picSize.height)];
         imgCon.layer.masksToBounds = YES;
         
-        PHImage *img = [[PHImage alloc] initWithFrame:CGRectMake(0, 0, picSize.width, picSize.height)];
+        UIActivityIndicatorView *indicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+        [indicatorView setFrame:CGRectMake(0, 0, picSize.width, picSize.height)];
+        [imgCon addSubview:indicatorView];
+        
+        UIImageView *img = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, picSize.width, picSize.height)];
         img.contentMode = UIViewContentModeScaleAspectFill;
         NSString *picURL = photos[i];
-        picURL = [self.sharedData picURL:picURL];
-        img.showLoading = YES;
-        [img loadImage:picURL defaultImageNamed:nil];
+        [img sd_setImageWithURL:[NSURL URLWithString:picURL]
+               placeholderImage:nil];
         [imgCon addSubview:img];
         [self.picScroll addSubview:imgCon];
     }

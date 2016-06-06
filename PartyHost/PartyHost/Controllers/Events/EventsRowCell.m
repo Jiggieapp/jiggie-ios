@@ -7,6 +7,7 @@
 //
 
 #import "EventsRowCell.h"
+#import "UIImageView+WebCache.h"
 
 @implementation EventsRowCell
 
@@ -43,7 +44,7 @@
         self.cPicIndex = -1;
         
         CGFloat heightRatio = 3.0 / 4.0;
-        self.mainImg = [[PHImage alloc] initWithFrame:CGRectMake(0, 0, self.sharedData.screenWidth, self.sharedData.screenWidth * heightRatio)];
+        self.mainImg = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.sharedData.screenWidth, self.sharedData.screenWidth * heightRatio)];
         self.mainImg.contentMode = UIViewContentModeScaleAspectFill;
         self.mainImg.layer.masksToBounds = YES;
         [self addSubview:self.mainImg];
@@ -53,6 +54,26 @@
         self.dimView.alpha = 0.5;
         self.dimView.hidden = YES;
         [self addSubview:self.dimView];
+        
+        self.infoView = [[UIView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(self.mainImg.frame) - 60, self.sharedData.screenWidth, 60)];
+        [self addSubview:self.infoView];
+        
+        if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 8.0 &&
+            !UIAccessibilityIsReduceTransparencyEnabled()) {
+            self.infoView.backgroundColor = [UIColor clearColor];
+            
+            UIBlurEffect *blurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleDark];
+            
+            UIVisualEffectView *blurEffectView = [[UIVisualEffectView alloc] initWithEffect:blurEffect];
+            blurEffectView.frame = self.infoView.bounds;
+            blurEffectView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+            
+            [self.infoView addSubview:blurEffectView];
+            self.infoView.alpha = 0.6;
+        } else {
+            self.infoView.backgroundColor = [UIColor blackColor];
+            self.infoView.alpha = 0.4;
+        }
         
         self.startFromLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, CGRectGetMaxY(self.mainImg.frame) - 50, self.sharedData.screenWidth - 20, 18)];
         self.startFromLabel.textColor = [UIColor whiteColor];
@@ -193,10 +214,12 @@
             [self.minimumPrice setText:@"FREE"];
         }
         
+        self.infoView.hidden = NO;
         self.minimumPrice.hidden = NO;
         self.startFromLabel.hidden = NO;
         
     } else {
+        self.infoView.hidden = YES;
         self.minimumPrice.hidden = YES;
         self.startFromLabel.hidden = YES;
     }
@@ -213,17 +236,14 @@
     
     self.likeCount.text = [NSString stringWithFormat:@"%@", event.likes];
     
+    [self.mainImg setImage:nil];
     if (event.photo && event.photo != nil) {
-        self.picURL = [self.sharedData picURL:event.photo];
-        
         //Load venue image
-        [self.mainImg loadImage:self.picURL defaultImageNamed:@""]; //This will load and can be cancelled?
-
-    } else {
-        [self.mainImg setImage:[UIImage imageNamed:@""]];
+        [self.mainImg sd_setImageWithURL:[NSURL URLWithString:event.photo]
+                        placeholderImage:nil];
     }
     
-    NSLog(@"LOADING_IMG_URL :: %@ - %@",self.title.text, self.picURL);
+    NSLog(@"LOADING_IMG_URL :: %@ - %@", self.title.text, event.photo);
     
     //remove all tags
     NSArray *viewsToRemove = [self.tagsView subviews];
@@ -307,15 +327,6 @@
 {
     [self.visiblePopTipViews removeObject:popTipView];
     self.currentPopTipViewTarget = nil;
-}
-
--(void)wentOffscreen
-{
-    [self.mainImg cancelImage];
-    for (int i=0; i<[self.cancelImagesA count]; i++) {
-        NWURLConnection *connection = self.cancelImagesA[i];
-        [connection cancel];
-    }
 }
 
 @end

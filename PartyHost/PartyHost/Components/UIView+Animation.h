@@ -10,7 +10,10 @@
 
 @interface UIView (Animation)
 
-- (void)presentView:(UIView *)view animated:(BOOL)animated completion:(void (^)(void))completion;
+- (void)presentView:(UIView *)view withOverlay:(BOOL)overlay
+           animated:(BOOL)animated
+         completion:(void (^)(void))completion;
+
 - (void)dismissViewAnimated:(BOOL)animated completion:(void (^)(void))completion;
 
 @end

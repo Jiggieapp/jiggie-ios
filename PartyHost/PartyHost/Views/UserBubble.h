@@ -17,9 +17,10 @@
 @property(nonatomic,strong) NWURLConnection *connection; //This can be canceled
 
 - (id)initWithFrame:(CGRect)frame;
+- (void)loadPicture:(NSString *)picURL;
 - (void)reset; //Cancel and revert to facebook default image
-- (NWURLConnection*)loadImage:(NSString*)url; //Load any image
-- (NWURLConnection*)loadFacebookImage:(NSString*)fb_id; //Load a facebook image
+- (void)loadImage:(NSString*)url; //Load any image
+- (void)loadFacebookImage:(NSString*)fb_id; //Load a facebook image
 - (void)loadProfileImage:(NSString*)fb_id; //Load first image from member info
 - (void)cancel; //Cancels an existing load
 - (void)setName:(NSString*)firstName lastName:(NSString*)lastName;

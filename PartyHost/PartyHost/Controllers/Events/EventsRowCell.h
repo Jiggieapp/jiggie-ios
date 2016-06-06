@@ -22,9 +22,9 @@
 @property(nonatomic,strong) UIButton         *likeButton;
 @property(nonatomic,strong) UILabel         *likeCount;
 
-@property(nonatomic,strong) PHImage         *mainImg;
-@property(nonatomic,strong) NSString        *picURL;
+@property(nonatomic,strong) UIImageView     *mainImg;
 
+@property(nonatomic,strong) UIView          *infoView;
 @property(nonatomic,strong) UILabel         *startFromLabel;
 @property(nonatomic,strong) UILabel         *minimumPrice;
 
@@ -56,6 +56,5 @@
 -(void)showLoading;
 -(void)hideLoading;
 -(void)goPreselect;
--(void)wentOffscreen;
 
 @end

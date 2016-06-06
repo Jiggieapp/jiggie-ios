@@ -27,7 +27,7 @@
 
 @property(nonatomic,assign) BOOL            isMe;
 
--(void)loadData:(NSMutableDictionary *)dict;
+-(void)loadData:(NSMutableDictionary *)dict andMainData:(NSDictionary *)mainDict;
 -(void)showLoading:(BOOL)loading;
 
 @end

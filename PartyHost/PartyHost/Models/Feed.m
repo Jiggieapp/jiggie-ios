@@ -11,14 +11,6 @@
 
 @interface Feed ()
 
-@property (copy, nonatomic) NSString *eventId;
-@property (copy, nonatomic) NSString *eventName;
-@property (copy, nonatomic) NSString *fbId;
-@property (copy, nonatomic) NSString *fromFbId;
-@property (copy, nonatomic) NSString *fromFirstName;
-@property (copy, nonatomic) NSString *fromImageURL;
-@property (assign, nonatomic) FeedType type;
-
 @end
 
 @implementation Feed
@@ -30,7 +22,9 @@
              @"fromFbId" : @"from_fb_id",
              @"fromFirstName" : @"from_first_name",
              @"fromImageURL" : @"image",
-             @"type" : @"type"};
+             @"type" : @"type",
+             @"hasBooking" : @"badge_booking",
+             @"hasTicket" : @"badge_ticket"};
 }
 
 + (NSValueTransformer *)typeJSONTransformer {
@@ -83,9 +77,15 @@
                                          fromJSONArray:responseObject[@"data"][@"social_feeds"]
                                                  error:&error];
         if (completion) {
-            completion(feeds,
-                       operation.response.statusCode,
-                       nil);
+            if (feeds) {
+                completion(feeds,
+                           operation.response.statusCode,
+                           nil);
+            } else {
+                completion(nil,
+                           operation.response.statusCode,
+                           error);
+            }
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         if (completion) {
