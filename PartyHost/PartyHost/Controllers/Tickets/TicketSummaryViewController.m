@@ -15,9 +15,13 @@
 #import "SVProgressHUD.h"
 #import "AnalyticManager.h"
 
+
 @interface TicketSummaryViewController ()
 
 @end
+
+NSInteger const MaxBookingTableGuest = 100;
+
 
 @implementation TicketSummaryViewController
 
@@ -229,6 +233,14 @@
     [self.totalPrice setBackgroundColor:[UIColor clearColor]];
     [self.totalPrice setTextAlignment:NSTextAlignmentRight];
     [bottomView addSubview:self.totalPrice];
+    
+    NSNumber *extra_charge = [self.productSelected objectForKey:@"extra_charge"];
+    if (extra_charge != nil) {
+        self.bookTableExtraCharge = extra_charge.integerValue;
+    } else {
+        self.bookTableExtraCharge = 0;
+    }
+        
     
     NSString *price = [self.productSelected objectForKey:@"price"];
     if (price && price != nil) {
@@ -496,7 +508,19 @@
 - (void)plusButtonDidTap:(id)sender {
     NSInteger currentAmount = self.totalTicket.text.integerValue;
     
-    if (currentAmount < self.maxAmount) {
+    if (self.bookTableExtraCharge > 0 && currentAmount < MaxBookingTableGuest) {
+        currentAmount++;
+        self.totalTicket.text = [NSString stringWithFormat:@"%li", (long)currentAmount];
+        
+        if (currentAmount > self.maxAmount) {
+            NSInteger diff = currentAmount - self.maxAmount;
+            SharedData *sharedData = [SharedData sharedInstance];
+            NSString *updatedPrice = [NSString stringWithFormat:@"%li", self.price + diff * self.bookTableExtraCharge];
+            NSString *formattedPrice = [sharedData formatCurrencyString:updatedPrice];
+            [self.totalPrice setText:[NSString stringWithFormat:@"Rp%@", formattedPrice]];
+
+        }
+    } else if (currentAmount < self.maxAmount) {
         currentAmount++;
         self.totalTicket.text = [NSString stringWithFormat:@"%li", (long)currentAmount];
     }
@@ -517,7 +541,26 @@
 - (void)minusButtonDidTap:(id)sender {
     NSInteger currentAmount = self.totalTicket.text.integerValue;
     
-    if (currentAmount > 1) {
+    if (self.bookTableExtraCharge > 0 && currentAmount > 1) {
+        currentAmount--;
+        self.totalTicket.text = [NSString stringWithFormat:@"%li", (long)currentAmount];
+        
+        if (currentAmount > self.maxAmount) {
+            NSInteger diff = currentAmount - self.maxAmount;
+            SharedData *sharedData = [SharedData sharedInstance];
+            NSString *updatedPrice = [NSString stringWithFormat:@"%li", self.price + diff * self.bookTableExtraCharge];
+            NSString *formattedPrice = [sharedData formatCurrencyString:updatedPrice];
+            [self.totalPrice setText:[NSString stringWithFormat:@"Rp%@", formattedPrice]];
+            
+        } else {
+            SharedData *sharedData = [SharedData sharedInstance];
+            NSString *totalPrice = [NSString stringWithFormat:@"%li", self.price];
+            NSString *formattedPrice = [sharedData formatCurrencyString:totalPrice];
+            
+            self.totalPrice.text = [NSString stringWithFormat:@"Rp%@", formattedPrice];
+        }
+        
+    } else if (currentAmount > 1) {
         currentAmount--;
         self.totalTicket.text = [NSString stringWithFormat:@"%li", (long)currentAmount];
     }
