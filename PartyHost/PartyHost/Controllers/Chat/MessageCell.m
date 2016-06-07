@@ -38,7 +38,8 @@
         [self addSubview:self.toIconCon];
         
         self.toIcon = [[UserBubble alloc] initWithFrame:CGRectMake(0, 0, 40, 40)];
-        self.toIcon.userInteractionEnabled = NO;
+        self.toIcon.userInteractionEnabled = YES;
+        [self.toIcon addTarget:self action:@selector(showMemberProfile) forControlEvents:UIControlEventTouchUpInside];
         [self.toIconCon addSubview:self.toIcon];
         
         self.dateLabel = [[UILabel alloc] initWithFrame:CGRectMake(54, 35, 60, 45)];
@@ -239,6 +240,12 @@
     [super layoutSubviews];
 }
 */
+
+-(void)showMemberProfile
+{
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"SHOW_MEMBER_PROFILE"
+                                                        object:self.sharedData.member_fb_id];
+}
 
 -(void)showLoading:(BOOL)loading
 {
