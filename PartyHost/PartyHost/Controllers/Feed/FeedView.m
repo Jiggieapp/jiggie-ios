@@ -270,6 +270,7 @@
     }
     
     [self.filterButton setEnabled:NO];
+    
     [Feed retrieveFeedsWithCompletionHandler:^(NSArray *feeds, NSInteger statusCode, NSError *error) {
         if (show) {
             [SVProgressHUD dismiss];
@@ -305,12 +306,12 @@
                 
                 [self.swipeableView setHidden:NO];
                 [self.swipeableView loadViewsIfNeeded];
-                
-                if (self.feedData.count > 0) {
-                    [Feed archiveObject:feeds];
-                    [[AnalyticManager sharedManager] trackMixPanelWithDict:@"New Feed Item" withDict:@{}];
-                }
             });
+            
+            if (self.feedData.count > 0) {
+                [Feed archiveObject:feeds];
+                [[AnalyticManager sharedManager] trackMixPanelWithDict:@"New Feed Item" withDict:@{}];
+            }
         }
         
         if (completion) {
@@ -414,6 +415,10 @@
 
 #pragma mark - View
 - (void)setupSwipeableView {
+    if (![self.emptyView isDescendantOfView:self]) {
+        [self addSubview:self.emptyView];
+    }
+    
     if (![self.swipeableView isDescendantOfView:self]) {
         [self addSubview:self.swipeableView];
         
@@ -431,10 +436,6 @@
         
         [self addConstraints:horizontalConstraints];
         [self addConstraints:verticalConstraints];
-    }
-    
-    if (![self.emptyView isDescendantOfView:self]) {
-        [self addSubview:self.emptyView];
     }
 }
 
@@ -648,13 +649,20 @@
     self.isSwipedOut = YES;
     [self.swipeableView setUserInteractionEnabled:NO];
     
+    ShadowView *shadowView = (ShadowView*)view;
+    FeedCardView *cardView = (FeedCardView *)shadowView.subviews.lastObject;
+    Feed *feed = cardView.feed;
+    
+    [self.feedData removeObject:feed];
+    [Feed archiveObject:self.feedData];
+    
+    if (self.feedData.count == 10) {
+        [self loadDataAndShowHUD:NO withCompletionHandler:nil];
+    }
+    
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW,
                                  (int64_t)(0.7 * NSEC_PER_SEC)),
                    dispatch_get_main_queue(), ^{
-                       if (!self.swipeableView.topView) {
-                           [self loadDataAndShowHUD:NO withCompletionHandler:nil];
-                       }
-                       
                        [self.swipeableView setUserInteractionEnabled:YES];
                    });
 }
