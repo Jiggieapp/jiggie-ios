@@ -15,11 +15,6 @@
 #import "JGTooltipHelper.h"
 
 
-///REMOVE THIS WHEN LIVE
-//#import "GSTouchesShowingWindow.h"
-///REMOVE THIS WHEN LIVE
-
-
 @interface AppDelegate ()
 @end
 
@@ -30,19 +25,7 @@ static NSString *const kAllowTracking = @"allowTracking";
 
 @implementation AppDelegate
 
-
-///REMOVE THIS WHEN LIVE
-/*
-- (GSTouchesShowingWindow *)window {
-    static GSTouchesShowingWindow *window = nil;
-    if (!window) {
-        window = [[GSTouchesShwingWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    }
-    return window;
-}
- */
-///REMOVE THIS WHEN LIVE
-
+#pragma mark - UIApplicationDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
@@ -63,21 +46,15 @@ static NSString *const kAllowTracking = @"allowTracking";
     
     [self checkIfHasAPN];
     
-    //[[AppsFlyerTracker sharedTracker].customerUserID =@"YOUR_CUSTOM_DEVICE_ID"];
-    
     NSDictionary *appDefaults = @{kAllowTracking: @(YES)};
     [[NSUserDefaults standardUserDefaults] registerDefaults:appDefaults];
+    
     [GAI sharedInstance].optOut =![[NSUserDefaults standardUserDefaults] boolForKey:kAllowTracking];
     [GAI sharedInstance].dispatchInterval = 1;
-    
     [GAI sharedInstance].trackUncaughtExceptions = YES;
-    //self.tracker = [[GAI sharedInstance] trackerWithName:@"PartyHostApp" trackingId:kTrackingId];
     
     [RFRateMe showRateAlertAfterTimesOpened:3];
-    //[Appsee start:@"ba0b4c483e6c4a3ebf9266d0db03e794"];
-    
-    
-    
+
     [FBSDKProfile enableUpdatesOnAccessTokenChange:YES];
     
     [[FBSDKApplicationDelegate sharedInstance] application:application
@@ -91,7 +68,6 @@ static NSString *const kAllowTracking = @"allowTracking";
 //    [[AFNetworkActivityLogger sharedLogger] startLogging];
 //    [[AFNetworkActivityLogger sharedLogger] setLevel:AFLoggerLevelDebug];
     
-    //[Crashlytics startWithAPIKey:@"1714fcc893d2312cb2b248ed57743517e718c399"];
     [Fabric with:@[[Crashlytics class]]];
     
     NSURL *launchUrl = [launchOptions objectForKey:UIApplicationLaunchOptionsURLKey];
@@ -104,8 +80,6 @@ static NSString *const kAllowTracking = @"allowTracking";
             if(dict[@"af_sub2"])
             {
                 self.sharedData.hasInitEventSelection = YES;
-//                self.sharedData.cInitHosting_id = dict[@"af_sub2"];
-//                self.sharedData.cHostingIdFromInvite = dict[@"af_sub2"];
                 
                 self.sharedData.cEventId_Feed = dict[@"af_sub2"];
                 self.sharedData.cEventId_Modal = dict[@"af_sub2"];
@@ -188,90 +162,10 @@ static NSString *const kAllowTracking = @"allowTracking";
     [VTConfig setCLIENT_KEY:VeritransClientKey];
     [VTConfig setVT_IsProduction:isVeritransInProducion];
     
-    //[self performSelector:@selector(testApp) withObject:nil afterDelay:5.0];
-    
     // set up tooltip
     [JGTooltipHelper setUpTooltip];
 
     return YES;
-}
-
--(void)testApp
-{
-    [self showChatNotification:@"sunny" withMessage:@"message" withImage:[self.sharedData profileImg:@"10152901432247953"]];
-}
-
--(void)checkIfHasAPN
-{
-    
-    if([self notificationServicesEnabled])
-    {
-        self.sharedData.APN_PERMISSION_STATE = @"ENABLED";
-        /*
-         NSLog(@"notificationServicesEnabled");
-         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Enabled" message:@"You have enabled push notifications" delegate:nil cancelButtonTitle:nil otherButtonTitles:@"Okay", nil];
-         [alert show];
-         */
-    }else{
-        self.sharedData.APN_PERMISSION_STATE = @"DISABLED";
-        /*
-         NSLog(@"notificationServicesDisabled");
-         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Disabled" message:@"You have disabled push notifications" delegate:nil cancelButtonTitle:nil otherButtonTitles:@"Okay", nil];
-         [alert show];
-         */
-    }
-    
-    
-    [self performSelector:@selector(checkApnAgain) withObject:nil afterDelay:8.0];
-}
-
--(void)checkApnAgain
-{
-    if(self.sharedData.isLoggedIn)
-    {
-        return;
-    }
- 
-        self.sharedData.apnToken = @"empty";
-        [[NSNotificationCenter defaultCenter]
-         postNotificationName:@"APN_LOADED"
-         object:self];
-}
-
--(BOOL)notificationServicesEnabled
-{
-    BOOL isEnabled = NO;
-    
-    if ([[UIApplication sharedApplication] respondsToSelector:@selector(currentUserNotificationSettings)])
-    {
-        UIUserNotificationSettings *notificationSettings = [[UIApplication sharedApplication] currentUserNotificationSettings];
-        
-        if(!notificationSettings || (notificationSettings.types == UIUserNotificationTypeNone))
-        {
-            isEnabled = NO;
-        }else
-        {
-            isEnabled = YES;
-        }
-    }else
-    {
-        UIRemoteNotificationType types = [[UIApplication sharedApplication] enabledRemoteNotificationTypes];
-        //if (types && (types == UIRemoteNotificationTypeAlert || types == UIRemoteNotificationTypeBadge || types ==UIRemoteNotificationTypeSound))
-        if(types != UIUserNotificationTypeNone)
-        {
-            isEnabled = YES;
-        } else{
-            isEnabled = NO;
-        }
-    }
-    
-    return isEnabled;
-}
-
-- (void)applicationWillResignActive:(UIApplication *)application
-{
-    // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
-    // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application
@@ -282,11 +176,6 @@ static NSString *const kAllowTracking = @"allowTracking";
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     [prefs removeObjectForKey:@"temp_da_list"];
     [prefs synchronize];
-}
-
-- (void)applicationWillEnterForeground:(UIApplication *)application
-{
-    // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
@@ -311,32 +200,13 @@ static NSString *const kAllowTracking = @"allowTracking";
     }
     
     self.inAskingAPNMode = NO;
-    //UPDATE_CONVERSATION_LIST
-    
-    
-    
+
     //[AppsFlyerTracker sharedTracker].isHTTPS = YES;
     [[AppsFlyerTracker sharedTracker] trackAppLaunch];
-    
-    
     [AppsFlyerTracker sharedTracker].delegate = self;
     
     // Load all Tags
     [[UserManager sharedManager] loadAllTags];
-    
-    /*
-    NSString *idfaString = [[[ASIdentifierManager sharedManager] advertisingIdentifier] UUIDString];
-    [AppsFlyerTracker sharedTracker].appsFlyerDevKey = @"Rkuw6TCpCtAMpUicmEUz27";
-    [AppsFlyerTracker sharedTracker].appleAppID = @"906484188";
-    [AppsFlyerTracker sharedTracker].customerUserID = idfaString;
-    [AppsFlyerTracker sharedTracker].delegate = self;
-    //[AppsFlyerTracker sharedTracker].isHTTPS = YES;
-    [[AppsFlyerTracker sharedTracker] trackAppLaunch];
-    NSLog(@"idfaString :: %@",idfaString);
-    */
-    
-    
-    //[self.sharedData trackMixPanel:@"ios-party-host-open"];
     
     if(self.sharedData.isLoggedIn)
     {
@@ -396,9 +266,7 @@ static NSString *const kAllowTracking = @"allowTracking";
     [prefs synchronize];
 }
 
-- (BOOL)application:(UIApplication *)application
-continueUserActivity:(NSUserActivity *)userActivity
- restorationHandler:(void (^)(NSArray *restorableObjects))restorationHandler {
+- (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray *restorableObjects))restorationHandler {
 
     if (userActivity.activityType == NSUserActivityTypeBrowsingWeb) {
         NSURL *url = userActivity.webpageURL;
@@ -427,8 +295,6 @@ continueUserActivity:(NSUserActivity *)userActivity
   sourceApplication:(NSString *)sourceApplication
          annotation:(id)annotation
 {
-    
-    NSLog(@"URL :: %@",url.absoluteString);
     if(contains(url.absoluteString,@"jiggie://"))
     {
         if(self.sharedData.isLoggedIn)
@@ -436,27 +302,12 @@ continueUserActivity:(NSUserActivity *)userActivity
             NSDictionary *dict = [self.sharedData parseQueryString:[url query]];
             if(dict[@"af_sub2"])
             {
-//                self.sharedData.cInitHosting_id = dict[@"af_sub2"];
-//                
-//                self.sharedData.cHostingIdFromInvite = dict[@"af_sub2"];
-//                self.sharedData.hasInitEventSelection = NO;
-//
-//                [[NSNotificationCenter defaultCenter]
-//                 postNotificationName:@"SHOW_HOST_VENUE_DETAIL_FROM_SHARE"
-//                 object:self];
-                
                 self.sharedData.cEventId_Feed = dict[@"af_sub2"];
                 self.sharedData.cEventId_Modal = dict[@"af_sub2"];
                 
                 [[NSNotificationCenter defaultCenter]
                  postNotificationName:@"SHOW_EVENT_DETAIL"
                  object:self];
-                
-                /*
-                 [[NSNotificationCenter defaultCenter]
-                 postNotificationName:@"GO_TO_INIT_HOSTING"
-                 object:self];
-                 */
             }
         }
         return YES;
@@ -470,12 +321,202 @@ continueUserActivity:(NSUserActivity *)userActivity
                                                           openURL:url
                                                 sourceApplication:sourceApplication
                                                        annotation:annotation];
-    
-    //return YES;
-    // attempt to extract a token from the url
-    //return [FBAppCall handleOpenURL:url sourceApplication:sourceApplication];
 }
 
+- (void)application:(UIApplication*)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData*)deviceToken
+{
+    NSString *token = [[deviceToken description] stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"<>"]];
+    token = [token stringByReplacingOccurrencesOfString:@" " withString:@""];
+//    NSLog(@"APN - %@", token);
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setObject:token forKey:@"USER_APN"];
+    [defaults synchronize];
+    self.apnToken = token;
+    self.sharedData.apnToken  = token;
+    
+    if(self.sharedData.isInAskingNotification)
+    {
+        [[NSNotificationCenter defaultCenter]
+         postNotificationName:@"HIDE_LOADING"
+         object:nil];
+    }
+    
+    self.sharedData.isInAskingNotification = NO;
+    
+    if(self.sharedData.isLoggedIn)
+    {
+        [self syncAPN];
+    }
+}
+
+- (void)application:(UIApplication *)application didRegisterUserNotificationSettings:(UIUserNotificationSettings *)notificationSettings
+{
+    //register to receive notifications
+    [application registerForRemoteNotifications];
+}
+
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
+{
+    if(!self.sharedData.isLoggedIn)
+    {
+        return;
+    }
+    
+//    NSLog(@"APS PAYLOAD : %@", userInfo);
+    
+    if ( application.applicationState == UIApplicationStateActive ) {
+        // app was already in the foreground
+        
+        if([[userInfo objectForKey:@"type"]  isEqualToString:@"message"])
+        {
+            
+            self.sharedData.fromMailId = [userInfo objectForKey:@"fromFBId"];
+            self.sharedData.fromMailName = [userInfo objectForKey:@"fromName"];
+            
+            if(self.sharedData.isInConversation && [self.sharedData.conversationId isEqualToString:self.sharedData.fromMailId])
+            {
+                [[NSNotificationCenter defaultCenter]
+                 postNotificationName:@"UPDATE_CURRENT_CONVERSATION"
+                 object:self];
+            }else{
+                [[NSNotificationCenter defaultCenter]
+                 postNotificationName:@"UPDATE_CONVERSATION_LIST"
+                 object:self];
+                
+                if(!self.isShowNotification)
+                {
+                    [self showChatNotification:[userInfo objectForKey:@"fromName"] withMessage:[userInfo objectForKey:@"message"] withImage:[self.sharedData profileImg:self.sharedData.fromMailId]];
+                }
+            }
+        }
+    }
+    else {
+        if([[userInfo objectForKey:@"type"]  isEqualToString:@"general"])
+        {
+            // app was just brought from background to foreground
+            [[NSNotificationCenter defaultCenter]
+             postNotificationName:@"SHOW_EVENTS"
+             object:self];
+            
+        } else if([[userInfo objectForKey:@"type"]  isEqualToString:@"event"])
+        {
+            self.sharedData.cEventId_Feed = [userInfo objectForKey:@"event_id"];
+            self.sharedData.cEventId_Modal = [userInfo objectForKey:@"event_id"];
+            
+            [[NSNotificationCenter defaultCenter]
+             postNotificationName:@"SHOW_EVENT_DETAIL"
+             object:self];
+            
+        } else if([[userInfo objectForKey:@"type"]  isEqualToString:@"match"])
+        {
+            // app was just brought from background to foreground
+            self.sharedData.fromMailId = [userInfo objectForKey:@"fromFBId"];
+            self.sharedData.fromMailName = [userInfo objectForKey:@"fromName"];
+            [self goToMessages];
+            
+        } else if([[userInfo objectForKey:@"type"]  isEqualToString:@"message"])
+        {
+            // app was just brought from background to foreground
+            self.sharedData.fromMailId = [userInfo objectForKey:@"fromFBId"];
+            self.sharedData.fromMailName = [userInfo objectForKey:@"fromName"];
+            [self goToMessages];
+            
+        } else if([[userInfo objectForKey:@"type"]  isEqualToString:@"social"])
+        {
+            [[NSNotificationCenter defaultCenter]
+             postNotificationName:@"SHOW_FEED"
+             object:self];
+            
+        } else if([[userInfo objectForKey:@"type"]  isEqualToString:@"chat"])
+        {
+            [[NSNotificationCenter defaultCenter]
+             postNotificationName:@"SHOW_CHAT"
+             object:self];
+        }
+    }
+}
+
+
+- (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error
+{
+    self.apnToken = @"empty";
+    self.sharedData.apnToken  = @"empty";
+    
+    [[NSNotificationCenter defaultCenter]
+     postNotificationName:@"APN_LOADED"
+     object:self];
+    
+//    NSLog(@"APN_ERROR :: %@",[NSString stringWithFormat:@"APN ERR : %@", error.description]);
+}
+
+#pragma mark - Notification
+
+-(void)checkIfHasAPN
+{
+    
+    if([self notificationServicesEnabled])
+    {
+        self.sharedData.APN_PERMISSION_STATE = @"ENABLED";
+        /*
+         NSLog(@"notificationServicesEnabled");
+         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Enabled" message:@"You have enabled push notifications" delegate:nil cancelButtonTitle:nil otherButtonTitles:@"Okay", nil];
+         [alert show];
+         */
+    }else{
+        self.sharedData.APN_PERMISSION_STATE = @"DISABLED";
+        /*
+         NSLog(@"notificationServicesDisabled");
+         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Disabled" message:@"You have disabled push notifications" delegate:nil cancelButtonTitle:nil otherButtonTitles:@"Okay", nil];
+         [alert show];
+         */
+    }
+    
+    
+    [self performSelector:@selector(checkApnAgain) withObject:nil afterDelay:8.0];
+}
+
+-(void)checkApnAgain
+{
+    if(self.sharedData.isLoggedIn)
+    {
+        return;
+    }
+    
+    self.sharedData.apnToken = @"empty";
+    [[NSNotificationCenter defaultCenter]
+     postNotificationName:@"APN_LOADED"
+     object:self];
+}
+
+-(BOOL)notificationServicesEnabled
+{
+    BOOL isEnabled = NO;
+    
+    if ([[UIApplication sharedApplication] respondsToSelector:@selector(currentUserNotificationSettings)])
+    {
+        UIUserNotificationSettings *notificationSettings = [[UIApplication sharedApplication] currentUserNotificationSettings];
+        
+        if(!notificationSettings || (notificationSettings.types == UIUserNotificationTypeNone))
+        {
+            isEnabled = NO;
+        }else
+        {
+            isEnabled = YES;
+        }
+    }else
+    {
+        UIRemoteNotificationType types = [[UIApplication sharedApplication] enabledRemoteNotificationTypes];
+        //if (types && (types == UIRemoteNotificationTypeAlert || types == UIRemoteNotificationTypeBadge || types ==UIRemoteNotificationTypeSound))
+        if(types != UIUserNotificationTypeNone)
+        {
+            isEnabled = YES;
+        } else{
+            isEnabled = NO;
+        }
+    }
+    
+    return isEnabled;
+}
 
 -(void)syncAPN
 {
@@ -519,174 +560,6 @@ continueUserActivity:(NSUserActivity *)userActivity
     }
 
 }
-
-- (void)application:(UIApplication*)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData*)deviceToken
-{
-    NSString *token = [[deviceToken description] stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"<>"]];
-    token = [token stringByReplacingOccurrencesOfString:@" " withString:@""];
-    NSLog(@"APN - %@", token);
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    [defaults setObject:token forKey:@"USER_APN"];
-    [defaults synchronize];
-    self.apnToken = token;
-    self.sharedData.apnToken  = token;
-    
-    //UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"YES" message:self.sharedData.apnToken delegate:nil cancelButtonTitle:@"Cancel" otherButtonTitles:@"Okay", nil];
-    //[alert show];
-    /*
-    [[NSNotificationCenter defaultCenter]
-     postNotificationName:@"APN_LOADED"
-     object:self];
-    */
-    
-    if(self.sharedData.isInAskingNotification)
-    {
-        [[NSNotificationCenter defaultCenter]
-         postNotificationName:@"HIDE_LOADING"
-         object:nil];
-    }
-    
-    self.sharedData.isInAskingNotification = NO;
-    
-    if(self.sharedData.isLoggedIn)
-    {
-        [self syncAPN];
-    }
-    
-    /*
-    [[NSNotificationCenter defaultCenter]
-     postNotificationName:@"APN_ASKING_DONE"
-     object:nil];
-    */
-}
-
-- (void)application:(UIApplication *)application didRegisterUserNotificationSettings:(UIUserNotificationSettings *)notificationSettings
-{
-    //register to receive notifications
-    [application registerForRemoteNotifications];
-}
-
-
--(void)application:(UIApplication *)application handleActionWithIdentifier:(NSString *)identifier forRemoteNotification:(NSDictionary *)userInfo completionHandler:(void(^)())completionHandler
-{
-    //handle the actions
-    if ([identifier isEqualToString:@"declineAction"])
-    {
-        
-    }
-    else if ([identifier isEqualToString:@"answerAction"])
-    {
-        
-    }
-}
-
-- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
-{
-    if(!self.sharedData.isLoggedIn)
-    {
-        return;
-    }
-    
-    NSLog(@"APS PAYLOAD : %@", userInfo);
-    
-    if ( application.applicationState == UIApplicationStateActive ) {
-        // app was already in the foreground
-        
-        if([[userInfo objectForKey:@"type"]  isEqualToString:@"message"])
-        {
-            
-            self.sharedData.fromMailId = [userInfo objectForKey:@"fromFBId"];
-            self.sharedData.fromMailName = [userInfo objectForKey:@"fromName"];
-
-            if(self.sharedData.isInConversation && [self.sharedData.conversationId isEqualToString:self.sharedData.fromMailId])
-            {
-                [[NSNotificationCenter defaultCenter]
-                 postNotificationName:@"UPDATE_CURRENT_CONVERSATION"
-                 object:self];
-            }else{
-                [[NSNotificationCenter defaultCenter]
-                 postNotificationName:@"UPDATE_CONVERSATION_LIST"
-                 object:self];
-
-                if(!self.isShowNotification)
-                {
-                    [self showChatNotification:[userInfo objectForKey:@"fromName"] withMessage:[userInfo objectForKey:@"message"] withImage:[self.sharedData profileImg:self.sharedData.fromMailId]];
-                }
-            }
-            
-        }
-    }
-    else {
-        if([[userInfo objectForKey:@"type"]  isEqualToString:@"general"])
-        {
-            // app was just brought from background to foreground
-            [[NSNotificationCenter defaultCenter]
-             postNotificationName:@"SHOW_EVENTS"
-             object:self];
-            
-        } else if([[userInfo objectForKey:@"type"]  isEqualToString:@"event"])
-        {
-            self.sharedData.cEventId_Feed = [userInfo objectForKey:@"event_id"];
-            self.sharedData.cEventId_Modal = [userInfo objectForKey:@"event_id"];
-            
-            [[NSNotificationCenter defaultCenter]
-             postNotificationName:@"SHOW_EVENT_DETAIL"
-             object:self];
-         
-        } else if([[userInfo objectForKey:@"type"]  isEqualToString:@"match"])
-        {
-            // app was just brought from background to foreground
-            self.sharedData.fromMailId = [userInfo objectForKey:@"fromFBId"];
-            self.sharedData.fromMailName = [userInfo objectForKey:@"fromName"];
-            [self goToMessages];
-            
-        } else if([[userInfo objectForKey:@"type"]  isEqualToString:@"message"])
-        {
-            // app was just brought from background to foreground
-            self.sharedData.fromMailId = [userInfo objectForKey:@"fromFBId"];
-            self.sharedData.fromMailName = [userInfo objectForKey:@"fromName"];
-            [self goToMessages];
-            
-        } else if([[userInfo objectForKey:@"type"]  isEqualToString:@"social"])
-        {
-            [[NSNotificationCenter defaultCenter]
-             postNotificationName:@"SHOW_FEED"
-             object:self];
-            
-        } else if([[userInfo objectForKey:@"type"]  isEqualToString:@"chat"])
-        {
-            [[NSNotificationCenter defaultCenter]
-             postNotificationName:@"SHOW_CHAT"
-             object:self];
-        }
-    }
-}
-
-
-- (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error
-{
-    self.apnToken = @"empty";
-    self.sharedData.apnToken  = @"empty";
-    
-    
-    //UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"APN_ERROR" message:@"" delegate:nil cancelButtonTitle:@"Cancel" otherButtonTitles:@"Okay", nil];
-    //[alert show];
-    
-    [[NSNotificationCenter defaultCenter]
-     postNotificationName:@"APN_LOADED"
-     object:self];
-    
-//    [self.sharedData.setupPage apnAskingDoneHandler];
-    /*
-    [[NSNotificationCenter defaultCenter]
-     postNotificationName:@"APN_ASKING_DONE"
-     object:self];
-    */
-    
-    NSLog(@"APN_ERROR :: %@",[NSString stringWithFormat:@"APN ERR : %@", error.description]);
-}
-
-
 
 -(void)showChatNotification:(NSString *)userName withMessage:(NSString *)message withImage:(NSString *)imgURL
 {
@@ -756,20 +629,6 @@ continueUserActivity:(NSUserActivity *)userActivity
      } completion:^(BOOL finished){
          [self performSelector:@selector(animateHideNotify) withObject:nil afterDelay:5.0];
      }];
-    
-    /*
-     UIView *tmpView = [[UIView alloc] initWithFrame:CGRectMake(0, -65, 320, 65)];
-     tmpView.backgroundColor = [UIColor purpleColor];
-     [self.window.rootViewController.view addSubview:tmpView];
-     
-     [UIView animateWithDuration:0.5 animations:^()
-     {
-     tmpView.frame = CGRectMake(0, 0, 320, 65);
-     }];
-     */
-    
-    
-    //[self checkMessages];
 }
 
 
@@ -862,12 +721,11 @@ continueUserActivity:(NSUserActivity *)userActivity
 }
 
 
-#pragma AppsFlyerTrackerDelegate methods
+#pragma mark - AppsFlyerTrackerDelegate
 - (void)onConversionDataReceived:(NSDictionary*) installData {
     
-    NSLog(@"RECEIVE_INSTALL DATA :: %@",installData);
-    
-    
+//    NSLog(@"RECEIVE_INSTALL DATA :: %@",installData);
+
     id status = [installData objectForKey:@"af_status"];
     
     if(self.sharedData.didAppsFlyerLoad == YES)
@@ -989,7 +847,6 @@ continueUserActivity:(NSUserActivity *)userActivity
     if (managedObjectModel != nil) {
         return managedObjectModel;
     }
-//    managedObjectModel = [NSManagedObjectModel mergedModelFromBundles:nil];
     
     // use this code on versioned models:
     NSString *path = [[NSBundle mainBundle] pathForResource:@"Jiggie" ofType:@"momd"];
