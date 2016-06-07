@@ -417,16 +417,6 @@
             }
         }
         
-        /*
-         //SHOW HOST VENUE DETAIL FROM HARE AS A TEST
-        self.sharedData.cInitHosting_id = @"55d387422e351903005b8ca8";
-        self.sharedData.cHostingIdFromInvite = @"55d387422e351903005b8ca8";
-        self.sharedData.hasInitEventSelection = NO;
-        [[NSNotificationCenter defaultCenter]
-         postNotificationName:@"SHOW_HOST_VENUE_DETAIL_FROM_SHARE"
-         object:self];
-        */
-        
         //SHOW POPUP
         if(self.sharedData.cPageIndex==0)
         {
