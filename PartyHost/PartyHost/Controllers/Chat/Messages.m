@@ -1487,15 +1487,11 @@
     self.confirmArea.backgroundColor = backgroundColor;
 }
 
-
-///TEXTVIEW
-
-#pragma mark - UITableViewDelegate
+#pragma mark - UITextViewDelegate
 - (BOOL)textViewShouldBeginEditing:(UITextView *)aTextView
 {
     return YES;
 }
-
 
 - (void)textViewDidBeginEditing:(UITextView *)textView
 {
