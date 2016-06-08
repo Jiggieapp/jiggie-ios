@@ -80,11 +80,11 @@
     //Cancel button
     self.btnCity = [UIButton buttonWithType:UIButtonTypeCustom];
     self.btnCity.frame = CGRectMake(8, 0, 80, 40);
-    self.btnCity.titleLabel.font = [UIFont phBold:11];
+    self.btnCity.titleLabel.font = [UIFont phBold:13];
     self.btnCity.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
     [self.btnCity setTitle:@"JKT" forState:UIControlStateNormal];
-    [self.btnCity setTitleColor:[UIColor phLightGrayColor] forState:UIControlStateNormal];
-    self.btnCity.userInteractionEnabled = NO;
+    [self.btnCity setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [self.btnCity addTarget:self action:@selector(goToCityList) forControlEvents:UIControlEventTouchUpInside];
     [self.tabBar addSubview:self.btnCity];
     
     self.btnFilter = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -1384,6 +1384,11 @@ shouldDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
 }
 
 #pragma mark - Navigations
+
+- (void)goToCityList {
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"SHOW_CITY_LIST"
+                                                        object:nil];
+}
 
 -(void)goHome
 {

@@ -20,6 +20,7 @@
 #import "InviteViewController.h"
 #import "PromotionsViewController.h"
 #import "InviteFriendsViewController.h"
+#import "CityListViewController.h"
 
 @interface ViewController ()
 
@@ -184,6 +185,12 @@
      addObserver:self
      selector:@selector(showPromotions:)
      name:@"SHOW_PROMOTIONS"
+     object:nil];
+    
+    [[NSNotificationCenter defaultCenter]
+     addObserver:self
+     selector:@selector(showCityList:)
+     name:@"SHOW_CITY_LIST"
      object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserverForName:
@@ -743,6 +750,12 @@
                                                                             action:nil];
     
     [self.navigationController pushViewController:[PromotionsViewController new] animated:YES];
+}
+
+#pragma mark - City List
+- (void)showCityList:(NSNotification *)notification {
+    UINavigationController *cityListNavigationController = [[UINavigationController alloc] initWithRootViewController:[CityListViewController new]];
+    [self presentViewController:cityListNavigationController animated:YES completion:nil];
 }
 
 - (void)didReceiveMemoryWarning

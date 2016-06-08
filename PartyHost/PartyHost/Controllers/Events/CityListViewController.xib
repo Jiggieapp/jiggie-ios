@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10116" systemVersion="15B42" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="CityListViewController">
+            <connections>
+                <outlet property="searchBar" destination="fBf-ne-7lt" id="YKE-Yj-aQn"/>
+                <outlet property="tableView" destination="sLb-xi-kaY" id="QXb-a6-Hiw"/>
+                <outlet property="tableViewBottomConstraint" destination="VYa-MW-uRx" id="IJC-Fr-Mhv"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="sLb-xi-kaY">
+                    <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <connections>
+                        <outlet property="delegate" destination="-1" id="2EI-lY-zbk"/>
+                    </connections>
+                </tableView>
+                <searchBar contentMode="redraw" placeholder="City Name" translatesAutoresizingMaskIntoConstraints="NO" id="fBf-ne-7lt">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                    <textInputTraits key="textInputTraits"/>
+                    <scopeButtonTitles>
+                        <string>Title</string>
+                        <string>Title</string>
+                    </scopeButtonTitles>
+                    <connections>
+                        <outlet property="delegate" destination="-1" id="ToN-Qg-EDB"/>
+                    </connections>
+                </searchBar>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstItem="sLb-xi-kaY" firstAttribute="top" secondItem="fBf-ne-7lt" secondAttribute="bottom" id="5kH-fD-Y7H"/>
+                <constraint firstItem="fBf-ne-7lt" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="EYN-H4-5nc"/>
+                <constraint firstAttribute="bottom" secondItem="sLb-xi-kaY" secondAttribute="bottom" id="VYa-MW-uRx"/>
+                <constraint firstAttribute="trailing" secondItem="fBf-ne-7lt" secondAttribute="trailing" id="abc-sR-wmg"/>
+                <constraint firstItem="fBf-ne-7lt" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="b44-em-geJ"/>
+                <constraint firstAttribute="trailing" secondItem="sLb-xi-kaY" secondAttribute="trailing" id="ezz-aY-HLM"/>
+                <constraint firstItem="sLb-xi-kaY" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="kzm-eR-v5g"/>
+            </constraints>
+            <nil key="simulatedStatusBarMetrics"/>
+            <variation key="default">
+                <mask key="subviews">
+                    <exclude reference="sLb-xi-kaY"/>
+                    <exclude reference="fBf-ne-7lt"/>
+                </mask>
+                <mask key="constraints">
+                    <exclude reference="EYN-H4-5nc"/>
+                    <exclude reference="abc-sR-wmg"/>
+                    <exclude reference="b44-em-geJ"/>
+                    <exclude reference="5kH-fD-Y7H"/>
+                    <exclude reference="VYa-MW-uRx"/>
+                    <exclude reference="ezz-aY-HLM"/>
+                    <exclude reference="kzm-eR-v5g"/>
+                </mask>
+            </variation>
+            <variation key="heightClass=regular-widthClass=compact">
+                <mask key="subviews">
+                    <include reference="sLb-xi-kaY"/>
+                    <include reference="fBf-ne-7lt"/>
+                </mask>
+                <mask key="constraints">
+                    <include reference="EYN-H4-5nc"/>
+                    <include reference="abc-sR-wmg"/>
+                    <include reference="b44-em-geJ"/>
+                    <include reference="5kH-fD-Y7H"/>
+                    <include reference="VYa-MW-uRx"/>
+                    <include reference="ezz-aY-HLM"/>
+                    <include reference="kzm-eR-v5g"/>
+                </mask>
+            </variation>
+        </view>
+    </objects>
+</document>
