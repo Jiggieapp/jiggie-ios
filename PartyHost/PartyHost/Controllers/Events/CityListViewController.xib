@@ -9,6 +9,7 @@
             <connections>
                 <outlet property="searchBar" destination="fBf-ne-7lt" id="YKE-Yj-aQn"/>
                 <outlet property="tableView" destination="sLb-xi-kaY" id="QXb-a6-Hiw"/>
+                <outlet property="tableViewBottomConstraint" destination="VYa-MW-uRx" id="IJC-Fr-Mhv"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -27,6 +28,10 @@
                 <searchBar contentMode="redraw" placeholder="City Name" translatesAutoresizingMaskIntoConstraints="NO" id="fBf-ne-7lt">
                     <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                     <textInputTraits key="textInputTraits"/>
+                    <scopeButtonTitles>
+                        <string>Title</string>
+                        <string>Title</string>
+                    </scopeButtonTitles>
                     <connections>
                         <outlet property="delegate" destination="-1" id="ToN-Qg-EDB"/>
                     </connections>
