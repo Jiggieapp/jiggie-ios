@@ -515,6 +515,8 @@
         creditHeight += 30;
     }
     
+    NSString *sale_type = [self.productList objectForKey:@"sale_type"];
+    
     UIImageView *lineDot1View = [[UIImageView alloc] initWithFrame:CGRectMake(self.visibleSize.width - 120, creditHeight, 100, 1)];
     [lineDot1View setImage:[UIImage imageNamed:@"line_dot"]];
     [self.scrollView addSubview:lineDot1View];
@@ -523,7 +525,11 @@
     [estimatedLabel setFont:[UIFont phBlond:13]];
     [estimatedLabel setTextColor:[UIColor darkGrayColor]];
     [estimatedLabel setBackgroundColor:[UIColor clearColor]];
-    [estimatedLabel setText:@"Estimated Total"];
+    if (sale_type != nil && [sale_type isEqualToString:@"exact"]) {
+        [estimatedLabel setText:@"Total"];
+    } else {
+        [estimatedLabel setText:@"Estimated Total"];
+    }
     [self.scrollView addSubview:estimatedLabel];
     
     UILabel *estimatedPrice = [[UILabel alloc] initWithFrame:CGRectMake(self.visibleSize.width - 140, CGRectGetMaxY(lineDot1View.frame) + 14, 120, 20)];
@@ -545,7 +551,11 @@
     [requiredLabel setFont:[UIFont phBlond:13]];
     [requiredLabel setTextColor:[UIColor blackColor]];
     [requiredLabel setBackgroundColor:[UIColor clearColor]];
-    [requiredLabel setText:@"Required Deposit"];
+    if (sale_type != nil && [sale_type isEqualToString:@"exact"]) {
+        [requiredLabel setText:@"Deposit"];
+    } else {
+        [requiredLabel setText:@"Required Deposit"];
+    }
     [self.scrollView addSubview:requiredLabel];
     
     self.requiredPrice = [[UILabel alloc] initWithFrame:CGRectMake(self.visibleSize.width - 140, CGRectGetMaxY(lineDot1View.frame) + 14 + 30, 120, 20)];
@@ -570,7 +580,11 @@
     [balanceLabel setFont:[UIFont phBlond:13]];
     [balanceLabel setTextColor:[UIColor darkGrayColor]];
     [balanceLabel setBackgroundColor:[UIColor clearColor]];
-    [balanceLabel setText:@"Estimated Balance (pay at venue)"];
+    if (sale_type != nil && [sale_type isEqualToString:@"exact"]) {
+        [balanceLabel setText:@"Balance (pay at venue)"];
+    } else {
+        [balanceLabel setText:@"Estimated Balance (pay at venue)"];
+    }
     [self.scrollView addSubview:balanceLabel];
     
     self.balancePrice = [[UILabel alloc] initWithFrame:CGRectMake(self.visibleSize.width - 140, CGRectGetMaxY(lineDot2View.frame) + 14, 120, 20)];

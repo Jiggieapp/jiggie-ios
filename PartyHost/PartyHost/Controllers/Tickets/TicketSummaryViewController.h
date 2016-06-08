@@ -35,7 +35,7 @@
 @property (nonatomic, assign) BOOL isAllowToContinue;
 @property (nonatomic, assign) BOOL isSoldOut;
 @property (nonatomic, assign) NSInteger bookTableExtraCharge;
-@property (nonatomic, assign) BOOL allowExactPrice;
-@property (nonatomic, strong) NSString *errorType;
+@property (nonatomic, copy) NSString *saleType;
+@property (nonatomic, copy) NSString *errorType;
 
 @end
