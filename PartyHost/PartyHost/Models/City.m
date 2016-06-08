@@ -13,7 +13,9 @@
 + (NSDictionary *)JSONKeyPathsByPropertyKey {
     return @{@"identifier" : @"_id",
              @"country" : @"country",
-             @"name" : @"city"};
+             @"name" : @"city",
+             @"initial" : @"initial",
+             @"GMT" : @"tz"};
 }
 
 + (void)retrieveCitiesWithCompletionHandler:(CitiesCompletionHandler)completion {

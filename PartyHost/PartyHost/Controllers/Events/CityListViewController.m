@@ -10,6 +10,7 @@
 #import "JGKeyboardNotificationHelper.h"
 #import "SVProgressHUD.h"
 #import "City.h"
+#import "Mantle.h"
 
 @interface CityListViewController () <UISearchBarDelegate, UITableViewDelegate, UITableViewDataSource>
 
@@ -164,17 +165,39 @@
         [[cell textLabel] setText:[city.name capitalizedString]];
     }
     
+    City *currentCity = [MTLJSONAdapter modelOfClass:[City class]
+                                  fromJSONDictionary:[[NSUserDefaults standardUserDefaults]
+                                                      objectForKey:@"CurrentCity"]
+                                               error:nil];
+    
+    if ([city.initial isEqualToString:currentCity.initial]) {
+        [cell setAccessoryType:UITableViewCellAccessoryCheckmark];
+    } else {
+        if (!currentCity && [city.initial isEqualToString:@"JKT"]) {
+            [cell setAccessoryType:UITableViewCellAccessoryCheckmark];
+        } else {
+            [cell setAccessoryType:UITableViewCellAccessoryNone];
+        }
+    }
+    
     return cell;
 }
 
 #pragma mark - UITableViewDelegate
--(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:[tableView indexPathForSelectedRow] animated:YES];
     
     City *city = self.cities[indexPath.row];
     
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"SelectedCity"
-                                                        object:city];
+    NSDictionary *currentCity = [MTLJSONAdapter JSONDictionaryFromModel:city error:nil];
+    
+    [[NSUserDefaults standardUserDefaults] setObject:currentCity forKey:@"CurrentCity"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    
+    [tableView reloadData];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"SELECTED_CITY"
+                                                        object:currentCity];
     
     [self dismissViewControllerAnimated:YES completion:nil];
 }

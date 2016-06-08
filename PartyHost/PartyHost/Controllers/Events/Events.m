@@ -17,6 +17,8 @@
 #import "JDFTooltips.h"
 #import "JGTooltipHelper.h"
 #import "JGKeyboardNotificationHelper.h"
+#import "City.h"
+#import "Mantle.h"
 
 #define SCREENS_DEEP 4
 
@@ -82,7 +84,13 @@
     self.btnCity.frame = CGRectMake(8, 0, 80, 40);
     self.btnCity.titleLabel.font = [UIFont phBold:13];
     self.btnCity.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-    [self.btnCity setTitle:@"JKT" forState:UIControlStateNormal];
+    
+    City *city = [MTLJSONAdapter modelOfClass:[City class]
+                           fromJSONDictionary:[[NSUserDefaults standardUserDefaults]
+                                               objectForKey:@"CurrentCity"]
+                                        error:nil];
+    
+    [self.btnCity setTitle:city ? city.initial : @"JKT" forState:UIControlStateNormal];
     [self.btnCity setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [self.btnCity addTarget:self action:@selector(goToCityList) forControlEvents:UIControlEventTouchUpInside];
     [self.tabBar addSubview:self.btnCity];
@@ -304,6 +312,12 @@
      addObserver:self
      selector:@selector(goToSummary)
      name:@"EVENTS_GO_GUEST_SUMMARY"
+     object:nil];
+    
+    [[NSNotificationCenter defaultCenter]
+     addObserver:self
+     selector:@selector(updateCity:)
+     name:@"SELECTED_CITY"
      object:nil];
     
     /*
@@ -545,6 +559,13 @@
     for (Event *oldEvent in oldEvents) {
         [self.managedObjectContext deleteObject:oldEvent];
     }
+}
+
+- (void)updateCity:(NSNotification *)notification {
+    City *city = [MTLJSONAdapter modelOfClass:[City class]
+                           fromJSONDictionary:notification.object error:nil];
+    
+    [self.btnCity setTitle:city.initial forState:UIControlStateNormal];
 }
 
 #pragma mark - API
