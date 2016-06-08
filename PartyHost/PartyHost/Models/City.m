@@ -47,4 +47,26 @@
     }];
 }
 
+#pragma mark - Archive
++ (NSString *)pathToArchiveCities {
+    return [[[[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory
+                                                     inDomains:NSUserDomainMask] lastObject]
+             URLByAppendingPathComponent:@"cities.model"] path];
+}
+
++ (void)archiveCities:(NSArray *)cities {
+    [NSKeyedArchiver archiveRootObject:cities
+                                toFile:[City pathToArchiveCities]];
+}
+
++ (NSArray *)unarchiveCities {
+    return [NSKeyedUnarchiver unarchiveObjectWithFile:[City pathToArchiveCities]];
+}
+
++ (void)removeArchivedCities {
+    NSError *error = nil;
+    [[NSFileManager defaultManager] removeItemAtPath:[City pathToArchiveCities]
+                                               error:&error];
+}
+
 @end

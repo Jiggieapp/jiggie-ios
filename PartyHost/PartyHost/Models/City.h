@@ -17,4 +17,9 @@
 
 + (void)retrieveCitiesWithCompletionHandler:(CitiesCompletionHandler)completion;
 
++ (NSString *)pathToArchiveCities;
++ (void)archiveCities:(NSArray *)cities;
++ (NSArray *)unarchiveCities;
++ (void)removeArchivedCities;
+
 @end
