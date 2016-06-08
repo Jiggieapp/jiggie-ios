@@ -88,8 +88,8 @@ static NSString *const kAllowTracking = @"allowTracking";
     [[AnalyticManager sharedManager] startAnalytics];
     
     // AFNetworking Debug Setting:
-//    [[AFNetworkActivityLogger sharedLogger] startLogging];
-//    [[AFNetworkActivityLogger sharedLogger] setLevel:AFLoggerLevelDebug];
+    [[AFNetworkActivityLogger sharedLogger] startLogging];
+    [[AFNetworkActivityLogger sharedLogger] setLevel:AFLoggerLevelDebug];
     
     //[Crashlytics startWithAPIKey:@"1714fcc893d2312cb2b248ed57743517e718c399"];
     [Fabric with:@[[Crashlytics class]]];
