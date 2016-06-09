@@ -107,6 +107,19 @@
         
         [self.tableView setDataSource:self];
         [self.tableView reloadData];
+        
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            [City retrieveCitiesWithCompletionHandler:^(NSArray *cities, NSInteger statusCode, NSError *error) {
+                if (cities) {
+                    if (cities.count > 0) {
+                        self.cities = cities;
+                        
+                        [City archiveCities:cities];
+                        [self.tableView reloadData];
+                    }
+                }
+            }];
+        });
     } else {
         [SVProgressHUD show];
         [City retrieveCitiesWithCompletionHandler:^(NSArray *cities, NSInteger statusCode, NSError *error) {
