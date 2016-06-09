@@ -15,7 +15,7 @@
              @"country" : @"country",
              @"name" : @"city",
              @"initial" : @"initial",
-             @"GMT" : @"tz"};
+             @"timeZone" : @"tz"};
 }
 
 + (void)retrieveCitiesWithCompletionHandler:(CitiesCompletionHandler)completion {

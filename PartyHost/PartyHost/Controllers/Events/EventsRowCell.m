@@ -8,6 +8,8 @@
 
 #import "EventsRowCell.h"
 #import "UIImageView+WebCache.h"
+#import "Mantle.h"
+#import "City.h"
 
 @implementation EventsRowCell
 
@@ -224,10 +226,21 @@
         self.startFromLabel.hidden = YES;
     }
     
+    City *city = [MTLJSONAdapter modelOfClass:[City class]
+                           fromJSONDictionary:[[NSUserDefaults standardUserDefaults]
+                                               objectForKey:@"CurrentCity"]
+                                        error:nil];
+    
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     [formatter setDateFormat:PHDateFormatApp];
     [formatter setLocale:[NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"]];
-    [formatter setTimeZone:[NSTimeZone localTimeZone]];
+    
+    if (city) {
+        [formatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:3600 * [city.timeZone integerValue]]];
+    } else {
+        [formatter setTimeZone:[NSTimeZone localTimeZone]];
+    }
+    
     self.date.text = [formatter stringFromDate:event.startDatetime];
     self.date.frame = CGRectMake(10, CGRectGetMaxY(self.title.frame) + 4, self.sharedData.screenWidth - 20, 20);
     

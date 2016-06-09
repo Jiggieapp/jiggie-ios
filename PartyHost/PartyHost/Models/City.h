@@ -15,7 +15,7 @@
 @property (copy, nonatomic, readonly) NSString *country;
 @property (copy, nonatomic, readonly) NSString *name;
 @property (copy, nonatomic, readonly) NSString *initial;
-@property (copy, nonatomic, readonly) NSNumber *GMT;
+@property (copy, nonatomic, readonly) NSNumber *timeZone;
 
 + (void)retrieveCitiesWithCompletionHandler:(CitiesCompletionHandler)completion;
 
