@@ -416,7 +416,7 @@
             [self reloadFetch:nil];
         }
         [self removeOldEvent];
-        [self loadData];
+        [self loadDataWithCompletionHandler:nil];
         
         NSArray *alltags = [UserManager allTags];
         if (alltags && alltags != nil) {
@@ -478,7 +478,7 @@
 - (void)refreshControlDidChange:(UIRefreshControl *)refreshControl {
     self.isReloadMode = YES;
     self.refreshControl = refreshControl;
-    [self loadData];
+    [self loadDataWithCompletionHandler:nil];
 }
 
 #pragma mark - Fetch
@@ -566,10 +566,24 @@
                            fromJSONDictionary:notification.object error:nil];
     
     [self.btnCity setTitle:city.initial forState:UIControlStateNormal];
+    
+    AFHTTPRequestOperationManager *manager = [self.sharedData getOperationManager];
+    NSString *url = [Constants memberSettingsURL];
+    NSDictionary *parameters = @{@"fb_id" : self.sharedData.fb_id,
+                                 @"area_event" : city.name};
+    
+    [SVProgressHUD show];
+    [manager POST:url parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        [self loadDataWithCompletionHandler:^(NSError *error) {
+            [SVProgressHUD dismiss];
+        }];
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        [SVProgressHUD dismiss];
+    }];
 }
 
 #pragma mark - API
--(void)loadData
+-(void)loadDataWithCompletionHandler:(void(^)(NSError* error))completion
 {
     AFHTTPRequestOperationManager *manager = [self.sharedData getOperationManager];
     //events/list/
@@ -579,6 +593,10 @@
      {
          NSString *responseString = operation.responseString;
          NSError *error;
+         
+         if (completion) {
+             completion(nil);
+         }
          
          NSInteger responseStatusCode = operation.response.statusCode;
          if (responseStatusCode == 204) {
@@ -761,11 +779,19 @@
                  
              } else {
                  [self.emptyView setMode:@"empty"];
+                 
+                 if (completion) {
+                     completion(nil);
+                 }
              }
          });
          
      } failure:^(AFHTTPRequestOperation *operation, NSError *error)
      {
+         if (completion) {
+             completion(error);
+         }
+         
          if (self.isReloadMode) {
              // Do your job, when done:
              [self.refreshControl endRefreshing];
@@ -1293,7 +1319,7 @@
     [manager POST:url parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject)
      {
          if(responseObject[@"response"]) {
-            [self loadData];
+            [self loadDataWithCompletionHandler:nil];
          }
          
      } failure:^(AFHTTPRequestOperation *operation, NSError *error)
@@ -1419,7 +1445,7 @@ shouldDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
          self.mainCon.frame = CGRectMake(0, 20, self.sharedData.screenWidth * SCREENS_DEEP, self.sharedData.screenHeight - 20);
      } completion:^(BOOL finished)
      {
-         [self loadData];
+         [self loadDataWithCompletionHandler:nil];
      }];
 }
 
