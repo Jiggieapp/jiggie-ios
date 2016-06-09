@@ -785,11 +785,16 @@
     
     for (Event *event in [self.fetchedResultsController fetchedObjects]) {
         components = [cal components:(NSCalendarUnitEra | NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay) fromDate:event.startDatetime];
-        NSDate *otherDate = [cal dateFromComponents:components];
+        NSDate *startDate = [cal dateFromComponents:components];
         
-        if([today isEqualToDate:otherDate]) {
+        components = [cal components:(NSCalendarUnitEra | NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay) fromDate:event.endDatetime];
+        NSDate *endDate = [cal dateFromComponents:components];
+        
+        if([today isEqualToDate:endDate]) {
             [self.eventsToday addObject:event];
-        } else if([tomorrow isEqualToDate:otherDate]) {
+        } else if([today isEqualToDate:startDate]) {
+            [self.eventsToday addObject:event];
+        } else if([tomorrow isEqualToDate:startDate]) {
             [self.eventsTomorrow addObject:event];
         } else {
             [self.eventsUpcoming addObject:event];

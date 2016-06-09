@@ -102,6 +102,11 @@
             }
         }
         
+        NSString *saleType = [data objectForKey:@"sale_type"];
+        if (saleType && [saleType isEqualToString:@"reserve"]) {
+            [self.ticketPrice setText:@"RESERVE"];
+        }
+        
         /*
          [self.ticketDescription setFrame:CGRectMake(14, 30, ticketTitleWidth, 20)];
          [self.ticketPerson setFrame:CGRectMake(self.cellWidth - 160, 30, 120, 20)];
