@@ -17,6 +17,8 @@
 #import "JDFTooltips.h"
 #import "JGTooltipHelper.h"
 #import "JGKeyboardNotificationHelper.h"
+#import "City.h"
+#import "Mantle.h"
 
 #define SCREENS_DEEP 4
 
@@ -82,9 +84,24 @@
     self.btnCity.frame = CGRectMake(8, 0, 80, 40);
     self.btnCity.titleLabel.font = [UIFont phBold:13];
     self.btnCity.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-    [self.btnCity setTitle:@"JKT" forState:UIControlStateNormal];
+    
+    City *city = [MTLJSONAdapter modelOfClass:[City class]
+                           fromJSONDictionary:[[NSUserDefaults standardUserDefaults]
+                                               objectForKey:@"CurrentCity"]
+                                        error:nil];
+    
+    
+    [self.btnCity setTitle:city ? city.initial : @"JKT" forState:UIControlStateNormal];
     [self.btnCity setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [self.btnCity addTarget:self action:@selector(goToCityList) forControlEvents:UIControlEventTouchUpInside];
+    
+    if ([City unarchiveCities]) {
+        UIImage *arrowImage = [UIImage imageNamed:@"icon_arrow_down"];
+        [self.btnCity setImage:arrowImage forState:UIControlStateNormal];
+        [self.btnCity setImage:arrowImage forState:UIControlStateHighlighted];
+        [self.btnCity setImageEdgeInsets:UIEdgeInsetsMake(0, (CGRectGetWidth(self.btnCity.bounds) - 25) - (arrowImage.size.width + 8), 0, 0)];
+        [self.btnCity addTarget:self action:@selector(goToCityList) forControlEvents:UIControlEventTouchUpInside];
+    }
+    
     [self.tabBar addSubview:self.btnCity];
     
     self.btnFilter = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -306,6 +323,12 @@
      name:@"EVENTS_GO_GUEST_SUMMARY"
      object:nil];
     
+    [[NSNotificationCenter defaultCenter]
+     addObserver:self
+     selector:@selector(updateCity:)
+     name:@"SELECTED_CITY"
+     object:nil];
+    
     /*
     [[NSNotificationCenter defaultCenter]
      addObserver:self
@@ -402,7 +425,7 @@
             [self reloadFetch:nil];
         }
         [self removeOldEvent];
-        [self loadData];
+        [self loadDataWithCompletionHandler:nil];
         
         NSArray *alltags = [UserManager allTags];
         if (alltags && alltags != nil) {
@@ -465,7 +488,7 @@
 - (void)refreshControlDidChange:(UIRefreshControl *)refreshControl {
     self.isReloadMode = YES;
     self.refreshControl = refreshControl;
-    [self loadData];
+    [self loadDataWithCompletionHandler:nil];
 }
 
 #pragma mark - Fetch
@@ -548,8 +571,36 @@
     }
 }
 
+- (void)updateCity:(NSNotification *)notification {
+    City *city = [MTLJSONAdapter modelOfClass:[City class]
+                           fromJSONDictionary:notification.object error:nil];
+    
+    UIImage *arrowImage = [UIImage imageNamed:@"icon_arrow_down"];
+    [self.btnCity setImage:arrowImage forState:UIControlStateNormal];
+    [self.btnCity setImage:arrowImage forState:UIControlStateHighlighted];
+    [self.btnCity setImageEdgeInsets:UIEdgeInsetsMake(0, (CGRectGetWidth(self.btnCity.bounds) - 25) - (arrowImage.size.width + 8), 0, 0)];
+    [self.btnCity addTarget:self action:@selector(goToCityList) forControlEvents:UIControlEventTouchUpInside];
+    
+    if (city) {
+        [self.btnCity setTitle:city.initial forState:UIControlStateNormal];
+        AFHTTPRequestOperationManager *manager = [self.sharedData getOperationManager];
+        NSString *url = [Constants memberSettingsURL];
+        NSDictionary *parameters = @{@"fb_id" : self.sharedData.fb_id,
+                                     @"area_event" : city.name};
+        
+        [SVProgressHUD show];
+        [manager POST:url parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+            [self loadDataWithCompletionHandler:^(NSError *error) {
+                [SVProgressHUD dismiss];
+            }];
+        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+            [SVProgressHUD dismiss];
+        }];
+    }
+}
+
 #pragma mark - API
--(void)loadData
+-(void)loadDataWithCompletionHandler:(void(^)(NSError* error))completion
 {
     AFHTTPRequestOperationManager *manager = [self.sharedData getOperationManager];
     //events/list/
@@ -559,6 +610,10 @@
      {
          NSString *responseString = operation.responseString;
          NSError *error;
+         
+         if (completion) {
+             completion(nil);
+         }
          
          NSInteger responseStatusCode = operation.response.statusCode;
          if (responseStatusCode == 204) {
@@ -741,11 +796,19 @@
                  
              } else {
                  [self.emptyView setMode:@"empty"];
+                 
+                 if (completion) {
+                     completion(nil);
+                 }
              }
          });
          
      } failure:^(AFHTTPRequestOperation *operation, NSError *error)
      {
+         if (completion) {
+             completion(error);
+         }
+         
          if (self.isReloadMode) {
              // Do your job, when done:
              [self.refreshControl endRefreshing];
@@ -1278,7 +1341,7 @@
     [manager POST:url parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject)
      {
          if(responseObject[@"response"]) {
-            [self loadData];
+            [self loadDataWithCompletionHandler:nil];
          }
          
      } failure:^(AFHTTPRequestOperation *operation, NSError *error)
@@ -1392,7 +1455,7 @@ shouldDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
          self.mainCon.frame = CGRectMake(0, 20, self.sharedData.screenWidth * SCREENS_DEEP, self.sharedData.screenHeight - 20);
      } completion:^(BOOL finished)
      {
-         [self loadData];
+         [self loadDataWithCompletionHandler:nil];
      }];
 }
 
