@@ -90,9 +90,18 @@
                                                objectForKey:@"CurrentCity"]
                                         error:nil];
     
+    
     [self.btnCity setTitle:city ? city.initial : @"JKT" forState:UIControlStateNormal];
     [self.btnCity setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [self.btnCity addTarget:self action:@selector(goToCityList) forControlEvents:UIControlEventTouchUpInside];
+    
+    if ([City unarchiveCities]) {
+        UIImage *arrowImage = [UIImage imageNamed:@"icon_arrow_down"];
+        [self.btnCity setImage:arrowImage forState:UIControlStateNormal];
+        [self.btnCity setImage:arrowImage forState:UIControlStateHighlighted];
+        [self.btnCity setImageEdgeInsets:UIEdgeInsetsMake(0, (CGRectGetWidth(self.btnCity.bounds) - 25) - (arrowImage.size.width + 8), 0, 0)];
+        [self.btnCity addTarget:self action:@selector(goToCityList) forControlEvents:UIControlEventTouchUpInside];
+    }
+    
     [self.tabBar addSubview:self.btnCity];
     
     self.btnFilter = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -565,21 +574,28 @@
     City *city = [MTLJSONAdapter modelOfClass:[City class]
                            fromJSONDictionary:notification.object error:nil];
     
-    [self.btnCity setTitle:city.initial forState:UIControlStateNormal];
+    UIImage *arrowImage = [UIImage imageNamed:@"icon_arrow_down"];
+    [self.btnCity setImage:arrowImage forState:UIControlStateNormal];
+    [self.btnCity setImage:arrowImage forState:UIControlStateHighlighted];
+    [self.btnCity setImageEdgeInsets:UIEdgeInsetsMake(0, (CGRectGetWidth(self.btnCity.bounds) - 25) - (arrowImage.size.width + 8), 0, 0)];
+    [self.btnCity addTarget:self action:@selector(goToCityList) forControlEvents:UIControlEventTouchUpInside];
     
-    AFHTTPRequestOperationManager *manager = [self.sharedData getOperationManager];
-    NSString *url = [Constants memberSettingsURL];
-    NSDictionary *parameters = @{@"fb_id" : self.sharedData.fb_id,
-                                 @"area_event" : city.name};
-    
-    [SVProgressHUD show];
-    [manager POST:url parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        [self loadDataWithCompletionHandler:^(NSError *error) {
+    if (city) {
+        [self.btnCity setTitle:city.initial forState:UIControlStateNormal];
+        AFHTTPRequestOperationManager *manager = [self.sharedData getOperationManager];
+        NSString *url = [Constants memberSettingsURL];
+        NSDictionary *parameters = @{@"fb_id" : self.sharedData.fb_id,
+                                     @"area_event" : city.name};
+        
+        [SVProgressHUD show];
+        [manager POST:url parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+            [self loadDataWithCompletionHandler:^(NSError *error) {
+                [SVProgressHUD dismiss];
+            }];
+        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
             [SVProgressHUD dismiss];
         }];
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        [SVProgressHUD dismiss];
-    }];
+    }
 }
 
 #pragma mark - API
