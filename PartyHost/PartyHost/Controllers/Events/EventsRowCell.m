@@ -8,6 +8,7 @@
 
 #import "EventsRowCell.h"
 #import "UIImageView+WebCache.h"
+#import "UserManager.h"
 
 @implementation EventsRowCell
 
@@ -205,7 +206,7 @@
     self.title.frame = CGRectMake(10, CGRectGetMaxY(self.mainImg.frame) + 14, self.sharedData.screenWidth - 20 - 70, 70);
     [self.title sizeToFit];
     
-    if ([event .fullfillmentType isEqualToString:@"ticket"]) {
+    if ([event.fullfillmentType isEqualToString:@"ticket"]) {
         if (event.lowestPrice.integerValue > 0) {
             SharedData *sharedData = [SharedData sharedInstance];
             NSString *formattedPrice = [sharedData formatCurrencyString:event.lowestPrice.stringValue];
@@ -243,8 +244,6 @@
                         placeholderImage:nil];
     }
     
-    NSLog(@"LOADING_IMG_URL :: %@ - %@", self.title.text, event.photo);
-    
     //remove all tags
     NSArray *viewsToRemove = [self.tagsView subviews];
     for (UIView *v in viewsToRemove) {
@@ -268,19 +267,7 @@
         [tagPil setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         tagPil.layer.cornerRadius = 10;
         
-        if ([tag isEqualToString:@"Featured"]) {
-            tagPil.backgroundColor = [UIColor colorFromHexCode:@"D9603E"];
-        } else if ([tag isEqualToString:@"Music"]) {
-            tagPil.backgroundColor = [UIColor colorFromHexCode:@"5E3ED9"];
-        } else if ([tag isEqualToString:@"Nightlife"]) {
-            tagPil.backgroundColor = [UIColor colorFromHexCode:@"4A555A"];
-        } else if ([tag isEqualToString:@"Food & Drink"]) {
-            tagPil.backgroundColor = [UIColor colorFromHexCode:@"DDC54D"];
-        } else if ([tag isEqualToString:@"Fashion"]) {
-            tagPil.backgroundColor = [UIColor colorFromHexCode:@"68CE49"];
-        } else {
-            tagPil.backgroundColor = [UIColor colorFromHexCode:@"ED4FC4"];
-        }
+        tagPil.backgroundColor = [UserManager colorForTag:tag];
         
         CGSize resizePill =  [self.sharedData sizeForLabelString:[tagPil titleForState:UIControlStateNormal]
                                                         withFont:tagPil.titleLabel.font

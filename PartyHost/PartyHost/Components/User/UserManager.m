@@ -171,4 +171,16 @@ static UserManager *_sharedManager = nil;
     return userSetting;
 }
 
++ (UIColor *)colorForTag:(NSString *)tagName {
+    NSArray *allTags = [self allTags];
+    for (NSDictionary *tag in allTags) {
+        NSString *name = [tag objectForKey:@"name"];
+        if ([name isEqualToString:tagName]) {
+            NSString *hexColor = [tag objectForKey:@"color"];
+            return [UIColor colorFromHexCode:hexColor];
+        }
+    }
+    return [UIColor phBlueColor];
+}
+
 @end

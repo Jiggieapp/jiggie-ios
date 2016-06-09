@@ -412,7 +412,8 @@
         self.filterTagCollection.frame = CGRectMake(6, 14, self.sharedData.screenWidth - 12, self.filterTagCollection.collectionViewLayout.collectionViewContentSize.height);
         
         for (int i = 0; i<self.tagArray.count; i++) {
-            if ([self.sharedData.experiences containsObject:[self.tagArray objectAtIndex:i]]) {
+            NSString *name = [self.tagArray objectAtIndex:i];
+            if ([self.sharedData.experiences containsObject:name]) {
                 [self.filterTagCollection selectItemAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0] animated:NO scrollPosition:UICollectionViewScrollPositionNone];
             }
         }
@@ -1297,7 +1298,7 @@
     static NSString *cellIdentifier = @"EventsSummaryTagCell";
     SetupPickViewCell *cell = (SetupPickViewCell*)[collectionView dequeueReusableCellWithReuseIdentifier:cellIdentifier forIndexPath:indexPath];
     
-    NSString *title = self.tagArray[indexPath.row];
+    NSString *title = [self.tagArray[indexPath.row] objectForKey:@"name"];
     [cell.button.button setTitle:title forState:UIControlStateNormal];
     cell.button.button.titleLabel.font = [UIFont phBold:12];
     cell.button.onTextColor = [UIColor whiteColor];
@@ -1305,20 +1306,8 @@
     cell.button.offTextColor = [UIColor whiteColor];
     cell.button.offBorderColor = [UIColor clearColor];
     cell.button.offBackgroundColor = [UIColor phGrayColor];
-    
-    if ([title isEqualToString:@"Featured"]) {
-        cell.button.onBackgroundColor = [UIColor colorFromHexCode:@"D9603E"];
-    } else if ([title isEqualToString:@"Music"]) {
-        cell.button.onBackgroundColor = [UIColor colorFromHexCode:@"5E3ED9"];
-    } else if ([title isEqualToString:@"Nightlife"]) {
-        cell.button.onBackgroundColor = [UIColor colorFromHexCode:@"4A555A"];
-    } else if ([title isEqualToString:@"Food & Drink"]) {
-        cell.button.onBackgroundColor = [UIColor colorFromHexCode:@"DDC54D"];
-    } else if ([title isEqualToString:@"Fashion"]) {
-        cell.button.onBackgroundColor = [UIColor colorFromHexCode:@"68CE49"];
-    } else {
-        cell.button.onBackgroundColor = [UIColor colorFromHexCode:@"ED4FC4"];
-    }
+    NSString *hexColor = [self.tagArray[indexPath.row] objectForKey:@"color"];
+    cell.button.onBackgroundColor = [UIColor colorFromHexCode:hexColor];
     
     [cell setNeedsLayout];
     [cell layoutIfNeeded];
@@ -1339,7 +1328,7 @@
 
 -(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
     
-    NSString *title = self.tagArray[indexPath.row];
+    NSString *title = [self.tagArray[indexPath.row] objectForKey:@"name"];
     NSDictionary *fontDict = @{NSFontAttributeName:[UIFont phBold:12]};
     CGSize stringSize = [title sizeWithAttributes:fontDict];
     
