@@ -1105,6 +1105,8 @@
             }
             
             if (sale_type && [sale_type isEqualToString:@"reserve"]) {
+                [self.bookingTicketPrice setText:@"RESERVED"];
+                
                 [self.bookingDiscountView setFrame:CGRectMake(0, self.bookingDiscountView.frame.origin.y, 0, 0)];
                 [self.bookingDepositView setFrame:CGRectMake(0, self.bookingDiscountView.frame.origin.y, 0, 0)];
                 

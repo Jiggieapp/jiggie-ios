@@ -74,7 +74,9 @@ NSInteger const MaxBookingTableGuest = 100;
     CGFloat bottomHeight = 140;
     if (sale_type != nil) {
         self.saleType = sale_type;
-        bottomHeight = 70;
+        if ([sale_type isEqualToString:@"reserve"]) {
+            bottomHeight = 70;
+        }
     }
     
     // SCROLL VIEW

@@ -113,9 +113,10 @@ int totalPages;
                  //Get choices and uppercase
                  NSMutableArray *arr = [[NSMutableArray alloc] init];
                  [self.sharedData.experiences removeAllObjects];
-                 for (NSString *tag in tagslist) {
+                 for (NSDictionary *tag in tagslist) {
                      [arr addObject:tag];
-                     [self.sharedData.experiences addObject:tag];
+                     NSString *name = [tag objectForKey:@"name"];
+                     [self.sharedData.experiences addObject:name];
                  }
                  
                  //Select all those picks now if exists

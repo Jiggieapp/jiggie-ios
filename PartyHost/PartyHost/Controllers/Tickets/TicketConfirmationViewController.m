@@ -369,6 +369,8 @@
     tmpPurpleView.backgroundColor = [UIColor phPurpleColor];
     [self.scrollView addSubview:tmpPurpleView];
     
+    NSString *sale_type = [self.productList objectForKey:@"sale_type"];
+    
     CGRect eventFrame = [self.eventTitleString boundingRectWithSize:CGSizeMake(self.view.bounds.size.width - 28, 40)
                                                              options:NSStringDrawingUsesLineFragmentOrigin
                                                           attributes:@{NSFontAttributeName:[UIFont phBlond:15]}
@@ -409,7 +411,11 @@
     [ticketTitle setFont:[UIFont phBlond:13]];
     [ticketTitle setTextColor:[UIColor darkGrayColor]];
     [ticketTitle setBackgroundColor:[UIColor clearColor]];
-    [ticketTitle setText:[NSString stringWithFormat:@"%@ (Estimate)",[self.productList objectForKey:@"name"]]];
+    if (sale_type && [sale_type isEqualToString:@"exact"]) {
+        [ticketTitle setText:[NSString stringWithFormat:@"%@",[self.productList objectForKey:@"name"]]];
+    } else {
+        [ticketTitle setText:[NSString stringWithFormat:@"%@ (Estimate)",[self.productList objectForKey:@"name"]]];
+    }
     [self.scrollView addSubview:ticketTitle];
     
     
@@ -514,8 +520,6 @@
         [self.scrollView addSubview:creditPrice];
         creditHeight += 30;
     }
-    
-    NSString *sale_type = [self.productList objectForKey:@"sale_type"];
     
     UIImageView *lineDot1View = [[UIImageView alloc] initWithFrame:CGRectMake(self.visibleSize.width - 120, creditHeight, 100, 1)];
     [lineDot1View setImage:[UIImage imageNamed:@"line_dot"]];
