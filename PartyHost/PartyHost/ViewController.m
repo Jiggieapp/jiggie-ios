@@ -350,7 +350,17 @@
     for (UIButton *navButton in self.dashboard.btnsA) {
         [navButton setEnabled:enable];
     }
+    
     [self.dashboard.eventsPage.btnFilter setEnabled:enable];
+    [self.dashboard.eventsPage.btnCity setEnabled:enable];
+    
+    if (enable) {
+        [self.dashboard.eventsPage.btnCity setTitleColor:[UIColor whiteColor]
+                                                forState:UIControlStateNormal];
+    } else {
+        [self.dashboard.eventsPage.btnCity setTitleColor:[UIColor phLightGrayColor]
+                                                forState:UIControlStateNormal];
+    }
 }
 
 -(void)checkIfPushIsEnabled
