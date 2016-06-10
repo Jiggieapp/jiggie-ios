@@ -406,8 +406,9 @@
     [self.scrollView addSubview:line1View];
     
     CGFloat ticketTitleWidth = self.visibleSize.width/2;
+    CGFloat offsetY = CGRectGetMaxY(line1View.frame) + 14;
     
-    UILabel *ticketTitle = [[UILabel alloc] initWithFrame:CGRectMake(18, CGRectGetMaxY(line1View.frame) + 14, ticketTitleWidth, 20)];
+    UILabel *ticketTitle = [[UILabel alloc] initWithFrame:CGRectMake(18, offsetY, ticketTitleWidth, 20)];
     [ticketTitle setFont:[UIFont phBlond:13]];
     [ticketTitle setTextColor:[UIColor darkGrayColor]];
     [ticketTitle setBackgroundColor:[UIColor clearColor]];
@@ -417,11 +418,10 @@
         [ticketTitle setText:[NSString stringWithFormat:@"%@ (Estimate)",[self.productList objectForKey:@"name"]]];
     }
     [self.scrollView addSubview:ticketTitle];
-    
-    
+
     SharedData *sharedData = [SharedData sharedInstance];
     
-    UILabel *ticketPrice = [[UILabel alloc] initWithFrame:CGRectMake(self.visibleSize.width - 140, CGRectGetMaxY(line1View.frame) + 14, 120, 20)];
+    UILabel *ticketPrice = [[UILabel alloc] initWithFrame:CGRectMake(self.visibleSize.width - 140, offsetY, 120, 20)];
     [ticketPrice setFont:[UIFont phBlond:13]];
     [ticketPrice setTextColor:[UIColor phPurpleColor]];
     [ticketPrice setBackgroundColor:[UIColor clearColor]];
@@ -430,14 +430,40 @@
     [ticketPrice setText:[NSString stringWithFormat:@"Rp%@",price]];
     [self.scrollView addSubview:ticketPrice];
     
-    UILabel *serviceChargeTitle = [[UILabel alloc] initWithFrame:CGRectMake(18, CGRectGetMaxY(line1View.frame) + 14 + 30, ticketTitleWidth, 20)];
+    offsetY+=30;
+    
+    NSString *extra_charge = [sharedData formatCurrencyString:[self.productList objectForKey:@"extra_charge"]];
+    if (extra_charge && extra_charge.integerValue > 0) {
+        UILabel *extraTitle = [[UILabel alloc] initWithFrame:CGRectMake(18, offsetY, ticketTitleWidth, 20)];
+        [extraTitle setFont:[UIFont phBlond:13]];
+        [extraTitle setTextColor:[UIColor darkGrayColor]];
+        [extraTitle setBackgroundColor:[UIColor clearColor]];
+        [extraTitle setText:@"Extra Charge"];
+        [self.scrollView addSubview:extraTitle];
+        
+        UILabel *extraPrice = [[UILabel alloc] initWithFrame:CGRectMake(self.visibleSize.width - 140, offsetY, 120, 20)];
+        [extraPrice setFont:[UIFont phBlond:13]];
+        [extraPrice setTextColor:[UIColor phPurpleColor]];
+        [extraPrice setBackgroundColor:[UIColor clearColor]];
+        [extraPrice setTextAlignment:NSTextAlignmentRight];
+        NSString *price = [sharedData formatCurrencyString:[self.productList objectForKey:@"extra_charge"]];
+        [extraPrice setText:[NSString stringWithFormat:@"Rp%@",price]];
+        [self.scrollView addSubview:extraPrice];
+        
+        NSString *total_price = [sharedData formatCurrencyString:[self.productList objectForKey:@"price"]];
+        [ticketPrice setText:[NSString stringWithFormat:@"Rp%@", total_price]];
+                                                            
+        offsetY+=30;
+    }
+    
+    UILabel *serviceChargeTitle = [[UILabel alloc] initWithFrame:CGRectMake(18, offsetY, ticketTitleWidth, 20)];
     [serviceChargeTitle setFont:[UIFont phBlond:13]];
     [serviceChargeTitle setTextColor:[UIColor darkGrayColor]];
     [serviceChargeTitle setBackgroundColor:[UIColor clearColor]];
     [serviceChargeTitle setText:@"Service Charge"];
     [self.scrollView addSubview:serviceChargeTitle];
     
-    UILabel *servicePrice = [[UILabel alloc] initWithFrame:CGRectMake(self.visibleSize.width - 140, CGRectGetMaxY(line1View.frame) + 14 + 30, 120, 20)];
+    UILabel *servicePrice = [[UILabel alloc] initWithFrame:CGRectMake(self.visibleSize.width - 140, offsetY, 120, 20)];
     [servicePrice setFont:[UIFont phBlond:13]];
     [servicePrice setTextColor:[UIColor phPurpleColor]];
     [servicePrice setBackgroundColor:[UIColor clearColor]];
@@ -446,7 +472,7 @@
     [servicePrice setText:[NSString stringWithFormat:@"Rp%@",admin_fee]];
     [self.scrollView addSubview:servicePrice];
     
-    int creditHeight = CGRectGetMaxY(line1View.frame) + 14 + 30 + 30;
+    int creditHeight = offsetY + 30;
     
     NSArray *discounts = self.productSummary[@"discount"][@"data"];
     for (NSDictionary *discount in discounts) {
