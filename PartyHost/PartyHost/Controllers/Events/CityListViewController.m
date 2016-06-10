@@ -11,6 +11,7 @@
 #import "SVProgressHUD.h"
 #import "City.h"
 #import "Mantle.h"
+#import "AnalyticManager.h"
 
 @interface CityListViewController () <UISearchBarDelegate, UITableViewDelegate, UITableViewDataSource>
 
@@ -201,6 +202,11 @@
     [tableView deselectRowAtIndexPath:[tableView indexPathForSelectedRow] animated:YES];
     
     City *city = self.cities[indexPath.row];
+    
+    NSDictionary *dictionary = @{@"City Name" : city.name,
+                                 @"City Code" : city.initial};
+    
+    [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Change City" withDict:dictionary];
     
     NSDictionary *currentCity = [MTLJSONAdapter JSONDictionaryFromModel:city error:nil];
     

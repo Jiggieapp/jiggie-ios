@@ -94,7 +94,7 @@
     [self.btnCity setTitle:city ? city.initial : @"JKT" forState:UIControlStateNormal];
     [self.btnCity setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     
-    if ([City unarchiveCities]) {
+    if ([City unarchiveCities].count > 1) {
         UIImage *arrowImage = [UIImage imageNamed:@"icon_arrow_down"];
         [self.btnCity setImage:arrowImage forState:UIControlStateNormal];
         [self.btnCity setImage:arrowImage forState:UIControlStateHighlighted];
@@ -575,11 +575,17 @@
     City *city = [MTLJSONAdapter modelOfClass:[City class]
                            fromJSONDictionary:notification.object error:nil];
     
-    UIImage *arrowImage = [UIImage imageNamed:@"icon_arrow_down"];
-    [self.btnCity setImage:arrowImage forState:UIControlStateNormal];
-    [self.btnCity setImage:arrowImage forState:UIControlStateHighlighted];
-    [self.btnCity setImageEdgeInsets:UIEdgeInsetsMake(0, (CGRectGetWidth(self.btnCity.bounds) - 25) - (arrowImage.size.width + 8), 0, 0)];
-    [self.btnCity addTarget:self action:@selector(goToCityList) forControlEvents:UIControlEventTouchUpInside];
+    if ([City unarchiveCities].count > 1) {
+        UIImage *arrowImage = [UIImage imageNamed:@"icon_arrow_down"];
+        [self.btnCity setImage:arrowImage forState:UIControlStateNormal];
+        [self.btnCity setImage:arrowImage forState:UIControlStateHighlighted];
+        [self.btnCity setImageEdgeInsets:UIEdgeInsetsMake(0, (CGRectGetWidth(self.btnCity.bounds) - 25) - (arrowImage.size.width + 8), 0, 0)];
+        [self.btnCity setUserInteractionEnabled:YES];
+    } else {
+        [self.btnCity setImage:nil forState:UIControlStateNormal];
+        [self.btnCity setImage:nil forState:UIControlStateHighlighted];
+        [self.btnCity setUserInteractionEnabled:NO];
+    }
     
     if (city) {
         [self.btnCity setTitle:city.initial forState:UIControlStateNormal];
