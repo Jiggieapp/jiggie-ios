@@ -1443,6 +1443,10 @@ shouldDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
 #pragma mark - Navigations
 
 - (void)goToCityList {
+    if (self.isSearchMode) {
+        [self changeSearchMode:NO];
+    }
+    
     [[NSNotificationCenter defaultCenter] postNotificationName:@"SHOW_CITY_LIST"
                                                         object:nil];
 }

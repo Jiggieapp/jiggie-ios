@@ -187,7 +187,7 @@ NSInteger const MaxBookingTableGuest = 100;
         [ticketLabel setText:@"TICKETS"];
         [ticketInfoLabel setText:@"TICKET INFO"];
     } else {
-        [ticketLabel setText:@"NUMBER OF GUEST"];
+        [ticketLabel setText:@"NUMBER OF GUEST(S)"];
         [ticketInfoLabel setText:@"TABLE INFO"];
     }
     
