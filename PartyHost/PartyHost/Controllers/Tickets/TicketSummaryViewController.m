@@ -14,18 +14,21 @@
 #import "UserManager.h"
 #import "SVProgressHUD.h"
 #import "AnalyticManager.h"
+#import "TicketSuccessViewController.h"
+
 
 @interface TicketSummaryViewController ()
 
 @end
+
+NSInteger const MaxBookingTableGuest = 100;
+
 
 @implementation TicketSummaryViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    
-//    [self setupUserInfo];
     
     self.navBar = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.visibleSize.width, 60)];
     [self.navBar setBackgroundColor:[UIColor phPurpleColor]];
@@ -60,10 +63,25 @@
     
     [self.view setBackgroundColor:[UIColor colorFromHexCode:@"F1F1F1"]];
     
+    NSNumber *extra_charge = [self.productSelected objectForKey:@"extra_charge"];
+    if (extra_charge != nil) {
+        self.bookTableExtraCharge = extra_charge.integerValue;
+    } else {
+        self.bookTableExtraCharge = 0;
+    }
+    
+    NSString *sale_type = [self.productSelected objectForKey:@"sale_type"];
+    CGFloat bottomHeight = 140;
+    if (sale_type != nil) {
+        self.saleType = sale_type;
+        if ([sale_type isEqualToString:@"reserve"]) {
+            bottomHeight = 70;
+        }
+    }
     
     // SCROLL VIEW
     
-    self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 60, self.visibleSize.width, self.view.bounds.size.height - 60 - 54 - 140 - 140)];
+    self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 60, self.visibleSize.width, self.view.bounds.size.height - 60 - 54 - 140 - bottomHeight)];
     self.scrollView.showsVerticalScrollIndicator    = YES;
     self.scrollView.showsHorizontalScrollIndicator  = NO;
     self.scrollView.scrollEnabled                   = YES;
@@ -100,7 +118,7 @@
     
      // LINE 2 VIEW
     
-    UIView *line2View = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height - 54 - 140 - 140, self.visibleSize.width, 1)];
+    UIView *line2View = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height - 54 - 140 - bottomHeight, self.visibleSize.width, 1)];
     [line2View setBackgroundColor:[UIColor phLightGrayColor]];
     [self.view addSubview:line2View];
     
@@ -154,7 +172,7 @@
     
     // LINE 3 VIEW
     
-    UIView *bottomView = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height - 54 - 140, self.visibleSize.width, 160)];
+    UIView *bottomView = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height - 54 - bottomHeight, self.visibleSize.width, bottomHeight + 20)];
     [bottomView setBackgroundColor:[UIColor whiteColor]];
     [self.view addSubview:bottomView];
     
@@ -169,7 +187,7 @@
         [ticketLabel setText:@"TICKETS"];
         [ticketInfoLabel setText:@"TICKET INFO"];
     } else {
-        [ticketLabel setText:@"NUMBER OF GUEST"];
+        [ticketLabel setText:@"NUMBER OF GUEST(S)"];
         [ticketInfoLabel setText:@"TABLE INFO"];
     }
     
@@ -207,28 +225,33 @@
     [minusButton setImageEdgeInsets:UIEdgeInsetsMake(2, 2, 2, 2)];
     [bottomView addSubview:minusButton];
     
-    UIView *line3View = [[UIView alloc] initWithFrame:CGRectMake(16, 70, self.visibleSize.width - 32, 1)];
-    [line3View setBackgroundColor:[UIColor phLightGrayColor]];
-    [bottomView addSubview:line3View];
-    
-    UILabel *estimatedLabel = [[UILabel alloc] initWithFrame:CGRectMake(15, line3View.frame.origin.y + 25, 120, 20)];
-    [estimatedLabel setFont:[UIFont phBlond:12]];
-    [estimatedLabel setTextColor:[UIColor darkGrayColor]];
-    [estimatedLabel setBackgroundColor:[UIColor clearColor]];
-    [bottomView addSubview:estimatedLabel];
-    
-    if (self.isTicketProduct) {
-        [estimatedLabel setText:@"ESTIMATED COST"];
-    } else {
-        [estimatedLabel setText:@"MINIMUM SPEND"];
+    if (!self.saleType || ![self.saleType isEqualToString:@"reserve"]) {
+        UIView *line3View = [[UIView alloc] initWithFrame:CGRectMake(16, 70, self.visibleSize.width - 32, 1)];
+        [line3View setBackgroundColor:[UIColor phLightGrayColor]];
+        [bottomView addSubview:line3View];
+        
+        UILabel *estimatedLabel = [[UILabel alloc] initWithFrame:CGRectMake(15, line3View.frame.origin.y + 25, 120, 20)];
+        [estimatedLabel setFont:[UIFont phBlond:12]];
+        [estimatedLabel setTextColor:[UIColor darkGrayColor]];
+        [estimatedLabel setBackgroundColor:[UIColor clearColor]];
+        [bottomView addSubview:estimatedLabel];
+        
+        if (self.isTicketProduct) {
+            [estimatedLabel setText:@"ESTIMATED COST"];
+        } else {
+            [estimatedLabel setText:@"MINIMUM SPEND"];
+            if (self.saleType != nil && [self.saleType isEqualToString:@"exact"]) {
+                [estimatedLabel setText:@"PRICE"];
+            }
+        }
+        
+        self.totalPrice = [[UILabel alloc] initWithFrame:CGRectMake(self.visibleSize.width - 8 - 16 - 160, line3View.frame.origin.y + 23, 160, 24)];
+        [self.totalPrice setFont:[UIFont phBlond:20]];
+        [self.totalPrice setTextColor:[UIColor phPurpleColor]];
+        [self.totalPrice setBackgroundColor:[UIColor clearColor]];
+        [self.totalPrice setTextAlignment:NSTextAlignmentRight];
+        [bottomView addSubview:self.totalPrice];
     }
-    
-    self.totalPrice = [[UILabel alloc] initWithFrame:CGRectMake(self.visibleSize.width - 8 - 16 - 160, line3View.frame.origin.y + 23, 160, 24)];
-    [self.totalPrice setFont:[UIFont phBlond:20]];
-    [self.totalPrice setTextColor:[UIColor phPurpleColor]];
-    [self.totalPrice setBackgroundColor:[UIColor clearColor]];
-    [self.totalPrice setTextAlignment:NSTextAlignmentRight];
-    [bottomView addSubview:self.totalPrice];
     
     NSString *price = [self.productSelected objectForKey:@"price"];
     if (price && price != nil) {
@@ -496,7 +519,19 @@
 - (void)plusButtonDidTap:(id)sender {
     NSInteger currentAmount = self.totalTicket.text.integerValue;
     
-    if (currentAmount < self.maxAmount) {
+    if (self.bookTableExtraCharge > 0 && currentAmount < MaxBookingTableGuest) {
+        currentAmount++;
+        self.totalTicket.text = [NSString stringWithFormat:@"%li", (long)currentAmount];
+        
+        if (currentAmount > self.maxAmount) {
+            NSInteger diff = currentAmount - self.maxAmount;
+            SharedData *sharedData = [SharedData sharedInstance];
+            NSString *updatedPrice = [NSString stringWithFormat:@"%li", self.price + diff * self.bookTableExtraCharge];
+            NSString *formattedPrice = [sharedData formatCurrencyString:updatedPrice];
+            [self.totalPrice setText:[NSString stringWithFormat:@"Rp%@", formattedPrice]];
+
+        }
+    } else if (currentAmount < self.maxAmount) {
         currentAmount++;
         self.totalTicket.text = [NSString stringWithFormat:@"%li", (long)currentAmount];
     }
@@ -517,7 +552,26 @@
 - (void)minusButtonDidTap:(id)sender {
     NSInteger currentAmount = self.totalTicket.text.integerValue;
     
-    if (currentAmount > 1) {
+    if (self.bookTableExtraCharge > 0 && currentAmount > 1) {
+        currentAmount--;
+        self.totalTicket.text = [NSString stringWithFormat:@"%li", (long)currentAmount];
+        
+        if (currentAmount > self.maxAmount) {
+            NSInteger diff = currentAmount - self.maxAmount;
+            SharedData *sharedData = [SharedData sharedInstance];
+            NSString *updatedPrice = [NSString stringWithFormat:@"%li", self.price + diff * self.bookTableExtraCharge];
+            NSString *formattedPrice = [sharedData formatCurrencyString:updatedPrice];
+            [self.totalPrice setText:[NSString stringWithFormat:@"Rp%@", formattedPrice]];
+            
+        } else {
+            SharedData *sharedData = [SharedData sharedInstance];
+            NSString *totalPrice = [NSString stringWithFormat:@"%li", self.price];
+            NSString *formattedPrice = [sharedData formatCurrencyString:totalPrice];
+            
+            self.totalPrice.text = [NSString stringWithFormat:@"Rp%@", formattedPrice];
+        }
+        
+    } else if (currentAmount > 1) {
         currentAmount--;
         self.totalTicket.text = [NSString stringWithFormat:@"%li", (long)currentAmount];
     }
@@ -551,35 +605,41 @@
     if (self.productSummary && self.productSummary != nil) {
         NSArray *product_list = [self.productSummary objectForKey:@"product_list"];
         if (product_list && product_list != nil && product_list.count > 0) {
-            TicketConfirmationViewController *ticketConfirmationViewController = [[TicketConfirmationViewController alloc] init];
-            ticketConfirmationViewController.productSummary = self.productSummary;
-            ticketConfirmationViewController.productList = [product_list objectAtIndex:0];
             
-            NSString *event_name = [self.productList objectForKey:@"event_name"];
-            if (event_name && event_name != nil) {
-                ticketConfirmationViewController.eventTitleString = [event_name uppercaseString];
+            if (self.saleType && [self.saleType isEqualToString:@"reserve"]) {
+                [self postPaymentFree];
+                
+            } else {
+                TicketConfirmationViewController *ticketConfirmationViewController = [[TicketConfirmationViewController alloc] init];
+                ticketConfirmationViewController.productSummary = self.productSummary;
+                ticketConfirmationViewController.productList = [product_list objectAtIndex:0];
+                
+                NSString *event_name = [self.productList objectForKey:@"event_name"];
+                if (event_name && event_name != nil) {
+                    ticketConfirmationViewController.eventTitleString = [event_name uppercaseString];
+                }
+                
+                NSString *venue_name = [self.productList objectForKey:@"venue_name"];
+                if (venue_name && venue_name != nil) {
+                    ticketConfirmationViewController.eventVenueString = venue_name;
+                }
+                
+                NSString *start_datetime = [self.productList objectForKey:@"start_datetime"];
+                NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+                [formatter setDateFormat:PHDateFormatServer];
+                [formatter setLocale:[NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"]];
+                [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
+                NSDate *startDatetime = [formatter dateFromString:start_datetime];
+                
+                [formatter setDateFormat:PHDateFormatApp];
+                [formatter setLocale:[NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"]];
+                [formatter setTimeZone:[NSTimeZone localTimeZone]];
+                NSString *shortDateTime = [formatter stringFromDate:startDatetime];
+                
+                ticketConfirmationViewController.eventDateString = shortDateTime;
+                
+                [self.navigationController pushViewController:ticketConfirmationViewController animated:YES];
             }
-            
-            NSString *venue_name = [self.productList objectForKey:@"venue_name"];
-            if (venue_name && venue_name != nil) {
-                ticketConfirmationViewController.eventVenueString = venue_name;
-            }
-            
-            NSString *start_datetime = [self.productList objectForKey:@"start_datetime"];
-            NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-            [formatter setDateFormat:PHDateFormatServer];
-            [formatter setLocale:[NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"]];
-            [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
-            NSDate *startDatetime = [formatter dateFromString:start_datetime];
-            
-            [formatter setDateFormat:PHDateFormatApp];
-            [formatter setLocale:[NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"]];
-            [formatter setTimeZone:[NSTimeZone localTimeZone]];
-            NSString *shortDateTime = [formatter stringFromDate:startDatetime];
-            
-            ticketConfirmationViewController.eventDateString = shortDateTime;
-    
-            [self.navigationController pushViewController:ticketConfirmationViewController animated:YES];
         }
     }
 }
@@ -767,6 +827,86 @@
     }];
 }
 
+- (void)postPaymentFree {
+    SharedData *sharedData = [SharedData sharedInstance];
+    AFHTTPRequestOperationManager *manager = [sharedData getOperationManager];
+    NSString *url = [NSString stringWithFormat:@"%@/product/free_payment",PHBaseNewURL];
+    
+    NSDictionary *params = @{@"order_id":[self.productSummary objectForKey:@"order_id"],
+                             @"pay_deposit":@"0"};
+    
+    [SVProgressHUD show];
+    
+    // disable all button
+    [self.tcContinueButton setEnabled:NO];
+    
+    [manager POST:url parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        [SVProgressHUD dismiss];
+        
+        // enable all button
+        [self.tcContinueButton setEnabled:YES];
+        
+        NSInteger responseStatusCode = operation.response.statusCode;
+        if (responseStatusCode != 200) {
+            return;
+        }
+        
+        if (![[responseObject objectForKey:@"response"] boolValue]) {
+            NSString *message = [responseObject objectForKey:@"msg"];
+            if (!message || message == nil) {
+                message = @"";
+            }
+            
+            self.errorType = [responseObject objectForKey:@"type"];
+            
+            if (([[[UIDevice currentDevice] systemVersion] compare:@"8.0" options:NSNumericSearch] == NSOrderedAscending)) {
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Payment Failed"
+                                                                message:message
+                                                               delegate:self
+                                                      cancelButtonTitle:@"OK"
+                                                      otherButtonTitles:nil];
+                [alert show];
+            }
+            else {
+                UIAlertController *alertController = [UIAlertController
+                                                      alertControllerWithTitle:@"Payment Failed"
+                                                      message:message
+                                                      preferredStyle:UIAlertControllerStyleAlert];
+                
+                UIAlertAction *cancelAction = [UIAlertAction
+                                               actionWithTitle:@"OK"
+                                               style:UIAlertActionStyleCancel
+                                               handler:^(UIAlertAction *action)
+                                               {
+                                                   if ([self.errorType isEqualToString:@"ticket_list"]) {
+                                                       [[self navigationController] popToRootViewControllerAnimated:YES];
+                                                       
+                                                   } else if ([self.errorType isEqualToString:@"paid"]) {
+                                                       [self openSuccessScreen];
+                                                   }
+                                               }];
+                
+                [alertController addAction:cancelAction];
+                [self presentViewController:alertController animated:YES completion:nil];
+            }
+            
+            return;
+        }
+        
+        [self openSuccessScreen];
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        if (operation.response.statusCode == 410) {
+            [self reloadLoginWithFBToken];
+        } else {
+            // enable all button
+            [self.tcContinueButton setEnabled:YES];
+            
+            [SVProgressHUD dismiss];
+        }
+    }];
+}
+
 - (void)reloadLoginWithFBToken {
     SharedData *sharedData = [SharedData sharedInstance];
     
@@ -776,6 +916,17 @@
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         [self reloadLoginWithFBToken];
     }];
+}
+
+#pragma mark - Navigation
+- (void)openSuccessScreen {
+    TicketSuccessViewController *ticketSuccessViewController = [[TicketSuccessViewController alloc] init];
+    [ticketSuccessViewController setShowCloseButton:YES];
+    [ticketSuccessViewController setShowViewButton:YES];
+    [ticketSuccessViewController setIsModalScreen:YES];
+    [ticketSuccessViewController setOrderID:[self.productSummary objectForKey:@"order_id"]];
+    [ticketSuccessViewController setTicketType:[self.productList objectForKey:@"ticket_type"]];
+    [[self navigationController] pushViewController:ticketSuccessViewController animated:YES];
 }
 
 #pragma mark - UIAlertViewDelegate

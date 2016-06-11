@@ -13,6 +13,7 @@
 #import "VTConfig.h"
 #import "LocationManager.h"
 #import "JGTooltipHelper.h"
+#import "City.h"
 
 
 ///REMOVE THIS WHEN LIVE
@@ -88,8 +89,8 @@ static NSString *const kAllowTracking = @"allowTracking";
     [[AnalyticManager sharedManager] startAnalytics];
     
     // AFNetworking Debug Setting:
-//    [[AFNetworkActivityLogger sharedLogger] startLogging];
-//    [[AFNetworkActivityLogger sharedLogger] setLevel:AFLoggerLevelDebug];
+    [[AFNetworkActivityLogger sharedLogger] startLogging];
+    [[AFNetworkActivityLogger sharedLogger] setLevel:AFLoggerLevelDebug];
     
     //[Crashlytics startWithAPIKey:@"1714fcc893d2312cb2b248ed57743517e718c399"];
     [Fabric with:@[[Crashlytics class]]];
@@ -372,6 +373,17 @@ static NSString *const kAllowTracking = @"allowTracking";
     }
     
     [FBSDKAppEvents activateApp];
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        [City retrieveCitiesWithCompletionHandler:^(NSArray *cities, NSInteger statusCode, NSError *error) {
+            if (cities && cities.count > 0) {
+                [City archiveCities:cities];
+                
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"SELECTED_CITY"
+                                                                    object:nil];
+            }
+        }];
+    });
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application

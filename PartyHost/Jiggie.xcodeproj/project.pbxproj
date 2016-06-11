@@ -74,6 +74,9 @@
 		9366752D1CE30EB200AC94F3 /* APSocialProfile.m in Sources */ = {isa = PBXBuildFile; fileRef = 936675141CE30EB200AC94F3 /* APSocialProfile.m */; };
 		9366752E1CE30EB200AC94F3 /* APSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 936675161CE30EB200AC94F3 /* APSource.m */; };
 		936675311CE3381100AC94F3 /* Contact.m in Sources */ = {isa = PBXBuildFile; fileRef = 936675301CE3381100AC94F3 /* Contact.m */; };
+		9386D5491D07EE940094AC12 /* City.m in Sources */ = {isa = PBXBuildFile; fileRef = 9386D5481D07EE940094AC12 /* City.m */; };
+		9386D54D1D07F41F0094AC12 /* CityListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9386D54B1D07F41F0094AC12 /* CityListViewController.m */; };
+		9386D54E1D07F41F0094AC12 /* CityListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9386D54C1D07F41F0094AC12 /* CityListViewController.xib */; };
 		938CE7781CCE2C9900ADDD4C /* ShadowView.m in Sources */ = {isa = PBXBuildFile; fileRef = 938CE7711CCE2C9800ADDD4C /* ShadowView.m */; };
 		938CE7791CCE2C9900ADDD4C /* FeedCardView.m in Sources */ = {isa = PBXBuildFile; fileRef = 938CE7731CCE2C9900ADDD4C /* FeedCardView.m */; };
 		938CE77A1CCE2C9900ADDD4C /* FeedCardView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 938CE7741CCE2C9900ADDD4C /* FeedCardView.xib */; };
@@ -576,6 +579,11 @@
 		936675171CE30EB200AC94F3 /* APTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APTypes.h; sourceTree = "<group>"; };
 		9366752F1CE3381100AC94F3 /* Contact.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Contact.h; sourceTree = "<group>"; };
 		936675301CE3381100AC94F3 /* Contact.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Contact.m; sourceTree = "<group>"; };
+		9386D5471D07EE940094AC12 /* City.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = City.h; sourceTree = "<group>"; };
+		9386D5481D07EE940094AC12 /* City.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = City.m; sourceTree = "<group>"; };
+		9386D54A1D07F41F0094AC12 /* CityListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CityListViewController.h; sourceTree = "<group>"; };
+		9386D54B1D07F41F0094AC12 /* CityListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CityListViewController.m; sourceTree = "<group>"; };
+		9386D54C1D07F41F0094AC12 /* CityListViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CityListViewController.xib; sourceTree = "<group>"; };
 		938CE7701CCE2C9800ADDD4C /* ShadowView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShadowView.h; sourceTree = "<group>"; };
 		938CE7711CCE2C9800ADDD4C /* ShadowView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShadowView.m; sourceTree = "<group>"; };
 		938CE7721CCE2C9800ADDD4C /* FeedCardView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FeedCardView.h; sourceTree = "<group>"; };
@@ -1741,6 +1749,8 @@
 				93AF8BA91CF565CC008BFA94 /* MemberInfo.m */,
 				93FDBA1A1CF6E725000344F2 /* MemberInfoEvent.h */,
 				93FDBA1B1CF6E725000344F2 /* MemberInfoEvent.m */,
+				9386D5471D07EE940094AC12 /* City.h */,
+				9386D5481D07EE940094AC12 /* City.m */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -2032,6 +2042,9 @@
 				DAABB03A1C1FD50E004DDCFA /* EventsSummaryModal.m */,
 				DAABB03B1C1FD50E004DDCFA /* EventsVenueDetail.h */,
 				DAABB03C1C1FD50E004DDCFA /* EventsVenueDetail.m */,
+				9386D54A1D07F41F0094AC12 /* CityListViewController.h */,
+				9386D54B1D07F41F0094AC12 /* CityListViewController.m */,
+				9386D54C1D07F41F0094AC12 /* CityListViewController.xib */,
 				DAABB03D1C1FD50E004DDCFA /* GuestList */,
 				DAABB0421C1FD50E004DDCFA /* HostList */,
 			);
@@ -2949,6 +2962,7 @@
 				DA700E0E1C63561300E5D945 /* Jiggie.entitlements in Resources */,
 				DAABB0FF1C1FD50E004DDCFA /* Signup.xib in Resources */,
 				FA4D2EFB1A4D9A77006828E7 /* Main.storyboard in Resources */,
+				9386D54E1D07F41F0094AC12 /* CityListViewController.xib in Resources */,
 				CB3EB6C81B459177003F658F /* App.xcassets in Resources */,
 				DAABB0E21C1FD50E004DDCFA /* GenericOverlay.xib in Resources */,
 				DAABB2E61C1FF993004DDCFA /* FaktPro-SemiBold.ttf in Resources */,
@@ -3187,6 +3201,7 @@
 				DA4305611C22823700ED6C54 /* Jiggie.xcdatamodeld in Sources */,
 				DAABB2981C1FF5AE004DDCFA /* MPDesignerEventBindingRequestMesssage.m in Sources */,
 				DAABB2C21C1FF5AE004DDCFA /* UIImage+MPImageEffects.m in Sources */,
+				9386D54D1D07F41F0094AC12 /* CityListViewController.m in Sources */,
 				DAABB0C51C1FD50E004DDCFA /* EventsHeader.m in Sources */,
 				9366742E1CD7621500AC94F3 /* UIImageView+FacebookFadeIn.m in Sources */,
 				DAABB28F1C1FF5AE004DDCFA /* MPCATransform3DToNSDictionaryValueTransformer.m in Sources */,
@@ -3351,6 +3366,7 @@
 				DAABB0F81C1FD50E004DDCFA /* SetupLocationView.m in Sources */,
 				DAABB0F11C1FD50E004DDCFA /* PopupView.m in Sources */,
 				DAABB2921C1FF5AE004DDCFA /* MPCGPointToNSDictionaryValueTransformer.m in Sources */,
+				9386D5491D07EE940094AC12 /* City.m in Sources */,
 				DAABB2951C1FF5AE004DDCFA /* MPClassDescription.m in Sources */,
 				DA33069B1CDA61A500A4126D /* JDFTooltipView.m in Sources */,
 				936674551CD7627500AC94F3 /* UIButton+WebCache.m in Sources */,
@@ -3679,8 +3695,8 @@
 				BUNDLE_APP_NAME = Jiggie;
 				BUNDLE_ID = com.partyhost.jiggie;
 				CODE_SIGN_ENTITLEMENTS = Jiggie.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: PARTYHOST, LLC (RNSG55F2T7)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: PARTYHOST, LLC (RNSG55F2T7)";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -3706,7 +3722,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "$(BUNDLE_ID)";
 				PRODUCT_NAME = Jiggie;
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "7b035a3d-e7a5-4bce-8ef4-b8b16f6dd00e";
 				TARGETED_DEVICE_FAMILY = 1;
 				VT_CLIENT = "VT-client-tHEKcD0xJGsm6uwH";
 				VT_ENABLE_PROD = 1;

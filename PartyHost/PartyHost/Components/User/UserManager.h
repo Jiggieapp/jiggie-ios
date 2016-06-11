@@ -22,5 +22,6 @@
 - (void)clearAllUserData;
 - (void)loadAllTags;
 + (NSArray *)allTags;
++ (UIColor *)colorForTag:(NSString *)tagName;
 
 @end
