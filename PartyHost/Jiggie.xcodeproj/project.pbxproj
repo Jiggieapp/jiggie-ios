@@ -143,10 +143,6 @@
 		DA10F5201C52149F006090ED /* SVRadialGradientLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = DA10F51C1C52149F006090ED /* SVRadialGradientLayer.m */; };
 		DA14910F1CE33C3A00566173 /* EmptyCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DA14910D1CE33C3A00566173 /* EmptyCell.m */; };
 		DA1491101CE33C3A00566173 /* EmptyCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA14910E1CE33C3A00566173 /* EmptyCell.xib */; };
-		DA1FF2C41D06B3A700987AA6 /* ChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA1FF2C21D06B3A700987AA6 /* ChatViewController.m */; };
-		DA1FF2C51D06B3A700987AA6 /* ChatViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA1FF2C31D06B3A700987AA6 /* ChatViewController.xib */; };
-		DA1FF2C91D06B3C200987AA6 /* EventViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA1FF2C71D06B3C200987AA6 /* EventViewController.m */; };
-		DA1FF2CA1D06B3C200987AA6 /* EventViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA1FF2C81D06B3C200987AA6 /* EventViewController.xib */; };
 		DA1FF2CD1D06B44900987AA6 /* BaseTabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA1FF2CC1D06B44900987AA6 /* BaseTabBarController.m */; };
 		DA3306991CDA61A500A4126D /* JDFSequentialTooltipManager.m in Sources */ = {isa = PBXBuildFile; fileRef = DA33068F1CDA61A500A4126D /* JDFSequentialTooltipManager.m */; };
 		DA33069A1CDA61A500A4126D /* JDFTooltipManager.m in Sources */ = {isa = PBXBuildFile; fileRef = DA3306911CDA61A500A4126D /* JDFTooltipManager.m */; };
@@ -710,12 +706,6 @@
 		DA14910C1CE33C3A00566173 /* EmptyCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmptyCell.h; sourceTree = "<group>"; };
 		DA14910D1CE33C3A00566173 /* EmptyCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmptyCell.m; sourceTree = "<group>"; };
 		DA14910E1CE33C3A00566173 /* EmptyCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EmptyCell.xib; sourceTree = "<group>"; };
-		DA1FF2C11D06B3A700987AA6 /* ChatViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatViewController.h; sourceTree = "<group>"; };
-		DA1FF2C21D06B3A700987AA6 /* ChatViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatViewController.m; sourceTree = "<group>"; };
-		DA1FF2C31D06B3A700987AA6 /* ChatViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ChatViewController.xib; sourceTree = "<group>"; };
-		DA1FF2C61D06B3C200987AA6 /* EventViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventViewController.h; sourceTree = "<group>"; };
-		DA1FF2C71D06B3C200987AA6 /* EventViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventViewController.m; sourceTree = "<group>"; };
-		DA1FF2C81D06B3C200987AA6 /* EventViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EventViewController.xib; sourceTree = "<group>"; };
 		DA1FF2CB1D06B44900987AA6 /* BaseTabBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseTabBarController.h; sourceTree = "<group>"; };
 		DA1FF2CC1D06B44900987AA6 /* BaseTabBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseTabBarController.m; sourceTree = "<group>"; };
 		DA33068E1CDA61A500A4126D /* JDFSequentialTooltipManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JDFSequentialTooltipManager.h; sourceTree = "<group>"; };
@@ -2027,9 +2017,6 @@
 				DAABB0281C1FD50E004DDCFA /* Messages.m */,
 				DAABB0251C1FD50E004DDCFA /* MessageCell.h */,
 				DAABB0261C1FD50E004DDCFA /* MessageCell.m */,
-				DA1FF2C11D06B3A700987AA6 /* ChatViewController.h */,
-				DA1FF2C21D06B3A700987AA6 /* ChatViewController.m */,
-				DA1FF2C31D06B3A700987AA6 /* ChatViewController.xib */,
 			);
 			path = Chat;
 			sourceTree = "<group>";
@@ -2065,9 +2052,6 @@
 				9386D54C1D07F41F0094AC12 /* CityListViewController.xib */,
 				DAABB03D1C1FD50E004DDCFA /* GuestList */,
 				DAABB0421C1FD50E004DDCFA /* HostList */,
-				DA1FF2C61D06B3C200987AA6 /* EventViewController.h */,
-				DA1FF2C71D06B3C200987AA6 /* EventViewController.m */,
-				DA1FF2C81D06B3C200987AA6 /* EventViewController.xib */,
 			);
 			path = Events;
 			sourceTree = "<group>";
@@ -2953,14 +2937,12 @@
 			files = (
 				936674DA1CE2EDD600AC94F3 /* InviteFriendsTableViewCell.xib in Resources */,
 				DAABB2E21C1FF993004DDCFA /* Calibre-Light.ttf in Resources */,
-				DA1FF2C51D06B3A700987AA6 /* ChatViewController.xib in Resources */,
 				936674721CE1DCFE00AC94F3 /* InviteViewController.xib in Resources */,
 				DAABB2EA1C1FF993004DDCFA /* Lato-Light.ttf in Resources */,
 				DAABB29E1C1FF5AE004DDCFA /* MPNotification.storyboard in Resources */,
 				DAABB2E31C1FF993004DDCFA /* Calibre-Regular.ttf in Resources */,
 				DAABB2E71C1FF993004DDCFA /* FaktPro-Thin.ttf in Resources */,
 				DAABB2AB1C1FF5AE004DDCFA /* MPSurvey.storyboard in Resources */,
-				DA1FF2CA1D06B3C200987AA6 /* EventViewController.xib in Resources */,
 				938CE77A1CCE2C9900ADDD4C /* FeedCardView.xib in Resources */,
 				9366745F1CD8562300AC94F3 /* SidePhotoTableViewCell.xib in Resources */,
 				DAABB1001C1FD50E004DDCFA /* SignupPages.xib in Resources */,
@@ -3141,7 +3123,6 @@
 				DAABB26B1C1FF5AE004DDCFA /* UINavigationBar+FlatUI.m in Sources */,
 				DAE02EA51C6C812200EBAAF0 /* TicketSummaryViewController.m in Sources */,
 				DAABB2B71C1FF5AE004DDCFA /* MPUIFontToNSDictionaryValueTransformer.m in Sources */,
-				DA1FF2C91D06B3C200987AA6 /* EventViewController.m in Sources */,
 				DAABB25A1C1FF5AE004DDCFA /* AFURLRequestSerialization.m in Sources */,
 				DAABB2BD1C1FF5AE004DDCFA /* NSInvocation+MPHelpers.m in Sources */,
 				DAABB0CD1C1FD50E004DDCFA /* EventsHostingsList.m in Sources */,
@@ -3379,7 +3360,6 @@
 				FA4D2EF21A4D9A77006828E7 /* main.m in Sources */,
 				936674571CD7627500AC94F3 /* UIImage+MultiFormat.m in Sources */,
 				938CE7D91CD1BE8600ADDD4C /* SocialFilterView.m in Sources */,
-				DA1FF2C41D06B3A700987AA6 /* ChatViewController.m in Sources */,
 				DAABB0F21C1FD50E004DDCFA /* MemberReviewCell.m in Sources */,
 				DAABB2681C1FF5AE004DDCFA /* UIColor+FlatUI.m in Sources */,
 				9366742C1CD7621500AC94F3 /* OLPhotoViewController.m in Sources */,
