@@ -32,7 +32,7 @@
     static NSString *cellIdentifier = @"SetupPickViewCell";
     SetupPickViewCell *cell = (SetupPickViewCell*)[collectionView dequeueReusableCellWithReuseIdentifier:cellIdentifier forIndexPath:indexPath];
     
-    NSString *title = self.choiceArray[indexPath.row];
+    NSString *title = [self.choiceArray[indexPath.row] objectForKey:@"name"];
     [cell.button.button setTitle:title forState:UIControlStateNormal];
     [cell setNeedsLayout];
     [cell layoutIfNeeded];
@@ -55,7 +55,7 @@
 
 -(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
     
-    NSString *title = self.choiceArray[indexPath.row];
+    NSString *title = [self.choiceArray[indexPath.row] objectForKey:@"name"];
     NSDictionary *fontDict = @{NSFontAttributeName:[UIFont phBold:14]};
     CGSize stringSize = [title sizeWithAttributes:fontDict];
     

@@ -8,6 +8,9 @@
 
 #import "EventsRowCell.h"
 #import "UIImageView+WebCache.h"
+#import "UserManager.h"
+#import "Mantle.h"
+#import "City.h"
 
 @implementation EventsRowCell
 
@@ -205,7 +208,7 @@
     self.title.frame = CGRectMake(10, CGRectGetMaxY(self.mainImg.frame) + 14, self.sharedData.screenWidth - 20 - 70, 70);
     [self.title sizeToFit];
     
-    if ([event .fullfillmentType isEqualToString:@"ticket"]) {
+    if ([event.fullfillmentType isEqualToString:@"ticket"]) {
         if (event.lowestPrice.integerValue > 0) {
             SharedData *sharedData = [SharedData sharedInstance];
             NSString *formattedPrice = [sharedData formatCurrencyString:event.lowestPrice.stringValue];
@@ -224,10 +227,21 @@
         self.startFromLabel.hidden = YES;
     }
     
+    City *city = [MTLJSONAdapter modelOfClass:[City class]
+                           fromJSONDictionary:[[NSUserDefaults standardUserDefaults]
+                                               objectForKey:@"CurrentCity"]
+                                        error:nil];
+    
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     [formatter setDateFormat:PHDateFormatApp];
     [formatter setLocale:[NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"]];
-    [formatter setTimeZone:[NSTimeZone localTimeZone]];
+    
+    if (city) {
+        [formatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:3600 * [city.timeZone integerValue]]];
+    } else {
+        [formatter setTimeZone:[NSTimeZone localTimeZone]];
+    }
+    
     self.date.text = [formatter stringFromDate:event.startDatetime];
     self.date.frame = CGRectMake(10, CGRectGetMaxY(self.title.frame) + 4, self.sharedData.screenWidth - 20, 20);
     
@@ -242,8 +256,6 @@
         [self.mainImg sd_setImageWithURL:[NSURL URLWithString:event.photo]
                         placeholderImage:nil];
     }
-    
-    NSLog(@"LOADING_IMG_URL :: %@ - %@", self.title.text, event.photo);
     
     //remove all tags
     NSArray *viewsToRemove = [self.tagsView subviews];
@@ -268,19 +280,7 @@
         [tagPil setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         tagPil.layer.cornerRadius = 10;
         
-        if ([tag isEqualToString:@"Featured"]) {
-            tagPil.backgroundColor = [UIColor colorFromHexCode:@"D9603E"];
-        } else if ([tag isEqualToString:@"Music"]) {
-            tagPil.backgroundColor = [UIColor colorFromHexCode:@"5E3ED9"];
-        } else if ([tag isEqualToString:@"Nightlife"]) {
-            tagPil.backgroundColor = [UIColor colorFromHexCode:@"4A555A"];
-        } else if ([tag isEqualToString:@"Food & Drink"]) {
-            tagPil.backgroundColor = [UIColor colorFromHexCode:@"DDC54D"];
-        } else if ([tag isEqualToString:@"Fashion"]) {
-            tagPil.backgroundColor = [UIColor colorFromHexCode:@"68CE49"];
-        } else {
-            tagPil.backgroundColor = [UIColor colorFromHexCode:@"ED4FC4"];
-        }
+        tagPil.backgroundColor = [UserManager colorForTag:tag];
         
         CGSize resizePill =  [self.sharedData sizeForLabelString:[tagPil titleForState:UIControlStateNormal]
                                                         withFont:tagPil.titleLabel.font

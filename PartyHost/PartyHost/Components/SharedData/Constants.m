@@ -42,7 +42,7 @@ NSString *const PHFBProfileImageURL = @"/profile_image_url?fb_id=:fb_id";
 NSString *const PHGuestEventsViewedURL = @"/guest/events/viewed/:fb_id/:event_id";
 NSString *const PHEventProductsURL = @"/productlist/:event_id";
 NSString *const PHTicketAddURL = @"/tickets/add/:fb_id/:event_id";
-NSString *const PHUserTagListURL = @"/user/tagslist";
+NSString *const PHUserTagListURL = @"/user/tagslist2";
 NSString *const PHOrdersAllURL = @"/user/orders/all/:fb_id";
 NSString *const PHPhoneVerifySendURL = @"/user/phone/verification/send/:fb_id/:phone";
 NSString *const PHPhoneVerifyValidateURL = @"/user/phone/verification/validate/:fb_id/:token";
