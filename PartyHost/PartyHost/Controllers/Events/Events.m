@@ -17,6 +17,8 @@
 #import "JDFTooltips.h"
 #import "JGTooltipHelper.h"
 #import "JGKeyboardNotificationHelper.h"
+#import "City.h"
+#import "Mantle.h"
 
 #define SCREENS_DEEP 4
 
@@ -80,11 +82,26 @@
     //Cancel button
     self.btnCity = [UIButton buttonWithType:UIButtonTypeCustom];
     self.btnCity.frame = CGRectMake(8, 0, 80, 40);
-    self.btnCity.titleLabel.font = [UIFont phBold:11];
+    self.btnCity.titleLabel.font = [UIFont phBold:13];
     self.btnCity.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-    [self.btnCity setTitle:@"JKT" forState:UIControlStateNormal];
-    [self.btnCity setTitleColor:[UIColor phLightGrayColor] forState:UIControlStateNormal];
-    self.btnCity.userInteractionEnabled = NO;
+    
+    City *city = [MTLJSONAdapter modelOfClass:[City class]
+                           fromJSONDictionary:[[NSUserDefaults standardUserDefaults]
+                                               objectForKey:@"CurrentCity"]
+                                        error:nil];
+    
+    
+    [self.btnCity setTitle:city ? city.initial : @"JKT" forState:UIControlStateNormal];
+    [self.btnCity setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    
+    if ([City unarchiveCities].count > 1) {
+        UIImage *arrowImage = [UIImage imageNamed:@"icon_arrow_down"];
+        [self.btnCity setImage:arrowImage forState:UIControlStateNormal];
+        [self.btnCity setImage:arrowImage forState:UIControlStateHighlighted];
+        [self.btnCity setImageEdgeInsets:UIEdgeInsetsMake(0, (CGRectGetWidth(self.btnCity.bounds) - 25) - (arrowImage.size.width + 8), 0, 0)];
+        [self.btnCity addTarget:self action:@selector(goToCityList) forControlEvents:UIControlEventTouchUpInside];
+    }
+    
     [self.tabBar addSubview:self.btnCity];
     
     self.btnFilter = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -306,6 +323,12 @@
      name:@"EVENTS_GO_GUEST_SUMMARY"
      object:nil];
     
+    [[NSNotificationCenter defaultCenter]
+     addObserver:self
+     selector:@selector(updateCity:)
+     name:@"SELECTED_CITY"
+     object:nil];
+    
     /*
     [[NSNotificationCenter defaultCenter]
      addObserver:self
@@ -402,7 +425,7 @@
             [self reloadFetch:nil];
         }
         [self removeOldEvent];
-        [self loadData];
+        [self loadDataWithCompletionHandler:nil];
         
         NSArray *alltags = [UserManager allTags];
         if (alltags && alltags != nil) {
@@ -412,7 +435,8 @@
         self.filterTagCollection.frame = CGRectMake(6, 14, self.sharedData.screenWidth - 12, self.filterTagCollection.collectionViewLayout.collectionViewContentSize.height);
         
         for (int i = 0; i<self.tagArray.count; i++) {
-            if ([self.sharedData.experiences containsObject:[self.tagArray objectAtIndex:i]]) {
+            NSString *name = [self.tagArray objectAtIndex:i];
+            if ([self.sharedData.experiences containsObject:name]) {
                 [self.filterTagCollection selectItemAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0] animated:NO scrollPosition:UICollectionViewScrollPositionNone];
             }
         }
@@ -454,7 +478,7 @@
 - (void)refreshControlDidChange:(UIRefreshControl *)refreshControl {
     self.isReloadMode = YES;
     self.refreshControl = refreshControl;
-    [self loadData];
+    [self loadDataWithCompletionHandler:nil];
 }
 
 #pragma mark - Fetch
@@ -537,8 +561,42 @@
     }
 }
 
+- (void)updateCity:(NSNotification *)notification {
+    City *city = [MTLJSONAdapter modelOfClass:[City class]
+                           fromJSONDictionary:notification.object error:nil];
+    
+    if ([City unarchiveCities].count > 1) {
+        UIImage *arrowImage = [UIImage imageNamed:@"icon_arrow_down"];
+        [self.btnCity setImage:arrowImage forState:UIControlStateNormal];
+        [self.btnCity setImage:arrowImage forState:UIControlStateHighlighted];
+        [self.btnCity setImageEdgeInsets:UIEdgeInsetsMake(0, (CGRectGetWidth(self.btnCity.bounds) - 25) - (arrowImage.size.width + 8), 0, 0)];
+        [self.btnCity setUserInteractionEnabled:YES];
+    } else {
+        [self.btnCity setImage:nil forState:UIControlStateNormal];
+        [self.btnCity setImage:nil forState:UIControlStateHighlighted];
+        [self.btnCity setUserInteractionEnabled:NO];
+    }
+    
+    if (city) {
+        [self.btnCity setTitle:city.initial forState:UIControlStateNormal];
+        AFHTTPRequestOperationManager *manager = [self.sharedData getOperationManager];
+        NSString *url = [Constants memberSettingsURL];
+        NSDictionary *parameters = @{@"fb_id" : self.sharedData.fb_id,
+                                     @"area_event" : city.name};
+        
+        [SVProgressHUD show];
+        [manager POST:url parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+            [self loadDataWithCompletionHandler:^(NSError *error) {
+                [SVProgressHUD dismiss];
+            }];
+        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+            [SVProgressHUD dismiss];
+        }];
+    }
+}
+
 #pragma mark - API
--(void)loadData
+-(void)loadDataWithCompletionHandler:(void(^)(NSError* error))completion
 {
     AFHTTPRequestOperationManager *manager = [self.sharedData getOperationManager];
     //events/list/
@@ -548,6 +606,10 @@
      {
          NSString *responseString = operation.responseString;
          NSError *error;
+         
+         if (completion) {
+             completion(nil);
+         }
          
          NSInteger responseStatusCode = operation.response.statusCode;
          if (responseStatusCode == 204) {
@@ -730,11 +792,19 @@
                  
              } else {
                  [self.emptyView setMode:@"empty"];
+                 
+                 if (completion) {
+                     completion(nil);
+                 }
              }
          });
          
      } failure:^(AFHTTPRequestOperation *operation, NSError *error)
      {
+         if (completion) {
+             completion(error);
+         }
+         
          if (self.isReloadMode) {
              // Do your job, when done:
              [self.refreshControl endRefreshing];
@@ -774,11 +844,16 @@
     
     for (Event *event in [self.fetchedResultsController fetchedObjects]) {
         components = [cal components:(NSCalendarUnitEra | NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay) fromDate:event.startDatetime];
-        NSDate *otherDate = [cal dateFromComponents:components];
+        NSDate *startDate = [cal dateFromComponents:components];
         
-        if([today isEqualToDate:otherDate]) {
+        components = [cal components:(NSCalendarUnitEra | NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay) fromDate:event.endDatetime];
+        NSDate *endDate = [cal dateFromComponents:components];
+        
+        if([today isEqualToDate:endDate]) {
             [self.eventsToday addObject:event];
-        } else if([tomorrow isEqualToDate:otherDate]) {
+        } else if([today isEqualToDate:startDate]) {
+            [self.eventsToday addObject:event];
+        } else if([tomorrow isEqualToDate:startDate]) {
             [self.eventsTomorrow addObject:event];
         } else {
             [self.eventsUpcoming addObject:event];
@@ -1262,7 +1337,7 @@
     [manager POST:url parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject)
      {
          if(responseObject[@"response"]) {
-            [self loadData];
+            [self loadDataWithCompletionHandler:nil];
          }
          
      } failure:^(AFHTTPRequestOperation *operation, NSError *error)
@@ -1287,7 +1362,7 @@
     static NSString *cellIdentifier = @"EventsSummaryTagCell";
     SetupPickViewCell *cell = (SetupPickViewCell*)[collectionView dequeueReusableCellWithReuseIdentifier:cellIdentifier forIndexPath:indexPath];
     
-    NSString *title = self.tagArray[indexPath.row];
+    NSString *title = [self.tagArray[indexPath.row] objectForKey:@"name"];
     [cell.button.button setTitle:title forState:UIControlStateNormal];
     cell.button.button.titleLabel.font = [UIFont phBold:12];
     cell.button.onTextColor = [UIColor whiteColor];
@@ -1295,20 +1370,8 @@
     cell.button.offTextColor = [UIColor whiteColor];
     cell.button.offBorderColor = [UIColor clearColor];
     cell.button.offBackgroundColor = [UIColor phGrayColor];
-    
-    if ([title isEqualToString:@"Featured"]) {
-        cell.button.onBackgroundColor = [UIColor colorFromHexCode:@"D9603E"];
-    } else if ([title isEqualToString:@"Music"]) {
-        cell.button.onBackgroundColor = [UIColor colorFromHexCode:@"5E3ED9"];
-    } else if ([title isEqualToString:@"Nightlife"]) {
-        cell.button.onBackgroundColor = [UIColor colorFromHexCode:@"4A555A"];
-    } else if ([title isEqualToString:@"Food & Drink"]) {
-        cell.button.onBackgroundColor = [UIColor colorFromHexCode:@"DDC54D"];
-    } else if ([title isEqualToString:@"Fashion"]) {
-        cell.button.onBackgroundColor = [UIColor colorFromHexCode:@"68CE49"];
-    } else {
-        cell.button.onBackgroundColor = [UIColor colorFromHexCode:@"ED4FC4"];
-    }
+    NSString *hexColor = [self.tagArray[indexPath.row] objectForKey:@"color"];
+    cell.button.onBackgroundColor = [UIColor colorFromHexCode:hexColor];
     
     [cell setNeedsLayout];
     [cell layoutIfNeeded];
@@ -1329,7 +1392,7 @@
 
 -(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
     
-    NSString *title = self.tagArray[indexPath.row];
+    NSString *title = [self.tagArray[indexPath.row] objectForKey:@"name"];
     NSDictionary *fontDict = @{NSFontAttributeName:[UIFont phBold:12]};
     CGSize stringSize = [title sizeWithAttributes:fontDict];
     
@@ -1375,6 +1438,15 @@ shouldDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
 
 #pragma mark - Navigations
 
+- (void)goToCityList {
+    if (self.isSearchMode) {
+        [self changeSearchMode:NO];
+    }
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"SHOW_CITY_LIST"
+                                                        object:nil];
+}
+
 -(void)goHome
 {
     self.sharedData.isGuestListingsShowing = NO;
@@ -1383,7 +1455,7 @@ shouldDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
          self.mainCon.frame = CGRectMake(0, 20, self.sharedData.screenWidth * SCREENS_DEEP, self.sharedData.screenHeight - 20);
      } completion:^(BOOL finished)
      {
-         [self loadData];
+         [self loadDataWithCompletionHandler:nil];
      }];
 }
 

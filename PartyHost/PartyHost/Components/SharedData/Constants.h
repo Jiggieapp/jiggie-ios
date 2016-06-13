@@ -29,6 +29,10 @@ typedef void (^MemberInfoCompletionHandler)(MemberInfo *memberInfo,
                                             NSInteger statusCode,
                                             NSError *error);
 
+typedef void (^CitiesCompletionHandler)(NSArray *cities,
+                                        NSInteger statusCode,
+                                        NSError *error);
+
 //Others
 extern BOOL const PHDebugOn; //Pretend we are a new user in debug mode, they will see walkthrough, alerts etc.
 extern int const PHTabHeight;

@@ -18,6 +18,7 @@
 #import "EventsGuestList.h"
 #import "UIView+Animation.h"
 #import "UIImageView+WebCache.h"
+#import "UserManager.h"
 
 #define PROFILE_PICS 4 //If more than 4 then last is +MORE
 #define PROFILE_SIZE 40
@@ -1408,12 +1409,15 @@
 #pragma mark - UICollectionViewDataSource
 -(NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
 {
-    return 1;
+//    return 1;
+    return 0;
 }
 
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    return [self.tagArray count];
+//    return [self.tagArray count]; turn off
+    
+    return 0;
 }
 
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
@@ -1427,19 +1431,7 @@
     cell.button.offTextColor = [UIColor whiteColor];
     cell.button.offBackgroundColor = [UIColor clearColor];
     
-    if ([title isEqualToString:@"Featured"]) {
-        cell.button.offBackgroundColor = [UIColor colorFromHexCode:@"D9603E"];
-    } else if ([title isEqualToString:@"Music"]) {
-        cell.button.offBackgroundColor = [UIColor colorFromHexCode:@"5E3ED9"];
-    } else if ([title isEqualToString:@"Nightlife"]) {
-        cell.button.offBackgroundColor = [UIColor colorFromHexCode:@"4A555A"];
-    } else if ([title isEqualToString:@"Food & Drink"]) {
-        cell.button.offBackgroundColor = [UIColor colorFromHexCode:@"DDC54D"];
-    } else if ([title isEqualToString:@"Fashion"]) {
-        cell.button.offBackgroundColor = [UIColor colorFromHexCode:@"68CE49"];
-    } else {
-        cell.button.offBackgroundColor = [UIColor colorFromHexCode:@"ED4FC4"];
-    }
+    cell.button.offBackgroundColor = [UserManager colorForTag:title];
     
     [cell setNeedsLayout];
     [cell layoutIfNeeded];

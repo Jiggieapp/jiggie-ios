@@ -20,6 +20,7 @@
 #import "InviteViewController.h"
 #import "PromotionsViewController.h"
 #import "InviteFriendsViewController.h"
+#import "CityListViewController.h"
 
 @interface ViewController ()
 
@@ -186,6 +187,12 @@
      name:@"SHOW_PROMOTIONS"
      object:nil];
     
+    [[NSNotificationCenter defaultCenter]
+     addObserver:self
+     selector:@selector(showCityList:)
+     name:@"SHOW_CITY_LIST"
+     object:nil];
+    
     [[NSNotificationCenter defaultCenter] addObserverForName:
      UIApplicationDidReceiveMemoryWarningNotification
                                                       object:[UIApplication sharedApplication] queue:nil
@@ -343,7 +350,17 @@
     for (UIButton *navButton in self.dashboard.btnsA) {
         [navButton setEnabled:enable];
     }
+    
     [self.dashboard.eventsPage.btnFilter setEnabled:enable];
+    [self.dashboard.eventsPage.btnCity setEnabled:enable];
+    
+    if (enable) {
+        [self.dashboard.eventsPage.btnCity setTitleColor:[UIColor whiteColor]
+                                                forState:UIControlStateNormal];
+    } else {
+        [self.dashboard.eventsPage.btnCity setTitleColor:[UIColor phLightGrayColor]
+                                                forState:UIControlStateNormal];
+    }
 }
 
 -(void)checkIfPushIsEnabled
@@ -743,6 +760,12 @@
                                                                             action:nil];
     
     [self.navigationController pushViewController:[PromotionsViewController new] animated:YES];
+}
+
+#pragma mark - City List
+- (void)showCityList:(NSNotification *)notification {
+    UINavigationController *cityListNavigationController = [[UINavigationController alloc] initWithRootViewController:[CityListViewController new]];
+    [self presentViewController:cityListNavigationController animated:YES completion:nil];
 }
 
 - (void)didReceiveMemoryWarning
