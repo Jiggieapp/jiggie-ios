@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		93042B5E1D1005F2004A8B2F /* FirebaseAnalytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93042B561D1005F2004A8B2F /* FirebaseAnalytics.framework */; };
+		93042B5F1D1005F2004A8B2F /* FirebaseInstanceID.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93042B571D1005F2004A8B2F /* FirebaseInstanceID.framework */; };
+		93042B601D1005F2004A8B2F /* GoogleInterchangeUtilities.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93042B581D1005F2004A8B2F /* GoogleInterchangeUtilities.framework */; };
+		93042B611D1005F2004A8B2F /* GoogleSymbolUtilities.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93042B591D1005F2004A8B2F /* GoogleSymbolUtilities.framework */; };
+		93042B621D1005F2004A8B2F /* GoogleUtilities.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93042B5A1D1005F2004A8B2F /* GoogleUtilities.framework */; };
+		93042B631D1005F2004A8B2F /* FirebaseDatabase.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93042B5C1D1005F2004A8B2F /* FirebaseDatabase.framework */; };
 		936673FC1CD7164A00AC94F3 /* UIActionSheet+Blocks.m in Sources */ = {isa = PBXBuildFile; fileRef = 936673FA1CD7164A00AC94F3 /* UIActionSheet+Blocks.m */; };
 		936674061CD718A800AC94F3 /* TPKeyboardAvoidingScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 936674031CD718A800AC94F3 /* TPKeyboardAvoidingScrollView.m */; };
 		936674071CD718A900AC94F3 /* UIScrollView+TPKeyboardAvoidingAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 936674051CD718A800AC94F3 /* UIScrollView+TPKeyboardAvoidingAdditions.m */; };
@@ -450,6 +456,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		93042B561D1005F2004A8B2F /* FirebaseAnalytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FirebaseAnalytics.framework; sourceTree = "<group>"; };
+		93042B571D1005F2004A8B2F /* FirebaseInstanceID.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FirebaseInstanceID.framework; sourceTree = "<group>"; };
+		93042B581D1005F2004A8B2F /* GoogleInterchangeUtilities.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GoogleInterchangeUtilities.framework; sourceTree = "<group>"; };
+		93042B591D1005F2004A8B2F /* GoogleSymbolUtilities.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GoogleSymbolUtilities.framework; sourceTree = "<group>"; };
+		93042B5A1D1005F2004A8B2F /* GoogleUtilities.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GoogleUtilities.framework; sourceTree = "<group>"; };
+		93042B5C1D1005F2004A8B2F /* FirebaseDatabase.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FirebaseDatabase.framework; sourceTree = "<group>"; };
+		93042B5D1D1005F2004A8B2F /* Firebase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Firebase.h; sourceTree = "<group>"; };
 		936673F91CD7164A00AC94F3 /* UIActionSheet+Blocks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIActionSheet+Blocks.h"; sourceTree = "<group>"; };
 		936673FA1CD7164A00AC94F3 /* UIActionSheet+Blocks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIActionSheet+Blocks.m"; sourceTree = "<group>"; };
 		936674021CD718A800AC94F3 /* TPKeyboardAvoidingScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TPKeyboardAvoidingScrollView.h; sourceTree = "<group>"; };
@@ -1297,21 +1310,27 @@
 				DAABB2731C1FF5AE004DDCFA /* libAdIdAccess.a in Frameworks */,
 				FAEFCC111AB7FF0C0070097D /* CoreVideo.framework in Frameworks */,
 				FAEFCC0F1AB7FF050070097D /* CoreMedia.framework in Frameworks */,
+				93042B621D1005F2004A8B2F /* GoogleUtilities.framework in Frameworks */,
 				DAABB2F11C1FFDF4004DDCFA /* FBSDKCoreKit.framework in Frameworks */,
 				FAEFCC0D1AB7FEFF0070097D /* CoreGraphics.framework in Frameworks */,
+				93042B5E1D1005F2004A8B2F /* FirebaseAnalytics.framework in Frameworks */,
 				DAABB2F41C1FFDF4004DDCFA /* FBSDKShareKit.framework in Frameworks */,
 				FAEFCC0B1AB7FEF30070097D /* AVFoundation.framework in Frameworks */,
 				FAEE1C0A1A92E1AA0007737F /* MessageUI.framework in Frameworks */,
 				FA3702BA1A8F9EC300B2BD6A /* CoreLocation.framework in Frameworks */,
 				DAABB2F81C200227004DDCFA /* Crashlytics.framework in Frameworks */,
 				DAABB2F31C1FFDF4004DDCFA /* FBSDKMessengerShareKit.framework in Frameworks */,
+				93042B601D1005F2004A8B2F /* GoogleInterchangeUtilities.framework in Frameworks */,
 				FA3702B81A8F9E9000B2BD6A /* MapKit.framework in Frameworks */,
 				DAABB2F21C1FFDF4004DDCFA /* FBSDKLoginKit.framework in Frameworks */,
+				93042B611D1005F2004A8B2F /* GoogleSymbolUtilities.framework in Frameworks */,
+				93042B631D1005F2004A8B2F /* FirebaseDatabase.framework in Frameworks */,
 				DAABB2531C1FF5AE004DDCFA /* libAppsFlyerLib.a in Frameworks */,
 				FAEE84821A8AE6B10073E81A /* libz.dylib in Frameworks */,
 				FAEE84801A8AE56E0073E81A /* libsqlite3.dylib in Frameworks */,
 				DAABB27D1C1FF5AE004DDCFA /* libMPCategoryHelpers.a in Frameworks */,
 				FAEE847E1A8AE5520073E81A /* SystemConfiguration.framework in Frameworks */,
+				93042B5F1D1005F2004A8B2F /* FirebaseInstanceID.framework in Frameworks */,
 				DAABB2741C1FF5AE004DDCFA /* libGoogleAnalyticsServices.a in Frameworks */,
 				FAEE84681A8AE1630073E81A /* libicucore.dylib in Frameworks */,
 			);
@@ -1320,6 +1339,36 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		93042B541D1005F2004A8B2F /* Firebase */ = {
+			isa = PBXGroup;
+			children = (
+				93042B551D1005F2004A8B2F /* Analytics */,
+				93042B5B1D1005F2004A8B2F /* Database */,
+				93042B5D1D1005F2004A8B2F /* Firebase.h */,
+			);
+			path = Firebase;
+			sourceTree = "<group>";
+		};
+		93042B551D1005F2004A8B2F /* Analytics */ = {
+			isa = PBXGroup;
+			children = (
+				93042B561D1005F2004A8B2F /* FirebaseAnalytics.framework */,
+				93042B571D1005F2004A8B2F /* FirebaseInstanceID.framework */,
+				93042B581D1005F2004A8B2F /* GoogleInterchangeUtilities.framework */,
+				93042B591D1005F2004A8B2F /* GoogleSymbolUtilities.framework */,
+				93042B5A1D1005F2004A8B2F /* GoogleUtilities.framework */,
+			);
+			path = Analytics;
+			sourceTree = "<group>";
+		};
+		93042B5B1D1005F2004A8B2F /* Database */ = {
+			isa = PBXGroup;
+			children = (
+				93042B5C1D1005F2004A8B2F /* FirebaseDatabase.framework */,
+			);
+			path = Database;
+			sourceTree = "<group>";
+		};
 		936673F71CD7164A00AC94F3 /* UIActionSheet-Blocks */ = {
 			isa = PBXGroup;
 			children = (
@@ -1770,6 +1819,7 @@
 		DA5ED5ED1C92975100004C7E /* lib */ = {
 			isa = PBXGroup;
 			children = (
+				93042B541D1005F2004A8B2F /* Firebase */,
 				DA5ED5EE1C92975100004C7E /* include */,
 				DA5ED5FA1C92975100004C7E /* VTiOSAPI */,
 			);
@@ -3460,6 +3510,8 @@
 					"$(PROJECT_DIR)/PartyHost",
 					"$(PROJECT_DIR)/PartyHost/ExtraLibraries/FacebookSDK",
 					"$(PROJECT_DIR)/PartyHost/ExtraLibraries/Fabric",
+					"$(PROJECT_DIR)/lib/Firebase/Analytics",
+					"$(PROJECT_DIR)/lib/Firebase/Database",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = PartyHost/PartyHost.pch;
@@ -3473,6 +3525,10 @@
 					"$(PROJECT_DIR)/PartyHost/ExtraLibraries/GoogleAnalytics",
 					"$(PROJECT_DIR)/PartyHost/ExtraLibraries/AF-iOS-SDK-v3.3.0",
 					"$(PROJECT_DIR)/PartyHost/ExtraLibraries/Mixpanel",
+				);
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"\"$(SRCROOT)/lib/Firebase/Firebase.h\"",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "$(BUNDLE_ID)";
 				PRODUCT_NAME = Jiggie;
@@ -3542,6 +3598,8 @@
 					"$(PROJECT_DIR)/PartyHost",
 					"$(PROJECT_DIR)/PartyHost/ExtraLibraries/FacebookSDK",
 					"$(PROJECT_DIR)/PartyHost/ExtraLibraries/Fabric",
+					"$(PROJECT_DIR)/lib/Firebase/Analytics",
+					"$(PROJECT_DIR)/lib/Firebase/Database",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = PartyHost/PartyHost.pch;
@@ -3555,6 +3613,10 @@
 					"$(PROJECT_DIR)/PartyHost/ExtraLibraries/GoogleAnalytics",
 					"$(PROJECT_DIR)/PartyHost/ExtraLibraries/AF-iOS-SDK-v3.3.0",
 					"$(PROJECT_DIR)/PartyHost/ExtraLibraries/Mixpanel",
+				);
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"\"$(SRCROOT)/lib/Firebase/Firebase.h\"",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "$(BUNDLE_ID)";
 				PRODUCT_NAME = Jiggie;
@@ -3667,6 +3729,8 @@
 					"$(PROJECT_DIR)/PartyHost",
 					"$(PROJECT_DIR)/PartyHost/ExtraLibraries/FacebookSDK",
 					"$(PROJECT_DIR)/PartyHost/ExtraLibraries/Fabric",
+					"$(PROJECT_DIR)/lib/Firebase/Analytics",
+					"$(PROJECT_DIR)/lib/Firebase/Database",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = PartyHost/PartyHost.pch;
@@ -3680,6 +3744,10 @@
 					"$(PROJECT_DIR)/PartyHost/ExtraLibraries/GoogleAnalytics",
 					"$(PROJECT_DIR)/PartyHost/ExtraLibraries/AF-iOS-SDK-v3.3.0",
 					"$(PROJECT_DIR)/PartyHost/ExtraLibraries/Mixpanel",
+				);
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"\"$(SRCROOT)/lib/Firebase/Firebase.h\"",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "$(BUNDLE_ID)";
 				PRODUCT_NAME = Jiggie;
@@ -3712,6 +3780,8 @@
 					"$(PROJECT_DIR)/PartyHost",
 					"$(PROJECT_DIR)/PartyHost/ExtraLibraries/FacebookSDK",
 					"$(PROJECT_DIR)/PartyHost/ExtraLibraries/Fabric",
+					"$(PROJECT_DIR)/lib/Firebase/Analytics",
+					"$(PROJECT_DIR)/lib/Firebase/Database",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = PartyHost/PartyHost.pch;
@@ -3725,6 +3795,10 @@
 					"$(PROJECT_DIR)/PartyHost/ExtraLibraries/GoogleAnalytics",
 					"$(PROJECT_DIR)/PartyHost/ExtraLibraries/AF-iOS-SDK-v3.3.0",
 					"$(PROJECT_DIR)/PartyHost/ExtraLibraries/Mixpanel",
+				);
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"\"$(SRCROOT)/lib/Firebase/Firebase.h\"",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "$(BUNDLE_ID)";
 				PRODUCT_NAME = Jiggie;
