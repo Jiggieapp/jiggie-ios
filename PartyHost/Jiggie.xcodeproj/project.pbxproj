@@ -16,6 +16,7 @@
 		93042B651D1008B6004A8B2F /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 93042B641D1008B6004A8B2F /* GoogleService-Info.plist */; };
 		93042B691D100C62004A8B2F /* Member.m in Sources */ = {isa = PBXBuildFile; fileRef = 93042B681D100C62004A8B2F /* Member.m */; };
 		93042B6F1D1014E5004A8B2F /* Room.m in Sources */ = {isa = PBXBuildFile; fileRef = 93042B6E1D1014E5004A8B2F /* Room.m */; };
+		93042B721D101625004A8B2F /* RoomMember.m in Sources */ = {isa = PBXBuildFile; fileRef = 93042B711D101625004A8B2F /* RoomMember.m */; };
 		936673FC1CD7164A00AC94F3 /* UIActionSheet+Blocks.m in Sources */ = {isa = PBXBuildFile; fileRef = 936673FA1CD7164A00AC94F3 /* UIActionSheet+Blocks.m */; };
 		936674061CD718A800AC94F3 /* TPKeyboardAvoidingScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 936674031CD718A800AC94F3 /* TPKeyboardAvoidingScrollView.m */; };
 		936674071CD718A900AC94F3 /* UIScrollView+TPKeyboardAvoidingAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 936674051CD718A800AC94F3 /* UIScrollView+TPKeyboardAvoidingAdditions.m */; };
@@ -471,6 +472,8 @@
 		93042B681D100C62004A8B2F /* Member.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Member.m; sourceTree = "<group>"; };
 		93042B6D1D1014E5004A8B2F /* Room.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Room.h; sourceTree = "<group>"; };
 		93042B6E1D1014E5004A8B2F /* Room.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Room.m; sourceTree = "<group>"; };
+		93042B701D101625004A8B2F /* RoomMember.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RoomMember.h; sourceTree = "<group>"; };
+		93042B711D101625004A8B2F /* RoomMember.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RoomMember.m; sourceTree = "<group>"; };
 		936673F91CD7164A00AC94F3 /* UIActionSheet+Blocks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIActionSheet+Blocks.h"; sourceTree = "<group>"; };
 		936673FA1CD7164A00AC94F3 /* UIActionSheet+Blocks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIActionSheet+Blocks.m"; sourceTree = "<group>"; };
 		936674021CD718A800AC94F3 /* TPKeyboardAvoidingScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TPKeyboardAvoidingScrollView.h; sourceTree = "<group>"; };
@@ -1384,6 +1387,8 @@
 				93042B681D100C62004A8B2F /* Member.m */,
 				93042B6D1D1014E5004A8B2F /* Room.h */,
 				93042B6E1D1014E5004A8B2F /* Room.m */,
+				93042B701D101625004A8B2F /* RoomMember.h */,
+				93042B711D101625004A8B2F /* RoomMember.m */,
 			);
 			path = Firebase;
 			sourceTree = "<group>";
@@ -3320,6 +3325,7 @@
 				DAABB0E11C1FD50E004DDCFA /* Settings.m in Sources */,
 				DAABB2561C1FF5AE004DDCFA /* AFHTTPSessionManager.m in Sources */,
 				DA6A7FA71CC755F800A666E8 /* DialCodeListViewController.m in Sources */,
+				93042B721D101625004A8B2F /* RoomMember.m in Sources */,
 				936675291CE30EB200AC94F3 /* APName.m in Sources */,
 				DAABB2A41C1FF5AE004DDCFA /* MPObjectSerializer.m in Sources */,
 				DA10F51D1C52149F006090ED /* SVIndefiniteAnimatedView.m in Sources */,
