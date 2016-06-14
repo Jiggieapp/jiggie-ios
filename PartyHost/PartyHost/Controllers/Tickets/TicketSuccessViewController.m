@@ -10,6 +10,7 @@
 #import "PurchaseHistoryViewController.h"
 #import "AnalyticManager.h"
 #import "NSString+HTML.h"
+#import "Constants.h"
 
 @interface TicketSuccessViewController ()
 
@@ -735,10 +736,7 @@
         [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
         NSDate *startDatetime = [formatter dateFromString:start_datetime];
         
-        [formatter setDateFormat:PHDateFormatAppShort];
-        [formatter setLocale:[NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"]];
-        [formatter setTimeZone:[NSTimeZone localTimeZone]];
-        NSString *shortDateTime = [formatter stringFromDate:startDatetime];
+        NSString *shortDateTime = [Constants toStringDate:startDatetime withFormat:PHDateFormatAppShort];
         
         [self.eventDate setText:shortDateTime];
         [self.eventDateBottom setText:shortDateTime];
@@ -749,15 +747,8 @@
         [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
         NSDate *endDatetime = [formatter dateFromString:end_datetime];
         
-        [formatter setDateFormat:@"HH:mm"];
-        [formatter setLocale:[NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"]];
-        [formatter setTimeZone:[NSTimeZone localTimeZone]];
-        NSString *startMicroDateTime = [formatter stringFromDate:startDatetime];
-        
-        [formatter setDateFormat:@"HH:mm"];
-        [formatter setLocale:[NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"]];
-        [formatter setTimeZone:[NSTimeZone localTimeZone]];
-        NSString *endMicroDateTime = [formatter stringFromDate:endDatetime];
+        NSString *startMicroDateTime = [Constants toStringDate:startDatetime withFormat:@"HH:mm"];
+        NSString *endMicroDateTime = [Constants toStringDate:endDatetime withFormat:@"HH:mm"];
         
         [self.eventTimeBottom setText:[NSString stringWithFormat:@"%@ - %@", startMicroDateTime, endMicroDateTime]];
         
@@ -1009,10 +1000,7 @@
         [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
         NSDate *startDatetime = [formatter dateFromString:start_datetime];
         
-        [formatter setDateFormat:PHDateFormatAppShort];
-        [formatter setLocale:[NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"]];
-        [formatter setTimeZone:[NSTimeZone localTimeZone]];
-        NSString *shortDateTime = [formatter stringFromDate:startDatetime];
+        NSString *shortDateTime = [Constants toStringDate:startDatetime withFormat:PHDateFormatAppShort];
         
         [self.bookingEventDate setText:shortDateTime];
         [self.bookingEventDateBottom setText:shortDateTime];
@@ -1023,15 +1011,8 @@
         [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
         NSDate *endDatetime = [formatter dateFromString:end_datetime];
         
-        [formatter setDateFormat:@"HH:mm"];
-        [formatter setLocale:[NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"]];
-        [formatter setTimeZone:[NSTimeZone localTimeZone]];
-        NSString *startMicroDateTime = [formatter stringFromDate:startDatetime];
-        
-        [formatter setDateFormat:@"HH:mm"];
-        [formatter setLocale:[NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"]];
-        [formatter setTimeZone:[NSTimeZone localTimeZone]];
-        NSString *endMicroDateTime = [formatter stringFromDate:endDatetime];
+        NSString *startMicroDateTime = [Constants toStringDate:startDatetime withFormat:@"HH:mm"];
+        NSString *endMicroDateTime = [Constants toStringDate:endDatetime withFormat:@"HH:mm"];
         
         [self.bookingEventTimeBottom setText:[NSString stringWithFormat:@"%@ - %@", startMicroDateTime, endMicroDateTime]];
         

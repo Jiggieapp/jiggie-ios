@@ -15,6 +15,7 @@
 #import "SVProgressHUD.h"
 #import "AnalyticManager.h"
 #import "TicketSuccessViewController.h"
+#import "Constants.h"
 
 
 @interface TicketSummaryViewController ()
@@ -631,12 +632,7 @@ NSInteger const MaxBookingTableGuest = 100;
                 [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
                 NSDate *startDatetime = [formatter dateFromString:start_datetime];
                 
-                [formatter setDateFormat:PHDateFormatApp];
-                [formatter setLocale:[NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"]];
-                [formatter setTimeZone:[NSTimeZone localTimeZone]];
-                NSString *shortDateTime = [formatter stringFromDate:startDatetime];
-                
-                ticketConfirmationViewController.eventDateString = shortDateTime;
+                ticketConfirmationViewController.eventDateString = [Constants toStringDate:startDatetime withFormat:PHDateFormatApp];
                 
                 [self.navigationController pushViewController:ticketConfirmationViewController animated:YES];
             }
