@@ -14,9 +14,13 @@ typedef enum {
     RoomTypeGroup
 } RoomType;
 
+@class FIRDatabaseReference;
 @interface Room : MTLModel <MTLJSONSerializing>
 
 @property(copy, nonatomic, readonly) NSString *name;
 @property(assign, nonatomic, readonly) RoomType type;
+
++ (FIRDatabaseReference *)reference;
++ (FIRDatabaseReference *)referenceWithRoomId:(NSString *)roomId;
 
 @end

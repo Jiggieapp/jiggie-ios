@@ -9,8 +9,12 @@
 #import <Foundation/Foundation.h>
 #import "Mantle.h"
 
+@class FIRDatabaseReference;
 @interface RoomMember : MTLModel <MTLJSONSerializing>
 
 @property(copy, nonatomic, readonly) NSString *fbId;
+
++ (FIRDatabaseReference *)reference;
++ (FIRDatabaseReference *)referenceWithRoomId:(NSString *)roomId;
 
 @end
