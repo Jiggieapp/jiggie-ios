@@ -15,6 +15,7 @@
 		93042B631D1005F2004A8B2F /* FirebaseDatabase.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93042B5C1D1005F2004A8B2F /* FirebaseDatabase.framework */; };
 		93042B651D1008B6004A8B2F /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 93042B641D1008B6004A8B2F /* GoogleService-Info.plist */; };
 		93042B691D100C62004A8B2F /* Member.m in Sources */ = {isa = PBXBuildFile; fileRef = 93042B681D100C62004A8B2F /* Member.m */; };
+		93042B6F1D1014E5004A8B2F /* Room.m in Sources */ = {isa = PBXBuildFile; fileRef = 93042B6E1D1014E5004A8B2F /* Room.m */; };
 		936673FC1CD7164A00AC94F3 /* UIActionSheet+Blocks.m in Sources */ = {isa = PBXBuildFile; fileRef = 936673FA1CD7164A00AC94F3 /* UIActionSheet+Blocks.m */; };
 		936674061CD718A800AC94F3 /* TPKeyboardAvoidingScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 936674031CD718A800AC94F3 /* TPKeyboardAvoidingScrollView.m */; };
 		936674071CD718A900AC94F3 /* UIScrollView+TPKeyboardAvoidingAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 936674051CD718A800AC94F3 /* UIScrollView+TPKeyboardAvoidingAdditions.m */; };
@@ -468,6 +469,8 @@
 		93042B641D1008B6004A8B2F /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		93042B671D100C62004A8B2F /* Member.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Member.h; sourceTree = "<group>"; };
 		93042B681D100C62004A8B2F /* Member.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Member.m; sourceTree = "<group>"; };
+		93042B6D1D1014E5004A8B2F /* Room.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Room.h; sourceTree = "<group>"; };
+		93042B6E1D1014E5004A8B2F /* Room.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Room.m; sourceTree = "<group>"; };
 		936673F91CD7164A00AC94F3 /* UIActionSheet+Blocks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIActionSheet+Blocks.h"; sourceTree = "<group>"; };
 		936673FA1CD7164A00AC94F3 /* UIActionSheet+Blocks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIActionSheet+Blocks.m"; sourceTree = "<group>"; };
 		936674021CD718A800AC94F3 /* TPKeyboardAvoidingScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TPKeyboardAvoidingScrollView.h; sourceTree = "<group>"; };
@@ -1379,6 +1382,8 @@
 			children = (
 				93042B671D100C62004A8B2F /* Member.h */,
 				93042B681D100C62004A8B2F /* Member.m */,
+				93042B6D1D1014E5004A8B2F /* Room.h */,
+				93042B6E1D1014E5004A8B2F /* Room.m */,
 			);
 			path = Firebase;
 			sourceTree = "<group>";
@@ -3393,6 +3398,7 @@
 				DAABB1121C1FF0F3004DDCFA /* AnalyticManager.m in Sources */,
 				DAABB2A81C1FF5AE004DDCFA /* MPPropertyDescription.m in Sources */,
 				DA0CEC8D1C9C181B00C0DA44 /* PurchaseHistoryViewController.m in Sources */,
+				93042B6F1D1014E5004A8B2F /* Room.m in Sources */,
 				9366747C1CE1EE6700AC94F3 /* UIView+Animation.m in Sources */,
 				938CE79A1CCE2D2C00ADDD4C /* ZLSwipeableViewMovement.m in Sources */,
 				DAABB0CC1C1FD50E004DDCFA /* EventsHostDetail.m in Sources */,
