@@ -14,6 +14,7 @@
 #import "LocationManager.h"
 #import "JGTooltipHelper.h"
 #import "City.h"
+#import "Firebase.h"
 
 
 ///REMOVE THIS WHEN LIVE
@@ -57,6 +58,9 @@ static NSString *const kAllowTracking = @"allowTracking";
                                                                                                   NSFontAttributeName,
                                                                                                   nil]
                                                                                         forState:UIControlStateNormal];
+    // Use Firebase library to configure APIs
+    [FIRApp configure];
+    
     // Override point for customization after application launch.
     self.sharedData = [SharedData sharedInstance];
     self.inAskingAPNMode = NO;
