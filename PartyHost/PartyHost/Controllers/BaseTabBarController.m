@@ -7,8 +7,6 @@
 //
 
 #import "BaseTabBarController.h"
-#import "EventViewController.h"
-#import "ChatViewController.h"
 
 @interface BaseTabBarController ()
 
