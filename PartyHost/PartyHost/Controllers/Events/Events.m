@@ -20,7 +20,7 @@
 #import "City.h"
 #import "Mantle.h"
 
-#define SCREENS_DEEP 4
+#define SCREENS_DEEP 5
 
 @interface Events()
 
@@ -282,15 +282,15 @@
     [self.filterView addSubview:self.filterTagCollection];
     
     //2nd screen
-    self.eventsSummary = [[EventsSummary alloc] initWithFrame:CGRectMake(self.sharedData.screenWidth, -20, self.sharedData.screenWidth, self.mainCon.frame.size.height)];
+    self.eventsSummary = [[EventsSummary alloc] initWithFrame:CGRectMake(self.sharedData.screenWidth*2, -20, self.sharedData.screenWidth, self.mainCon.frame.size.height)];
     [self.mainCon addSubview:self.eventsSummary];
     
     //3rd screen
-    self.eventsHostingsList = [[EventsHostingsList alloc] initWithFrame:CGRectMake(self.sharedData.screenWidth*2, -20, self.sharedData.screenWidth, self.mainCon.frame.size.height)];
+    self.eventsHostingsList = [[EventsHostingsList alloc] initWithFrame:CGRectMake(self.sharedData.screenWidth*3, -20, self.sharedData.screenWidth, self.mainCon.frame.size.height)];
     [self.mainCon addSubview:self.eventsHostingsList];
     
     //3rd screen
-    self.eventsGuestList = [[EventsGuestList alloc] initWithFrame:CGRectMake(self.sharedData.screenWidth*2, -20, self.sharedData.screenWidth, self.mainCon.frame.size.height)];
+    self.eventsGuestList = [[EventsGuestList alloc] initWithFrame:CGRectMake(self.sharedData.screenWidth*3, -20, self.sharedData.screenWidth, self.mainCon.frame.size.height)];
     [self.mainCon addSubview:self.eventsGuestList];
     
     //Gone
@@ -1476,7 +1476,7 @@ shouldDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
 {
     [UIView animateWithDuration:0.25 animations:^()
     {
-        self.mainCon.frame = CGRectMake(-self.sharedData.screenWidth, 20, self.sharedData.screenWidth * SCREENS_DEEP, self.sharedData.screenHeight - 20);
+        self.mainCon.frame = CGRectMake(-self.sharedData.screenWidth * 2, 20, self.sharedData.screenWidth * SCREENS_DEEP, self.sharedData.screenHeight - 20);
     } completion:^(BOOL finished)
     {
         [JGTooltipHelper setShowed:@"Tooltip_LoadEvent_isShowed"];
@@ -1489,7 +1489,7 @@ shouldDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
 {
     [UIView animateWithDuration:0 animations:^()
      {
-         self.mainCon.frame = CGRectMake(-self.sharedData.screenWidth, 20, self.sharedData.screenWidth * SCREENS_DEEP, self.sharedData.screenHeight - 20);
+         self.mainCon.frame = CGRectMake(-self.sharedData.screenWidth * 2, 20, self.sharedData.screenWidth * SCREENS_DEEP, self.sharedData.screenHeight - 20);
      } completion:^(BOOL finished)
      {
      }];
