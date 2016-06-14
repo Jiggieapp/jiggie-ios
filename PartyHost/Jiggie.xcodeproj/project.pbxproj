@@ -86,8 +86,6 @@
 		9366752E1CE30EB200AC94F3 /* APSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 936675161CE30EB200AC94F3 /* APSource.m */; };
 		936675311CE3381100AC94F3 /* Contact.m in Sources */ = {isa = PBXBuildFile; fileRef = 936675301CE3381100AC94F3 /* Contact.m */; };
 		9386D5491D07EE940094AC12 /* City.m in Sources */ = {isa = PBXBuildFile; fileRef = 9386D5481D07EE940094AC12 /* City.m */; };
-		9386D54D1D07F41F0094AC12 /* CityListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9386D54B1D07F41F0094AC12 /* CityListViewController.m */; };
-		9386D54E1D07F41F0094AC12 /* CityListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9386D54C1D07F41F0094AC12 /* CityListViewController.xib */; };
 		938CE7781CCE2C9900ADDD4C /* ShadowView.m in Sources */ = {isa = PBXBuildFile; fileRef = 938CE7711CCE2C9800ADDD4C /* ShadowView.m */; };
 		938CE7791CCE2C9900ADDD4C /* FeedCardView.m in Sources */ = {isa = PBXBuildFile; fileRef = 938CE7731CCE2C9900ADDD4C /* FeedCardView.m */; };
 		938CE77A1CCE2C9900ADDD4C /* FeedCardView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 938CE7741CCE2C9900ADDD4C /* FeedCardView.xib */; };
@@ -146,6 +144,10 @@
 		CB3EB6C81B459177003F658F /* App.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CB3EB6C71B459177003F658F /* App.xcassets */; };
 		CB3EB6CA1B459184003F658F /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = CB3EB6C91B459184003F658F /* LaunchScreen.xib */; };
 		CB3EB6CC1B45919A003F658F /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CB3EB6CB1B45919A003F658F /* Images.xcassets */; };
+		DA0B6B911D1005A200680867 /* EventsSummary.m in Sources */ = {isa = PBXBuildFile; fileRef = DA0B6B901D1005A200680867 /* EventsSummary.m */; };
+		DA0B6B941D10097D00680867 /* EventsTheme.m in Sources */ = {isa = PBXBuildFile; fileRef = DA0B6B931D10097D00680867 /* EventsTheme.m */; };
+		DA0B6B981D1010B800680867 /* CityListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA0B6B961D1010B800680867 /* CityListViewController.m */; };
+		DA0B6B991D1010B800680867 /* CityListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA0B6B971D1010B800680867 /* CityListViewController.xib */; };
 		DA0CEC8D1C9C181B00C0DA44 /* PurchaseHistoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA0CEC8C1C9C181B00C0DA44 /* PurchaseHistoryViewController.m */; };
 		DA0CEC901C9D39E200C0DA44 /* PurchaseHistoryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DA0CEC8F1C9D39E200C0DA44 /* PurchaseHistoryCell.m */; };
 		DA10F51D1C52149F006090ED /* SVIndefiniteAnimatedView.m in Sources */ = {isa = PBXBuildFile; fileRef = DA10F5161C52149F006090ED /* SVIndefiniteAnimatedView.m */; };
@@ -154,7 +156,6 @@
 		DA10F5201C52149F006090ED /* SVRadialGradientLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = DA10F51C1C52149F006090ED /* SVRadialGradientLayer.m */; };
 		DA14910F1CE33C3A00566173 /* EmptyCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DA14910D1CE33C3A00566173 /* EmptyCell.m */; };
 		DA1491101CE33C3A00566173 /* EmptyCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA14910E1CE33C3A00566173 /* EmptyCell.xib */; };
-		DA1FF2CD1D06B44900987AA6 /* BaseTabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA1FF2CC1D06B44900987AA6 /* BaseTabBarController.m */; };
 		DA3306991CDA61A500A4126D /* JDFSequentialTooltipManager.m in Sources */ = {isa = PBXBuildFile; fileRef = DA33068F1CDA61A500A4126D /* JDFSequentialTooltipManager.m */; };
 		DA33069A1CDA61A500A4126D /* JDFTooltipManager.m in Sources */ = {isa = PBXBuildFile; fileRef = DA3306911CDA61A500A4126D /* JDFTooltipManager.m */; };
 		DA33069B1CDA61A500A4126D /* JDFTooltipView.m in Sources */ = {isa = PBXBuildFile; fileRef = DA3306941CDA61A500A4126D /* JDFTooltipView.m */; };
@@ -216,7 +217,6 @@
 		DAABB0C41C1FD50E004DDCFA /* Events.m in Sources */ = {isa = PBXBuildFile; fileRef = DAABB0321C1FD50E004DDCFA /* Events.m */; };
 		DAABB0C51C1FD50E004DDCFA /* EventsHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = DAABB0341C1FD50E004DDCFA /* EventsHeader.m */; };
 		DAABB0C61C1FD50E004DDCFA /* EventsRowCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DAABB0361C1FD50E004DDCFA /* EventsRowCell.m */; };
-		DAABB0C71C1FD50E004DDCFA /* EventsSummary.m in Sources */ = {isa = PBXBuildFile; fileRef = DAABB0381C1FD50E004DDCFA /* EventsSummary.m */; };
 		DAABB0C81C1FD50E004DDCFA /* EventsSummaryModal.m in Sources */ = {isa = PBXBuildFile; fileRef = DAABB03A1C1FD50E004DDCFA /* EventsSummaryModal.m */; };
 		DAABB0C91C1FD50E004DDCFA /* EventsVenueDetail.m in Sources */ = {isa = PBXBuildFile; fileRef = DAABB03C1C1FD50E004DDCFA /* EventsVenueDetail.m */; };
 		DAABB0CA1C1FD50E004DDCFA /* EventsGuestList.m in Sources */ = {isa = PBXBuildFile; fileRef = DAABB03F1C1FD50E004DDCFA /* EventsGuestList.m */; };
@@ -609,9 +609,6 @@
 		936675301CE3381100AC94F3 /* Contact.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Contact.m; sourceTree = "<group>"; };
 		9386D5471D07EE940094AC12 /* City.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = City.h; sourceTree = "<group>"; };
 		9386D5481D07EE940094AC12 /* City.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = City.m; sourceTree = "<group>"; };
-		9386D54A1D07F41F0094AC12 /* CityListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CityListViewController.h; sourceTree = "<group>"; };
-		9386D54B1D07F41F0094AC12 /* CityListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CityListViewController.m; sourceTree = "<group>"; };
-		9386D54C1D07F41F0094AC12 /* CityListViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CityListViewController.xib; sourceTree = "<group>"; };
 		938CE7701CCE2C9800ADDD4C /* ShadowView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShadowView.h; sourceTree = "<group>"; };
 		938CE7711CCE2C9800ADDD4C /* ShadowView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShadowView.m; sourceTree = "<group>"; };
 		938CE7721CCE2C9800ADDD4C /* FeedCardView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FeedCardView.h; sourceTree = "<group>"; };
@@ -718,6 +715,12 @@
 		CB3EB6C91B459184003F658F /* LaunchScreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LaunchScreen.xib; sourceTree = "<group>"; };
 		CB3EB6CB1B45919A003F658F /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		DA0906F41CCE3D9F0072D6EC /* Jiggie 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Jiggie 2.xcdatamodel"; sourceTree = "<group>"; };
+		DA0B6B901D1005A200680867 /* EventsSummary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventsSummary.m; sourceTree = "<group>"; };
+		DA0B6B921D10097D00680867 /* EventsTheme.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventsTheme.h; sourceTree = "<group>"; };
+		DA0B6B931D10097D00680867 /* EventsTheme.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventsTheme.m; sourceTree = "<group>"; };
+		DA0B6B951D1010B800680867 /* CityListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CityListViewController.h; sourceTree = "<group>"; };
+		DA0B6B961D1010B800680867 /* CityListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CityListViewController.m; sourceTree = "<group>"; };
+		DA0B6B971D1010B800680867 /* CityListViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CityListViewController.xib; sourceTree = "<group>"; };
 		DA0CEC8B1C9C181B00C0DA44 /* PurchaseHistoryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PurchaseHistoryViewController.h; sourceTree = "<group>"; };
 		DA0CEC8C1C9C181B00C0DA44 /* PurchaseHistoryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PurchaseHistoryViewController.m; sourceTree = "<group>"; };
 		DA0CEC8E1C9D39E200C0DA44 /* PurchaseHistoryCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PurchaseHistoryCell.h; sourceTree = "<group>"; };
@@ -733,8 +736,6 @@
 		DA14910C1CE33C3A00566173 /* EmptyCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmptyCell.h; sourceTree = "<group>"; };
 		DA14910D1CE33C3A00566173 /* EmptyCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmptyCell.m; sourceTree = "<group>"; };
 		DA14910E1CE33C3A00566173 /* EmptyCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EmptyCell.xib; sourceTree = "<group>"; };
-		DA1FF2CB1D06B44900987AA6 /* BaseTabBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseTabBarController.h; sourceTree = "<group>"; };
-		DA1FF2CC1D06B44900987AA6 /* BaseTabBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseTabBarController.m; sourceTree = "<group>"; };
 		DA33068E1CDA61A500A4126D /* JDFSequentialTooltipManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JDFSequentialTooltipManager.h; sourceTree = "<group>"; };
 		DA33068F1CDA61A500A4126D /* JDFSequentialTooltipManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JDFSequentialTooltipManager.m; sourceTree = "<group>"; };
 		DA3306901CDA61A500A4126D /* JDFTooltipManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JDFTooltipManager.h; sourceTree = "<group>"; };
@@ -871,7 +872,6 @@
 		DAABB0351C1FD50E004DDCFA /* EventsRowCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventsRowCell.h; sourceTree = "<group>"; };
 		DAABB0361C1FD50E004DDCFA /* EventsRowCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventsRowCell.m; sourceTree = "<group>"; };
 		DAABB0371C1FD50E004DDCFA /* EventsSummary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventsSummary.h; sourceTree = "<group>"; };
-		DAABB0381C1FD50E004DDCFA /* EventsSummary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventsSummary.m; sourceTree = "<group>"; };
 		DAABB0391C1FD50E004DDCFA /* EventsSummaryModal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventsSummaryModal.h; sourceTree = "<group>"; };
 		DAABB03A1C1FD50E004DDCFA /* EventsSummaryModal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventsSummaryModal.m; sourceTree = "<group>"; };
 		DAABB03B1C1FD50E004DDCFA /* EventsVenueDetail.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventsVenueDetail.h; sourceTree = "<group>"; };
@@ -2049,8 +2049,6 @@
 				DAABB0541C1FD50E004DDCFA /* HostVenueDetailFromShare.m */,
 				DA9E0CF51C61F75000966F16 /* BaseViewController.h */,
 				DA9E0CF61C61F75000966F16 /* BaseViewController.m */,
-				DA1FF2CB1D06B44900987AA6 /* BaseTabBarController.h */,
-				DA1FF2CC1D06B44900987AA6 /* BaseTabBarController.m */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -2119,17 +2117,19 @@
 				DAABB0321C1FD50E004DDCFA /* Events.m */,
 				DAABB0331C1FD50E004DDCFA /* EventsHeader.h */,
 				DAABB0341C1FD50E004DDCFA /* EventsHeader.m */,
+				DA0B6B921D10097D00680867 /* EventsTheme.h */,
+				DA0B6B931D10097D00680867 /* EventsTheme.m */,
 				DAABB0351C1FD50E004DDCFA /* EventsRowCell.h */,
 				DAABB0361C1FD50E004DDCFA /* EventsRowCell.m */,
 				DAABB0371C1FD50E004DDCFA /* EventsSummary.h */,
-				DAABB0381C1FD50E004DDCFA /* EventsSummary.m */,
+				DA0B6B901D1005A200680867 /* EventsSummary.m */,
 				DAABB0391C1FD50E004DDCFA /* EventsSummaryModal.h */,
 				DAABB03A1C1FD50E004DDCFA /* EventsSummaryModal.m */,
 				DAABB03B1C1FD50E004DDCFA /* EventsVenueDetail.h */,
 				DAABB03C1C1FD50E004DDCFA /* EventsVenueDetail.m */,
-				9386D54A1D07F41F0094AC12 /* CityListViewController.h */,
-				9386D54B1D07F41F0094AC12 /* CityListViewController.m */,
-				9386D54C1D07F41F0094AC12 /* CityListViewController.xib */,
+				DA0B6B951D1010B800680867 /* CityListViewController.h */,
+				DA0B6B961D1010B800680867 /* CityListViewController.m */,
+				DA0B6B971D1010B800680867 /* CityListViewController.xib */,
 				DAABB03D1C1FD50E004DDCFA /* GuestList */,
 				DAABB0421C1FD50E004DDCFA /* HostList */,
 			);
@@ -3049,7 +3049,7 @@
 				DA700E0E1C63561300E5D945 /* Jiggie.entitlements in Resources */,
 				DAABB0FF1C1FD50E004DDCFA /* Signup.xib in Resources */,
 				FA4D2EFB1A4D9A77006828E7 /* Main.storyboard in Resources */,
-				9386D54E1D07F41F0094AC12 /* CityListViewController.xib in Resources */,
+				DA0B6B991D1010B800680867 /* CityListViewController.xib in Resources */,
 				CB3EB6C81B459177003F658F /* App.xcassets in Resources */,
 				DAABB0E21C1FD50E004DDCFA /* GenericOverlay.xib in Resources */,
 				DAABB2E61C1FF993004DDCFA /* FaktPro-SemiBold.ttf in Resources */,
@@ -3122,8 +3122,10 @@
 				DAABB1171C1FF0F3004DDCFA /* PHImage.m in Sources */,
 				9366752C1CE30EB200AC94F3 /* APRelatedPerson.m in Sources */,
 				DAABB2C31C1FF5AE004DDCFA /* NSDate+TimeAgo.m in Sources */,
+				DA0B6B911D1005A200680867 /* EventsSummary.m in Sources */,
 				DAABB1131C1FF0F3004DDCFA /* NSDate+Calculators.m in Sources */,
 				936674561CD7627500AC94F3 /* UIImage+GIF.m in Sources */,
+				DA0B6B981D1010B800680867 /* CityListViewController.m in Sources */,
 				DA47B23B1C3BA492001B4476 /* FeedMatch.m in Sources */,
 				DAABB0E51C1FD50E004DDCFA /* PhoneVerify.m in Sources */,
 				DAABB0C61C1FD50E004DDCFA /* EventsRowCell.m in Sources */,
@@ -3183,6 +3185,7 @@
 				9366752B1CE30EB200AC94F3 /* APRecordDate.m in Sources */,
 				DAABB29F1C1FF5AE004DDCFA /* MPNotificationViewController.m in Sources */,
 				938CE7DE1CD1C91700ADDD4C /* SocialOptionTableViewCell.m in Sources */,
+				DA0B6B941D10097D00680867 /* EventsTheme.m in Sources */,
 				936674231CD7621500AC94F3 /* OLAlbumViewController.m in Sources */,
 				DA5ED6171C92975100004C7E /* VTiOSAPI.m in Sources */,
 				DA9B10A01CB4D7B7001FB798 /* GTMNSString+HTML.m in Sources */,
@@ -3289,7 +3292,6 @@
 				DA4305611C22823700ED6C54 /* Jiggie.xcdatamodeld in Sources */,
 				DAABB2981C1FF5AE004DDCFA /* MPDesignerEventBindingRequestMesssage.m in Sources */,
 				DAABB2C21C1FF5AE004DDCFA /* UIImage+MPImageEffects.m in Sources */,
-				9386D54D1D07F41F0094AC12 /* CityListViewController.m in Sources */,
 				DAABB0C51C1FD50E004DDCFA /* EventsHeader.m in Sources */,
 				9366742E1CD7621500AC94F3 /* UIImageView+FacebookFadeIn.m in Sources */,
 				DAABB28F1C1FF5AE004DDCFA /* MPCATransform3DToNSDictionaryValueTransformer.m in Sources */,
@@ -3349,7 +3351,6 @@
 				938CE80C1CD3435700ADDD4C /* UIControl+HitTestEdgeInsets.m in Sources */,
 				9366751F1CE30EB200AC94F3 /* APAddressBookExternalChangeRoutine.m in Sources */,
 				DAABB2CA1C1FF5AE004DDCFA /* TSCore.m in Sources */,
-				DAABB0C71C1FD50E004DDCFA /* EventsSummary.m in Sources */,
 				DAABB2A71C1FF5AE004DDCFA /* MPPassThroughValueTransformer.m in Sources */,
 				DAABB0C21C1FD50E004DDCFA /* CreditCardComplete.m in Sources */,
 				9366752E1CE30EB200AC94F3 /* APSource.m in Sources */,
@@ -3358,7 +3359,6 @@
 				DA0CEC901C9D39E200C0DA44 /* PurchaseHistoryCell.m in Sources */,
 				DA4305691C22916E00ED6C54 /* Event.m in Sources */,
 				DAABB12B1C1FF13A004DDCFA /* PerkButton.m in Sources */,
-				DA1FF2CD1D06B44900987AA6 /* BaseTabBarController.m in Sources */,
 				DAABB0CB1C1FD50E004DDCFA /* EventsGuestListCell.m in Sources */,
 				938CE7C51CCF627D00ADDD4C /* MTLJSONAdapter.m in Sources */,
 				DA52379C1C805D9A00E140C1 /* TicketListCell.m in Sources */,
