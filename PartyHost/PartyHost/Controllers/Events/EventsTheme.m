@@ -28,9 +28,26 @@
     [self.titleLabel setText:@"Themes"];
     [self.navBar addSubview:self.titleLabel];
     
+    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(self.navBar.frame),
+                                                                   self.sharedData.screenWidth,
+                                                                   self.sharedData.screenHeight - self.navBar.frame.size.height)];
+    self.tableView.backgroundColor = [UIColor whiteColor];
+    self.tableView.delegate = self;
+    self.tableView.dataSource = self;
+    self.tableView.separatorColor = [UIColor clearColor];
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.tableView.allowsMultipleSelectionDuringEditing = NO;
+    self.tableView.showsVerticalScrollIndicator = NO;
+    [self addSubview:self.tableView];
     
+    UIView *tmpPurpleView = [[UIView alloc] initWithFrame:CGRectMake(0, -300, self.sharedData.screenWidth, 300)];
+    tmpPurpleView.backgroundColor = [UIColor phPurpleColor];
+    [self.tableView addSubview:tmpPurpleView];
     
     return self;
 }
+
+
+
 
 @end

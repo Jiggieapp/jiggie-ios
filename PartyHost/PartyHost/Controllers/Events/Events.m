@@ -1471,16 +1471,28 @@ shouldDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
      }];
 }
 
-//2nd Screen (VENUE+LIST)
--(void)goToSummary
+//2nd Screen
+-(void)goToEventTheme
 {
     [UIView animateWithDuration:0.25 animations:^()
     {
-        self.mainCon.frame = CGRectMake(-self.sharedData.screenWidth * 2, 20, self.sharedData.screenWidth * SCREENS_DEEP, self.sharedData.screenHeight - 20);
+        self.mainCon.frame = CGRectMake(-self.sharedData.screenWidth, 20, self.sharedData.screenWidth * SCREENS_DEEP, self.sharedData.screenHeight - 20);
     } completion:^(BOOL finished)
     {
         [JGTooltipHelper setShowed:@"Tooltip_LoadEvent_isShowed"];
     }];
+}
+
+//2nd Screen (VENUE+LIST)
+-(void)goToSummary
+{
+    [UIView animateWithDuration:0.25 animations:^()
+     {
+         self.mainCon.frame = CGRectMake(-self.sharedData.screenWidth * 2, 20, self.sharedData.screenWidth * SCREENS_DEEP, self.sharedData.screenHeight - 20);
+     } completion:^(BOOL finished)
+     {
+         [JGTooltipHelper setShowed:@"Tooltip_LoadEvent_isShowed"];
+     }];
 }
 
 
