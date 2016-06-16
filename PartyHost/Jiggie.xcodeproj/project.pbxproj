@@ -13,11 +13,12 @@
 		93042B611D1005F2004A8B2F /* GoogleSymbolUtilities.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93042B591D1005F2004A8B2F /* GoogleSymbolUtilities.framework */; };
 		93042B621D1005F2004A8B2F /* GoogleUtilities.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93042B5A1D1005F2004A8B2F /* GoogleUtilities.framework */; };
 		93042B631D1005F2004A8B2F /* FirebaseDatabase.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93042B5C1D1005F2004A8B2F /* FirebaseDatabase.framework */; };
-		93042B651D1008B6004A8B2F /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 93042B641D1008B6004A8B2F /* GoogleService-Info.plist */; };
 		93042B691D100C62004A8B2F /* Member.m in Sources */ = {isa = PBXBuildFile; fileRef = 93042B681D100C62004A8B2F /* Member.m */; };
 		93042B6F1D1014E5004A8B2F /* Room.m in Sources */ = {isa = PBXBuildFile; fileRef = 93042B6E1D1014E5004A8B2F /* Room.m */; };
 		93042B721D101625004A8B2F /* RoomMember.m in Sources */ = {isa = PBXBuildFile; fileRef = 93042B711D101625004A8B2F /* RoomMember.m */; };
 		93042B751D1016E5004A8B2F /* Message.m in Sources */ = {isa = PBXBuildFile; fileRef = 93042B741D1016E5004A8B2F /* Message.m */; };
+		93042B7F1D111E27004A8B2F /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 93042B7E1D111E27004A8B2F /* GoogleService-Info.plist */; };
+		93042B821D128114004A8B2F /* RoomGroupInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 93042B811D128114004A8B2F /* RoomGroupInfo.m */; };
 		936673FC1CD7164A00AC94F3 /* UIActionSheet+Blocks.m in Sources */ = {isa = PBXBuildFile; fileRef = 936673FA1CD7164A00AC94F3 /* UIActionSheet+Blocks.m */; };
 		936674061CD718A800AC94F3 /* TPKeyboardAvoidingScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 936674031CD718A800AC94F3 /* TPKeyboardAvoidingScrollView.m */; };
 		936674071CD718A900AC94F3 /* UIScrollView+TPKeyboardAvoidingAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 936674051CD718A800AC94F3 /* UIScrollView+TPKeyboardAvoidingAdditions.m */; };
@@ -468,7 +469,6 @@
 		93042B5A1D1005F2004A8B2F /* GoogleUtilities.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GoogleUtilities.framework; sourceTree = "<group>"; };
 		93042B5C1D1005F2004A8B2F /* FirebaseDatabase.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FirebaseDatabase.framework; sourceTree = "<group>"; };
 		93042B5D1D1005F2004A8B2F /* Firebase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Firebase.h; sourceTree = "<group>"; };
-		93042B641D1008B6004A8B2F /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		93042B671D100C62004A8B2F /* Member.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Member.h; sourceTree = "<group>"; };
 		93042B681D100C62004A8B2F /* Member.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Member.m; sourceTree = "<group>"; };
 		93042B6D1D1014E5004A8B2F /* Room.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Room.h; sourceTree = "<group>"; };
@@ -477,6 +477,9 @@
 		93042B711D101625004A8B2F /* RoomMember.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RoomMember.m; sourceTree = "<group>"; };
 		93042B731D1016E5004A8B2F /* Message.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Message.h; sourceTree = "<group>"; };
 		93042B741D1016E5004A8B2F /* Message.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Message.m; sourceTree = "<group>"; };
+		93042B7E1D111E27004A8B2F /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		93042B801D128114004A8B2F /* RoomGroupInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RoomGroupInfo.h; sourceTree = "<group>"; };
+		93042B811D128114004A8B2F /* RoomGroupInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RoomGroupInfo.m; sourceTree = "<group>"; };
 		936673F91CD7164A00AC94F3 /* UIActionSheet+Blocks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIActionSheet+Blocks.h"; sourceTree = "<group>"; };
 		936673FA1CD7164A00AC94F3 /* UIActionSheet+Blocks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIActionSheet+Blocks.m"; sourceTree = "<group>"; };
 		936674021CD718A800AC94F3 /* TPKeyboardAvoidingScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TPKeyboardAvoidingScrollView.h; sourceTree = "<group>"; };
@@ -1390,6 +1393,8 @@
 				93042B681D100C62004A8B2F /* Member.m */,
 				93042B6D1D1014E5004A8B2F /* Room.h */,
 				93042B6E1D1014E5004A8B2F /* Room.m */,
+				93042B801D128114004A8B2F /* RoomGroupInfo.h */,
+				93042B811D128114004A8B2F /* RoomGroupInfo.m */,
 				93042B701D101625004A8B2F /* RoomMember.h */,
 				93042B711D101625004A8B2F /* RoomMember.m */,
 				93042B731D1016E5004A8B2F /* Message.h */,
@@ -2896,8 +2901,8 @@
 		FA4D2EEF1A4D9A77006828E7 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				93042B7E1D111E27004A8B2F /* GoogleService-Info.plist */,
 				FA4D2EF01A4D9A77006828E7 /* Info.plist */,
-				93042B641D1008B6004A8B2F /* GoogleService-Info.plist */,
 				FA4D2EF11A4D9A77006828E7 /* main.m */,
 				FA4D2F4A1A4DDDA2006828E7 /* PartyHost.pch */,
 			);
@@ -3041,7 +3046,6 @@
 				DAABB2E11C1FF993004DDCFA /* Calibre-Bold.ttf in Resources */,
 				DAABB0E81C1FD50E004DDCFA /* ChatPopup.xcassets in Resources */,
 				DAABB27E1C1FF5AE004DDCFA /* Media.xcassets in Resources */,
-				93042B651D1008B6004A8B2F /* GoogleService-Info.plist in Resources */,
 				DA34D80E1C69C794008162DA /* jiggie.cer in Resources */,
 				DAABB2E51C1FF993004DDCFA /* FaktPro-Blond.ttf in Resources */,
 				DAABB0EC1C1FD50E004DDCFA /* EventsPopup.xib in Resources */,
@@ -3068,6 +3072,7 @@
 				DAABB0F61C1FD50E004DDCFA /* Setup.xib in Resources */,
 				DAABB2BF1C1FF5AE004DDCFA /* test_variant.json in Resources */,
 				DAABB2771C1FF5AE004DDCFA /* GSTouchImage@2x.png in Resources */,
+				93042B7F1D111E27004A8B2F /* GoogleService-Info.plist in Resources */,
 				938CE81F1CD387BC00ADDD4C /* EditProfileViewController.xib in Resources */,
 				938CE7C41CCF627D00ADDD4C /* Info.plist in Resources */,
 				936674791CE1EAC500AC94F3 /* SuccessPromotionsView.xib in Resources */,
@@ -3439,6 +3444,7 @@
 				DAABB2631C1FF5AE004DDCFA /* FUISegmentedControl.m in Sources */,
 				DAABB2D41C1FF5AE004DDCFA /* UIImageViewAligned.m in Sources */,
 				DAABB12F1C1FF13A004DDCFA /* TrendButton.m in Sources */,
+				93042B821D128114004A8B2F /* RoomGroupInfo.m in Sources */,
 				DAABB0D51C1FD50E004DDCFA /* MyConfirmations.m in Sources */,
 				DA33069A1CDA61A500A4126D /* JDFTooltipManager.m in Sources */,
 				DAABB0BB1C1FD50E004DDCFA /* BookTableOfferingCell.m in Sources */,
