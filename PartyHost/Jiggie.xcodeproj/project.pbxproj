@@ -15,7 +15,6 @@
 		93042B631D1005F2004A8B2F /* FirebaseDatabase.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93042B5C1D1005F2004A8B2F /* FirebaseDatabase.framework */; };
 		93042B691D100C62004A8B2F /* Member.m in Sources */ = {isa = PBXBuildFile; fileRef = 93042B681D100C62004A8B2F /* Member.m */; };
 		93042B6F1D1014E5004A8B2F /* Room.m in Sources */ = {isa = PBXBuildFile; fileRef = 93042B6E1D1014E5004A8B2F /* Room.m */; };
-		93042B721D101625004A8B2F /* RoomMember.m in Sources */ = {isa = PBXBuildFile; fileRef = 93042B711D101625004A8B2F /* RoomMember.m */; };
 		93042B751D1016E5004A8B2F /* Message.m in Sources */ = {isa = PBXBuildFile; fileRef = 93042B741D1016E5004A8B2F /* Message.m */; };
 		93042B7F1D111E27004A8B2F /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 93042B7E1D111E27004A8B2F /* GoogleService-Info.plist */; };
 		93042B821D128114004A8B2F /* RoomGroupInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 93042B811D128114004A8B2F /* RoomGroupInfo.m */; };
@@ -474,8 +473,6 @@
 		93042B681D100C62004A8B2F /* Member.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Member.m; sourceTree = "<group>"; };
 		93042B6D1D1014E5004A8B2F /* Room.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Room.h; sourceTree = "<group>"; };
 		93042B6E1D1014E5004A8B2F /* Room.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Room.m; sourceTree = "<group>"; };
-		93042B701D101625004A8B2F /* RoomMember.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RoomMember.h; sourceTree = "<group>"; };
-		93042B711D101625004A8B2F /* RoomMember.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RoomMember.m; sourceTree = "<group>"; };
 		93042B731D1016E5004A8B2F /* Message.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Message.h; sourceTree = "<group>"; };
 		93042B741D1016E5004A8B2F /* Message.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Message.m; sourceTree = "<group>"; };
 		93042B7E1D111E27004A8B2F /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -1400,8 +1397,6 @@
 				93042B811D128114004A8B2F /* RoomGroupInfo.m */,
 				93042B831D1282A9004A8B2F /* RoomIndividualInfo.h */,
 				93042B841D1282A9004A8B2F /* RoomIndividualInfo.m */,
-				93042B701D101625004A8B2F /* RoomMember.h */,
-				93042B711D101625004A8B2F /* RoomMember.m */,
 				93042B731D1016E5004A8B2F /* Message.h */,
 				93042B741D1016E5004A8B2F /* Message.m */,
 			);
@@ -3343,7 +3338,6 @@
 				DAABB0E11C1FD50E004DDCFA /* Settings.m in Sources */,
 				DAABB2561C1FF5AE004DDCFA /* AFHTTPSessionManager.m in Sources */,
 				DA6A7FA71CC755F800A666E8 /* DialCodeListViewController.m in Sources */,
-				93042B721D101625004A8B2F /* RoomMember.m in Sources */,
 				936675291CE30EB200AC94F3 /* APName.m in Sources */,
 				DAABB2A41C1FF5AE004DDCFA /* MPObjectSerializer.m in Sources */,
 				DA10F51D1C52149F006090ED /* SVIndefiniteAnimatedView.m in Sources */,
