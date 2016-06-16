@@ -21,4 +21,17 @@
     return [[FIRDatabase database] referenceWithPath:@"users"];
 }
 
++ (void)retrieveUserInfoWithFbId:(NSString *)fbId andCompletionHandler:(UserCompletionHandler)completion {
+    FIRDatabaseReference *reference = [User reference];
+    
+    [reference observeSingleEventOfType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
+        NSError *error;
+        User *user = [MTLJSONAdapter modelOfClass:[User class] fromJSONDictionary:snapshot.value error:&error];
+        
+        if (completion) {
+            completion(user, error);
+        }
+    }];
+}
+
 @end

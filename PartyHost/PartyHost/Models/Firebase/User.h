@@ -9,7 +9,12 @@
 #import <Foundation/Foundation.h>
 #import "Mantle.h"
 
+@class User;
 @class FIRDatabaseReference;
+
+typedef void (^UserCompletionHandler)(User *user,
+                                      NSError *error);
+
 @interface User : MTLModel <MTLJSONSerializing>
 
 @property(copy, nonatomic, readonly) NSString *fbId;
@@ -17,5 +22,7 @@
 @property(copy, nonatomic, readonly) NSString *avatarURL;
 
 + (FIRDatabaseReference *)reference;
++ (void)retrieveUserInfoWithFbId:(NSString *)fbId
+            andCompletionHandler:(UserCompletionHandler)completion;
 
 @end

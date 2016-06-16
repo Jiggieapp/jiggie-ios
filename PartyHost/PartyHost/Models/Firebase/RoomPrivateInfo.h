@@ -16,4 +16,10 @@
 @property(copy, nonatomic, readonly) NSString *lastMessage;
 @property(assign, nonatomic, readonly) NSTimeInterval updatedAt;
 
++ (NSString *)getFriendFbIdFromIdentifier:(NSString *)identifier
+                                     fbId:(NSString *)currentFbId;
+
++ (NSString *)getPrivateMessageIdWithsenderId:(NSString *)senderId
+                                andReceiverId:(NSString *)receiverId;
+
 @end
