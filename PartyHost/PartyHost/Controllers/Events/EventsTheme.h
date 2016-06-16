@@ -8,11 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
-@interface EventsTheme : UIView
+@interface EventsTheme : UIView <UITableViewDelegate, UITableViewDataSource>
 
 @property (strong, nonatomic) SharedData *sharedData;
 
 @property (nonatomic, strong) UIView *navBar;
 @property (nonatomic, strong) UILabel *titleLabel;
+@property (nonatomic, strong) UITableView *tableView;
 
 @end
