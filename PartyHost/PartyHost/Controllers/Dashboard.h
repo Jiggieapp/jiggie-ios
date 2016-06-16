@@ -24,7 +24,7 @@
 #import "EventsSummaryModal.h"
 #import "FeedMatch.h"
 
-@class ChatListView;
+@class ChatView;
 @interface Dashboard : UIView
 
 @property(nonatomic,strong) SharedData      *sharedData;
@@ -36,7 +36,7 @@
 @property(nonatomic,strong) NSMutableArray  *pagesA;
 
 @property(nonatomic,strong) Events          *eventsPage;
-@property(nonatomic,strong) ChatListView    *chatPage;
+@property(nonatomic,strong) ChatView        *chatPage;
 @property(nonatomic,strong) Profile         *profilePage;
 @property(nonatomic,strong) More            *morePage;
 @property(nonatomic,strong) Hostings        *hostingsPage;
