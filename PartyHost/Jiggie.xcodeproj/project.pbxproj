@@ -190,6 +190,9 @@
 		DA6A7FA71CC755F800A666E8 /* DialCodeListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA6A7FA61CC755F800A666E8 /* DialCodeListViewController.m */; };
 		DA700E0E1C63561300E5D945 /* Jiggie.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = DA700E0D1C63515D00E5D945 /* Jiggie.entitlements */; };
 		DA89B2461CF2FC7D0010EDE2 /* JGInviteHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = DA89B2451CF2FC7D0010EDE2 /* JGInviteHelper.m */; };
+		DA9945031D113E7F008A45EA /* Theme.m in Sources */ = {isa = PBXBuildFile; fileRef = DA9945021D113E7F008A45EA /* Theme.m */; };
+		DA9945071D114F7F008A45EA /* EventsThemeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DA9945051D114F7F008A45EA /* EventsThemeCell.m */; };
+		DA9945081D114F7F008A45EA /* EventsThemeCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA9945061D114F7F008A45EA /* EventsThemeCell.xib */; };
 		DA9B10A01CB4D7B7001FB798 /* GTMNSString+HTML.m in Sources */ = {isa = PBXBuildFile; fileRef = DA9B108F1CB4D7B7001FB798 /* GTMNSString+HTML.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		DA9B10A51CB4D7B7001FB798 /* NSString+HTML.m in Sources */ = {isa = PBXBuildFile; fileRef = DA9B109A1CB4D7B7001FB798 /* NSString+HTML.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		DA9B10A61CB4D7B7001FB798 /* NSString+XMLEntities.m in Sources */ = {isa = PBXBuildFile; fileRef = DA9B109C1CB4D7B7001FB798 /* NSString+XMLEntities.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -816,6 +819,12 @@
 		DA832D7F1CED999700277721 /* Jiggie 3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Jiggie 3.xcdatamodel"; sourceTree = "<group>"; };
 		DA89B2441CF2FC7D0010EDE2 /* JGInviteHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JGInviteHelper.h; sourceTree = "<group>"; };
 		DA89B2451CF2FC7D0010EDE2 /* JGInviteHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JGInviteHelper.m; sourceTree = "<group>"; };
+		DA9945011D113E7F008A45EA /* Theme.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Theme.h; sourceTree = "<group>"; };
+		DA9945021D113E7F008A45EA /* Theme.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Theme.m; sourceTree = "<group>"; };
+		DA9945041D114F7F008A45EA /* EventsThemeCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventsThemeCell.h; sourceTree = "<group>"; };
+		DA9945051D114F7F008A45EA /* EventsThemeCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventsThemeCell.m; sourceTree = "<group>"; };
+		DA9945061D114F7F008A45EA /* EventsThemeCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EventsThemeCell.xib; sourceTree = "<group>"; };
+		DA9945091D129FBD008A45EA /* Jiggie 4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Jiggie 4.xcdatamodel"; sourceTree = "<group>"; };
 		DA9B108D1CB4D7B7001FB798 /* GTMDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTMDefines.h; sourceTree = "<group>"; };
 		DA9B108E1CB4D7B7001FB798 /* GTMNSString+HTML.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "GTMNSString+HTML.h"; sourceTree = "<group>"; };
 		DA9B108F1CB4D7B7001FB798 /* GTMNSString+HTML.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GTMNSString+HTML.m"; sourceTree = "<group>"; };
@@ -1815,6 +1824,8 @@
 			isa = PBXGroup;
 			children = (
 				93042B661D100C5B004A8B2F /* Firebase */,
+				DA9945011D113E7F008A45EA /* Theme.h */,
+				DA9945021D113E7F008A45EA /* Theme.m */,
 				DA4305661C22916E00ED6C54 /* Event.h */,
 				DA4305671C22916E00ED6C54 /* Event.m */,
 				DAB3AF921C27D66900AA7E25 /* EventDetail.h */,
@@ -2121,6 +2132,9 @@
 				DA0B6B931D10097D00680867 /* EventsTheme.m */,
 				DAABB0351C1FD50E004DDCFA /* EventsRowCell.h */,
 				DAABB0361C1FD50E004DDCFA /* EventsRowCell.m */,
+				DA9945041D114F7F008A45EA /* EventsThemeCell.h */,
+				DA9945051D114F7F008A45EA /* EventsThemeCell.m */,
+				DA9945061D114F7F008A45EA /* EventsThemeCell.xib */,
 				DAABB0371C1FD50E004DDCFA /* EventsSummary.h */,
 				DA0B6B901D1005A200680867 /* EventsSummary.m */,
 				DAABB0391C1FD50E004DDCFA /* EventsSummaryModal.h */,
@@ -3024,6 +3038,7 @@
 				DAABB2E31C1FF993004DDCFA /* Calibre-Regular.ttf in Resources */,
 				DAABB2E71C1FF993004DDCFA /* FaktPro-Thin.ttf in Resources */,
 				DAABB2AB1C1FF5AE004DDCFA /* MPSurvey.storyboard in Resources */,
+				DA9945081D114F7F008A45EA /* EventsThemeCell.xib in Resources */,
 				938CE77A1CCE2C9900ADDD4C /* FeedCardView.xib in Resources */,
 				9366745F1CD8562300AC94F3 /* SidePhotoTableViewCell.xib in Resources */,
 				DAABB1001C1FD50E004DDCFA /* SignupPages.xib in Resources */,
@@ -3316,6 +3331,7 @@
 				DAABB2701C1FF5AE004DDCFA /* UITabBar+FlatUI.m in Sources */,
 				DAABB2791C1FF5AE004DDCFA /* MKMapView+ZoomLevel.m in Sources */,
 				DA5ED5E31C896AEA00004C7E /* GuestDetailViewController.m in Sources */,
+				DA9945031D113E7F008A45EA /* Theme.m in Sources */,
 				DA5ED5E61C8FDF5100004C7E /* TicketConfirmationViewController.m in Sources */,
 				938CE7CB1CCF627D00ADDD4C /* NSArray+MTLManipulationAdditions.m in Sources */,
 				936675251CE30EB200AC94F3 /* APContact.m in Sources */,
@@ -3349,6 +3365,7 @@
 				DAABB1151C1FF0F3004DDCFA /* UIFont+PH.m in Sources */,
 				DAABB2CD1C1FF5AE004DDCFA /* TSHit.m in Sources */,
 				938CE80C1CD3435700ADDD4C /* UIControl+HitTestEdgeInsets.m in Sources */,
+				DA9945071D114F7F008A45EA /* EventsThemeCell.m in Sources */,
 				9366751F1CE30EB200AC94F3 /* APAddressBookExternalChangeRoutine.m in Sources */,
 				DAABB2CA1C1FF5AE004DDCFA /* TSCore.m in Sources */,
 				DAABB2A71C1FF5AE004DDCFA /* MPPassThroughValueTransformer.m in Sources */,
@@ -3876,11 +3893,12 @@
 		DA43055F1C22823700ED6C54 /* Jiggie.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				DA9945091D129FBD008A45EA /* Jiggie 4.xcdatamodel */,
 				DA832D7F1CED999700277721 /* Jiggie 3.xcdatamodel */,
 				DA0906F41CCE3D9F0072D6EC /* Jiggie 2.xcdatamodel */,
 				DA4305601C22823700ED6C54 /* Jiggie.xcdatamodel */,
 			);
-			currentVersion = DA832D7F1CED999700277721 /* Jiggie 3.xcdatamodel */;
+			currentVersion = DA9945091D129FBD008A45EA /* Jiggie 4.xcdatamodel */;
 			path = Jiggie.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

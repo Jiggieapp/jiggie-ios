@@ -26,6 +26,7 @@
 @property (nonatomic, retain) NSDate *endDatetime;
 @property (nonatomic, retain) NSNumber *isFeatured;
 @property (nonatomic, retain) NSString *fullfillmentType;
+@property (nonatomic, retain) NSString *themeID;
 
 @end
 

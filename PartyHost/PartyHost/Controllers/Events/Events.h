@@ -14,6 +14,7 @@
 #import "EventsVenueDetail.h"
 #import "EventsHostDetail.h"
 #import "EventsSummary.h"
+#import "EventsTheme.h"
 #import "PHImage.h"
 
 @class EventsGuestList;
@@ -30,6 +31,9 @@
 @property(nonatomic,strong) UIView              *tabBar;
 @property(nonatomic,strong) UILabel             *title;
 @property(nonatomic,strong) UIView              *mainCon;
+@property(nonatomic,strong) NSMutableArray      *themeToday;
+@property(nonatomic,strong) NSMutableArray      *themeTomorrow;
+@property(nonatomic,strong) NSMutableArray      *themeUpcoming;
 @property(nonatomic,strong) NSMutableArray      *eventsToday;
 @property(nonatomic,strong) NSMutableArray      *eventsTomorrow;
 @property(nonatomic,strong) NSMutableArray      *eventsUpcoming;
@@ -47,6 +51,7 @@
 @property(nonatomic,assign) BOOL                isSearchMode;
 @property(nonatomic,assign) BOOL                isReloadMode;
 @property(nonatomic,strong) EventsSummary       *eventsSummary;
+@property(nonatomic,strong) EventsTheme         *eventsTheme;
 @property(nonatomic,strong) EventsHostingsList  *eventsHostingsList;
 @property(nonatomic,strong) EventsGuestList     *eventsGuestList;
 @property(nonatomic,strong) EventsVenueDetail   *eventsVenueDetail;

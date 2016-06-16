@@ -383,6 +383,7 @@
     self.isLoaded = NO;
 }
 
+#pragma mark - Initialization
 -(void)initClassWithEvent:(Event *)event
 {
     self.cEvent = nil;
@@ -431,6 +432,7 @@
     self.isModal = YES;
 }
 
+#pragma mark - Navigation
 -(void)goBack
 {
     if (self.isModal) {
