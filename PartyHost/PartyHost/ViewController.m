@@ -37,7 +37,6 @@
     [super viewDidLoad];
     self.sharedData = [SharedData sharedInstance];
     
-    
     ///TEST DISCONNECTED VIEWS
     //SetupView *v = [[SetupView alloc] initWithFrame:self.view.frame];
     //[self.view addSubview:v];

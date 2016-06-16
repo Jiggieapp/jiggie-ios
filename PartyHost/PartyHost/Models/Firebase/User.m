@@ -22,7 +22,7 @@
 }
 
 + (void)retrieveUserInfoWithFbId:(NSString *)fbId andCompletionHandler:(UserCompletionHandler)completion {
-    FIRDatabaseReference *reference = [User reference];
+    FIRDatabaseReference *reference = [[User reference] child:fbId];
     
     [reference observeSingleEventOfType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
         NSError *error;

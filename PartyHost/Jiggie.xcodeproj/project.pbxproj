@@ -19,6 +19,10 @@
 		93042B7F1D111E27004A8B2F /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 93042B7E1D111E27004A8B2F /* GoogleService-Info.plist */; };
 		93042B821D128114004A8B2F /* RoomGroupInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 93042B811D128114004A8B2F /* RoomGroupInfo.m */; };
 		93042B851D1282A9004A8B2F /* RoomPrivateInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 93042B841D1282A9004A8B2F /* RoomPrivateInfo.m */; };
+		93042B891D129174004A8B2F /* ChatListView.m in Sources */ = {isa = PBXBuildFile; fileRef = 93042B871D129174004A8B2F /* ChatListView.m */; };
+		93042B8A1D129174004A8B2F /* ChatListView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 93042B881D129174004A8B2F /* ChatListView.xib */; };
+		93042B8E1D129266004A8B2F /* ChatListTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 93042B8C1D129266004A8B2F /* ChatListTableViewCell.m */; };
+		93042B8F1D129266004A8B2F /* ChatListTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 93042B8D1D129266004A8B2F /* ChatListTableViewCell.xib */; };
 		936673FC1CD7164A00AC94F3 /* UIActionSheet+Blocks.m in Sources */ = {isa = PBXBuildFile; fileRef = 936673FA1CD7164A00AC94F3 /* UIActionSheet+Blocks.m */; };
 		936674061CD718A800AC94F3 /* TPKeyboardAvoidingScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 936674031CD718A800AC94F3 /* TPKeyboardAvoidingScrollView.m */; };
 		936674071CD718A900AC94F3 /* UIScrollView+TPKeyboardAvoidingAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 936674051CD718A800AC94F3 /* UIScrollView+TPKeyboardAvoidingAdditions.m */; };
@@ -480,6 +484,12 @@
 		93042B811D128114004A8B2F /* RoomGroupInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RoomGroupInfo.m; sourceTree = "<group>"; };
 		93042B831D1282A9004A8B2F /* RoomPrivateInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RoomPrivateInfo.h; sourceTree = "<group>"; };
 		93042B841D1282A9004A8B2F /* RoomPrivateInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RoomPrivateInfo.m; sourceTree = "<group>"; };
+		93042B861D129174004A8B2F /* ChatListView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatListView.h; sourceTree = "<group>"; };
+		93042B871D129174004A8B2F /* ChatListView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatListView.m; sourceTree = "<group>"; };
+		93042B881D129174004A8B2F /* ChatListView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ChatListView.xib; sourceTree = "<group>"; };
+		93042B8B1D129266004A8B2F /* ChatListTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatListTableViewCell.h; sourceTree = "<group>"; };
+		93042B8C1D129266004A8B2F /* ChatListTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatListTableViewCell.m; sourceTree = "<group>"; };
+		93042B8D1D129266004A8B2F /* ChatListTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ChatListTableViewCell.xib; sourceTree = "<group>"; };
 		936673F91CD7164A00AC94F3 /* UIActionSheet+Blocks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIActionSheet+Blocks.h"; sourceTree = "<group>"; };
 		936673FA1CD7164A00AC94F3 /* UIActionSheet+Blocks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIActionSheet+Blocks.m"; sourceTree = "<group>"; };
 		936674021CD718A800AC94F3 /* TPKeyboardAvoidingScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TPKeyboardAvoidingScrollView.h; sourceTree = "<group>"; };
@@ -2100,6 +2110,12 @@
 				DAABB0281C1FD50E004DDCFA /* Messages.m */,
 				DAABB0251C1FD50E004DDCFA /* MessageCell.h */,
 				DAABB0261C1FD50E004DDCFA /* MessageCell.m */,
+				93042B861D129174004A8B2F /* ChatListView.h */,
+				93042B871D129174004A8B2F /* ChatListView.m */,
+				93042B881D129174004A8B2F /* ChatListView.xib */,
+				93042B8B1D129266004A8B2F /* ChatListTableViewCell.h */,
+				93042B8C1D129266004A8B2F /* ChatListTableViewCell.m */,
+				93042B8D1D129266004A8B2F /* ChatListTableViewCell.xib */,
 			);
 			path = Chat;
 			sourceTree = "<group>";
@@ -3031,6 +3047,7 @@
 				DAABB2AB1C1FF5AE004DDCFA /* MPSurvey.storyboard in Resources */,
 				938CE77A1CCE2C9900ADDD4C /* FeedCardView.xib in Resources */,
 				9366745F1CD8562300AC94F3 /* SidePhotoTableViewCell.xib in Resources */,
+				93042B8A1D129174004A8B2F /* ChatListView.xib in Resources */,
 				DAABB1001C1FD50E004DDCFA /* SignupPages.xib in Resources */,
 				DAABB2E91C1FF993004DDCFA /* Lato-Italic.ttf in Resources */,
 				DA1491101CE33C3A00566173 /* EmptyCell.xib in Resources */,
@@ -3079,6 +3096,7 @@
 				938CE7DF1CD1C91700ADDD4C /* SocialOptionTableViewCell.xib in Resources */,
 				DA10F51E1C52149F006090ED /* SVProgressHUD.bundle in Resources */,
 				93AF8BA71CF5603F008BFA94 /* AboutTableViewCell.xib in Resources */,
+				93042B8F1D129266004A8B2F /* ChatListTableViewCell.xib in Resources */,
 				CB3EB6CA1B459184003F658F /* LaunchScreen.xib in Resources */,
 				DAABB0F51C1FD50E004DDCFA /* Setup.xcassets in Resources */,
 				DAABB2E41C1FF993004DDCFA /* Calibre-Semibold.ttf in Resources */,
@@ -3111,6 +3129,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				93042B891D129174004A8B2F /* ChatListView.m in Sources */,
 				938CE7C81CCF627D00ADDD4C /* MTLReflection.m in Sources */,
 				DAABB0FB1C1FD50E004DDCFA /* SetupPickView.m in Sources */,
 				DAABB2BB1C1FF5AE004DDCFA /* MPWebSocket.m in Sources */,
@@ -3373,6 +3392,7 @@
 				936675231CE30EB200AC94F3 /* APAddressBook.m in Sources */,
 				DAABB2D21C1FF5AE004DDCFA /* TSUtils.m in Sources */,
 				DAABB2571C1FF5AE004DDCFA /* AFNetworkReachabilityManager.m in Sources */,
+				93042B8E1D129266004A8B2F /* ChatListTableViewCell.m in Sources */,
 				936674061CD718A800AC94F3 /* TPKeyboardAvoidingScrollView.m in Sources */,
 				DAABB0DF1C1FD50E004DDCFA /* MyPurchases.m in Sources */,
 				DAABB1291C1FF13A004DDCFA /* BadgeView.m in Sources */,

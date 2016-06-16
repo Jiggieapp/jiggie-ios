@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10116" systemVersion="15B42" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT" customClass="ChatListView">
+            <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="jon-Fq-YfG">
+                    <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                </tableView>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="jon-Fq-YfG" secondAttribute="trailing" id="9nc-Sb-KHy"/>
+                <constraint firstAttribute="bottom" secondItem="jon-Fq-YfG" secondAttribute="bottom" id="IOM-bL-5ZQ"/>
+                <constraint firstItem="jon-Fq-YfG" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="c89-O4-N8U"/>
+                <constraint firstItem="jon-Fq-YfG" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="wrX-0m-l3q"/>
+            </constraints>
+            <nil key="simulatedStatusBarMetrics"/>
+            <variation key="default">
+                <mask key="subviews">
+                    <exclude reference="jon-Fq-YfG"/>
+                </mask>
+                <mask key="constraints">
+                    <exclude reference="9nc-Sb-KHy"/>
+                    <exclude reference="IOM-bL-5ZQ"/>
+                    <exclude reference="c89-O4-N8U"/>
+                    <exclude reference="wrX-0m-l3q"/>
+                </mask>
+            </variation>
+            <variation key="heightClass=regular-widthClass=compact">
+                <mask key="subviews">
+                    <include reference="jon-Fq-YfG"/>
+                </mask>
+                <mask key="constraints">
+                    <include reference="9nc-Sb-KHy"/>
+                    <include reference="IOM-bL-5ZQ"/>
+                    <include reference="c89-O4-N8U"/>
+                    <include reference="wrX-0m-l3q"/>
+                </mask>
+            </variation>
+            <connections>
+                <outlet property="tableView" destination="jon-Fq-YfG" id="ik2-ga-IY5"/>
+            </connections>
+        </view>
+    </objects>
+</document>
