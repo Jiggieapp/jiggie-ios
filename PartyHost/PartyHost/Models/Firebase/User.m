@@ -6,19 +6,19 @@
 //  Copyright © 2016 Jiggie. All rights reserved.
 //
 
-#import "Member.h"
+#import "User.h"
 #import "Firebase.h"
 
-@implementation Member
+@implementation User
 
 + (NSDictionary *)JSONKeyPathsByPropertyKey {
     return @{@"fbId" : @"fb_id",
              @"name" : @"name",
-             @"avatarURL" : @"propic"};
+             @"avatarURL" : @"avatar"};
 }
 
 + (FIRDatabaseReference *)reference {
-    return [[FIRDatabase database] referenceWithPath:@"member"];
+    return [[FIRDatabase database] referenceWithPath:@"users"];
 }
 
 @end

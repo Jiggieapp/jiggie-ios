@@ -14,13 +14,20 @@ typedef enum {
     RoomTypeGroup
 } RoomType;
 
+typedef void (^RoomsCompletionHandler)(NSArray *rooms,
+                                      NSError *error);
+
 @class FIRDatabaseReference;
 @interface Room : MTLModel <MTLJSONSerializing>
 
-@property(copy, nonatomic, readonly) NSString *name;
 @property(assign, nonatomic, readonly) RoomType type;
+@property(strong, nonatomic, readonly) NSDictionary *info;
 
 + (FIRDatabaseReference *)reference;
 + (FIRDatabaseReference *)referenceWithRoomId:(NSString *)roomId;
+
++ (void)retrieveRoomsWithFbId:(NSString *)fbId
+         andCompletionHandler:(RoomsCompletionHandler)completion;
++ (NSArray *)retrieveRoomsInfoWithRooms:(NSArray *)rooms;
 
 @end

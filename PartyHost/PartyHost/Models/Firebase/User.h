@@ -10,7 +10,7 @@
 #import "Mantle.h"
 
 @class FIRDatabaseReference;
-@interface Member : MTLModel <MTLJSONSerializing>
+@interface User : MTLModel <MTLJSONSerializing>
 
 @property(copy, nonatomic, readonly) NSString *fbId;
 @property(copy, nonatomic, readonly) NSString *name;

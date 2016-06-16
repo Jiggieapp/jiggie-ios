@@ -13,12 +13,12 @@
 		93042B611D1005F2004A8B2F /* GoogleSymbolUtilities.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93042B591D1005F2004A8B2F /* GoogleSymbolUtilities.framework */; };
 		93042B621D1005F2004A8B2F /* GoogleUtilities.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93042B5A1D1005F2004A8B2F /* GoogleUtilities.framework */; };
 		93042B631D1005F2004A8B2F /* FirebaseDatabase.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93042B5C1D1005F2004A8B2F /* FirebaseDatabase.framework */; };
-		93042B691D100C62004A8B2F /* Member.m in Sources */ = {isa = PBXBuildFile; fileRef = 93042B681D100C62004A8B2F /* Member.m */; };
+		93042B691D100C62004A8B2F /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 93042B681D100C62004A8B2F /* User.m */; };
 		93042B6F1D1014E5004A8B2F /* Room.m in Sources */ = {isa = PBXBuildFile; fileRef = 93042B6E1D1014E5004A8B2F /* Room.m */; };
 		93042B751D1016E5004A8B2F /* Message.m in Sources */ = {isa = PBXBuildFile; fileRef = 93042B741D1016E5004A8B2F /* Message.m */; };
 		93042B7F1D111E27004A8B2F /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 93042B7E1D111E27004A8B2F /* GoogleService-Info.plist */; };
 		93042B821D128114004A8B2F /* RoomGroupInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 93042B811D128114004A8B2F /* RoomGroupInfo.m */; };
-		93042B851D1282A9004A8B2F /* RoomIndividualInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 93042B841D1282A9004A8B2F /* RoomIndividualInfo.m */; };
+		93042B851D1282A9004A8B2F /* RoomPrivateInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 93042B841D1282A9004A8B2F /* RoomPrivateInfo.m */; };
 		936673FC1CD7164A00AC94F3 /* UIActionSheet+Blocks.m in Sources */ = {isa = PBXBuildFile; fileRef = 936673FA1CD7164A00AC94F3 /* UIActionSheet+Blocks.m */; };
 		936674061CD718A800AC94F3 /* TPKeyboardAvoidingScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 936674031CD718A800AC94F3 /* TPKeyboardAvoidingScrollView.m */; };
 		936674071CD718A900AC94F3 /* UIScrollView+TPKeyboardAvoidingAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 936674051CD718A800AC94F3 /* UIScrollView+TPKeyboardAvoidingAdditions.m */; };
@@ -469,8 +469,8 @@
 		93042B5A1D1005F2004A8B2F /* GoogleUtilities.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GoogleUtilities.framework; sourceTree = "<group>"; };
 		93042B5C1D1005F2004A8B2F /* FirebaseDatabase.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FirebaseDatabase.framework; sourceTree = "<group>"; };
 		93042B5D1D1005F2004A8B2F /* Firebase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Firebase.h; sourceTree = "<group>"; };
-		93042B671D100C62004A8B2F /* Member.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Member.h; sourceTree = "<group>"; };
-		93042B681D100C62004A8B2F /* Member.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Member.m; sourceTree = "<group>"; };
+		93042B671D100C62004A8B2F /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
+		93042B681D100C62004A8B2F /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
 		93042B6D1D1014E5004A8B2F /* Room.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Room.h; sourceTree = "<group>"; };
 		93042B6E1D1014E5004A8B2F /* Room.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Room.m; sourceTree = "<group>"; };
 		93042B731D1016E5004A8B2F /* Message.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Message.h; sourceTree = "<group>"; };
@@ -478,8 +478,8 @@
 		93042B7E1D111E27004A8B2F /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		93042B801D128114004A8B2F /* RoomGroupInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RoomGroupInfo.h; sourceTree = "<group>"; };
 		93042B811D128114004A8B2F /* RoomGroupInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RoomGroupInfo.m; sourceTree = "<group>"; };
-		93042B831D1282A9004A8B2F /* RoomIndividualInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RoomIndividualInfo.h; sourceTree = "<group>"; };
-		93042B841D1282A9004A8B2F /* RoomIndividualInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RoomIndividualInfo.m; sourceTree = "<group>"; };
+		93042B831D1282A9004A8B2F /* RoomPrivateInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RoomPrivateInfo.h; sourceTree = "<group>"; };
+		93042B841D1282A9004A8B2F /* RoomPrivateInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RoomPrivateInfo.m; sourceTree = "<group>"; };
 		936673F91CD7164A00AC94F3 /* UIActionSheet+Blocks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIActionSheet+Blocks.h"; sourceTree = "<group>"; };
 		936673FA1CD7164A00AC94F3 /* UIActionSheet+Blocks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIActionSheet+Blocks.m"; sourceTree = "<group>"; };
 		936674021CD718A800AC94F3 /* TPKeyboardAvoidingScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TPKeyboardAvoidingScrollView.h; sourceTree = "<group>"; };
@@ -1389,14 +1389,14 @@
 		93042B661D100C5B004A8B2F /* Firebase */ = {
 			isa = PBXGroup;
 			children = (
-				93042B671D100C62004A8B2F /* Member.h */,
-				93042B681D100C62004A8B2F /* Member.m */,
+				93042B671D100C62004A8B2F /* User.h */,
+				93042B681D100C62004A8B2F /* User.m */,
 				93042B6D1D1014E5004A8B2F /* Room.h */,
 				93042B6E1D1014E5004A8B2F /* Room.m */,
 				93042B801D128114004A8B2F /* RoomGroupInfo.h */,
 				93042B811D128114004A8B2F /* RoomGroupInfo.m */,
-				93042B831D1282A9004A8B2F /* RoomIndividualInfo.h */,
-				93042B841D1282A9004A8B2F /* RoomIndividualInfo.m */,
+				93042B831D1282A9004A8B2F /* RoomPrivateInfo.h */,
+				93042B841D1282A9004A8B2F /* RoomPrivateInfo.m */,
 				93042B731D1016E5004A8B2F /* Message.h */,
 				93042B741D1016E5004A8B2F /* Message.m */,
 			);
@@ -3240,7 +3240,7 @@
 				938CE7D21CCF627D00ADDD4C /* NSValueTransformer+MTLPredefinedTransformerAdditions.m in Sources */,
 				DA9B10A51CB4D7B7001FB798 /* NSString+HTML.m in Sources */,
 				DAABB2881C1FF5AE004DDCFA /* MPABTestDesignerDisconnectMessage.m in Sources */,
-				93042B851D1282A9004A8B2F /* RoomIndividualInfo.m in Sources */,
+				93042B851D1282A9004A8B2F /* RoomPrivateInfo.m in Sources */,
 				DAABB2941C1FF5AE004DDCFA /* MPCGSizeToNSDictionaryValueTransformer.m in Sources */,
 				DAABB25F1C1FF5AE004DDCFA /* FUIAlertView.m in Sources */,
 				DA5ED6141C92975100004C7E /* VTConfig.m in Sources */,
@@ -3274,7 +3274,7 @@
 				936674591CD7627500AC94F3 /* UIImageView+WebCache.m in Sources */,
 				DAABB0D71C1FD50E004DDCFA /* MyHostings.m in Sources */,
 				DAABB2A31C1FF5AE004DDCFA /* MPObjectSelector.m in Sources */,
-				93042B691D100C62004A8B2F /* Member.m in Sources */,
+				93042B691D100C62004A8B2F /* User.m in Sources */,
 				9366744F1CD7627500AC94F3 /* SDWebImageCompat.m in Sources */,
 				936675281CE30EB200AC94F3 /* APJob.m in Sources */,
 				936675201CE30EB200AC94F3 /* APAddressBookBaseRoutine.m in Sources */,

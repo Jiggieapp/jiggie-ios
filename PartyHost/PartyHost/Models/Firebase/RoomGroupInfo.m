@@ -14,7 +14,7 @@
     return @{@"name" : @"name",
              @"avatarURL" : @"avatar",
              @"lastMessage" : @"last_message",
-             @"updatedAt" : @"updatedAt"};
+             @"updatedAt" : @"updated_at"};
 }
 
 @end

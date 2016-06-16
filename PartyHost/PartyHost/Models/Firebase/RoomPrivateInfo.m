@@ -6,15 +6,15 @@
 //  Copyright © 2016 Jiggie. All rights reserved.
 //
 
-#import "RoomIndividualInfo.h"
+#import "RoomPrivateInfo.h"
 
-@implementation RoomIndividualInfo
+@implementation RoomPrivateInfo
 
 + (NSDictionary *)JSONKeyPathsByPropertyKey {
     return @{@"event" : @"event",
              @"identifier" : @"identifier",
              @"lastMessage" : @"last_message",
-             @"updatedAt" : @"updatedAt"};
+             @"updatedAt" : @"updated_at"};
 }
 
 @end

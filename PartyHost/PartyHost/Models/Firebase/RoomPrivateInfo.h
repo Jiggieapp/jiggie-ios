@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "Mantle.h"
 
-@interface RoomIndividualInfo : MTLModel <MTLJSONSerializing>
+@interface RoomPrivateInfo : MTLModel <MTLJSONSerializing>
 
 @property(copy, nonatomic, readonly) NSString *event;
 @property(copy, nonatomic, readonly) NSString *identifier;
