@@ -48,6 +48,8 @@
 }
 
 - (IBAction)didTapInviteButton:(id)sender {
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"SHOW_INVITE_CONTACT_FRIENDS"
+                                                        object:nil];
 }
 
 - (IBAction)didTapActionButton:(id)sender {
