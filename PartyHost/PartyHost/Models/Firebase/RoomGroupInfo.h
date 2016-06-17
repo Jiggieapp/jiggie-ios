@@ -11,7 +11,7 @@
 
 @interface RoomGroupInfo : MTLModel <MTLJSONSerializing>
 
-@property(copy, nonatomic, readonly) NSString *name;
+@property(copy, nonatomic, readonly) NSString *event;
 @property(copy, nonatomic, readonly) NSString *avatarURL;
 @property(copy, nonatomic, readonly) NSString *lastMessage;
 @property(assign, nonatomic, readonly) NSTimeInterval updatedAt;

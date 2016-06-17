@@ -11,7 +11,7 @@
 @implementation RoomGroupInfo
 
 + (NSDictionary *)JSONKeyPathsByPropertyKey {
-    return @{@"name" : @"name",
+    return @{@"event" : @"event",
              @"avatarURL" : @"avatar",
              @"lastMessage" : @"last_message",
              @"updatedAt" : @"updated_at"};
