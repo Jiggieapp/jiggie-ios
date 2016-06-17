@@ -15,7 +15,8 @@ typedef enum {
 } RoomType;
 
 typedef void (^RoomsCompletionHandler)(NSArray *rooms,
-                                      NSError *error);
+                                       NSError *error);
+typedef void (^ClearChatCompletionHandler)(NSError *error);
 
 @class FIRDatabaseReference;
 @interface Room : MTLModel <MTLJSONSerializing>
@@ -29,5 +30,8 @@ typedef void (^RoomsCompletionHandler)(NSArray *rooms,
 + (void)retrieveRoomsWithFbId:(NSString *)fbId
          andCompletionHandler:(RoomsCompletionHandler)completion;
 + (NSArray *)retrieveRoomsInfoWithRooms:(NSArray *)rooms;
+
++ (void)clearChatFromRoomId:(NSString *)roomId
+       andCompletionHandler:(ClearChatCompletionHandler)completion;
 
 @end

@@ -13,6 +13,7 @@
 + (NSDictionary *)JSONKeyPathsByPropertyKey {
     return @{@"event" : @"event",
              @"avatarURL" : @"avatar",
+             @"identifier" : @"identifier",
              @"lastMessage" : @"last_message",
              @"updatedAt" : @"updated_at"};
 }

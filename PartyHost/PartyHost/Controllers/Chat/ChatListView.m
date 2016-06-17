@@ -10,12 +10,17 @@
 #import "ChatListTableViewCell.h"
 #import "MGSwipeButton.h"
 #import "Room.h"
+#import "AnalyticManager.h"
+#import "SVProgressHUD.h"
+#import "RoomPrivateInfo.h"
+#import "RoomGroupInfo.h"
 
 static NSString *const kChatsCellIdentifier = @"ChatsCellIdentifier";
 
 @interface ChatListView () <UITableViewDataSource, UITableViewDelegate, MGSwipeTableCellDelegate>
 
-@property (strong, nonatomic) NSArray *chats;
+@property (strong, nonatomic) NSArray *rooms;
+@property (copy, nonatomic) NSString *roomId;
 
 @end
 
@@ -38,7 +43,7 @@ static NSString *const kChatsCellIdentifier = @"ChatsCellIdentifier";
 - (void)initClass {
     [Room retrieveRoomsWithFbId:@"111222333" andCompletionHandler:^(NSArray *rooms, NSError *error) {
         if (rooms) {
-            self.chats = [Room retrieveRoomsInfoWithRooms:rooms];
+            self.rooms = [Room retrieveRoomsInfoWithRooms:rooms];
             [self.tableView reloadData];
         }
     }];
@@ -50,7 +55,7 @@ static NSString *const kChatsCellIdentifier = @"ChatsCellIdentifier";
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return self.chats.count;
+    return self.rooms.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -64,7 +69,7 @@ static NSString *const kChatsCellIdentifier = @"ChatsCellIdentifier";
         cell.delegate = self;
     }
     
-    [cell configureChatListWithRoomInfo:self.chats[indexPath.row]];
+    [cell configureChatListWithRoomInfo:self.rooms[indexPath.row]];
     
     return cell;
 }
@@ -90,12 +95,36 @@ static NSString *const kChatsCellIdentifier = @"ChatsCellIdentifier";
         CGFloat padding = 15;
         
         MGSwipeButton *trash = [MGSwipeButton buttonWithTitle:@"Delete" backgroundColor:[UIColor redColor] padding:padding callback:^BOOL(MGSwipeTableCell *sender) {
-            [self showAlertQuestion:@"Confirm" withMessage:@"Are you sure you want to delete chat messages from this user?"];
+            
+            NSObject *roomInfo = [self.rooms objectAtIndex:[self.tableView indexPathForCell:sender].row];
+            
+            if ([roomInfo isKindOfClass:[RoomPrivateInfo class]]) {
+                RoomPrivateInfo *info = (RoomPrivateInfo *)roomInfo;
+                self.roomId = info.identifier;
+            } else {
+                RoomGroupInfo *info = (RoomGroupInfo *)roomInfo;
+                self.roomId = info.identifier;
+            }
+            
+            [self showAlertQuestion:@"Confirm" withMessage:@"Are you sure you want to delete chat messages from this user?" andTag:5];
+            
             return NO;
         }];
         
         MGSwipeButton * block = [MGSwipeButton buttonWithTitle:@"Block" backgroundColor:[UIColor grayColor] padding:padding callback:^BOOL(MGSwipeTableCell *sender) {
-            [self showAlertQuestion:@"Confirm" withMessage:@"Are you sure you want to block this user?"];
+            
+            NSObject *roomInfo = [self.rooms objectAtIndex:[self.tableView indexPathForCell:sender].row];
+            
+            if ([roomInfo isKindOfClass:[RoomPrivateInfo class]]) {
+                RoomPrivateInfo *info = (RoomPrivateInfo *)roomInfo;
+                self.roomId = info.identifier;
+            } else {
+                RoomGroupInfo *info = (RoomGroupInfo *)roomInfo;
+                self.roomId = info.identifier;
+            }
+            
+            [self showAlertQuestion:@"Confirm" withMessage:@"Are you sure you want to block this user?" andTag:10];
+            
             return NO;
         }];
         
@@ -120,6 +149,23 @@ static NSString *const kChatsCellIdentifier = @"ChatsCellIdentifier";
 
 #pragma mark - UIAlertViewDelegate
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
+    if (buttonIndex == 1) {
+        [SVProgressHUD show];
+        
+        if (alertView.tag == 5) {
+            [Room clearChatFromRoomId:self.roomId andCompletionHandler:^(NSError *error) {
+                if (error) {
+                    [self showFailDelete];
+                } else {
+                    [self showSuccessDelete];
+                    [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Delete Messages"
+                                                                  withDict:@{@"origin" : @"Chat"}];
+                }
+                
+                [SVProgressHUD dismiss];
+            }];
+        }
+    }
 }
 
 - (void)showSuccessDelete {
@@ -140,8 +186,9 @@ static NSString *const kChatsCellIdentifier = @"ChatsCellIdentifier";
     [alert show];
 }
 
-- (void)showAlertQuestion:(NSString *)title withMessage:(NSString *)message {
+- (void)showAlertQuestion:(NSString *)title withMessage:(NSString *)message andTag:(NSInteger)tag {
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title message:message delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
+    [alert setTag:tag];
     // optional - add more buttons:
     [alert addButtonWithTitle:@"Yes"];
     [alert show];

@@ -47,8 +47,11 @@
         for (NSString *key in keys) {
             FIRDatabaseReference *reference = [[Room reference] child:key];
             [reference observeSingleEventOfType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
+                NSMutableDictionary *dictionary = [NSMutableDictionary dictionaryWithDictionary:snapshot.value];
+                [[dictionary objectForKey:@"info"] setObject:snapshot.key forKey:@"identifier"];
+                
                 NSError *error;
-                Room *room = [MTLJSONAdapter modelOfClass:[Room class] fromJSONDictionary:snapshot.value error:&error];
+                Room *room = [MTLJSONAdapter modelOfClass:[Room class] fromJSONDictionary:dictionary error:&error];
                 
                 [rooms addObject:room];
                 
@@ -86,6 +89,19 @@
     }
     
     return roomsInfo;
+}
+
++ (void)clearChatFromRoomId:(NSString *)roomId andCompletionHandler:(ClearChatCompletionHandler)completion {
+    SharedData *sharedData = [SharedData sharedInstance];
+    FIRDatabaseReference *reference = [[Room membersReference] child:roomId];
+    
+    NSDictionary *parameters = @{@"111222333" : [NSNumber numberWithBool:NO]};
+    
+    [reference updateChildValues:parameters withCompletionBlock:^(NSError * _Nullable error, FIRDatabaseReference * _Nonnull ref) {
+        if (completion) {
+            completion(error);
+        }
+    }];
 }
 
 @end

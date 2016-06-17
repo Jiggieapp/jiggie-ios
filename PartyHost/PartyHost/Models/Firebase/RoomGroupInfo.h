@@ -13,6 +13,7 @@
 
 @property(copy, nonatomic, readonly) NSString *event;
 @property(copy, nonatomic, readonly) NSString *avatarURL;
+@property(copy, nonatomic, readonly) NSString *identifier;
 @property(copy, nonatomic, readonly) NSString *lastMessage;
 @property(assign, nonatomic, readonly) NSTimeInterval updatedAt;
 
