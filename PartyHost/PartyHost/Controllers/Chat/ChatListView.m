@@ -8,11 +8,12 @@
 
 #import "ChatListView.h"
 #import "ChatListTableViewCell.h"
+#import "MGSwipeButton.h"
 #import "Room.h"
 
 static NSString *const kChatsCellIdentifier = @"ChatsCellIdentifier";
 
-@interface ChatListView () <UITableViewDataSource, UITableViewDelegate>
+@interface ChatListView () <UITableViewDataSource, UITableViewDelegate, MGSwipeTableCellDelegate>
 
 @property (strong, nonatomic) NSArray *chats;
 
@@ -59,6 +60,10 @@ static NSString *const kChatsCellIdentifier = @"ChatsCellIdentifier";
         cell = [[ChatListTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kChatsCellIdentifier];
     }
     
+    if (!cell.delegate) {
+        cell.delegate = self;
+    }
+    
     [cell configureChatListWithRoomInfo:self.chats[indexPath.row]];
     
     return cell;
@@ -71,6 +76,75 @@ static NSString *const kChatsCellIdentifier = @"ChatsCellIdentifier";
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+}
+
+#pragma mark - MGSwipeTableCellDelegate
+- (BOOL)swipeTableCell:(MGSwipeTableCell*)cell canSwipe:(MGSwipeDirection)direction; {
+    return YES;
+}
+
+- (NSArray*)swipeTableCell:(MGSwipeTableCell*) cell swipeButtonsForDirection:(MGSwipeDirection)direction swipeSettings:(MGSwipeSettings*) swipeSettings expansionSettings:(MGSwipeExpansionSettings*) expansionSettings {
+    swipeSettings.transition = MGSwipeTransitionBorder;
+    
+    if (direction == MGSwipeDirectionRightToLeft) {
+        CGFloat padding = 15;
+        
+        MGSwipeButton *trash = [MGSwipeButton buttonWithTitle:@"Delete" backgroundColor:[UIColor redColor] padding:padding callback:^BOOL(MGSwipeTableCell *sender) {
+            [self showAlertQuestion:@"Confirm" withMessage:@"Are you sure you want to delete chat messages from this user?"];
+            return NO;
+        }];
+        
+        MGSwipeButton * block = [MGSwipeButton buttonWithTitle:@"Block" backgroundColor:[UIColor grayColor] padding:padding callback:^BOOL(MGSwipeTableCell *sender) {
+            [self showAlertQuestion:@"Confirm" withMessage:@"Are you sure you want to block this user?"];
+            return NO;
+        }];
+        
+        return @[block, trash];
+    }
+    
+    return nil;
+}
+
+- (void)swipeTableCell:(MGSwipeTableCell*) cell didChangeSwipeState:(MGSwipeState)state gestureIsActive:(BOOL)gestureIsActive {
+    NSString *str;
+    switch (state) {
+        case MGSwipeStateNone: str = @"None"; break;
+        case MGSwipeStateSwippingLeftToRight: str = @"SwippingLeftToRight"; break;
+        case MGSwipeStateSwippingRightToLeft: str = @"SwippingRightToLeft"; break;
+        case MGSwipeStateExpandingLeftToRight: str = @"ExpandingLeftToRight"; break;
+        case MGSwipeStateExpandingRightToLeft: str = @"ExpandingRightToLeft"; break;
+    }
+    
+    NSLog(@"Swipe state: %@ ::: Gesture: %@", str, gestureIsActive ? @"Active" : @"Ended");
+}
+
+#pragma mark - UIAlertViewDelegate
+- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
+}
+
+- (void)showSuccessDelete {
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Deleted Messages"
+                                                    message:@"Messages have been deleted."
+                                                   delegate:nil
+                                          cancelButtonTitle:@"OK"
+                                          otherButtonTitles:nil];
+    [alert show];
+}
+
+- (void)showFailDelete {
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Deleted Messages"
+                                                    message:@"Unable to delete messages."
+                                                   delegate:nil
+                                          cancelButtonTitle:@"OK"
+                                          otherButtonTitles:nil];
+    [alert show];
+}
+
+- (void)showAlertQuestion:(NSString *)title withMessage:(NSString *)message {
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title message:message delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
+    // optional - add more buttons:
+    [alert addButtonWithTitle:@"Yes"];
+    [alert show];
 }
 
 @end

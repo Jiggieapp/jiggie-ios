@@ -7,9 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "MGSwipeTableCell.h"
 
 @class Friend;
-@interface ChatListTableViewCell : UITableViewCell
+@interface ChatListTableViewCell : MGSwipeTableCell
 
 @property (strong, nonatomic) IBOutlet UIImageView *photoImageView;
 @property (strong, nonatomic) IBOutlet UIView *badgeView;
