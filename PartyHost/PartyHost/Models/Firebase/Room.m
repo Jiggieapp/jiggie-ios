@@ -104,9 +104,8 @@
     }];
 }
 
-+ (void)LeaveFromRoomWithRoomId:(NSString *)roomId andCompletionHandler:(ClearChatCompletionHandler)completion {
-    SharedData *sharedData = [SharedData sharedInstance];
-    FIRDatabaseReference *reference = [[[Room membersReference] child:roomId] child:@"111222333"];
++ (void)blockRoomWithRoomId:(NSString *)roomId andCompletionHandler:(ClearChatCompletionHandler)completion {
+    FIRDatabaseReference *reference = [[Room membersReference] child:roomId];
     
     [reference removeValueWithCompletionBlock:^(NSError * _Nullable error, FIRDatabaseReference * _Nonnull ref) {
         if (completion) {

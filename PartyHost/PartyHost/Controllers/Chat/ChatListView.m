@@ -23,6 +23,7 @@ static NSString *const kChatsCellIdentifier = @"ChatsCellIdentifier";
 @property (strong, nonatomic) NSArray *rooms;
 @property (copy, nonatomic) NSString *roomId;
 @property (copy, nonatomic) NSString *roomName;
+@property (assign, nonatomic) BOOL isBlockedUser;
 
 @end
 
@@ -129,12 +130,16 @@ static NSString *const kChatsCellIdentifier = @"ChatsCellIdentifier";
             if ([roomInfo isKindOfClass:[RoomPrivateInfo class]]) {
                 RoomPrivateInfo *info = (RoomPrivateInfo *)roomInfo;
                 
+                self.isBlockedUser = YES;
                 self.roomId = info.identifier;
-                self.roomName = ((ChatListTableViewCell *)cell).nameLabel.text;
             } else {
                 RoomGroupInfo *info = (RoomGroupInfo *)roomInfo;
+                
+                self.isBlockedUser = NO;
                 self.roomId = info.identifier;
             }
+            
+            self.roomName = ((ChatListTableViewCell *)cell).nameLabel.text;
             
             [self showAlertQuestion:@"Confirm"
                         withMessage:@"Are you sure you want to block this user?"
@@ -180,11 +185,14 @@ static NSString *const kChatsCellIdentifier = @"ChatsCellIdentifier";
                 [SVProgressHUD dismiss];
             }];
         } else {
-            [Room LeaveFromRoomWithRoomId:self.roomId andCompletionHandler:^(NSError *error) {
+            [Room blockRoomWithRoomId:self.roomId andCompletionHandler:^(NSError *error) {
                 if (error) {
-                    [self showFailAlertWithTitle:@"Blocked User" andMessage:@"Fail."];
+                    [self showFailAlertWithTitle:self.isBlockedUser ? @"Blocked User" : @"Blocked Group"
+                                      andMessage:@"Fail."];
                 } else {
-                    [self showSuccessAlertWithTitle:@"Blocked User" andMessage:[NSString stringWithFormat:@"%@ has been blocked", self.roomName]];
+                    [self showSuccessAlertWithTitle:self.isBlockedUser ? @"Blocked User" : @"Blocked Group"
+                                         andMessage:[NSString stringWithFormat:@"%@ has been blocked",
+                                                     self.roomName]];
                     [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Block User"
                                                                   withDict:@{@"origin" : @"Chat"}];
                 }
