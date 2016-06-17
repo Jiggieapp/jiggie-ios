@@ -34,4 +34,7 @@ typedef void (^ClearChatCompletionHandler)(NSError *error);
 + (void)clearChatFromRoomId:(NSString *)roomId
        andCompletionHandler:(ClearChatCompletionHandler)completion;
 
++ (void)LeaveFromRoomWithRoomId:(NSString *)roomId
+           andCompletionHandler:(ClearChatCompletionHandler)completion;
+
 @end

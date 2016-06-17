@@ -10,6 +10,7 @@
 #import "ChatListTableViewCell.h"
 #import "MGSwipeButton.h"
 #import "Room.h"
+#import "User.h"
 #import "AnalyticManager.h"
 #import "SVProgressHUD.h"
 #import "RoomPrivateInfo.h"
@@ -21,6 +22,7 @@ static NSString *const kChatsCellIdentifier = @"ChatsCellIdentifier";
 
 @property (strong, nonatomic) NSArray *rooms;
 @property (copy, nonatomic) NSString *roomId;
+@property (copy, nonatomic) NSString *roomName;
 
 @end
 
@@ -88,7 +90,7 @@ static NSString *const kChatsCellIdentifier = @"ChatsCellIdentifier";
     return YES;
 }
 
-- (NSArray*)swipeTableCell:(MGSwipeTableCell*) cell swipeButtonsForDirection:(MGSwipeDirection)direction swipeSettings:(MGSwipeSettings*) swipeSettings expansionSettings:(MGSwipeExpansionSettings*) expansionSettings {
+- (NSArray*)swipeTableCell:(MGSwipeTableCell*)cell swipeButtonsForDirection:(MGSwipeDirection)direction swipeSettings:(MGSwipeSettings*) swipeSettings expansionSettings:(MGSwipeExpansionSettings*) expansionSettings {
     swipeSettings.transition = MGSwipeTransitionBorder;
     
     if (direction == MGSwipeDirectionRightToLeft) {
@@ -100,13 +102,22 @@ static NSString *const kChatsCellIdentifier = @"ChatsCellIdentifier";
             
             if ([roomInfo isKindOfClass:[RoomPrivateInfo class]]) {
                 RoomPrivateInfo *info = (RoomPrivateInfo *)roomInfo;
+                
                 self.roomId = info.identifier;
+                self.roomName = ((ChatListTableViewCell *)cell).nameLabel.text;
+                
+                [self showAlertQuestion:@"Confirm"
+                            withMessage:@"Are you sure you want to delete chat messages from this user?"
+                                 andTag:5];
             } else {
                 RoomGroupInfo *info = (RoomGroupInfo *)roomInfo;
                 self.roomId = info.identifier;
+                self.roomName = info.event;
             }
             
-            [self showAlertQuestion:@"Confirm" withMessage:@"Are you sure you want to delete chat messages from this user?" andTag:5];
+            [self showAlertQuestion:@"Confirm"
+                        withMessage:@"Are you sure you want to delete chat messages from this user?"
+                             andTag:5];
             
             return NO;
         }];
@@ -117,13 +128,17 @@ static NSString *const kChatsCellIdentifier = @"ChatsCellIdentifier";
             
             if ([roomInfo isKindOfClass:[RoomPrivateInfo class]]) {
                 RoomPrivateInfo *info = (RoomPrivateInfo *)roomInfo;
+                
                 self.roomId = info.identifier;
+                self.roomName = ((ChatListTableViewCell *)cell).nameLabel.text;
             } else {
                 RoomGroupInfo *info = (RoomGroupInfo *)roomInfo;
                 self.roomId = info.identifier;
             }
             
-            [self showAlertQuestion:@"Confirm" withMessage:@"Are you sure you want to block this user?" andTag:10];
+            [self showAlertQuestion:@"Confirm"
+                        withMessage:@"Are you sure you want to block this user?"
+                             andTag:10];
             
             return NO;
         }];
@@ -143,8 +158,6 @@ static NSString *const kChatsCellIdentifier = @"ChatsCellIdentifier";
         case MGSwipeStateExpandingLeftToRight: str = @"ExpandingLeftToRight"; break;
         case MGSwipeStateExpandingRightToLeft: str = @"ExpandingRightToLeft"; break;
     }
-    
-    NSLog(@"Swipe state: %@ ::: Gesture: %@", str, gestureIsActive ? @"Active" : @"Ended");
 }
 
 #pragma mark - UIAlertViewDelegate
@@ -155,10 +168,24 @@ static NSString *const kChatsCellIdentifier = @"ChatsCellIdentifier";
         if (alertView.tag == 5) {
             [Room clearChatFromRoomId:self.roomId andCompletionHandler:^(NSError *error) {
                 if (error) {
-                    [self showFailDelete];
+                    [self showFailAlertWithTitle:@"Deleted Messages"
+                                      andMessage:@"Unable to delete messages."];
                 } else {
-                    [self showSuccessDelete];
+                    [self showSuccessAlertWithTitle:@"Deleted Messages"
+                                         andMessage:@"Messages have been deleted."];
                     [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Delete Messages"
+                                                                  withDict:@{@"origin" : @"Chat"}];
+                }
+                
+                [SVProgressHUD dismiss];
+            }];
+        } else {
+            [Room LeaveFromRoomWithRoomId:self.roomId andCompletionHandler:^(NSError *error) {
+                if (error) {
+                    [self showFailAlertWithTitle:@"Blocked User" andMessage:@"Fail."];
+                } else {
+                    [self showSuccessAlertWithTitle:@"Blocked User" andMessage:[NSString stringWithFormat:@"%@ has been blocked", self.roomName]];
+                    [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Block User"
                                                                   withDict:@{@"origin" : @"Chat"}];
                 }
                 
@@ -168,18 +195,18 @@ static NSString *const kChatsCellIdentifier = @"ChatsCellIdentifier";
     }
 }
 
-- (void)showSuccessDelete {
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Deleted Messages"
-                                                    message:@"Messages have been deleted."
+- (void)showSuccessAlertWithTitle:(NSString *)title andMessage:(NSString *)message {
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title
+                                                    message:message
                                                    delegate:nil
                                           cancelButtonTitle:@"OK"
                                           otherButtonTitles:nil];
     [alert show];
 }
 
-- (void)showFailDelete {
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Deleted Messages"
-                                                    message:@"Unable to delete messages."
+- (void)showFailAlertWithTitle:(NSString *)title andMessage:(NSString *)message {
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title
+                                                    message:message
                                                    delegate:nil
                                           cancelButtonTitle:@"OK"
                                           otherButtonTitles:nil];
