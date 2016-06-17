@@ -2111,6 +2111,9 @@
 				93042B861D129174004A8B2F /* ChatListView.h */,
 				93042B871D129174004A8B2F /* ChatListView.m */,
 				93042B881D129174004A8B2F /* ChatListView.xib */,
+				93042B8B1D129266004A8B2F /* ChatListTableViewCell.h */,
+				93042B8C1D129266004A8B2F /* ChatListTableViewCell.m */,
+				93042B8D1D129266004A8B2F /* ChatListTableViewCell.xib */,
 				DAABB01F1C1FD50E004DDCFA /* Chats.h */,
 				DAABB0201C1FD50E004DDCFA /* Chats.m */,
 				DAABB0211C1FD50E004DDCFA /* ConvoCell.h */,
@@ -2121,9 +2124,6 @@
 				DAABB0281C1FD50E004DDCFA /* Messages.m */,
 				DAABB0251C1FD50E004DDCFA /* MessageCell.h */,
 				DAABB0261C1FD50E004DDCFA /* MessageCell.m */,
-				93042B8B1D129266004A8B2F /* ChatListTableViewCell.h */,
-				93042B8C1D129266004A8B2F /* ChatListTableViewCell.m */,
-				93042B8D1D129266004A8B2F /* ChatListTableViewCell.xib */,
 			);
 			path = Chat;
 			sourceTree = "<group>";

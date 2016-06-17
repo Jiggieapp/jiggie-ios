@@ -215,7 +215,62 @@
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9mV-Yi-izH">
                             <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                            <subviews>
+                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5QD-hM-ax3">
+                                    <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </view>
+                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Lte-Be-3mP">
+                                    <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </view>
+                            </subviews>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <constraints>
+                                <constraint firstItem="5QD-hM-ax3" firstAttribute="leading" secondItem="9mV-Yi-izH" secondAttribute="leading" id="9MS-II-8vo"/>
+                                <constraint firstItem="5QD-hM-ax3" firstAttribute="top" secondItem="9mV-Yi-izH" secondAttribute="top" id="HUC-ZN-2yZ"/>
+                                <constraint firstItem="Lte-Be-3mP" firstAttribute="top" secondItem="9mV-Yi-izH" secondAttribute="top" id="Hv0-v1-OjZ"/>
+                                <constraint firstAttribute="bottom" secondItem="Lte-Be-3mP" secondAttribute="bottom" id="VIJ-A8-Z3a"/>
+                                <constraint firstItem="Lte-Be-3mP" firstAttribute="leading" secondItem="5QD-hM-ax3" secondAttribute="trailing" id="kSw-tX-iHD"/>
+                                <constraint firstAttribute="trailing" secondItem="Lte-Be-3mP" secondAttribute="trailing" id="mix-W0-Mp7"/>
+                                <constraint firstAttribute="bottom" secondItem="5QD-hM-ax3" secondAttribute="bottom" id="mqf-H4-jWT"/>
+                                <constraint firstItem="Lte-Be-3mP" firstAttribute="width" secondItem="5QD-hM-ax3" secondAttribute="width" id="o9R-Ze-e4k"/>
+                                <constraint firstAttribute="width" secondItem="5QD-hM-ax3" secondAttribute="width" multiplier="2" id="qsq-4B-7q4"/>
+                            </constraints>
+                            <variation key="default">
+                                <mask key="subviews">
+                                    <exclude reference="5QD-hM-ax3"/>
+                                    <exclude reference="Lte-Be-3mP"/>
+                                </mask>
+                                <mask key="constraints">
+                                    <exclude reference="9MS-II-8vo"/>
+                                    <exclude reference="HUC-ZN-2yZ"/>
+                                    <exclude reference="mqf-H4-jWT"/>
+                                    <exclude reference="qsq-4B-7q4"/>
+                                    <exclude reference="Hv0-v1-OjZ"/>
+                                    <exclude reference="VIJ-A8-Z3a"/>
+                                    <exclude reference="kSw-tX-iHD"/>
+                                    <exclude reference="mix-W0-Mp7"/>
+                                    <exclude reference="o9R-Ze-e4k"/>
+                                </mask>
+                            </variation>
+                            <variation key="heightClass=regular-widthClass=compact">
+                                <mask key="subviews">
+                                    <include reference="5QD-hM-ax3"/>
+                                    <include reference="Lte-Be-3mP"/>
+                                </mask>
+                                <mask key="constraints">
+                                    <include reference="9MS-II-8vo"/>
+                                    <include reference="HUC-ZN-2yZ"/>
+                                    <include reference="mqf-H4-jWT"/>
+                                    <include reference="qsq-4B-7q4"/>
+                                    <include reference="Hv0-v1-OjZ"/>
+                                    <include reference="VIJ-A8-Z3a"/>
+                                    <include reference="kSw-tX-iHD"/>
+                                    <include reference="mix-W0-Mp7"/>
+                                    <include reference="o9R-Ze-e4k"/>
+                                </mask>
+                            </variation>
                         </view>
                     </subviews>
                     <constraints>
@@ -309,8 +364,10 @@
             </variation>
             <connections>
                 <outlet property="activeButton" destination="Bly-qm-osL" id="WXF-pu-Vla"/>
+                <outlet property="activeContentView" destination="5QD-hM-ax3" id="Tgj-lo-oZP"/>
                 <outlet property="contentView" destination="9mV-Yi-izH" id="6uK-dz-hc4"/>
                 <outlet property="friendsButton" destination="8MS-Xw-C2v" id="Vnv-YI-MX0"/>
+                <outlet property="friendsContentView" destination="Lte-Be-3mP" id="2N8-nq-yAf"/>
                 <outlet property="inviteButton" destination="DBl-l5-0yy" id="8gg-rS-jDU"/>
                 <outlet property="scrollView" destination="l39-fs-8kg" id="vvQ-W2-wQe"/>
             </connections>

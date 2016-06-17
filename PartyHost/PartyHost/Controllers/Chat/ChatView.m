@@ -32,7 +32,7 @@
 
 - (void)awakeFromNib {
     [super awakeFromNib];
-    [self.contentView addSubview:self.chatListView];
+    [self.activeContentView addSubview:self.chatListView];
 }
 
 - (void)initClass {
@@ -42,7 +42,7 @@
 - (void)layoutSubviews {
     [super layoutSubviews];
     
-    self.chatListView.frame = CGRectMake(0, 0, CGRectGetWidth([UIScreen mainScreen].bounds), CGRectGetHeight(self.scrollView.bounds));
+    self.chatListView.frame = CGRectMake(0, 0, CGRectGetWidth(self.activeContentView.bounds), CGRectGetHeight(self.activeContentView.bounds));
 }
 
 - (IBAction)didTapInviteButton:(id)sender {

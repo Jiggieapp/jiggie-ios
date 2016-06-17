@@ -15,6 +15,8 @@
 @property (strong, nonatomic) IBOutlet UIButton *inviteButton;
 @property (strong, nonatomic) IBOutlet UIScrollView *scrollView;
 @property (strong, nonatomic) IBOutlet UIView *contentView;
+@property (strong, nonatomic) IBOutlet UIView *activeContentView;
+@property (strong, nonatomic) IBOutlet UIView *friendsContentView;
 
 + (ChatView *)instanceFromNib;
 

@@ -31,6 +31,14 @@
                             <constraint firstAttribute="height" constant="50" id="epj-Od-Ty2"/>
                         </constraints>
                     </imageView>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yMR-gA-XBe">
+                        <rect key="frame" x="50" y="10" width="16" height="16"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="16" id="1rN-5s-7LA"/>
+                            <constraint firstAttribute="height" constant="16" id="w9J-1P-Kt4"/>
+                        </constraints>
+                    </view>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="Nuruddin Effendi" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TeK-jM-AuV">
                         <rect key="frame" x="75" y="18" width="153" height="18"/>
                         <fontDescription key="fontDescription" name="Lato-Bold" family="Lato" pointSize="15"/>
@@ -56,7 +64,9 @@
                     <constraint firstItem="TeK-jM-AuV" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="10" id="Ac5-y3-I3u"/>
                     <constraint firstItem="TeK-jM-AuV" firstAttribute="leading" secondItem="trh-hx-rce" secondAttribute="trailing" constant="10" id="GR5-IH-KpM"/>
                     <constraint firstAttribute="bottomMargin" secondItem="Ff5-xY-Mfj" secondAttribute="bottom" constant="9.5" id="Xgx-5n-Pz1"/>
+                    <constraint firstItem="yMR-gA-XBe" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="42" id="gvJ-8Z-b7J"/>
                     <constraint firstItem="Ff5-xY-Mfj" firstAttribute="leading" secondItem="TeK-jM-AuV" secondAttribute="leading" id="jYW-w4-8eZ"/>
+                    <constraint firstItem="yMR-gA-XBe" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="2" id="jco-Pb-dNT"/>
                     <constraint firstAttribute="trailingMargin" secondItem="FvG-Fx-X3d" secondAttribute="trailing" constant="-8" id="pSy-4e-LsA"/>
                     <constraint firstItem="Ff5-xY-Mfj" firstAttribute="top" secondItem="TeK-jM-AuV" secondAttribute="bottom" constant="3" id="qlb-1r-klS"/>
                     <constraint firstItem="FvG-Fx-X3d" firstAttribute="leading" secondItem="TeK-jM-AuV" secondAttribute="trailing" constant="8" id="u4O-RF-s1P"/>
@@ -64,6 +74,7 @@
                 </constraints>
             </tableViewCellContentView>
             <connections>
+                <outlet property="badgeView" destination="yMR-gA-XBe" id="F6O-6i-lh3"/>
                 <outlet property="dateLabel" destination="FvG-Fx-X3d" id="tcb-xC-hpo"/>
                 <outlet property="lastMessageLabel" destination="Ff5-xY-Mfj" id="ByY-JQ-Hsg"/>
                 <outlet property="nameLabel" destination="TeK-jM-AuV" id="7zK-Uj-nEE"/>

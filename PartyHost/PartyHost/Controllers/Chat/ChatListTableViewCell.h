@@ -11,6 +11,7 @@
 @interface ChatListTableViewCell : UITableViewCell
 
 @property (strong, nonatomic) IBOutlet UIImageView *photoImageView;
+@property (strong, nonatomic) IBOutlet UIView *badgeView;
 @property (strong, nonatomic) IBOutlet UILabel *nameLabel;
 @property (strong, nonatomic) IBOutlet UILabel *lastMessageLabel;
 @property (strong, nonatomic) IBOutlet UILabel *dateLabel;

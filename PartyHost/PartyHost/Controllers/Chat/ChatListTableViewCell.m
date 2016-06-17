@@ -12,6 +12,7 @@
 #import "RoomGroupInfo.h"
 #import "RoomPrivateInfo.h"
 #import "User.h"
+#import "BadgeView.h"
 
 @implementation ChatListTableViewCell
 
@@ -31,6 +32,11 @@
     
     self.photoImageView.layer.cornerRadius = 25;
     self.photoImageView.layer.masksToBounds = YES;
+    
+    BadgeView *unreadBadgeView = [[BadgeView alloc] initWithFrame:CGRectMake(0, 0, 16, 16)];
+    [unreadBadgeView updateValue:0];
+    
+    [self.badgeView addSubview:unreadBadgeView];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
