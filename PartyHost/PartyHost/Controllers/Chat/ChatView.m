@@ -11,6 +11,8 @@
 
 @interface ChatView ()
 
+@property (strong, nonatomic) IBOutlet UIView *indicatorView;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *indicatorViewLeadingConstraint;
 @property (strong, nonatomic) ChatListView *chatListView;
 
 @end
@@ -49,9 +51,23 @@
 }
 
 - (IBAction)didTapActionButton:(id)sender {
+    self.indicatorViewLeadingConstraint.constant = 0;
+    
+    [UIView animateWithDuration:0.5 animations:^{
+        self.scrollView.contentOffset = CGPointMake(0, 0);
+        [self layoutIfNeeded];
+    }];
 }
 
 - (IBAction)didTapFriendsButton:(id)sender {
+    CGFloat xPos = CGRectGetWidth([UIScreen mainScreen].bounds);
+    
+    self.indicatorViewLeadingConstraint.constant = xPos / 2;
+    
+    [UIView animateWithDuration:0.5 animations:^{
+        self.scrollView.contentOffset = CGPointMake(xPos, 0);
+        [self layoutIfNeeded];
+    }];
 }
 
 @end

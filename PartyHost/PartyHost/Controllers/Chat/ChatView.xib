@@ -136,18 +136,15 @@
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="2" id="4cc-PE-8BK"/>
-                                <constraint firstAttribute="width" constant="200" id="blD-m2-QjR"/>
                             </constraints>
                             <variation key="default">
                                 <mask key="constraints">
                                     <exclude reference="4cc-PE-8BK"/>
-                                    <exclude reference="blD-m2-QjR"/>
                                 </mask>
                             </variation>
                             <variation key="heightClass=regular-widthClass=compact">
                                 <mask key="constraints">
                                     <include reference="4cc-PE-8BK"/>
-                                    <include reference="blD-m2-QjR"/>
                                 </mask>
                             </variation>
                         </view>
@@ -166,6 +163,7 @@
                         <constraint firstAttribute="height" constant="45" id="oOq-iZ-KJL"/>
                         <constraint firstAttribute="bottom" secondItem="Bly-qm-osL" secondAttribute="bottom" id="t1N-9d-Wo5"/>
                         <constraint firstItem="1Om-Ft-JuS" firstAttribute="leading" secondItem="BZk-5g-tUc" secondAttribute="leading" id="tai-U2-tyY"/>
+                        <constraint firstItem="1Om-Ft-JuS" firstAttribute="width" secondItem="Bly-qm-osL" secondAttribute="width" id="wPL-K7-JX9"/>
                     </constraints>
                     <variation key="default">
                         <mask key="subviews">
@@ -181,6 +179,7 @@
                             <exclude reference="t1N-9d-Wo5"/>
                             <exclude reference="ZiM-Jp-aTC"/>
                             <exclude reference="tai-U2-tyY"/>
+                            <exclude reference="wPL-K7-JX9"/>
                             <exclude reference="X8j-EI-chP"/>
                             <exclude reference="caO-5d-vlM"/>
                             <exclude reference="gBF-91-9TC"/>
@@ -202,6 +201,7 @@
                             <include reference="t1N-9d-Wo5"/>
                             <include reference="ZiM-Jp-aTC"/>
                             <include reference="tai-U2-tyY"/>
+                            <include reference="wPL-K7-JX9"/>
                             <include reference="X8j-EI-chP"/>
                             <include reference="caO-5d-vlM"/>
                             <include reference="gBF-91-9TC"/>
@@ -210,7 +210,7 @@
                         </mask>
                     </variation>
                 </view>
-                <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" pagingEnabled="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="l39-fs-8kg">
+                <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" scrollEnabled="NO" pagingEnabled="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="l39-fs-8kg">
                     <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9mV-Yi-izH">
@@ -368,6 +368,8 @@
                 <outlet property="contentView" destination="9mV-Yi-izH" id="6uK-dz-hc4"/>
                 <outlet property="friendsButton" destination="8MS-Xw-C2v" id="Vnv-YI-MX0"/>
                 <outlet property="friendsContentView" destination="Lte-Be-3mP" id="2N8-nq-yAf"/>
+                <outlet property="indicatorView" destination="1Om-Ft-JuS" id="SF2-sI-FVH"/>
+                <outlet property="indicatorViewLeadingConstraint" destination="tai-U2-tyY" id="rgp-kg-6bG"/>
                 <outlet property="inviteButton" destination="DBl-l5-0yy" id="8gg-rS-jDU"/>
                 <outlet property="scrollView" destination="l39-fs-8kg" id="vvQ-W2-wQe"/>
             </connections>
