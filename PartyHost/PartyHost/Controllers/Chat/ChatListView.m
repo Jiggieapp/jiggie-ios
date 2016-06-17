@@ -10,7 +10,7 @@
 #import "ChatListTableViewCell.h"
 #import "Room.h"
 
-static NSString *const kFriendConvoCellIdentifier = @"FriendConvoCellIdentifier";
+static NSString *const kChatsCellIdentifier = @"ChatsCellIdentifier";
 
 @interface ChatListView () <UITableViewDataSource, UITableViewDelegate>
 
@@ -30,9 +30,7 @@ static NSString *const kFriendConvoCellIdentifier = @"FriendConvoCellIdentifier"
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     self.tableView.tableFooterView = [UIView new];
-    [self.tableView registerNib:[ChatListTableViewCell nib] forCellReuseIdentifier:kFriendConvoCellIdentifier];
-    
-    [self initClass];
+    [self.tableView registerNib:[ChatListTableViewCell nib] forCellReuseIdentifier:kChatsCellIdentifier];
 }
 
 
@@ -55,10 +53,10 @@ static NSString *const kFriendConvoCellIdentifier = @"FriendConvoCellIdentifier"
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    ChatListTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kFriendConvoCellIdentifier];
+    ChatListTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kChatsCellIdentifier];
     
     if (cell == nil) {
-        cell = [[ChatListTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kFriendConvoCellIdentifier];
+        cell = [[ChatListTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kChatsCellIdentifier];
     }
     
     [cell configureChatListWithRoomInfo:self.chats[indexPath.row]];

@@ -8,12 +8,14 @@
 
 #import "ChatView.h"
 #import "ChatListView.h"
+#import "ChatFriendListView.h"
 
 @interface ChatView ()
 
 @property (strong, nonatomic) IBOutlet UIView *indicatorView;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *indicatorViewLeadingConstraint;
 @property (strong, nonatomic) ChatListView *chatListView;
+@property (strong, nonatomic) ChatFriendListView *chatFriendListView;
 
 @end
 
@@ -27,6 +29,13 @@
     return _chatListView;
 }
 
+- (ChatFriendListView *)chatFriendListView {
+    if (!_chatFriendListView) {
+        _chatFriendListView = [ChatFriendListView instanceFromNib];
+    }
+    
+    return _chatFriendListView;
+}
 
 + (ChatView *)instanceFromNib {
     return (ChatView *)[[UINib nibWithNibName:@"ChatView" bundle:nil] instantiateWithOwner:self options:nil][0];
@@ -35,16 +44,19 @@
 - (void)awakeFromNib {
     [super awakeFromNib];
     [self.activeContentView addSubview:self.chatListView];
+    [self.friendsContentView addSubview:self.chatFriendListView];
 }
 
 - (void)initClass {
-    
+    [self.chatListView initClass];
+    [self.chatFriendListView initClass];
 }
 
 - (void)layoutSubviews {
     [super layoutSubviews];
     
     self.chatListView.frame = CGRectMake(0, 0, CGRectGetWidth(self.activeContentView.bounds), CGRectGetHeight(self.activeContentView.bounds));
+    self.chatFriendListView.frame = CGRectMake(0, 0, CGRectGetWidth(self.friendsContentView.bounds), CGRectGetHeight(self.friendsContentView.bounds));
 }
 
 - (IBAction)didTapInviteButton:(id)sender {

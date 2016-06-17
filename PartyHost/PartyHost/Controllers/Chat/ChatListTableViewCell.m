@@ -13,8 +13,23 @@
 #import "RoomPrivateInfo.h"
 #import "User.h"
 #import "BadgeView.h"
+#import "Friend.h"
+
+@interface ChatListTableViewCell ()
+
+@property (strong, nonatomic) BadgeView *unreadBadgeView;
+
+@end
 
 @implementation ChatListTableViewCell
+
+- (BadgeView *)unreadBadgeView {
+    if (!_unreadBadgeView) {
+        _unreadBadgeView = [[BadgeView alloc] initWithFrame:CGRectMake(0, 0, 16, 16)];
+    }
+    
+    return _unreadBadgeView;
+}
 
 + (UINib *)nib {
     return [UINib nibWithNibName:@"ChatListTableViewCell" bundle:nil];
@@ -33,10 +48,9 @@
     self.photoImageView.layer.cornerRadius = 25;
     self.photoImageView.layer.masksToBounds = YES;
     
-    BadgeView *unreadBadgeView = [[BadgeView alloc] initWithFrame:CGRectMake(0, 0, 16, 16)];
-    [unreadBadgeView updateValue:0];
+    [self.unreadBadgeView updateValue:0];
     
-    [self.badgeView addSubview:unreadBadgeView];
+    [self.badgeView addSubview:self.unreadBadgeView];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
@@ -68,6 +82,20 @@
         [self.lastMessageLabel setText:info.lastMessage];
         [self.dateLabel setText:[[NSDate dateWithTimeIntervalSince1970:info.updatedAt] timeAgo]];
     }
+}
+
+- (void)configureChatFriendListWithFriend:(Friend *)friend {
+    [self.unreadBadgeView updateValue:0];
+    [self.photoImageView sd_setImageWithURL:[NSURL URLWithString:friend.imgURL]];
+    [self.nameLabel setText:[[NSString stringWithFormat:@"%@ %@", friend.firstName, friend.lastName] capitalizedString]];
+    
+    if ([friend.about length] == 0) {
+        [self.lastMessageLabel setText:@""];
+    } else {
+        [self.lastMessageLabel setText:friend.about];
+    }
+    
+    [self.dateLabel setText:@""];
 }
 
 @end

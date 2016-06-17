@@ -25,6 +25,8 @@
 		93042B8F1D129266004A8B2F /* ChatListTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 93042B8D1D129266004A8B2F /* ChatListTableViewCell.xib */; };
 		93042B931D12B645004A8B2F /* ChatView.m in Sources */ = {isa = PBXBuildFile; fileRef = 93042B911D12B645004A8B2F /* ChatView.m */; };
 		93042B941D12B645004A8B2F /* ChatView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 93042B921D12B645004A8B2F /* ChatView.xib */; };
+		93042B981D13CF25004A8B2F /* ChatFriendListView.m in Sources */ = {isa = PBXBuildFile; fileRef = 93042B961D13CF25004A8B2F /* ChatFriendListView.m */; };
+		93042B991D13CF25004A8B2F /* ChatFriendListView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 93042B971D13CF25004A8B2F /* ChatFriendListView.xib */; };
 		936673FC1CD7164A00AC94F3 /* UIActionSheet+Blocks.m in Sources */ = {isa = PBXBuildFile; fileRef = 936673FA1CD7164A00AC94F3 /* UIActionSheet+Blocks.m */; };
 		936674061CD718A800AC94F3 /* TPKeyboardAvoidingScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 936674031CD718A800AC94F3 /* TPKeyboardAvoidingScrollView.m */; };
 		936674071CD718A900AC94F3 /* UIScrollView+TPKeyboardAvoidingAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 936674051CD718A800AC94F3 /* UIScrollView+TPKeyboardAvoidingAdditions.m */; };
@@ -495,6 +497,9 @@
 		93042B901D12B645004A8B2F /* ChatView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatView.h; sourceTree = "<group>"; };
 		93042B911D12B645004A8B2F /* ChatView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatView.m; sourceTree = "<group>"; };
 		93042B921D12B645004A8B2F /* ChatView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ChatView.xib; sourceTree = "<group>"; };
+		93042B951D13CF25004A8B2F /* ChatFriendListView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatFriendListView.h; sourceTree = "<group>"; };
+		93042B961D13CF25004A8B2F /* ChatFriendListView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatFriendListView.m; sourceTree = "<group>"; };
+		93042B971D13CF25004A8B2F /* ChatFriendListView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ChatFriendListView.xib; sourceTree = "<group>"; };
 		936673F91CD7164A00AC94F3 /* UIActionSheet+Blocks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIActionSheet+Blocks.h"; sourceTree = "<group>"; };
 		936673FA1CD7164A00AC94F3 /* UIActionSheet+Blocks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIActionSheet+Blocks.m"; sourceTree = "<group>"; };
 		936674021CD718A800AC94F3 /* TPKeyboardAvoidingScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TPKeyboardAvoidingScrollView.h; sourceTree = "<group>"; };
@@ -2111,6 +2116,9 @@
 				93042B861D129174004A8B2F /* ChatListView.h */,
 				93042B871D129174004A8B2F /* ChatListView.m */,
 				93042B881D129174004A8B2F /* ChatListView.xib */,
+				93042B951D13CF25004A8B2F /* ChatFriendListView.h */,
+				93042B961D13CF25004A8B2F /* ChatFriendListView.m */,
+				93042B971D13CF25004A8B2F /* ChatFriendListView.xib */,
 				93042B8B1D129266004A8B2F /* ChatListTableViewCell.h */,
 				93042B8C1D129266004A8B2F /* ChatListTableViewCell.m */,
 				93042B8D1D129266004A8B2F /* ChatListTableViewCell.xib */,
@@ -3083,6 +3091,7 @@
 				CB3EB6C81B459177003F658F /* App.xcassets in Resources */,
 				DAABB0E21C1FD50E004DDCFA /* GenericOverlay.xib in Resources */,
 				DAABB2E61C1FF993004DDCFA /* FaktPro-SemiBold.ttf in Resources */,
+				93042B991D13CF25004A8B2F /* ChatFriendListView.xib in Resources */,
 				DAABB2971C1FF5AE004DDCFA /* MPCloseBtn@2x.png in Resources */,
 				9366742D1CD7621500AC94F3 /* OLPhotoViewController.xib in Resources */,
 				938CE8051CD3184300ADDD4C /* SocialMultiSliderTableViewCell.xib in Resources */,
@@ -3448,6 +3457,7 @@
 				93042B6F1D1014E5004A8B2F /* Room.m in Sources */,
 				9366747C1CE1EE6700AC94F3 /* UIView+Animation.m in Sources */,
 				938CE79A1CCE2D2C00ADDD4C /* ZLSwipeableViewMovement.m in Sources */,
+				93042B981D13CF25004A8B2F /* ChatFriendListView.m in Sources */,
 				DAABB0CC1C1FD50E004DDCFA /* EventsHostDetail.m in Sources */,
 				DAABB2C91C1FF5AE004DDCFA /* TSConfig.m in Sources */,
 				938CE7991CCE2D2C00ADDD4C /* ZLSwipeableView.m in Sources */,

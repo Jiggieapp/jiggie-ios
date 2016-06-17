@@ -63,6 +63,7 @@
                     <constraint firstItem="trh-hx-rce" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="9Ms-IE-q7k"/>
                     <constraint firstItem="TeK-jM-AuV" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="10" id="Ac5-y3-I3u"/>
                     <constraint firstItem="TeK-jM-AuV" firstAttribute="leading" secondItem="trh-hx-rce" secondAttribute="trailing" constant="10" id="GR5-IH-KpM"/>
+                    <constraint firstAttribute="trailingMargin" relation="greaterThanOrEqual" secondItem="Ff5-xY-Mfj" secondAttribute="trailing" constant="-8" id="KDb-di-lBT"/>
                     <constraint firstAttribute="bottomMargin" secondItem="Ff5-xY-Mfj" secondAttribute="bottom" constant="9.5" id="Xgx-5n-Pz1"/>
                     <constraint firstItem="yMR-gA-XBe" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="42" id="gvJ-8Z-b7J"/>
                     <constraint firstItem="Ff5-xY-Mfj" firstAttribute="leading" secondItem="TeK-jM-AuV" secondAttribute="leading" id="jYW-w4-8eZ"/>

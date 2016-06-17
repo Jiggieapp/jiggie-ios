@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
+@class Friend;
 @interface ChatListTableViewCell : UITableViewCell
 
 @property (strong, nonatomic) IBOutlet UIImageView *photoImageView;
@@ -19,5 +20,6 @@
 + (UINib *)nib;
 
 - (void)configureChatListWithRoomInfo:(NSObject *)roomInfo;
+- (void)configureChatFriendListWithFriend:(Friend *)friend;
 
 @end
