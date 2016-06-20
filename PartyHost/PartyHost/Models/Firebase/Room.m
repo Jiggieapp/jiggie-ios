@@ -93,7 +93,7 @@
         }
     }
     
-    NSSortDescriptor *descriptor = [NSSortDescriptor sortDescriptorWithKey:@"updatedAt" ascending:YES];
+    NSSortDescriptor *descriptor = [NSSortDescriptor sortDescriptorWithKey:@"updatedAt" ascending:NO];
     NSArray *sortedRoomsInfo = [roomsInfo sortedArrayUsingDescriptors:@[descriptor]];
     
     return sortedRoomsInfo;

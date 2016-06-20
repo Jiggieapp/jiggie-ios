@@ -73,14 +73,14 @@
         }];
         
         [self.lastMessageLabel setText:info.lastMessage];
-        [self.dateLabel setText:[[NSDate dateWithTimeIntervalSince1970:info.updatedAt] timeAgo]];
+        [self.dateLabel setText:[[NSDate dateWithTimeIntervalSince1970:info.updatedAt / 1000] timeAgo]];
     } else {
         RoomGroupInfo *info = (RoomGroupInfo *)roomInfo;
         
         [self.photoImageView sd_setImageWithURL:[NSURL URLWithString:info.avatarURL]];
         [self.nameLabel setText:info.event];
         [self.lastMessageLabel setText:info.lastMessage];
-        [self.dateLabel setText:[[NSDate dateWithTimeIntervalSince1970:info.updatedAt] timeAgo]];
+        [self.dateLabel setText:[[NSDate dateWithTimeIntervalSince1970:info.updatedAt / 1000] timeAgo]];
     }
 }
 
