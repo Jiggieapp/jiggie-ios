@@ -115,7 +115,7 @@
 }
 
 - (void)configureMessage:(Message *)message {
-    BOOL isMe = [@"111222333" isEqualToString:message.fbId];
+    BOOL isMe = [self.sharedData.fb_id isEqualToString:message.fbId];
     NSDate *date = [NSDate dateWithTimeIntervalSince1970:message.createdAt / 1000];
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     [formatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US"]];

@@ -187,6 +187,8 @@
 }
 
 - (void)loadMessages {
+    [self.messages removeAllObjects];
+    
     if (![[self.eventName lowercaseString] isEqualToString:@"generic"]) {
         UIView *view = [self headerViewWithText:self.eventName];
         UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(.0f, .0f, CGRectGetWidth(self.messagesList.bounds), CGRectGetHeight(view.bounds) + 20.0f)];
@@ -194,6 +196,8 @@
         [view setCenter:headerView.center];
         
         [self.messagesList setTableHeaderView:headerView];
+    } else {
+        [self.messagesList setTableHeaderView:nil];
     }
     
     [Message retrieveMessagesWithRoomId:self.roomId andCompletionHandler:^(NSArray *messages, NSError *error) {
@@ -501,7 +505,7 @@
     [self scrollToBottom:YES];
     
     [Message sendMessageWithRoomId:self.roomId
-                          senderId:@"111222333"
+                          senderId:self.sharedData.fb_id
                               text:text];
 }
 

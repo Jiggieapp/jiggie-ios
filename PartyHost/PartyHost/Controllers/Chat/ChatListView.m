@@ -45,7 +45,8 @@ static NSString *const kChatsCellIdentifier = @"ChatsCellIdentifier";
 
 
 - (void)initClass {
-    [Room retrieveRoomsWithFbId:@"111222333" andCompletionHandler:^(NSArray *rooms, NSError *error) {
+    SharedData *sharedData = [SharedData sharedInstance];
+    [Room retrieveRoomsWithFbId:sharedData.fb_id andCompletionHandler:^(NSArray *rooms, NSError *error) {
         if (rooms) {
             self.rooms = [Room retrieveRoomsInfoWithRooms:rooms];
             [self.tableView reloadData];
@@ -192,7 +193,7 @@ static NSString *const kChatsCellIdentifier = @"ChatsCellIdentifier";
         
         if (alertView.tag == 5) {
             SharedData *sharedData = [SharedData sharedInstance];
-            [Room clearChatFromRoomId:self.roomId withFbId:@"111222333" andCompletionHandler:^(NSError *error) {
+            [Room clearChatFromRoomId:self.roomId withFbId:sharedData.fb_id andCompletionHandler:^(NSError *error) {
                 if (error) {
                     [self showFailAlertWithTitle:@"Deleted Messages"
                                       andMessage:@"Unable to delete messages."];
@@ -223,7 +224,7 @@ static NSString *const kChatsCellIdentifier = @"ChatsCellIdentifier";
                 }];
             } else {
                 SharedData *sharedData = [SharedData sharedInstance];
-                [Room blockRoomWithRoomId:self.roomId withFbId:@"111222333" andCompletionHandler:^(NSError *error) {
+                [Room blockRoomWithRoomId:self.roomId withFbId:sharedData.fb_id andCompletionHandler:^(NSError *error) {
                     if (error) {
                         [self showFailAlertWithTitle:@"Blocked Group"
                                           andMessage:@"Fail."];
