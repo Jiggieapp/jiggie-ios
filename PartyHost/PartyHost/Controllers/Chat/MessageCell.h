@@ -14,22 +14,13 @@
 @class Message;
 @interface MessageCell : UITableViewCell
 
-@property(nonatomic, strong)   SharedData      *sharedData;
-
-@property(nonatomic,strong) UIView          *toIconCon;
-@property(nonatomic,strong) UserBubble         *toIcon;
-@property(nonatomic,strong) MessageBubbleTriangle *triangle;
-@property(nonatomic,strong) UITextView      *toMessage;
-@property(nonatomic,strong) UITextView      *fromMessage;
-
-
-@property(nonatomic,strong) UILabel          *dateLabel;
-@property(nonatomic,strong) UILabel          *myDateLabel;
-
-@property(nonatomic,assign) BOOL            isMe;
-
--(void)loadData:(NSMutableDictionary *)dict andMainData:(NSDictionary *)mainDict;
--(void)showLoading:(BOOL)loading;
+@property (nonatomic,strong) UIView *toIconCon;
+@property (nonatomic,strong) UserBubble *toIcon;
+@property (nonatomic,strong) MessageBubbleTriangle *triangle;
+@property (nonatomic,strong) UITextView *toMessage;
+@property (nonatomic,strong) UITextView *fromMessage;
+@property (nonatomic,strong) UILabel *dateLabel;
+@property (nonatomic,strong) UILabel *myDateLabel;
 
 - (void)configureMessage:(Message *)message;
 
