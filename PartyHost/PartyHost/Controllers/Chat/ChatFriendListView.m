@@ -9,6 +9,7 @@
 #import "ChatFriendListView.h"
 #import "ChatListTableViewCell.h"
 #import "Friend.h"
+#import "RoomPrivateInfo.h"
 
 static NSString *const kFriendConvoCellIdentifier = @"FriendConvoCellIdentifier";
 
@@ -98,6 +99,16 @@ static NSString *const kFriendConvoCellIdentifier = @"FriendConvoCellIdentifier"
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    SharedData *sharedData = [SharedData sharedInstance];
+    Friend *friend = self.friends[indexPath.row];
+    
+    NSDictionary *object = @{@"roomId" : [RoomPrivateInfo getPrivateMessageIdWithsenderId:sharedData.fb_id
+                                                                            andReceiverId:friend.fbID],
+                             @"eventName" : @"generic"};
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"SHOW_MESSAGES"
+                                                        object:object];
 }
 
 @end
