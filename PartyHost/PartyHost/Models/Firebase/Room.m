@@ -91,11 +91,10 @@
     return roomsInfo;
 }
 
-+ (void)clearChatFromRoomId:(NSString *)roomId andCompletionHandler:(ClearChatCompletionHandler)completion {
-    SharedData *sharedData = [SharedData sharedInstance];
++ (void)clearChatFromRoomId:(NSString *)roomId withFbId:(NSString *)fbId andCompletionHandler:(ClearChatCompletionHandler)completion {
     FIRDatabaseReference *reference = [[Room membersReference] child:roomId];
     
-    NSDictionary *parameters = @{@"111222333" : [NSNumber numberWithBool:NO]};
+    NSDictionary *parameters = @{fbId : [NSNumber numberWithBool:NO]};
     
     [reference updateChildValues:parameters withCompletionBlock:^(NSError * _Nullable error, FIRDatabaseReference * _Nonnull ref) {
         if (completion) {
@@ -104,8 +103,18 @@
     }];
 }
 
-+ (void)blockRoomWithRoomId:(NSString *)roomId andCompletionHandler:(ClearChatCompletionHandler)completion {
++ (void)blockPrivateChatWithRoomId:(NSString *)roomId andCompletionHandler:(ClearChatCompletionHandler)completion {
     FIRDatabaseReference *reference = [[Room membersReference] child:roomId];
+    
+    [reference removeValueWithCompletionBlock:^(NSError * _Nullable error, FIRDatabaseReference * _Nonnull ref) {
+        if (completion) {
+            completion(error);
+        }
+    }];
+}
+
++ (void)blockRoomWithRoomId:(NSString *)roomId withFbId:(NSString *)fbId andCompletionHandler:(ClearChatCompletionHandler)completion {
+    FIRDatabaseReference *reference = [[[Room membersReference] child:roomId] child:fbId];
     
     [reference removeValueWithCompletionBlock:^(NSError * _Nullable error, FIRDatabaseReference * _Nonnull ref) {
         if (completion) {

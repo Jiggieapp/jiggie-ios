@@ -32,9 +32,14 @@ typedef void (^ClearChatCompletionHandler)(NSError *error);
 + (NSArray *)retrieveRoomsInfoWithRooms:(NSArray *)rooms;
 
 + (void)clearChatFromRoomId:(NSString *)roomId
+                   withFbId:(NSString *)fbId
        andCompletionHandler:(ClearChatCompletionHandler)completion;
 
++ (void)blockPrivateChatWithRoomId:(NSString *)roomId
+              andCompletionHandler:(ClearChatCompletionHandler)completion;
+
 + (void)blockRoomWithRoomId:(NSString *)roomId
+                   withFbId:(NSString *)fbId
        andCompletionHandler:(ClearChatCompletionHandler)completion;
 
 @end

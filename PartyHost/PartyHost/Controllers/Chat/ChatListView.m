@@ -171,7 +171,8 @@ static NSString *const kChatsCellIdentifier = @"ChatsCellIdentifier";
         [SVProgressHUD show];
         
         if (alertView.tag == 5) {
-            [Room clearChatFromRoomId:self.roomId andCompletionHandler:^(NSError *error) {
+            SharedData *sharedData = [SharedData sharedInstance];
+            [Room clearChatFromRoomId:self.roomId withFbId:@"111222333" andCompletionHandler:^(NSError *error) {
                 if (error) {
                     [self showFailAlertWithTitle:@"Deleted Messages"
                                       andMessage:@"Unable to delete messages."];
@@ -185,20 +186,38 @@ static NSString *const kChatsCellIdentifier = @"ChatsCellIdentifier";
                 [SVProgressHUD dismiss];
             }];
         } else {
-            [Room blockRoomWithRoomId:self.roomId andCompletionHandler:^(NSError *error) {
-                if (error) {
-                    [self showFailAlertWithTitle:self.isBlockedUser ? @"Blocked User" : @"Blocked Group"
-                                      andMessage:@"Fail."];
-                } else {
-                    [self showSuccessAlertWithTitle:self.isBlockedUser ? @"Blocked User" : @"Blocked Group"
-                                         andMessage:[NSString stringWithFormat:@"%@ has been blocked",
-                                                     self.roomName]];
-                    [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Block User"
-                                                                  withDict:@{@"origin" : @"Chat"}];
-                }
-                
-                [SVProgressHUD dismiss];
-            }];
+            if (self.isBlockedUser) {
+                [Room blockPrivateChatWithRoomId:self.roomId andCompletionHandler:^(NSError *error) {
+                    if (error) {
+                        [self showFailAlertWithTitle:@"Blocked User"
+                                          andMessage:@"Fail."];
+                    } else {
+                        [self showSuccessAlertWithTitle:@"Blocked User"
+                                             andMessage:[NSString stringWithFormat:@"%@ has been blocked",
+                                                         self.roomName]];
+                        [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Block User"
+                                                                      withDict:@{@"origin" : @"Chat"}];
+                    }
+                    
+                    [SVProgressHUD dismiss];
+                }];
+            } else {
+                SharedData *sharedData = [SharedData sharedInstance];
+                [Room blockRoomWithRoomId:self.roomId withFbId:@"111222333" andCompletionHandler:^(NSError *error) {
+                    if (error) {
+                        [self showFailAlertWithTitle:@"Blocked Group"
+                                          andMessage:@"Fail."];
+                    } else {
+                        [self showSuccessAlertWithTitle:@"Blocked Group"
+                                             andMessage:[NSString stringWithFormat:@"%@ has been blocked",
+                                                         self.roomName]];
+                        [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Block Group"
+                                                                      withDict:@{@"origin" : @"Chat"}];
+                    }
+                    
+                    [SVProgressHUD dismiss];
+                }];
+            }
         }
     }
 }
