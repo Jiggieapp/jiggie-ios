@@ -75,6 +75,8 @@
 
 @property (nonatomic, assign) NSInteger         currentSegmentationIndex;
 
+@property (nonatomic, assign) NSInteger         nodeToHome;
+
 @property (nonatomic, retain) NSFetchedResultsController *fetchedResultsController;
 @property (nonatomic, retain) NSManagedObjectContext *managedObjectContext;
 

@@ -439,7 +439,7 @@
         [self dismissViewAnimated:YES completion:nil];
     } else {
         [[NSNotificationCenter defaultCenter]
-         postNotificationName:@"EVENTS_GO_HOME"
+         postNotificationName:@"EVENTS_GO_BACK"
          object:self];
     }
 }

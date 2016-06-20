@@ -112,7 +112,7 @@
     if (self.isModal) {
         [self dismissViewAnimated:YES completion:nil];
     } else {
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"EVENTS_GO_HOST_SUMMARY"
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"EVENTS_GO_BACK"
                                                             object:self];
     }
     

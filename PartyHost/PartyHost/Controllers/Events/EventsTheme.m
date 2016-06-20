@@ -13,6 +13,8 @@
 #import "Event.h"
 #import "AppDelegate.h"
 #import "EventsRowCell.h"
+#import "EventThemeHeaderCell.h"
+#import "BaseModel.h"
 
 
 @implementation EventsTheme
@@ -49,7 +51,7 @@
     
     self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(self.navBar.frame),
                                                                    self.sharedData.screenWidth,
-                                                                   self.sharedData.screenHeight - self.navBar.frame.size.height)];
+                                                                   self.sharedData.screenHeight - self.navBar.frame.size.height - PHTabHeight)];
     self.tableView.backgroundColor = [UIColor whiteColor];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
@@ -177,9 +179,11 @@
     AFHTTPRequestOperationManager *manager = [self.sharedData getOperationManager];
     
     NSString *url = nil;
-    url = [NSString stringWithFormat:@"%@/events/themes/%@/",PHBaseNewURL,themeID];
+    url = [NSString stringWithFormat:@"%@/events/themes/",PHBaseNewURL];
     
-    [manager GET:url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject)
+    NSDictionary *parameters = @{@"themes_id" : @[themeID]};
+    
+    [manager POST:url parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject)
      {
          
          NSInteger responseStatusCode = operation.response.statusCode;
@@ -207,15 +211,35 @@
              
              @try {
                  
+                 NSPredicate *predicate = [NSPredicate predicateWithFormat:@"themeID = %@", themeID];
+                 NSArray *fetchEvents = [BaseModel fetchManagedObject:self.managedObjectContext
+                                                             inEntity:NSStringFromClass([Event class])
+                                                         andPredicate:predicate];
+                 for (Event *fetchEvent in fetchEvents) {
+                     [self.managedObjectContext deleteObject:fetchEvent];
+                     
+                     NSError *error;
+                     if (![self.managedObjectContext save:&error]) NSLog(@"Error: %@", [error localizedDescription]);
+                 }
+                 
                  NSDictionary *data = [json objectForKey:@"data"];
                  if (data && data != nil) {
                      NSArray *events = [data objectForKey:@"events"];
+                     NSDictionary *themes = [data objectForKey:@"themes"];
                      
-                     if (!events || events.count == 0) {
+                     if ((!events || events.count == 0) &&
+                         (!themes || themes.count == 0)) {
                          [self.emptyView setMode:@"empty"];
                      }
                      
                      self.needUpdateContents = NO;
+                     
+                     if (themes && themes.count > 0) {
+                         Theme *parsedTheme = [MTLJSONAdapter modelOfClass:[Theme class]
+                                                        fromJSONDictionary:themes
+                                                                     error:nil];
+                         self.cTheme = parsedTheme;
+                     }
                      
                      for (NSDictionary *eventRow in events) {
                          
@@ -241,12 +265,7 @@
                              item.eventID = @"";
                          }
                          
-                         NSString *themes_id = [eventRow objectForKey:@"themes_id"];
-                         if (themes_id && ![themes_id isEqual:[NSNull null]]) {
-                             item.themeID = themes_id;
-                         } else {
-                             item.themeID = @"";
-                         }
+                         item.themeID = self.cTheme.themeID;
                          
                          NSString *venue_name = [eventRow objectForKey:@"venue_name"];
                          if (venue_name && ![venue_name isEqual:[NSNull null]]) {
@@ -325,6 +344,7 @@
                  
              }
              
+             [self.emptyView setMode:@"hide"];
              [self.tableView reloadData];
              
              self.needUpdateContents = YES;
@@ -342,58 +362,88 @@
 
 #pragma mark - UITableViewDataSource
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 1;
+    return 2;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    if (self.fetchedResultsController && [[self.fetchedResultsController fetchedObjects] count] > 0){
-        return [[self.fetchedResultsController fetchedObjects] count];
+    if (section == 0 && self.cTheme != nil) {
+        return 1;
+    } else if (section == 1) {
+        if (self.fetchedResultsController && [[self.fetchedResultsController fetchedObjects] count] > 0){
+            return [[self.fetchedResultsController fetchedObjects] count];
+        }
     }
+    
+    
     
     return 0;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-
-    if ([[self.fetchedResultsController fetchedObjects] count] > 0) {
-        CGFloat pictureHeightRatio = 3.0 / 4.0;
-        CGFloat cellHeight = pictureHeightRatio * tableView.bounds.size.width + 100;
-        
-        Event *event = [[self fetchedResultsController] objectAtIndexPath:indexPath];
-        if (event != nil) {
-            NSString *eventTitle = [event.title uppercaseString];
+    
+    if ([indexPath section] == 0) {
+        return 300;
+    } else if ([indexPath section] == 1) {
+        if ([[self.fetchedResultsController fetchedObjects] count] > 0) {
+            CGFloat pictureHeightRatio = 3.0 / 4.0;
+            CGFloat cellHeight = pictureHeightRatio * tableView.bounds.size.width + 100;
             
-            CGRect eventTitleFrame = [eventTitle boundingRectWithSize:CGSizeMake(self.sharedData.screenWidth - 20 - 70, 70)
-                                                              options:NSStringDrawingUsesLineFragmentOrigin
-                                                           attributes:@{NSFontAttributeName:[UIFont phBlond:16]}
-                                                              context:nil];
-            cellHeight += eventTitleFrame.size.height;
+            NSIndexPath *eventIndexPath = [NSIndexPath indexPathForRow:indexPath.row inSection:0];
+            Event *event = [[self fetchedResultsController] objectAtIndexPath:eventIndexPath];
+            if (event != nil) {
+                NSString *eventTitle = [event.title uppercaseString];
+                
+                CGRect eventTitleFrame = [eventTitle boundingRectWithSize:CGSizeMake(self.sharedData.screenWidth - 20 - 70, 70)
+                                                                  options:NSStringDrawingUsesLineFragmentOrigin
+                                                               attributes:@{NSFontAttributeName:[UIFont phBlond:16]}
+                                                                  context:nil];
+                cellHeight += eventTitleFrame.size.height;
+            }
+            
+            return cellHeight;
         }
-        
-        return cellHeight;
     }
+    
     return tableView.bounds.size.height;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    if ([[self.fetchedResultsController fetchedObjects] count] > 0) {
-        static NSString *simpleTableIdentifier = @"EventsRow1Cell";
+    if ([indexPath section] == 0) {
+        static NSString *simpleTableIdentifier = @"EventsThemeHeaderCell";
+        EventThemeHeaderCell *cell = [tableView dequeueReusableCellWithIdentifier:simpleTableIdentifier];
         
-        EventsRowCell *cell = [tableView dequeueReusableCellWithIdentifier:simpleTableIdentifier];
-        
-        if (cell == nil)
-        {
-            cell = [[EventsRowCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:simpleTableIdentifier];
+        if (cell == nil) {
+            [tableView registerNib:[EventThemeHeaderCell nib] forCellReuseIdentifier:simpleTableIdentifier];
+            cell = [tableView dequeueReusableCellWithIdentifier:simpleTableIdentifier forIndexPath:indexPath];
         }
         
-        [cell clearData];
-        
-        Event *event = [[self fetchedResultsController] objectAtIndexPath:indexPath];
-        cell.isFeaturedEvent = [event.isFeatured boolValue];
-        [cell loadData:event];
-        
+        Theme *theme = self.cTheme;
+        if (theme && theme != nil) {
+            [cell loadData:theme];
+        }
         return cell;
+        
+    } else if ([indexPath section] == 1) {
+        if ([[self.fetchedResultsController fetchedObjects] count] > 0) {
+            static NSString *simpleTableIdentifier = @"EventsRow1Cell";
+            
+            EventsRowCell *cell = [tableView dequeueReusableCellWithIdentifier:simpleTableIdentifier];
+            
+            if (cell == nil)
+            {
+                cell = [[EventsRowCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:simpleTableIdentifier];
+            }
+            
+            [cell clearData];
+            
+            NSIndexPath *eventIndexPath = [NSIndexPath indexPathForRow:indexPath.row inSection:0];
+            Event *event = [[self fetchedResultsController] objectAtIndexPath:eventIndexPath];
+            cell.isFeaturedEvent = [event.isFeatured boolValue];
+            [cell loadData:event];
+            
+            return cell;
+        }
     }
     
     static NSString *emptyTableIdentifier = @"EmptyCell";
@@ -409,5 +459,41 @@
     
     return cell;
 }
+
+#pragma mark - UITableViewDelegate
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [tableView deselectRowAtIndexPath:[tableView indexPathForSelectedRow] animated:YES];
+    [self endEditing:YES];
+ 
+    if ([indexPath section] == 1) {
+        @try {
+            
+            NSIndexPath *eventIndexPath = [NSIndexPath indexPathForRow:indexPath.row inSection:0];
+            Event *event = [[self fetchedResultsController] objectAtIndexPath:eventIndexPath];
+            
+            if (event != nil) {
+                [self.sharedData.selectedEvent removeAllObjects];
+                self.sharedData.selectedEvent[@"_id"] = event.eventID;
+                self.sharedData.selectedEvent[@"venue_name"] = event.venue;
+                
+                self.sharedData.cEventId = event.eventID;
+                self.sharedData.mostRecentEventSelectedId = event.eventID;
+                self.sharedData.cVenueName = event.venue;
+                
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"EVENTS_GO_HOST_SUMMARY"
+                                                                    object:event];
+            }
+            
+        }
+        @catch (NSException *exception) {
+            
+        }
+        @finally {
+            
+        }
+    }
+}
+
 
 @end

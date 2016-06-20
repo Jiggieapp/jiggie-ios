@@ -46,6 +46,7 @@
     self.didLoadFromHostings = NO;
     self.didLoadFromInvite = NO;
     self.needUpdateContents = YES;
+    self.nodeToHome = 0;
     
     UIView *tmpPurpleView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.sharedData.screenWidth, 40)];
     tmpPurpleView.backgroundColor = [UIColor phPurpleColor];
@@ -309,6 +310,7 @@
     
     //4th screen
     self.eventsHostDetail = [[EventsHostDetail alloc] initWithFrame:CGRectMake(self.sharedData.screenWidth * 3, -20, self.sharedData.screenWidth, self.mainCon.frame.size.height)];
+    [self.eventsHostDetail setHidden:YES];
     [self.mainCon addSubview:self.eventsHostDetail];
     
     [self observeKeyboardNotification];
@@ -319,17 +321,23 @@
      name:@"EVENTS_GO_HOME"
      object:nil];
     
+    [[NSNotificationCenter defaultCenter]
+     addObserver:self
+     selector:@selector(goBackNode)
+     name:@"EVENTS_GO_BACK"
+     object:nil];
+    
     //2nd screen
     [[NSNotificationCenter defaultCenter]
      addObserver:self
-     selector:@selector(goToSummary)
+     selector:@selector(goToSummaryNotification:)
      name:@"EVENTS_GO_HOST_SUMMARY"
      object:nil];
     
     //2nd screen
     [[NSNotificationCenter defaultCenter]
      addObserver:self
-     selector:@selector(goToSummary)
+     selector:@selector(goToSummaryNotification:)
      name:@"EVENTS_GO_GUEST_SUMMARY"
      object:nil];
     
@@ -1070,19 +1078,10 @@
         
     } else if (section == 1) {
         if ([tableView isEqual:self.events1List]) {
-            if (self.eventsToday.count == 0) {
-                return 1;
-            }
             return self.eventsToday.count;
         } else if ([tableView isEqual:self.events2List]) {
-            if (self.eventsTomorrow.count == 0) {
-                return 1;
-            }
             return self.eventsTomorrow.count;
         } else if ([tableView isEqual:self.events3List]) {
-            if (self.eventsUpcoming.count == 0) {
-                return 1;
-            }
             return self.eventsUpcoming.count;
         }
     }
@@ -1313,24 +1312,7 @@
                 self.sharedData.mostRecentEventSelectedId = event.eventID;
                 self.sharedData.cVenueName = event.venue;
                 
-                if([self.sharedData isGuest] && ![self.sharedData isMember])
-                {
-                    [self.eventsSummary initClassWithEvent:event];
-                    
-                    self.eventsSummary.hidden = NO;
-                    self.eventsGuestList.hidden = YES;
-                    self.eventsHostingsList.hidden = NO;
-                }
-                else if([self.sharedData isHost] || [self.sharedData isMember])
-                {
-                    [self.eventsSummary initClassWithEvent:event];
-                    
-                    self.eventsSummary.hidden = NO;
-                    self.eventsGuestList.hidden = NO;
-                    self.eventsHostingsList.hidden = YES;
-                }
-                
-                [self goToSummary];
+                [self goToSummary:event];
             }
         }
     }
@@ -1577,6 +1559,8 @@ shouldDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
 
 -(void)goHome
 {
+    self.nodeToHome = 0;
+    
     self.sharedData.isGuestListingsShowing = NO;
     [UIView animateWithDuration:0.25 animations:^()
      {
@@ -1589,6 +1573,8 @@ shouldDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
 
 -(void)goHomeNoLoad
 {
+    self.nodeToHome--;
+    
     self.sharedData.isGuestListingsShowing = NO;
     [UIView animateWithDuration:0.25 animations:^()
      {
@@ -1599,9 +1585,27 @@ shouldDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
      }];
 }
 
+- (void)goBackNode {
+    self.nodeToHome--;
+    
+    [UIView animateWithDuration:0.25 animations:^()
+     {
+         self.mainCon.frame = CGRectMake(-self.sharedData.screenWidth * self.nodeToHome, 20, self.sharedData.screenWidth * SCREENS_DEEP, self.sharedData.screenHeight - 20);
+     } completion:^(BOOL finished)
+     {
+         
+     }];
+}
+
 //2nd Screen
 -(void)goToEventTheme
 {
+    self.nodeToHome++;
+    
+    [self.eventsTheme setFrame:CGRectMake(self.sharedData.screenWidth, -20, self.sharedData.screenWidth, self.mainCon.frame.size.height)];
+    [self.eventsSummary setFrame:CGRectMake(self.sharedData.screenWidth *2, -20, self.sharedData.screenWidth, self.mainCon.frame.size.height)];
+    [self.eventsGuestList setFrame:CGRectMake(self.sharedData.screenWidth *3, -20, self.sharedData.screenWidth, self.mainCon.frame.size.height)];
+    
     [UIView animateWithDuration:0.25 animations:^()
     {
         self.mainCon.frame = CGRectMake(-self.sharedData.screenWidth, 20, self.sharedData.screenWidth * SCREENS_DEEP, self.sharedData.screenHeight - 20);
@@ -1612,11 +1616,30 @@ shouldDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
 }
 
 //2nd Screen (VENUE+LIST)
--(void)goToSummary
+- (void)goToSummaryNotification:(NSNotification *)notification {
+    Event *event = (Event *)[notification object];
+    [self goToSummary:event];
+}
+
+-(void)goToSummary:(Event *)event
 {
+    [self.eventsSummary initClassWithEvent:event];
+    
+    self.eventsSummary.hidden = NO;
+    self.eventsGuestList.hidden = NO;
+    self.eventsHostingsList.hidden = YES;
+    
+    self.nodeToHome++;
+    
+    if (self.nodeToHome == 1) {
+        [self.eventsTheme setFrame:CGRectMake(self.sharedData.screenWidth, -20, self.sharedData.screenWidth, self.mainCon.frame.size.height)];
+        [self.eventsSummary setFrame:CGRectMake(self.sharedData.screenWidth, -20, self.sharedData.screenWidth, self.mainCon.frame.size.height)];
+        [self.eventsGuestList setFrame:CGRectMake(self.sharedData.screenWidth *2, -20, self.sharedData.screenWidth, self.mainCon.frame.size.height)];
+    }
+    
     [UIView animateWithDuration:0.25 animations:^()
      {
-         self.mainCon.frame = CGRectMake(-self.sharedData.screenWidth * 2, 20, self.sharedData.screenWidth * SCREENS_DEEP, self.sharedData.screenHeight - 20);
+         self.mainCon.frame = CGRectMake(-self.sharedData.screenWidth * self.nodeToHome, 20, self.sharedData.screenWidth * SCREENS_DEEP, self.sharedData.screenHeight - 20);
      } completion:^(BOOL finished)
      {
          [JGTooltipHelper setShowed:@"Tooltip_LoadEvent_isShowed"];
@@ -1653,6 +1676,8 @@ shouldDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
 //3rd Screen (GUEST LIST)
 -(void)goToGuestList
 {
+    self.nodeToHome ++;
+    
     self.eventsHostingsList.hidden = YES;
     self.eventsGuestList.hidden = NO;
     [self.eventsGuestList initClass];
@@ -1660,7 +1685,7 @@ shouldDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
     [self.eventsGuestList loadData:self.sharedData.cEventId_Summary];
     [UIView animateWithDuration:0.25 animations:^()
      {
-         self.mainCon.frame = CGRectMake(-self.sharedData.screenWidth * 2, 20, self.sharedData.screenWidth * SCREENS_DEEP, self.sharedData.screenHeight - 20);
+         self.mainCon.frame = CGRectMake(-self.sharedData.screenWidth * self.nodeToHome, 20, self.sharedData.screenWidth * SCREENS_DEEP, self.sharedData.screenHeight - 20);
      } completion:^(BOOL finished)
      {
      }];

@@ -193,6 +193,8 @@
 		DA9945031D113E7F008A45EA /* Theme.m in Sources */ = {isa = PBXBuildFile; fileRef = DA9945021D113E7F008A45EA /* Theme.m */; };
 		DA9945071D114F7F008A45EA /* EventsThemeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DA9945051D114F7F008A45EA /* EventsThemeCell.m */; };
 		DA9945081D114F7F008A45EA /* EventsThemeCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA9945061D114F7F008A45EA /* EventsThemeCell.xib */; };
+		DA9945131D13F08E008A45EA /* EventThemeHeaderCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DA9945111D13F08E008A45EA /* EventThemeHeaderCell.m */; };
+		DA9945141D13F08E008A45EA /* EventThemeHeaderCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA9945121D13F08E008A45EA /* EventThemeHeaderCell.xib */; };
 		DA9B10A01CB4D7B7001FB798 /* GTMNSString+HTML.m in Sources */ = {isa = PBXBuildFile; fileRef = DA9B108F1CB4D7B7001FB798 /* GTMNSString+HTML.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		DA9B10A51CB4D7B7001FB798 /* NSString+HTML.m in Sources */ = {isa = PBXBuildFile; fileRef = DA9B109A1CB4D7B7001FB798 /* NSString+HTML.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		DA9B10A61CB4D7B7001FB798 /* NSString+XMLEntities.m in Sources */ = {isa = PBXBuildFile; fileRef = DA9B109C1CB4D7B7001FB798 /* NSString+XMLEntities.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -825,6 +827,9 @@
 		DA9945051D114F7F008A45EA /* EventsThemeCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventsThemeCell.m; sourceTree = "<group>"; };
 		DA9945061D114F7F008A45EA /* EventsThemeCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EventsThemeCell.xib; sourceTree = "<group>"; };
 		DA9945091D129FBD008A45EA /* Jiggie 4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Jiggie 4.xcdatamodel"; sourceTree = "<group>"; };
+		DA9945101D13F08E008A45EA /* EventThemeHeaderCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventThemeHeaderCell.h; sourceTree = "<group>"; };
+		DA9945111D13F08E008A45EA /* EventThemeHeaderCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventThemeHeaderCell.m; sourceTree = "<group>"; };
+		DA9945121D13F08E008A45EA /* EventThemeHeaderCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EventThemeHeaderCell.xib; sourceTree = "<group>"; };
 		DA9B108D1CB4D7B7001FB798 /* GTMDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTMDefines.h; sourceTree = "<group>"; };
 		DA9B108E1CB4D7B7001FB798 /* GTMNSString+HTML.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "GTMNSString+HTML.h"; sourceTree = "<group>"; };
 		DA9B108F1CB4D7B7001FB798 /* GTMNSString+HTML.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GTMNSString+HTML.m"; sourceTree = "<group>"; };
@@ -2132,6 +2137,9 @@
 				DA0B6B931D10097D00680867 /* EventsTheme.m */,
 				DAABB0351C1FD50E004DDCFA /* EventsRowCell.h */,
 				DAABB0361C1FD50E004DDCFA /* EventsRowCell.m */,
+				DA9945101D13F08E008A45EA /* EventThemeHeaderCell.h */,
+				DA9945111D13F08E008A45EA /* EventThemeHeaderCell.m */,
+				DA9945121D13F08E008A45EA /* EventThemeHeaderCell.xib */,
 				DA9945041D114F7F008A45EA /* EventsThemeCell.h */,
 				DA9945051D114F7F008A45EA /* EventsThemeCell.m */,
 				DA9945061D114F7F008A45EA /* EventsThemeCell.xib */,
@@ -3089,6 +3097,7 @@
 				938CE7DF1CD1C91700ADDD4C /* SocialOptionTableViewCell.xib in Resources */,
 				DA10F51E1C52149F006090ED /* SVProgressHUD.bundle in Resources */,
 				93AF8BA71CF5603F008BFA94 /* AboutTableViewCell.xib in Resources */,
+				DA9945141D13F08E008A45EA /* EventThemeHeaderCell.xib in Resources */,
 				CB3EB6CA1B459184003F658F /* LaunchScreen.xib in Resources */,
 				DAABB0F51C1FD50E004DDCFA /* Setup.xcassets in Resources */,
 				DAABB2E41C1FF993004DDCFA /* Calibre-Semibold.ttf in Resources */,
@@ -3200,6 +3209,7 @@
 				9366752B1CE30EB200AC94F3 /* APRecordDate.m in Sources */,
 				DAABB29F1C1FF5AE004DDCFA /* MPNotificationViewController.m in Sources */,
 				938CE7DE1CD1C91700ADDD4C /* SocialOptionTableViewCell.m in Sources */,
+				DA9945131D13F08E008A45EA /* EventThemeHeaderCell.m in Sources */,
 				DA0B6B941D10097D00680867 /* EventsTheme.m in Sources */,
 				936674231CD7621500AC94F3 /* OLAlbumViewController.m in Sources */,
 				DA5ED6171C92975100004C7E /* VTiOSAPI.m in Sources */,
