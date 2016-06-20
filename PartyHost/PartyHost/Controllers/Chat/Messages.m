@@ -8,8 +8,17 @@
 
 #import "Messages.h"
 #import "AnalyticManager.h"
+#import "Message.h"
 
 #define MESSAGE_PLACEHOLDER @"Type your message here ..."
+
+@interface Messages ()
+
+@property (copy, nonatomic) NSString *roomId;
+@property (copy, nonatomic) NSString *eventName;
+@property (strong, nonatomic) NSMutableArray *messages;
+
+@end
 
 @implementation Messages
 
@@ -57,6 +66,7 @@
     [self.confirmArea addSubview:self.confirmLabel];
     
     self.messagesA = [[NSMutableArray alloc] init];
+    self.messages = [NSMutableArray array];
     self.messagesListFrame = CGRectMake(0, 60, frame.size.width, frame.size.height - 60 - 40);
     self.messagesList = [[UITableView alloc] initWithFrame:self.messagesListFrame style:UITableViewStyleGrouped];
     self.messagesList.backgroundColor = [UIColor greenColor];
@@ -65,6 +75,7 @@
     self.messagesList.allowsMultipleSelectionDuringEditing = NO;
     self.messagesList.backgroundColor = [UIColor clearColor];
     self.messagesList.separatorColor = [UIColor clearColor];
+    [self.messagesList setTableFooterView:[UIView new]];
     
     [self addSubview:self.messagesList];
     
@@ -202,6 +213,13 @@
     return self;
 }
 
+- (void)initClassWithRoomId:(NSString *)roomId andEventName:(NSString *)eventName {
+    self.roomId = roomId;
+    self.eventName = eventName;
+    
+    [self initClass];
+}
+
 -(void)initClass
 {
     self.canPoll = YES;
@@ -221,109 +239,114 @@
 
 -(void)loadMessages
 {
-    //self.isMessagesLoaded = NO;
-    //[self.sharedData trackMixPanel:@"display_conversations_details"];
+    if (![[self.eventName lowercaseString] isEqualToString:@"generic"]) {
+        UIView *view = [self headerViewWithText:self.eventName];
+        UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(.0f, .0f, CGRectGetWidth(self.messagesList.bounds), CGRectGetHeight(view.bounds) + 20.0f)];
+        [headerView addSubview:view];
+        [view setCenter:headerView.center];
+        
+        [self.messagesList setTableHeaderView:headerView];
+    }
     
-    //NSString *facebookId = [self.sharedData.userDict objectForKey:@"fb_id"];
+    [Message retrieveMessagesWithRoomId:self.roomId andCompletionHandler:^(NSArray *messages, NSError *error) {
+        self.loadingView.alpha = .0;
+        self.loadingView.hidden = YES;
+        self.messages = [NSMutableArray arrayWithArray:messages];
+        [self.messagesList reloadData];
+    }];
     
-    //facebookId = @"1376680319326091";
-    
-    AFHTTPRequestOperationManager *manager = [self.sharedData getOperationManager];
-    
-    
-    
-    
-    
-    //NSLog(@"GET_MESSAGES :: %@",params);
-    //NSString *urlToLoad = [NSString stringWithFormat:@"%@/%@/conversation/%@/%@",PHBaseURL,self.sharedData.account_type,self.sharedData.fb_id,self.toId];
-    NSString *urlToLoad = [NSString stringWithFormat:@"%@/chat/conversation/%@/%@",PHBaseNewURL,self.sharedData.fb_id,self.toId];
-    //chat/conversation/
-    
-    NSLog(@"MESSAGES_URL :: %@",urlToLoad);
-    [manager GET:urlToLoad parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject)
-     {
-         NSLog(@"MESSAGES :: %@",responseObject);
-         
-         
-         NSInteger responseStatusCode = operation.response.statusCode;
-         if (responseStatusCode != 200) {
-             return;
-         }
-         
-         NSString *responseString = operation.responseString;
-         NSError *error;
-         NSDictionary *json = (NSDictionary *)[NSJSONSerialization
-                                               JSONObjectWithData:[responseString dataUsingEncoding:NSUTF8StringEncoding]
-                                               options:kNilOptions
-                                               error:&error];
-         dispatch_async(dispatch_get_main_queue(), ^{
-             @try {
-                 NSDictionary *data = [json objectForKey:@"data"];
-                 if (data && data != nil) {
-                     NSDictionary *chat_conversations = [data objectForKey:@"chat_conversations"];
-                     
-                     [self.dataDict removeAllObjects];
-                     [self.dataDict addEntriesFromDictionary:chat_conversations];
-                     
-                     self.confirmMode = 0;
-                     
-                     if (![[chat_conversations[@"event_name"] lowercaseString] isEqualToString:@"generic"]) {
-                         UIView *view = [self headerViewWithText:chat_conversations[@"event_name"]];
-                         UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(.0f, .0f, CGRectGetWidth(self.messagesList.bounds), CGRectGetHeight(view.bounds) + 20.0f)];
-                         [headerView addSubview:view];
-                         [view setCenter:headerView.center];
-                      
-                         [self.messagesList setTableHeaderView:headerView];
-                     }
-                     
-                     if(self.isMessagesLoaded && [chat_conversations[@"messages"] isEqualToArray:self.messagesA])
-                     {
-                         NSLog(@"SAME_MESSAGES");
-                         [self pollMessages];
-                         return;
-                     }
-                     
-                     self.isMessagesLoaded = YES;
-                     
-                     [self.messagesA removeAllObjects];
-                     [self.messagesA addObjectsFromArray:chat_conversations[@"messages"]];
-                     
-                     [self sanitizeData];
-                     
-                     [self.messagesList reloadData];
-                     
-                     [self scrollToBottom:NO];
-                     
-                     //Modify button
-                     
-                     [UIView animateWithDuration:0.15 animations:^(void)
-                      {
-                          self.loadingView.alpha = 0;
-                      } completion:^(BOOL finished)
-                      {
-                          self.loadingView.hidden = YES;
-                      }];
-                     
-                     
-                     [[NSNotificationCenter defaultCenter]
-                      postNotificationName:@"UPDATE_CONVERSATION_LIST"
-                      object:self];
-                     
-                     [self pollMessages];
-                 }
-             }
-             @catch (NSException *exception) {
-                 
-             }
-             @finally {
-                 
-             }
-         });
-         
-     } failure:^(AFHTTPRequestOperation *operation, NSError *error)
-     {
-         NSLog(@"MESSAGE_ERROR :: %@",error);
-     }];
+//    AFHTTPRequestOperationManager *manager = [self.sharedData getOperationManager];
+//    
+//    //NSLog(@"GET_MESSAGES :: %@",params);
+//    //NSString *urlToLoad = [NSString stringWithFormat:@"%@/%@/conversation/%@/%@",PHBaseURL,self.sharedData.account_type,self.sharedData.fb_id,self.toId];
+//    NSString *urlToLoad = [NSString stringWithFormat:@"%@/chat/conversation/%@/%@",PHBaseNewURL,self.sharedData.fb_id,self.toId];
+//    //chat/conversation/
+//    
+//    NSLog(@"MESSAGES_URL :: %@",urlToLoad);
+//    [manager GET:urlToLoad parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject)
+//     {
+//         NSLog(@"MESSAGES :: %@",responseObject);
+//         
+//         
+//         NSInteger responseStatusCode = operation.response.statusCode;
+//         if (responseStatusCode != 200) {
+//             return;
+//         }
+//         
+//         NSString *responseString = operation.responseString;
+//         NSError *error;
+//         NSDictionary *json = (NSDictionary *)[NSJSONSerialization
+//                                               JSONObjectWithData:[responseString dataUsingEncoding:NSUTF8StringEncoding]
+//                                               options:kNilOptions
+//                                               error:&error];
+//         dispatch_async(dispatch_get_main_queue(), ^{
+//             @try {
+//                 NSDictionary *data = [json objectForKey:@"data"];
+//                 if (data && data != nil) {
+//                     NSDictionary *chat_conversations = [data objectForKey:@"chat_conversations"];
+//                     
+//                     [self.dataDict removeAllObjects];
+//                     [self.dataDict addEntriesFromDictionary:chat_conversations];
+//                     
+//                     self.confirmMode = 0;
+//                     
+//                     if (![[chat_conversations[@"event_name"] lowercaseString] isEqualToString:@"generic"]) {
+//                         UIView *view = [self headerViewWithText:chat_conversations[@"event_name"]];
+//                         UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(.0f, .0f, CGRectGetWidth(self.messagesList.bounds), CGRectGetHeight(view.bounds) + 20.0f)];
+//                         [headerView addSubview:view];
+//                         [view setCenter:headerView.center];
+//                      
+//                         [self.messagesList setTableHeaderView:headerView];
+//                     }
+//                     
+//                     if(self.isMessagesLoaded && [chat_conversations[@"messages"] isEqualToArray:self.messagesA])
+//                     {
+//                         NSLog(@"SAME_MESSAGES");
+//                         [self pollMessages];
+//                         return;
+//                     }
+//                     
+//                     self.isMessagesLoaded = YES;
+//                     
+//                     [self.messagesA removeAllObjects];
+//                     [self.messagesA addObjectsFromArray:chat_conversations[@"messages"]];
+//                     
+//                     [self sanitizeData];
+//                     
+//                     [self.messagesList reloadData];
+//                     
+//                     [self scrollToBottom:NO];
+//                     
+//                     //Modify button
+//                     
+//                     [UIView animateWithDuration:0.15 animations:^(void)
+//                      {
+//                          self.loadingView.alpha = 0;
+//                      } completion:^(BOOL finished)
+//                      {
+//                          self.loadingView.hidden = YES;
+//                      }];
+//                     
+//                     
+//                     [[NSNotificationCenter defaultCenter]
+//                      postNotificationName:@"UPDATE_CONVERSATION_LIST"
+//                      object:self];
+//                     
+//                     [self pollMessages];
+//                 }
+//             }
+//             @catch (NSException *exception) {
+//                 
+//             }
+//             @finally {
+//                 
+//             }
+//         });
+//         
+//     } failure:^(AFHTTPRequestOperation *operation, NSError *error)
+//     {
+//         NSLog(@"MESSAGE_ERROR :: %@",error);
+//     }];
 }
 
 -(void)pollMessages
@@ -1093,107 +1116,71 @@
 }
 
 #pragma mark - UITableViewDataSource
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
-    return [self.sectionsA count];
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    return 1;
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    NSString *cKey = [self.sectionsA objectAtIndex:section];
-    
-    return (self.isMessagesLoaded == NO)?1:[[self.mainDataA objectForKey:cKey] count];
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return self.messages.count;
 }
 
-- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
-{
-    UIView *secCon = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, 15)];
-    secCon.backgroundColor = [UIColor whiteColor];
-    
-    UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(0, 4, self.frame.size.width, 12)];
-    title.font = [UIFont phBlond:12];
-    title.textColor = [UIColor phDarkGrayColor];
-    title.textAlignment = NSTextAlignmentCenter;
-    title.text = [self.sectionsA objectAtIndex:section];
-    [secCon addSubview:title];
-    
-    return secCon;
-}
+//- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+//    UIView *secCon = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, 15)];
+//    secCon.backgroundColor = [UIColor whiteColor];
+//    
+//    UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(0, 4, self.frame.size.width, 12)];
+//    title.font = [UIFont phBlond:12];
+//    title.textColor = [UIColor phDarkGrayColor];
+//    title.textAlignment = NSTextAlignmentCenter;
+//    title.text = [self.sectionsA objectAtIndex:section];
+//    [secCon addSubview:title];
+//    
+//    return secCon;
+//}
 
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-{
-    return 15;
-}
+//- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+//    return 15;
+//}
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    //MessageCell *cell = (MessageCell *)[tableView cellForRowAtIndexPath:indexPath];
-    if(!self.isMessagesLoaded)
-    {
-        return tableView.bounds.size.height;
-    }
-    
-    NSString *cKey = [self.sectionsA objectAtIndex:indexPath.section];
-    NSMutableDictionary *dict = [[self.mainDataA objectForKey:cKey] objectAtIndex:indexPath.row];
-    //BOOL isMe = [[dict objectForKey:@"isFromYou"] boolValue];
-    
-    //Add header to message
-    NSString *text = [dict objectForKey:@"message"];
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    NSString *text = ((Message *)self.messages[indexPath.row]).text;
     text = [text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-    if(![[dict objectForKey:@"header"] isEqualToString:@""])
-    {
-        text = [NSString stringWithFormat:@"%@\n%@",[dict objectForKey:@"header"],text];
-    }
     
-    UITextView *calculationView = [[UITextView alloc] initWithFrame:CGRectMake(70, 0, self.frame.size.width - 20 - 70, 30)];
+    UITextView *calculationView = [[UITextView alloc] initWithFrame:CGRectMake(70,
+                                                                               0,
+                                                                               self.frame.size.width - 20 - 70,
+                                                                               30)];
     calculationView.font = [UIFont phBlond:self.sharedData.messageFontSize];
     [calculationView setText:text];
-    //CGFloat wrappingWidth = calculationView.bounds.size.width - (calculationView.textContainerInset.left + calculationView.textContainerInset.right + 2 * calculationView.textContainer.lineFragmentPadding);
-    
     [calculationView sizeToFit];
     
-    CGRect boundingRect = calculationView.frame;//[text boundingRectWithSize:CGSizeMake(wrappingWidth, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{ NSFontAttributeName: calculationView.font }                                              context:nil];
+    CGRect boundingRect = calculationView.frame;
     
     int newHeight = (boundingRect.size.height + 44 < 70)?70:boundingRect.size.height + 44;
     
-    
-    
     return newHeight;
-    
 }
 
 
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *simpleTableIdentifier = @"MessageCell";
-    
     MessageCell *cell = [tableView dequeueReusableCellWithIdentifier:simpleTableIdentifier];
     
-    if (cell == nil)
-    {
+    if (cell == nil) {
         cell = [[MessageCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:simpleTableIdentifier];
     }
     
     cell.backgroundColor = [UIColor clearColor];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
-    if(self.isMessagesLoaded)
-    {
-        [cell showLoading:NO];
-        NSString *cKey = [self.sectionsA objectAtIndex:indexPath.section];
-        NSMutableDictionary *dict = [[self.mainDataA objectForKey:cKey] objectAtIndex:indexPath.row];
-        cell.isMe = [[dict objectForKey:@"isFromYou"] boolValue];
-        cell.textLabel.text = @"";//[dict objectForKey:@"message"];
-        [cell loadData:dict andMainData:self.dataDict];
-    }else{
-        [cell showLoading:YES];
-        cell.textLabel.text = @"Loading";
-    }
+    Message *message = self.messages[indexPath.row];
+    [cell configureMessage:message];
     
     return cell;
 }
 
+#pragma mark --
 
 -(void)scrollToBottom:(BOOL )animated
 {

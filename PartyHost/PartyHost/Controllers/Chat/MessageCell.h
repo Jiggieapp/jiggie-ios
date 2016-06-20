@@ -11,6 +11,7 @@
 #import "MessageBubbleTriangle.h"
 #import "NSDate+Calculators.h"
 
+@class Message;
 @interface MessageCell : UITableViewCell
 
 @property(nonatomic, strong)   SharedData      *sharedData;
@@ -29,5 +30,7 @@
 
 -(void)loadData:(NSMutableDictionary *)dict andMainData:(NSDictionary *)mainDict;
 -(void)showLoading:(BOOL)loading;
+
+- (void)configureMessage:(Message *)message;
 
 @end

@@ -312,7 +312,7 @@
     
     [[NSNotificationCenter defaultCenter]
      addObserver:self
-     selector:@selector(showMessages)
+     selector:@selector(showMessages:)
      name:@"SHOW_MESSAGES"
      object:nil];
     
@@ -776,6 +776,20 @@
     {
         [self.messagesPage initClass];
     }];
+}
+
+-(void)showMessages:(NSNotification *)notification {
+    NSDictionary *object = notification.object;
+    
+    if (object) {
+        [self.messagesPage reset];
+        [UIView animateWithDuration:0.25 animations:^() {
+            self.mainCon.frame = CGRectMake(-self.frame.size.width, 0, self.frame.size.width * 2, self.frame.size.height);
+        } completion:^(BOOL finished) {
+            [self.messagesPage initClassWithRoomId:object[@"roomId"]
+                                      andEventName:object[@"eventName"]];
+        }];
+    }
 }
 
 -(void)exitMemberProfile

@@ -7,6 +7,8 @@
 //
 
 #import "MessageCell.h"
+#import "Message.h"
+#import "User.h"
 
 @implementation MessageCell
 
@@ -263,6 +265,72 @@
     [super setSelected:selected animated:animated];
 
     // Configure the view for the selected state
+}
+
+- (void)configureMessage:(Message *)message {
+    BOOL isMe = [@"111222333" isEqualToString:message.fbId];
+    NSDate *date = [NSDate dateWithTimeIntervalSince1970:message.createdAt / 1000];
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US"]];
+    [formatter setDateFormat:@"h:mm a"];
+    
+    self.toIconCon.hidden = self.toMessage.hidden = self.dateLabel.hidden = isMe;
+    self.myDateLabel.hidden = self.fromMessage.hidden = !self.toMessage.hidden;
+    
+    if(isMe) {
+        self.fromMessage.textColor = [UIColor whiteColor];
+        self.fromMessage.backgroundColor = [UIColor phBlueColor];
+        self.triangle.color = [UIColor phBlueColor];
+        
+        self.triangle.frame = CGRectMake(self.frame.size.width - 20, 17, 15, 15);
+        self.triangle.isRightSide = YES;
+        [self.triangle setNeedsDisplay];
+        
+        self.fromMessage.text = message.text;;
+        self.fromMessage.frame = CGRectMake(10, 0, self.frame.size.width - 30, 30);
+        [self.fromMessage sizeToFit];
+        
+        CGRect fromFrame = self.fromMessage.frame;
+        fromFrame.origin.x = self.frame.size.width - fromFrame.size.width - 16 - 8;
+        fromFrame.origin.y = 10;
+        fromFrame.size.height -= 10;
+        fromFrame.size.width += 8;
+        self.fromMessage.frame = fromFrame;
+        
+        self.myDateLabel.numberOfLines = 2;
+        self.myDateLabel.text = [formatter stringFromDate:date];
+        self.myDateLabel.frame = CGRectMake(self.frame.size.width - 80, self.fromMessage.frame.size.height, 60, 45);
+    } else {
+        self.toMessage.backgroundColor = [UIColor phDarkGrayColor];
+        self.toMessage.textColor = [UIColor whiteColor];
+        self.triangle.color = [UIColor phGrayColor];
+        
+        self.triangle.frame = CGRectMake(58, 17, 15, 15);
+        self.triangle.isRightSide = NO;
+        [self.triangle setNeedsDisplay];
+        
+        self.toMessage.text = message.text;
+        
+        self.toMessage.frame = CGRectMake(70, 0, self.frame.size.width - 90, 30);
+        [self.toMessage sizeToFit];
+        
+        CGRect toFrame = self.toMessage.frame;
+        toFrame.origin.x = 70;
+        toFrame.origin.y = 10;
+        toFrame.size.height -= 10;
+        toFrame.size.width += 8;
+        self.toMessage.frame = toFrame;
+        
+        self.dateLabel.numberOfLines = 2;
+        self.dateLabel.text = [formatter stringFromDate:date];
+        self.dateLabel.frame = CGRectMake(self.dateLabel.frame.origin.x, self.toMessage.frame.size.height, 60, 45);
+        
+        [User retrieveUserInfoWithFbId:message.fbId andCompletionHandler:^(User *user, NSError *error) {
+            if (user) {
+                [self.toIcon loadPicture:user.avatarURL];
+            }
+        }];
+    }
 }
 
 @end

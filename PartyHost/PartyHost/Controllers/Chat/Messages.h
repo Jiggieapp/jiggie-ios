@@ -64,6 +64,8 @@
 @property(nonatomic,strong) UILabel *confirmLabel; //Description of what is going to be pressed?
 
 -(void)initClass;
+-(void)initClassWithRoomId:(NSString *)roomId
+              andEventName:(NSString *)eventName;
 -(void)reset;
 -(void)addMessageFromAPN:(NSString *)message;
 @end

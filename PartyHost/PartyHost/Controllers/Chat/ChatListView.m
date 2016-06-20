@@ -15,6 +15,7 @@
 #import "SVProgressHUD.h"
 #import "RoomPrivateInfo.h"
 #import "RoomGroupInfo.h"
+#import "Message.h"
 
 static NSString *const kChatsCellIdentifier = @"ChatsCellIdentifier";
 
@@ -84,6 +85,25 @@ static NSString *const kChatsCellIdentifier = @"ChatsCellIdentifier";
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    NSObject *roomInfo = [self.rooms objectAtIndex:indexPath.row];
+    NSString *eventName = @"";
+    
+    if ([roomInfo isKindOfClass:[RoomPrivateInfo class]]) {
+        RoomPrivateInfo *info = (RoomPrivateInfo *)roomInfo;
+        self.roomId = info.identifier;
+        eventName = info.event;
+    } else {
+        RoomGroupInfo *info = (RoomGroupInfo *)roomInfo;
+        self.roomId = info.identifier;
+        eventName = info.event;
+    }
+    
+    NSDictionary *object = @{@"roomId" : self.roomId,
+                             @"eventName" : eventName};
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"SHOW_MESSAGES"
+                                                        object:object];
 }
 
 #pragma mark - MGSwipeTableCellDelegate
