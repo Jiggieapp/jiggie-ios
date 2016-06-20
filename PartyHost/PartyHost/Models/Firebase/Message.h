@@ -9,6 +9,9 @@
 #import <Foundation/Foundation.h>
 #import "Mantle.h"
 
+typedef void (^MessagesCompletionHandler)(NSArray *messages,
+                                          NSError *error);
+
 @class FIRDatabaseReference;
 @interface Message : MTLModel <MTLJSONSerializing>
 
@@ -18,6 +21,9 @@
 
 + (FIRDatabaseReference *)reference;
 + (FIRDatabaseReference *)referenceWithRoomId:(NSString *)roomId;
+
++ (void)retrieveMessagesWithRoomId:(NSString *)roomId
+              andCompletionHandler:(MessagesCompletionHandler)completion;
 
 + (void)sendMessageWithRoomId:(NSString *)roomId
                      senderId:(NSString *)fbId

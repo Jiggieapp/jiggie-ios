@@ -26,6 +26,27 @@
     return [[Message reference] child:roomId];
 }
 
++ (void)retrieveMessagesWithRoomId:(NSString *)roomId andCompletionHandler:(MessagesCompletionHandler)completion {
+    FIRDatabaseReference *reference = [[Message reference] child:roomId];
+    
+    [reference observeEventType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
+        NSMutableArray *messages = [NSMutableArray arrayWithCapacity:snapshot.childrenCount];
+        NSError *error;
+        
+        for (FIRDataSnapshot *child in snapshot.children) {
+            Message *message = [MTLJSONAdapter modelOfClass:[Message class]
+                                         fromJSONDictionary:child.value
+                                                      error:&error];
+            
+            [messages addObject:message];
+        }
+        
+        if (completion) {
+            completion(messages, error);
+        }
+    }];
+}
+
 + (void)sendMessageWithRoomId:(NSString *)roomId
                      senderId:(NSString *)fbId
                          text:(NSString *)text {
