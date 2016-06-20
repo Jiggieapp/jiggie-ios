@@ -26,11 +26,19 @@
     
     [reference observeSingleEventOfType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
         NSError *error;
-        User *user = [MTLJSONAdapter modelOfClass:[User class] fromJSONDictionary:snapshot.value error:&error];
         
-        if (completion) {
-            completion(user, error);
+        if (![snapshot.value isEqual:[NSNull null]]) {
+            User *user = [MTLJSONAdapter modelOfClass:[User class] fromJSONDictionary:snapshot.value error:&error];
+            
+            if (completion) {
+                completion(user, error);
+            }
+        } else {
+            if (completion) {
+                completion(nil, nil);
+            }
         }
+        
     }];
 }
 

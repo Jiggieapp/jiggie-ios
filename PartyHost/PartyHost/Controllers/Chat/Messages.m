@@ -9,6 +9,7 @@
 #import "Messages.h"
 #import "AnalyticManager.h"
 #import "Message.h"
+#import "Mantle.h"
 
 #define MESSAGE_PLACEHOLDER @"Type your message here ..."
 
@@ -232,7 +233,7 @@
     
     if(sender.state == UIGestureRecognizerStateEnded) {
         self.btnSendDimView.hidden = YES;
-        [self addMessage:[self.sharedData clipSpace:self.input.text]];
+        [self sendMessageWithText:[self.sharedData clipSpace:self.input.text]];
         
     }
 }
@@ -370,6 +371,139 @@
     [self reset];
     [self initClass];
 }
+#pragma mark --
+
+-(void)scrollToBottom:(BOOL )animated {
+    dispatch_time_t delay = dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC * 0.15);
+    dispatch_after(delay, dispatch_get_main_queue(), ^(void){
+        // do work in the UI thread here
+        int num = (int)self.messagesList.numberOfSections;
+        num = (num < 1)?1:num;
+        NSUInteger row_count = [self.messagesList numberOfRowsInSection:num - 1];
+        row_count = (row_count < 1)?1:row_count;
+        
+        if([self.messages count] < 1) {
+            return;
+        }
+        
+        @try {
+            //[self.tableView scrollToRowAtIndexPath: // etc etc etc
+            [self.messagesList scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:row_count - 1  inSection:num - 1] atScrollPosition:UITableViewScrollPositionBottom animated:animated];
+        }
+        @catch ( NSException *e )
+        {
+            NSLog(@"bummer: %@",e);
+        }
+    });
+}
+
+- (void)adjustFrames {
+    float rows = (self.input.contentSize.height - self.input.textContainerInset.top - self.input.textContainerInset.bottom) / self.input.font.lineHeight;
+    NSLog(@"text_rows :: %f",rows);
+    self.inputNumLines = (int)floor(rows);
+    self.inputNumLines = (self.inputNumLines > 10)?10:self.inputNumLines;
+    CGRect textFrame = CGRectMake(0, self.frame.size.height - 40 - self.keyBoardHeight, self.frame.size.width - 60, 40);
+    textFrame.size.height += 20 * (self.inputNumLines - 1);
+    textFrame.origin.y -= 20 * (self.inputNumLines - 1);
+    self.input.frame = textFrame;
+    
+    CGRect btnFrame = CGRectMake(self.frame.size.width - 60, self.frame.size.height - 40 - self.keyBoardHeight, 60, 40);
+    btnFrame.size.height += 20 * (self.inputNumLines - 1);
+    btnFrame.origin.y -= 20 * (self.inputNumLines - 1);
+    self.btnSend.frame = btnFrame;
+    
+    self.sendTxt.frame = CGRectMake(0,self.btnSend.bounds.size.height - 29,self.btnSend.bounds.size.width,20);
+    
+    int length = (self.input.text.length < 1)?1:(int)self.input.text.length;
+    NSRange range = NSMakeRange(length - 1, 1);
+    [self.input scrollRangeToVisible:range];
+}
+
+//- (void)sanitizeData {
+//    [self.mainDataA removeAllObjects];
+//    [self.sectionsA removeAllObjects];
+//    for (int i = 0; i < [self.messagesA count]; i++)
+//    {
+//        NSDictionary *dict = [self.messagesA objectAtIndex:i];
+//        NSString *dateTime = [[dict objectForKey:@"created_at"] substringToIndex:19];
+//        NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+//        [dateFormat setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US"]];
+//        [dateFormat setDateFormat:@"YYYY-MM-dd'T'HH:mm:ss'"];
+//        [dateFormat setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"GMT"]];
+//        NSDate *dte = [dateFormat dateFromString:dateTime];
+//
+//        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+//        [formatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US"]];
+//        [formatter setDateFormat:@"EE, MMM d"];
+//        NSString *day = [formatter stringFromDate:dte];
+//
+//        if(![self.mainDataA objectForKey:day])
+//        {
+//            NSMutableArray *tmpA = [[NSMutableArray alloc] init];
+//            [self.mainDataA setObject:tmpA forKey:day];
+//            [self.sectionsA addObject:day];
+//        }
+//
+//        [[self.mainDataA objectForKey:day] addObject:dict];
+//    }
+//
+//    NSLog(@"SANITIZED_DATA_BEGIN");
+//    NSLog(@"%@",self.mainDataA);
+//    NSLog(@"SANITIZED_DATA_END");
+//}
+
+- (BOOL)isSameDate:(NSDate *)compareDate {
+    BOOL isSame = NO;
+    
+    NSDateComponents *otherDay = [[NSCalendar currentCalendar] components:NSEraCalendarUnit|NSYearCalendarUnit|NSMonthCalendarUnit|NSDayCalendarUnit fromDate:compareDate];
+    NSDateComponents *today = [[NSCalendar currentCalendar] components:NSEraCalendarUnit|NSYearCalendarUnit|NSMonthCalendarUnit|NSDayCalendarUnit fromDate:[NSDate date]];
+    
+    if([today day] == [otherDay day] &&
+       [today month] == [otherDay month] &&
+       [today year] == [otherDay year] &&
+       [today era] == [otherDay era]) {
+        //do stuff
+        isSame = YES;
+    }
+    
+    return isSame;
+}
+
+- (void)sendMessageWithText:(NSString *)text {
+    NSDictionary *dictionary = @{@"created_at" : [NSNumber numberWithDouble:[[NSDate date] timeIntervalSince1970]],
+                                 @"fb_id" : self.sharedData.fb_id,
+                                 @"message" : text};
+    
+    Message *message = [MTLJSONAdapter modelOfClass:[Message class]
+                                 fromJSONDictionary:dictionary
+                                              error:nil];
+    
+    [self.messages addObject:message];
+    [self.messagesList beginUpdates];
+    [self.messagesList insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:self.messages.count-1
+                                                                   inSection:0]]
+                             withRowAnimation:UITableViewRowAnimationAutomatic];
+    [self.messagesList endUpdates];
+    
+    if(self.isKeyBoardShowing) {
+        self.input.frame = CGRectMake(0, self.frame.size.height - 40 - self.keyBoardHeight, self.frame.size.width - 60, 40);
+        self.btnSend.frame = CGRectMake(self.frame.size.width - 60, self.frame.size.height - 40 - self.keyBoardHeight, 60, 40);
+    } else {
+        self.btnSend.frame = CGRectMake(self.frame.size.width - 60, self.frame.size.height - 40, 60, 40);
+        self.input.frame = CGRectMake(0, self.frame.size.height - 40, self.frame.size.width - 60, 40);
+    }
+    
+    self.sendTxt.frame = CGRectMake(0,self.btnSend.bounds.size.height - 29,self.btnSend.bounds.size.width,20);
+    self.input.text = @"";
+    
+    self.inputNumLines = 1;
+    self.canCheckScrollDown = NO;
+    [self scrollToBottom:YES];
+    
+    [Message sendMessageWithRoomId:self.roomId
+                          senderId:@"111222333"
+                              text:text];
+}
 
 #pragma mark - Header View
 - (UIView *)headerViewWithText:(NSString *)text {
@@ -468,183 +602,6 @@
     [cell configureMessage:message];
     
     return cell;
-}
-
-#pragma mark --
-
--(void)scrollToBottom:(BOOL )animated {
-    dispatch_time_t delay = dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC * 0.15);
-    dispatch_after(delay, dispatch_get_main_queue(), ^(void){
-        // do work in the UI thread here
-        int num = (int)self.messagesList.numberOfSections;
-        num = (num < 1)?1:num;
-        NSUInteger row_count = [self.messagesList numberOfRowsInSection:num - 1];
-        row_count = (row_count < 1)?1:row_count;
-        
-        if([self.messages count] < 1) {
-            return;
-        }
-        
-        @try {
-            //[self.tableView scrollToRowAtIndexPath: // etc etc etc
-            [self.messagesList scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:row_count - 1  inSection:num - 1] atScrollPosition:UITableViewScrollPositionBottom animated:animated];
-        }
-        @catch ( NSException *e )
-        {
-            NSLog(@"bummer: %@",e);
-        }
-    });
-}
-
-- (void)adjustFrames {
-    float rows = (self.input.contentSize.height - self.input.textContainerInset.top - self.input.textContainerInset.bottom) / self.input.font.lineHeight;
-    NSLog(@"text_rows :: %f",rows);
-    self.inputNumLines = (int)floor(rows);
-    self.inputNumLines = (self.inputNumLines > 10)?10:self.inputNumLines;
-    CGRect textFrame = CGRectMake(0, self.frame.size.height - 40 - self.keyBoardHeight, self.frame.size.width - 60, 40);
-    textFrame.size.height += 20 * (self.inputNumLines - 1);
-    textFrame.origin.y -= 20 * (self.inputNumLines - 1);
-    self.input.frame = textFrame;
-    
-    CGRect btnFrame = CGRectMake(self.frame.size.width - 60, self.frame.size.height - 40 - self.keyBoardHeight, 60, 40);
-    btnFrame.size.height += 20 * (self.inputNumLines - 1);
-    btnFrame.origin.y -= 20 * (self.inputNumLines - 1);
-    self.btnSend.frame = btnFrame;
-    
-    self.sendTxt.frame = CGRectMake(0,self.btnSend.bounds.size.height - 29,self.btnSend.bounds.size.width,20);
-    
-    int length = (self.input.text.length < 1)?1:(int)self.input.text.length;
-    NSRange range = NSMakeRange(length - 1, 1);
-    [self.input scrollRangeToVisible:range];
-}
-
-//- (void)sanitizeData {
-//    [self.mainDataA removeAllObjects];
-//    [self.sectionsA removeAllObjects];
-//    for (int i = 0; i < [self.messagesA count]; i++)
-//    {
-//        NSDictionary *dict = [self.messagesA objectAtIndex:i];
-//        NSString *dateTime = [[dict objectForKey:@"created_at"] substringToIndex:19];
-//        NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
-//        [dateFormat setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US"]];
-//        [dateFormat setDateFormat:@"YYYY-MM-dd'T'HH:mm:ss'"];
-//        [dateFormat setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"GMT"]];
-//        NSDate *dte = [dateFormat dateFromString:dateTime];
-//        
-//        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-//        [formatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US"]];
-//        [formatter setDateFormat:@"EE, MMM d"];
-//        NSString *day = [formatter stringFromDate:dte];
-//        
-//        if(![self.mainDataA objectForKey:day])
-//        {
-//            NSMutableArray *tmpA = [[NSMutableArray alloc] init];
-//            [self.mainDataA setObject:tmpA forKey:day];
-//            [self.sectionsA addObject:day];
-//        }
-//        
-//        [[self.mainDataA objectForKey:day] addObject:dict];
-//    }
-//    
-//    NSLog(@"SANITIZED_DATA_BEGIN");
-//    NSLog(@"%@",self.mainDataA);
-//    NSLog(@"SANITIZED_DATA_END");
-//}
-
-- (void)addMessage:(NSString *)message {
-    if(self.isKeyBoardShowing) {
-        self.input.frame = CGRectMake(0, self.frame.size.height - 40 - self.keyBoardHeight, self.frame.size.width - 60, 40);
-        self.btnSend.frame = CGRectMake(self.frame.size.width - 60, self.frame.size.height - 40 - self.keyBoardHeight, 60, 40);
-    } else {
-        self.btnSend.frame = CGRectMake(self.frame.size.width - 60, self.frame.size.height - 40, 60, 40);
-        self.input.frame = CGRectMake(0, self.frame.size.height - 40, self.frame.size.width - 60, 40);
-    }
-    
-    self.sendTxt.frame = CGRectMake(0,self.btnSend.bounds.size.height - 29,self.btnSend.bounds.size.width,20);
-    self.input.text = @"";
-    
-    self.inputNumLines = 1;
-    self.canCheckScrollDown = NO;
-    [self scrollToBottom:YES];
-    
-    [self sendMessageToServer:message];
-    
-    NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
-    [dict setObject:message forKey:@"message"];
-    NSDate *now = [NSDate date];
-    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
-    [dateFormat setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US"]];
-    [dateFormat setDateFormat:@"YYYY-MM-dd'T'HH:mm:ss'"];
-    [dateFormat setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"GMT"]];
-    NSString *created_at = [dateFormat stringFromDate:now];
-    [dict setObject:created_at forKey:@"created_at"];
-    [dict setObject:@"" forKey:@"header"];
-    [dict setObject:@"1" forKey:@"isFromYou"];
-    
-    NSLog(@"MESSAGE_DICT :: %@",dict);
-    
-    [self.messages addObject:dict];
-//    [self sanitizeData];
-    [self.messagesList reloadData];
-    
-    [self performSelector:@selector(updateKeyBoard) withObject:nil afterDelay:1.0];
-    dispatch_time_t delay = dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC * 0.1);
-    dispatch_after(delay, dispatch_get_main_queue(), ^(void) {
-        [self scrollToBottom:YES];
-    });
-    
-}
-
-- (BOOL)isSameDate:(NSDate *)compareDate {
-    BOOL isSame = NO;
-    
-    NSDateComponents *otherDay = [[NSCalendar currentCalendar] components:NSEraCalendarUnit|NSYearCalendarUnit|NSMonthCalendarUnit|NSDayCalendarUnit fromDate:compareDate];
-    NSDateComponents *today = [[NSCalendar currentCalendar] components:NSEraCalendarUnit|NSYearCalendarUnit|NSMonthCalendarUnit|NSDayCalendarUnit fromDate:[NSDate date]];
-    
-    if([today day] == [otherDay day] &&
-       [today month] == [otherDay month] &&
-       [today year] == [otherDay year] &&
-       [today era] == [otherDay era]) {
-        //do stuff
-        isSame = YES;
-    }
-    
-    return isSame;
-}
-
-
-- (void)sendMessageToServer:(NSString *)message {
-    AFHTTPRequestOperationManager *manager = [self.sharedData getOperationManager];
-    
-    NSDictionary *params =@{
-                            @"fromId" : self.sharedData.fb_id,
-                            @"toId":self.toId,
-                            @"message":message,
-                            @"header":@"",
-                            @"fromName":[self.sharedData.userDict[@"first_name"] lowercaseString],
-                            @"key":self.sharedData.appKey,
-                            @"hosting_id":@""};
-    
-    NSString *url = [NSString stringWithFormat:@"%@/messages/add",PHBaseNewURL];
-    
-    NSLog(@"MESSAGE_PARAMS");
-    
-    NSLog(@"%@",params);
-    
-    NSLog(@"MESSAGE_PARAMS");
-    
-    [manager POST:url parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject)
-     {
-         NSLog(@"DONE!! :: %@",responseObject);
-         
-         [[AnalyticManager sharedManager] trackMixPanelIncrementWithDict:@{@"send_message":@1}];
-         
-         //[self.sharedData trackMixPanel:responseObject[@"chat_state"]];
-         
-     } failure:^(AFHTTPRequestOperation *operation, NSError *error)
-     {
-         NSLog(@"SEND_MESSAGE_ERROR :: %@",error);
-     }];
 }
 
 #pragma mark - UITextViewDelegate
