@@ -17,6 +17,10 @@
 @property(assign, nonatomic, readonly) NSTimeInterval createdAt;
 
 + (FIRDatabaseReference *)reference;
-+ (FIRDatabaseReference *)referenceWithFbId:(NSString *)fbId;
++ (FIRDatabaseReference *)referenceWithRoomId:(NSString *)roomId;
+
++ (void)sendMessageWithRoomId:(NSString *)roomId
+                     senderId:(NSString *)fbId
+                      text:(NSString *)text;
 
 @end

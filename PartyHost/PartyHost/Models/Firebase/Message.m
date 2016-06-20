@@ -7,6 +7,7 @@
 //
 
 #import "Message.h"
+#import "Room.h"
 #import "Firebase.h"
 
 @implementation Message
@@ -18,11 +19,30 @@
 }
 
 + (FIRDatabaseReference *)reference {
-    return [[FIRDatabase database] referenceWithPath:@"message"];
+    return [[FIRDatabase database] referenceWithPath:@"messages"];
 }
 
-+ (FIRDatabaseReference *)referenceWithFbId:(NSString *)fbId {
-    return [[Message reference] child:fbId];
++ (FIRDatabaseReference *)referenceWithRoomId:(NSString *)roomId {
+    return [[Message reference] child:roomId];
+}
+
++ (void)sendMessageWithRoomId:(NSString *)roomId
+                     senderId:(NSString *)fbId
+                         text:(NSString *)text {
+    FIRDatabaseReference *reference = [[Message referenceWithRoomId:roomId] childByAutoId];
+    NSDictionary *parameters = @{@"created_at" : [FIRServerValue timestamp],
+                                 @"fb_id" : fbId,
+                                 @"message" : text};
+    
+    [reference setValue:parameters withCompletionBlock:^(NSError * _Nullable error, FIRDatabaseReference * _Nonnull ref) {
+        if (!error) {
+            FIRDatabaseReference *reference = [[[Room reference] child:roomId] child:@"info"];
+            NSDictionary *parameters = @{@"last_message" : text,
+                                         @"updated_at" : [FIRServerValue timestamp]};
+            
+            [reference updateChildValues:parameters];
+        }
+    }];
 }
 
 @end
