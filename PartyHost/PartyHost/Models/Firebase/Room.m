@@ -46,19 +46,24 @@
         
         for (NSString *key in keys) {
             FIRDatabaseReference *reference = [[Room reference] child:key];
-            [reference observeSingleEventOfType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
+            [reference observeEventType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
                 NSMutableDictionary *dictionary = [NSMutableDictionary dictionaryWithDictionary:snapshot.value];
                 [[dictionary objectForKey:@"info"] setObject:snapshot.key forKey:@"identifier"];
+                
+                for (Room *room in rooms) {
+                    if ([room.info[@"identifier"] isEqualToString:dictionary[@"info"][@"identifier"]]) {
+                        [rooms removeObject:room];
+                        break;
+                    }
+                }
                 
                 NSError *error;
                 Room *room = [MTLJSONAdapter modelOfClass:[Room class] fromJSONDictionary:dictionary error:&error];
                 
                 [rooms addObject:room];
-                
-                if ([keys indexOfObject:key] == keys.count-1) {
-                    if (completion) {
-                        completion(rooms, error);
-                    }
+
+                if (completion) {
+                    completion(rooms, error);
                 }
             }];
         }
@@ -88,7 +93,10 @@
         }
     }
     
-    return roomsInfo;
+    NSSortDescriptor *descriptor = [NSSortDescriptor sortDescriptorWithKey:@"updatedAt" ascending:YES];
+    NSArray *sortedRoomsInfo = [roomsInfo sortedArrayUsingDescriptors:@[descriptor]];
+    
+    return sortedRoomsInfo;
 }
 
 + (void)clearChatFromRoomId:(NSString *)roomId withFbId:(NSString *)fbId andCompletionHandler:(ClearChatCompletionHandler)completion {
