@@ -10,6 +10,7 @@
 #import "AnalyticManager.h"
 #import "JGTooltipHelper.h"
 #import "UIView+Animation.h"
+#import "ChatView.h"
 
 @implementation Dashboard
 
@@ -178,7 +179,8 @@
     CGRect pageRect = CGRectMake(0, 0, self.sharedData.screenWidth, self.sharedData.screenHeight - 50);
     
     self.eventsPage     = [[Events alloc] initWithFrame:pageRect];
-    self.chatPage       = [[Chats alloc] initWithFrame:pageRect];
+    self.chatPage       = [ChatView instanceFromNib];
+    self.chatPage.frame = pageRect;
     self.messagesPage   = [[Messages alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, frame.size.height)];
     self.hostVenueDetailPage   = [[HostVenueDetail alloc] initWithFrame:CGRectMake(0, self.sharedData.screenHeight, self.sharedData.screenWidth, self.sharedData.screenHeight)];
     
