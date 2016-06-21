@@ -60,7 +60,7 @@ static NSString *const kAllowTracking = @"allowTracking";
                                                                                         forState:UIControlStateNormal];
     // Use Firebase library to configure APIs
     [FIRApp configure];
-    [[FIRDatabase database] setPersistenceEnabled:YES];
+//    [[FIRDatabase database] setPersistenceEnabled:YES];
     
     // Override point for customization after application launch.
     self.sharedData = [SharedData sharedInstance];

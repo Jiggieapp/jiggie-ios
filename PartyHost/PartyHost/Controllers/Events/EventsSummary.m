@@ -19,10 +19,18 @@
 #import "UIView+Animation.h"
 #import "UIImageView+WebCache.h"
 #import "UserManager.h"
+#import "Room.h"
+#import "Firebase.h"
 
 #define PROFILE_PICS 4 //If more than 4 then last is +MORE
 #define PROFILE_SIZE 40
 #define PROFILE_PADDING 4
+
+@interface EventsSummary ()
+
+@property (strong, nonatomic) FIRDatabaseReference *reference;
+
+@end
 
 @implementation EventsSummary {
     NSString *lastEventId;
@@ -110,7 +118,20 @@
     self.likeCount.font = [UIFont phBlond:15];
     [self.mainScroll addSubview:self.likeCount];
     
-    self.shareButton = [[UIButton alloc] initWithFrame:CGRectMake(11 + 80 + 16, CGRectGetMaxY(self.picScroll.frame) + 10, 40, 40)];
+    self.chatButton = [[UIButton alloc] initWithFrame:CGRectMake(11 + 80 + 16, CGRectGetMaxY(self.picScroll.frame) + 10, 40, 40)];
+    [self.chatButton setImage:[UIImage imageNamed:@"event-chat-icon"] forState:UIControlStateNormal];
+    [self.chatButton setImageEdgeInsets:UIEdgeInsetsMake(5, 5, 5, 5)];
+    [self.chatButton addTarget:self action:@selector(chatButtonDidTap:) forControlEvents:UIControlEventTouchUpInside];
+    [self.mainScroll addSubview:self.chatButton];
+    
+    self.membersCount = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(self.chatButton.frame) + 8, CGRectGetMaxY(self.picScroll.frame) + 20, 40, 20)];
+    self.membersCount.textColor = [UIColor darkGrayColor];
+    self.membersCount.adjustsFontSizeToFitWidth = YES;
+    self.membersCount.font = [UIFont phBlond:15];
+    self.membersCount.text = @"0";
+    [self.mainScroll addSubview:self.membersCount];
+    
+    self.shareButton = [[UIButton alloc] initWithFrame:CGRectMake(CGRectGetMaxX(self.membersCount.frame) + 11, CGRectGetMaxY(self.picScroll.frame) + 10, 40, 40)];
     [self.shareButton setImage:[UIImage imageNamed:@"icon_share"] forState:UIControlStateNormal];
     [self.shareButton setImageEdgeInsets:UIEdgeInsetsMake(5, 5, 5, 5)];
     [self.shareButton addTarget:self action:@selector(goShareHandler) forControlEvents:UIControlEventTouchUpInside];
@@ -440,6 +461,8 @@
          postNotificationName:@"EVENTS_GO_HOME"
          object:self];
     }
+    
+    [self.reference removeAllObservers];
 }
 
 - (void)showNavBar:(BOOL)isShow withAnimation:(BOOL)isAnimated {
@@ -626,6 +649,10 @@
     }
 }
 
+- (void)chatButtonDidTap:(id)sender {
+    
+}
+
 #pragma mark - Fetch
 - (NSFetchedResultsController *)fetchedResultsController {
     
@@ -769,6 +796,14 @@
 - (void)loadData:(NSString*)event_id {
     self.event_id = event_id;
     self.sharedData.cEventId_Summary = event_id;
+    
+    self.reference = [[Room membersReference] child:event_id];
+    [self.reference observeEventType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
+        if (![snapshot.value isEqual:[NSNull null]]) {
+            NSUInteger totalMembers = [snapshot.value allKeys].count;
+            [self.membersCount setText:[NSString stringWithFormat:@"%lu", (unsigned long)totalMembers]];
+        }
+    }];
     
     AFHTTPRequestOperationManager *manager = [self.sharedData getOperationManager];
     

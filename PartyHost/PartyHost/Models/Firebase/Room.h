@@ -26,7 +26,6 @@ typedef void (^ClearChatCompletionHandler)(NSError *error);
 
 + (FIRDatabaseReference *)reference;
 + (FIRDatabaseReference *)membersReference;
-+ (FIRDatabaseReference *)referenceWithRoomId:(NSString *)roomId;
 
 + (void)retrieveRoomsWithFbId:(NSString *)fbId
          andCompletionHandler:(RoomsCompletionHandler)completion;

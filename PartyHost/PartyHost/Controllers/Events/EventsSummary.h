@@ -41,6 +41,8 @@
 @property (nonatomic, strong) UIButton *btnHostHere;
 @property (nonatomic, strong) UIButton *likeButton;
 @property (nonatomic, strong) UILabel *likeCount;
+@property (nonatomic, strong) UIButton *chatButton;
+@property (nonatomic, strong) UILabel *membersCount;
 @property (nonatomic, strong) UIButton *shareButton;
 @property (nonatomic, strong) UILabel *eventName;
 @property (nonatomic, strong) UILabel *venueName;
@@ -80,7 +82,7 @@
 @property (nonatomic, retain) NSFetchedResultsController *fetchedResultsController;
 @property (nonatomic, retain) NSManagedObjectContext *managedObjectContext;
 
-@property(nonatomic,strong) JDFSequentialTooltipManager *tooltip;
+@property (nonatomic,strong) JDFSequentialTooltipManager *tooltip;
 
 @property (assign, nonatomic) BOOL isModal;
 

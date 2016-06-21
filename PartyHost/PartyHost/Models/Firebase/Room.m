@@ -32,10 +32,6 @@
     return [[FIRDatabase database] referenceWithPath:@"room_members"];
 }
 
-+ (FIRDatabaseReference *)referenceWithRoomId:(NSString *)roomId {
-    return [[Room reference] child:roomId];
-}
-
 + (void)retrieveRoomsWithFbId:(NSString *)fbId andCompletionHandler:(RoomsCompletionHandler)completion {
     FIRDatabaseReference *reference = [Room membersReference];
     FIRDatabaseQuery *query = [[reference queryOrderedByChild:fbId] queryEqualToValue:[NSNumber numberWithBool:YES]];
