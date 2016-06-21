@@ -47,7 +47,7 @@ static NSString *const kChatsCellIdentifier = @"ChatsCellIdentifier";
 - (void)initClass {
     SharedData *sharedData = [SharedData sharedInstance];
     [Room retrieveRoomsWithFbId:sharedData.fb_id andCompletionHandler:^(NSArray *rooms, NSError *error) {
-        if (rooms) {
+        if (!error) {
             self.rooms = [Room retrieveRoomsInfoWithRooms:rooms];
             [self.tableView reloadData];
         }

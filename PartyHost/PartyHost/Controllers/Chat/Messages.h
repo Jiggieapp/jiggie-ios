@@ -11,7 +11,7 @@
 #import "MessageCell.h"
 #import "MemberProfile.h"
 
-@interface Messages : UIView<UITableViewDelegate,UITableViewDataSource,UIActionSheetDelegate,UIAlertViewDelegate,UIScrollViewDelegate,UITextViewDelegate>
+@interface Messages : UIView
 
 @property (strong, nonatomic) SharedData    *sharedData;
 

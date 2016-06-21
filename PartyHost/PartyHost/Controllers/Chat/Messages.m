@@ -10,14 +10,19 @@
 #import "AnalyticManager.h"
 #import "Message.h"
 #import "Mantle.h"
+#import "User.h"
+#import "RoomPrivateInfo.h"
+#import "Room.h"
+#import "SVProgressHUD.h"
 
 #define MESSAGE_PLACEHOLDER @"Type your message here ..."
 
-@interface Messages ()
+@interface Messages () <UITableViewDelegate, UITableViewDataSource, UIActionSheetDelegate, UIAlertViewDelegate,UIScrollViewDelegate, UITextViewDelegate>
 
 @property (copy, nonatomic) NSString *roomId;
 @property (copy, nonatomic) NSString *eventName;
 @property (strong, nonatomic) NSMutableArray *messages;
+@property (copy, nonatomic) User *user;
 
 @end
 
@@ -60,16 +65,13 @@
     [self.btnBack addTarget:self action:@selector(goBack) forControlEvents:UIControlEventTouchUpInside];
     [self.tabBar addSubview:self.btnBack];
     
-    
     self.btnInfo = [UIButton buttonWithType:UIButtonTypeCustom];
     self.btnInfo.frame = CGRectMake(frame.size.width - 50 + 4, 20, 40, 40);
-    //self.btnInfo.backgroundColor = [UIColor redColor];
     [self.btnInfo setImage:[UIImage imageNamed:@"nav_dots"] forState:UIControlStateNormal];
     [self.btnInfo setImageEdgeInsets:UIEdgeInsetsMake(16, 10, 16, 10)];
     self.btnInfo.imageView.contentMode = UIViewContentModeScaleAspectFit;
     [self.btnInfo addTarget:self action:@selector(showInfo) forControlEvents:UIControlEventTouchUpInside];
     [self.tabBar addSubview:self.btnInfo];
-    
     
     self.input = [[UITextView alloc] initWithFrame:CGRectMake(0, frame.size.height - 40, frame.size.width - 60, 40)];
     self.input.font = [UIFont phBlond:13];
@@ -82,13 +84,11 @@
     self.input.textColor = [UIColor grayColor];
     [self addSubview:self.input];
     
-    
     CALayer *rightBorder = [CALayer layer];
     rightBorder.borderColor = [UIColor phLightGrayColor].CGColor;
     rightBorder.borderWidth = 1;
     rightBorder.frame = CGRectMake(-1,0,self.sharedData.screenWidth+2,1);
     [self.input.layer addSublayer:rightBorder];
-    
     
     self.inputNumLines = 1;
     
@@ -108,14 +108,11 @@
     self.sendTxt.userInteractionEnabled = NO;
     [self.btnSend addSubview:self.sendTxt];
     
-    
-    
     CALayer *topBorder = [CALayer layer];
     topBorder.borderColor = [UIColor phLightGrayColor].CGColor;
     topBorder.borderWidth = 1;
     topBorder.frame = CGRectMake(-1,0,self.btnSend.frame.size.width+2,1);
     [self.btnSend.layer addSublayer:topBorder];
-    
     
     self.btnSendDimView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 60, 380)];
     self.btnSendDimView.backgroundColor = [UIColor colorWithWhite:0.0 alpha:0.25];
@@ -199,12 +196,31 @@
         [self.messagesList setTableHeaderView:nil];
     }
     
-    [Message retrieveMessagesWithRoomId:self.roomId andCompletionHandler:^(NSArray *messages, NSError *error) {
-        self.loadingView.alpha = .0;
-        self.loadingView.hidden = YES;
-        self.messages = [NSMutableArray arrayWithArray:messages];
-        [self.messagesList reloadData];
-    }];
+    if ([self.roomId containsString:@"_"]) {
+        NSString *fbId = [RoomPrivateInfo getFriendFbIdFromIdentifier:self.roomId fbId:self.sharedData.fb_id];
+
+        [User retrieveUserInfoWithFbId:fbId andCompletionHandler:^(User *user, NSError *error) {
+            if (user) {
+                self.user = user;
+                [self.toLabel setText:user.name];
+            }
+            
+            [Message retrieveMessagesWithRoomId:self.roomId andCompletionHandler:^(NSArray *messages, NSError *error) {
+                self.loadingView.alpha = .0;
+                self.loadingView.hidden = YES;
+                self.messages = [NSMutableArray arrayWithArray:messages];
+                [self.messagesList reloadData];
+            }];
+        }];
+    } else {
+        [self.toLabel setText:self.eventName];
+        [Message retrieveMessagesWithRoomId:self.roomId andCompletionHandler:^(NSArray *messages, NSError *error) {
+            self.loadingView.alpha = .0;
+            self.loadingView.hidden = YES;
+            self.messages = [NSMutableArray arrayWithArray:messages];
+            [self.messagesList reloadData];
+        }];
+    }
 }
 
 - (void)reset {
@@ -282,7 +298,9 @@
 
 - (void)goBack {
     self.sharedData.isInConversation = NO;
+    self.user = nil;
     
+    [self.toLabel setText:nil];
     [self keyboardOff];
     [self endEditing:YES];
     
@@ -294,7 +312,13 @@
 - (void)showInfo {
     [self dismissKeyBoardDown];
     
-    NSString *toName = [@"haehae" capitalizedString];
+    NSString *toName = @"";
+    
+    if (self.user) {
+        toName = [self.user.name capitalizedString];
+    } else {
+        toName = [self.eventName capitalizedString];
+    }
     
     if (self.sharedData.osVersion >= 8) {
         UIAlertController *alertController = [UIAlertController
@@ -302,42 +326,29 @@
                                               message:NULL
                                               preferredStyle:UIAlertControllerStyleActionSheet];
         
-        
         UIAlertAction *cancelAction = [UIAlertAction
                                        actionWithTitle:@"Cancel"
                                        style:UIAlertActionStyleCancel
-                                       handler:^(UIAlertAction *action)
-                                       {
-                                           NSLog(@"Cancel action");
-                                       }];
+                                       handler:nil];
         
         UIAlertAction *blockAction = [UIAlertAction
                                       actionWithTitle:[NSString stringWithFormat:@"Block %@?",toName]
                                       style:UIAlertActionStyleDestructive
-                                      handler:^(UIAlertAction *action)
-                                      {
-                                          //[self blockUser];
-                                          
-                                          //self.isInBlockMode = YES;
-                                          UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Block" message:@"Are you sure you want to block this user?" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-                                          [alert addButtonWithTitle:@"Cancel"];
+                                      handler:^(UIAlertAction *action) {
+                                          UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Block"
+                                                                                          message:[NSString stringWithFormat:@"Are you sure you want to block this %@?", self.user ? @"user" : @"group"]
+                                                                                         delegate:self
+                                                                                cancelButtonTitle:@"Cancel"
+                                                                                otherButtonTitles:@"OK", nil];
                                           [alert show];
                                       }];
         
-        
-        
         UIAlertAction *profileAction = [UIAlertAction
-                                        actionWithTitle:[NSString stringWithFormat:@"%@'s Profile",toName]
+                                        actionWithTitle:self.user ? [NSString stringWithFormat:@"%@'s Profile", toName] : toName
                                         style:UIAlertActionStyleDefault
-                                        handler:^(UIAlertAction *action)
-                                        {
-                                            self.sharedData.member_fb_id = self.toId;
-                                            self.sharedData.member_first_name = self.toLabel.text;
+                                        handler:^(UIAlertAction *action) {
                                             [self performSelector:@selector(showMemberProfile) withObject:nil afterDelay:0.1];
-                                            
                                         }];
-        
-        
         
         [alertController addAction:profileAction];
         [alertController addAction:blockAction];
@@ -345,8 +356,8 @@
         
         [self.window.rootViewController presentViewController:alertController animated:YES completion:nil];
     } else {
-        NSString *profileName = [NSString stringWithFormat:@"%@'s Profile",toName];
-        UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:profileName,[NSString stringWithFormat:@"Block %@?",toName],nil];
+        NSString *profileName = self.user ? [NSString stringWithFormat:@"%@'s Profile", toName] : toName;
+        UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:profileName,[NSString stringWithFormat:@"Block %@?", toName],nil];
         
         [actionSheet showInView:self];
     }
@@ -355,17 +366,18 @@
 
 -(void)showMemberProfile {
     [[NSNotificationCenter defaultCenter] postNotificationName:@"SHOW_MEMBER_PROFILE"
-                                                        object:self.toId];
+                                                        object:self.user.fbId];
 }
 
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
     if (buttonIndex == 0) {
-        self.sharedData.member_fb_id = self.toId;
-        self.sharedData.member_first_name = self.toLabel.text;
         [self performSelector:@selector(showMemberProfile) withObject:nil afterDelay:0.1];
     } else if (buttonIndex == 1) {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Block" message:@"Are you sure you want to block this user?" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-        [alert addButtonWithTitle:@"Cancel"];
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Block"
+                                                        message:[NSString stringWithFormat:@"Are you sure you want to block this %@?", self.user ? @"user" : @"group"]
+                                                       delegate:self
+                                              cancelButtonTitle:@"Cancel"
+                                              otherButtonTitles:@"OK", nil];
         [alert show];
     }
 }
@@ -375,6 +387,16 @@
     [self reset];
     [self initClass];
 }
+
+- (void)showAlertViewWithTitle:(NSString *)title andMessage:(NSString *)message {
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title
+                                                    message:message
+                                                   delegate:nil
+                                          cancelButtonTitle:@"OK"
+                                          otherButtonTitles:nil];
+    [alert show];
+}
+
 #pragma mark --
 
 -(void)scrollToBottom:(BOOL )animated {
@@ -651,6 +673,49 @@
 
 - (BOOL) textFieldShouldEndEditing:(UITextField *)textField {
     return YES;
+}
+
+#pragma mark - UIAlertViewDelegate
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if (buttonIndex == 1) {
+        if (self.user) {
+            [SVProgressHUD show];
+            [Room blockPrivateChatWithRoomId:self.roomId andCompletionHandler:^(NSError *error) {
+                if (error) {
+                    [self showAlertViewWithTitle:@"Blocked User"
+                                      andMessage:@"Fail."];
+                } else {
+                    [self goBack];
+                    [self showAlertViewWithTitle:@"Blocked User"
+                                      andMessage:[NSString stringWithFormat:@"%@ has been blocked",
+                                                  self.user.name]];
+                    
+                    [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Block User"
+                                                                  withDict:@{@"origin" : @"Chat"}];
+                }
+                
+                [SVProgressHUD dismiss];
+            }];
+        } else {
+            [SVProgressHUD show];
+            [Room blockRoomWithRoomId:self.roomId withFbId:self.sharedData.fb_id andCompletionHandler:^(NSError *error) {
+                if (error) {
+                    [self showAlertViewWithTitle:@"Blocked Group"
+                                      andMessage:@"Fail."];
+                } else {
+                    [self goBack];
+                    [self showAlertViewWithTitle:@"Blocked Group"
+                                      andMessage:[NSString stringWithFormat:@"%@ has been blocked",
+                                                  self.eventName]];
+                    
+                    [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Block Group"
+                                                                  withDict:@{@"origin" : @"Chat"}];
+                }
+                
+                [SVProgressHUD dismiss];
+            }];
+        }
+    }
 }
 
 #pragma mark - UIKeyboard Notification

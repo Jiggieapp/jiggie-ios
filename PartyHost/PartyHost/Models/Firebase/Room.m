@@ -41,31 +41,37 @@
     FIRDatabaseQuery *query = [[reference queryOrderedByChild:fbId] queryEqualToValue:[NSNumber numberWithBool:YES]];
     
     [query observeEventType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
-        NSArray *keys = [snapshot.value allKeys];
-        NSMutableArray *rooms = [NSMutableArray arrayWithCapacity:keys.count];
-        
-        for (NSString *key in keys) {
-            FIRDatabaseReference *reference = [[Room reference] child:key];
-            [reference observeEventType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
-                NSMutableDictionary *dictionary = [NSMutableDictionary dictionaryWithDictionary:snapshot.value];
-                [[dictionary objectForKey:@"info"] setObject:snapshot.key forKey:@"identifier"];
-                
-                for (Room *room in rooms) {
-                    if ([room.info[@"identifier"] isEqualToString:dictionary[@"info"][@"identifier"]]) {
-                        [rooms removeObject:room];
-                        break;
+        if (![snapshot.value isEqual:[NSNull null]]) {
+            NSArray *keys = [snapshot.value allKeys];
+            NSMutableArray *rooms = [NSMutableArray arrayWithCapacity:keys.count];
+            
+            for (NSString *key in keys) {
+                FIRDatabaseReference *reference = [[Room reference] child:key];
+                [reference observeEventType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
+                    NSMutableDictionary *dictionary = [NSMutableDictionary dictionaryWithDictionary:snapshot.value];
+                    [[dictionary objectForKey:@"info"] setObject:snapshot.key forKey:@"identifier"];
+                    
+                    for (Room *room in rooms) {
+                        if ([room.info[@"identifier"] isEqualToString:dictionary[@"info"][@"identifier"]]) {
+                            [rooms removeObject:room];
+                            break;
+                        }
                     }
-                }
-                
-                NSError *error;
-                Room *room = [MTLJSONAdapter modelOfClass:[Room class] fromJSONDictionary:dictionary error:&error];
-                
-                [rooms addObject:room];
-
-                if (completion) {
-                    completion(rooms, error);
-                }
-            }];
+                    
+                    NSError *error;
+                    Room *room = [MTLJSONAdapter modelOfClass:[Room class] fromJSONDictionary:dictionary error:&error];
+                    
+                    [rooms addObject:room];
+                    
+                    if (completion) {
+                        completion(rooms, error);
+                    }
+                }];
+            }
+        } else {
+            if (completion) {
+                completion(nil, nil);
+            }
         }
     }];
 }
