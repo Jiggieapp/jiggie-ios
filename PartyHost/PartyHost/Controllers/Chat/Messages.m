@@ -182,6 +182,8 @@
     [self loadMessages];
 }
 
+#pragma mark - Data
+
 - (void)loadMessages {
     [self.messages removeAllObjects];
     
@@ -223,14 +225,53 @@
     }
 }
 
-- (void)reset {
-    self.canCheckScrollDown = NO;
-    self.loadingView.alpha = 1.0;
-    self.loadingView.hidden = NO;
-    self.input.frame = CGRectMake(0, self.frame.size.height - 40, self.frame.size.width - 60, 40);
-    self.btnSend.frame = CGRectMake(self.frame.size.width - 60, self.frame.size.height - 40, 60, 40);
-    self.messagesList.frame = self.messagesListFrame;
+- (void)sendMessageWithText:(NSString *)text {
+    NSDictionary *dictionary = @{@"created_at" : [NSNumber numberWithDouble:[[NSDate date] timeIntervalSince1970]],
+                                 @"fb_id" : self.sharedData.fb_id,
+                                 @"message" : text};
+    
+    Message *message = [MTLJSONAdapter modelOfClass:[Message class]
+                                 fromJSONDictionary:dictionary
+                                              error:nil];
+    
+    [self.messages addObject:message];
+    [self.messagesList beginUpdates];
+    [self.messagesList insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:self.messages.count-1
+                                                                   inSection:0]]
+                             withRowAnimation:UITableViewRowAnimationAutomatic];
+    [self.messagesList endUpdates];
+    
+    if(self.isKeyBoardShowing) {
+        self.input.frame = CGRectMake(0, self.frame.size.height - 40 - self.keyBoardHeight, self.frame.size.width - 60, 40);
+        self.btnSend.frame = CGRectMake(self.frame.size.width - 60, self.frame.size.height - 40 - self.keyBoardHeight, 60, 40);
+    } else {
+        self.btnSend.frame = CGRectMake(self.frame.size.width - 60, self.frame.size.height - 40, 60, 40);
+        self.input.frame = CGRectMake(0, self.frame.size.height - 40, self.frame.size.width - 60, 40);
+    }
+    
+    self.sendTxt.frame = CGRectMake(0,self.btnSend.bounds.size.height - 29,self.btnSend.bounds.size.width,20);
+    self.input.text = @"";
+    
     self.inputNumLines = 1;
+    self.canCheckScrollDown = NO;
+    [self scrollToBottom:YES];
+    
+    [Message sendMessageWithRoomId:self.roomId
+                          senderId:self.sharedData.fb_id
+                              text:text];
+}
+
+#pragma mark - Action
+
+- (void)goBack {
+    self.sharedData.isInConversation = NO;
+    self.user = nil;
+    
+    [self.toLabel setText:nil];
+    [self endEditing:YES];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"EXIT_MESSAGES"
+                                                        object:self];
 }
 
 - (void)btnSendTapHandler:(UILongPressGestureRecognizer *)sender {
@@ -256,165 +297,9 @@
     }
 }
 
-- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView
-                  willDecelerate:(BOOL)decelerate {
-    if(self.canCheckScrollDown && scrollView == self.messagesList) {
-        CGPoint location = [scrollView.panGestureRecognizer locationInView:self.window.rootViewController.view];
-        
-        NSLog(@"LOCATION SCROLL :: %f > %f", location.y, self.tabBar.frame.size.height + self.messagesList.frame.size.height + 90 - (self.inputNumLines * 20));
-        if(location.y > self.tabBar.frame.size.height + self.messagesList.frame.size.height + 90 - (self.inputNumLines * 20))
-        {
-            NSLog(@"POINT ::  %@",NSStringFromCGPoint(location));
-            [self dismissKeyBoardDown];
-        }
-    }
-}
+#pragma mark - Helper
 
-
--(void)dismissKeyBoardDown {
-    NSLog(@"DISMISS_KEYBOARD");
-    self.canCheckScrollDown = NO;
-    [self.messagesList setContentOffset:self.messagesList.contentOffset animated:NO];
-    [self.input resignFirstResponder];
-    CGRect screenRect = [[UIScreen mainScreen] bounds];
-    CGFloat screenHeight = screenRect.size.height;
-    CGRect tableFrame = self.messagesList.frame;
-    tableFrame.size.height = screenHeight - 105;
-    [UIView animateWithDuration:0.25 animations:^(void) {
-         self.messagesList.frame = tableFrame;
-         self.input.frame = CGRectMake(0, self.frame.size.height - self.input.frame.size.height, self.frame.size.width - 60, self.input.frame.size.height);
-         self.btnSend.frame = CGRectMake(self.frame.size.width - 60, self.frame.size.height - self.btnSend.frame.size.height, 60, self.btnSend.frame.size.height);
-     }];
-}
-
--(void)keyboardPostUpdateDismiss {
-    [UIView animateWithDuration:0.25 animations:^() {
-         self.input.frame = CGRectMake(0, self.frame.size.height - 40, self.frame.size.width, 50);
-         self.messagesList.frame = CGRectMake(0, 60, self.frame.size.width, self.frame.size.height - 60 - 40);
-     } completion:^(BOOL finished) {
-         [self scrollToBottom:YES];
-     }];
-}
-
-- (void)goBack {
-    self.sharedData.isInConversation = NO;
-    self.user = nil;
-    
-    [self.toLabel setText:nil];
-    [self keyboardOff];
-    [self endEditing:YES];
-    
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"EXIT_MESSAGES"
-                                                        object:self];
-}
-
-
-- (void)showInfo {
-    [self dismissKeyBoardDown];
-    
-    NSString *toName = @"";
-    
-    if (self.user) {
-        toName = [self.user.name capitalizedString];
-    } else {
-        toName = [self.eventName capitalizedString];
-    }
-    
-    if (self.sharedData.osVersion >= 8) {
-        UIAlertController *alertController = [UIAlertController
-                                              alertControllerWithTitle:NULL
-                                              message:NULL
-                                              preferredStyle:UIAlertControllerStyleActionSheet];
-        
-        UIAlertAction *cancelAction = [UIAlertAction
-                                       actionWithTitle:@"Cancel"
-                                       style:UIAlertActionStyleCancel
-                                       handler:nil];
-        
-        UIAlertAction *blockAction = [UIAlertAction
-                                      actionWithTitle:[NSString stringWithFormat:@"Block %@?",toName]
-                                      style:UIAlertActionStyleDestructive
-                                      handler:^(UIAlertAction *action) {
-                                          UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Block"
-                                                                                          message:[NSString stringWithFormat:@"Are you sure you want to block this %@?", self.user ? @"user" : @"group"]
-                                                                                         delegate:self
-                                                                                cancelButtonTitle:@"Cancel"
-                                                                                otherButtonTitles:@"OK", nil];
-                                          [alert show];
-                                      }];
-        
-        UIAlertAction *profileAction = [UIAlertAction
-                                        actionWithTitle:self.user ? [NSString stringWithFormat:@"%@'s Profile", toName] : toName
-                                        style:UIAlertActionStyleDefault
-                                        handler:^(UIAlertAction *action) {
-                                            if (self.user) {
-                                                [self performSelector:@selector(showMemberProfile) withObject:nil afterDelay:0.1];
-                                            } else {
-                                                [self performSelector:@selector(showEventDetail) withObject:nil afterDelay:0.1];
-                                            }
-                                        }];
-        
-        [alertController addAction:profileAction];
-        [alertController addAction:blockAction];
-        [alertController addAction:cancelAction];
-        
-        [self.window.rootViewController presentViewController:alertController animated:YES completion:nil];
-    } else {
-        NSString *profileName = self.user ? [NSString stringWithFormat:@"%@'s Profile", toName] : toName;
-        UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:profileName,[NSString stringWithFormat:@"Block %@?", toName],nil];
-        
-        [actionSheet showInView:self];
-    }
-}
-
-- (void)showMemberProfile {
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"SHOW_MEMBER_PROFILE"
-                                                        object:self.user.fbId];
-}
-
-- (void)showEventDetail {
-    self.sharedData.selectedEvent[@"_id"] = self.roomId;
-    self.sharedData.selectedEvent[@"venue_name"] = self.eventName;
-    
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"SHOW_EVENT_MODAL"
-                                                        object:nil];
-}
-
-- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
-    if (buttonIndex == 0) {
-        if (self.user) {
-            [self performSelector:@selector(showMemberProfile) withObject:nil afterDelay:0.1];
-        } else {
-            [self performSelector:@selector(showEventDetail) withObject:nil afterDelay:0.1];
-        }
-    } else if (buttonIndex == 1) {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Block"
-                                                        message:[NSString stringWithFormat:@"Are you sure you want to block this %@?", self.user ? @"user" : @"group"]
-                                                       delegate:self
-                                              cancelButtonTitle:@"Cancel"
-                                              otherButtonTitles:@"OK", nil];
-        [alert show];
-    }
-}
-
-- (void)reLoadApp {
-    [self.sharedData clearKeyBoards];
-    [self reset];
-    [self initClass];
-}
-
-- (void)showAlertViewWithTitle:(NSString *)title andMessage:(NSString *)message {
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title
-                                                    message:message
-                                                   delegate:nil
-                                          cancelButtonTitle:@"OK"
-                                          otherButtonTitles:nil];
-    [alert show];
-}
-
-#pragma mark --
-
--(void)scrollToBottom:(BOOL )animated {
+- (void)scrollToBottom:(BOOL )animated {
     dispatch_time_t delay = dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC * 0.15);
     dispatch_after(delay, dispatch_get_main_queue(), ^(void){
         // do work in the UI thread here
@@ -428,7 +313,6 @@
         }
         
         @try {
-            //[self.tableView scrollToRowAtIndexPath: // etc etc etc
             [self.messagesList scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:row_count - 1  inSection:num - 1] atScrollPosition:UITableViewScrollPositionBottom animated:animated];
         }
         @catch ( NSException *e )
@@ -510,40 +394,100 @@
     return isSame;
 }
 
-- (void)sendMessageWithText:(NSString *)text {
-    NSDictionary *dictionary = @{@"created_at" : [NSNumber numberWithDouble:[[NSDate date] timeIntervalSince1970]],
-                                 @"fb_id" : self.sharedData.fb_id,
-                                 @"message" : text};
+- (void)reLoadApp {
+    [self.sharedData clearKeyBoards];
+    [self reset];
+    [self initClass];
+}
+
+- (void)reset {
+    self.canCheckScrollDown = NO;
+    self.loadingView.alpha = 1.0;
+    self.loadingView.hidden = NO;
+    self.input.frame = CGRectMake(0, self.frame.size.height - 40, self.frame.size.width - 60, 40);
+    self.btnSend.frame = CGRectMake(self.frame.size.width - 60, self.frame.size.height - 40, 60, 40);
+    self.messagesList.frame = self.messagesListFrame;
+    self.inputNumLines = 1;
+}
+
+- (void)showInfo {
+    [self dismissKeyBoardDown];
     
-    Message *message = [MTLJSONAdapter modelOfClass:[Message class]
-                                 fromJSONDictionary:dictionary
-                                              error:nil];
+    NSString *toName = @"";
     
-    [self.messages addObject:message];
-    [self.messagesList beginUpdates];
-    [self.messagesList insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:self.messages.count-1
-                                                                   inSection:0]]
-                             withRowAnimation:UITableViewRowAnimationAutomatic];
-    [self.messagesList endUpdates];
-    
-    if(self.isKeyBoardShowing) {
-        self.input.frame = CGRectMake(0, self.frame.size.height - 40 - self.keyBoardHeight, self.frame.size.width - 60, 40);
-        self.btnSend.frame = CGRectMake(self.frame.size.width - 60, self.frame.size.height - 40 - self.keyBoardHeight, 60, 40);
+    if (self.user) {
+        toName = [self.user.name capitalizedString];
     } else {
-        self.btnSend.frame = CGRectMake(self.frame.size.width - 60, self.frame.size.height - 40, 60, 40);
-        self.input.frame = CGRectMake(0, self.frame.size.height - 40, self.frame.size.width - 60, 40);
+        toName = [self.eventName capitalizedString];
     }
     
-    self.sendTxt.frame = CGRectMake(0,self.btnSend.bounds.size.height - 29,self.btnSend.bounds.size.width,20);
-    self.input.text = @"";
+    if (self.sharedData.osVersion >= 8) {
+        UIAlertController *alertController = [UIAlertController
+                                              alertControllerWithTitle:NULL
+                                              message:NULL
+                                              preferredStyle:UIAlertControllerStyleActionSheet];
+        
+        UIAlertAction *cancelAction = [UIAlertAction
+                                       actionWithTitle:@"Cancel"
+                                       style:UIAlertActionStyleCancel
+                                       handler:nil];
+        
+        UIAlertAction *blockAction = [UIAlertAction
+                                      actionWithTitle:[NSString stringWithFormat:@"Block %@?",toName]
+                                      style:UIAlertActionStyleDestructive
+                                      handler:^(UIAlertAction *action) {
+                                          UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Block"
+                                                                                          message:[NSString stringWithFormat:@"Are you sure you want to block this %@?", self.user ? @"user" : @"group"]
+                                                                                         delegate:self
+                                                                                cancelButtonTitle:@"Cancel"
+                                                                                otherButtonTitles:@"OK", nil];
+                                          [alert show];
+                                      }];
+        
+        UIAlertAction *profileAction = [UIAlertAction
+                                        actionWithTitle:self.user ? [NSString stringWithFormat:@"%@'s Profile", toName] : toName
+                                        style:UIAlertActionStyleDefault
+                                        handler:^(UIAlertAction *action) {
+                                            if (self.user) {
+                                                [self performSelector:@selector(showMemberProfile) withObject:nil afterDelay:0.1];
+                                            } else {
+                                                [self performSelector:@selector(showEventDetail) withObject:nil afterDelay:0.1];
+                                            }
+                                        }];
+        
+        [alertController addAction:profileAction];
+        [alertController addAction:blockAction];
+        [alertController addAction:cancelAction];
+        
+        [self.window.rootViewController presentViewController:alertController animated:YES completion:nil];
+    } else {
+        NSString *profileName = self.user ? [NSString stringWithFormat:@"%@'s Profile", toName] : toName;
+        UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:profileName,[NSString stringWithFormat:@"Block %@?", toName],nil];
+        
+        [actionSheet showInView:self];
+    }
+}
+
+- (void)showMemberProfile {
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"SHOW_MEMBER_PROFILE"
+                                                        object:self.user.fbId];
+}
+
+- (void)showEventDetail {
+    self.sharedData.selectedEvent[@"_id"] = self.roomId;
+    self.sharedData.selectedEvent[@"venue_name"] = self.eventName;
     
-    self.inputNumLines = 1;
-    self.canCheckScrollDown = NO;
-    [self scrollToBottom:YES];
-    
-    [Message sendMessageWithRoomId:self.roomId
-                          senderId:self.sharedData.fb_id
-                              text:text];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"SHOW_EVENT_MODAL"
+                                                        object:nil];
+}
+
+- (void)showAlertViewWithTitle:(NSString *)title andMessage:(NSString *)message {
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title
+                                                    message:message
+                                                   delegate:nil
+                                          cancelButtonTitle:@"OK"
+                                          otherButtonTitles:nil];
+    [alert show];
 }
 
 #pragma mark - Header View
@@ -645,6 +589,22 @@
     return cell;
 }
 
+#pragma mark - UIScrollViewDelegate
+
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView
+                  willDecelerate:(BOOL)decelerate {
+    if(self.canCheckScrollDown && scrollView == self.messagesList) {
+        CGPoint location = [scrollView.panGestureRecognizer locationInView:self.window.rootViewController.view];
+        
+        NSLog(@"LOCATION SCROLL :: %f > %f", location.y, self.tabBar.frame.size.height + self.messagesList.frame.size.height + 90 - (self.inputNumLines * 20));
+        if(location.y > self.tabBar.frame.size.height + self.messagesList.frame.size.height + 90 - (self.inputNumLines * 20))
+        {
+            NSLog(@"POINT ::  %@",NSStringFromCGPoint(location));
+            [self dismissKeyBoardDown];
+        }
+    }
+}
+
 #pragma mark - UITextViewDelegate
 - (BOOL)textViewShouldBeginEditing:(UITextView *)aTextView {
     return YES;
@@ -690,6 +650,25 @@
     return YES;
 }
 
+#pragma mark - UIActionSheetDelegate
+
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if (buttonIndex == 0) {
+        if (self.user) {
+            [self performSelector:@selector(showMemberProfile) withObject:nil afterDelay:0.1];
+        } else {
+            [self performSelector:@selector(showEventDetail) withObject:nil afterDelay:0.1];
+        }
+    } else if (buttonIndex == 1) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Block"
+                                                        message:[NSString stringWithFormat:@"Are you sure you want to block this %@?", self.user ? @"user" : @"group"]
+                                                       delegate:self
+                                              cancelButtonTitle:@"Cancel"
+                                              otherButtonTitles:@"OK", nil];
+        [alert show];
+    }
+}
+
 #pragma mark - UIAlertViewDelegate
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
     if (buttonIndex == 1) {
@@ -733,42 +712,59 @@
     }
 }
 
+#pragma mark - UIKeyboard
+
+- (void)dismissKeyBoardDown {
+    self.canCheckScrollDown = NO;
+    
+    [self.messagesList setContentOffset:self.messagesList.contentOffset animated:NO];
+    [self.input resignFirstResponder];
+    
+    CGRect screenRect = [[UIScreen mainScreen] bounds];
+    CGFloat screenHeight = screenRect.size.height;
+    CGRect tableFrame = self.messagesList.frame;
+    tableFrame.size.height = screenHeight - 105;
+    
+    [UIView animateWithDuration:0.25 animations:^(void) {
+        self.messagesList.frame = tableFrame;
+        self.input.frame = CGRectMake(0, self.frame.size.height - self.input.frame.size.height, self.frame.size.width - 60, self.input.frame.size.height);
+        self.btnSend.frame = CGRectMake(self.frame.size.width - 60, self.frame.size.height - self.btnSend.frame.size.height, 60, self.btnSend.frame.size.height);
+    }];
+}
+
+- (void)keyboardPostUpdateDismiss {
+    [UIView animateWithDuration:0.25 animations:^() {
+        self.input.frame = CGRectMake(0, self.frame.size.height - 40, self.frame.size.width, 50);
+        self.messagesList.frame = CGRectMake(0, 60, self.frame.size.width, self.frame.size.height - 60 - 40);
+    } completion:^(BOOL finished) {
+        [self scrollToBottom:YES];
+    }];
+}
+
 #pragma mark - UIKeyboard Notification
 - (void)keyboardOn {
-    NSLog(@"keyboardOn");
+    //Remove keyboard observer
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:UIKeyboardWillShowNotification
+                                                  object:nil];
     
     //Remove keyboard observer
-    [[NSNotificationCenter defaultCenter]
-     removeObserver:self
-     name:UIKeyboardWillShowNotification
-     object:nil];
-    
-    //Remove keyboard observer
-    [[NSNotificationCenter defaultCenter]
-     removeObserver:self
-     name:UIKeyboardWillHideNotification
-     object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:UIKeyboardWillHideNotification
+                                                  object:nil];
     
     //Add keyboard observer
-    [[NSNotificationCenter defaultCenter]
-     addObserver:self
-     selector:@selector(onKeyboardShow:)
-     name:UIKeyboardWillShowNotification
-     object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(onKeyboardShow:)
+                                                 name:UIKeyboardWillShowNotification
+                                               object:nil];
     
     //Add keyboard observer
-    [[NSNotificationCenter defaultCenter]
-     addObserver:self
-     selector:@selector(onKeyboardHide:)
-     name:UIKeyboardWillHideNotification
-     object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(onKeyboardHide:)
+                                                 name:UIKeyboardWillHideNotification
+                                               object:nil];
 }
-
-
-- (void)keyboardOff {
-    NSLog(@"keyboardOff");
-}
-
 
 - (void)clickAwayFromKeyboard {
     [self endEditing:YES];
@@ -779,8 +775,6 @@
     if(!self.sharedData.isInConversation) {
         return;
     }
-    
-    NSLog(@"onKeyboardShow");
     
     self.isKeyBoardShowing = YES;
     NSDictionary* keyboardInfo = [notification userInfo];
@@ -809,8 +803,6 @@
     if(!self.sharedData.isInConversation) {
         return;
     }
-    
-    NSLog(@"onKeyboardHide");
     
     self.isKeyBoardShowing = NO;
     self.input.frame = CGRectMake(0, self.frame.size.height - 40, self.frame.size.width - 60, 40);
