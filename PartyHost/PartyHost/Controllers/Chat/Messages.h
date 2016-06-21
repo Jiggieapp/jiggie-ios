@@ -13,33 +13,27 @@
 
 @interface Messages : UIView
 
-@property (strong, nonatomic) SharedData    *sharedData;
+@property (strong, nonatomic) SharedData *sharedData;
 
-@property(nonatomic,strong) UITableView     *messagesList;
-@property(nonatomic,assign) CGRect          messagesListFrame;
-@property(nonatomic,strong) NSString        *toId;
-@property(nonatomic,strong) UIImageView     *toIcon;
-@property(nonatomic,strong) UILabel         *toLabel;
-@property(nonatomic,strong) UIView          *tabBar;
-@property(nonatomic,strong) UIButton        *btnBack;
-@property(nonatomic,strong) UIButton        *btnInfo;
-@property(nonatomic,strong) UIView          *btnSend;
-@property(nonatomic,strong) UIView          *btnSendDimView;
-@property(nonatomic,strong) UIView          *loadingView;
+@property (nonatomic, strong) UITableView *messagesList;
+@property (nonatomic, strong) UIImageView *toIcon;
+@property (nonatomic, strong) UILabel *toLabel;
+@property (nonatomic, strong) UIView *tabBar;
+@property (nonatomic, strong) UIButton *btnBack;
+@property (nonatomic, strong) UIButton *btnInfo;
+@property (nonatomic, strong) UIView *btnSend;
+@property (nonatomic, strong) UIView *btnSendDimView;
+@property (nonatomic, strong) UIView *loadingView;
+@property (nonatomic, strong) UILabel *sendTxt;
+@property (nonatomic, strong) UITextView *input;
 
-@property(nonatomic,strong) UILabel         *sendTxt;
-@property(nonatomic,strong) UITextView     *input;
+@property (nonatomic, assign) BOOL canCheckScrollDown;
 
-@property(nonatomic,assign) BOOL            isKeyBoardShowing;
-@property(nonatomic,assign) CGFloat         contentOffSetYToCompare;
-@property(nonatomic,assign) CGFloat         keyBoardHeight;
-@property(nonatomic,assign) BOOL            canCheckScrollDown;
+@property (nonatomic, assign) int inputNumLines;
 
-@property(nonatomic,assign) int            inputNumLines;
-
--(void)initClass;
--(void)initClassWithRoomId:(NSString *)roomId
+- (void)initClass;
+- (void)initClassWithRoomId:(NSString *)roomId
               andEventName:(NSString *)eventName;
--(void)reset;
+- (void)reset;
 
 @end

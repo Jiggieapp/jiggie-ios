@@ -19,6 +19,13 @@
 
 @interface Messages () <UITableViewDelegate, UITableViewDataSource, UIActionSheetDelegate, UIAlertViewDelegate,UIScrollViewDelegate, UITextViewDelegate>
 
+@property (nonatomic, assign) BOOL isKeyBoardShowing;
+@property (nonatomic, assign) CGFloat contentOffSetYToCompare;
+@property (nonatomic, assign) CGFloat keyBoardHeight;
+
+@property (nonatomic, assign) CGRect messagesListFrame;
+
+@property (nonatomic, strong) NSString *toId;
 @property (copy, nonatomic) NSString *roomId;
 @property (copy, nonatomic) NSString *eventName;
 @property (strong, nonatomic) NSMutableArray *messages;
