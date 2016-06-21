@@ -23,5 +23,6 @@
 @dynamic endDatetime;
 @dynamic isFeatured;
 @dynamic fullfillmentType;
+@dynamic themeID;
 
 @end
