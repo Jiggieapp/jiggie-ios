@@ -379,10 +379,18 @@
     return 0;
 }
 
+- (CGFloat)tableView:(UITableView *)tableView
+estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    if ([indexPath section] == 0) {
+        return 300;
+    }
+    return UITableViewAutomaticDimension;
+}
+
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     if ([indexPath section] == 0) {
-        return 300;
+        return UITableViewAutomaticDimension;
     } else if ([indexPath section] == 1) {
         if ([[self.fetchedResultsController fetchedObjects] count] > 0) {
             CGFloat pictureHeightRatio = 3.0 / 4.0;
