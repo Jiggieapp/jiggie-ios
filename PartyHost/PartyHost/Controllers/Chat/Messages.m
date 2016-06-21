@@ -13,9 +13,16 @@
 #import "User.h"
 #import "RoomPrivateInfo.h"
 #import "Room.h"
+#import "Firebase.h"
 #import "SVProgressHUD.h"
 
 #define MESSAGE_PLACEHOLDER @"Type your message here ..."
+
+@interface Messages ()
+
+@property (strong, nonatomic) FIRDatabaseReference *reference;
+
+@end
 
 @interface Messages () <UITableViewDelegate, UITableViewDataSource, UIActionSheetDelegate, UIAlertViewDelegate,UIScrollViewDelegate, UITextViewDelegate>
 
@@ -167,10 +174,24 @@
 
 - (void)initClassWithRoomId:(NSString *)roomId members:(NSDictionary *)members andEventName:(NSString *)eventName {
     self.roomId = roomId;
-    self.members = members;
     self.eventName = eventName;
     
-    [self initClass];
+    if (self.members.count > 0) {
+        self.members = members;
+        
+        [self initClass];
+    } else {
+        self.reference = [[Room reference] child:roomId];
+        
+        [self.reference observeEventType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
+            if (![snapshot.value isEqual:[NSNull null]]) {
+                self.members = snapshot.value;
+            }
+            
+            [self initClass];
+        }];
+    }
+    
 }
 
 - (void)initClass {
@@ -191,18 +212,18 @@
 - (void)loadMessages {
     [self.messages removeAllObjects];
     
-    if (![[self.eventName lowercaseString] isEqualToString:@"generic"]) {
-        UIView *view = [self headerViewWithText:self.eventName];
-        UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(.0f, .0f, CGRectGetWidth(self.messagesList.bounds), CGRectGetHeight(view.bounds) + 20.0f)];
-        [headerView addSubview:view];
-        [view setCenter:headerView.center];
-        
-        [self.messagesList setTableHeaderView:headerView];
-    } else {
-        [self.messagesList setTableHeaderView:nil];
-    }
-    
     if ([self.roomId containsString:@"_"]) {
+        if (![[self.eventName lowercaseString] isEqualToString:@"generic"]) {
+            UIView *view = [self headerViewWithText:self.eventName];
+            UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(.0f, .0f, CGRectGetWidth(self.messagesList.bounds), CGRectGetHeight(view.bounds) + 20.0f)];
+            [headerView addSubview:view];
+            [view setCenter:headerView.center];
+            
+            [self.messagesList setTableHeaderView:headerView];
+        } else {
+            [self.messagesList setTableHeaderView:nil];
+        }
+        
         NSString *fbId = [RoomPrivateInfo getFriendFbIdFromIdentifier:self.roomId fbId:self.sharedData.fb_id];
 
         [User retrieveUserInfoWithFbId:fbId andCompletionHandler:^(User *user, NSError *error) {

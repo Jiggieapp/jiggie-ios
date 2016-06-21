@@ -44,24 +44,30 @@
             for (NSString *key in keys) {
                 FIRDatabaseReference *reference = [[Room reference] child:key];
                 [reference observeEventType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
-                    NSMutableDictionary *dictionary = [NSMutableDictionary dictionaryWithDictionary:snapshot.value];
-                    [[dictionary objectForKey:@"info"] setObject:snapshot.key forKey:@"identifier"];
-                    [[dictionary objectForKey:@"info"] setObject:[snapshotMember.value objectForKey:key] forKey:@"members"];
-                    
-                    for (Room *room in rooms) {
-                        if ([room.info[@"identifier"] isEqualToString:dictionary[@"info"][@"identifier"]]) {
-                            [rooms removeObject:room];
-                            break;
-                        }
-                    }
                     
                     NSError *error;
-                    Room *room = [MTLJSONAdapter modelOfClass:[Room class] fromJSONDictionary:dictionary error:&error];
                     
-                    [rooms addObject:room];
+                    if (![snapshot.value isEqual:[NSNull null]]) {
+                        NSMutableDictionary *dictionary = [NSMutableDictionary dictionaryWithDictionary:snapshot.value];
+                        [[dictionary objectForKey:@"info"] setObject:snapshot.key forKey:@"identifier"];
+                        [[dictionary objectForKey:@"info"] setObject:[snapshotMember.value objectForKey:key] forKey:@"members"];
+                        
+                        for (Room *room in rooms) {
+                            if ([room.info[@"identifier"] isEqualToString:dictionary[@"info"][@"identifier"]]) {
+                                [rooms removeObject:room];
+                                break;
+                            }
+                        }
+                        
+                        Room *room = [MTLJSONAdapter modelOfClass:[Room class] fromJSONDictionary:dictionary error:&error];
+                        
+                        [rooms addObject:room];
+                    }
                     
-                    if (completion) {
-                        completion(rooms, error);
+                    if (rooms.count >= keys.count) {
+                        if (completion) {
+                            completion(rooms, error);
+                        }
                     }
                 }];
             }

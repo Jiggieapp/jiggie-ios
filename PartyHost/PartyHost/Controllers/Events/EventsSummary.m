@@ -650,7 +650,26 @@
 }
 
 - (void)chatButtonDidTap:(id)sender {
+    AFHTTPRequestOperationManager *manager = [self.sharedData getOperationManager];
+    NSString *url = [NSString stringWithFormat:@"%@/group/firebase", PHBaseNewURL];
+    NSDictionary *parameters = @{@"fb_id" : self.sharedData.fb_id,
+                                 @"event_id" : self.event_id};
     
+    [SVProgressHUD show];
+    [manager POST:url parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        if (operation.response.statusCode == 200) {
+            NSDictionary *object = @{@"roomId" : self.event_id,
+                                     @"members" : @{},
+                                     @"eventName" : self.eventName.text};
+            
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"SHOW_MESSAGES"
+                                                                object:object];
+        }
+        
+        [SVProgressHUD dismiss];
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        [SVProgressHUD dismiss];
+    }];
 }
 
 #pragma mark - Fetch
