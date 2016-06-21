@@ -25,6 +25,7 @@ typedef void (^ClearChatCompletionHandler)(NSError *error);
 @property(strong, nonatomic, readonly) NSDictionary *info;
 
 + (FIRDatabaseReference *)reference;
++ (FIRDatabaseReference *)membersReference;
 + (FIRDatabaseReference *)referenceWithRoomId:(NSString *)roomId;
 
 + (void)retrieveRoomsWithFbId:(NSString *)fbId

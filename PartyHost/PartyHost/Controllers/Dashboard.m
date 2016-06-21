@@ -787,6 +787,7 @@
             self.mainCon.frame = CGRectMake(-self.frame.size.width, 0, self.frame.size.width * 2, self.frame.size.height);
         } completion:^(BOOL finished) {
             [self.messagesPage initClassWithRoomId:object[@"roomId"]
+                                           members:object[@"members"]
                                       andEventName:object[@"eventName"]];
         }];
     }

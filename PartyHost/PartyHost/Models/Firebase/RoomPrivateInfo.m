@@ -14,7 +14,8 @@
     return @{@"event" : @"event",
              @"identifier" : @"identifier",
              @"lastMessage" : @"last_message",
-             @"updatedAt" : @"updated_at"};
+             @"updatedAt" : @"updated_at",
+             @"members" : @"members"};
 }
 
 + (NSString *)getFriendFbIdFromIdentifier:(NSString *)identifier fbId:(NSString *)currentFbId {

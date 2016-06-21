@@ -40,9 +40,9 @@
     FIRDatabaseReference *reference = [Room membersReference];
     FIRDatabaseQuery *query = [[reference queryOrderedByChild:fbId] queryEqualToValue:[NSNumber numberWithBool:YES]];
     
-    [query observeEventType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
-        if (![snapshot.value isEqual:[NSNull null]]) {
-            NSArray *keys = [snapshot.value allKeys];
+    [query observeEventType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshotMember) {
+        if (![snapshotMember.value isEqual:[NSNull null]]) {
+            NSArray *keys = [snapshotMember.value allKeys];
             NSMutableArray *rooms = [NSMutableArray arrayWithCapacity:keys.count];
             
             for (NSString *key in keys) {
@@ -50,6 +50,7 @@
                 [reference observeEventType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
                     NSMutableDictionary *dictionary = [NSMutableDictionary dictionaryWithDictionary:snapshot.value];
                     [[dictionary objectForKey:@"info"] setObject:snapshot.key forKey:@"identifier"];
+                    [[dictionary objectForKey:@"info"] setObject:[snapshotMember.value objectForKey:key] forKey:@"members"];
                     
                     for (Room *room in rooms) {
                         if ([room.info[@"identifier"] isEqualToString:dictionary[@"info"][@"identifier"]]) {

@@ -27,6 +27,7 @@ typedef void (^MessagesCompletionHandler)(NSArray *messages,
 
 + (void)sendMessageWithRoomId:(NSString *)roomId
                      senderId:(NSString *)fbId
+                      members:(NSDictionary *)members
                       text:(NSString *)text;
 
 @end

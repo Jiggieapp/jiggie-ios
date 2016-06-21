@@ -33,7 +33,8 @@
 
 - (void)initClass;
 - (void)initClassWithRoomId:(NSString *)roomId
-              andEventName:(NSString *)eventName;
+                    members:(NSDictionary *)members
+               andEventName:(NSString *)eventName;
 - (void)reset;
 
 @end

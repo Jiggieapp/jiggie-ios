@@ -89,18 +89,22 @@ static NSString *const kChatsCellIdentifier = @"ChatsCellIdentifier";
     
     NSObject *roomInfo = [self.rooms objectAtIndex:indexPath.row];
     NSString *eventName = @"";
+    NSDictionary *roomMembers = [NSDictionary dictionary];
     
     if ([roomInfo isKindOfClass:[RoomPrivateInfo class]]) {
         RoomPrivateInfo *info = (RoomPrivateInfo *)roomInfo;
         self.roomId = info.identifier;
         eventName = info.event;
+        roomMembers = info.members;
     } else {
         RoomGroupInfo *info = (RoomGroupInfo *)roomInfo;
         self.roomId = info.identifier;
         eventName = info.event;
+        roomMembers = info.members;
     }
     
     NSDictionary *object = @{@"roomId" : self.roomId,
+                             @"members" : roomMembers,
                              @"eventName" : eventName};
     
     [[NSNotificationCenter defaultCenter] postNotificationName:@"SHOW_MESSAGES"

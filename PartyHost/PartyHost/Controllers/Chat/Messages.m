@@ -26,6 +26,7 @@
 @property (nonatomic, assign) CGRect messagesListFrame;
 
 @property (copy, nonatomic) NSString *roomId;
+@property (strong, nonatomic) NSDictionary *members;
 @property (copy, nonatomic) NSString *eventName;
 @property (strong, nonatomic) NSMutableArray *messages;
 @property (copy, nonatomic) User *user;
@@ -164,8 +165,9 @@
     return self;
 }
 
-- (void)initClassWithRoomId:(NSString *)roomId andEventName:(NSString *)eventName {
+- (void)initClassWithRoomId:(NSString *)roomId members:(NSDictionary *)members andEventName:(NSString *)eventName {
     self.roomId = roomId;
+    self.members = members;
     self.eventName = eventName;
     
     [self initClass];
@@ -260,6 +262,7 @@
     
     [Message sendMessageWithRoomId:self.roomId
                           senderId:self.sharedData.fb_id
+                           members:self.members
                               text:text];
 }
 
