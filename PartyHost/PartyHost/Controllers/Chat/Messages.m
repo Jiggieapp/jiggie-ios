@@ -347,7 +347,11 @@
                                         actionWithTitle:self.user ? [NSString stringWithFormat:@"%@'s Profile", toName] : toName
                                         style:UIAlertActionStyleDefault
                                         handler:^(UIAlertAction *action) {
-                                            [self performSelector:@selector(showMemberProfile) withObject:nil afterDelay:0.1];
+                                            if (self.user) {
+                                                [self performSelector:@selector(showMemberProfile) withObject:nil afterDelay:0.1];
+                                            } else {
+                                                [self performSelector:@selector(showEventDetail) withObject:nil afterDelay:0.1];
+                                            }
                                         }];
         
         [alertController addAction:profileAction];
@@ -363,15 +367,26 @@
     }
 }
 
-
--(void)showMemberProfile {
+- (void)showMemberProfile {
     [[NSNotificationCenter defaultCenter] postNotificationName:@"SHOW_MEMBER_PROFILE"
                                                         object:self.user.fbId];
 }
 
+- (void)showEventDetail {
+    self.sharedData.selectedEvent[@"_id"] = self.roomId;
+    self.sharedData.selectedEvent[@"venue_name"] = self.eventName;
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"SHOW_EVENT_MODAL"
+                                                        object:nil];
+}
+
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
     if (buttonIndex == 0) {
-        [self performSelector:@selector(showMemberProfile) withObject:nil afterDelay:0.1];
+        if (self.user) {
+            [self performSelector:@selector(showMemberProfile) withObject:nil afterDelay:0.1];
+        } else {
+            [self performSelector:@selector(showEventDetail) withObject:nil afterDelay:0.1];
+        }
     } else if (buttonIndex == 1) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Block"
                                                         message:[NSString stringWithFormat:@"Are you sure you want to block this %@?", self.user ? @"user" : @"group"]
