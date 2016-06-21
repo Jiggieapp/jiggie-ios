@@ -14,6 +14,8 @@
 + (NSDictionary *)JSONKeyPathsByPropertyKey {
     return @{@"fbId" : @"fb_id",
              @"name" : @"name",
+             @"firstName" : @"first_name",
+             @"lastName" : @"last_name",
              @"avatarURL" : @"avatar"};
 }
 
