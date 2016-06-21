@@ -13,6 +13,7 @@
 @interface MessageCell ()
 
 @property (nonatomic, strong) SharedData *sharedData;
+@property (nonatomic, copy) NSString *fbId;
 
 @end
 
@@ -103,9 +104,9 @@
     return self;
 }
 
--(void)showMemberProfile {
+- (void)showMemberProfile {
     [[NSNotificationCenter defaultCenter] postNotificationName:@"SHOW_MEMBER_PROFILE"
-                                                        object:self.sharedData.member_fb_id];
+                                                        object:self.fbId];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
@@ -174,6 +175,7 @@
         
         [User retrieveUserInfoWithFbId:message.fbId andCompletionHandler:^(User *user, NSError *error) {
             if (user) {
+                self.fbId = user.fbId;
                 [self.toIcon loadPicture:user.avatarURL];
             }
         }];
