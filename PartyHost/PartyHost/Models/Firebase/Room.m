@@ -32,35 +32,49 @@
     return [[FIRDatabase database] referenceWithPath:@"room_members"];
 }
 
-+ (FIRDatabaseReference *)referenceWithRoomId:(NSString *)roomId {
-    return [[Room reference] child:roomId];
-}
-
 + (void)retrieveRoomsWithFbId:(NSString *)fbId andCompletionHandler:(RoomsCompletionHandler)completion {
     FIRDatabaseReference *reference = [Room membersReference];
     FIRDatabaseQuery *query = [[reference queryOrderedByChild:fbId] queryEqualToValue:[NSNumber numberWithBool:YES]];
     
-    [query observeEventType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
-        NSArray *keys = [snapshot.value allKeys];
-        NSMutableArray *rooms = [NSMutableArray arrayWithCapacity:keys.count];
-        
-        for (NSString *key in keys) {
-            FIRDatabaseReference *reference = [[Room reference] child:key];
-            [reference observeSingleEventOfType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
-                NSMutableDictionary *dictionary = [NSMutableDictionary dictionaryWithDictionary:snapshot.value];
-                [[dictionary objectForKey:@"info"] setObject:snapshot.key forKey:@"identifier"];
-                
-                NSError *error;
-                Room *room = [MTLJSONAdapter modelOfClass:[Room class] fromJSONDictionary:dictionary error:&error];
-                
-                [rooms addObject:room];
-                
-                if ([keys indexOfObject:key] == keys.count-1) {
-                    if (completion) {
-                        completion(rooms, error);
+    [query observeEventType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshotMember) {
+        if (![snapshotMember.value isEqual:[NSNull null]]) {
+            NSArray *keys = [snapshotMember.value allKeys];
+            NSMutableArray *rooms = [NSMutableArray arrayWithCapacity:keys.count];
+            
+            for (NSString *key in keys) {
+                FIRDatabaseReference *reference = [[Room reference] child:key];
+                [reference observeEventType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
+                    
+                    NSError *error;
+                    
+                    if (![snapshot.value isEqual:[NSNull null]]) {
+                        NSMutableDictionary *dictionary = [NSMutableDictionary dictionaryWithDictionary:snapshot.value];
+                        [[dictionary objectForKey:@"info"] setObject:snapshot.key forKey:@"identifier"];
+                        [[dictionary objectForKey:@"info"] setObject:[snapshotMember.value objectForKey:key] forKey:@"members"];
+                        
+                        for (Room *room in rooms) {
+                            if ([room.info[@"identifier"] isEqualToString:dictionary[@"info"][@"identifier"]]) {
+                                [rooms removeObject:room];
+                                break;
+                            }
+                        }
+                        
+                        Room *room = [MTLJSONAdapter modelOfClass:[Room class] fromJSONDictionary:dictionary error:&error];
+                        
+                        [rooms addObject:room];
                     }
-                }
-            }];
+                    
+                    if (rooms.count >= keys.count) {
+                        if (completion) {
+                            completion(rooms, error);
+                        }
+                    }
+                }];
+            }
+        } else {
+            if (completion) {
+                completion(nil, nil);
+            }
         }
     }];
 }
@@ -88,14 +102,16 @@
         }
     }
     
-    return roomsInfo;
+    NSSortDescriptor *descriptor = [NSSortDescriptor sortDescriptorWithKey:@"updatedAt" ascending:NO];
+    NSArray *sortedRoomsInfo = [roomsInfo sortedArrayUsingDescriptors:@[descriptor]];
+    
+    return sortedRoomsInfo;
 }
 
-+ (void)clearChatFromRoomId:(NSString *)roomId andCompletionHandler:(ClearChatCompletionHandler)completion {
-    SharedData *sharedData = [SharedData sharedInstance];
++ (void)clearChatFromRoomId:(NSString *)roomId withFbId:(NSString *)fbId andCompletionHandler:(ClearChatCompletionHandler)completion {
     FIRDatabaseReference *reference = [[Room membersReference] child:roomId];
     
-    NSDictionary *parameters = @{@"111222333" : [NSNumber numberWithBool:NO]};
+    NSDictionary *parameters = @{fbId : [NSNumber numberWithBool:NO]};
     
     [reference updateChildValues:parameters withCompletionBlock:^(NSError * _Nullable error, FIRDatabaseReference * _Nonnull ref) {
         if (completion) {
@@ -104,8 +120,18 @@
     }];
 }
 
-+ (void)blockRoomWithRoomId:(NSString *)roomId andCompletionHandler:(ClearChatCompletionHandler)completion {
++ (void)blockPrivateChatWithRoomId:(NSString *)roomId andCompletionHandler:(ClearChatCompletionHandler)completion {
     FIRDatabaseReference *reference = [[Room membersReference] child:roomId];
+    
+    [reference removeValueWithCompletionBlock:^(NSError * _Nullable error, FIRDatabaseReference * _Nonnull ref) {
+        if (completion) {
+            completion(error);
+        }
+    }];
+}
+
++ (void)blockRoomWithRoomId:(NSString *)roomId withFbId:(NSString *)fbId andCompletionHandler:(ClearChatCompletionHandler)completion {
+    FIRDatabaseReference *reference = [[[Room membersReference] child:roomId] child:fbId];
     
     [reference removeValueWithCompletionBlock:^(NSError * _Nullable error, FIRDatabaseReference * _Nonnull ref) {
         if (completion) {

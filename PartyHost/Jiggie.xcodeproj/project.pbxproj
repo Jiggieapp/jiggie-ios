@@ -220,8 +220,6 @@
 		DAABB0B91C1FD50E004DDCFA /* BookTableHostingComplete.m in Sources */ = {isa = PBXBuildFile; fileRef = DAABB0191C1FD50E004DDCFA /* BookTableHostingComplete.m */; };
 		DAABB0BA1C1FD50E004DDCFA /* BookTableOffering.m in Sources */ = {isa = PBXBuildFile; fileRef = DAABB01B1C1FD50E004DDCFA /* BookTableOffering.m */; };
 		DAABB0BB1C1FD50E004DDCFA /* BookTableOfferingCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DAABB01D1C1FD50E004DDCFA /* BookTableOfferingCell.m */; };
-		DAABB0BC1C1FD50E004DDCFA /* Chats.m in Sources */ = {isa = PBXBuildFile; fileRef = DAABB0201C1FD50E004DDCFA /* Chats.m */; };
-		DAABB0BD1C1FD50E004DDCFA /* ConvoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DAABB0221C1FD50E004DDCFA /* ConvoCell.m */; };
 		DAABB0BE1C1FD50E004DDCFA /* MessageBubbleTriangle.m in Sources */ = {isa = PBXBuildFile; fileRef = DAABB0241C1FD50E004DDCFA /* MessageBubbleTriangle.m */; };
 		DAABB0BF1C1FD50E004DDCFA /* MessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DAABB0261C1FD50E004DDCFA /* MessageCell.m */; };
 		DAABB0C01C1FD50E004DDCFA /* Messages.m in Sources */ = {isa = PBXBuildFile; fileRef = DAABB0281C1FD50E004DDCFA /* Messages.m */; };
@@ -886,10 +884,6 @@
 		DAABB01B1C1FD50E004DDCFA /* BookTableOffering.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BookTableOffering.m; sourceTree = "<group>"; };
 		DAABB01C1C1FD50E004DDCFA /* BookTableOfferingCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BookTableOfferingCell.h; sourceTree = "<group>"; };
 		DAABB01D1C1FD50E004DDCFA /* BookTableOfferingCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BookTableOfferingCell.m; sourceTree = "<group>"; };
-		DAABB01F1C1FD50E004DDCFA /* Chats.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Chats.h; sourceTree = "<group>"; };
-		DAABB0201C1FD50E004DDCFA /* Chats.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Chats.m; sourceTree = "<group>"; };
-		DAABB0211C1FD50E004DDCFA /* ConvoCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConvoCell.h; sourceTree = "<group>"; };
-		DAABB0221C1FD50E004DDCFA /* ConvoCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConvoCell.m; sourceTree = "<group>"; };
 		DAABB0231C1FD50E004DDCFA /* MessageBubbleTriangle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageBubbleTriangle.h; sourceTree = "<group>"; };
 		DAABB0241C1FD50E004DDCFA /* MessageBubbleTriangle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageBubbleTriangle.m; sourceTree = "<group>"; };
 		DAABB0251C1FD50E004DDCFA /* MessageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageCell.h; sourceTree = "<group>"; };
@@ -2138,10 +2132,6 @@
 				93042B8B1D129266004A8B2F /* ChatListTableViewCell.h */,
 				93042B8C1D129266004A8B2F /* ChatListTableViewCell.m */,
 				93042B8D1D129266004A8B2F /* ChatListTableViewCell.xib */,
-				DAABB01F1C1FD50E004DDCFA /* Chats.h */,
-				DAABB0201C1FD50E004DDCFA /* Chats.m */,
-				DAABB0211C1FD50E004DDCFA /* ConvoCell.h */,
-				DAABB0221C1FD50E004DDCFA /* ConvoCell.m */,
 				DAABB0231C1FD50E004DDCFA /* MessageBubbleTriangle.h */,
 				DAABB0241C1FD50E004DDCFA /* MessageBubbleTriangle.m */,
 				DAABB0271C1FD50E004DDCFA /* Messages.h */,
@@ -3228,7 +3218,6 @@
 				DAABB0CF1C1FD50E004DDCFA /* EventsHostMessage.m in Sources */,
 				DAABB0B51C1FD50E004DDCFA /* BookTableConfirm.m in Sources */,
 				936674711CE1DCFE00AC94F3 /* InviteViewController.m in Sources */,
-				DAABB0BD1C1FD50E004DDCFA /* ConvoCell.m in Sources */,
 				DAABB2721C1FF5AE004DDCFA /* UIToolbar+FlatUI.m in Sources */,
 				DAABB26D1C1FF5AE004DDCFA /* UIProgressView+FlatUI.m in Sources */,
 				DAABB28A1C1FF5AE004DDCFA /* MPABTestDesignerSnapshotResponseMessage.m in Sources */,
@@ -3378,7 +3367,6 @@
 				DAABB2931C1FF5AE004DDCFA /* MPCGRectToNSDictionaryValueTransformer.m in Sources */,
 				9366752A1CE30EB200AC94F3 /* APPhone.m in Sources */,
 				93AF8BAA1CF565CC008BFA94 /* MemberInfo.m in Sources */,
-				DAABB0BC1C1FD50E004DDCFA /* Chats.m in Sources */,
 				938CE7CF1CCF627D00ADDD4C /* NSError+MTLModelException.m in Sources */,
 				9366745A1CD7627500AC94F3 /* UIView+WebCacheOperation.m in Sources */,
 				DA43056C1C23E7D000ED6C54 /* BaseModel.m in Sources */,

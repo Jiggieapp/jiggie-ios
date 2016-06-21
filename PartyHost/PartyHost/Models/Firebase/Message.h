@@ -9,6 +9,9 @@
 #import <Foundation/Foundation.h>
 #import "Mantle.h"
 
+typedef void (^MessagesCompletionHandler)(NSArray *messages,
+                                          NSError *error);
+
 @class FIRDatabaseReference;
 @interface Message : MTLModel <MTLJSONSerializing>
 
@@ -17,6 +20,14 @@
 @property(assign, nonatomic, readonly) NSTimeInterval createdAt;
 
 + (FIRDatabaseReference *)reference;
-+ (FIRDatabaseReference *)referenceWithFbId:(NSString *)fbId;
++ (FIRDatabaseReference *)referenceWithRoomId:(NSString *)roomId;
+
++ (void)retrieveMessagesWithRoomId:(NSString *)roomId
+              andCompletionHandler:(MessagesCompletionHandler)completion;
+
++ (void)sendMessageWithRoomId:(NSString *)roomId
+                     senderId:(NSString *)fbId
+                      members:(NSDictionary *)members
+                      text:(NSString *)text;
 
 @end

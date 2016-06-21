@@ -43,20 +43,48 @@
 
 - (void)awakeFromNib {
     [super awakeFromNib];
+
     [self.activeContentView addSubview:self.chatListView];
     [self.friendsContentView addSubview:self.chatFriendListView];
-}
-
-- (void)initClass {
-    [self.chatListView initClass];
-    [self.chatFriendListView initClass];
+    
+    [self.activityIndicatorView stopAnimating];
 }
 
 - (void)layoutSubviews {
     [super layoutSubviews];
     
-    self.chatListView.frame = CGRectMake(0, 0, CGRectGetWidth(self.activeContentView.bounds), CGRectGetHeight(self.activeContentView.bounds));
-    self.chatFriendListView.frame = CGRectMake(0, 0, CGRectGetWidth(self.friendsContentView.bounds), CGRectGetHeight(self.friendsContentView.bounds));
+    self.chatListView.frame = self.activeContentView.bounds;
+    self.chatFriendListView.frame = self.friendsContentView.bounds;
+}
+
+- (void)initClass {
+    BOOL isMigratedToFirebase = [[NSUserDefaults standardUserDefaults] boolForKey:@"IS_ALREADY_MIGRATED_TO_FIREBASE"];
+    
+    if (isMigratedToFirebase) {
+        [self.chatListView initClass];
+        [self.chatFriendListView initClass];
+    } else {
+        SharedData *sharedData = [SharedData sharedInstance];
+        AFHTTPRequestOperationManager *manager = [sharedData getOperationManager];
+        NSString *url = [NSString stringWithFormat:@"%@/chat/firebase/%@", PHBaseNewURL, sharedData.fb_id];
+        
+        [self.activityIndicatorView startAnimating];
+        [manager GET:url parameters:@{} success:^(AFHTTPRequestOperation *operation, id responseObject) {
+            if (operation.response.statusCode == 200) {
+                [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"IS_ALREADY_MIGRATED_TO_FIREBASE"];
+                [[NSUserDefaults standardUserDefaults] synchronize];
+                
+                [self.chatListView initClass];
+                [self.chatFriendListView initClass];
+            }
+            
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [self.activityIndicatorView stopAnimating];
+            });
+        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+            [self.activityIndicatorView stopAnimating];
+        }];
+    }
 }
 
 - (IBAction)didTapInviteButton:(id)sender {

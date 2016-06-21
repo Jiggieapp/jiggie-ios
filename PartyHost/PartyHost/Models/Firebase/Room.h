@@ -25,16 +25,21 @@ typedef void (^ClearChatCompletionHandler)(NSError *error);
 @property(strong, nonatomic, readonly) NSDictionary *info;
 
 + (FIRDatabaseReference *)reference;
-+ (FIRDatabaseReference *)referenceWithRoomId:(NSString *)roomId;
++ (FIRDatabaseReference *)membersReference;
 
 + (void)retrieveRoomsWithFbId:(NSString *)fbId
          andCompletionHandler:(RoomsCompletionHandler)completion;
 + (NSArray *)retrieveRoomsInfoWithRooms:(NSArray *)rooms;
 
 + (void)clearChatFromRoomId:(NSString *)roomId
+                   withFbId:(NSString *)fbId
        andCompletionHandler:(ClearChatCompletionHandler)completion;
 
++ (void)blockPrivateChatWithRoomId:(NSString *)roomId
+              andCompletionHandler:(ClearChatCompletionHandler)completion;
+
 + (void)blockRoomWithRoomId:(NSString *)roomId
+                   withFbId:(NSString *)fbId
        andCompletionHandler:(ClearChatCompletionHandler)completion;
 
 @end

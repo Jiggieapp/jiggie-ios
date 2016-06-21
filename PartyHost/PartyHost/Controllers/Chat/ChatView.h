@@ -17,6 +17,7 @@
 @property (strong, nonatomic) IBOutlet UIView *contentView;
 @property (strong, nonatomic) IBOutlet UIView *activeContentView;
 @property (strong, nonatomic) IBOutlet UIView *friendsContentView;
+@property (strong, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicatorView;
 
 + (ChatView *)instanceFromNib;
 

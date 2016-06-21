@@ -63,7 +63,7 @@
     if ([roomInfo isKindOfClass:[RoomPrivateInfo class]]) {
         RoomPrivateInfo *info = (RoomPrivateInfo *)roomInfo;
         SharedData *sharedData = [SharedData sharedInstance];
-        NSString *friendFbId = [RoomPrivateInfo getFriendFbIdFromIdentifier:info.identifier fbId:@"111222333"];
+        NSString *friendFbId = [RoomPrivateInfo getFriendFbIdFromIdentifier:info.identifier fbId:sharedData.fb_id];
         
         [User retrieveUserInfoWithFbId:friendFbId andCompletionHandler:^(User *user, NSError *error) {
             if (user) {
@@ -73,14 +73,14 @@
         }];
         
         [self.lastMessageLabel setText:info.lastMessage];
-        [self.dateLabel setText:[[NSDate dateWithTimeIntervalSince1970:info.updatedAt] timeAgo]];
+        [self.dateLabel setText:[[NSDate dateWithTimeIntervalSince1970:info.updatedAt / 1000] timeAgo]];
     } else {
         RoomGroupInfo *info = (RoomGroupInfo *)roomInfo;
         
         [self.photoImageView sd_setImageWithURL:[NSURL URLWithString:info.avatarURL]];
         [self.nameLabel setText:info.event];
         [self.lastMessageLabel setText:info.lastMessage];
-        [self.dateLabel setText:[[NSDate dateWithTimeIntervalSince1970:info.updatedAt] timeAgo]];
+        [self.dateLabel setText:[[NSDate dateWithTimeIntervalSince1970:info.updatedAt / 1000] timeAgo]];
     }
 }
 
