@@ -25,7 +25,6 @@
 
 @property (nonatomic, assign) CGRect messagesListFrame;
 
-@property (nonatomic, strong) NSString *toId;
 @property (copy, nonatomic) NSString *roomId;
 @property (copy, nonatomic) NSString *eventName;
 @property (strong, nonatomic) NSMutableArray *messages;
@@ -141,28 +140,24 @@
     [self addSubview:self.loadingView];
     [self addSubview:self.tabBar];
 
-    [[NSNotificationCenter defaultCenter]
-     addObserver:self
-     selector:@selector(loadMessages)
-     name:@"UPDATE_CURRENT_CONVERSATION"
-     object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(loadMessages)
+                                                 name:@"UPDATE_CURRENT_CONVERSATION"
+                                               object:nil];
     
-    [[NSNotificationCenter defaultCenter]
-     addObserver:self
-     selector:@selector(goBack)
-     name:@"MESSAGES_GO_BACK"
-     object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(goBack)
+                                                 name:@"MESSAGES_GO_BACK"
+                                               object:nil];
     
-    [[NSNotificationCenter defaultCenter]
-     addObserver:self
-     selector:@selector(reLoadApp)
-     name:@"RELOAD_CURRENT_CONVERSATION"
-     object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(reLoadApp)
+                                                 name:@"RELOAD_CURRENT_CONVERSATION"
+                                               object:nil];
     
     //Resign first responder when tapped away
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(clickAwayFromKeyboard)];
     [self addGestureRecognizer:tap];
-    
     
     [self keyboardOn];
     

@@ -27,8 +27,8 @@
 @property (nonatomic, strong) UILabel *sendTxt;
 @property (nonatomic, strong) UITextView *input;
 
+@property (nonatomic, strong) NSString *toId;
 @property (nonatomic, assign) BOOL canCheckScrollDown;
-
 @property (nonatomic, assign) int inputNumLines;
 
 - (void)initClass;
