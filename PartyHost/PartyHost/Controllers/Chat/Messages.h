@@ -17,7 +17,6 @@
 
 @property(nonatomic,strong) UITableView     *messagesList;
 @property(nonatomic,assign) CGRect          messagesListFrame;
-@property(nonatomic,assign) BOOL            isMessagesLoaded;
 @property(nonatomic,strong) NSString        *toId;
 @property(nonatomic,strong) UIImageView     *toIcon;
 @property(nonatomic,strong) UILabel         *toLabel;

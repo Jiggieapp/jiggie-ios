@@ -128,24 +128,26 @@ static NSString *const kChatsCellIdentifier = @"ChatsCellIdentifier";
                 self.roomId = info.identifier;
                 self.roomName = ((ChatListTableViewCell *)cell).nameLabel.text;
                 
-                [self showAlertQuestion:@"Confirm"
-                            withMessage:@"Are you sure you want to delete chat messages from this user?"
-                                 andTag:5];
+                [self showAlertViewWithTitle:@"Confirm"
+                                     message:@"Are you sure you want to delete chat messages from this user?"
+                                      andTag:5];
             } else {
                 RoomGroupInfo *info = (RoomGroupInfo *)roomInfo;
                 self.roomId = info.identifier;
                 self.roomName = info.event;
+
+                [self showAlertViewWithTitle:@"Confirm"
+                                     message:@"Are you sure you want to delete chat messages from this group?"
+                                      andTag:5];
             }
             
-            [self showAlertQuestion:@"Confirm"
-                        withMessage:@"Are you sure you want to delete chat messages from this user?"
-                             andTag:5];
             
             return NO;
         }];
         
         MGSwipeButton * block = [MGSwipeButton buttonWithTitle:@"Block" backgroundColor:[UIColor grayColor] padding:padding callback:^BOOL(MGSwipeTableCell *sender) {
             
+            self.roomName = ((ChatListTableViewCell *)cell).nameLabel.text;
             NSObject *roomInfo = [self.rooms objectAtIndex:[self.tableView indexPathForCell:sender].row];
             
             if ([roomInfo isKindOfClass:[RoomPrivateInfo class]]) {
@@ -153,18 +155,20 @@ static NSString *const kChatsCellIdentifier = @"ChatsCellIdentifier";
                 
                 self.isBlockedUser = YES;
                 self.roomId = info.identifier;
+
+                [self showAlertViewWithTitle:@"Confirm"
+                                     message:@"Are you sure you want to block this user?"
+                                      andTag:10];
             } else {
                 RoomGroupInfo *info = (RoomGroupInfo *)roomInfo;
                 
                 self.isBlockedUser = NO;
                 self.roomId = info.identifier;
+                
+                [self showAlertViewWithTitle:@"Confirm"
+                                     message:@"Are you sure you want to block this group?"
+                                      andTag:10];
             }
-            
-            self.roomName = ((ChatListTableViewCell *)cell).nameLabel.text;
-            
-            [self showAlertQuestion:@"Confirm"
-                        withMessage:@"Are you sure you want to block this user?"
-                             andTag:10];
             
             return NO;
         }];
@@ -195,11 +199,12 @@ static NSString *const kChatsCellIdentifier = @"ChatsCellIdentifier";
             SharedData *sharedData = [SharedData sharedInstance];
             [Room clearChatFromRoomId:self.roomId withFbId:sharedData.fb_id andCompletionHandler:^(NSError *error) {
                 if (error) {
-                    [self showFailAlertWithTitle:@"Deleted Messages"
+                    [self showAlertViewWithTitle:@"Deleted Messages"
                                       andMessage:@"Unable to delete messages."];
                 } else {
-                    [self showSuccessAlertWithTitle:@"Deleted Messages"
-                                         andMessage:@"Messages have been deleted."];
+                    [self showAlertViewWithTitle:@"Deleted Messages"
+                                      andMessage:@"Messages have been deleted."];
+                    
                     [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Delete Messages"
                                                                   withDict:@{@"origin" : @"Chat"}];
                 }
@@ -210,12 +215,13 @@ static NSString *const kChatsCellIdentifier = @"ChatsCellIdentifier";
             if (self.isBlockedUser) {
                 [Room blockPrivateChatWithRoomId:self.roomId andCompletionHandler:^(NSError *error) {
                     if (error) {
-                        [self showFailAlertWithTitle:@"Blocked User"
+                        [self showAlertViewWithTitle:@"Blocked User"
                                           andMessage:@"Fail."];
                     } else {
-                        [self showSuccessAlertWithTitle:@"Blocked User"
-                                             andMessage:[NSString stringWithFormat:@"%@ has been blocked",
-                                                         self.roomName]];
+                        [self showAlertViewWithTitle:@"Blocked User"
+                                          andMessage:[NSString stringWithFormat:@"%@ has been blocked",
+                                                      self.roomName]];
+                        
                         [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Block User"
                                                                       withDict:@{@"origin" : @"Chat"}];
                     }
@@ -226,12 +232,13 @@ static NSString *const kChatsCellIdentifier = @"ChatsCellIdentifier";
                 SharedData *sharedData = [SharedData sharedInstance];
                 [Room blockRoomWithRoomId:self.roomId withFbId:sharedData.fb_id andCompletionHandler:^(NSError *error) {
                     if (error) {
-                        [self showFailAlertWithTitle:@"Blocked Group"
+                        [self showAlertViewWithTitle:@"Blocked Group"
                                           andMessage:@"Fail."];
                     } else {
-                        [self showSuccessAlertWithTitle:@"Blocked Group"
-                                             andMessage:[NSString stringWithFormat:@"%@ has been blocked",
-                                                         self.roomName]];
+                        [self showAlertViewWithTitle:@"Blocked Group"
+                                          andMessage:[NSString stringWithFormat:@"%@ has been blocked",
+                                                      self.roomName]];
+                        
                         [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Block Group"
                                                                       withDict:@{@"origin" : @"Chat"}];
                     }
@@ -243,7 +250,7 @@ static NSString *const kChatsCellIdentifier = @"ChatsCellIdentifier";
     }
 }
 
-- (void)showSuccessAlertWithTitle:(NSString *)title andMessage:(NSString *)message {
+- (void)showAlertViewWithTitle:(NSString *)title andMessage:(NSString *)message {
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title
                                                     message:message
                                                    delegate:nil
@@ -252,16 +259,7 @@ static NSString *const kChatsCellIdentifier = @"ChatsCellIdentifier";
     [alert show];
 }
 
-- (void)showFailAlertWithTitle:(NSString *)title andMessage:(NSString *)message {
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title
-                                                    message:message
-                                                   delegate:nil
-                                          cancelButtonTitle:@"OK"
-                                          otherButtonTitles:nil];
-    [alert show];
-}
-
-- (void)showAlertQuestion:(NSString *)title withMessage:(NSString *)message andTag:(NSInteger)tag {
+- (void)showAlertViewWithTitle:(NSString *)title message:(NSString *)message andTag:(NSInteger)tag {
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title message:message delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
     [alert setTag:tag];
     // optional - add more buttons:

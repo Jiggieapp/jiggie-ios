@@ -175,7 +175,6 @@
 - (void)initClass {
     self.sharedData.memberProfile.hidden = YES;
     self.sharedData.isInConversation = YES;
-    self.isMessagesLoaded = NO;
     self.keyBoardHeight = 0;
     
     //Restart placeholder
@@ -212,7 +211,6 @@
     self.canCheckScrollDown = NO;
     self.loadingView.alpha = 1.0;
     self.loadingView.hidden = NO;
-    self.isMessagesLoaded = NO;
     self.input.frame = CGRectMake(0, self.frame.size.height - 40, self.frame.size.width - 60, 40);
     self.btnSend.frame = CGRectMake(self.frame.size.width - 60, self.frame.size.height - 40, 60, 40);
     self.messagesList.frame = self.messagesListFrame;
@@ -295,7 +293,9 @@
 
 - (void)showInfo {
     [self dismissKeyBoardDown];
+    
     NSString *toName = [@"haehae" capitalizedString];
+    
     if (self.sharedData.osVersion >= 8) {
         UIAlertController *alertController = [UIAlertController
                                               alertControllerWithTitle:NULL
