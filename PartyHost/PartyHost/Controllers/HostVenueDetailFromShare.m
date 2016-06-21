@@ -391,9 +391,8 @@
 
 -(void)goBack
 {
-    [[NSNotificationCenter defaultCenter]
-     postNotificationName:@"EXIT_HOST_VENUE_DETAIL_FROM_SHARE"
-     object:self];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"EXIT_HOST_VENUE_DETAIL_FROM_SHARE"
+                                                        object:self];
     
 }
 

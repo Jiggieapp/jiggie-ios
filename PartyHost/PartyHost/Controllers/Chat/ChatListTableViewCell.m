@@ -63,7 +63,7 @@
     if ([roomInfo isKindOfClass:[RoomPrivateInfo class]]) {
         RoomPrivateInfo *info = (RoomPrivateInfo *)roomInfo;
         SharedData *sharedData = [SharedData sharedInstance];
-        NSString *friendFbId = [RoomPrivateInfo getFriendFbIdFromIdentifier:info.identifier fbId:@"111222333"];
+        NSString *friendFbId = [RoomPrivateInfo getFriendFbIdFromIdentifier:info.identifier fbId:sharedData.fb_id];
         
         [User retrieveUserInfoWithFbId:friendFbId andCompletionHandler:^(User *user, NSError *error) {
             if (user) {

@@ -49,19 +49,26 @@
 
 + (void)sendMessageWithRoomId:(NSString *)roomId
                      senderId:(NSString *)fbId
+                      members:(NSDictionary *)members
                          text:(NSString *)text {
     FIRDatabaseReference *reference = [[Message referenceWithRoomId:roomId] childByAutoId];
     NSDictionary *parameters = @{@"created_at" : [FIRServerValue timestamp],
                                  @"fb_id" : fbId,
                                  @"message" : text};
     
-    [reference setValue:parameters withCompletionBlock:^(NSError * _Nullable error, FIRDatabaseReference * _Nonnull ref) {
+    [reference setValue:parameters withCompletionBlock:^(NSError * _Nullable error,
+                                                         FIRDatabaseReference * _Nonnull ref) {
         if (!error) {
             FIRDatabaseReference *reference = [[[Room reference] child:roomId] child:@"info"];
-            NSDictionary *parameters = @{@"last_message" : text,
-                                         @"updated_at" : [FIRServerValue timestamp]};
+            NSMutableDictionary *parameters = [NSMutableDictionary
+                                               dictionaryWithDictionary:@{@"last_message" : text,
+                                                                          @"updated_at" : [FIRServerValue timestamp]}];
             
             [reference updateChildValues:parameters];
+            
+            reference = [[Room membersReference] child:roomId];
+            
+            [reference updateChildValues:members];
         }
     }];
 }

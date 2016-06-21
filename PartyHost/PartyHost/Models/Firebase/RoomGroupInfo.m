@@ -15,7 +15,8 @@
              @"avatarURL" : @"avatar",
              @"identifier" : @"identifier",
              @"lastMessage" : @"last_message",
-             @"updatedAt" : @"updated_at"};
+             @"updatedAt" : @"updated_at",
+             @"members" : @"members"};
 }
 
 @end

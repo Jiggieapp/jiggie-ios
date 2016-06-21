@@ -19,6 +19,8 @@ typedef void (^UserCompletionHandler)(User *user,
 
 @property(copy, nonatomic, readonly) NSString *fbId;
 @property(copy, nonatomic, readonly) NSString *name;
+@property(copy, nonatomic, readonly) NSString *firstName;
+@property(copy, nonatomic, readonly) NSString *lastName;
 @property(copy, nonatomic, readonly) NSString *avatarURL;
 
 + (FIRDatabaseReference *)reference;
