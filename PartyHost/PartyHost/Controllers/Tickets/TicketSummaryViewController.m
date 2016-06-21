@@ -693,6 +693,14 @@ NSInteger const MaxBookingTableGuest = 100;
         emptyCounter++;
     }
     
+    NSString *source = [self.productSelected objectForKey:@"source"];
+    if (source && [source isEqualToString:@"loket"]) {
+        if (![userInfo objectForKey:@"identity_id"] || [[userInfo objectForKey:@"identity_id"] isEqualToString:@""]) {
+            [self.userBox setImage:[[UIImage imageNamed:@"bg_rectangle_red"] stretchableImageWithLeftCapWidth:10 topCapHeight:10]];
+            self.isAllowToContinue = NO;
+        }
+    }
+    
     if (emptyCounter == 3) {
         // check if all data is empty
         [self.userName setHidden:YES];
@@ -729,13 +737,19 @@ NSInteger const MaxBookingTableGuest = 100;
                               @"num_buy":self.totalTicket.text};
     [summaryList addObject:summary];
     
+    NSString *identity_id = @"";
+    if ([userInfo objectForKey:@"phone"]) {
+        identity_id = [userInfo objectForKey:@"phone"];
+    }
+    
     NSDictionary *params = @{@"fb_id":sharedData.fb_id,
                              @"event_id":[self.productList objectForKey:@"event_id"],
                              @"product_list":summaryList,
                              @"guest_detail":@{@"name":[userInfo objectForKey:@"name"],
                                                @"email":[userInfo objectForKey:@"email"],
                                                @"phone":[userInfo objectForKey:@"phone"],
-                                               @"dial_code":[userInfo objectForKey:@"dial_code"]}};
+                                               @"dial_code":[userInfo objectForKey:@"dial_code"],
+                                               @"identity_id":identity_id}};
     
     [SVProgressHUD show];
     [self.continueButton setEnabled:NO];

@@ -66,6 +66,12 @@
         [self.idNumberTextField setDelegate:self];
         [self.scrollView addSubview:self.idNumberTextField];
         
+        self.idNumberAlert = [[UIImageView alloc] initWithFrame:CGRectMake(self.visibleSize.width - 36, CGRectGetMaxY(lineView.frame) + 14, 20, 20)];
+        [self.idNumberAlert setImage:[UIImage imageNamed:@"icon_alert"]];
+        [self.idNumberAlert setBackgroundColor:[UIColor clearColor]];
+        [self.idNumberAlert setHidden:YES];
+        [self.scrollView addSubview:self.idNumberAlert];
+        
         UIToolbar* numberToolbar = [[UIToolbar alloc]initWithFrame:CGRectMake(0, 0, self.visibleSize.width, 50)];
         numberToolbar.barStyle = UIBarStyleDefault;
         numberToolbar.items = @[[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil],
@@ -254,6 +260,12 @@
         
         [SVProgressHUD showErrorWithStatus:@"Invalid Email Format"];
         return;
+    } else if (self.idNumberTextField.text.length < 9) {
+        [self.idNumberTextField setTextColor:[UIColor redColor]];
+        [self.idNumberAlert setHidden:NO];
+        
+        [SVProgressHUD showErrorWithStatus:@"Invalid ID Number Format"];
+        return;
     }
     
     NSString *dialCode = self.phoneCodeTextField.text;
@@ -266,7 +278,8 @@
     NSDictionary *userInfo = @{@"name":self.nameTextField.text,
                                @"email":self.emailTextField.text,
                                @"dial_code":dialCode,
-                               @"phone":phone};
+                               @"phone":phone,
+                               @"identity_id":self.idNumberTextField.text};
     [UserManager saveUserTicketInfo:userInfo];
     
     [self dismissViewControllerAnimated:YES completion:nil];
@@ -313,6 +326,17 @@
     if (textField == self.emailTextField) {
         [self.emailTextField setTextColor:[UIColor blackColor]];
         [self.emailAlert setHidden:YES];
+    } else if (textField == self.idNumberTextField) {
+        [self.idNumberTextField setTextColor:[UIColor blackColor]];
+        [self.idNumberAlert setHidden:YES];
+        
+        if(range.length + range.location > textField.text.length)
+        {
+            return NO;
+        }
+        
+        NSUInteger newLength = [textField.text length] + [string length] - range.length;
+        return (newLength > 32) ? NO : YES;
     }
     
     return YES;
