@@ -18,13 +18,9 @@
 
 #define MESSAGE_PLACEHOLDER @"Type your message here ..."
 
-@interface Messages ()
+@interface Messages () <UITableViewDelegate, UITableViewDataSource, UIActionSheetDelegate, UIAlertViewDelegate,UIScrollViewDelegate, UITextViewDelegate>
 
 @property (strong, nonatomic) FIRDatabaseReference *reference;
-
-@end
-
-@interface Messages () <UITableViewDelegate, UITableViewDataSource, UIActionSheetDelegate, UIAlertViewDelegate,UIScrollViewDelegate, UITextViewDelegate>
 
 @property (nonatomic, assign) BOOL isKeyBoardShowing;
 @property (nonatomic, assign) CGFloat contentOffSetYToCompare;
@@ -34,6 +30,7 @@
 
 @property (copy, nonatomic) NSString *roomId;
 @property (strong, nonatomic) NSDictionary *members;
+@property (strong, nonatomic) NSDictionary *unreads;
 @property (copy, nonatomic) NSString *eventName;
 @property (strong, nonatomic) NSMutableArray *messages;
 @property (copy, nonatomic) User *user;
@@ -176,6 +173,8 @@
     self.roomId = roomId;
     self.eventName = eventName;
     
+    [Message hasReadMessagesInRoom:self.roomId];
+    
     if (self.members.count > 0) {
         self.members = members;
         
@@ -265,21 +264,25 @@
                                                                    inSection:0]]
                              withRowAnimation:UITableViewRowAnimationAutomatic];
     [self.messagesList endUpdates];
-    
-    if(self.isKeyBoardShowing) {
-        self.input.frame = CGRectMake(0, self.frame.size.height - 40 - self.keyBoardHeight, self.frame.size.width - 60, 40);
-        self.btnSend.frame = CGRectMake(self.frame.size.width - 60, self.frame.size.height - 40 - self.keyBoardHeight, 60, 40);
-    } else {
-        self.btnSend.frame = CGRectMake(self.frame.size.width - 60, self.frame.size.height - 40, 60, 40);
-        self.input.frame = CGRectMake(0, self.frame.size.height - 40, self.frame.size.width - 60, 40);
-    }
-    
+
     self.sendTxt.frame = CGRectMake(0,self.btnSend.bounds.size.height - 29,self.btnSend.bounds.size.width,20);
     self.input.text = @"";
     
     self.inputNumLines = 1;
     self.canCheckScrollDown = NO;
     [self scrollToBottom:YES];
+    
+    if (self.isKeyBoardShowing) {
+        CGRect textFrame = CGRectMake(0, self.frame.size.height - 40 - self.keyBoardHeight, self.frame.size.width - 60, 40);
+        textFrame.size.height += 20 * (self.inputNumLines - 1);
+        textFrame.origin.y -= 20 * (self.inputNumLines - 1);
+        self.input.frame = textFrame;
+        
+        self.btnSend.frame = CGRectMake(self.frame.size.width - 60, self.frame.size.height - 40 - self.keyBoardHeight, 60, 40);
+    } else {
+        self.btnSend.frame = CGRectMake(self.frame.size.width - 60, self.frame.size.height - 40, 60, 40);
+        self.input.frame = CGRectMake(0, self.frame.size.height - 40, self.frame.size.width - 60, 40);
+    }
     
     [Message sendMessageWithRoomId:self.roomId
                           senderId:self.sharedData.fb_id

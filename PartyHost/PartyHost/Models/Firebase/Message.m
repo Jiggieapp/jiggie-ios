@@ -47,6 +47,14 @@
     }];
 }
 
++ (void)hasReadMessagesInRoom:(NSString *)roomId {
+    FIRDatabaseReference *reference = [[[[Room reference] child:roomId] child:@"info"] child:@"unread"];
+    SharedData *sharedData = [SharedData sharedInstance];
+    NSDictionary *parameters = @{sharedData.fb_id : [NSNumber numberWithInt:0]};
+    
+    [reference updateChildValues:parameters];
+}
+
 + (void)sendMessageWithRoomId:(NSString *)roomId
                      senderId:(NSString *)fbId
                       members:(NSDictionary *)members
@@ -66,8 +74,22 @@
             
             [reference updateChildValues:parameters];
             
-            reference = [[Room membersReference] child:roomId];
+            NSMutableDictionary *unreads = [NSMutableDictionary
+                                            dictionaryWithDictionary:[[NSUserDefaults standardUserDefaults]
+                                                                      objectForKey:@"CURRENT_UNREAD_MEMBERS"]];
+            [unreads removeObjectForKey:fbId];
             
+            if (unreads.count > 0) {
+                for (NSString *key in [unreads allKeys]) {
+                    NSNumber *value = [NSNumber numberWithInteger:[[unreads objectForKey:key] intValue] + 1];
+                    [unreads setObject:value forKey:key];
+                }
+                
+                reference = [reference child:@"unread"];
+                [reference updateChildValues:unreads];
+            }
+            
+            reference = [[Room membersReference] child:roomId];
             [reference updateChildValues:members];
         }
     }];

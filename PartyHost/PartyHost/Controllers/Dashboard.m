@@ -475,6 +475,12 @@
      name:@"EXIT_FEED_MATCH"
      object:nil];
     
+    [[NSNotificationCenter defaultCenter]
+     addObserver:self
+     selector:@selector(updateChatBadge:)
+     name:@"TOTAL_UNREAD_MESSAGES"
+     object:nil];
+    
     
     //[self performSelector:@selector(testapp) withObject:nil afterDelay:8.0];
     
@@ -686,6 +692,10 @@
      {
          self.feedMatch.hidden = YES;
      }];
+}
+
+- (void)updateChatBadge:(NSNotification *)notification {
+    [self.chatBadge updateValue:[notification.object intValue]];
 }
 
 -(void)showMore

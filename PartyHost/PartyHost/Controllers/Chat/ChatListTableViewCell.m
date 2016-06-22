@@ -60,10 +60,14 @@
 }
 
 - (void)configureChatListWithRoomInfo:(NSObject *)roomInfo {
+    SharedData *sharedData = [SharedData sharedInstance];
+    
     if ([roomInfo isKindOfClass:[RoomPrivateInfo class]]) {
         RoomPrivateInfo *info = (RoomPrivateInfo *)roomInfo;
-        SharedData *sharedData = [SharedData sharedInstance];
         NSString *friendFbId = [RoomPrivateInfo getFriendFbIdFromIdentifier:info.identifier fbId:sharedData.fb_id];
+        NSNumber *badgeValue = [info.unreads objectForKey:sharedData.fb_id];
+        
+        [self.unreadBadgeView updateValue:[badgeValue intValue]];
         
         [User retrieveUserInfoWithFbId:friendFbId andCompletionHandler:^(User *user, NSError *error) {
             if (user) {
@@ -76,7 +80,9 @@
         [self.dateLabel setText:[[NSDate dateWithTimeIntervalSince1970:info.updatedAt / 1000] timeAgo]];
     } else {
         RoomGroupInfo *info = (RoomGroupInfo *)roomInfo;
+        NSNumber *badgeValue = [info.unreads objectForKey:sharedData.fb_id];
         
+        [self.unreadBadgeView updateValue:[badgeValue intValue]];
         [self.photoImageView sd_setImageWithURL:[NSURL URLWithString:info.avatarURL]];
         [self.nameLabel setText:info.event];
         [self.lastMessageLabel setText:info.lastMessage];
