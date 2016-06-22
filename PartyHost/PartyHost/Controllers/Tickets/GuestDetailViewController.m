@@ -49,10 +49,8 @@
     self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 60, self.visibleSize.width, self.visibleSize.height - 60 - 54)];
     [self.view addSubview:self.scrollView];
     
-    
-    BOOL isIDEnabled = YES;
     CGFloat offsetY = 0;
-    if (isIDEnabled) {
+    if (self.isIDNumberEnabled) {
         UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(0, offsetY, self.visibleSize.width, 1)];
         [lineView setBackgroundColor:[UIColor phLightGrayColor]];
         [self.scrollView addSubview:lineView];
@@ -222,6 +220,10 @@
 
 - (void)loadData {
     NSDictionary *userInfo = [UserManager loadUserTicketInfo];
+    
+    if (self.isIDNumberEnabled && ![[userInfo objectForKey:@"identity_id"] isEqualToString:@""]) {
+        self.idNumberTextField.text = [userInfo objectForKey:@"identity_id"];
+    }
     
     if (![[userInfo objectForKey:@"name"] isEqualToString:@""]) {
         self.nameTextField.text = [userInfo objectForKey:@"name"];

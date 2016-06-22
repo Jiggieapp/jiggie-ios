@@ -22,4 +22,6 @@
 @property (nonatomic, strong) UIImageView *idNumberAlert;
 @property (nonatomic, strong) UIImageView *emailAlert;
 
+@property (nonatomic, assign) BOOL isIDNumberEnabled;
+
 @end
