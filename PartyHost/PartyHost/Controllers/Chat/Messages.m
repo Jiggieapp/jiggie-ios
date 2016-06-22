@@ -180,7 +180,7 @@
         
         [self initClass];
     } else {
-        self.reference = [[Room reference] child:roomId];
+        self.reference = [[[[Room reference] child:roomId] child:@"info"] child:@"unread"];
         
         [self.reference observeEventType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
             if (![snapshot.value isEqual:[NSNull null]]) {
@@ -232,8 +232,10 @@
             }
             
             [Message retrieveMessagesWithRoomId:self.roomId andCompletionHandler:^(NSArray *messages, NSError *error) {
-                self.loadingView.alpha = .0;
-                self.loadingView.hidden = YES;
+                if (!self.loadingView.hidden) {
+                    self.loadingView.hidden = YES;
+                }
+                
                 self.messages = [NSMutableArray arrayWithArray:messages];
                 [self.messagesList reloadData];
             }];
@@ -241,8 +243,10 @@
     } else {
         [self.toLabel setText:self.eventName];
         [Message retrieveMessagesWithRoomId:self.roomId andCompletionHandler:^(NSArray *messages, NSError *error) {
-            self.loadingView.alpha = .0;
-            self.loadingView.hidden = YES;
+            if (!self.loadingView.hidden) {
+                self.loadingView.hidden = YES;
+            }
+            
             self.messages = [NSMutableArray arrayWithArray:messages];
             [self.messagesList reloadData];
         }];
@@ -273,12 +277,8 @@
     [self scrollToBottom:YES];
     
     if (self.isKeyBoardShowing) {
-        CGRect textFrame = CGRectMake(0, self.frame.size.height - 40 - self.keyBoardHeight, self.frame.size.width - 60, 40);
-        textFrame.size.height += 20 * (self.inputNumLines - 1);
-        textFrame.origin.y -= 20 * (self.inputNumLines - 1);
-        self.input.frame = textFrame;
-        
         self.btnSend.frame = CGRectMake(self.frame.size.width - 60, self.frame.size.height - 40 - self.keyBoardHeight, 60, 40);
+        self.input.frame = CGRectMake(0, self.frame.size.height - 40 - self.keyBoardHeight, self.frame.size.width - 60, 40);
     } else {
         self.btnSend.frame = CGRectMake(self.frame.size.width - 60, self.frame.size.height - 40, 60, 40);
         self.input.frame = CGRectMake(0, self.frame.size.height - 40, self.frame.size.width - 60, 40);
@@ -287,7 +287,41 @@
     [Message sendMessageWithRoomId:self.roomId
                           senderId:self.sharedData.fb_id
                            members:self.members
-                              text:text];
+                              text:text
+              andCompletionHandler:^(NSString *key, NSError *error) {
+                  if (!error) {
+                      AFHTTPRequestOperationManager *manager = [self.sharedData getOperationManager];
+                      
+                      if ([self.roomId containsString:@"_"]) {
+                          NSString *friendFbId = [RoomPrivateInfo getFriendFbIdFromIdentifier:self.roomId
+                                                                                         fbId:self.sharedData.fb_id];
+                          
+                          NSString *url = [NSString stringWithFormat:@"%@/messages/add", PHBaseNewURL];
+                          NSDictionary *params = @{@"fromId" : self.sharedData.fb_id,
+                                                   @"toId" : friendFbId,
+                                                   @"message" : text,
+                                                   @"header" : @"",
+                                                   @"fromName" : [self.sharedData.userDict[@"first_name"] lowercaseString],
+                                                   @"key" : key,
+                                                   @"hosting_id" :@""};
+                          
+                          [manager POST:url parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                              [[AnalyticManager sharedManager] trackMixPanelIncrementWithDict:@{@"send_message" : @1}];
+                          } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                          }];
+                      } else {
+                          NSString *url = [NSString stringWithFormat:@"%@/group/notif", PHBaseNewURL];
+                          NSDictionary *params = @{@"fb_id" : self.sharedData.fb_id,
+                                                   @"event_id" : self.roomId,
+                                                   @"message" : text};
+                          
+                          [manager POST:url parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                              [[AnalyticManager sharedManager] trackMixPanelIncrementWithDict:@{@"send_message" : @1}];
+                          } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                          }];
+                      }
+                  }
+              }];
 }
 
 #pragma mark - Action
@@ -321,6 +355,7 @@
     
     if(sender.state == UIGestureRecognizerStateEnded) {
         self.btnSendDimView.hidden = YES;
+
         [self sendMessageWithText:[self.sharedData clipSpace:self.input.text]];
         
     }
@@ -581,22 +616,26 @@
 //}
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSString *text = ((Message *)self.messages[indexPath.row]).text;
-    text = [text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    if (self.messages.count > 0) {
+        NSString *text = ((Message *)self.messages[indexPath.row]).text;
+        text = [text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+        
+        UITextView *calculationView = [[UITextView alloc] initWithFrame:CGRectMake(70,
+                                                                                   0,
+                                                                                   self.frame.size.width - 20 - 70,
+                                                                                   30)];
+        calculationView.font = [UIFont phBlond:self.sharedData.messageFontSize];
+        [calculationView setText:text];
+        [calculationView sizeToFit];
+        
+        CGRect boundingRect = calculationView.frame;
+        
+        int newHeight = (boundingRect.size.height + 44 < 70)?70:boundingRect.size.height + 44;
+        
+        return newHeight;
+    }
     
-    UITextView *calculationView = [[UITextView alloc] initWithFrame:CGRectMake(70,
-                                                                               0,
-                                                                               self.frame.size.width - 20 - 70,
-                                                                               30)];
-    calculationView.font = [UIFont phBlond:self.sharedData.messageFontSize];
-    [calculationView setText:text];
-    [calculationView sizeToFit];
-    
-    CGRect boundingRect = calculationView.frame;
-    
-    int newHeight = (boundingRect.size.height + 44 < 70)?70:boundingRect.size.height + 44;
-    
-    return newHeight;
+    return 0;
 }
 
 
@@ -612,8 +651,10 @@
     cell.backgroundColor = [UIColor clearColor];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
-    Message *message = self.messages[indexPath.row];
-    [cell configureMessage:message];
+    if (self.messages.count > 0) {
+        Message *message = self.messages[indexPath.row];
+        [cell configureMessage:message];
+    }
     
     return cell;
 }

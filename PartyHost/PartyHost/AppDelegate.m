@@ -48,6 +48,8 @@ static NSString *const kAllowTracking = @"allowTracking";
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    NSSetUncaughtExceptionHandler(&HandleExceptions);
+    
     [[UINavigationBar appearance] setBackIndicatorImage:[UIImage imageNamed:@"nav_back_new"]];
     [[UINavigationBar appearance] setBackIndicatorTransitionMaskImage:[UIImage imageNamed:@"nav_back_new"]];
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
@@ -413,6 +415,12 @@ static NSString *const kAllowTracking = @"allowTracking";
     [prefs synchronize];
 }
 
+void HandleExceptions(NSException *exception) {
+    NSLog(@"The app has encountered an unhandled exception: %@", [exception debugDescription]);
+    
+    [[FIRDatabase database] setPersistenceEnabled:NO];
+}
+
 - (BOOL)application:(UIApplication *)application
 continueUserActivity:(NSUserActivity *)userActivity
  restorationHandler:(void (^)(NSArray *restorableObjects))restorationHandler {
@@ -609,24 +617,19 @@ continueUserActivity:(NSUserActivity *)userActivity
     if ( application.applicationState == UIApplicationStateActive ) {
         // app was already in the foreground
         
-        if([[userInfo objectForKey:@"type"]  isEqualToString:@"message"])
-        {
-            
+        if([[userInfo objectForKey:@"type"]  isEqualToString:@"message"]) {
+            NSString *roomId = [userInfo objectForKey:@"room_id"];
             self.sharedData.fromMailId = [userInfo objectForKey:@"fromFBId"];
             self.sharedData.fromMailName = [userInfo objectForKey:@"fromName"];
 
-            if(self.sharedData.isInConversation && [self.sharedData.conversationId isEqualToString:self.sharedData.fromMailId])
-            {
-                [[NSNotificationCenter defaultCenter]
-                 postNotificationName:@"UPDATE_CURRENT_CONVERSATION"
-                 object:self];
-            }else{
-                [[NSNotificationCenter defaultCenter]
-                 postNotificationName:@"UPDATE_CONVERSATION_LIST"
-                 object:self];
-
-                if(!self.isShowNotification)
-                {
+            if (self.sharedData.isInConversation && [self.sharedData.conversationId isEqualToString:self.sharedData.fromMailId]) {
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"UPDATE_CURRENT_CONVERSATION"
+                                                                    object:roomId];
+            } else {
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"UPDATE_CONVERSATION_LIST"
+                                                                    object:roomId];
+                
+                if(!self.isShowNotification) {
                     [self showChatNotification:[userInfo objectForKey:@"fromName"] withMessage:[userInfo objectForKey:@"message"] withImage:[self.sharedData profileImg:self.sharedData.fromMailId]];
                 }
             }
@@ -653,16 +656,18 @@ continueUserActivity:(NSUserActivity *)userActivity
         } else if([[userInfo objectForKey:@"type"]  isEqualToString:@"match"])
         {
             // app was just brought from background to foreground
+            NSString *roomId = [userInfo objectForKey:@"room_id"];
             self.sharedData.fromMailId = [userInfo objectForKey:@"fromFBId"];
             self.sharedData.fromMailName = [userInfo objectForKey:@"fromName"];
-            [self goToMessages];
+            [self goToMessagesWithRoomId:roomId];
             
         } else if([[userInfo objectForKey:@"type"]  isEqualToString:@"message"])
         {
             // app was just brought from background to foreground
+            NSString *roomId = [userInfo objectForKey:@"room_id"];
             self.sharedData.fromMailId = [userInfo objectForKey:@"fromFBId"];
             self.sharedData.fromMailName = [userInfo objectForKey:@"fromName"];
-            [self goToMessages];
+            [self goToMessagesWithRoomId:roomId];
             
         } else if([[userInfo objectForKey:@"type"]  isEqualToString:@"social"])
         {
@@ -857,25 +862,22 @@ continueUserActivity:(NSUserActivity *)userActivity
     }
     
     [self performSelector:@selector(goToMessages) withObject:nil afterDelay:setTime];
-    [UIView animateWithDuration:0.25 animations:^()
-     {
+    [UIView animateWithDuration:0.25 animations:^() {
          self.btnNotify.frame = CGRectMake(0, -65, self.window.frame.size.width, 65);
-     } completion:^(BOOL finished)
-     {
+     } completion:^(BOOL finished) {
          [self.btnNotify removeFromSuperview];
          self.btnNotify = nil;
      }];
 }
 
--(void)goToMessages
-{
+- (void)goToMessagesWithRoomId:(NSString *)roomId {
     self.sharedData.conversationId = self.sharedData.fromMailId;
     self.sharedData.messagesPage.toId = self.sharedData.fromMailId;
     self.sharedData.messagesPage.toLabel.text = [self.sharedData.fromMailName uppercaseString];
     self.sharedData.toImgURL = [self.sharedData profileImg:self.sharedData.fromMailId];
-    [[NSNotificationCenter defaultCenter]
-     postNotificationName:@"SHOW_MESSAGES"
-     object:self];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"SHOW_MESSAGES"
+                                                        object:roomId];
 }
 
 

@@ -58,7 +58,8 @@
 + (void)sendMessageWithRoomId:(NSString *)roomId
                      senderId:(NSString *)fbId
                       members:(NSDictionary *)members
-                         text:(NSString *)text {
+                         text:(NSString *)text
+         andCompletionHandler:(SendMessageCompletionHandler)completion {
     FIRDatabaseReference *reference = [[Message referenceWithRoomId:roomId] childByAutoId];
     NSDictionary *parameters = @{@"created_at" : [FIRServerValue timestamp],
                                  @"fb_id" : fbId,
@@ -86,11 +87,15 @@
                 }
                 
                 reference = [reference child:@"unread"];
-                [reference updateChildValues:unreads];
+                [reference setValue:unreads];
             }
             
             reference = [[Room membersReference] child:roomId];
             [reference updateChildValues:members];
+        }
+        
+        if (completion) {
+            completion(ref.key, error);
         }
     }];
 }

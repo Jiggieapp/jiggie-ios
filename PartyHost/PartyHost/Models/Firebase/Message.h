@@ -9,6 +9,9 @@
 #import <Foundation/Foundation.h>
 #import "Mantle.h"
 
+typedef void (^SendMessageCompletionHandler)(NSString *key,
+                                             NSError *error);
+
 typedef void (^MessagesCompletionHandler)(NSArray *messages,
                                           NSError *error);
 
@@ -30,6 +33,7 @@ typedef void (^MessagesCompletionHandler)(NSArray *messages,
 + (void)sendMessageWithRoomId:(NSString *)roomId
                      senderId:(NSString *)fbId
                       members:(NSDictionary *)members
-                      text:(NSString *)text;
+                         text:(NSString *)text
+         andCompletionHandler:(SendMessageCompletionHandler)completion;
 
 @end
