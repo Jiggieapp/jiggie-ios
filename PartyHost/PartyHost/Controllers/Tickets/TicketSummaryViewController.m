@@ -303,7 +303,7 @@ NSInteger const MaxBookingTableGuest = 100;
     [sharedData.mixPanelCTicketDict setObject:[self.productSelected objectForKey:@"ticket_type"] forKey:@"Ticket Type"];
     [sharedData.mixPanelCTicketDict setObject:[self.productSelected objectForKey:@"price"] forKey:@"Ticket Price"];
     if (self.isTicketProduct) {
-       [sharedData.mixPanelCTicketDict setObject:[self.productSelected objectForKey:@"max_purchase"] forKey:@"Ticket Max Per Guest"];
+        [sharedData.mixPanelCTicketDict setObject:[self.productSelected objectForKey:@"max_purchase"] forKey:@"Ticket Max Per Guest"];
     } else {
         [sharedData.mixPanelCTicketDict setObject:[self.productSelected objectForKey:@"max_guests"] forKey:@"Ticket Max Per Guest"];
     }

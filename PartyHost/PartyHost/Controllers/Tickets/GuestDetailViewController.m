@@ -59,7 +59,7 @@
         [self.idNumberTextField setBackgroundColor:[UIColor clearColor]];
         [self.idNumberTextField setPlaceholder:@"ID Card Number (KTP)"];
         [self.idNumberTextField setFont:[UIFont phBlond:13]];
-        [self.idNumberTextField setKeyboardType:UIKeyboardTypeNumberPad];
+        [self.idNumberTextField setKeyboardType:UIKeyboardTypeDefault];
         [self.idNumberTextField setReturnKeyType:UIReturnKeyDone];
         [self.idNumberTextField setDelegate:self];
         [self.scrollView addSubview:self.idNumberTextField];
@@ -69,13 +69,6 @@
         [self.idNumberAlert setBackgroundColor:[UIColor clearColor]];
         [self.idNumberAlert setHidden:YES];
         [self.scrollView addSubview:self.idNumberAlert];
-        
-        UIToolbar* numberToolbar = [[UIToolbar alloc]initWithFrame:CGRectMake(0, 0, self.visibleSize.width, 50)];
-        numberToolbar.barStyle = UIBarStyleDefault;
-        numberToolbar.items = @[[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil],
-                                [[UIBarButtonItem alloc]initWithTitle:@"Next" style:UIBarButtonItemStyleDone target:self action:@selector(nextWithNumberPad)]];
-        [numberToolbar sizeToFit];
-        self.idNumberTextField.inputAccessoryView = numberToolbar;
         
         offsetY = CGRectGetMaxY(lineView.frame) + 50;
     }
@@ -289,10 +282,6 @@
 
 - (void)doneWithNumberPad {
     [self.phoneTextField resignFirstResponder];
-}
-
-- (void)nextWithNumberPad {
-    [self.nameTextField becomeFirstResponder];
 }
 
 #pragma mark - UITextFieldDelegate

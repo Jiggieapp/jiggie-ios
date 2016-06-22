@@ -895,10 +895,7 @@
         components = [cal components:(NSCalendarUnitEra | NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay) fromDate:event.startDatetime];
         NSDate *startDate = [cal dateFromComponents:components];
         
-        components = [cal components:(NSCalendarUnitEra | NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay) fromDate:event.endDatetime];
-        NSDate *endDate = [cal dateFromComponents:components];
-        
-        if([today isEqualToDate:endDate]) {
+        if([today compare:startDate] == NSOrderedDescending) {
             [self.eventsToday addObject:event];
         } else if([today isEqualToDate:startDate]) {
             [self.eventsToday addObject:event];

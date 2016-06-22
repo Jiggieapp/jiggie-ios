@@ -7,7 +7,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="161" id="KGk-i7-Jjw" customClass="EventsThemeCell">
+        <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" rowHeight="161" id="KGk-i7-Jjw" customClass="EventsThemeCell">
             <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
@@ -22,7 +22,9 @@
                     <constraint firstItem="qGb-le-gCu" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="IYh-E6-F6R"/>
                     <constraint firstAttribute="trailing" secondItem="qGb-le-gCu" secondAttribute="trailing" id="Ifl-Dz-t56"/>
                     <constraint firstItem="qGb-le-gCu" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="Tgh-oP-zWu"/>
-                    <constraint firstAttribute="bottom" secondItem="qGb-le-gCu" secondAttribute="bottom" id="qX2-DS-RXX"/>
+                    <constraint firstAttribute="bottom" secondItem="qGb-le-gCu" secondAttribute="bottom" id="qX2-DS-RXX">
+                        <variation key="heightClass=regular-widthClass=compact" constant="4"/>
+                    </constraint>
                 </constraints>
                 <variation key="default">
                     <mask key="subviews">
