@@ -255,7 +255,7 @@
         
         [SVProgressHUD showErrorWithStatus:@"Invalid Email Format"];
         return;
-    } else if (self.idNumberTextField.text.length < 9) {
+    } else if (self.idNumberTextField.text.length < 8) {
         [self.idNumberTextField setTextColor:[UIColor redColor]];
         [self.idNumberAlert setHidden:NO];
         
