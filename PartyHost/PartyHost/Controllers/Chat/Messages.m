@@ -337,6 +337,7 @@
     self.sharedData.isInConversation = NO;
     self.user = nil;
     self.messages = nil;
+    [self.messagesList reloadData];
     
     [self.toLabel setText:nil];
     [self endEditing:YES];
