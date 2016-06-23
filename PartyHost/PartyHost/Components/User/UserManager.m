@@ -89,6 +89,7 @@ static UserManager *_sharedManager = nil;
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     [prefs removeObjectForKey:@"INVITE_CREDIT"];
     [prefs removeObjectForKey:@"user.setting"];
+    [prefs removeObjectForKey:@"IS_ALREADY_MIGRATED_TO_FIREBASE"];
     [prefs synchronize];
     
     AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
