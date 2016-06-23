@@ -87,11 +87,19 @@
                 }
                 
                 reference = [reference child:@"unread"];
-                [reference setValue:unreads];
+                [reference updateChildValues:unreads];
+            }
+            
+            NSMutableDictionary *membersDict = [NSMutableDictionary dictionaryWithDictionary:members];
+            [membersDict removeObjectForKey:fbId];
+            
+            for (NSString *key in [membersDict allKeys]) {
+                [membersDict setObject:[NSNumber numberWithBool:YES]
+                                forKey:key];
             }
             
             reference = [[Room membersReference] child:roomId];
-            [reference updateChildValues:members];
+            [reference updateChildValues:membersDict];
         }
         
         if (completion) {

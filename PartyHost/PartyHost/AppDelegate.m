@@ -618,16 +618,16 @@ continueUserActivity:(NSUserActivity *)userActivity
         // app was already in the foreground
         
         if([[userInfo objectForKey:@"type"]  isEqualToString:@"message"]) {
-            NSString *roomId = [userInfo objectForKey:@"room_id"];
+            self.roomId = [userInfo objectForKey:@"room_id"];
             self.sharedData.fromMailId = [userInfo objectForKey:@"fromFBId"];
             self.sharedData.fromMailName = [userInfo objectForKey:@"fromName"];
 
             if (self.sharedData.isInConversation && [self.sharedData.conversationId isEqualToString:self.sharedData.fromMailId]) {
                 [[NSNotificationCenter defaultCenter] postNotificationName:@"UPDATE_CURRENT_CONVERSATION"
-                                                                    object:roomId];
+                                                                    object:self.roomId];
             } else {
                 [[NSNotificationCenter defaultCenter] postNotificationName:@"UPDATE_CONVERSATION_LIST"
-                                                                    object:roomId];
+                                                                    object:self.roomId];
                 
                 if(!self.isShowNotification) {
                     [self showChatNotification:[userInfo objectForKey:@"fromName"] withMessage:[userInfo objectForKey:@"message"] withImage:[self.sharedData profileImg:self.sharedData.fromMailId]];
@@ -656,18 +656,18 @@ continueUserActivity:(NSUserActivity *)userActivity
         } else if([[userInfo objectForKey:@"type"]  isEqualToString:@"match"])
         {
             // app was just brought from background to foreground
-            NSString *roomId = [userInfo objectForKey:@"room_id"];
+            self.roomId = [userInfo objectForKey:@"room_id"];
             self.sharedData.fromMailId = [userInfo objectForKey:@"fromFBId"];
             self.sharedData.fromMailName = [userInfo objectForKey:@"fromName"];
-            [self goToMessagesWithRoomId:roomId];
+            [self goToMessagesWithRoomId:self.roomId];
             
         } else if([[userInfo objectForKey:@"type"]  isEqualToString:@"message"])
         {
             // app was just brought from background to foreground
-            NSString *roomId = [userInfo objectForKey:@"room_id"];
+            self.roomId = [userInfo objectForKey:@"room_id"];
             self.sharedData.fromMailId = [userInfo objectForKey:@"fromFBId"];
             self.sharedData.fromMailName = [userInfo objectForKey:@"fromName"];
-            [self goToMessagesWithRoomId:roomId];
+            [self goToMessagesWithRoomId:self.roomId];
             
         } else if([[userInfo objectForKey:@"type"]  isEqualToString:@"social"])
         {
@@ -861,7 +861,7 @@ continueUserActivity:(NSUserActivity *)userActivity
          object:self];
     }
     
-    [self performSelector:@selector(goToMessages) withObject:nil afterDelay:setTime];
+    [self performSelector:@selector(goToMessagesWithRoomId:) withObject:self.roomId afterDelay:setTime];
     [UIView animateWithDuration:0.25 animations:^() {
          self.btnNotify.frame = CGRectMake(0, -65, self.window.frame.size.width, 65);
      } completion:^(BOOL finished) {

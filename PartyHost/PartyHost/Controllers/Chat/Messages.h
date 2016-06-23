@@ -32,6 +32,7 @@
 @property (nonatomic, assign) int inputNumLines;
 
 - (void)initClass;
+- (void)initClassWithRoomId:(NSString *)roomId;
 - (void)initClassWithRoomId:(NSString *)roomId
                     members:(NSDictionary *)members
                andEventName:(NSString *)eventName;

@@ -20,7 +20,8 @@
 
 @interface Messages () <UITableViewDelegate, UITableViewDataSource, UIActionSheetDelegate, UIAlertViewDelegate,UIScrollViewDelegate, UITextViewDelegate>
 
-@property (strong, nonatomic) FIRDatabaseReference *reference;
+@property (strong, nonatomic) FIRDatabaseReference *membersReference;
+@property (strong, nonatomic) FIRDatabaseReference *roomInfoReference;
 
 @property (nonatomic, assign) BOOL isKeyBoardShowing;
 @property (nonatomic, assign) CGFloat contentOffSetYToCompare;
@@ -169,28 +170,40 @@
     return self;
 }
 
+- (void)initClassWithRoomId:(NSString *)roomId {
+    self.roomId = roomId;
+    
+    [Message hasReadMessagesInRoom:self.roomId];
+    
+    self.roomInfoReference = [[Room reference] child:self.roomId];
+    
+    [self.roomInfoReference observeSingleEventOfType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
+        if (![snapshot.value isEqual:[NSNull null]]) {
+            [self initClassWithRoomId:self.roomId
+                              members:snapshot.value[@"members"]
+                         andEventName:snapshot.value[@"event"]];
+        }
+        
+    }];
+}
+
 - (void)initClassWithRoomId:(NSString *)roomId members:(NSDictionary *)members andEventName:(NSString *)eventName {
     self.roomId = roomId;
     self.eventName = eventName;
     
     [Message hasReadMessagesInRoom:self.roomId];
+    [self.loadingView setHidden:YES];
     
-    if (self.members.count > 0) {
-        self.members = members;
+    self.members = members;
+    self.membersReference = [[Room membersReference] child:self.roomId];
+    
+    [self.membersReference observeEventType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
+        if (![snapshot.value isEqual:[NSNull null]]) {
+            self.members = snapshot.value;
+        }
         
         [self initClass];
-    } else {
-        self.reference = [[[[Room reference] child:roomId] child:@"info"] child:@"unread"];
-        
-        [self.reference observeEventType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
-            if (![snapshot.value isEqual:[NSNull null]]) {
-                self.members = snapshot.value;
-            }
-            
-            [self initClass];
-        }];
-    }
-    
+    }];
 }
 
 - (void)initClass {
@@ -209,7 +222,7 @@
 #pragma mark - Data
 
 - (void)loadMessages {
-    [self.messages removeAllObjects];
+    [self.loadingView setHidden:NO];
     
     if ([self.roomId containsString:@"_"]) {
         if (![[self.eventName lowercaseString] isEqualToString:@"generic"]) {
@@ -232,22 +245,16 @@
             }
             
             [Message retrieveMessagesWithRoomId:self.roomId andCompletionHandler:^(NSArray *messages, NSError *error) {
-                if (!self.loadingView.hidden) {
-                    self.loadingView.hidden = YES;
-                }
-                
                 self.messages = [NSMutableArray arrayWithArray:messages];
+                [self.loadingView setHidden:YES];
                 [self.messagesList reloadData];
             }];
         }];
     } else {
         [self.toLabel setText:self.eventName];
         [Message retrieveMessagesWithRoomId:self.roomId andCompletionHandler:^(NSArray *messages, NSError *error) {
-            if (!self.loadingView.hidden) {
-                self.loadingView.hidden = YES;
-            }
-            
             self.messages = [NSMutableArray arrayWithArray:messages];
+            [self.loadingView setHidden:YES];
             [self.messagesList reloadData];
         }];
     }
@@ -329,9 +336,14 @@
 - (void)goBack {
     self.sharedData.isInConversation = NO;
     self.user = nil;
+    self.messages = nil;
     
     [self.toLabel setText:nil];
     [self endEditing:YES];
+    
+    [Message hasReadMessagesInRoom:self.roomId];
+    [self.membersReference removeAllObservers];
+    [self.roomInfoReference removeAllObservers];
     
     [[NSNotificationCenter defaultCenter] postNotificationName:@"EXIT_MESSAGES"
                                                         object:self];

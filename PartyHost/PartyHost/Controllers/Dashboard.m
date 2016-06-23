@@ -789,16 +789,20 @@
 }
 
 -(void)showMessages:(NSNotification *)notification {
-    NSDictionary *object = notification.object;
-    
-    if (object) {
+    if (notification.object) {
         [self.messagesPage reset];
         [UIView animateWithDuration:0.25 animations:^() {
             self.mainCon.frame = CGRectMake(-self.frame.size.width, 0, self.frame.size.width * 2, self.frame.size.height);
         } completion:^(BOOL finished) {
-            [self.messagesPage initClassWithRoomId:object[@"roomId"]
-                                           members:object[@"members"]
-                                      andEventName:object[@"eventName"]];
+            if ([notification.object isKindOfClass:[NSDictionary class]]) {
+                NSDictionary *object = notification.object;
+                
+                [self.messagesPage initClassWithRoomId:object[@"roomId"]
+                                               members:object[@"members"]
+                                          andEventName:object[@"eventName"]];
+            } else {
+                [self.messagesPage initClassWithRoomId:notification.object];
+            }
         }];
     }
 }
