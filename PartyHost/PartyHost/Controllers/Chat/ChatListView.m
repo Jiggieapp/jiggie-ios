@@ -166,12 +166,11 @@ static NSString *const kChatsCellIdentifier = @"ChatsCellIdentifier";
     
     if (direction == MGSwipeDirectionRightToLeft) {
         CGFloat padding = 15;
+        NSObject *roomInfo = [self.rooms objectAtIndex:[self.tableView indexPathForCell:cell].row];
         
-        MGSwipeButton *trash = [MGSwipeButton buttonWithTitle:@"Delete" backgroundColor:[UIColor redColor] padding:padding callback:^BOOL(MGSwipeTableCell *sender) {
-            
-            NSObject *roomInfo = [self.rooms objectAtIndex:[self.tableView indexPathForCell:sender].row];
-            
-            if ([roomInfo isKindOfClass:[RoomPrivateInfo class]]) {
+        if ([roomInfo isKindOfClass:[RoomPrivateInfo class]]) {
+            MGSwipeButton *trash = [MGSwipeButton buttonWithTitle:@"Delete" backgroundColor:[UIColor redColor] padding:padding callback:^BOOL(MGSwipeTableCell *sender) {
+                
                 RoomPrivateInfo *info = (RoomPrivateInfo *)roomInfo;
                 
                 self.roomId = info.identifier;
@@ -180,49 +179,46 @@ static NSString *const kChatsCellIdentifier = @"ChatsCellIdentifier";
                 [self showAlertViewWithTitle:@"Confirm"
                                      message:@"Are you sure you want to delete chat messages from this user?"
                                       andTag:5];
-            } else {
-                RoomGroupInfo *info = (RoomGroupInfo *)roomInfo;
-                self.roomId = info.identifier;
-                self.roomName = info.event;
-
-                [self showAlertViewWithTitle:@"Confirm"
-                                     message:@"Are you sure you want to delete chat messages from this group?"
-                                      andTag:5];
-            }
+                
+                return NO;
+            }];
             
-            
-            return NO;
-        }];
-        
-        MGSwipeButton * block = [MGSwipeButton buttonWithTitle:@"Block" backgroundColor:[UIColor grayColor] padding:padding callback:^BOOL(MGSwipeTableCell *sender) {
-            
-            self.roomName = ((ChatListTableViewCell *)cell).nameLabel.text;
-            NSObject *roomInfo = [self.rooms objectAtIndex:[self.tableView indexPathForCell:sender].row];
-            
-            if ([roomInfo isKindOfClass:[RoomPrivateInfo class]]) {
+            MGSwipeButton * block = [MGSwipeButton buttonWithTitle:@"Block" backgroundColor:[UIColor grayColor] padding:padding callback:^BOOL(MGSwipeTableCell *sender) {
+                
+                self.roomName = ((ChatListTableViewCell *)cell).nameLabel.text;
+                NSObject *roomInfo = [self.rooms objectAtIndex:[self.tableView indexPathForCell:sender].row];
+                
                 RoomPrivateInfo *info = (RoomPrivateInfo *)roomInfo;
                 
                 self.isBlockedUser = YES;
                 self.roomId = info.identifier;
-
+                
                 [self showAlertViewWithTitle:@"Confirm"
                                      message:@"Are you sure you want to block this user?"
                                       andTag:10];
-            } else {
+                
+                return NO;
+            }];
+            
+            return @[block, trash];
+        } else {
+            MGSwipeButton *exit = [MGSwipeButton buttonWithTitle:@"Exit" backgroundColor:[UIColor grayColor] padding:padding callback:^BOOL(MGSwipeTableCell *sender) {
+                
+                self.roomName = ((ChatListTableViewCell *)cell).nameLabel.text;
                 RoomGroupInfo *info = (RoomGroupInfo *)roomInfo;
                 
                 self.isBlockedUser = NO;
                 self.roomId = info.identifier;
                 
                 [self showAlertViewWithTitle:@"Confirm"
-                                     message:@"Are you sure you want to block this group?"
+                                     message:@"Are you sure you want to exit this group?"
                                       andTag:10];
-            }
+                
+                return NO;
+            }];
             
-            return NO;
-        }];
-        
-        return @[block, trash];
+            return @[exit];
+        }
     }
     
     return nil;
@@ -281,14 +277,14 @@ static NSString *const kChatsCellIdentifier = @"ChatsCellIdentifier";
                 SharedData *sharedData = [SharedData sharedInstance];
                 [Room blockRoomWithRoomId:self.roomId withFbId:sharedData.fb_id andCompletionHandler:^(NSError *error) {
                     if (error) {
-                        [self showAlertViewWithTitle:@"Blocked Group"
+                        [self showAlertViewWithTitle:@"Exit Group"
                                           andMessage:@"Fail."];
                     } else {
-                        [self showAlertViewWithTitle:@"Blocked Group"
-                                          andMessage:[NSString stringWithFormat:@"%@ has been blocked",
+                        [self showAlertViewWithTitle:@"Exit Group"
+                                          andMessage:[NSString stringWithFormat:@"You have exited %@ group",
                                                       self.roomName]];
                         
-                        [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Block Group"
+                        [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Exit Group"
                                                                       withDict:@{@"origin" : @"Chat"}];
                     }
                     

@@ -257,6 +257,7 @@
             }];
         }];
     } else {
+        [self.btnInfo setEnabled:YES];
         [self.toLabel setText:self.eventName];
         [Message retrieveMessagesWithRoomId:self.roomId andCompletionHandler:^(NSArray *messages, NSError *error) {
             self.messages = [NSMutableArray arrayWithArray:messages];
@@ -504,6 +505,8 @@
         toName = [self.eventName capitalizedString];
     }
     
+    NSString *blockTitle = self.user ? [NSString stringWithFormat:@"Block %@?",toName] : [NSString stringWithFormat:@"Exit %@?",toName];
+    
     if (self.sharedData.osVersion >= 8) {
         UIAlertController *alertController = [UIAlertController
                                               alertControllerWithTitle:NULL
@@ -515,12 +518,14 @@
                                        style:UIAlertActionStyleCancel
                                        handler:nil];
         
+        NSString *blockAlertTitle = self.user ? @"Block" : @"Exit";
+        NSString *blockAlertMessage = self.user ? @"Are you sure you want to block this user?" : @"Are you sure you want to exit from this group?";
         UIAlertAction *blockAction = [UIAlertAction
-                                      actionWithTitle:[NSString stringWithFormat:@"Block %@?",toName]
+                                      actionWithTitle:blockTitle
                                       style:UIAlertActionStyleDestructive
                                       handler:^(UIAlertAction *action) {
-                                          UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Block"
-                                                                                          message:[NSString stringWithFormat:@"Are you sure you want to block this %@?", self.user ? @"user" : @"group"]
+                                          UIAlertView *alert = [[UIAlertView alloc] initWithTitle:blockAlertTitle
+                                                                                          message:blockAlertMessage
                                                                                          delegate:self
                                                                                 cancelButtonTitle:@"Cancel"
                                                                                 otherButtonTitles:@"OK", nil];
@@ -528,7 +533,7 @@
                                       }];
         
         UIAlertAction *profileAction = [UIAlertAction
-                                        actionWithTitle:self.user ? [NSString stringWithFormat:@"%@'s Profile", toName] : toName
+                                        actionWithTitle:self.user ? [NSString stringWithFormat:@"%@'s Profile", toName] : [NSString stringWithFormat:@"View %@", toName]
                                         style:UIAlertActionStyleDefault
                                         handler:^(UIAlertAction *action) {
                                             if (self.user) {
@@ -544,8 +549,12 @@
         
         [self.window.rootViewController presentViewController:alertController animated:YES completion:nil];
     } else {
-        NSString *profileName = self.user ? [NSString stringWithFormat:@"%@'s Profile", toName] : toName;
-        UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:profileName,[NSString stringWithFormat:@"Block %@?", toName],nil];
+        NSString *profileName = self.user ? [NSString stringWithFormat:@"%@'s Profile", toName] : [NSString stringWithFormat:@"View %@", toName];
+        UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil
+                                                                 delegate:self
+                                                        cancelButtonTitle:@"Cancel"
+                                                   destructiveButtonTitle:nil
+                                                        otherButtonTitles:profileName, blockTitle ,nil];
         
         [actionSheet showInView:self];
     }
@@ -749,8 +758,10 @@
             [self performSelector:@selector(showEventDetail) withObject:nil afterDelay:0.1];
         }
     } else if (buttonIndex == 1) {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Block"
-                                                        message:[NSString stringWithFormat:@"Are you sure you want to block this %@?", self.user ? @"user" : @"group"]
+        NSString *blockAlertTitle = self.user ? @"Block" : @"Exit";
+        NSString *blockAlertMessage = self.user ? @"Are you sure you want to block this user?" : @"Are you sure you want to exit from this group?";
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:blockAlertTitle
+                                                        message:blockAlertMessage
                                                        delegate:self
                                               cancelButtonTitle:@"Cancel"
                                               otherButtonTitles:@"OK", nil];
@@ -783,15 +794,15 @@
             [SVProgressHUD show];
             [Room blockRoomWithRoomId:self.roomId withFbId:self.sharedData.fb_id andCompletionHandler:^(NSError *error) {
                 if (error) {
-                    [self showAlertViewWithTitle:@"Blocked Group"
+                    [self showAlertViewWithTitle:@"Exit Group"
                                       andMessage:@"Fail."];
                 } else {
                     [self goBack];
-                    [self showAlertViewWithTitle:@"Blocked Group"
-                                      andMessage:[NSString stringWithFormat:@"%@ has been blocked",
+                    [self showAlertViewWithTitle:@"Exit Group"
+                                      andMessage:[NSString stringWithFormat:@"You have exited %@ group",
                                                   self.eventName]];
                     
-                    [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Block Group"
+                    [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Exit Group"
                                                                   withDict:@{@"origin" : @"Chat"}];
                 }
                 
