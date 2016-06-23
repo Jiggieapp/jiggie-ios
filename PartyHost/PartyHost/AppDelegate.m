@@ -200,7 +200,7 @@ static NSString *const kAllowTracking = @"allowTracking";
     
     // set up tooltip
     [JGTooltipHelper setUpTooltip];
-
+    
     return YES;
 }
 

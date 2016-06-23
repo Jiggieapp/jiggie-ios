@@ -374,24 +374,40 @@
             return [[self.fetchedResultsController fetchedObjects] count];
         }
     }
-    
-    
-    
+
     return 0;
 }
 
-- (CGFloat)tableView:(UITableView *)tableView
-estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    if ([indexPath section] == 0) {
-        return 300;
-    }
-    return UITableViewAutomaticDimension;
-}
+//- (CGFloat)tableView:(UITableView *)tableView
+//estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath {
+//    if ([indexPath section] == 0) {
+//        return 300;
+//    }
+//    return UITableViewAutomaticDimension;
+//}
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     if ([indexPath section] == 0) {
-        return UITableViewAutomaticDimension;
+        if ([[[UIDevice currentDevice] systemVersion] compare:@"8.0" options:NSNumericSearch] != NSOrderedAscending) {
+            return UITableViewAutomaticDimension;
+        } else {
+            static NSString *simpleTableIdentifier = @"EventsThemeHeaderCell";
+            EventThemeHeaderCell *cell = [tableView dequeueReusableCellWithIdentifier:simpleTableIdentifier];
+            Theme *theme = self.cTheme;
+            if (theme && theme != nil) {
+                [cell loadData:theme];
+            }
+            
+            [cell setNeedsUpdateConstraints];
+            [cell updateConstraintsIfNeeded];
+            [cell setNeedsLayout];
+            [cell layoutIfNeeded];
+            
+            CGFloat height = [cell.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize].height;
+            
+            return height += 1;
+        }
     } else if ([indexPath section] == 1) {
         if ([[self.fetchedResultsController fetchedObjects] count] > 0) {
             CGFloat pictureHeightRatio = 3.0 / 4.0;
