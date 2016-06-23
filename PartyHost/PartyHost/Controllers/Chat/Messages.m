@@ -202,6 +202,7 @@
             self.members = snapshot.value;
         }
         
+        [self scrollToBottom:NO];
         [self initClass];
     }];
 }
