@@ -173,6 +173,7 @@
 - (void)initClassWithRoomId:(NSString *)roomId {
     self.roomId = roomId;
     
+    [self.btnInfo setEnabled:NO];
     [Message hasReadMessagesInRoom:self.roomId];
     
     self.roomInfoReference = [[Room reference] child:self.roomId];
@@ -191,6 +192,7 @@
     self.roomId = roomId;
     self.eventName = eventName;
     
+    [self.btnInfo setEnabled:NO];
     [Message hasReadMessagesInRoom:self.roomId];
     [self.loadingView setHidden:YES];
     
@@ -243,6 +245,9 @@
             if (user) {
                 self.user = user;
                 [self.toLabel setText:user.name];
+                [self.btnInfo setEnabled:YES];
+            } else {
+                [self.btnInfo setEnabled:NO];
             }
             
             [Message retrieveMessagesWithRoomId:self.roomId andCompletionHandler:^(NSArray *messages, NSError *error) {
