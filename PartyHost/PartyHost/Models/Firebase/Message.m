@@ -47,10 +47,19 @@
     }];
 }
 
++ (void)hasReadMessagesInRoom:(NSString *)roomId {
+    FIRDatabaseReference *reference = [[[[Room reference] child:roomId] child:@"info"] child:@"unread"];
+    SharedData *sharedData = [SharedData sharedInstance];
+    NSDictionary *parameters = @{sharedData.fb_id : [NSNumber numberWithInt:0]};
+    
+    [reference updateChildValues:parameters];
+}
+
 + (void)sendMessageWithRoomId:(NSString *)roomId
                      senderId:(NSString *)fbId
                       members:(NSDictionary *)members
-                         text:(NSString *)text {
+                         text:(NSString *)text
+         andCompletionHandler:(SendMessageCompletionHandler)completion {
     FIRDatabaseReference *reference = [[Message referenceWithRoomId:roomId] childByAutoId];
     NSDictionary *parameters = @{@"created_at" : [FIRServerValue timestamp],
                                  @"fb_id" : fbId,
@@ -66,9 +75,35 @@
             
             [reference updateChildValues:parameters];
             
-            reference = [[Room membersReference] child:roomId];
+            NSMutableDictionary *unreads = [NSMutableDictionary
+                                            dictionaryWithDictionary:[[NSUserDefaults standardUserDefaults]
+                                                                      objectForKey:@"CURRENT_UNREAD_MEMBERS"]];
+            [unreads removeObjectForKey:fbId];
             
-            [reference updateChildValues:members];
+            if (unreads.count > 0) {
+                for (NSString *key in [unreads allKeys]) {
+                    NSNumber *value = [NSNumber numberWithInteger:[[unreads objectForKey:key] intValue] + 1];
+                    [unreads setObject:value forKey:key];
+                }
+                
+                reference = [reference child:@"unread"];
+                [reference updateChildValues:unreads];
+            }
+            
+            NSMutableDictionary *membersDict = [NSMutableDictionary dictionaryWithDictionary:members];
+            [membersDict removeObjectForKey:fbId];
+            
+            for (NSString *key in [membersDict allKeys]) {
+                [membersDict setObject:[NSNumber numberWithBool:YES]
+                                forKey:key];
+            }
+            
+            reference = [[Room membersReference] child:roomId];
+            [reference updateChildValues:membersDict];
+        }
+        
+        if (completion) {
+            completion(ref.key, error);
         }
     }];
 }

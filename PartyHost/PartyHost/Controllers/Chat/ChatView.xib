@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10116" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10116" systemVersion="15B42" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
@@ -310,32 +310,27 @@
                 </scrollView>
                 <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="9DK-Qz-33V">
                     <rect key="frame" x="-10" y="-10" width="20" height="20"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                 </activityIndicatorView>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <constraints>
-                <constraint firstItem="9DK-Qz-33V" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="282" id="2Z3-jB-G4e">
-                    <variation key="heightClass=regular-widthClass=compact" constant="0.0"/>
-                </constraint>
-                <constraint firstItem="9DK-Qz-33V" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="281" id="5SY-dJ-QYs">
-                    <variation key="heightClass=regular-widthClass=compact" constant="0.0"/>
-                </constraint>
                 <constraint firstItem="l39-fs-8kg" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="HMj-cf-5ag"/>
                 <constraint firstAttribute="bottom" secondItem="l39-fs-8kg" secondAttribute="bottom" id="IPl-oK-JyI"/>
                 <constraint firstItem="BZk-5g-tUc" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="Lio-IC-EkA"/>
-                <constraint firstAttribute="bottom" secondItem="9DK-Qz-33V" secondAttribute="bottom" constant="281" id="Lmo-H0-lEm">
-                    <variation key="heightClass=regular-widthClass=compact" constant="0.0"/>
-                </constraint>
                 <constraint firstAttribute="trailing" secondItem="FKn-hk-2F0" secondAttribute="trailing" id="Oya-Jg-7Nx"/>
                 <constraint firstItem="FKn-hk-2F0" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="PEc-9G-ytj"/>
                 <constraint firstItem="l39-fs-8kg" firstAttribute="top" secondItem="BZk-5g-tUc" secondAttribute="bottom" id="Y6g-QH-Bcn"/>
                 <constraint firstItem="BZk-5g-tUc" firstAttribute="top" secondItem="FKn-hk-2F0" secondAttribute="bottom" id="Z7C-pr-Wi3"/>
                 <constraint firstItem="FKn-hk-2F0" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="cg1-5f-aq1"/>
                 <constraint firstAttribute="trailing" secondItem="BZk-5g-tUc" secondAttribute="trailing" id="gIK-58-poj"/>
-                <constraint firstAttribute="trailing" secondItem="l39-fs-8kg" secondAttribute="trailing" id="lkk-Lh-mBT"/>
-                <constraint firstAttribute="trailing" secondItem="9DK-Qz-33V" secondAttribute="trailing" constant="282" id="n2p-2O-h2n">
-                    <variation key="heightClass=regular-widthClass=compact" constant="0.0"/>
+                <constraint firstItem="9DK-Qz-33V" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="iEh-8i-ZJ6">
+                    <variation key="heightClass=regular-widthClass=compact" constant="105"/>
                 </constraint>
+                <constraint firstAttribute="bottom" secondItem="9DK-Qz-33V" secondAttribute="bottom" id="k1O-b0-vPU"/>
+                <constraint firstAttribute="trailing" secondItem="l39-fs-8kg" secondAttribute="trailing" id="lkk-Lh-mBT"/>
+                <constraint firstAttribute="trailing" secondItem="9DK-Qz-33V" secondAttribute="trailing" id="qSM-xe-Ybl"/>
+                <constraint firstItem="9DK-Qz-33V" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="v9Z-p9-Es1"/>
             </constraints>
             <nil key="simulatedStatusBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
@@ -347,16 +342,16 @@
                     <exclude reference="9DK-Qz-33V"/>
                 </mask>
                 <mask key="constraints">
-                    <exclude reference="2Z3-jB-G4e"/>
-                    <exclude reference="5SY-dJ-QYs"/>
-                    <exclude reference="Lmo-H0-lEm"/>
-                    <exclude reference="n2p-2O-h2n"/>
-                    <exclude reference="Lio-IC-EkA"/>
-                    <exclude reference="Z7C-pr-Wi3"/>
-                    <exclude reference="gIK-58-poj"/>
+                    <exclude reference="iEh-8i-ZJ6"/>
+                    <exclude reference="k1O-b0-vPU"/>
+                    <exclude reference="qSM-xe-Ybl"/>
+                    <exclude reference="v9Z-p9-Es1"/>
                     <exclude reference="Oya-Jg-7Nx"/>
                     <exclude reference="PEc-9G-ytj"/>
                     <exclude reference="cg1-5f-aq1"/>
+                    <exclude reference="Lio-IC-EkA"/>
+                    <exclude reference="Z7C-pr-Wi3"/>
+                    <exclude reference="gIK-58-poj"/>
                     <exclude reference="HMj-cf-5ag"/>
                     <exclude reference="IPl-oK-JyI"/>
                     <exclude reference="Y6g-QH-Bcn"/>
@@ -371,16 +366,16 @@
                     <include reference="9DK-Qz-33V"/>
                 </mask>
                 <mask key="constraints">
-                    <include reference="2Z3-jB-G4e"/>
-                    <include reference="5SY-dJ-QYs"/>
-                    <include reference="Lmo-H0-lEm"/>
-                    <include reference="n2p-2O-h2n"/>
-                    <include reference="Lio-IC-EkA"/>
-                    <include reference="Z7C-pr-Wi3"/>
-                    <include reference="gIK-58-poj"/>
+                    <include reference="iEh-8i-ZJ6"/>
+                    <include reference="k1O-b0-vPU"/>
+                    <include reference="qSM-xe-Ybl"/>
+                    <include reference="v9Z-p9-Es1"/>
                     <include reference="Oya-Jg-7Nx"/>
                     <include reference="PEc-9G-ytj"/>
                     <include reference="cg1-5f-aq1"/>
+                    <include reference="Lio-IC-EkA"/>
+                    <include reference="Z7C-pr-Wi3"/>
+                    <include reference="gIK-58-poj"/>
                     <include reference="HMj-cf-5ag"/>
                     <include reference="IPl-oK-JyI"/>
                     <include reference="Y6g-QH-Bcn"/>

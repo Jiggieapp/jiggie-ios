@@ -15,6 +15,7 @@
              @"identifier" : @"identifier",
              @"lastMessage" : @"last_message",
              @"updatedAt" : @"updated_at",
+             @"unreads" : @"unread",
              @"members" : @"members"};
 }
 

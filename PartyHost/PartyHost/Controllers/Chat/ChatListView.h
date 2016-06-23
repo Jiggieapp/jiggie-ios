@@ -11,6 +11,7 @@
 @interface ChatListView : UIView
 
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
+@property (strong, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicatorView;
 
 + (ChatListView *)instanceFromNib;
 
