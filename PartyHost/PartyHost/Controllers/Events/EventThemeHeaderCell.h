@@ -15,6 +15,8 @@
 @property (weak, nonatomic) IBOutlet UILabel *themeTitleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *themeDescLabel;
 
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *imageConstraintHeight;
+
 + (UINib *)nib;
 - (void)loadData:(Theme *)theme;
 

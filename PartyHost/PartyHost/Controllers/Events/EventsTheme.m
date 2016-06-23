@@ -80,7 +80,11 @@
     
     if (theme) {
         self.cTheme = theme;
+        [self.titleLabel setText:theme.name];
         [self loadData:theme.themeID];
+        
+        NSDictionary *mixpanelDict = @{@"Theme Name": theme.name};
+        [[AnalyticManager sharedManager] trackMixPanelWithDict:@"View Theme" withDict:mixpanelDict];
     }
     
     [self reset];
@@ -89,7 +93,9 @@
 
 - (void)reset {
     [self.emptyView setMode:@"load"];
-    [self.tableView setContentOffset:CGPointZero];
+    [self.tableView setContentOffset:CGPointMake(0, 0)];
+//    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+//    [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
 }
 
 - (void)closeButtonDidTap:(id)sender {
@@ -163,16 +169,7 @@
 }
 
 - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
-    //    self.eventsList.hidden = NO;
-    [self.emptyView setMode:@"hide"];
-    
-    if ([[self.fetchedResultsController fetchedObjects] count] == 0) {
-        [self.emptyView setMode:@"empty"];
-    }
-    
-    if (self.needUpdateContents) {
-        [self.tableView reloadData];
-    }
+
 }
 
 #pragma mark - Data
@@ -378,13 +375,14 @@
     return 0;
 }
 
-//- (CGFloat)tableView:(UITableView *)tableView
-//estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath {
-//    if ([indexPath section] == 0) {
-//        return 300;
-//    }
-//    return UITableViewAutomaticDimension;
-//}
+- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    if ([[[UIDevice currentDevice] systemVersion] compare:@"8.0" options:NSNumericSearch] != NSOrderedAscending) {
+        if ([indexPath section] == 0) {
+            return 400;
+        }
+    }
+    return UITableViewAutomaticDimension;
+}
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     
@@ -520,5 +518,8 @@
     }
 }
 
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    NSLog(@"SCROLL : %@", NSStringFromCGPoint(scrollView.contentOffset));
+}
 
 @end
