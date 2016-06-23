@@ -49,10 +49,8 @@
     self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 60, self.visibleSize.width, self.visibleSize.height - 60 - 54)];
     [self.view addSubview:self.scrollView];
     
-    
-    BOOL isIDEnabled = YES;
     CGFloat offsetY = 0;
-    if (isIDEnabled) {
+    if (self.isIDNumberEnabled) {
         UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(0, offsetY, self.visibleSize.width, 1)];
         [lineView setBackgroundColor:[UIColor phLightGrayColor]];
         [self.scrollView addSubview:lineView];
@@ -61,7 +59,7 @@
         [self.idNumberTextField setBackgroundColor:[UIColor clearColor]];
         [self.idNumberTextField setPlaceholder:@"ID Card Number (KTP)"];
         [self.idNumberTextField setFont:[UIFont phBlond:13]];
-        [self.idNumberTextField setKeyboardType:UIKeyboardTypeNumberPad];
+        [self.idNumberTextField setKeyboardType:UIKeyboardTypeDefault];
         [self.idNumberTextField setReturnKeyType:UIReturnKeyDone];
         [self.idNumberTextField setDelegate:self];
         [self.scrollView addSubview:self.idNumberTextField];
@@ -71,13 +69,6 @@
         [self.idNumberAlert setBackgroundColor:[UIColor clearColor]];
         [self.idNumberAlert setHidden:YES];
         [self.scrollView addSubview:self.idNumberAlert];
-        
-        UIToolbar* numberToolbar = [[UIToolbar alloc]initWithFrame:CGRectMake(0, 0, self.visibleSize.width, 50)];
-        numberToolbar.barStyle = UIBarStyleDefault;
-        numberToolbar.items = @[[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil],
-                                [[UIBarButtonItem alloc]initWithTitle:@"Next" style:UIBarButtonItemStyleDone target:self action:@selector(nextWithNumberPad)]];
-        [numberToolbar sizeToFit];
-        self.idNumberTextField.inputAccessoryView = numberToolbar;
         
         offsetY = CGRectGetMaxY(lineView.frame) + 50;
     }
@@ -141,12 +132,14 @@
     [self.phoneTextField setDelegate:self];
     [self.scrollView addSubview:self.phoneTextField];
     
-    UIToolbar* numberToolbar = [[UIToolbar alloc]initWithFrame:CGRectMake(0, 0, self.visibleSize.width, 50)];
-    numberToolbar.barStyle = UIBarStyleDefault;
-    numberToolbar.items = @[[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil],
-                            [[UIBarButtonItem alloc]initWithTitle:@"Done" style:UIBarButtonItemStyleDone target:self action:@selector(doneWithNumberPad)]];
-    [numberToolbar sizeToFit];
-    self.phoneTextField.inputAccessoryView = numberToolbar;
+    if ([[[UIDevice currentDevice] systemVersion] compare:@"8.0" options:NSNumericSearch] != NSOrderedAscending) {
+        UIToolbar* numberToolbar = [[UIToolbar alloc]initWithFrame:CGRectMake(0, 0, self.visibleSize.width, 50)];
+        numberToolbar.barStyle = UIBarStyleDefault;
+        numberToolbar.items = @[[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil],
+                                [[UIBarButtonItem alloc]initWithTitle:@"Done" style:UIBarButtonItemStyleDone target:self action:@selector(doneWithNumberPad)]];
+        [numberToolbar sizeToFit];
+        self.phoneTextField.inputAccessoryView = numberToolbar;
+    }
     
     UIView *line4View = [[UIView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(line3View.frame) + 50, self.visibleSize.width, 1)];
     [line4View setBackgroundColor:[UIColor phLightGrayColor]];
@@ -223,6 +216,10 @@
 - (void)loadData {
     NSDictionary *userInfo = [UserManager loadUserTicketInfo];
     
+    if (self.isIDNumberEnabled && ![[userInfo objectForKey:@"identity_id"] isEqualToString:@""]) {
+        self.idNumberTextField.text = [userInfo objectForKey:@"identity_id"];
+    }
+    
     if (![[userInfo objectForKey:@"name"] isEqualToString:@""]) {
         self.nameTextField.text = [userInfo objectForKey:@"name"];
     }
@@ -260,7 +257,7 @@
         
         [SVProgressHUD showErrorWithStatus:@"Invalid Email Format"];
         return;
-    } else if (self.idNumberTextField.text.length < 9) {
+    } else if (self.idNumberTextField.text.length < 8) {
         [self.idNumberTextField setTextColor:[UIColor redColor]];
         [self.idNumberAlert setHidden:NO];
         
@@ -287,10 +284,6 @@
 
 - (void)doneWithNumberPad {
     [self.phoneTextField resignFirstResponder];
-}
-
-- (void)nextWithNumberPad {
-    [self.nameTextField becomeFirstResponder];
 }
 
 #pragma mark - UITextFieldDelegate

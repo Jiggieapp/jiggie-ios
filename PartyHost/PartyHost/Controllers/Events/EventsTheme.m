@@ -89,6 +89,7 @@
 
 - (void)reset {
     [self.emptyView setMode:@"load"];
+    [self.tableView setContentOffset:CGPointZero];
 }
 
 - (void)closeButtonDidTap:(id)sender {
