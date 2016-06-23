@@ -30,7 +30,10 @@
         NSError *error;
         
         if (![snapshot.value isEqual:[NSNull null]]) {
-            User *user = [MTLJSONAdapter modelOfClass:[User class] fromJSONDictionary:snapshot.value error:&error];
+            NSMutableDictionary *dictionary = [NSMutableDictionary dictionaryWithDictionary:snapshot.value];
+            [dictionary setObject:snapshot.key forKey:@"fb_id"];
+            
+            User *user = [MTLJSONAdapter modelOfClass:[User class] fromJSONDictionary:dictionary error:&error];
             
             if (completion) {
                 completion(user, error);
