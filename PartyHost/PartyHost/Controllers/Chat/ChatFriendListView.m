@@ -10,6 +10,8 @@
 #import "ChatListTableViewCell.h"
 #import "Friend.h"
 #import "RoomPrivateInfo.h"
+#import "SVProgressHUD.h"
+#import "Friend.h"
 
 static NSString *const kFriendConvoCellIdentifier = @"FriendConvoCellIdentifier";
 
@@ -103,12 +105,39 @@ static NSString *const kFriendConvoCellIdentifier = @"FriendConvoCellIdentifier"
     SharedData *sharedData = [SharedData sharedInstance];
     Friend *friend = self.friends[indexPath.row];
     
-    NSDictionary *object = @{@"roomId" : [RoomPrivateInfo getPrivateMessageIdWithsenderId:sharedData.fb_id
-                                                                            andReceiverId:friend.fbID],
-                             @"eventName" : @"generic"};
-    
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"SHOW_MESSAGES"
-                                                        object:object];
+    if (friend.connectState == FriendStateNotConnected) {
+        [SVProgressHUD show];
+        [Friend connectFriend:@[friend.fbID] WithCompletionHandler:^(BOOL success,
+                                                                     NSString *message,
+                                                                     NSInteger statusCode,
+                                                                     NSError *error) {
+            [SVProgressHUD dismiss];
+            
+            if (error == nil && success) {
+                NSMutableArray *friends = [NSMutableArray arrayWithArray:self.friends];
+                [friend setFriendConnectState:FriendStateConnected];
+                [friends replaceObjectAtIndex:indexPath.row withObject:friend];
+                [Friend archiveObject:friends];
+                
+                self.friends = friends;
+                [self.tableView reloadData];
+                
+                NSDictionary *object = @{@"roomId" : [RoomPrivateInfo getPrivateMessageIdWithsenderId:sharedData.fb_id
+                                                                                        andReceiverId:friend.fbID],
+                                         @"eventName" : @"generic"};
+                
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"SHOW_MESSAGES"
+                                                                    object:object];
+            }
+        }];
+    } else {
+        NSDictionary *object = @{@"roomId" : [RoomPrivateInfo getPrivateMessageIdWithsenderId:sharedData.fb_id
+                                                                                andReceiverId:friend.fbID],
+                                 @"eventName" : @"generic"};
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"SHOW_MESSAGES"
+                                                            object:object];
+    }
 }
 
 @end

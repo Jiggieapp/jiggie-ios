@@ -33,6 +33,8 @@ typedef void (^ConnectFriendCompletionHandler)(BOOL success,
 @property (copy, nonatomic, readonly) NSString *about;
 @property (assign, nonatomic, readonly) FriendState connectState;
 
+- (void)setFriendConnectState:(FriendState *)connectState;
+
 + (NSString *)pathToArchive;
 + (void)archiveObject:(NSArray *)object;
 + (NSArray *)unarchiveObject;

@@ -9,6 +9,7 @@
 #import "FeedMatch.h"
 #import "SharedData.h"
 #import "Messages.h"
+#import "RoomPrivateInfo.h"
 
 @implementation FeedMatch
 
@@ -124,7 +125,8 @@
     
     [[NSNotificationCenter defaultCenter]
      postNotificationName:@"SHOW_MESSAGES"
-     object:self];
+     object:[RoomPrivateInfo getPrivateMessageIdWithsenderId:self.sharedData.fb_id
+                                               andReceiverId:self.fromFBId]];
     
     [[NSNotificationCenter defaultCenter]
      postNotificationName:@"EXIT_FEED_MATCH"
