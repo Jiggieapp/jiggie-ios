@@ -132,12 +132,14 @@
     [self.phoneTextField setDelegate:self];
     [self.scrollView addSubview:self.phoneTextField];
     
-    UIToolbar* numberToolbar = [[UIToolbar alloc]initWithFrame:CGRectMake(0, 0, self.visibleSize.width, 50)];
-    numberToolbar.barStyle = UIBarStyleDefault;
-    numberToolbar.items = @[[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil],
-                            [[UIBarButtonItem alloc]initWithTitle:@"Done" style:UIBarButtonItemStyleDone target:self action:@selector(doneWithNumberPad)]];
-    [numberToolbar sizeToFit];
-    self.phoneTextField.inputAccessoryView = numberToolbar;
+    if ([[[UIDevice currentDevice] systemVersion] compare:@"8.0" options:NSNumericSearch] != NSOrderedAscending) {
+        UIToolbar* numberToolbar = [[UIToolbar alloc]initWithFrame:CGRectMake(0, 0, self.visibleSize.width, 50)];
+        numberToolbar.barStyle = UIBarStyleDefault;
+        numberToolbar.items = @[[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil],
+                                [[UIBarButtonItem alloc]initWithTitle:@"Done" style:UIBarButtonItemStyleDone target:self action:@selector(doneWithNumberPad)]];
+        [numberToolbar sizeToFit];
+        self.phoneTextField.inputAccessoryView = numberToolbar;
+    }
     
     UIView *line4View = [[UIView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(line3View.frame) + 50, self.visibleSize.width, 1)];
     [line4View setBackgroundColor:[UIColor phLightGrayColor]];

@@ -701,11 +701,14 @@ NSInteger const MaxBookingTableGuest = 100;
         emptyCounter++;
     }
     
-    NSString *sourceName = self.productSelected [@"source"][@"name"];
-    if (sourceName && [sourceName isEqualToString:@"loket"]) {
-        if (![userInfo objectForKey:@"identity_id"] || [[userInfo objectForKey:@"identity_id"] isEqualToString:@""]) {
-            [self.userBox setImage:[[UIImage imageNamed:@"bg_rectangle_red"] stretchableImageWithLeftCapWidth:10 topCapHeight:10]];
-            self.isAllowToContinue = NO;
+    NSDictionary *source = [self.productSelected objectForKey:@"source"];
+    if (source && ![source isEqual:[NSNull null]]) {
+        NSString *sourceName = [source objectForKey:@"name"];
+        if (sourceName && [sourceName isEqualToString:@"loket"]) {
+            if (![userInfo objectForKey:@"identity_id"] || [[userInfo objectForKey:@"identity_id"] isEqualToString:@""]) {
+                [self.userBox setImage:[[UIImage imageNamed:@"bg_rectangle_red"] stretchableImageWithLeftCapWidth:10 topCapHeight:10]];
+                self.isAllowToContinue = NO;
+            }
         }
     }
     
