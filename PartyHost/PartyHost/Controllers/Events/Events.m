@@ -1088,7 +1088,9 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     if ([indexPath section] == 0) {
-        return 300;
+        CGFloat pictureHeightRatio = 3.0 / 4.0;
+        CGFloat cellHeight = pictureHeightRatio * tableView.bounds.size.width + 4;
+        return cellHeight;
     }
     
     if ([tableView isEqual:self.events1List] && self.eventsToday.count == 0) {

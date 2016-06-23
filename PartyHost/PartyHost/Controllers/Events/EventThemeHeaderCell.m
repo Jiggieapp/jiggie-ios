@@ -19,6 +19,14 @@
 - (void)awakeFromNib {
     [super awakeFromNib];
     // Initialization code
+    
+    if ([[[UIDevice currentDevice] systemVersion] compare:@"8.0" options:NSNumericSearch] == NSOrderedAscending) {
+        [self.contentView setTranslatesAutoresizingMaskIntoConstraints:YES];
+        self.contentView.frame = self.bounds;
+        self.contentView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleRightMargin |UIViewAutoresizingFlexibleTopMargin |UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleBottomMargin;
+        
+        [self.themeDescLabel setPreferredMaxLayoutWidth:304];
+    }
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
@@ -38,6 +46,14 @@
         [self.themeTitleLabel setText:theme.name];
         [self.themeDescLabel setText:theme.desc];        
     }
+}
+
+- (void)layoutSubviews {
+    [super layoutSubviews];
+
+    CGFloat pictureHeightRatio = 3.0 / 4.0;
+    CGFloat imageContentHeight = pictureHeightRatio * self.contentView.bounds.size.width;
+    self.imageConstraintHeight.constant = imageContentHeight;
 }
 
 @end
