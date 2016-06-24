@@ -7,21 +7,21 @@
 	<key>AD_UNIT_ID_FOR_INTERSTITIAL_TEST</key>
 	<string>ca-app-pub-3940256099942544/4411468910</string>
 	<key>CLIENT_ID</key>
-	<string>680009696864-5kblk6r678tru7hhofi7ng3dpg5knk19.apps.googleusercontent.com</string>
+	<string>540424998611-hlmjvhnmj91298ripou25h0at0odlhtg.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.680009696864-5kblk6r678tru7hhofi7ng3dpg5knk19</string>
+	<string>com.googleusercontent.apps.540424998611-hlmjvhnmj91298ripou25h0at0odlhtg</string>
 	<key>API_KEY</key>
-	<string>AIzaSyDtxZ7QU6udLW-_qCkzgiOqS5wuHaMKKMQ</string>
+	<string>AIzaSyAy9A0qgcgYhlKHmILiEEAfpBpU3lnZEiQ</string>
 	<key>GCM_SENDER_ID</key>
-	<string>680009696864</string>
+	<string>540424998611</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.partyhost.jiggie</string>
+	<string>com.partyhost.jiggiedev</string>
 	<key>PROJECT_ID</key>
-	<string>jiggie-1196</string>
+	<string>jiggie-dev</string>
 	<key>STORAGE_BUCKET</key>
-	<string>jiggie-1196.appspot.com</string>
+	<string>jiggie-dev.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<true/>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -33,8 +33,8 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true/>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:680009696864:ios:3c38586341b32456</string>
+	<string>1:540424998611:ios:6c4d0e6b6c0487f6</string>
 	<key>DATABASE_URL</key>
-	<string>https://jiggie-1196.firebaseio.com</string>
+	<string>https://jiggie-dev.firebaseio.com</string>
 </dict>
 </plist>
