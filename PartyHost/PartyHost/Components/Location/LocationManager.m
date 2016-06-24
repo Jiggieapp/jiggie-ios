@@ -45,6 +45,8 @@
 - (void)startUpdatingLocation {
     if ([self.location respondsToSelector:@selector(requestWhenInUseAuthorization)]) {
         [self.location requestWhenInUseAuthorization];
+    } else {
+        [self.location startUpdatingLocation];
     }
     
     if([CLLocationManager locationServicesEnabled]) {

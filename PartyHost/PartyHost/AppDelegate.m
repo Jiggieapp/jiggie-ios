@@ -366,6 +366,7 @@ static NSString *const kAllowTracking = @"allowTracking";
     
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    
     if([defaults objectForKey:@"SHOWED_WALKTHROUGH"]) {
         [[LocationManager manager] startUpdatingLocation];
         [[LocationManager manager] didUpdateLocationsWithCompletion:^(CLLocationDegrees latitude, CLLocationDegrees longitude) {
