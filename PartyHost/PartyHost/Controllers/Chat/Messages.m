@@ -227,7 +227,7 @@
 - (void)loadMessages {
     [self.loadingView setHidden:NO];
     
-    if ([self.roomId containsString:@"_"]) {
+    if ([self.roomId rangeOfString:@"_"].location != NSNotFound) {
         if (![[self.eventName lowercaseString] isEqualToString:@"generic"]) {
             UIView *view = [self headerViewWithText:self.eventName];
             UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(.0f, .0f, CGRectGetWidth(self.messagesList.bounds), CGRectGetHeight(view.bounds) + 20.0f)];
@@ -306,7 +306,7 @@
                   if (!error) {
                       AFHTTPRequestOperationManager *manager = [self.sharedData getOperationManager];
                       
-                      if ([self.roomId containsString:@"_"]) {
+                      if ([self.roomId rangeOfString:@"_"].location != NSNotFound) {
                           NSString *friendFbId = [RoomPrivateInfo getFriendFbIdFromIdentifier:self.roomId
                                                                                          fbId:self.sharedData.fb_id];
                           

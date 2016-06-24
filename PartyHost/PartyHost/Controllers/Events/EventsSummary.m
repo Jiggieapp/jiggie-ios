@@ -112,23 +112,23 @@
     [self.likeButton addTarget:self action:@selector(likeButtonDidTap:) forControlEvents:UIControlEventTouchUpInside];
     [self.mainScroll addSubview:self.likeButton];
     
-    self.likeCount = [[UILabel alloc] initWithFrame:CGRectMake(11 + 40 + 6, CGRectGetMaxY(self.picScroll.frame) + 20, 40, 20)];
+    self.likeCount = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(self.likeButton.frame) + 8, CGRectGetMaxY(self.picScroll.frame) + 20, 25, 20)];
     self.likeCount.textColor = [UIColor darkGrayColor];
     self.likeCount.adjustsFontSizeToFitWidth = YES;
     self.likeCount.font = [UIFont phBlond:15];
     [self.mainScroll addSubview:self.likeCount];
     
-    self.chatButton = [[UIButton alloc] initWithFrame:CGRectMake(11 + 80 + 16, CGRectGetMaxY(self.picScroll.frame) + 10, 40, 40)];
+    self.chatButton = [[UIButton alloc] initWithFrame:CGRectMake(CGRectGetMaxX(self.likeCount.frame) + 11, CGRectGetMaxY(self.picScroll.frame) + 10, 40, 40)];
     [self.chatButton setImage:[UIImage imageNamed:@"event-chat-icon"] forState:UIControlStateNormal];
     [self.chatButton setImageEdgeInsets:UIEdgeInsetsMake(5, 5, 5, 5)];
     [self.chatButton addTarget:self action:@selector(chatButtonDidTap:) forControlEvents:UIControlEventTouchUpInside];
     [self.mainScroll addSubview:self.chatButton];
     
-    self.membersCount = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(self.chatButton.frame) + 8, CGRectGetMaxY(self.picScroll.frame) + 20, 40, 20)];
+    self.membersCount = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(self.chatButton.frame) + 8, CGRectGetMaxY(self.picScroll.frame) + 20, 65, 20)];
     self.membersCount.textColor = [UIColor darkGrayColor];
     self.membersCount.adjustsFontSizeToFitWidth = YES;
     self.membersCount.font = [UIFont phBlond:15];
-    self.membersCount.text = @"0";
+    self.membersCount.text = @"Chat";
     [self.mainScroll addSubview:self.membersCount];
     
     self.shareButton = [[UIButton alloc] initWithFrame:CGRectMake(CGRectGetMaxX(self.membersCount.frame) + 11, CGRectGetMaxY(self.picScroll.frame) + 10, 40, 40)];
@@ -358,7 +358,7 @@
     [self.likeButton setEnabled:NO];
     [self.likeButton setSelected:NO];
     
-    [self.likeCount setText:@"0"];
+    [self.likeCount setText:@"Chat"];
     
     self.separator1.hidden = YES;
     
@@ -633,7 +633,7 @@
         
         NSInteger likeCount = [self.likeCount.text integerValue];
         likeCount--;
-        [self.likeCount setText:[NSString stringWithFormat:@"%li", likeCount]];
+        [self.likeCount setText:[NSString stringWithFormat:@"%li", (long)likeCount]];
         
         [self postLikeEvent:NO];
         
@@ -643,7 +643,7 @@
 
         NSInteger likeCount = [self.likeCount.text integerValue];
         likeCount++;
-        [self.likeCount setText:[NSString stringWithFormat:@"%li", likeCount]];
+        [self.likeCount setText:[NSString stringWithFormat:@"%li", (long)likeCount]];
         
         [self postLikeEvent:YES];
         
@@ -822,7 +822,13 @@
     [self.reference observeEventType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
         if (![snapshot.value isEqual:[NSNull null]]) {
             NSUInteger totalMembers = [snapshot.value allKeys].count;
-            [self.membersCount setText:[NSString stringWithFormat:@"%lu", (unsigned long)totalMembers]];
+            if (totalMembers > 99) {
+                [self.membersCount setText:@"Chat (99+)"];
+            } else {
+                [self.membersCount setText:[NSString stringWithFormat:@"Chat (%lu)", (unsigned long)totalMembers]];
+            }
+        } else {
+            [self.membersCount setText:@"Chat"];
         }
     }];
     

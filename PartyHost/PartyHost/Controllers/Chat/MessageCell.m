@@ -36,8 +36,6 @@
         myframe.size.width = self.sharedData.screenWidth;
         self.frame = myframe;
         
-        //NSLog(@"RECT :: %@",NSStringFromCGRect(screenBounds));
-        
         self.toIconCon = [[UIView alloc] initWithFrame:CGRectMake(10, 5, 50, 50)];
         self.toIconCon.layer.masksToBounds = YES;
         self.toIconCon.hidden = YES;
@@ -59,47 +57,27 @@
         self.myDateLabel.textAlignment = NSTextAlignmentRight;
         
         self.toMessage = [[UITextView alloc] initWithFrame:CGRectMake(70, 0, self.frame.size.width - 90, 30)];
-        //self.toMessage.backgroundColor = [self.sharedData colorWithHexString:@"292929"];
         self.toMessage.hidden = YES;
-        self.toMessage.userInteractionEnabled = YES;
+        self.toMessage.editable = NO;
         self.toMessage.font = [UIFont phBlond:self.sharedData.messageFontSize];
         self.toMessage.layer.borderWidth = 0;
         self.toMessage.layer.masksToBounds = YES;
         self.toMessage.layer.cornerRadius = 17;
         self.toMessage.textContainerInset = UIEdgeInsetsMake(7.0f, 8.0f, 20, 0.0);
-        self.toMessage.editable = NO;
-        self.toMessage.selectable = NO;
-        self.toMessage.userInteractionEnabled = NO;
-        //self.toMessage.contentInset = UIEdgeInsetsMake(0.0f, 0.0f, 30, 0);
         [self addSubview:self.toMessage];
         
         self.fromMessage = [[UITextView alloc] initWithFrame:CGRectMake(10, 0, self.frame.size.width - 30, 30)];
-        //self.fromMessage.backgroundColor = [UIColor whiteColor];
         self.fromMessage.hidden = YES;
-        self.fromMessage.userInteractionEnabled = NO;
+        self.fromMessage.editable = NO;
         self.fromMessage.font = [UIFont phBlond:self.sharedData.messageFontSize];
         self.fromMessage.layer.borderWidth = 0;
         self.fromMessage.layer.masksToBounds = YES;
         self.fromMessage.layer.cornerRadius = 17;
         self.fromMessage.textContainerInset = UIEdgeInsetsMake(7.0f, 8.0f, 20, 0.0);
-        //self.fromMessage.contentInset = UIEdgeInsetsMake(0.0f, 0.0f, 30, 0);
         [self addSubview:self.fromMessage];
-        
-        
-        self.triangle = [[MessageBubbleTriangle alloc] initWithFrame:CGRectMake(10, 40, 20, 20)];
-        self.triangle.hidden = YES;
-//        [self addSubview:self.triangle];
-        
         
         [self addSubview:self.dateLabel];
         [self addSubview:self.myDateLabel];
-        
-        CALayer *topBorder = [CALayer layer];
-        topBorder.borderColor = [UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:0.05].CGColor;
-        topBorder.borderWidth = 1;
-        topBorder.frame = CGRectMake(-1, 1, CGRectGetWidth(self.frame) + 1, 1);
-        
-        //[self.layer addSublayer:topBorder];
     }
     return self;
 }
@@ -128,14 +106,8 @@
     if(isMe) {
         self.fromMessage.textColor = [UIColor whiteColor];
         self.fromMessage.backgroundColor = [UIColor phBlueColor];
-        self.triangle.color = [UIColor phBlueColor];
-        
-        self.triangle.frame = CGRectMake(self.frame.size.width - 20, 17, 15, 15);
-        self.triangle.isRightSide = YES;
-        [self.triangle setNeedsDisplay];
-        
-        self.fromMessage.text = message.text;;
         self.fromMessage.frame = CGRectMake(10, 0, self.frame.size.width - 30, 30);
+        self.fromMessage.text = message.text;;
         [self.fromMessage sizeToFit];
         
         CGRect fromFrame = self.fromMessage.frame;
@@ -151,15 +123,8 @@
     } else {
         self.toMessage.backgroundColor = [UIColor phDarkGrayColor];
         self.toMessage.textColor = [UIColor whiteColor];
-        self.triangle.color = [UIColor phGrayColor];
-        
-        self.triangle.frame = CGRectMake(58, 17, 15, 15);
-        self.triangle.isRightSide = NO;
-        [self.triangle setNeedsDisplay];
-        
-        self.toMessage.text = message.text;
-        
         self.toMessage.frame = CGRectMake(70, 0, self.frame.size.width - 90, 30);
+        self.toMessage.text = message.text;
         [self.toMessage sizeToFit];
         
         CGRect toFrame = self.toMessage.frame;

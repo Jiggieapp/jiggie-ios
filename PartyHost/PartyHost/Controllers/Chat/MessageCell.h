@@ -16,7 +16,6 @@
 
 @property (nonatomic,strong) UIView *toIconCon;
 @property (nonatomic,strong) UserBubble *toIcon;
-@property (nonatomic,strong) MessageBubbleTriangle *triangle;
 @property (nonatomic,strong) UITextView *toMessage;
 @property (nonatomic,strong) UITextView *fromMessage;
 @property (nonatomic,strong) UILabel *dateLabel;
