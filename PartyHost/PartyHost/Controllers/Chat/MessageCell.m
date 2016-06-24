@@ -61,22 +61,19 @@
         self.toMessage = [[UITextView alloc] initWithFrame:CGRectMake(70, 0, self.frame.size.width - 90, 30)];
         //self.toMessage.backgroundColor = [self.sharedData colorWithHexString:@"292929"];
         self.toMessage.hidden = YES;
-        self.toMessage.userInteractionEnabled = YES;
+        self.toMessage.editable = NO;
         self.toMessage.font = [UIFont phBlond:self.sharedData.messageFontSize];
         self.toMessage.layer.borderWidth = 0;
         self.toMessage.layer.masksToBounds = YES;
         self.toMessage.layer.cornerRadius = 17;
         self.toMessage.textContainerInset = UIEdgeInsetsMake(7.0f, 8.0f, 20, 0.0);
-        self.toMessage.editable = NO;
-        self.toMessage.selectable = NO;
-        self.toMessage.userInteractionEnabled = NO;
         //self.toMessage.contentInset = UIEdgeInsetsMake(0.0f, 0.0f, 30, 0);
         [self addSubview:self.toMessage];
         
         self.fromMessage = [[UITextView alloc] initWithFrame:CGRectMake(10, 0, self.frame.size.width - 30, 30)];
         //self.fromMessage.backgroundColor = [UIColor whiteColor];
         self.fromMessage.hidden = YES;
-        self.fromMessage.userInteractionEnabled = NO;
+        self.fromMessage.editable = NO;
         self.fromMessage.font = [UIFont phBlond:self.sharedData.messageFontSize];
         self.fromMessage.layer.borderWidth = 0;
         self.fromMessage.layer.masksToBounds = YES;
