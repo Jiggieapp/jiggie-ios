@@ -306,7 +306,7 @@
                   if (!error) {
                       AFHTTPRequestOperationManager *manager = [self.sharedData getOperationManager];
                       
-                      if ([self.roomId containsString:@"_"]) {
+                      if ([self.roomId rangeOfString:@"_"].location != NSNotFound) {
                           NSString *friendFbId = [RoomPrivateInfo getFriendFbIdFromIdentifier:self.roomId
                                                                                          fbId:self.sharedData.fb_id];
                           

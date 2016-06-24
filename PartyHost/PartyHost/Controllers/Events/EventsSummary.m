@@ -112,7 +112,7 @@
     [self.likeButton addTarget:self action:@selector(likeButtonDidTap:) forControlEvents:UIControlEventTouchUpInside];
     [self.mainScroll addSubview:self.likeButton];
     
-    self.likeCount = [[UILabel alloc] initWithFrame:CGRectMake(11 + 40 + 6, CGRectGetMaxY(self.picScroll.frame) + 20, 40, 20)];
+    self.likeCount = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(self.likeButton.frame) + 8, CGRectGetMaxY(self.picScroll.frame) + 20, 25, 20)];
     self.likeCount.textColor = [UIColor darkGrayColor];
     self.likeCount.adjustsFontSizeToFitWidth = YES;
     self.likeCount.font = [UIFont phBlond:15];
@@ -124,7 +124,7 @@
     [self.chatButton addTarget:self action:@selector(chatButtonDidTap:) forControlEvents:UIControlEventTouchUpInside];
     [self.mainScroll addSubview:self.chatButton];
     
-    self.membersCount = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(self.chatButton.frame) + 8, CGRectGetMaxY(self.picScroll.frame) + 20, 70, 20)];
+    self.membersCount = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(self.chatButton.frame) + 8, CGRectGetMaxY(self.picScroll.frame) + 20, 65, 20)];
     self.membersCount.textColor = [UIColor darkGrayColor];
     self.membersCount.adjustsFontSizeToFitWidth = YES;
     self.membersCount.font = [UIFont phBlond:15];
@@ -633,7 +633,7 @@
         
         NSInteger likeCount = [self.likeCount.text integerValue];
         likeCount--;
-        [self.likeCount setText:[NSString stringWithFormat:@"%li", likeCount]];
+        [self.likeCount setText:[NSString stringWithFormat:@"%li", (long)likeCount]];
         
         [self postLikeEvent:NO];
         
@@ -643,7 +643,7 @@
 
         NSInteger likeCount = [self.likeCount.text integerValue];
         likeCount++;
-        [self.likeCount setText:[NSString stringWithFormat:@"%li", likeCount]];
+        [self.likeCount setText:[NSString stringWithFormat:@"%li", (long)likeCount]];
         
         [self postLikeEvent:YES];
         
