@@ -58,33 +58,8 @@
 }
 
 - (void)initClass {
-    BOOL isMigratedToFirebase = [[NSUserDefaults standardUserDefaults] boolForKey:@"IS_ALREADY_MIGRATED_TO_FIREBASE"];
-    
-    if (isMigratedToFirebase) {
-        [self.chatListView initClass];
-        [self.chatFriendListView initClass];
-    } else {
-        SharedData *sharedData = [SharedData sharedInstance];
-        AFHTTPRequestOperationManager *manager = [sharedData getOperationManager];
-        NSString *url = [NSString stringWithFormat:@"%@/chat/firebase/%@", PHBaseNewURL, sharedData.fb_id];
-        
-        [self.activityIndicatorView startAnimating];
-        [manager GET:url parameters:@{} success:^(AFHTTPRequestOperation *operation, id responseObject) {
-            if (operation.response.statusCode == 200) {
-                [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"IS_ALREADY_MIGRATED_TO_FIREBASE"];
-                [[NSUserDefaults standardUserDefaults] synchronize];
-                
-                [self.chatListView initClass];
-                [self.chatFriendListView initClass];
-            }
-            
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                [self.activityIndicatorView stopAnimating];
-            });
-        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-            [self.activityIndicatorView stopAnimating];
-        }];
-    }
+    [self.chatListView initClass];
+    [self.chatFriendListView initClass];
 }
 
 - (IBAction)didTapInviteButton:(id)sender {

@@ -241,6 +241,15 @@
 
 #pragma mark -
 
+- (void)retrieveMemberRooms {
+    [Room retrieveRoomsWithFbId:self.sharedData.fb_id andCompletionHandler:^(NSArray *rooms, NSError *error) {
+        if (!error) {
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"MEMBER_ROOMS"
+                                                                object:rooms];
+        }
+    }];
+}
+
 -(NSString *)getProfileAlbumId:(NSMutableArray *)dataA
 {
     NSString *albumId;
@@ -537,12 +546,25 @@
                           postNotificationName:@"HIDE_LOGIN"
                           object:self];
                          
-                         [Room retrieveRoomsWithFbId:self.sharedData.fb_id andCompletionHandler:^(NSArray *rooms, NSError *error) {
-                             if (!error) {
-                                 [[NSNotificationCenter defaultCenter] postNotificationName:@"MEMBER_ROOMS"
-                                                                                     object:rooms];
-                             }
-                         }];
+                         BOOL isMigratedToFirebase = [[NSUserDefaults standardUserDefaults] boolForKey:@"IS_ALREADY_MIGRATED_TO_FIREBASE"];
+                         
+                         if (isMigratedToFirebase) {
+                             [self retrieveMemberRooms];
+                         } else {
+                             SharedData *sharedData = [SharedData sharedInstance];
+                             AFHTTPRequestOperationManager *manager = [sharedData getOperationManager];
+                             NSString *url = [NSString stringWithFormat:@"%@/chat/firebase/%@", PHBaseNewURL, sharedData.fb_id];
+                             
+                             [manager GET:url parameters:@{} success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                                 if (operation.response.statusCode == 200) {
+                                     [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"IS_ALREADY_MIGRATED_TO_FIREBASE"];
+                                     [[NSUserDefaults standardUserDefaults] synchronize];
+                                     
+                                     [self retrieveMemberRooms];
+                                 }
+                             } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                             }];
+                         }
                          
                          [self checkAppsFlyerData];
                          [self performSelector:@selector(getUserImages) withObject:nil afterDelay:2.0];
