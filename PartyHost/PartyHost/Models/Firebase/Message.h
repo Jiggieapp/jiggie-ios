@@ -9,8 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "Mantle.h"
 
-typedef void (^SendMessageCompletionHandler)(NSString *key,
-                                             NSError *error);
+typedef void (^SendMessageCompletionHandler)(NSError *error);
 
 typedef void (^MessagesCompletionHandler)(NSArray *messages,
                                           NSError *error);
@@ -25,15 +24,15 @@ typedef void (^MessagesCompletionHandler)(NSArray *messages,
 + (FIRDatabaseReference *)reference;
 + (FIRDatabaseReference *)referenceWithRoomId:(NSString *)roomId;
 
-+ (void)retrieveMessagesWithRoomId:(NSString *)roomId
-              andCompletionHandler:(MessagesCompletionHandler)completion;
++ (FIRDatabaseReference *)retrieveMessagesWithRoomId:(NSString *)roomId
+                                andCompletionHandler:(MessagesCompletionHandler)completion;
 
 + (void)hasReadMessagesInRoom:(NSString *)roomId;
 
-+ (void)sendMessageWithRoomId:(NSString *)roomId
-                     senderId:(NSString *)fbId
-                      members:(NSDictionary *)members
-                         text:(NSString *)text
-         andCompletionHandler:(SendMessageCompletionHandler)completion;
++ (void)sendMessageToRoomId:(NSString *)roomId
+               withSenderId:(NSString *)senderId
+                 receiverId:(NSString *)receiverId
+                       text:(NSString *)text
+          completionHandler:(SendMessageCompletionHandler)completion;
 
 @end

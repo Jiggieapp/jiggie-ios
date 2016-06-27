@@ -43,56 +43,58 @@ static NSString *const kChatsCellIdentifier = @"ChatsCellIdentifier";
     [self.tableView registerNib:[ChatListTableViewCell nib] forCellReuseIdentifier:kChatsCellIdentifier];
     
     [self.activityIndicatorView stopAnimating];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(loadData:)
+                                                 name:@"MEMBER_ROOMS"
+                                               object:nil];
 }
 
 
 - (void)initClass {
-    if (self.rooms.count == 0) {
-        SharedData *sharedData = [SharedData sharedInstance];
+}
+
+- (void)loadData:(NSNotification *)notification {
+    NSArray *rooms = notification.object;
+    if (rooms) {
+        self.rooms = [Room retrieveRoomsInfoWithRooms:rooms];
+        [self.tableView reloadData];
         
-        [self.activityIndicatorView startAnimating];
-        [Room retrieveRoomsWithFbId:sharedData.fb_id andCompletionHandler:^(NSArray *rooms, NSError *error) {
+        if (self.rooms) {
+            SharedData *sharedData = [SharedData sharedInstance];
+            NSMutableArray *unreads = [NSMutableArray arrayWithArray:[[self.rooms valueForKey:@"unreads"] valueForKey:sharedData.fb_id]];
+            [unreads removeObjectIdenticalTo:[NSNull null]];
+            [unreads removeObject:[NSNumber numberWithInt:0]];
             
-            [self.activityIndicatorView stopAnimating];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"TOTAL_UNREAD_MESSAGES"
+                                                                object:[NSNumber numberWithInteger:unreads.count]];
+        }
+        
+        
+        NSString *roomId = [[NSUserDefaults standardUserDefaults] objectForKey:@"CURRENT_ROOM_ID"];
+        
+        if (roomId) {
+            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.identifier == %@", roomId];
+            NSArray *currentRoom = [self.rooms filteredArrayUsingPredicate:predicate];
             
-            if (!error) {
-                self.rooms = [Room retrieveRoomsInfoWithRooms:rooms];
-                [self.tableView reloadData];
-                
-                if (self.rooms) {
-                    SharedData *sharedData = [SharedData sharedInstance];
-                    NSMutableArray *unreads = [NSMutableArray arrayWithArray:[[self.rooms valueForKey:@"unreads"] valueForKey:sharedData.fb_id]];
-                    [unreads removeObjectIdenticalTo:[NSNull null]];
-                    [unreads removeObject:[NSNumber numberWithInt:0]];
+            if ([currentRoom firstObject]) {
+                NSObject *roomInfo = [currentRoom firstObject];
+                if ([roomInfo isKindOfClass:[RoomPrivateInfo class]]) {
+                    RoomPrivateInfo *info = (RoomPrivateInfo *)roomInfo;
                     
-                    [[NSNotificationCenter defaultCenter] postNotificationName:@"TOTAL_UNREAD_MESSAGES"
-                                                                        object:[NSNumber numberWithInteger:unreads.count]];
-                }
-                
-                
-                NSString *roomId = [[NSUserDefaults standardUserDefaults] objectForKey:@"CURRENT_ROOM_ID"];
-                
-                if (roomId) {
-                    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.identifier == %@", roomId];
-                    NSArray *currentRoom = [self.rooms filteredArrayUsingPredicate:predicate];
+                    [[NSUserDefaults standardUserDefaults] setObject:info.unreads forKey:@"CURRENT_UNREAD_MEMBERS"];
+                    [[NSUserDefaults standardUserDefaults] synchronize];
+                } else {
+                    RoomGroupInfo *info = (RoomGroupInfo *)roomInfo;
                     
-                    if ([currentRoom firstObject]) {
-                        NSObject *roomInfo = [currentRoom firstObject];
-                        if ([roomInfo isKindOfClass:[RoomPrivateInfo class]]) {
-                            RoomPrivateInfo *info = (RoomPrivateInfo *)roomInfo;
-                            
-                            [[NSUserDefaults standardUserDefaults] setObject:info.unreads forKey:@"CURRENT_UNREAD_MEMBERS"];
-                            [[NSUserDefaults standardUserDefaults] synchronize];
-                        } else {
-                            RoomGroupInfo *info = (RoomGroupInfo *)roomInfo;
-                            
-                            [[NSUserDefaults standardUserDefaults] setObject:info.unreads forKey:@"CURRENT_UNREAD_MEMBERS"];
-                            [[NSUserDefaults standardUserDefaults] synchronize];
-                        }
-                    }
+                    [[NSUserDefaults standardUserDefaults] setObject:info.unreads forKey:@"CURRENT_UNREAD_MEMBERS"];
+                    [[NSUserDefaults standardUserDefaults] synchronize];
                 }
             }
-        }];
+        }
+    } else {
+        self.rooms = nil;
+        [self.tableView reloadData];
     }
 }
 

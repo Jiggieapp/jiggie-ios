@@ -28,7 +28,7 @@
         }
     }
     
-    return identifiers[0];
+    return @"";
 }
 
 + (NSString *)getPrivateMessageIdWithsenderId:(NSString *)senderId andReceiverId:(NSString *)receiverId {

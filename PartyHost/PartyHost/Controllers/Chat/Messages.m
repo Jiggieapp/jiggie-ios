@@ -22,6 +22,7 @@
 
 @property (strong, nonatomic) FIRDatabaseReference *membersReference;
 @property (strong, nonatomic) FIRDatabaseReference *roomInfoReference;
+@property (strong, nonatomic) FIRDatabaseReference *messagesReference;
 
 @property (nonatomic, assign) BOOL isKeyBoardShowing;
 @property (nonatomic, assign) CGFloat contentOffSetYToCompare;
@@ -250,7 +251,7 @@
                 [self.btnInfo setEnabled:NO];
             }
             
-            [Message retrieveMessagesWithRoomId:self.roomId andCompletionHandler:^(NSArray *messages, NSError *error) {
+            self.messagesReference = [Message retrieveMessagesWithRoomId:self.roomId andCompletionHandler:^(NSArray *messages, NSError *error) {
                 self.messages = [NSMutableArray arrayWithArray:messages];
                 [self.loadingView setHidden:YES];
                 [self.messagesList reloadData];
@@ -259,7 +260,7 @@
     } else {
         [self.btnInfo setEnabled:YES];
         [self.toLabel setText:self.eventName];
-        [Message retrieveMessagesWithRoomId:self.roomId andCompletionHandler:^(NSArray *messages, NSError *error) {
+        self.messagesReference = [Message retrieveMessagesWithRoomId:self.roomId andCompletionHandler:^(NSArray *messages, NSError *error) {
             self.messages = [NSMutableArray arrayWithArray:messages];
             [self.loadingView setHidden:YES];
             [self.messagesList reloadData];
@@ -298,44 +299,17 @@
         self.input.frame = CGRectMake(0, self.frame.size.height - 40, self.frame.size.width - 60, 40);
     }
     
-    [Message sendMessageWithRoomId:self.roomId
-                          senderId:self.sharedData.fb_id
-                           members:self.members
-                              text:text
-              andCompletionHandler:^(NSString *key, NSError *error) {
-                  if (!error) {
-                      AFHTTPRequestOperationManager *manager = [self.sharedData getOperationManager];
-                      
-                      if ([self.roomId rangeOfString:@"_"].location != NSNotFound) {
-                          NSString *friendFbId = [RoomPrivateInfo getFriendFbIdFromIdentifier:self.roomId
-                                                                                         fbId:self.sharedData.fb_id];
-                          
-                          NSString *url = [NSString stringWithFormat:@"%@/messages/add", PHBaseNewURL];
-                          NSDictionary *params = @{@"fromId" : self.sharedData.fb_id,
-                                                   @"toId" : friendFbId,
-                                                   @"message" : text,
-                                                   @"header" : @"",
-                                                   @"fromName" : [self.sharedData.userDict[@"first_name"] lowercaseString],
-                                                   @"key" : key,
-                                                   @"hosting_id" :@""};
-                          
-                          [manager POST:url parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
-                              [[AnalyticManager sharedManager] trackMixPanelIncrementWithDict:@{@"send_message" : @1}];
-                          } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-                          }];
-                      } else {
-                          NSString *url = [NSString stringWithFormat:@"%@/group/notif", PHBaseNewURL];
-                          NSDictionary *params = @{@"fb_id" : self.sharedData.fb_id,
-                                                   @"event_id" : self.roomId,
-                                                   @"message" : text};
-                          
-                          [manager POST:url parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
-                              [[AnalyticManager sharedManager] trackMixPanelIncrementWithDict:@{@"send_message" : @1}];
-                          } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-                          }];
-                      }
-                  }
-              }];
+    NSString *receiverId = [self.roomId rangeOfString:@"_"].location == NSNotFound ? [RoomPrivateInfo getFriendFbIdFromIdentifier:self.roomId fbId:self.sharedData.fb_id] : @"";
+    
+    [Message sendMessageToRoomId:self.roomId
+                    withSenderId:self.sharedData.fb_id
+                      receiverId:receiverId
+                            text:text
+               completionHandler:^(NSError *error) {
+                   if (!error) {
+                       [[AnalyticManager sharedManager] trackMixPanelIncrementWithDict:@{@"send_message" : @1}];
+                   }
+               }];
 }
 
 #pragma mark - Action
@@ -352,6 +326,7 @@
     [Message hasReadMessagesInRoom:self.roomId];
     [self.membersReference removeAllObservers];
     [self.roomInfoReference removeAllObservers];
+    [self.messagesReference removeAllObservers];
     
     [[NSNotificationCenter defaultCenter] postNotificationName:@"EXIT_MESSAGES"
                                                         object:self];
