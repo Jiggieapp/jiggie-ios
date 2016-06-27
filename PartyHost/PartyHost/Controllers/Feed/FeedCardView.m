@@ -111,6 +111,18 @@
             break;
         }
     }
+    
+    switch (feed.source) {
+        case FeedSourceEvent: {
+            
+            break;
+        }
+            
+        case FeedSourceNearby: {
+             [self.eventNameLabel setText:@"IS NEARBY"];
+            break;
+        }
+    }
 }
 
 - (IBAction)didTapPersonImageButton:(id)sender {
@@ -121,7 +133,13 @@
 
 - (IBAction)didTapEventNameLabel:(id)sender {
     if (self.delegate) {
-        [self.delegate feedCardView:self didTapEventNameLabel:sender withFeed:self.feed];
+        if (self.feed.source) {
+            if (self.feed.source == FeedSourceEvent) {
+                [self.delegate feedCardView:self didTapEventNameLabel:sender withFeed:self.feed];
+            }
+        } else {
+            [self.delegate feedCardView:self didTapEventNameLabel:sender withFeed:self.feed];
+        }
     }
 }
 

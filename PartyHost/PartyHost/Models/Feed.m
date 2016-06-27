@@ -24,12 +24,18 @@
              @"fromImageURL" : @"image",
              @"type" : @"type",
              @"hasBooking" : @"badge_booking",
-             @"hasTicket" : @"badge_ticket"};
+             @"hasTicket" : @"badge_ticket",
+             @"source" : @"type_feed"};
 }
 
 + (NSValueTransformer *)typeJSONTransformer {
     return [NSValueTransformer mtl_valueMappingTransformerWithDictionary:@{@"viewed": @(FeedTypeViewed),
                                                                            @"approved": @(FeedTypeApproved)}];
+}
+
++ (NSValueTransformer *)sourceJSONTransformer {
+    return [NSValueTransformer mtl_valueMappingTransformerWithDictionary:@{@1: @(FeedSourceEvent),
+                                                                           @2: @(FeedSourceNearby)}];
 }
 
 + (NSString *)feedTypeAsString:(FeedType)type {

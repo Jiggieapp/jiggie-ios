@@ -278,8 +278,6 @@
             [self.emptyView setMode:@"hide"];
         }
         
-        self.feedIndex = 0;
-        
         [self.filterButton setEnabled:YES];
         
         if (error) {
@@ -289,10 +287,10 @@
             }
         } else {
             dispatch_async(dispatch_get_main_queue(), ^{
-                [self.feedData removeAllObjects];
                 
                 if ((!feeds || feeds.count == 0) && statusCode == 204) {
                     [self showEmptyView];
+                    self.feedIndex = 0;
                     [self.feedData removeAllObjects];
                     [self.swipeableView setHidden:YES];
                     
@@ -338,6 +336,8 @@
                 [self.swipeableView discardAllViews];
                 
                 if (self.sharedData.matchMe) {
+                    self.feedIndex = 0;
+                    [self.feedData removeAllObjects];
                     [self loadDataAndShowHUD:YES withCompletionHandler:nil];
                 } else {
                     [self.emptyView setMode:@"hide"];
@@ -607,9 +607,6 @@
     if (self.isSwipedOut) {
         Feed *feed = [self getFeedFromCardView:view];
         
-        [self.feedData removeObject:feed];
-        [Feed archiveObject:self.feedData];
-        
         if (location.x > CGRectGetWidth(self.bounds) / 2) {
             [self approveFeed:YES withFeed:feed];
         } else {
@@ -649,14 +646,7 @@
     self.isSwipedOut = YES;
     [self.swipeableView setUserInteractionEnabled:NO];
     
-    ShadowView *shadowView = (ShadowView*)view;
-    FeedCardView *cardView = (FeedCardView *)shadowView.subviews.lastObject;
-    Feed *feed = cardView.feed;
-    
-    [self.feedData removeObject:feed];
-    [Feed archiveObject:self.feedData];
-    
-    if (self.feedData.count == 10) {
+    if (self.feedData.count - (self.feedIndex + 1) == 10) {
         [self loadDataAndShowHUD:NO withCompletionHandler:nil];
     }
     
@@ -679,9 +669,6 @@
         [self approveFeed:NO withFeed:feed];
         [view showSkipOverlayView];
     }
-    
-    [self.feedData removeObject:feed];
-    [Feed archiveObject:self.feedData];
     
     ShadowView *shadowView = (ShadowView*)self.swipeableView.topView;
     FeedCardView *cardView = (FeedCardView *)shadowView.subviews.lastObject;
