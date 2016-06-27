@@ -73,6 +73,9 @@
             if (user) {
                 [self.photoImageView sd_setImageWithURL:[NSURL URLWithString:user.avatarURL]];
                 [self.nameLabel setText:user.name];
+            } else {
+                [self.photoImageView setImage:nil];
+                [self.nameLabel setText:@""];
             }
         }];
         
