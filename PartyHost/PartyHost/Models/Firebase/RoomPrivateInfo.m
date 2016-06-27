@@ -22,13 +22,17 @@
 + (NSString *)getFriendFbIdFromIdentifier:(NSString *)identifier fbId:(NSString *)currentFbId {
     NSArray *identifiers = [identifier componentsSeparatedByString:@"_"];
     
-    for (NSString *identifier in identifiers) {
-        if (![identifier isEqualToString:currentFbId]) {
-            return identifier;
+    if (identifiers) {
+        for (NSString *identifier in identifiers) {
+            if (![identifier isEqualToString:currentFbId]) {
+                return identifier;
+            }
         }
+        
+        return identifiers[0];
+    } else {
+        return @"";
     }
-    
-    return identifiers[0];
 }
 
 + (NSString *)getPrivateMessageIdWithsenderId:(NSString *)senderId andReceiverId:(NSString *)receiverId {

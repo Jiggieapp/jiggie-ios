@@ -55,55 +55,24 @@
     [reference updateChildValues:parameters];
 }
 
-+ (void)sendMessageWithRoomId:(NSString *)roomId
-                     senderId:(NSString *)fbId
-                      members:(NSDictionary *)members
-                         text:(NSString *)text
-         andCompletionHandler:(SendMessageCompletionHandler)completion {
-    FIRDatabaseReference *reference = [[Message referenceWithRoomId:roomId] childByAutoId];
-    NSDictionary *parameters = @{@"created_at" : [FIRServerValue timestamp],
-                                 @"fb_id" : fbId,
-                                 @"message" : text};
++ (void)sendMessageToRoomId:(NSString *)roomId withSenderId:(NSString *)senderId receiverId:(NSString *)receiverId text:(NSString *)text completionHandler:(SendMessageCompletionHandler)completion {
+    SharedData *sharedData = [SharedData sharedInstance];
+    AFHTTPRequestOperationManager *manager = [sharedData getOperationManager];
     
-    [reference setValue:parameters withCompletionBlock:^(NSError * _Nullable error,
-                                                         FIRDatabaseReference * _Nonnull ref) {
-        if (!error) {
-            FIRDatabaseReference *reference = [[[Room reference] child:roomId] child:@"info"];
-            NSMutableDictionary *parameters = [NSMutableDictionary
-                                               dictionaryWithDictionary:@{@"last_message" : text,
-                                                                          @"updated_at" : [FIRServerValue timestamp]}];
-            
-            [reference updateChildValues:parameters];
-            
-            NSMutableDictionary *unreads = [NSMutableDictionary
-                                            dictionaryWithDictionary:[[NSUserDefaults standardUserDefaults]
-                                                                      objectForKey:@"CURRENT_UNREAD_MEMBERS"]];
-            [unreads removeObjectForKey:fbId];
-            
-            if (unreads.count > 0) {
-                for (NSString *key in [unreads allKeys]) {
-                    NSNumber *value = [NSNumber numberWithInteger:[[unreads objectForKey:key] intValue] + 1];
-                    [unreads setObject:value forKey:key];
-                }
-                
-                reference = [reference child:@"unread"];
-                [reference updateChildValues:unreads];
-            }
-            
-            NSMutableDictionary *membersDict = [NSMutableDictionary dictionaryWithDictionary:members];
-            [membersDict removeObjectForKey:fbId];
-            
-            for (NSString *key in [membersDict allKeys]) {
-                [membersDict setObject:[NSNumber numberWithBool:YES]
-                                forKey:key];
-            }
-            
-            reference = [[Room membersReference] child:roomId];
-            [reference updateChildValues:membersDict];
-        }
-        
+    NSString *url = [NSString stringWithFormat:@"%@/messages/add", PHBaseNewURL];
+    NSDictionary *params = @{@"fb_id" : senderId,
+                             @"member_fb_id" : receiverId,
+                             @"message" : text,
+                             @"room_id" : roomId,
+                             @"type" : [roomId rangeOfString:@"_"].location != NSNotFound ? @"2" : @"1"};
+    
+    [manager POST:url parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if (completion) {
-            completion(ref.key, error);
+            completion(nil);
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        if (completion) {
+            completion(error);
         }
     }];
 }

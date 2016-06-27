@@ -298,44 +298,15 @@
         self.input.frame = CGRectMake(0, self.frame.size.height - 40, self.frame.size.width - 60, 40);
     }
     
-    [Message sendMessageWithRoomId:self.roomId
-                          senderId:self.sharedData.fb_id
-                           members:self.members
-                              text:text
-              andCompletionHandler:^(NSString *key, NSError *error) {
-                  if (!error) {
-                      AFHTTPRequestOperationManager *manager = [self.sharedData getOperationManager];
-                      
-                      if ([self.roomId rangeOfString:@"_"].location != NSNotFound) {
-                          NSString *friendFbId = [RoomPrivateInfo getFriendFbIdFromIdentifier:self.roomId
-                                                                                         fbId:self.sharedData.fb_id];
-                          
-                          NSString *url = [NSString stringWithFormat:@"%@/messages/add", PHBaseNewURL];
-                          NSDictionary *params = @{@"fromId" : self.sharedData.fb_id,
-                                                   @"toId" : friendFbId,
-                                                   @"message" : text,
-                                                   @"header" : @"",
-                                                   @"fromName" : [self.sharedData.userDict[@"first_name"] lowercaseString],
-                                                   @"key" : key,
-                                                   @"hosting_id" :@""};
-                          
-                          [manager POST:url parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
-                              [[AnalyticManager sharedManager] trackMixPanelIncrementWithDict:@{@"send_message" : @1}];
-                          } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-                          }];
-                      } else {
-                          NSString *url = [NSString stringWithFormat:@"%@/group/notif", PHBaseNewURL];
-                          NSDictionary *params = @{@"fb_id" : self.sharedData.fb_id,
-                                                   @"event_id" : self.roomId,
-                                                   @"message" : text};
-                          
-                          [manager POST:url parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
-                              [[AnalyticManager sharedManager] trackMixPanelIncrementWithDict:@{@"send_message" : @1}];
-                          } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-                          }];
-                      }
-                  }
-              }];
+    [Message sendMessageToRoomId:self.roomId
+                    withSenderId:self.sharedData.fb_id
+                      receiverId:[RoomPrivateInfo getFriendFbIdFromIdentifier:self.roomId fbId:self.sharedData.fb_id]
+                            text:text
+               completionHandler:^(NSError *error) {
+                   if (!error) {
+                       [[AnalyticManager sharedManager] trackMixPanelIncrementWithDict:@{@"send_message" : @1}];
+                   }
+               }];
 }
 
 #pragma mark - Action
