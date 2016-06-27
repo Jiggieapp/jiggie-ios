@@ -9,6 +9,7 @@
 #import "SignupView.h"
 #import "AnalyticManager.h"
 #import "UserManager.h"
+#import "Room.h"
 
 #define SET_IF_NOT_NULL(TARGET, VAL) if(VAL && VAL != [NSNull null]) { TARGET = VAL; } else {TARGET = @"";}
 
@@ -535,6 +536,13 @@
                          [[NSNotificationCenter defaultCenter]
                           postNotificationName:@"HIDE_LOGIN"
                           object:self];
+                         
+                         [Room retrieveRoomsWithFbId:self.sharedData.fb_id andCompletionHandler:^(NSArray *rooms, NSError *error) {
+                             if (!error) {
+                                 [[NSNotificationCenter defaultCenter] postNotificationName:@"MEMBER_ROOMS"
+                                                                                     object:rooms];
+                             }
+                         }];
                          
                          [self checkAppsFlyerData];
                          [self performSelector:@selector(getUserImages) withObject:nil afterDelay:2.0];

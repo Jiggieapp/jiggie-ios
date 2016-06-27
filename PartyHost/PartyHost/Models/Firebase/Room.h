@@ -18,6 +18,7 @@ typedef void (^RoomsCompletionHandler)(NSArray *rooms,
                                        NSError *error);
 typedef void (^ClearChatCompletionHandler)(NSError *error);
 
+@class FIRDatabaseQuery;
 @class FIRDatabaseReference;
 @interface Room : MTLModel <MTLJSONSerializing>
 
