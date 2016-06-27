@@ -61,7 +61,7 @@
     SharedData *sharedData = [SharedData sharedInstance];
     AFHTTPRequestOperationManager *manager = [sharedData getOperationManager];
     
-    NSString *url = [NSString stringWithFormat:@"%@/messages/add", PHBaseNewURL];
+    NSString *url = [NSString stringWithFormat:@"%@/firebase/post_message", PHBaseNewURL];
     NSDictionary *params = @{@"fb_id" : senderId,
                              @"member_fb_id" : receiverId,
                              @"message" : text,
