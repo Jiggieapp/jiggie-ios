@@ -66,7 +66,7 @@
                              @"member_fb_id" : receiverId,
                              @"message" : text,
                              @"room_id" : roomId,
-                             @"type" : [roomId rangeOfString:@"_"].location != NSNotFound ? @"2" : @"1"};
+                             @"type" : [roomId rangeOfString:@"_"].location == NSNotFound ? @"2" : @"1"};
     
     [manager POST:url parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if (completion) {
