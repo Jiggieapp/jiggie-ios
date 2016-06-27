@@ -51,6 +51,9 @@
     [self.unreadBadgeView updateValue:0];
     
     [self.badgeView addSubview:self.unreadBadgeView];
+    
+    [self.photoImageView setImage:nil];
+    [self.nameLabel setText:@""];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
@@ -70,13 +73,15 @@
         [self.unreadBadgeView updateValue:[badgeValue intValue]];
         
         [User retrieveUserInfoWithFbId:friendFbId andCompletionHandler:^(User *user, NSError *error) {
-            if (user) {
-                [self.photoImageView sd_setImageWithURL:[NSURL URLWithString:user.avatarURL]];
-                [self.nameLabel setText:user.name];
-            } else {
-                [self.photoImageView setImage:nil];
-                [self.nameLabel setText:@""];
-            }
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (user) {
+                    [self.photoImageView sd_setImageWithURL:[NSURL URLWithString:user.avatarURL]];
+                    [self.nameLabel setText:user.name];
+                } else {
+                    [self.photoImageView setImage:nil];
+                    [self.nameLabel setText:@""];
+                }
+            });
         }];
         
         [self.lastMessageLabel setText:info.lastMessage];
