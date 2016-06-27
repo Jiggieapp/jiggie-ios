@@ -620,6 +620,7 @@
 #pragma mark - API
 -(void)loadDataWithCompletionHandler:(void(^)(NSError* error))completion
 {
+    
     AFHTTPRequestOperationManager *manager = [self.sharedData getOperationManager];
     //events/list/
     NSString *url = [NSString stringWithFormat:@"%@/events/list/%@",PHBaseNewURL,self.sharedData.fb_id];
@@ -673,14 +674,13 @@
              
              return;
          }
-         
-         
+        
          NSDictionary *json = (NSDictionary *)[NSJSONSerialization
                                                JSONObjectWithData:[responseString dataUsingEncoding:NSUTF8StringEncoding]
                                                             options:kNilOptions
                                                             error:&error];
          dispatch_async(dispatch_get_main_queue(), ^{
-             
+         
              if (json && json != nil) {
                  self.isEventsLoaded = YES;
                  self.whiteBK.hidden = NO;
@@ -714,9 +714,8 @@
                          if (!events || events.count == 0) {
                              [self.emptyView setMode:@"empty"];
                          }
-                         
+                    
                          for (NSDictionary *eventRow in events) {
-                             
                              BOOL isFeatured = NO;
                              if ([[eventRow objectForKey:@"date_day"] isEqualToString:@"Featured Events"]) {
                                  isFeatured = YES;
@@ -761,7 +760,7 @@
                              } else {
                                  item.fullfillmentType = @"";
                              }
-                            
+                             
                              NSNumber *likes = [eventRow objectForKey:@"likes"];
                              if (likes && ![likes isEqual:[NSNull null]]) {
                                  item.likes = likes;
@@ -808,10 +807,8 @@
                              
                              NSError *error;
                              if (![self.managedObjectContext save:&error]) NSLog(@"Error: %@", [error localizedDescription]);
-                             
                          }
                      }
-
                  }
                  @catch (NSException *exception) {
 
@@ -832,7 +829,7 @@
                  }
              }
          });
-         
+     
      } failure:^(AFHTTPRequestOperation *operation, NSError *error)
      {
          if (completion) {
@@ -905,11 +902,11 @@
             [self.eventsUpcoming addObject:event];
         }
     }
-    
+
     [self.events1List reloadData];
     [self.events2List reloadData];
     [self.events3List reloadData];
-    
+
     if (self.isReloadMode) {
         // Do your job, when done:
         [self.refreshControl endRefreshing];
