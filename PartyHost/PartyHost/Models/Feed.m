@@ -77,6 +77,8 @@
                      PHBaseNewURL,
                      sharedData.fb_id,
                      sharedData.gender_interest];
+    url = [url stringByReplacingOccurrencesOfString:@"v3" withString:@"v4"];
+    
     [manager GET:url parameters:@{} success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSError *error = nil;
         NSArray *feeds = [MTLJSONAdapter modelsOfClass:[Feed class]
