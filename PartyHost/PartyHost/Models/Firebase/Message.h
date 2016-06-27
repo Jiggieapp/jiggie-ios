@@ -24,8 +24,8 @@ typedef void (^MessagesCompletionHandler)(NSArray *messages,
 + (FIRDatabaseReference *)reference;
 + (FIRDatabaseReference *)referenceWithRoomId:(NSString *)roomId;
 
-+ (void)retrieveMessagesWithRoomId:(NSString *)roomId
-              andCompletionHandler:(MessagesCompletionHandler)completion;
++ (FIRDatabaseReference *)retrieveMessagesWithRoomId:(NSString *)roomId
+                                andCompletionHandler:(MessagesCompletionHandler)completion;
 
 + (void)hasReadMessagesInRoom:(NSString *)roomId;
 

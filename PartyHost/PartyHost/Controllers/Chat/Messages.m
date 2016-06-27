@@ -22,6 +22,7 @@
 
 @property (strong, nonatomic) FIRDatabaseReference *membersReference;
 @property (strong, nonatomic) FIRDatabaseReference *roomInfoReference;
+@property (strong, nonatomic) FIRDatabaseReference *messagesReference;
 
 @property (nonatomic, assign) BOOL isKeyBoardShowing;
 @property (nonatomic, assign) CGFloat contentOffSetYToCompare;
@@ -250,7 +251,7 @@
                 [self.btnInfo setEnabled:NO];
             }
             
-            [Message retrieveMessagesWithRoomId:self.roomId andCompletionHandler:^(NSArray *messages, NSError *error) {
+            self.messagesReference = [Message retrieveMessagesWithRoomId:self.roomId andCompletionHandler:^(NSArray *messages, NSError *error) {
                 self.messages = [NSMutableArray arrayWithArray:messages];
                 [self.loadingView setHidden:YES];
                 [self.messagesList reloadData];
@@ -259,7 +260,7 @@
     } else {
         [self.btnInfo setEnabled:YES];
         [self.toLabel setText:self.eventName];
-        [Message retrieveMessagesWithRoomId:self.roomId andCompletionHandler:^(NSArray *messages, NSError *error) {
+        self.messagesReference = [Message retrieveMessagesWithRoomId:self.roomId andCompletionHandler:^(NSArray *messages, NSError *error) {
             self.messages = [NSMutableArray arrayWithArray:messages];
             [self.loadingView setHidden:YES];
             [self.messagesList reloadData];
@@ -323,6 +324,7 @@
     [Message hasReadMessagesInRoom:self.roomId];
     [self.membersReference removeAllObservers];
     [self.roomInfoReference removeAllObservers];
+    [self.messagesReference removeAllObservers];
     
     [[NSNotificationCenter defaultCenter] postNotificationName:@"EXIT_MESSAGES"
                                                         object:self];

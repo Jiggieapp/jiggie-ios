@@ -26,7 +26,7 @@
     return [[Message reference] child:roomId];
 }
 
-+ (void)retrieveMessagesWithRoomId:(NSString *)roomId andCompletionHandler:(MessagesCompletionHandler)completion {
++ (FIRDatabaseReference *)retrieveMessagesWithRoomId:(NSString *)roomId andCompletionHandler:(MessagesCompletionHandler)completion {
     FIRDatabaseReference *reference = [[Message reference] child:roomId];
     
     [reference observeEventType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
@@ -45,6 +45,8 @@
             completion(messages, error);
         }
     }];
+    
+    return reference;
 }
 
 + (void)hasReadMessagesInRoom:(NSString *)roomId {
