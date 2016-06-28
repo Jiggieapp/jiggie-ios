@@ -814,11 +814,8 @@
     
 }
 
-- (void)loadData:(NSString*)event_id {
-    self.event_id = event_id;
-    self.sharedData.cEventId_Summary = event_id;
-    
-    self.reference = [[Room membersReference] child:event_id];
+- (void)observeTotalMember:(NSString *)eventId {
+    self.reference = [[Room membersReference] child:eventId];
     [self.reference observeEventType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
         if (![snapshot.value isEqual:[NSNull null]]) {
             NSUInteger totalMembers = [snapshot.value allKeys].count;
@@ -831,6 +828,13 @@
             [self.membersCount setText:@"Chat"];
         }
     }];
+}
+
+- (void)loadData:(NSString*)event_id {
+    self.event_id = event_id;
+    self.sharedData.cEventId_Summary = event_id;
+    
+    [self observeTotalMember:event_id];
     
     AFHTTPRequestOperationManager *manager = [self.sharedData getOperationManager];
     
@@ -1065,7 +1069,7 @@
 
 -(void)populateData:(NSDictionary *)dict {
     [self.emptyView setMode:@"hide"];
-    
+    [self observeTotalMember:self.event_id];
     [self showTooltip];
     
     EventDetail *eventDetail = [[self fetchedResultsController] objectAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
