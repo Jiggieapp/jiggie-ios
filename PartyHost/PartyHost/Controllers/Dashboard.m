@@ -444,7 +444,7 @@
     
     [[NSNotificationCenter defaultCenter]
      addObserver:self
-     selector:@selector(showEventModal)
+     selector:@selector(showEventModal:)
      name:@"SHOW_EVENT_MODAL"
      object:nil];
     
@@ -1022,11 +1022,10 @@
     [self.eventsPage goToSummaryModal];
 }
 
--(void)showEventModal
-{
+-(void)showEventModal:(NSNotification *)notification {
     EventsSummary *eventDetail = [[EventsSummary alloc] initWithFrame:[UIScreen mainScreen].bounds];
     [eventDetail initClassModalWithEventID:self.sharedData.selectedEvent[@"_id"]];
-    
+    eventDetail.isFromMessage = [notification.object boolValue];
     eventDetail.mainScroll.frame = CGRectMake(0,
                                               0,
                                               CGRectGetWidth([UIScreen mainScreen].bounds),

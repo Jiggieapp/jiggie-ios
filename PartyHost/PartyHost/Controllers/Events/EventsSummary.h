@@ -28,6 +28,7 @@
 @property (nonatomic, assign) BOOL isLoaded;
 @property (nonatomic, strong) NSMutableDictionary *mainDict;
 @property (nonatomic, strong) NSString *event_id;
+@property (nonatomic, assign) BOOL isFromMessage;
 
 //Nav top
 @property (nonatomic,strong) UILabel *title;

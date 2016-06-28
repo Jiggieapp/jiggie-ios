@@ -545,7 +545,7 @@
     self.sharedData.selectedEvent[@"venue_name"] = self.eventName;
     
     [[NSNotificationCenter defaultCenter] postNotificationName:@"SHOW_EVENT_MODAL"
-                                                        object:nil];
+                                                        object:[NSNumber numberWithInt:YES]];
 }
 
 - (void)showAlertViewWithTitle:(NSString *)title andMessage:(NSString *)message {
