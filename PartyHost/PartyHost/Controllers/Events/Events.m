@@ -103,7 +103,6 @@
         [self.btnCity setImage:arrowImage forState:UIControlStateNormal];
         [self.btnCity setImage:arrowImage forState:UIControlStateHighlighted];
         [self.btnCity setImageEdgeInsets:UIEdgeInsetsMake(0, (CGRectGetWidth(self.btnCity.bounds) - 25) - (arrowImage.size.width + 8), 0, 0)];
-        [self.btnCity addTarget:self action:@selector(goToCityList) forControlEvents:UIControlEventTouchUpInside];
     }
     
     [self.tabBar addSubview:self.btnCity];
@@ -598,11 +597,15 @@
         [self.btnCity setImage:arrowImage forState:UIControlStateNormal];
         [self.btnCity setImage:arrowImage forState:UIControlStateHighlighted];
         [self.btnCity setImageEdgeInsets:UIEdgeInsetsMake(0, (CGRectGetWidth(self.btnCity.bounds) - 25) - (arrowImage.size.width + 8), 0, 0)];
-        [self.btnCity setUserInteractionEnabled:YES];
+        [self.btnCity setEnabled:YES];
+        
+        if ([self.btnCity.allTargets count] == 0) {
+            [self.btnCity addTarget:self action:@selector(goToCityList) forControlEvents:UIControlEventTouchUpInside];
+        }
     } else {
         [self.btnCity setImage:nil forState:UIControlStateNormal];
         [self.btnCity setImage:nil forState:UIControlStateHighlighted];
-        [self.btnCity setUserInteractionEnabled:NO];
+        [self.btnCity setEnabled:NO];
     }
     
     if (city) {
