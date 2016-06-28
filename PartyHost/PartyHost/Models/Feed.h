@@ -39,7 +39,7 @@ typedef enum : NSUInteger {
 + (void)removeArchivedObject;
 
 + (void)retrieveFeedsWithCompletionHandler:(PartyFeedCompletionHandler)completion;
-+ (void)approveFeed:(BOOL)approved withFbId:(NSString *)fbId andCompletionHandler:(MatchFeedCompletionHandler)completion;
++ (void)approveFeed:(BOOL)approved withFbId:(NSString *)fbId andSource:(FeedSource)source andCompletionHandler:(MatchFeedCompletionHandler)completion;
 + (void)enableSocialFeed:(BOOL)enabled withCompletionHandler:(MatchFeedCompletionHandler)completion;
 
 @end

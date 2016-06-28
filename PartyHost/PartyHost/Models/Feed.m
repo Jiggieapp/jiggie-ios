@@ -104,12 +104,15 @@
     }];
 }
 
-+ (void)approveFeed:(BOOL)approved withFbId:(NSString *)fbId andCompletionHandler:(MatchFeedCompletionHandler)completion {
++ (void)approveFeed:(BOOL)approved withFbId:(NSString *)fbId andSource:(FeedSource)source andCompletionHandler:(MatchFeedCompletionHandler)completion {
     SharedData *sharedData = [SharedData sharedInstance];
     AFHTTPRequestOperationManager *manager = [sharedData getOperationManager];
     NSString *approveStatus = approved ? @"approved" : @"denied";
     
     NSString *url = [NSString stringWithFormat:@"%@/partyfeed_socialmatch/match/%@/%@/%@", PHBaseNewURL, sharedData.fb_id, fbId, approveStatus];
+    if (source == FeedSourceNearby) {
+        url = [NSString stringWithFormat:@"%@/partyfeed_nearby/match/%@/%@/%@", PHBaseNewURL, sharedData.fb_id, fbId, approveStatus];
+    }
     
     [manager GET:url parameters:@{} success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if (completion) {
