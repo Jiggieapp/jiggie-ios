@@ -40,6 +40,7 @@
 @property (nonatomic, assign) NSInteger minPrice;
 @property (nonatomic, assign) NSInteger currentPrice;
 @property (nonatomic, strong) NSString *errorType;
+@property (nonatomic, assign) NSInteger extraCharge;
 @property (nonatomic, assign) BOOL isPaymentMethodShow;
 
 @end

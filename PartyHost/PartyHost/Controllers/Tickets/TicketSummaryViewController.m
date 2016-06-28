@@ -621,6 +621,7 @@ NSInteger const MaxBookingTableGuest = 100;
                 TicketConfirmationViewController *ticketConfirmationViewController = [[TicketConfirmationViewController alloc] init];
                 ticketConfirmationViewController.productSummary = self.productSummary;
                 ticketConfirmationViewController.productList = [product_list objectAtIndex:0];
+                ticketConfirmationViewController.extraCharge = self.bookTableExtraCharge;
                 
                 NSString *event_name = [self.productList objectForKey:@"event_name"];
                 if (event_name && event_name != nil) {

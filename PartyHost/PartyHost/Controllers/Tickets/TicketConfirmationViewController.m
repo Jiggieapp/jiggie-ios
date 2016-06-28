@@ -407,15 +407,26 @@
     
     CGFloat ticketTitleWidth = self.visibleSize.width/2;
     CGFloat offsetY = CGRectGetMaxY(line1View.frame) + 14;
+    NSInteger max_buy = [[self.productList objectForKey:@"max_buy"] integerValue];
+    NSInteger num_buy = [[self.productList objectForKey:@"num_buy"] integerValue];
+    NSInteger num_guest = num_buy;
+    NSInteger add_guest = 0;
     
-    UILabel *ticketTitle = [[UILabel alloc] initWithFrame:CGRectMake(18, offsetY, ticketTitleWidth, 20)];
+    if (num_buy > max_buy) {
+        num_guest = max_buy;
+        add_guest = num_buy - max_buy;
+    }
+    
+    NSString *numberGuest = [NSString stringWithFormat:@"%li %@", (long)num_guest, (num_guest > 1)?@"guests":@"guest"];
+    
+    UILabel *ticketTitle = [[UILabel alloc] initWithFrame:CGRectMake(18, offsetY, ticketTitleWidth + 40, 20)];
     [ticketTitle setFont:[UIFont phBlond:13]];
     [ticketTitle setTextColor:[UIColor darkGrayColor]];
     [ticketTitle setBackgroundColor:[UIColor clearColor]];
     if (sale_type && [sale_type isEqualToString:@"exact"]) {
-        [ticketTitle setText:[NSString stringWithFormat:@"%@",[self.productList objectForKey:@"name"]]];
+        [ticketTitle setText:[NSString stringWithFormat:@"%@ (%@)",[self.productList objectForKey:@"name"], numberGuest]];
     } else {
-        [ticketTitle setText:[NSString stringWithFormat:@"%@ (Estimate)",[self.productList objectForKey:@"name"]]];
+        [ticketTitle setText:[NSString stringWithFormat:@"%@ (%@ - estimate)",[self.productList objectForKey:@"name"], numberGuest]];
     }
     [self.scrollView addSubview:ticketTitle];
 
@@ -434,11 +445,14 @@
     
     NSString *extra_charge = [sharedData formatCurrencyString:[self.productList objectForKey:@"extra_charge"]];
     if (extra_charge && extra_charge.integerValue > 0) {
-        UILabel *extraTitle = [[UILabel alloc] initWithFrame:CGRectMake(18, offsetY, ticketTitleWidth, 20)];
+        NSString *additionalGuest = [NSString stringWithFormat:@"%li %@", (long)add_guest, (add_guest > 1)?@"guests":@"guest"];
+        NSString *chargePerGuest = [sharedData formatCurrencyString:[NSString stringWithFormat:@"%li", (long)self.extraCharge]];
+        
+        UILabel *extraTitle = [[UILabel alloc] initWithFrame:CGRectMake(18, offsetY, ticketTitleWidth + 40, 20)];
         [extraTitle setFont:[UIFont phBlond:13]];
         [extraTitle setTextColor:[UIColor darkGrayColor]];
         [extraTitle setBackgroundColor:[UIColor clearColor]];
-        [extraTitle setText:@"Extra Charge"];
+        [extraTitle setText:[NSString stringWithFormat:@"Add'l %@ (%@/guest)", additionalGuest, chargePerGuest]];
         [self.scrollView addSubview:extraTitle];
         
         UILabel *extraPrice = [[UILabel alloc] initWithFrame:CGRectMake(self.visibleSize.width - 140, offsetY, 120, 20)];
