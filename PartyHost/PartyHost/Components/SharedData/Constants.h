@@ -81,6 +81,7 @@ extern NSString *const PHBlankImgURL;
 +(NSString*)toDisplayDate:(NSString*)dbStartDateString;
 +(NSString*)toDisplayDateRange:(NSString*)dbStartDateString dbEndDateString:(NSString*)dbEndDateString;
 +(NSString*)toDisplayTime:(NSString*)dbStartDateString;
++(NSString*)toStringDate:(NSDate *)date withFormat:(NSString *)dateFormat;
 +(NSString*)toTitleDate:(NSString*)dbStartDateString;
 +(NSString*)toTitleDateRange:(NSString*)dbStartDateString dbEndDateString:(NSString*)dbEndDateString;
 +(NSString*)toTitleDate:(NSDate *)dbStartDate dbEndDate:(NSDate *)dbEndDate;
