@@ -80,6 +80,8 @@
 @property (nonatomic, retain) NSFetchedResultsController *fetchedResultsController;
 @property (nonatomic, retain) NSManagedObjectContext *managedObjectContext;
 
+@property (nonatomic, assign) BOOL hasLoadEventOnce;
+
 -(void)initClass;
 -(void)resetApp;
 -(void)goToSummaryModal;

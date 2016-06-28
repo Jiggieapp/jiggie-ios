@@ -406,6 +406,8 @@
      name:@"REFRESH_EVENTS_FEED"
      object:nil];
     
+    self.hasLoadEventOnce = NO;
+    
     return self;
 }
 
@@ -417,6 +419,7 @@
     self.whiteBK.hidden = YES;
     self.backgroundColor = [UIColor whiteColor];
     [self.emptyView setMode:@"load"];
+    self.hasLoadEventOnce = NO;
 }
 
 - (JGKeyboardNotificationHelper *)keyboardNotification {
@@ -432,10 +435,10 @@
 -(void)initClass
 {
     NSLog(@"EVENT_INIT_CLASS %@",(self.sharedData.isLoggedIn == YES)?@"Y":@"N");
-    if(self.sharedData.isLoggedIn)
+    if(self.sharedData.isLoggedIn && !self.hasLoadEventOnce)
     {
         NSLog(@"EVENT_INSIDE");
-        //[self.sharedData trackMixPanel:@"display_browse_events"];
+        self.hasLoadEventOnce = YES;
         
         [[AnalyticManager sharedManager] trackMixPanelWithDict:@"View Events" withDict:@{}];
         
@@ -1569,7 +1572,7 @@ shouldDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
          self.mainCon.frame = CGRectMake(0, 20, self.sharedData.screenWidth * SCREENS_DEEP, self.sharedData.screenHeight - 20);
      } completion:^(BOOL finished)
      {
-         [self loadDataWithCompletionHandler:nil];
+//         [self loadDataWithCompletionHandler:nil];
      }];
 }
 
