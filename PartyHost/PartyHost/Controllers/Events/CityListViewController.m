@@ -109,16 +109,17 @@
         [self.tableView setDataSource:self];
         [self.tableView reloadData];
         
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            [self loadCities];
-        });
+        [self loadCitiesAndShowHUD:NO];
     } else {
-        [self loadCities];
+        [self loadCitiesAndShowHUD:YES];
     }
 }
 
-- (void)loadCities {
-    [SVProgressHUD show];
+- (void)loadCitiesAndShowHUD:(BOOL)showHUD {
+    if (showHUD) {
+        [SVProgressHUD show];
+    }
+    
     [City retrieveCitiesWithCompletionHandler:^(NSArray *cities, NSInteger statusCode, NSError *error) {
         if (cities && cities.count > 0) {
             self.cities = cities;
@@ -134,7 +135,9 @@
             });
         }
         
-        [SVProgressHUD dismiss];
+        if (showHUD) {
+            [SVProgressHUD dismiss];
+        }
     }];
 }
 
