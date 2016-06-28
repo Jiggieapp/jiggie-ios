@@ -374,7 +374,8 @@ static NSString *const kAllowTracking = @"allowTracking";
             NSString *url = [NSString stringWithFormat:@"%@/save_longlat", PHBaseNewURL];
             NSDictionary *parameters = @{@"fb_id" : self.sharedData.fb_id,
                                          @"longitude" : [NSString stringWithFormat:@"%f", longitude],
-                                         @"latitude" : [NSString stringWithFormat:@"%f", latitude]};
+                                         @"latitude" : [NSString stringWithFormat:@"%f", latitude],
+                                         @"is_login" : [NSNumber numberWithBool:NO]};
             
             [manager POST:url parameters:parameters success:nil failure:nil];
         }];
