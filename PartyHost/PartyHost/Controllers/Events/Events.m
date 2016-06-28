@@ -497,6 +497,12 @@
     self.isReloadMode = YES;
     self.refreshControl = refreshControl;
     [self loadDataWithCompletionHandler:nil];
+    
+    [City retrieveCitiesWithCompletionHandler:^(NSArray *cities, NSInteger statusCode, NSError *error) {
+        if (cities && cities.count > 0) {
+            [City archiveCities:cities];
+        }
+    }];
 }
 
 #pragma mark - Fetch
