@@ -15,6 +15,7 @@
 #import "AnalyticManager.h"
 #import "UserManager.h"
 #import "UIImageView+WebCache.h"
+#import "Constants.h"
 
 
 @interface TicketListViewController ()
@@ -296,12 +297,7 @@
                             [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
                             NSDate *startDatetime = [formatter dateFromString:start_datetime];
                             
-                            [formatter setDateFormat:PHDateFormatApp];
-                            [formatter setLocale:[NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"]];
-                            [formatter setTimeZone:[NSTimeZone localTimeZone]];
-                            NSString *shortDateTime = [formatter stringFromDate:startDatetime];
-                            
-                            self.eventDate.text = shortDateTime;
+                            self.eventDate.text = [Constants toStringDate:startDatetime withFormat:PHDateFormatApp];
                             
                             NSArray *purchase = [product_lists objectForKey:@"purchase"];
                             if (purchase && purchase != nil) {

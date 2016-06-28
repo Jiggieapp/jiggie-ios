@@ -10,6 +10,8 @@
 #import "Constants.h"
 #import "Mixpanel.h"
 #import "AppsFlyerTracker.h"
+#import "City.h"
+#import "Mantle.h"
 
 
 BOOL const PHMixPanelOn = YES;
@@ -253,6 +255,24 @@ int const PHButtonHeight = 50; //This is the button at bottom of screen
     return [NSString stringWithFormat:@"%@%@",dateParts[3],[dateParts[4] lowercaseString]];
 }
 
++(NSString*)toStringDate:(NSDate *)date withFormat:(NSString *)dateFormat {
+    City *city = [MTLJSONAdapter modelOfClass:[City class]
+                           fromJSONDictionary:[[NSUserDefaults standardUserDefaults]
+                                               objectForKey:@"CurrentCity"]
+                                        error:nil];
+    
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat:dateFormat];
+    [formatter setLocale:[NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"]];
+    
+    if (city) {
+        [formatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:3600 * [city.timeZone integerValue]]];
+    } else {
+        [formatter setTimeZone:[NSTimeZone localTimeZone]];
+    }
+    
+    return [formatter stringFromDate:date];
+}
 
 //Convert dates from the server to a nicer display string
 +(NSString*)toTitleDate:(NSString*)dbStartDateString
@@ -321,12 +341,22 @@ int const PHButtonHeight = 50; //This is the button at bottom of screen
 
 //Convert dates from the server to a nicer display string
 +(NSString*)toTitleDate:(NSDate *)dbStartDate dbEndDate:(NSDate *)dbEndDate {
+    City *city = [MTLJSONAdapter modelOfClass:[City class]
+                           fromJSONDictionary:[[NSUserDefaults standardUserDefaults]
+                                               objectForKey:@"CurrentCity"]
+                                        error:nil];
+    
     NSDateFormatter *format = [[NSDateFormatter alloc] init];
     [format setLocale:[NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"]];
-    [format setTimeZone:[NSTimeZone localTimeZone]];
+    
+    if (city) {
+        [format setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:3600 * [city.timeZone integerValue]]];
+    } else {
+        [format setTimeZone:[NSTimeZone localTimeZone]];
+    }
     
     //Switch to nicer fate format
-    NSCalendar *calendar = [NSCalendar currentCalendar];
+//    NSCalendar *calendar = [NSCalendar currentCalendar];
     
     //Do start date
     [format setDateFormat:@"EEEE, MMMM d yyyy"];

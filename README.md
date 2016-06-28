@@ -1,4 +1,2 @@
-Jiggie_ios_12_26_14
-======================
-
-Jiggie iOS
+# jiggie-ios
+For hosting ios project of Jiggie
