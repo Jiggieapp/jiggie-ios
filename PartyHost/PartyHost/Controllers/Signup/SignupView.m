@@ -546,25 +546,17 @@
                           postNotificationName:@"HIDE_LOGIN"
                           object:self];
                          
-                         BOOL isMigratedToFirebase = [[NSUserDefaults standardUserDefaults] boolForKey:@"IS_ALREADY_MIGRATED_TO_FIREBASE"];
+                         SharedData *sharedData = [SharedData sharedInstance];
+                         AFHTTPRequestOperationManager *manager = [sharedData getOperationManager];
+                         NSString *url = [NSString stringWithFormat:@"%@/chat/firebase/%@", PHBaseNewURL, sharedData.fb_id];
                          
-                         if (isMigratedToFirebase) {
+                         [manager GET:url parameters:@{} success:^(AFHTTPRequestOperation *operation, id responseObject) {
                              [self retrieveMemberRooms];
-                         } else {
-                             SharedData *sharedData = [SharedData sharedInstance];
-                             AFHTTPRequestOperationManager *manager = [sharedData getOperationManager];
-                             NSString *url = [NSString stringWithFormat:@"%@/chat/firebase/%@", PHBaseNewURL, sharedData.fb_id];
-                             
-                             [manager GET:url parameters:@{} success:^(AFHTTPRequestOperation *operation, id responseObject) {
-                                 if (operation.response.statusCode == 200) {
-                                     [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"IS_ALREADY_MIGRATED_TO_FIREBASE"];
-                                     [[NSUserDefaults standardUserDefaults] synchronize];
-                                     
-                                     [self retrieveMemberRooms];
-                                 }
-                             } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-                             }];
-                         }
+                         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                             if (operation.response.statusCode == 403) {
+                                 [self retrieveMemberRooms];
+                             }
+                         }];
                          
                          [self checkAppsFlyerData];
                          [self performSelector:@selector(getUserImages) withObject:nil afterDelay:2.0];
