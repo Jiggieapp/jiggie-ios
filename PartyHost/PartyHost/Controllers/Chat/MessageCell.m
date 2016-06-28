@@ -64,6 +64,7 @@
         self.toMessage.layer.masksToBounds = YES;
         self.toMessage.layer.cornerRadius = 17;
         self.toMessage.textContainerInset = UIEdgeInsetsMake(7.0f, 8.0f, 20, 0.0);
+        self.toMessage.scrollEnabled = NO;
         [self addSubview:self.toMessage];
         
         self.fromMessage = [[UITextView alloc] initWithFrame:CGRectMake(10, 0, self.frame.size.width - 30, 30)];
@@ -74,6 +75,7 @@
         self.fromMessage.layer.masksToBounds = YES;
         self.fromMessage.layer.cornerRadius = 17;
         self.fromMessage.textContainerInset = UIEdgeInsetsMake(7.0f, 8.0f, 20, 0.0);
+        self.fromMessage.scrollEnabled = NO;
         [self addSubview:self.fromMessage];
         
         [self addSubview:self.dateLabel];
