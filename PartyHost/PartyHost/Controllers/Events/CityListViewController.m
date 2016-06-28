@@ -120,20 +120,18 @@
 - (void)loadCities {
     [SVProgressHUD show];
     [City retrieveCitiesWithCompletionHandler:^(NSArray *cities, NSInteger statusCode, NSError *error) {
-        if (cities) {
+        if (cities && cities.count > 0) {
             self.cities = cities;
             
             if (!self.tableView.dataSource) {
                 [self.tableView setDataSource:self];
             }
             
-            if (cities.count > 0) {
-                [City archiveCities:cities];
-             
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [self.tableView reloadData];
-                });
-            }
+            [City archiveCities:cities];
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.tableView reloadData];
+            });
         }
         
         [SVProgressHUD dismiss];
