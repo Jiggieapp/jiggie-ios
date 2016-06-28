@@ -360,7 +360,7 @@
                 [JGTooltipHelper setShowed:@"Tooltip_AcceptRequest_isShowed"];
                 
                 [SVProgressHUD show];
-                [Feed approveFeed:approved withFbId:feed.fromFbId andCompletionHandler:^(NSError *error) {
+                [Feed approveFeed:approved withFbId:feed.fromFbId andSource:feed.source andCompletionHandler:^(NSError *error) {
                     [SVProgressHUD dismiss];
                     
                     dispatch_async(dispatch_get_main_queue(), ^{
@@ -387,7 +387,7 @@
             case FeedTypeViewed: {
                 [JGTooltipHelper setShowed:@"Tooltip_AcceptSuggestion_isShowed"];
                 
-                [Feed approveFeed:approved withFbId:feed.fromFbId andCompletionHandler:^(NSError *error) {
+                [Feed approveFeed:approved withFbId:feed.fromFbId andSource:feed.source andCompletionHandler:^(NSError *error) {
                     dispatch_async(dispatch_get_main_queue(), ^{
                         if (self.feedData.count == 0) {
                             [self showEmptyView];
@@ -403,7 +403,7 @@
     } else {
         [self trackDeniedFeedItemWithType:feed.type];
         
-        [Feed approveFeed:approved withFbId:feed.fromFbId andCompletionHandler:^(NSError *error) {
+        [Feed approveFeed:approved withFbId:feed.fromFbId andSource:feed.source andCompletionHandler:^(NSError *error) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (self.feedData.count == 0) {
                     [self showEmptyView];
@@ -666,7 +666,7 @@
         [view showConnectOverlayView];
     } else {
         [self.swipeableView swipeTopViewToLeft];
-        [self approveFeed:NO withFeed:feed];
+//        [self approveFeed:NO withFeed:feed];
         [view showSkipOverlayView];
     }
     
