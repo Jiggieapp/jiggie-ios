@@ -666,7 +666,7 @@
         [view showConnectOverlayView];
     } else {
         [self.swipeableView swipeTopViewToLeft];
-//        [self approveFeed:NO withFeed:feed];
+        [self approveFeed:NO withFeed:feed];
         [view showSkipOverlayView];
     }
     
