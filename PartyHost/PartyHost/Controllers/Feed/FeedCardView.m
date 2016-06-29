@@ -88,7 +88,7 @@
             [self.okButton setTitle:@"CONNECT" forState:UIControlStateNormal];
             [self.interestLabel setText:[NSString stringWithFormat:@"%@ is also interested in", feed.fromFirstName]];
             [self.eventNameLabel setText:[NSString stringWithFormat:@"%@", [feed.eventName uppercaseString]]];
-            [self.connectLabel setText:[NSString stringWithFormat:@"Connect with %@", feed.fromFirstName]];
+            [self.connectLabel setText:[NSString stringWithFormat:@"Connect with %@?", feed.fromFirstName]];
             
             break;
         }
@@ -120,6 +120,11 @@
             
         case FeedSourceNearby: {
              [self.eventNameLabel setText:@"IS NEARBY"];
+            if (feed.type == FeedTypeViewed) {
+                [self.interestLabel setText:[NSString stringWithFormat:@"%@", feed.fromFirstName]];
+            } else {
+                [self.interestLabel setText:[NSString stringWithFormat:@"%@ wants to connect with you and", feed.fromFirstName]];
+            }
             break;
         }
     }
