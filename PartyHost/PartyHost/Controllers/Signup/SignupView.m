@@ -8,6 +8,7 @@
 
 #import "SignupView.h"
 #import "AnalyticManager.h"
+#import "LocationManager.h"
 #import "UserManager.h"
 #import "Room.h"
 
@@ -240,6 +241,33 @@
 }
 
 #pragma mark -
+
+- (void)updateLocation {
+    [[LocationManager manager] startUpdatingLocation];
+    [[LocationManager manager] didUpdateLocationsWithCompletion:^(CLLocationDegrees latitude, CLLocationDegrees longitude) {
+        AFHTTPRequestOperationManager *manager = [self.sharedData getOperationManager];
+        NSString *url = [NSString stringWithFormat:@"%@/save_longlat", PHBaseNewURL];
+        NSDictionary *parameters = @{@"fb_id" : self.sharedData.fb_id,
+                                     @"longitude" : [NSString stringWithFormat:@"%f", longitude],
+                                     @"latitude" : [NSString stringWithFormat:@"%f", latitude],
+                                     @"is_login" : [NSNumber numberWithBool:NO]};
+        
+        [manager POST:url parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+            if (operation.response.statusCode == 200) {
+                NSDictionary *currentCity = [[responseObject objectForKey:@"data"] objectForKey:@"city"];
+                
+                [[NSUserDefaults standardUserDefaults] setObject:currentCity
+                                                          forKey:@"CurrentCity"];
+                [[NSUserDefaults standardUserDefaults] synchronize];
+                
+                if (currentCity) {
+                    [[NSNotificationCenter defaultCenter] postNotificationName:@"SELECTED_CITY"
+                                                                        object:currentCity];
+                }
+            }
+        } failure:nil];
+    }];
+}
 
 - (void)retrieveMemberRooms {
     [Room retrieveRoomsWithFbId:self.sharedData.fb_id andCompletionHandler:^(NSArray *rooms, NSError *error) {
@@ -545,6 +573,8 @@
                          [[NSNotificationCenter defaultCenter]
                           postNotificationName:@"HIDE_LOGIN"
                           object:self];
+                         
+                         [self updateLocation];
                          
                          SharedData *sharedData = [SharedData sharedInstance];
                          AFHTTPRequestOperationManager *manager = [sharedData getOperationManager];

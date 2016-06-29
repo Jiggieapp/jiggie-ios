@@ -11,7 +11,6 @@
 #import "AFNetworkActivityLogger.h"
 #import "UserManager.h"
 #import "VTConfig.h"
-#import "LocationManager.h"
 #import "JGTooltipHelper.h"
 #import "City.h"
 #import "Firebase.h"
@@ -363,24 +362,7 @@ static NSString *const kAllowTracking = @"allowTracking";
          postNotificationName:@"MORE_TAPPED"
          object:self];
     }
-    
-    
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    
-    if([defaults objectForKey:@"SHOWED_WALKTHROUGH"]) {
-        [[LocationManager manager] startUpdatingLocation];
-        [[LocationManager manager] didUpdateLocationsWithCompletion:^(CLLocationDegrees latitude, CLLocationDegrees longitude) {
-            AFHTTPRequestOperationManager *manager = [self.sharedData getOperationManager];
-            NSString *url = [NSString stringWithFormat:@"%@/save_longlat", PHBaseNewURL];
-            NSDictionary *parameters = @{@"fb_id" : self.sharedData.fb_id,
-                                         @"longitude" : [NSString stringWithFormat:@"%f", longitude],
-                                         @"latitude" : [NSString stringWithFormat:@"%f", latitude],
-                                         @"is_login" : [NSNumber numberWithBool:NO]};
-            
-            [manager POST:url parameters:parameters success:nil failure:nil];
-        }];
-    }
-    
+        
     [FBSDKAppEvents activateApp];
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{

@@ -8,6 +8,8 @@
 
 #import "SetupLocationView.h"
 #import "LocationManager.h"
+#import "City.h"
+#import "Mantle.h"
 
 @implementation SetupLocationView
 
@@ -37,7 +39,20 @@
                                      @"latitude" : [NSString stringWithFormat:@"%f", latitude],
                                      @"is_login" : [NSNumber numberWithBool:NO]};
         
-        [manager POST:url parameters:parameters success:nil failure:nil];
+        [manager POST:url parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+            if (operation.response.statusCode == 200) {
+                NSDictionary *currentCity = [[responseObject objectForKey:@"data"] objectForKey:@"city"];
+                
+                [[NSUserDefaults standardUserDefaults] setObject:currentCity
+                                                          forKey:@"CurrentCity"];
+                [[NSUserDefaults standardUserDefaults] synchronize];
+                
+                if (currentCity) {
+                    [[NSNotificationCenter defaultCenter] postNotificationName:@"SELECTED_CITY"
+                                                                        object:currentCity];
+                }
+            }
+        } failure:nil];
     }];
     
     return YES;
