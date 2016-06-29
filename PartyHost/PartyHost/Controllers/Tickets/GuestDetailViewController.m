@@ -271,12 +271,16 @@
     }
     
     NSString *phone = [NSString stringWithFormat:@"%@%@", dialCode, self.phoneTextField.text];
+    NSString *identityID = @"";
+    if (self.isIDNumberEnabled) {
+        identityID = self.idNumberTextField.text;
+    }
     
     NSDictionary *userInfo = @{@"name":self.nameTextField.text,
                                @"email":self.emailTextField.text,
                                @"dial_code":dialCode,
                                @"phone":phone,
-                               @"identity_id":self.idNumberTextField.text};
+                               @"identity_id":identityID};
     [UserManager saveUserTicketInfo:userInfo];
     
     [self dismissViewControllerAnimated:YES completion:nil];
