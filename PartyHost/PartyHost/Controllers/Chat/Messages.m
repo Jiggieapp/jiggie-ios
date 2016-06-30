@@ -324,7 +324,7 @@
     [self.toLabel setText:nil];
     [self endEditing:YES];
     
-    if ([self.eventName isEqualToString:@"friendlist"]) {
+    if (![self.eventName isEqualToString:@"friendlist"]) {
         [Message hasReadMessagesInRoom:self.roomId];
     }
     
