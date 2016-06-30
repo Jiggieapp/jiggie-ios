@@ -124,7 +124,7 @@ static NSString *const kFriendConvoCellIdentifier = @"FriendConvoCellIdentifier"
                 
                 NSDictionary *object = @{@"roomId" : [RoomPrivateInfo getPrivateMessageIdWithsenderId:sharedData.fb_id
                                                                                         andReceiverId:friend.fbID],
-                                         @"eventName" : @"generic"};
+                                         @"eventName" : @"friendlist"};
                 
                 [[NSNotificationCenter defaultCenter] postNotificationName:@"SHOW_MESSAGES"
                                                                     object:object];
@@ -133,7 +133,7 @@ static NSString *const kFriendConvoCellIdentifier = @"FriendConvoCellIdentifier"
     } else {
         NSDictionary *object = @{@"roomId" : [RoomPrivateInfo getPrivateMessageIdWithsenderId:sharedData.fb_id
                                                                                 andReceiverId:friend.fbID],
-                                 @"eventName" : @"generic"};
+                                 @"eventName" : @"friendlist"};
         
         [[NSNotificationCenter defaultCenter] postNotificationName:@"SHOW_MESSAGES"
                                                             object:object];

@@ -175,7 +175,6 @@
     self.roomId = roomId;
     
     [self.btnInfo setEnabled:NO];
-    [Message hasReadMessagesInRoom:self.roomId];
     
     self.roomInfoReference = [[Room reference] child:self.roomId];
     
@@ -194,7 +193,6 @@
     self.eventName = eventName;
     
     [self.btnInfo setEnabled:NO];
-    [Message hasReadMessagesInRoom:self.roomId];
     [self.loadingView setHidden:YES];
     
     self.members = members;
@@ -229,7 +227,8 @@
     [self.loadingView setHidden:NO];
     
     if ([self.roomId rangeOfString:@"_"].location != NSNotFound) {
-        if (![[self.eventName lowercaseString] isEqualToString:@"generic"]) {
+        if (![[self.eventName lowercaseString] isEqualToString:@"generic"] &&
+            ![[self.eventName lowercaseString] isEqualToString:@"friendlist"]) {
             UIView *view = [self headerViewWithText:self.eventName];
             UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(.0f, .0f, CGRectGetWidth(self.messagesList.bounds), CGRectGetHeight(view.bounds) + 20.0f)];
             [headerView addSubview:view];
@@ -325,7 +324,10 @@
     [self.toLabel setText:nil];
     [self endEditing:YES];
     
-    [Message hasReadMessagesInRoom:self.roomId];
+    if ([self.eventName isEqualToString:@"friendlist"]) {
+        [Message hasReadMessagesInRoom:self.roomId];
+    }
+    
     [self.membersReference removeAllObservers];
     [self.roomInfoReference removeAllObservers];
     [self.messagesReference removeAllObservers];
