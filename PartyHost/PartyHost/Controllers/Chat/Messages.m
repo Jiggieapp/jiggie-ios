@@ -255,6 +255,7 @@
                 self.messages = [NSMutableArray arrayWithArray:messages];
                 [self.loadingView setHidden:YES];
                 [self.messagesList reloadData];
+                [self scrollToBottom:YES];
             }];
         }];
     } else {
@@ -264,6 +265,7 @@
             self.messages = [NSMutableArray arrayWithArray:messages];
             [self.loadingView setHidden:YES];
             [self.messagesList reloadData];
+            [self scrollToBottom:YES];
         }];
     }
 }
