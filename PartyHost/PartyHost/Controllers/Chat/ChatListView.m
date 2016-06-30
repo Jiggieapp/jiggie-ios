@@ -261,28 +261,24 @@ static NSString *const kChatsCellIdentifier = @"ChatsCellIdentifier";
                 [SVProgressHUD dismiss];
             }];
         } else {
-            if (self.isBlockedUser) {
-                [Room blockPrivateChatWithRoomId:self.roomId andCompletionHandler:^(NSError *error) {
-                    if (error) {
+            SharedData *sharedData = [SharedData sharedInstance];
+            [Room blockRoomWithRoomId:self.roomId withFbId:sharedData.fb_id andCompletionHandler:^(NSError *error) {
+                if (error) {
+                    if (self.isBlockedUser) {
                         [self showAlertViewWithTitle:@"Blocked User"
                                           andMessage:@"Fail."];
                     } else {
+                        [self showAlertViewWithTitle:@"Exit Group"
+                                          andMessage:@"Fail."];
+                    }
+                } else {
+                    if (self.isBlockedUser) {
                         [self showAlertViewWithTitle:@"Blocked User"
                                           andMessage:[NSString stringWithFormat:@"%@ has been blocked",
                                                       self.roomName]];
                         
                         [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Block User"
                                                                       withDict:@{@"origin" : @"Chat"}];
-                    }
-                    
-                    [SVProgressHUD dismiss];
-                }];
-            } else {
-                SharedData *sharedData = [SharedData sharedInstance];
-                [Room blockRoomWithRoomId:self.roomId withFbId:sharedData.fb_id andCompletionHandler:^(NSError *error) {
-                    if (error) {
-                        [self showAlertViewWithTitle:@"Exit Group"
-                                          andMessage:@"Fail."];
                     } else {
                         [self showAlertViewWithTitle:@"Exit Group"
                                           andMessage:[NSString stringWithFormat:@"You have exited %@ group",
@@ -291,10 +287,10 @@ static NSString *const kChatsCellIdentifier = @"ChatsCellIdentifier";
                         [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Exit Group"
                                                                       withDict:@{@"origin" : @"Chat"}];
                     }
-                    
-                    [SVProgressHUD dismiss];
-                }];
-            }
+                }
+                
+                [SVProgressHUD dismiss];
+            }];
         }
     }
 }

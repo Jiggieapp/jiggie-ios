@@ -747,32 +747,27 @@
 #pragma mark - UIAlertViewDelegate
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
     if (buttonIndex == 1) {
-        if (self.user) {
-            [SVProgressHUD show];
-            [Room blockPrivateChatWithRoomId:self.roomId andCompletionHandler:^(NSError *error) {
-                if (error) {
+        [SVProgressHUD show];
+        [Room blockRoomWithRoomId:self.roomId withFbId:self.sharedData.fb_id andCompletionHandler:^(NSError *error) {
+            if (error) {
+                if (self.user) {
                     [self showAlertViewWithTitle:@"Blocked User"
                                       andMessage:@"Fail."];
                 } else {
-                    [self goBack];
+                    [self showAlertViewWithTitle:@"Exit Group"
+                                      andMessage:@"Fail."];
+                }
+            } else {
+                [self goBack];
+                
+                if (self.user) {
                     [self showAlertViewWithTitle:@"Blocked User"
                                       andMessage:[NSString stringWithFormat:@"%@ has been blocked",
                                                   self.user.name]];
                     
                     [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Block User"
                                                                   withDict:@{@"origin" : @"Chat"}];
-                }
-                
-                [SVProgressHUD dismiss];
-            }];
-        } else {
-            [SVProgressHUD show];
-            [Room blockRoomWithRoomId:self.roomId withFbId:self.sharedData.fb_id andCompletionHandler:^(NSError *error) {
-                if (error) {
-                    [self showAlertViewWithTitle:@"Exit Group"
-                                      andMessage:@"Fail."];
                 } else {
-                    [self goBack];
                     [self showAlertViewWithTitle:@"Exit Group"
                                       andMessage:[NSString stringWithFormat:@"You have exited %@ group",
                                                   self.eventName]];
@@ -780,10 +775,10 @@
                     [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Exit Group"
                                                                   withDict:@{@"origin" : @"Chat"}];
                 }
-                
-                [SVProgressHUD dismiss];
-            }];
-        }
+            }
+            
+            [SVProgressHUD dismiss];
+        }];
     }
 }
 

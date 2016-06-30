@@ -127,20 +127,22 @@
     }];
 }
 
-+ (void)blockPrivateChatWithRoomId:(NSString *)roomId andCompletionHandler:(ClearChatCompletionHandler)completion {
-    FIRDatabaseReference *reference = [[Room membersReference] child:roomId];
-    
-    [reference removeValueWithCompletionBlock:^(NSError * _Nullable error, FIRDatabaseReference * _Nonnull ref) {
-        if (completion) {
-            completion(error);
-        }
-    }];
-}
-
 + (void)blockRoomWithRoomId:(NSString *)roomId withFbId:(NSString *)fbId andCompletionHandler:(ClearChatCompletionHandler)completion {
-    FIRDatabaseReference *reference = [[[Room membersReference] child:roomId] child:fbId];
+    SharedData *sharedData = [SharedData sharedInstance];
+    AFHTTPRequestOperationManager *manager = [sharedData getOperationManager];
     
-    [reference removeValueWithCompletionBlock:^(NSError * _Nullable error, FIRDatabaseReference * _Nonnull ref) {
+    NSString *friendFbId = [roomId rangeOfString:@"_"].location != NSNotFound ? [RoomPrivateInfo getFriendFbIdFromIdentifier:roomId fbId:sharedData.fb_id] : @"";
+    NSString *url = [NSString stringWithFormat:@"%@/firebase/block_chat", PHBaseNewURL];
+    NSDictionary *params = @{@"fb_id" : fbId,
+                             @"member_fb_id" : friendFbId,
+                             @"room_id" : roomId,
+                             @"type" : [roomId rangeOfString:@"_"].location != NSNotFound ? @"1" : @"2"};
+    
+    [manager POST:url parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        if (completion) {
+            completion(nil);
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         if (completion) {
             completion(error);
         }
