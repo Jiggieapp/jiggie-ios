@@ -72,11 +72,7 @@
     
     if (feeds) {
         self.feedData = [NSMutableArray arrayWithArray:feeds];
-        if (feeds.count > 0) {
-            [self.swipeableView loadViewsIfNeeded];
-        } else {
-            [self showEmptyView];
-        }
+        [self.swipeableView loadViewsIfNeeded];
     } else {
         [self loadDataAndShowHUD:NO withCompletionHandler:nil];
     }
@@ -286,22 +282,21 @@
                 [SVProgressHUD showInfoWithStatus:@"Please check your internet connection"];
             }
         } else {
+            if ((!feeds || feeds.count == 0) && statusCode == 204) {
+                [self showEmptyView];
+                self.feedIndex = 0;
+                [self.feedData removeAllObjects];
+                [self.swipeableView setHidden:YES];
+                
+                [Feed removeArchivedObject];
+                
+                return;
+            }
+            
+            [self.emptyView setMode:@"hide"];
+            [self.feedData addObjectsFromArray:feeds];
+            
             dispatch_async(dispatch_get_main_queue(), ^{
-                
-                if ((!feeds || feeds.count == 0) && statusCode == 204) {
-                    [self showEmptyView];
-                    self.feedIndex = 0;
-                    [self.feedData removeAllObjects];
-                    [self.swipeableView setHidden:YES];
-                    
-                    [Feed removeArchivedObject];
-                    
-                    return;
-                }
-                
-                [self.emptyView setMode:@"hide"];
-                [self.feedData addObjectsFromArray:feeds];
-                
                 [self.swipeableView setHidden:NO];
                 [self.swipeableView loadViewsIfNeeded];
             });
