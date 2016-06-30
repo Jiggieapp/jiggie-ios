@@ -244,7 +244,9 @@ static NSString *const kChatsCellIdentifier = @"ChatsCellIdentifier";
         
         if (alertView.tag == 5) {
             SharedData *sharedData = [SharedData sharedInstance];
-            [Room clearChatFromRoomId:self.roomId withFbId:sharedData.fb_id andCompletionHandler:^(NSError *error) {
+            NSString *friendFbId = [self.roomId rangeOfString:@"_"].location != NSNotFound ? [RoomPrivateInfo getFriendFbIdFromIdentifier:self.roomId fbId:sharedData.fb_id] : @"";
+            
+            [Room clearChatFromFriendFbId:friendFbId withFbId:sharedData.fb_id andCompletionHandler:^(NSError *error) {
                 if (error) {
                     [self showAlertViewWithTitle:@"Deleted Messages"
                                       andMessage:@"Unable to delete messages."];

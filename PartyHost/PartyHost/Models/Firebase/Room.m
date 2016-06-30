@@ -108,12 +108,19 @@
     return sortedRoomsInfo;
 }
 
-+ (void)clearChatFromRoomId:(NSString *)roomId withFbId:(NSString *)fbId andCompletionHandler:(ClearChatCompletionHandler)completion {
-    FIRDatabaseReference *reference = [[Room membersReference] child:roomId];
++ (void)clearChatFromFriendFbId:(NSString *)friendFbId withFbId:(NSString *)fbId andCompletionHandler:(ClearChatCompletionHandler)completion {
+    SharedData *sharedData = [SharedData sharedInstance];
+    AFHTTPRequestOperationManager *manager = [sharedData getOperationManager];
     
-    NSDictionary *parameters = @{fbId : [NSNumber numberWithBool:NO]};
+    NSString *url = [NSString stringWithFormat:@"%@/firebase/delete_chat", PHBaseNewURL];
+    NSDictionary *params = @{@"fb_id" : fbId,
+                             @"member_fb_id" : friendFbId};
     
-    [reference updateChildValues:parameters withCompletionBlock:^(NSError * _Nullable error, FIRDatabaseReference * _Nonnull ref) {
+    [manager POST:url parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        if (completion) {
+            completion(nil);
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         if (completion) {
             completion(error);
         }
