@@ -299,7 +299,7 @@
         self.input.frame = CGRectMake(0, self.frame.size.height - 40, self.frame.size.width - 60, 40);
     }
     
-    NSString *receiverId = [self.roomId rangeOfString:@"_"].location == NSNotFound ? [RoomPrivateInfo getFriendFbIdFromIdentifier:self.roomId fbId:self.sharedData.fb_id] : @"";
+    NSString *receiverId = [self.roomId rangeOfString:@"_"].location != NSNotFound ? [RoomPrivateInfo getFriendFbIdFromIdentifier:self.roomId fbId:self.sharedData.fb_id] : @"";
     
     [Message sendMessageToRoomId:self.roomId
                     withSenderId:self.sharedData.fb_id
