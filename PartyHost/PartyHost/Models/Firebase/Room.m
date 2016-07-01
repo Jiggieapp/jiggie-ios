@@ -41,6 +41,9 @@
             NSArray *keys = [snapshotMember.value allKeys];
             NSMutableArray *rooms = [NSMutableArray arrayWithCapacity:keys.count];
             
+            [[NSUserDefaults standardUserDefaults] setObject:keys forKey:@"FIREBASE_ROOM_KEYS"];
+            [[NSUserDefaults standardUserDefaults] synchronize];
+            
             for (NSString *key in keys) {
                 FIRDatabaseReference *reference = [[Room reference] child:key];
                 [reference observeEventType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
@@ -52,6 +55,9 @@
                         [[dictionary objectForKey:@"info"] setObject:snapshot.key forKey:@"identifier"];
                         [[dictionary objectForKey:@"info"] setObject:[snapshotMember.value objectForKey:key] forKey:@"members"];
                         
+                        NSArray *currentKeys = [[NSUserDefaults standardUserDefaults]
+                                                objectForKey:@"FIREBASE_ROOM_KEYS"];
+                        
                         for (Room *room in rooms) {
                             if ([room.info[@"identifier"] isEqualToString:dictionary[@"info"][@"identifier"]]) {
                                 [rooms removeObject:room];
@@ -59,14 +65,16 @@
                             }
                         }
                         
-                        Room *room = [MTLJSONAdapter modelOfClass:[Room class] fromJSONDictionary:dictionary error:&error];
+                        if ([currentKeys containsObject:snapshot.key]) {
+                            Room *room = [MTLJSONAdapter modelOfClass:[Room class] fromJSONDictionary:dictionary error:&error];
+                            
+                            [rooms addObject:room];
+                        }
                         
-                        [rooms addObject:room];
-                    }
-                    
-                    if (rooms.count >= keys.count) {
-                        if (completion) {
-                            completion(rooms, error);
+                        if (rooms.count >= keys.count) {
+                            if (completion) {
+                                completion(rooms, error);
+                            }
                         }
                     }
                 }];
@@ -140,6 +148,13 @@
     
     [manager POST:url parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if (completion) {
+            NSMutableArray *currentRoomKeys = [NSMutableArray arrayWithArray:[[NSUserDefaults standardUserDefaults] objectForKey:@"FIREBASE_ROOM_KEYS"]];
+            [currentRoomKeys removeObject:roomId];
+            
+            [[NSUserDefaults standardUserDefaults] setObject:[NSArray arrayWithArray:currentRoomKeys]
+                                                      forKey:@"FIREBASE_ROOM_KEYS"];
+            [[NSUserDefaults standardUserDefaults] synchronize];
+            
             completion(nil);
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
