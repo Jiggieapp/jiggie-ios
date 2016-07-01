@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model userDefinedModelVersionIdentifier="1.6.0" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="10171" systemVersion="15F34" minimumToolsVersion="Xcode 7.0">
+<model userDefinedModelVersionIdentifier="1.6.0" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="10171" systemVersion="15B42" minimumToolsVersion="Xcode 7.0">
     <entity name="Chat" representedClassName="Chat" syncable="YES">
         <attribute name="fb_id" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="fromID" optional="YES" attributeType="String" syncable="YES"/>
@@ -34,6 +34,7 @@
         <attribute name="eventID" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="fullfillmentType" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="fullfillmentValue" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="groupRoomID" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="guestViewed" optional="YES" attributeType="Transformable" syncable="YES"/>
         <attribute name="isLiked" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
         <attribute name="likes" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
@@ -51,6 +52,6 @@
     <elements>
         <element name="Chat" positionX="-45" positionY="153" width="128" height="180"/>
         <element name="Event" positionX="-63" positionY="-18" width="128" height="255"/>
-        <element name="EventDetail" positionX="-63" positionY="54" width="128" height="330"/>
+        <element name="EventDetail" positionX="-63" positionY="54" width="128" height="345"/>
     </elements>
 </model>

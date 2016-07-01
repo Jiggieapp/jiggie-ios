@@ -427,6 +427,9 @@
     if (event) {
         [self loadData:event.eventID];
     }
+    
+    [self.membersCount setText:@"Chat"];
+    [self.chatButton setEnabled:NO];
 }
 
 -(void)initClassWithEventID:(NSString *)eventID
@@ -446,6 +449,9 @@
            [self loadData:eventID];
         }
     }
+    
+    [self.membersCount setText:@"Chat"];
+    [self.chatButton setEnabled:NO];
 }
 
 - (void)initClassModalWithEventID:(NSString *)eventID {
@@ -663,7 +669,7 @@
         [SVProgressHUD show];
         [manager POST:url parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
             if (operation.response.statusCode == 200) {
-                NSDictionary *object = @{@"roomId" : self.event_id,
+                NSDictionary *object = @{@"roomId" : self.groupRoomId,
                                          @"members" : @{},
                                          @"eventName" : self.eventName.text};
                 
@@ -841,8 +847,6 @@
 - (void)loadData:(NSString*)event_id {
     self.event_id = event_id;
     self.sharedData.cEventId_Summary = event_id;
-    
-    [self observeTotalMember:event_id];
     
     AFHTTPRequestOperationManager *manager = [self.sharedData getOperationManager];
     
@@ -1027,6 +1031,18 @@
                          item.venue = [NSKeyedArchiver archivedDataWithRootObject:venue];
                      }
                      
+                     NSString *group_room_id = [eventDetail objectForKey:@"group_room_id"];
+                     if (group_room_id && ![group_room_id isEqual:[NSNull null]]) {
+                         item.groupRoomID = group_room_id;
+                         self.groupRoomId = group_room_id;
+                         
+                         [self observeTotalMember:group_room_id];
+                     } else {
+                         item.groupRoomID = @"";
+                         self.groupRoomId = @"";
+                     }
+
+                     
                      NSString *start_datetime = [eventDetail objectForKey:@"start_datetime"];
                      NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
                      [formatter setDateFormat:PHDateFormatServer];
@@ -1042,6 +1058,8 @@
                      }
                      
                      item.modified = [NSDate date];
+                     
+                     [self.chatButton setEnabled:YES];
                      
                      NSError *error;
                      if (![self.managedObjectContext save:&error]) NSLog(@"Error: %@", [error localizedDescription]);
