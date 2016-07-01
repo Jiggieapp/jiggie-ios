@@ -227,7 +227,8 @@
     [self.loadingView setHidden:NO];
     
     if ([self.roomId rangeOfString:@"_"].location != NSNotFound) {
-        if (![[self.eventName lowercaseString] isEqualToString:@"generic"] &&
+        if (self.eventName.length > 0 &&
+            ![[self.eventName lowercaseString] isEqualToString:@"generic"] &&
             ![[self.eventName lowercaseString] isEqualToString:@"friendlist"]) {
             UIView *view = [self headerViewWithText:self.eventName];
             UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(.0f, .0f, CGRectGetWidth(self.messagesList.bounds), CGRectGetHeight(view.bounds) + 20.0f)];
