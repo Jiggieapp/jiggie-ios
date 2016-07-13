@@ -10,7 +10,17 @@
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import "SharedData.h"
 
+@interface Friend ()
+
+@property (assign, nonatomic) FriendState connectState;
+
+@end
+
 @implementation Friend
+
+- (void)setFriendConnectState:(FriendState *)connectState {
+    self.connectState = connectState;
+}
 
 + (NSDictionary *)JSONKeyPathsByPropertyKey {
     return @{@"fbID" : @"fb_id",

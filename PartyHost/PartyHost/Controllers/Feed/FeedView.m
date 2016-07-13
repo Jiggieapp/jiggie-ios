@@ -72,11 +72,7 @@
     
     if (feeds) {
         self.feedData = [NSMutableArray arrayWithArray:feeds];
-        if (feeds.count > 0) {
-            [self.swipeableView loadViewsIfNeeded];
-        } else {
-            [self showEmptyView];
-        }
+        [self.swipeableView loadViewsIfNeeded];
     } else {
         [self loadDataAndShowHUD:NO withCompletionHandler:nil];
     }
@@ -278,8 +274,6 @@
             [self.emptyView setMode:@"hide"];
         }
         
-        self.feedIndex = 0;
-        
         [self.filterButton setEnabled:YES];
         
         if (error) {
@@ -288,22 +282,21 @@
                 [SVProgressHUD showInfoWithStatus:@"Please check your internet connection"];
             }
         } else {
-            dispatch_async(dispatch_get_main_queue(), ^{
+            if ((!feeds || feeds.count == 0) && statusCode == 204) {
+                [self showEmptyView];
+                self.feedIndex = 0;
                 [self.feedData removeAllObjects];
+                [self.swipeableView setHidden:YES];
                 
-                if ((!feeds || feeds.count == 0) && statusCode == 204) {
-                    [self showEmptyView];
-                    [self.feedData removeAllObjects];
-                    [self.swipeableView setHidden:YES];
-                    
-                    [Feed removeArchivedObject];
-                    
-                    return;
-                }
+                [Feed removeArchivedObject];
                 
-                [self.emptyView setMode:@"hide"];
-                [self.feedData addObjectsFromArray:feeds];
-                
+                return;
+            }
+            
+            [self.emptyView setMode:@"hide"];
+            [self.feedData addObjectsFromArray:feeds];
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
                 [self.swipeableView setHidden:NO];
                 [self.swipeableView loadViewsIfNeeded];
             });
@@ -338,6 +331,8 @@
                 [self.swipeableView discardAllViews];
                 
                 if (self.sharedData.matchMe) {
+                    self.feedIndex = 0;
+                    [self.feedData removeAllObjects];
                     [self loadDataAndShowHUD:YES withCompletionHandler:nil];
                 } else {
                     [self.emptyView setMode:@"hide"];
@@ -360,7 +355,7 @@
                 [JGTooltipHelper setShowed:@"Tooltip_AcceptRequest_isShowed"];
                 
                 [SVProgressHUD show];
-                [Feed approveFeed:approved withFbId:feed.fromFbId andCompletionHandler:^(NSError *error) {
+                [Feed approveFeed:approved withFbId:feed.fromFbId andSource:feed.source andCompletionHandler:^(NSError *error) {
                     [SVProgressHUD dismiss];
                     
                     dispatch_async(dispatch_get_main_queue(), ^{
@@ -387,7 +382,7 @@
             case FeedTypeViewed: {
                 [JGTooltipHelper setShowed:@"Tooltip_AcceptSuggestion_isShowed"];
                 
-                [Feed approveFeed:approved withFbId:feed.fromFbId andCompletionHandler:^(NSError *error) {
+                [Feed approveFeed:approved withFbId:feed.fromFbId andSource:feed.source andCompletionHandler:^(NSError *error) {
                     dispatch_async(dispatch_get_main_queue(), ^{
                         if (self.feedData.count == 0) {
                             [self showEmptyView];
@@ -403,7 +398,7 @@
     } else {
         [self trackDeniedFeedItemWithType:feed.type];
         
-        [Feed approveFeed:approved withFbId:feed.fromFbId andCompletionHandler:^(NSError *error) {
+        [Feed approveFeed:approved withFbId:feed.fromFbId andSource:feed.source andCompletionHandler:^(NSError *error) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (self.feedData.count == 0) {
                     [self showEmptyView];
@@ -607,9 +602,6 @@
     if (self.isSwipedOut) {
         Feed *feed = [self getFeedFromCardView:view];
         
-        [self.feedData removeObject:feed];
-        [Feed archiveObject:self.feedData];
-        
         if (location.x > CGRectGetWidth(self.bounds) / 2) {
             [self approveFeed:YES withFeed:feed];
         } else {
@@ -649,14 +641,7 @@
     self.isSwipedOut = YES;
     [self.swipeableView setUserInteractionEnabled:NO];
     
-    ShadowView *shadowView = (ShadowView*)view;
-    FeedCardView *cardView = (FeedCardView *)shadowView.subviews.lastObject;
-    Feed *feed = cardView.feed;
-    
-    [self.feedData removeObject:feed];
-    [Feed archiveObject:self.feedData];
-    
-    if (self.feedData.count == 10) {
+    if (self.feedData.count - (self.feedIndex + 1) == 10) {
         [self loadDataAndShowHUD:NO withCompletionHandler:nil];
     }
     
@@ -679,9 +664,6 @@
         [self approveFeed:NO withFeed:feed];
         [view showSkipOverlayView];
     }
-    
-    [self.feedData removeObject:feed];
-    [Feed archiveObject:self.feedData];
     
     ShadowView *shadowView = (ShadowView*)self.swipeableView.topView;
     FeedCardView *cardView = (FeedCardView *)shadowView.subviews.lastObject;

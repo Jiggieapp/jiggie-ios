@@ -28,6 +28,8 @@
 @property (nonatomic, assign) BOOL isLoaded;
 @property (nonatomic, strong) NSMutableDictionary *mainDict;
 @property (nonatomic, strong) NSString *event_id;
+@property (nonatomic, strong) NSString *groupRoomId;
+@property (nonatomic, assign) BOOL isFromMessage;
 
 //Nav top
 @property (nonatomic,strong) UILabel *title;
@@ -41,6 +43,8 @@
 @property (nonatomic, strong) UIButton *btnHostHere;
 @property (nonatomic, strong) UIButton *likeButton;
 @property (nonatomic, strong) UILabel *likeCount;
+@property (nonatomic, strong) UIButton *chatButton;
+@property (nonatomic, strong) UILabel *membersCount;
 @property (nonatomic, strong) UIButton *shareButton;
 @property (nonatomic, strong) UILabel *eventName;
 @property (nonatomic, strong) UILabel *venueName;
@@ -80,7 +84,7 @@
 @property (nonatomic, retain) NSFetchedResultsController *fetchedResultsController;
 @property (nonatomic, retain) NSManagedObjectContext *managedObjectContext;
 
-@property(nonatomic,strong) JDFSequentialTooltipManager *tooltip;
+@property (nonatomic,strong) JDFSequentialTooltipManager *tooltip;
 
 @property (assign, nonatomic) BOOL isModal;
 

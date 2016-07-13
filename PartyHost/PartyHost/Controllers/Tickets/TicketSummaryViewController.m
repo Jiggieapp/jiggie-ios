@@ -34,7 +34,7 @@ NSInteger const MaxBookingTableGuest = 100;
     self.navBar = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.visibleSize.width, 60)];
     [self.navBar setBackgroundColor:[UIColor phPurpleColor]];
     
-    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(40, 20, self.visibleSize.width - 80, 40)];
+    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(60, 20, self.visibleSize.width - 120, 40)];
     [titleLabel setTextAlignment:NSTextAlignmentCenter];
     [titleLabel setFont:[UIFont phBlond:16]];
     [titleLabel setTextColor:[UIColor whiteColor]];
@@ -304,7 +304,7 @@ NSInteger const MaxBookingTableGuest = 100;
     [sharedData.mixPanelCTicketDict setObject:[self.productSelected objectForKey:@"ticket_type"] forKey:@"Ticket Type"];
     [sharedData.mixPanelCTicketDict setObject:[self.productSelected objectForKey:@"price"] forKey:@"Ticket Price"];
     if (self.isTicketProduct) {
-       [sharedData.mixPanelCTicketDict setObject:[self.productSelected objectForKey:@"max_purchase"] forKey:@"Ticket Max Per Guest"];
+        [sharedData.mixPanelCTicketDict setObject:[self.productSelected objectForKey:@"max_purchase"] forKey:@"Ticket Max Per Guest"];
     } else {
         [sharedData.mixPanelCTicketDict setObject:[self.productSelected objectForKey:@"max_guests"] forKey:@"Ticket Max Per Guest"];
     }
@@ -597,6 +597,14 @@ NSInteger const MaxBookingTableGuest = 100;
          [self.userDetailButton setBackgroundColor:[UIColor clearColor]];
      } completion:^(BOOL finished){
          GuestDetailViewController *guestDetailViewController = [[GuestDetailViewController alloc] init];
+         
+         NSString *sourceName = self.productSelected [@"source"][@"name"];
+         if (sourceName && [sourceName isEqualToString:@"loket"]) {
+             guestDetailViewController.isIDNumberEnabled = YES;
+         } else {
+             guestDetailViewController.isIDNumberEnabled = NO;
+         }
+         
          UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:guestDetailViewController];
          [self presentViewController:nav animated:YES completion:nil];
      }];
@@ -614,6 +622,7 @@ NSInteger const MaxBookingTableGuest = 100;
                 TicketConfirmationViewController *ticketConfirmationViewController = [[TicketConfirmationViewController alloc] init];
                 ticketConfirmationViewController.productSummary = self.productSummary;
                 ticketConfirmationViewController.productList = [product_list objectAtIndex:0];
+                ticketConfirmationViewController.extraCharge = self.bookTableExtraCharge;
                 
                 NSString *event_name = [self.productList objectForKey:@"event_name"];
                 if (event_name && event_name != nil) {
@@ -689,6 +698,17 @@ NSInteger const MaxBookingTableGuest = 100;
         emptyCounter++;
     }
     
+    NSDictionary *source = [self.productSelected objectForKey:@"source"];
+    if (source && ![source isEqual:[NSNull null]]) {
+        NSString *sourceName = [source objectForKey:@"name"];
+        if (sourceName && [sourceName isEqualToString:@"loket"]) {
+            if (![userInfo objectForKey:@"identity_id"] || [[userInfo objectForKey:@"identity_id"] isEqualToString:@""]) {
+                [self.userBox setImage:[[UIImage imageNamed:@"bg_rectangle_red"] stretchableImageWithLeftCapWidth:10 topCapHeight:10]];
+                self.isAllowToContinue = NO;
+            }
+        }
+    }
+    
     if (emptyCounter == 3) {
         // check if all data is empty
         [self.userName setHidden:YES];
@@ -725,13 +745,19 @@ NSInteger const MaxBookingTableGuest = 100;
                               @"num_buy":self.totalTicket.text};
     [summaryList addObject:summary];
     
+    NSString *identity_id = @"";
+    if ([userInfo objectForKey:@"identity_id"]) {
+        identity_id = [userInfo objectForKey:@"identity_id"];
+    }
+    
     NSDictionary *params = @{@"fb_id":sharedData.fb_id,
                              @"event_id":[self.productList objectForKey:@"event_id"],
                              @"product_list":summaryList,
                              @"guest_detail":@{@"name":[userInfo objectForKey:@"name"],
                                                @"email":[userInfo objectForKey:@"email"],
                                                @"phone":[userInfo objectForKey:@"phone"],
-                                               @"dial_code":[userInfo objectForKey:@"dial_code"]}};
+                                               @"dial_code":[userInfo objectForKey:@"dial_code"],
+                                               @"identity_id":identity_id}};
     
     [SVProgressHUD show];
     [self.continueButton setEnabled:NO];

@@ -671,6 +671,14 @@
                                 [sharedData.mixPanelCTicketDict setObject:[summary objectForKey:@"created_at"] forKey:@"Date Time"];
                                 [sharedData.mixPanelCTicketDict setObject:[productList objectForKey:@"total_price_all"] forKey:@"Purchase Amount"];
                                 [sharedData.mixPanelCTicketDict setObject:[self.successData objectForKey:@"payment_type"] forKey:@"Purchase Payment"];
+                                NSString *creditUsed = self.successData[@"credit"][@"credit_used"];
+                                if (creditUsed && ![creditUsed isEqual:[NSNull null]] && creditUsed.integerValue > 0) {
+                                    [sharedData.mixPanelCTicketDict setObject:creditUsed forKey:@"Credit"];
+                                } else {
+                                    [sharedData.mixPanelCTicketDict setObject:@"0" forKey:@"Credit"];
+                                }
+                                
+                                // run for once after purchasing
                                 if (self.showViewButton) {
                                     [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Commerce Finish" withDict:sharedData.mixPanelCTicketDict];
                                 }

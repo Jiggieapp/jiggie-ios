@@ -19,8 +19,11 @@
 #import "JGKeyboardNotificationHelper.h"
 #import "City.h"
 #import "Mantle.h"
+#import "Theme.h"
+#import "EventsThemeCell.h"
 
-#define SCREENS_DEEP 4
+
+#define SCREENS_DEEP 5
 
 @interface Events()
 
@@ -43,6 +46,7 @@
     self.didLoadFromHostings = NO;
     self.didLoadFromInvite = NO;
     self.needUpdateContents = YES;
+    self.nodeToHome = 0;
     
     UIView *tmpPurpleView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.sharedData.screenWidth, 40)];
     tmpPurpleView.backgroundColor = [UIColor phPurpleColor];
@@ -99,7 +103,6 @@
         [self.btnCity setImage:arrowImage forState:UIControlStateNormal];
         [self.btnCity setImage:arrowImage forState:UIControlStateHighlighted];
         [self.btnCity setImageEdgeInsets:UIEdgeInsetsMake(0, (CGRectGetWidth(self.btnCity.bounds) - 25) - (arrowImage.size.width + 8), 0, 0)];
-        [self.btnCity addTarget:self action:@selector(goToCityList) forControlEvents:UIControlEventTouchUpInside];
     }
     
     [self.tabBar addSubview:self.btnCity];
@@ -149,6 +152,9 @@
     
     self.currentSegmentationIndex = 1;
     
+    self.themeToday = [[NSMutableArray alloc] init];
+    self.themeTomorrow = [[NSMutableArray alloc] init];
+    self.themeUpcoming = [[NSMutableArray alloc] init];
     self.eventsToday = [[NSMutableArray alloc] init];
     self.eventsTomorrow = [[NSMutableArray alloc] init];
     self.eventsUpcoming = [[NSMutableArray alloc] init];
@@ -282,15 +288,19 @@
     [self.filterView addSubview:self.filterTagCollection];
     
     //2nd screen
-    self.eventsSummary = [[EventsSummary alloc] initWithFrame:CGRectMake(self.sharedData.screenWidth, -20, self.sharedData.screenWidth, self.mainCon.frame.size.height)];
+    self.eventsTheme = [[EventsTheme alloc] initWithFrame:CGRectMake(self.sharedData.screenWidth, -20, self.sharedData.screenWidth, self.mainCon.frame.size.height)];
+    [self.mainCon addSubview:self.eventsTheme];
+    
+    //2nd screen
+    self.eventsSummary = [[EventsSummary alloc] initWithFrame:CGRectMake(self.sharedData.screenWidth*2, -20, self.sharedData.screenWidth, self.mainCon.frame.size.height)];
     [self.mainCon addSubview:self.eventsSummary];
     
     //3rd screen
-    self.eventsHostingsList = [[EventsHostingsList alloc] initWithFrame:CGRectMake(self.sharedData.screenWidth*2, -20, self.sharedData.screenWidth, self.mainCon.frame.size.height)];
+    self.eventsHostingsList = [[EventsHostingsList alloc] initWithFrame:CGRectMake(self.sharedData.screenWidth*3, -20, self.sharedData.screenWidth, self.mainCon.frame.size.height)];
     [self.mainCon addSubview:self.eventsHostingsList];
     
     //3rd screen
-    self.eventsGuestList = [[EventsGuestList alloc] initWithFrame:CGRectMake(self.sharedData.screenWidth*2, -20, self.sharedData.screenWidth, self.mainCon.frame.size.height)];
+    self.eventsGuestList = [[EventsGuestList alloc] initWithFrame:CGRectMake(self.sharedData.screenWidth*3, -20, self.sharedData.screenWidth, self.mainCon.frame.size.height)];
     [self.mainCon addSubview:self.eventsGuestList];
     
     //Gone
@@ -299,6 +309,7 @@
     
     //4th screen
     self.eventsHostDetail = [[EventsHostDetail alloc] initWithFrame:CGRectMake(self.sharedData.screenWidth * 3, -20, self.sharedData.screenWidth, self.mainCon.frame.size.height)];
+    [self.eventsHostDetail setHidden:YES];
     [self.mainCon addSubview:self.eventsHostDetail];
     
     [self observeKeyboardNotification];
@@ -309,17 +320,23 @@
      name:@"EVENTS_GO_HOME"
      object:nil];
     
+    [[NSNotificationCenter defaultCenter]
+     addObserver:self
+     selector:@selector(goBackNode)
+     name:@"EVENTS_GO_BACK"
+     object:nil];
+    
     //2nd screen
     [[NSNotificationCenter defaultCenter]
      addObserver:self
-     selector:@selector(goToSummary)
+     selector:@selector(goToSummaryNotification:)
      name:@"EVENTS_GO_HOST_SUMMARY"
      object:nil];
     
     //2nd screen
     [[NSNotificationCenter defaultCenter]
      addObserver:self
-     selector:@selector(goToSummary)
+     selector:@selector(goToSummaryNotification:)
      name:@"EVENTS_GO_GUEST_SUMMARY"
      object:nil];
     
@@ -388,6 +405,8 @@
      name:@"REFRESH_EVENTS_FEED"
      object:nil];
     
+    self.hasLoadEventOnce = NO;
+    
     return self;
 }
 
@@ -399,6 +418,7 @@
     self.whiteBK.hidden = YES;
     self.backgroundColor = [UIColor whiteColor];
     [self.emptyView setMode:@"load"];
+    self.hasLoadEventOnce = NO;
 }
 
 - (JGKeyboardNotificationHelper *)keyboardNotification {
@@ -414,10 +434,10 @@
 -(void)initClass
 {
     NSLog(@"EVENT_INIT_CLASS %@",(self.sharedData.isLoggedIn == YES)?@"Y":@"N");
-    if(self.sharedData.isLoggedIn)
+    if(self.sharedData.isLoggedIn && !self.hasLoadEventOnce)
     {
         NSLog(@"EVENT_INSIDE");
-        //[self.sharedData trackMixPanel:@"display_browse_events"];
+        self.hasLoadEventOnce = YES;
         
         [[AnalyticManager sharedManager] trackMixPanelWithDict:@"View Events" withDict:@{}];
         
@@ -440,16 +460,6 @@
                 [self.filterTagCollection selectItemAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0] animated:NO scrollPosition:UICollectionViewScrollPositionNone];
             }
         }
-        
-        /*
-         //SHOW HOST VENUE DETAIL FROM HARE AS A TEST
-        self.sharedData.cInitHosting_id = @"55d387422e351903005b8ca8";
-        self.sharedData.cHostingIdFromInvite = @"55d387422e351903005b8ca8";
-        self.sharedData.hasInitEventSelection = NO;
-        [[NSNotificationCenter defaultCenter]
-         postNotificationName:@"SHOW_HOST_VENUE_DETAIL_FROM_SHARE"
-         object:self];
-        */
         
         //SHOW POPUP
         if(self.sharedData.cPageIndex==0)
@@ -489,6 +499,12 @@
     self.isReloadMode = YES;
     self.refreshControl = refreshControl;
     [self loadDataWithCompletionHandler:nil];
+    
+    [City retrieveCitiesWithCompletionHandler:^(NSArray *cities, NSInteger statusCode, NSError *error) {
+        if (cities && cities.count > 0) {
+            [City archiveCities:cities];
+        }
+    }];
 }
 
 #pragma mark - Fetch
@@ -508,12 +524,16 @@
     NSSortDescriptor *sortDescriptor =
     [NSSortDescriptor sortDescriptorWithKey:@"modified"
                                   ascending:YES];
-    NSPredicate *eventPredicate = [NSPredicate predicateWithFormat:@"endDatetime > %@", [NSDate date]];
+    
+    NSMutableArray *subPredicates = [NSMutableArray array];
+    [subPredicates addObject:[NSPredicate predicateWithFormat:@"endDatetime > %@", [NSDate date]]];
+    [subPredicates addObject:[NSPredicate predicateWithFormat:@"themeID = %@", @"list"]];
+    
     NSArray *sortDescriptors = [NSArray arrayWithObjects:sortDescriptor, nil];
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     [fetchRequest setEntity:entityDescription];
     [fetchRequest setSortDescriptors:sortDescriptors];
-    [fetchRequest setPredicate:eventPredicate];
+    [fetchRequest setPredicate:[NSCompoundPredicate andPredicateWithSubpredicates:subPredicates]];
     
     fetchedResultsController = nil;
     fetchedResultsController = [[NSFetchedResultsController alloc]
@@ -580,11 +600,15 @@
         [self.btnCity setImage:arrowImage forState:UIControlStateNormal];
         [self.btnCity setImage:arrowImage forState:UIControlStateHighlighted];
         [self.btnCity setImageEdgeInsets:UIEdgeInsetsMake(0, (CGRectGetWidth(self.btnCity.bounds) - 25) - (arrowImage.size.width + 8), 0, 0)];
-        [self.btnCity setUserInteractionEnabled:YES];
+        [self.btnCity setEnabled:YES];
+        
+        if ([self.btnCity.allTargets count] == 0) {
+            [self.btnCity addTarget:self action:@selector(goToCityList) forControlEvents:UIControlEventTouchUpInside];
+        }
     } else {
         [self.btnCity setImage:nil forState:UIControlStateNormal];
         [self.btnCity setImage:nil forState:UIControlStateHighlighted];
-        [self.btnCity setUserInteractionEnabled:NO];
+        [self.btnCity setEnabled:NO];
     }
     
     if (city) {
@@ -608,6 +632,7 @@
 #pragma mark - API
 -(void)loadDataWithCompletionHandler:(void(^)(NSError* error))completion
 {
+    
     AFHTTPRequestOperationManager *manager = [self.sharedData getOperationManager];
     //events/list/
     NSString *url = [NSString stringWithFormat:@"%@/events/list/%@",PHBaseNewURL,self.sharedData.fb_id];
@@ -661,14 +686,13 @@
              
              return;
          }
-         
-         
+        
          NSDictionary *json = (NSDictionary *)[NSJSONSerialization
                                                JSONObjectWithData:[responseString dataUsingEncoding:NSUTF8StringEncoding]
                                                             options:kNilOptions
                                                             error:&error];
          dispatch_async(dispatch_get_main_queue(), ^{
-             
+         
              if (json && json != nil) {
                  self.isEventsLoaded = YES;
                  self.whiteBK.hidden = NO;
@@ -687,14 +711,23 @@
                      
                      NSDictionary *data = [json objectForKey:@"data"];
                      if (data && data != nil) {
+                         NSArray *themes = [data objectForKey:@"themes"];
+                         [Theme removeArchivedObject];
+                         
+                         if (themes && themes.count > 0) {
+                             NSError *error = nil;
+                             NSArray *parsedThemes = [MTLJSONAdapter modelsOfClass:[Theme class]
+                                                                     fromJSONArray:themes                                                                                   error:&error];
+                             [Theme archiveObject:parsedThemes];
+                         }
+                         
                          NSArray *events = [data objectForKey:@"events"];
                          
                          if (!events || events.count == 0) {
                              [self.emptyView setMode:@"empty"];
                          }
-                         
+                    
                          for (NSDictionary *eventRow in events) {
-                             
                              BOOL isFeatured = NO;
                              if ([[eventRow objectForKey:@"date_day"] isEqualToString:@"Featured Events"]) {
                                  isFeatured = YES;
@@ -717,6 +750,8 @@
                                  item.eventID = @"";
                              }
                              
+                             item.themeID = @"list"; // set as default
+                             
                              NSString *venue_name = [eventRow objectForKey:@"venue_name"];
                              if (venue_name && ![venue_name isEqual:[NSNull null]]) {
                                  item.venue = venue_name;
@@ -737,7 +772,7 @@
                              } else {
                                  item.fullfillmentType = @"";
                              }
-                            
+                             
                              NSNumber *likes = [eventRow objectForKey:@"likes"];
                              if (likes && ![likes isEqual:[NSNull null]]) {
                                  item.likes = likes;
@@ -784,10 +819,8 @@
                              
                              NSError *error;
                              if (![self.managedObjectContext save:&error]) NSLog(@"Error: %@", [error localizedDescription]);
-                             
                          }
                      }
-
                  }
                  @catch (NSException *exception) {
 
@@ -808,7 +841,7 @@
                  }
              }
          });
-         
+     
      } failure:^(AFHTTPRequestOperation *operation, NSError *error)
      {
          if (completion) {
@@ -841,6 +874,21 @@
 }
 
 - (void)reloadTables {
+    [self.themeToday removeAllObjects];
+    [self.themeTomorrow removeAllObjects];
+    [self.themeUpcoming removeAllObjects];
+    
+    NSArray *themes = [Theme unarchiveObject];
+    for (Theme *theme in themes) {
+        if ([theme.status isEqualToString:@"today"]) {
+            [self.themeToday addObject:theme];
+        } else if ([theme.status isEqualToString:@"tomorrow"]) {
+            [self.themeTomorrow addObject:theme];
+        } else {
+            [self.themeUpcoming addObject:theme];
+        }
+    }
+    
     [self.eventsToday removeAllObjects];
     [self.eventsTomorrow removeAllObjects];
     [self.eventsUpcoming removeAllObjects];
@@ -856,10 +904,7 @@
         components = [cal components:(NSCalendarUnitEra | NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay) fromDate:event.startDatetime];
         NSDate *startDate = [cal dateFromComponents:components];
         
-        components = [cal components:(NSCalendarUnitEra | NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay) fromDate:event.endDatetime];
-        NSDate *endDate = [cal dateFromComponents:components];
-        
-        if([today isEqualToDate:endDate]) {
+        if([today compare:startDate] == NSOrderedDescending) {
             [self.eventsToday addObject:event];
         } else if([today isEqualToDate:startDate]) {
             [self.eventsToday addObject:event];
@@ -869,11 +914,11 @@
             [self.eventsUpcoming addObject:event];
         }
     }
-    
+
     [self.events1List reloadData];
     [self.events2List reloadData];
     [self.events3List reloadData];
-    
+
     if (self.isReloadMode) {
         // Do your job, when done:
         [self.refreshControl endRefreshing];
@@ -1024,31 +1069,39 @@
 
 #pragma mark - UITableViewDataSource
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 1;
+    return 2;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    if ([tableView isEqual:self.events1List]) {
-        if (self.eventsToday.count == 0) {
-            return 1;
+    if (section == 0) {
+        if ([tableView isEqual:self.events1List]) {
+            return self.themeToday.count;
+        } else if ([tableView isEqual:self.events2List]) {
+            return self.themeTomorrow.count;
+        } else if ([tableView isEqual:self.events3List]) {
+            return self.themeUpcoming.count;
         }
-        return self.eventsToday.count;
-    } else if ([tableView isEqual:self.events2List]) {
-        if (self.eventsTomorrow.count == 0) {
-            return 1;
+        
+    } else if (section == 1) {
+        if ([tableView isEqual:self.events1List]) {
+            return self.eventsToday.count;
+        } else if ([tableView isEqual:self.events2List]) {
+            return self.eventsTomorrow.count;
+        } else if ([tableView isEqual:self.events3List]) {
+            return self.eventsUpcoming.count;
         }
-        return self.eventsTomorrow.count;
-    } else if ([tableView isEqual:self.events3List]) {
-        if (self.eventsUpcoming.count == 0) {
-            return 1;
-        }
-        return self.eventsUpcoming.count;
     }
     
     return 0;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    if ([indexPath section] == 0) {
+        CGFloat pictureHeightRatio = 3.0 / 4.0;
+        CGFloat cellHeight = pictureHeightRatio * tableView.bounds.size.width + 4;
+        return cellHeight;
+    }
+    
     if ([tableView isEqual:self.events1List] && self.eventsToday.count == 0) {
         return tableView.bounds.size.height;
     } else if ([tableView isEqual:self.events2List] && self.eventsTomorrow.count == 0) {
@@ -1092,6 +1145,55 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    if ([indexPath section] == 0) {
+        if ([tableView isEqual:self.events1List] && self.themeToday.count > 0) {
+            static NSString *simpleTableIdentifier = @"EventsTheme1Cell";
+            EventsThemeCell *cell = [tableView dequeueReusableCellWithIdentifier:simpleTableIdentifier];
+            
+            if (cell == nil) {
+                [tableView registerNib:[EventsThemeCell nib] forCellReuseIdentifier:simpleTableIdentifier];
+                cell = [tableView dequeueReusableCellWithIdentifier:simpleTableIdentifier forIndexPath:indexPath];
+            }
+            
+            Theme *theme = [self.themeToday objectAtIndex:indexPath.row];
+            if (theme && theme != nil) {
+                [cell loadData:theme];
+            }
+            
+            return cell;
+        } else if ([tableView isEqual:self.events2List] && self.themeTomorrow.count > 0) {
+            static NSString *simpleTableIdentifier = @"EventsTheme2Cell";
+            EventsThemeCell *cell = [tableView dequeueReusableCellWithIdentifier:simpleTableIdentifier];
+            
+            if (cell == nil) {
+                [tableView registerNib:[EventsThemeCell nib] forCellReuseIdentifier:simpleTableIdentifier];
+                cell = [tableView dequeueReusableCellWithIdentifier:simpleTableIdentifier forIndexPath:indexPath];
+            }
+            
+            Theme *theme = [self.themeTomorrow objectAtIndex:indexPath.row];
+            if (theme && theme != nil) {
+                [cell loadData:theme];
+            }
+            
+            return cell;
+        } else if ([tableView isEqual:self.events3List] && self.themeUpcoming.count > 0) {
+            static NSString *simpleTableIdentifier = @"EventsTheme3Cell";
+            EventsThemeCell *cell = [tableView dequeueReusableCellWithIdentifier:simpleTableIdentifier];
+            
+            if (cell == nil) {
+                [tableView registerNib:[EventsThemeCell nib] forCellReuseIdentifier:simpleTableIdentifier];
+                cell = [tableView dequeueReusableCellWithIdentifier:simpleTableIdentifier forIndexPath:indexPath];
+            }
+            
+            Theme *theme = [self.themeUpcoming objectAtIndex:indexPath.row];
+            if (theme && theme != nil) {
+                [cell loadData:theme];
+            }
+            
+            return cell;
+        }
+    }
+    
     if ([tableView isEqual:self.events1List] && self.eventsToday.count > 0) {
     
         static NSString *simpleTableIdentifier = @"EventsRow1Cell";
@@ -1171,49 +1273,55 @@
     [self endEditing:YES];
     
     @try {
-        Event *event = nil;
         
-        if ([tableView isEqual:self.events1List]) {
-            if (self.eventsToday != nil && indexPath.row < self.eventsToday.count) {
-                event = [self.eventsToday objectAtIndex:indexPath.row];
-            }
-        } else if ([tableView isEqual:self.events2List]) {
-            if (self.eventsTomorrow != nil && indexPath.row < self.eventsTomorrow.count) {
-                event = [self.eventsTomorrow objectAtIndex:indexPath.row];
-            }
-        } else if ([tableView isEqual:self.events3List]) {
-            if (self.eventsUpcoming != nil && indexPath.row < self.eventsUpcoming.count) {
-                event = [self.eventsUpcoming objectAtIndex:indexPath.row];
-            }
-        }
-        
-        if (event != nil) {
-            [self.sharedData.selectedEvent removeAllObjects];
-            self.sharedData.selectedEvent[@"_id"] = event.eventID;
-            self.sharedData.selectedEvent[@"venue_name"] = event.venue;
+        if (indexPath.section == 0) {
+            Theme *theme = nil;
             
-            self.sharedData.cEventId = event.eventID;
-            self.sharedData.mostRecentEventSelectedId = event.eventID;
-            self.sharedData.cVenueName = event.venue;
+            if ([tableView isEqual:self.events1List]) {
+                if (self.themeToday != nil && indexPath.row < self.themeToday.count) {
+                    theme = [self.themeToday objectAtIndex:indexPath.row];
+                }
+            } else if ([tableView isEqual:self.events2List]) {
+                if (self.themeTomorrow != nil && indexPath.row < self.themeTomorrow.count) {
+                    theme = [self.themeTomorrow objectAtIndex:indexPath.row];
+                }
+            } else if ([tableView isEqual:self.events3List]) {
+                if (self.themeUpcoming != nil && indexPath.row < self.themeUpcoming.count) {
+                    theme = [self.themeUpcoming objectAtIndex:indexPath.row];
+                }
+            }
             
-            if([self.sharedData isGuest] && ![self.sharedData isMember])
-            {
-                [self.eventsSummary initClassWithEvent:event];
+            [self.eventsTheme initClassWithTheme:theme];
+            [self goToEventTheme];
+            
+        } else {
+            Event *event = nil;
+            
+            if ([tableView isEqual:self.events1List]) {
+                if (self.eventsToday != nil && indexPath.row < self.eventsToday.count) {
+                    event = [self.eventsToday objectAtIndex:indexPath.row];
+                }
+            } else if ([tableView isEqual:self.events2List]) {
+                if (self.eventsTomorrow != nil && indexPath.row < self.eventsTomorrow.count) {
+                    event = [self.eventsTomorrow objectAtIndex:indexPath.row];
+                }
+            } else if ([tableView isEqual:self.events3List]) {
+                if (self.eventsUpcoming != nil && indexPath.row < self.eventsUpcoming.count) {
+                    event = [self.eventsUpcoming objectAtIndex:indexPath.row];
+                }
+            }
+            
+            if (event != nil) {
+                [self.sharedData.selectedEvent removeAllObjects];
+                self.sharedData.selectedEvent[@"_id"] = event.eventID;
+                self.sharedData.selectedEvent[@"venue_name"] = event.venue;
                 
-                self.eventsSummary.hidden = NO;
-                self.eventsGuestList.hidden = YES;
-                self.eventsHostingsList.hidden = NO;
-            }
-            else if([self.sharedData isHost] || [self.sharedData isMember])
-            {
-                [self.eventsSummary initClassWithEvent:event];
+                self.sharedData.cEventId = event.eventID;
+                self.sharedData.mostRecentEventSelectedId = event.eventID;
+                self.sharedData.cVenueName = event.venue;
                 
-                self.eventsSummary.hidden = NO;
-                self.eventsGuestList.hidden = NO;
-                self.eventsHostingsList.hidden = YES;
+                [self goToSummary:event];
             }
-            
-            [self goToSummary];
         }
     }
     @catch (NSException *exception) {
@@ -1459,18 +1567,22 @@ shouldDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
 
 -(void)goHome
 {
+    self.nodeToHome = 0;
+    
     self.sharedData.isGuestListingsShowing = NO;
     [UIView animateWithDuration:0.25 animations:^()
      {
          self.mainCon.frame = CGRectMake(0, 20, self.sharedData.screenWidth * SCREENS_DEEP, self.sharedData.screenHeight - 20);
      } completion:^(BOOL finished)
      {
-         [self loadDataWithCompletionHandler:nil];
+//         [self loadDataWithCompletionHandler:nil];
      }];
 }
 
 -(void)goHomeNoLoad
 {
+    self.nodeToHome--;
+    
     self.sharedData.isGuestListingsShowing = NO;
     [UIView animateWithDuration:0.25 animations:^()
      {
@@ -1481,9 +1593,27 @@ shouldDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
      }];
 }
 
-//2nd Screen (VENUE+LIST)
--(void)goToSummary
+- (void)goBackNode {
+    self.nodeToHome--;
+    
+    [UIView animateWithDuration:0.25 animations:^()
+     {
+         self.mainCon.frame = CGRectMake(-self.sharedData.screenWidth * self.nodeToHome, 20, self.sharedData.screenWidth * SCREENS_DEEP, self.sharedData.screenHeight - 20);
+     } completion:^(BOOL finished)
+     {
+         
+     }];
+}
+
+//2nd Screen
+-(void)goToEventTheme
 {
+    self.nodeToHome++;
+    
+    [self.eventsTheme setFrame:CGRectMake(self.sharedData.screenWidth, -20, self.sharedData.screenWidth, self.mainCon.frame.size.height)];
+    [self.eventsSummary setFrame:CGRectMake(self.sharedData.screenWidth *2, -20, self.sharedData.screenWidth, self.mainCon.frame.size.height)];
+    [self.eventsGuestList setFrame:CGRectMake(self.sharedData.screenWidth *3, -20, self.sharedData.screenWidth, self.mainCon.frame.size.height)];
+    
     [UIView animateWithDuration:0.25 animations:^()
     {
         self.mainCon.frame = CGRectMake(-self.sharedData.screenWidth, 20, self.sharedData.screenWidth * SCREENS_DEEP, self.sharedData.screenHeight - 20);
@@ -1493,13 +1623,44 @@ shouldDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
     }];
 }
 
+//2nd Screen (VENUE+LIST)
+- (void)goToSummaryNotification:(NSNotification *)notification {
+    Event *event = (Event *)[notification object];
+    [self goToSummary:event];
+}
+
+-(void)goToSummary:(Event *)event
+{
+    [self.eventsSummary initClassWithEvent:event];
+    
+    self.eventsSummary.hidden = NO;
+    self.eventsGuestList.hidden = NO;
+    self.eventsHostingsList.hidden = YES;
+    
+    self.nodeToHome++;
+    
+    if (self.nodeToHome == 1) {
+        [self.eventsTheme setFrame:CGRectMake(self.sharedData.screenWidth, -20, self.sharedData.screenWidth, self.mainCon.frame.size.height)];
+        [self.eventsSummary setFrame:CGRectMake(self.sharedData.screenWidth, -20, self.sharedData.screenWidth, self.mainCon.frame.size.height)];
+        [self.eventsGuestList setFrame:CGRectMake(self.sharedData.screenWidth *2, -20, self.sharedData.screenWidth, self.mainCon.frame.size.height)];
+    }
+    
+    [UIView animateWithDuration:0.25 animations:^()
+     {
+         self.mainCon.frame = CGRectMake(-self.sharedData.screenWidth * self.nodeToHome, 20, self.sharedData.screenWidth * SCREENS_DEEP, self.sharedData.screenHeight - 20);
+     } completion:^(BOOL finished)
+     {
+         [JGTooltipHelper setShowed:@"Tooltip_LoadEvent_isShowed"];
+     }];
+}
+
 
 //2nd Screen (VENUE+LIST)
 -(void)goToSummaryModal
 {
     [UIView animateWithDuration:0 animations:^()
      {
-         self.mainCon.frame = CGRectMake(-self.sharedData.screenWidth, 20, self.sharedData.screenWidth * SCREENS_DEEP, self.sharedData.screenHeight - 20);
+         self.mainCon.frame = CGRectMake(-self.sharedData.screenWidth * 2, 20, self.sharedData.screenWidth * SCREENS_DEEP, self.sharedData.screenHeight - 20);
      } completion:^(BOOL finished)
      {
      }];
@@ -1523,6 +1684,8 @@ shouldDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
 //3rd Screen (GUEST LIST)
 -(void)goToGuestList
 {
+    self.nodeToHome ++;
+    
     self.eventsHostingsList.hidden = YES;
     self.eventsGuestList.hidden = NO;
     [self.eventsGuestList initClass];
@@ -1530,7 +1693,7 @@ shouldDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
     [self.eventsGuestList loadData:self.sharedData.cEventId_Summary];
     [UIView animateWithDuration:0.25 animations:^()
      {
-         self.mainCon.frame = CGRectMake(-self.sharedData.screenWidth * 2, 20, self.sharedData.screenWidth * SCREENS_DEEP, self.sharedData.screenHeight - 20);
+         self.mainCon.frame = CGRectMake(-self.sharedData.screenWidth * self.nodeToHome, 20, self.sharedData.screenWidth * SCREENS_DEEP, self.sharedData.screenHeight - 20);
      } completion:^(BOOL finished)
      {
      }];

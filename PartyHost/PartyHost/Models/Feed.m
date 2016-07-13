@@ -24,12 +24,18 @@
              @"fromImageURL" : @"image",
              @"type" : @"type",
              @"hasBooking" : @"badge_booking",
-             @"hasTicket" : @"badge_ticket"};
+             @"hasTicket" : @"badge_ticket",
+             @"source" : @"type_feed"};
 }
 
 + (NSValueTransformer *)typeJSONTransformer {
     return [NSValueTransformer mtl_valueMappingTransformerWithDictionary:@{@"viewed": @(FeedTypeViewed),
                                                                            @"approved": @(FeedTypeApproved)}];
+}
+
++ (NSValueTransformer *)sourceJSONTransformer {
+    return [NSValueTransformer mtl_valueMappingTransformerWithDictionary:@{@1: @(FeedSourceEvent),
+                                                                           @2: @(FeedSourceNearby)}];
 }
 
 + (NSString *)feedTypeAsString:(FeedType)type {
@@ -71,6 +77,8 @@
                      PHBaseNewURL,
                      sharedData.fb_id,
                      sharedData.gender_interest];
+    url = [url stringByReplacingOccurrencesOfString:@"v3" withString:@"v4"];
+    
     [manager GET:url parameters:@{} success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSError *error = nil;
         NSArray *feeds = [MTLJSONAdapter modelsOfClass:[Feed class]
@@ -96,12 +104,15 @@
     }];
 }
 
-+ (void)approveFeed:(BOOL)approved withFbId:(NSString *)fbId andCompletionHandler:(MatchFeedCompletionHandler)completion {
++ (void)approveFeed:(BOOL)approved withFbId:(NSString *)fbId andSource:(FeedSource)source andCompletionHandler:(MatchFeedCompletionHandler)completion {
     SharedData *sharedData = [SharedData sharedInstance];
     AFHTTPRequestOperationManager *manager = [sharedData getOperationManager];
     NSString *approveStatus = approved ? @"approved" : @"denied";
     
     NSString *url = [NSString stringWithFormat:@"%@/partyfeed_socialmatch/match/%@/%@/%@", PHBaseNewURL, sharedData.fb_id, fbId, approveStatus];
+    if (source == FeedSourceNearby) {
+        url = [NSString stringWithFormat:@"%@/partyfeed_nearby/match/%@/%@/%@", PHBaseNewURL, sharedData.fb_id, fbId, approveStatus];
+    }
     
     [manager GET:url parameters:@{} success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if (completion) {

@@ -11,12 +11,17 @@
 @interface GuestDetailViewController : BaseViewController <UITextFieldDelegate>
 
 @property (nonatomic, strong) UIView *navBar;
+@property (nonatomic, strong) UIScrollView *scrollView;
+@property (nonatomic, strong) UITextField *idNumberTextField;
 @property (nonatomic, strong) UITextField *nameTextField;
 @property (nonatomic, strong) UITextField *emailTextField;
 @property (nonatomic, strong) UITextField *phoneCodeTextField;
 @property (nonatomic, strong) UITextField *phoneTextField;
 @property (nonatomic, strong) UIButton *saveButton;
 
+@property (nonatomic, strong) UIImageView *idNumberAlert;
 @property (nonatomic, strong) UIImageView *emailAlert;
+
+@property (nonatomic, assign) BOOL isIDNumberEnabled;
 
 @end

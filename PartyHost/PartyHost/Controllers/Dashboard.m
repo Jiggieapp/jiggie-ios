@@ -10,6 +10,7 @@
 #import "AnalyticManager.h"
 #import "JGTooltipHelper.h"
 #import "UIView+Animation.h"
+#import "ChatView.h"
 
 @implementation Dashboard
 
@@ -178,7 +179,8 @@
     CGRect pageRect = CGRectMake(0, 0, self.sharedData.screenWidth, self.sharedData.screenHeight - 50);
     
     self.eventsPage     = [[Events alloc] initWithFrame:pageRect];
-    self.chatPage       = [[Chats alloc] initWithFrame:pageRect];
+    self.chatPage       = [ChatView instanceFromNib];
+    self.chatPage.frame = pageRect;
     self.messagesPage   = [[Messages alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, frame.size.height)];
     self.hostVenueDetailPage   = [[HostVenueDetail alloc] initWithFrame:CGRectMake(0, self.sharedData.screenHeight, self.sharedData.screenWidth, self.sharedData.screenHeight)];
     
@@ -310,7 +312,7 @@
     
     [[NSNotificationCenter defaultCenter]
      addObserver:self
-     selector:@selector(showMessages)
+     selector:@selector(showMessages:)
      name:@"SHOW_MESSAGES"
      object:nil];
     
@@ -442,7 +444,7 @@
     
     [[NSNotificationCenter defaultCenter]
      addObserver:self
-     selector:@selector(showEventModal)
+     selector:@selector(showEventModal:)
      name:@"SHOW_EVENT_MODAL"
      object:nil];
     
@@ -471,6 +473,12 @@
      addObserver:self
      selector:@selector(exitFeedMatch)
      name:@"EXIT_FEED_MATCH"
+     object:nil];
+    
+    [[NSNotificationCenter defaultCenter]
+     addObserver:self
+     selector:@selector(updateChatBadge:)
+     name:@"TOTAL_UNREAD_MESSAGES"
      object:nil];
     
     
@@ -686,6 +694,10 @@
      }];
 }
 
+- (void)updateChatBadge:(NSNotification *)notification {
+    [self.chatBadge updateValue:[notification.object intValue]];
+}
+
 -(void)showMore
 {
     if(self.cIndex == 3)
@@ -774,6 +786,25 @@
     {
         [self.messagesPage initClass];
     }];
+}
+
+-(void)showMessages:(NSNotification *)notification {
+    if (notification.object) {
+        [self.messagesPage reset];
+        [UIView animateWithDuration:0.25 animations:^() {
+            self.mainCon.frame = CGRectMake(-self.frame.size.width, 0, self.frame.size.width * 2, self.frame.size.height);
+        } completion:^(BOOL finished) {
+            if ([notification.object isKindOfClass:[NSDictionary class]]) {
+                NSDictionary *object = notification.object;
+                
+                [self.messagesPage initClassWithRoomId:object[@"roomId"]
+                                               members:object[@"members"]
+                                          andEventName:object[@"eventName"]];
+            } else {
+                [self.messagesPage initClassWithRoomId:notification.object];
+            }
+        }];
+    }
 }
 
 -(void)exitMemberProfile
@@ -991,11 +1022,10 @@
     [self.eventsPage goToSummaryModal];
 }
 
--(void)showEventModal
-{
+-(void)showEventModal:(NSNotification *)notification {
     EventsSummary *eventDetail = [[EventsSummary alloc] initWithFrame:[UIScreen mainScreen].bounds];
     [eventDetail initClassModalWithEventID:self.sharedData.selectedEvent[@"_id"]];
-    
+    eventDetail.isFromMessage = [notification.object boolValue];
     eventDetail.mainScroll.frame = CGRectMake(0,
                                               0,
                                               CGRectGetWidth([UIScreen mainScreen].bounds),

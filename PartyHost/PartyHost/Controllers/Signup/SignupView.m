@@ -8,7 +8,9 @@
 
 #import "SignupView.h"
 #import "AnalyticManager.h"
+#import "LocationManager.h"
 #import "UserManager.h"
+#import "Room.h"
 
 #define SET_IF_NOT_NULL(TARGET, VAL) if(VAL && VAL != [NSNull null]) { TARGET = VAL; } else {TARGET = @"";}
 
@@ -239,6 +241,31 @@
 }
 
 #pragma mark -
+
+- (void)updateLocation {
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:@"SHOWED_WALKTHROUGH"]) {
+        [[LocationManager manager] startUpdatingLocation];
+        [[LocationManager manager] didUpdateLocationsWithCompletion:^(CLLocationDegrees latitude, CLLocationDegrees longitude) {
+            AFHTTPRequestOperationManager *manager = [self.sharedData getOperationManager];
+            NSString *url = [NSString stringWithFormat:@"%@/save_longlat", PHBaseNewURL];
+            NSDictionary *parameters = @{@"fb_id" : self.sharedData.fb_id,
+                                         @"longitude" : [NSString stringWithFormat:@"%f", longitude],
+                                         @"latitude" : [NSString stringWithFormat:@"%f", latitude],
+                                         @"is_login" : [NSNumber numberWithBool:YES]};
+            
+            [manager POST:url parameters:parameters success:nil failure:nil];
+        }];
+    }
+}
+
+- (void)retrieveMemberRooms {
+    [Room retrieveRoomsWithFbId:self.sharedData.fb_id andCompletionHandler:^(NSArray *rooms, NSError *error) {
+        if (!error) {
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"MEMBER_ROOMS"
+                                                                object:rooms];
+        }
+    }];
+}
 
 -(NSString *)getProfileAlbumId:(NSMutableArray *)dataA
 {
@@ -536,6 +563,19 @@
                           postNotificationName:@"HIDE_LOGIN"
                           object:self];
                          
+                         SharedData *sharedData = [SharedData sharedInstance];
+                         AFHTTPRequestOperationManager *manager = [sharedData getOperationManager];
+                         NSString *url = [NSString stringWithFormat:@"%@/chat/firebase/%@", PHBaseNewURL, sharedData.fb_id];
+                         
+                         [manager GET:url parameters:@{} success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                             [self retrieveMemberRooms];
+                         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                             if (operation.response.statusCode == 403) {
+                                 [self retrieveMemberRooms];
+                             }
+                         }];
+                         
+                         [self updateLocation];
                          [self checkAppsFlyerData];
                          [self performSelector:@selector(getUserImages) withObject:nil afterDelay:2.0];
                          

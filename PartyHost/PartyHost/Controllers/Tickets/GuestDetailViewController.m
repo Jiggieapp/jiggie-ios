@@ -46,9 +46,37 @@
     
     [self.view addSubview:self.navBar];
     
-    UIView *line1View = [[UIView alloc] initWithFrame:CGRectMake(0, 60, self.visibleSize.width, 1)];
+    self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 60, self.visibleSize.width, self.visibleSize.height - 60 - 54)];
+    [self.view addSubview:self.scrollView];
+    
+    CGFloat offsetY = 0;
+    if (self.isIDNumberEnabled) {
+        UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(0, offsetY, self.visibleSize.width, 1)];
+        [lineView setBackgroundColor:[UIColor phLightGrayColor]];
+        [self.scrollView addSubview:lineView];
+        
+        self.idNumberTextField = [[UITextField alloc] initWithFrame:CGRectMake(16, CGRectGetMaxY(lineView.frame) + 10, self.visibleSize.width - 32, 30)];
+        [self.idNumberTextField setBackgroundColor:[UIColor clearColor]];
+        [self.idNumberTextField setPlaceholder:@"ID Card Number (KTP)"];
+        [self.idNumberTextField setFont:[UIFont phBlond:13]];
+        [self.idNumberTextField setKeyboardType:UIKeyboardTypeDefault];
+        [self.idNumberTextField setReturnKeyType:UIReturnKeyDone];
+        [self.idNumberTextField setDelegate:self];
+        [self.scrollView addSubview:self.idNumberTextField];
+        
+        self.idNumberAlert = [[UIImageView alloc] initWithFrame:CGRectMake(self.visibleSize.width - 36, CGRectGetMaxY(lineView.frame) + 14, 20, 20)];
+        [self.idNumberAlert setImage:[UIImage imageNamed:@"icon_alert"]];
+        [self.idNumberAlert setBackgroundColor:[UIColor clearColor]];
+        [self.idNumberAlert setHidden:YES];
+        [self.scrollView addSubview:self.idNumberAlert];
+        
+        offsetY = CGRectGetMaxY(lineView.frame) + 50;
+    }
+    
+    
+    UIView *line1View = [[UIView alloc] initWithFrame:CGRectMake(0, offsetY, self.visibleSize.width, 1)];
     [line1View setBackgroundColor:[UIColor phLightGrayColor]];
-    [self.view addSubview:line1View];
+    [self.scrollView addSubview:line1View];
     
     self.nameTextField = [[UITextField alloc] initWithFrame:CGRectMake(16, CGRectGetMaxY(line1View.frame) + 10, self.visibleSize.width - 32, 30)];
     [self.nameTextField setBackgroundColor:[UIColor clearColor]];
@@ -56,11 +84,11 @@
     [self.nameTextField setFont:[UIFont phBlond:13]];
     [self.nameTextField setReturnKeyType:UIReturnKeyNext];
     [self.nameTextField setDelegate:self];
-    [self.view addSubview:self.nameTextField];
+    [self.scrollView addSubview:self.nameTextField];
     
-    UIView *line2View = [[UIView alloc] initWithFrame:CGRectMake(0, 60 + 50, self.visibleSize.width, 1)];
+    UIView *line2View = [[UIView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(line1View.frame) + 50, self.visibleSize.width, 1)];
     [line2View setBackgroundColor:[UIColor phLightGrayColor]];
-    [self.view addSubview:line2View];
+    [self.scrollView addSubview:line2View];
     
     self.emailTextField = [[UITextField alloc] initWithFrame:CGRectMake(16, CGRectGetMaxY(line2View.frame) + 10, self.visibleSize.width - 32, 30)];
     [self.emailTextField setBackgroundColor:[UIColor clearColor]];
@@ -69,17 +97,17 @@
     [self.emailTextField setKeyboardType:UIKeyboardTypeEmailAddress];
     [self.emailTextField setReturnKeyType:UIReturnKeyNext];
     [self.emailTextField setDelegate:self];
-    [self.view addSubview:self.emailTextField];
+    [self.scrollView addSubview:self.emailTextField];
     
     self.emailAlert = [[UIImageView alloc] initWithFrame:CGRectMake(self.visibleSize.width - 36, CGRectGetMaxY(line2View.frame) + 14, 20, 20)];
     [self.emailAlert setImage:[UIImage imageNamed:@"icon_alert"]];
     [self.emailAlert setBackgroundColor:[UIColor clearColor]];
     [self.emailAlert setHidden:YES];
-    [self.view addSubview:self.emailAlert];
+    [self.scrollView addSubview:self.emailAlert];
     
-    UIView *line3View = [[UIView alloc] initWithFrame:CGRectMake(0, 60 + 50 + 50, self.visibleSize.width, 1)];
+    UIView *line3View = [[UIView alloc] initWithFrame:CGRectMake(0,  CGRectGetMaxY(line2View.frame) + 50, self.visibleSize.width, 1)];
     [line3View setBackgroundColor:[UIColor phLightGrayColor]];
-    [self.view addSubview:line3View];
+    [self.scrollView addSubview:line3View];
     
     self.phoneCodeTextField = [[UITextField alloc] initWithFrame:CGRectMake(16, CGRectGetMaxY(line3View.frame) + 10, 50 , 30)];
     [self.phoneCodeTextField setBackgroundColor:[UIColor clearColor]];
@@ -89,11 +117,11 @@
     [self.phoneCodeTextField setDelegate:self];
     [self.phoneCodeTextField setEnabled:YES];
     [self.phoneCodeTextField setText:@"+62"];
-    [self.view addSubview:self.phoneCodeTextField];
+    [self.scrollView addSubview:self.phoneCodeTextField];
     
     UIView *lineVertical = [[UIView alloc] initWithFrame:CGRectMake(16 + 50, CGRectGetMaxY(line3View.frame) , 1, 50)];
     [lineVertical setBackgroundColor:[UIColor phLightGrayColor]];
-    [self.view addSubview:lineVertical];
+    [self.scrollView addSubview:lineVertical];
     
     self.phoneTextField = [[UITextField alloc] initWithFrame:CGRectMake(16 + 50 + 16, CGRectGetMaxY(line3View.frame) + 10, self.visibleSize.width - 32 - 50 - 16, 30)];
     [self.phoneTextField setBackgroundColor:[UIColor clearColor]];
@@ -102,18 +130,20 @@
     [self.phoneTextField setKeyboardType:UIKeyboardTypePhonePad];
     [self.phoneTextField setReturnKeyType:UIReturnKeyDone];
     [self.phoneTextField setDelegate:self];
-    [self.view addSubview:self.phoneTextField];
+    [self.scrollView addSubview:self.phoneTextField];
     
-    UIToolbar* numberToolbar = [[UIToolbar alloc]initWithFrame:CGRectMake(0, 0, self.visibleSize.width, 50)];
-    numberToolbar.barStyle = UIBarStyleDefault;
-    numberToolbar.items = @[[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil],
-                            [[UIBarButtonItem alloc]initWithTitle:@"Done" style:UIBarButtonItemStyleDone target:self action:@selector(doneWithNumberPad)]];
-    [numberToolbar sizeToFit];
-    self.phoneTextField.inputAccessoryView = numberToolbar;
+    if ([[[UIDevice currentDevice] systemVersion] compare:@"8.0" options:NSNumericSearch] != NSOrderedAscending) {
+        UIToolbar* numberToolbar = [[UIToolbar alloc]initWithFrame:CGRectMake(0, 0, self.visibleSize.width, 50)];
+        numberToolbar.barStyle = UIBarStyleDefault;
+        numberToolbar.items = @[[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil],
+                                [[UIBarButtonItem alloc]initWithTitle:@"Done" style:UIBarButtonItemStyleDone target:self action:@selector(doneWithNumberPad)]];
+        [numberToolbar sizeToFit];
+        self.phoneTextField.inputAccessoryView = numberToolbar;
+    }
     
-    UIView *line4View = [[UIView alloc] initWithFrame:CGRectMake(0, 60 + 50 + 50 + 50, self.visibleSize.width, 1)];
+    UIView *line4View = [[UIView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(line3View.frame) + 50, self.visibleSize.width, 1)];
     [line4View setBackgroundColor:[UIColor phLightGrayColor]];
-    [self.view addSubview:line4View];
+    [self.scrollView addSubview:line4View];
     
     UILabel *starLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, CGRectGetMaxY(line4View.frame) + 10, 8, 20)];
     [starLabel setText:@"*"];
@@ -121,7 +151,7 @@
     [starLabel setTextColor:[UIColor purpleColor]];
     [starLabel setFont:[UIFont phBlond:15]];
     [starLabel setBackgroundColor:[UIColor clearColor]];
-    [self.view addSubview:starLabel];
+    [self.scrollView addSubview:starLabel];
     
     UILabel *tncLabel = [[UILabel alloc] initWithFrame:CGRectMake(30, CGRectGetMaxY(line4View.frame) + 10, self.visibleSize.width - 30 - 16, 40)];
     [tncLabel setText:@"Please verify your information is correct so we can keep you updated on your order"];
@@ -130,7 +160,9 @@
     [tncLabel setTextColor:[UIColor phPurpleColor]];
     [tncLabel setBackgroundColor:[UIColor clearColor]];
     [tncLabel sizeToFit];
-    [self.view addSubview:tncLabel];
+    [self.scrollView addSubview:tncLabel];
+    
+    [self.scrollView setContentSize:CGSizeMake(self.visibleSize.width, CGRectGetMaxY(tncLabel.frame) + 20)];
     
     self.saveButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.saveButton addTarget:self action:@selector(saveButtonDidTap:) forControlEvents:UIControlEventTouchUpInside];
@@ -184,6 +216,10 @@
 - (void)loadData {
     NSDictionary *userInfo = [UserManager loadUserTicketInfo];
     
+    if (self.isIDNumberEnabled && ![[userInfo objectForKey:@"identity_id"] isEqualToString:@""]) {
+        self.idNumberTextField.text = [userInfo objectForKey:@"identity_id"];
+    }
+    
     if (![[userInfo objectForKey:@"name"] isEqualToString:@""]) {
         self.nameTextField.text = [userInfo objectForKey:@"name"];
     }
@@ -221,6 +257,12 @@
         
         [SVProgressHUD showErrorWithStatus:@"Invalid Email Format"];
         return;
+    } else if (self.isIDNumberEnabled && self.idNumberTextField.text.length < 8) {
+        [self.idNumberTextField setTextColor:[UIColor redColor]];
+        [self.idNumberAlert setHidden:NO];
+        
+        [SVProgressHUD showErrorWithStatus:@"Invalid ID Number Format"];
+        return;
     }
     
     NSString *dialCode = self.phoneCodeTextField.text;
@@ -229,17 +271,22 @@
     }
     
     NSString *phone = [NSString stringWithFormat:@"%@%@", dialCode, self.phoneTextField.text];
+    NSString *identityID = @"";
+    if (self.isIDNumberEnabled) {
+        identityID = self.idNumberTextField.text;
+    }
     
     NSDictionary *userInfo = @{@"name":self.nameTextField.text,
                                @"email":self.emailTextField.text,
                                @"dial_code":dialCode,
-                               @"phone":phone};
+                               @"phone":phone,
+                               @"identity_id":identityID};
     [UserManager saveUserTicketInfo:userInfo];
     
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
--(void)doneWithNumberPad {
+- (void)doneWithNumberPad {
     [self.phoneTextField resignFirstResponder];
 }
 
@@ -276,6 +323,17 @@
     if (textField == self.emailTextField) {
         [self.emailTextField setTextColor:[UIColor blackColor]];
         [self.emailAlert setHidden:YES];
+    } else if (textField == self.idNumberTextField) {
+        [self.idNumberTextField setTextColor:[UIColor blackColor]];
+        [self.idNumberAlert setHidden:YES];
+        
+        if(range.length + range.location > textField.text.length)
+        {
+            return NO;
+        }
+        
+        NSUInteger newLength = [textField.text length] + [string length] - range.length;
+        return (newLength > 32) ? NO : YES;
     }
     
     return YES;
@@ -284,18 +342,14 @@
 #pragma mark - UIKeyboardNotification
 // Called when the UIKeyboardDidShowNotification is sent.
 - (void)keyboardWillShow:(NSNotification*)aNotification {
-    SharedData *sharedData = [SharedData sharedInstance];
-    if (sharedData.isIphone4) {
-        return;
-    }
     
     NSDictionary* info = [aNotification userInfo];
     CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
     
-    // If active text field is hidden by keyboard, scroll it so it's visible
-    // Your application might not need or want this behavior.
-    CGRect aRect = self.view.frame;
-    aRect.size.height -= kbSize.height;
+    CGFloat contentHeight = kbSize.height - (self.scrollView.bounds.size.height - self.scrollView.contentSize.height) - 30;
+    UIEdgeInsets contentInsets = UIEdgeInsetsMake(0.0, 0.0, contentHeight, 0.0);
+    self.scrollView.contentInset = contentInsets;
+    self.scrollView.scrollIndicatorInsets = contentInsets;
     
     [UIView animateWithDuration:0.25 animations:^{
         [self.saveButton setFrame:CGRectMake(0, self.view.bounds.size.height - kbSize.height - self.saveButton.bounds.size.height, self.saveButton.bounds.size.width, self.saveButton.bounds.size.height)];
@@ -304,10 +358,9 @@
 
 // Called when the UIKeyboardWillHideNotification is sent
 - (void)keyboardWillBeHidden:(NSNotification*)aNotification {
-    SharedData *sharedData = [SharedData sharedInstance];
-    if (sharedData.isIphone4) {
-        return;
-    }
+    UIEdgeInsets contentInsets = UIEdgeInsetsZero;
+    self.scrollView.contentInset = contentInsets;
+    self.scrollView.scrollIndicatorInsets = contentInsets;
     
     [UIView animateWithDuration:0.25 animations:^{
         [self.saveButton setFrame:CGRectMake(0, self.view.bounds.size.height - self.saveButton.bounds.size.height, self.saveButton.bounds.size.width, self.saveButton.bounds.size.height)];

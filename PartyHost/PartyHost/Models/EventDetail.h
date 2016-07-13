@@ -31,6 +31,7 @@
 @property (nullable, nonatomic, retain) NSNumber *likes;
 @property (nullable, nonatomic, retain) NSNumber *isLiked;
 @property (nullable, nonatomic, retain) NSNumber *lowestPrice;
+@property (nullable, nonatomic, retain) NSString *groupRoomID;
 
 @end
 
