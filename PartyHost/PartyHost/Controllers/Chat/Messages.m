@@ -64,7 +64,7 @@
     
     [self addSubview:self.messagesList];
     
-    self.toLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 20, frame.size.width, 40)];
+    self.toLabel = [[UILabel alloc] initWithFrame:CGRectMake(40, 20, frame.size.width-85, 40)];
     self.toLabel.textColor = [UIColor whiteColor];
     self.toLabel.backgroundColor = [UIColor clearColor];
     self.toLabel.font = [UIFont phBold:18];
@@ -226,20 +226,21 @@
 - (void)loadMessages {
     [self.loadingView setHidden:NO];
     
-    if ([self.roomId rangeOfString:@"_"].location != NSNotFound) {
-        if (self.eventName.length > 0 &&
-            ![[self.eventName lowercaseString] isEqualToString:@"generic"] &&
-            ![[self.eventName lowercaseString] isEqualToString:@"friendlist"]) {
-            UIView *view = [self headerViewWithText:self.eventName];
-            UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(.0f, .0f, CGRectGetWidth(self.messagesList.bounds), CGRectGetHeight(view.bounds) + 20.0f)];
-            [headerView addSubview:view];
-            [view setCenter:headerView.center];
-            
-            [self.messagesList setTableHeaderView:headerView];
-        } else {
-            [self.messagesList setTableHeaderView:nil];
-        }
+    if (self.eventName.length > 0 &&
+        [self.roomId rangeOfString:@"_"].location != NSNotFound &&
+        ![[self.eventName lowercaseString] isEqualToString:@"generic"] &&
+        ![[self.eventName lowercaseString] isEqualToString:@"friendlist"]) {
+        UIView *view = [self headerViewWithText:self.eventName];
+        UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(.0f, .0f, CGRectGetWidth(self.messagesList.bounds), CGRectGetHeight(view.bounds) + 20.0f)];
+        [headerView addSubview:view];
+        [view setCenter:headerView.center];
         
+        [self.messagesList setTableHeaderView:headerView];
+    } else {
+        [self.messagesList setTableHeaderView:nil];
+    }
+    
+    if ([self.roomId rangeOfString:@"_"].location != NSNotFound) {
         NSString *fbId = [RoomPrivateInfo getFriendFbIdFromIdentifier:self.roomId fbId:self.sharedData.fb_id];
 
         [User retrieveUserInfoWithFbId:fbId andCompletionHandler:^(User *user, NSError *error) {
