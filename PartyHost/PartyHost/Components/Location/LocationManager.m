@@ -45,6 +45,8 @@
 - (void)startUpdatingLocation {
     if ([self.location respondsToSelector:@selector(requestWhenInUseAuthorization)]) {
         [self.location requestWhenInUseAuthorization];
+    } else {
+        [self.location startUpdatingLocation];
     }
     
     if([CLLocationManager locationServicesEnabled]) {
@@ -63,6 +65,18 @@
 }
 
 #pragma mark - CLLocationManagerDelegate
+- (void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status {
+    switch (status) {
+        case kCLAuthorizationStatusAuthorizedAlways:
+        case kCLAuthorizationStatusAuthorizedWhenInUse: {
+            [self.location startUpdatingLocation];
+        }
+            
+        default:
+            break;
+    }
+}
+
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations {
     if (!self.didUpdatedLocation) {
         if (self.locationManagerUpdateLocationsCompletion) {

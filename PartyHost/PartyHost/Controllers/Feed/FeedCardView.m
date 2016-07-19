@@ -88,7 +88,7 @@
             [self.okButton setTitle:@"CONNECT" forState:UIControlStateNormal];
             [self.interestLabel setText:[NSString stringWithFormat:@"%@ is also interested in", feed.fromFirstName]];
             [self.eventNameLabel setText:[NSString stringWithFormat:@"%@", [feed.eventName uppercaseString]]];
-            [self.connectLabel setText:[NSString stringWithFormat:@"Connect with %@", feed.fromFirstName]];
+            [self.connectLabel setText:[NSString stringWithFormat:@"Connect with %@?", feed.fromFirstName]];
             
             break;
         }
@@ -111,6 +111,23 @@
             break;
         }
     }
+    
+    switch (feed.source) {
+        case FeedSourceEvent: {
+            
+            break;
+        }
+            
+        case FeedSourceNearby: {
+             [self.eventNameLabel setText:@"IS NEARBY"];
+            if (feed.type == FeedTypeViewed) {
+                [self.interestLabel setText:[NSString stringWithFormat:@"%@", feed.fromFirstName]];
+            } else {
+                [self.interestLabel setText:[NSString stringWithFormat:@"%@ wants to connect with you and", feed.fromFirstName]];
+            }
+            break;
+        }
+    }
 }
 
 - (IBAction)didTapPersonImageButton:(id)sender {
@@ -121,7 +138,13 @@
 
 - (IBAction)didTapEventNameLabel:(id)sender {
     if (self.delegate) {
-        [self.delegate feedCardView:self didTapEventNameLabel:sender withFeed:self.feed];
+        if (self.feed.source) {
+            if (self.feed.source == FeedSourceEvent) {
+                [self.delegate feedCardView:self didTapEventNameLabel:sender withFeed:self.feed];
+            }
+        } else {
+            [self.delegate feedCardView:self didTapEventNameLabel:sender withFeed:self.feed];
+        }
     }
 }
 

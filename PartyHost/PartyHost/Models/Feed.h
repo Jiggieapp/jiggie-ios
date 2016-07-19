@@ -13,6 +13,11 @@ typedef enum : NSUInteger {
     FeedTypeApproved
 }FeedType;
 
+typedef enum : NSUInteger {
+    FeedSourceEvent,
+    FeedSourceNearby
+}FeedSource;
+
 @interface Feed : MTLModel <MTLJSONSerializing>
 
 @property (copy, nonatomic, readonly) NSString *eventId;
@@ -24,6 +29,7 @@ typedef enum : NSUInteger {
 @property (assign, nonatomic, readonly) FeedType type;
 @property (strong, nonatomic, readonly) NSNumber *hasBooking;
 @property (strong, nonatomic, readonly) NSNumber *hasTicket;
+@property (assign, nonatomic, readonly) FeedSource source;
 
 + (NSString *)feedTypeAsString:(FeedType)type;
 
@@ -33,7 +39,7 @@ typedef enum : NSUInteger {
 + (void)removeArchivedObject;
 
 + (void)retrieveFeedsWithCompletionHandler:(PartyFeedCompletionHandler)completion;
-+ (void)approveFeed:(BOOL)approved withFbId:(NSString *)fbId andCompletionHandler:(MatchFeedCompletionHandler)completion;
++ (void)approveFeed:(BOOL)approved withFbId:(NSString *)fbId andSource:(FeedSource)source andCompletionHandler:(MatchFeedCompletionHandler)completion;
 + (void)enableSocialFeed:(BOOL)enabled withCompletionHandler:(MatchFeedCompletionHandler)completion;
 
 @end

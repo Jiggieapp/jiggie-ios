@@ -19,10 +19,18 @@
 #import "UIView+Animation.h"
 #import "UIImageView+WebCache.h"
 #import "UserManager.h"
+#import "Room.h"
+#import "Firebase.h"
 
 #define PROFILE_PICS 4 //If more than 4 then last is +MORE
 #define PROFILE_SIZE 40
 #define PROFILE_PADDING 4
+
+@interface EventsSummary ()
+
+@property (strong, nonatomic) FIRDatabaseReference *reference;
+
+@end
 
 @implementation EventsSummary {
     NSString *lastEventId;
@@ -104,13 +112,26 @@
     [self.likeButton addTarget:self action:@selector(likeButtonDidTap:) forControlEvents:UIControlEventTouchUpInside];
     [self.mainScroll addSubview:self.likeButton];
     
-    self.likeCount = [[UILabel alloc] initWithFrame:CGRectMake(11 + 40 + 6, CGRectGetMaxY(self.picScroll.frame) + 20, 40, 20)];
+    self.likeCount = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(self.likeButton.frame) + 8, CGRectGetMaxY(self.picScroll.frame) + 20, 25, 20)];
     self.likeCount.textColor = [UIColor darkGrayColor];
     self.likeCount.adjustsFontSizeToFitWidth = YES;
     self.likeCount.font = [UIFont phBlond:15];
     [self.mainScroll addSubview:self.likeCount];
     
-    self.shareButton = [[UIButton alloc] initWithFrame:CGRectMake(11 + 80 + 16, CGRectGetMaxY(self.picScroll.frame) + 10, 40, 40)];
+    self.chatButton = [[UIButton alloc] initWithFrame:CGRectMake(CGRectGetMaxX(self.likeCount.frame) + 11, CGRectGetMaxY(self.picScroll.frame) + 10, 40, 40)];
+    [self.chatButton setImage:[UIImage imageNamed:@"event-chat-icon"] forState:UIControlStateNormal];
+    [self.chatButton setImageEdgeInsets:UIEdgeInsetsMake(5, 5, 5, 5)];
+    [self.chatButton addTarget:self action:@selector(chatButtonDidTap:) forControlEvents:UIControlEventTouchUpInside];
+    [self.mainScroll addSubview:self.chatButton];
+    
+    self.membersCount = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(self.chatButton.frame) + 8, CGRectGetMaxY(self.picScroll.frame) + 20, 65, 20)];
+    self.membersCount.textColor = [UIColor darkGrayColor];
+    self.membersCount.adjustsFontSizeToFitWidth = YES;
+    self.membersCount.font = [UIFont phBlond:15];
+    self.membersCount.text = @"Chat";
+    [self.mainScroll addSubview:self.membersCount];
+    
+    self.shareButton = [[UIButton alloc] initWithFrame:CGRectMake(CGRectGetMaxX(self.membersCount.frame) + 11, CGRectGetMaxY(self.picScroll.frame) + 10, 40, 40)];
     [self.shareButton setImage:[UIImage imageNamed:@"icon_share"] forState:UIControlStateNormal];
     [self.shareButton setImageEdgeInsets:UIEdgeInsetsMake(5, 5, 5, 5)];
     [self.shareButton addTarget:self action:@selector(goShareHandler) forControlEvents:UIControlEventTouchUpInside];
@@ -337,7 +358,7 @@
     [self.likeButton setEnabled:NO];
     [self.likeButton setSelected:NO];
     
-    [self.likeCount setText:@"0"];
+    [self.likeCount setText:@"Chat"];
     
     self.separator1.hidden = YES;
     
@@ -383,6 +404,7 @@
     self.isLoaded = NO;
 }
 
+#pragma mark - Initialization
 -(void)initClassWithEvent:(Event *)event
 {
     self.cEvent = nil;
@@ -405,6 +427,9 @@
     if (event) {
         [self loadData:event.eventID];
     }
+    
+    [self.membersCount setText:@"Chat"];
+    [self.chatButton setEnabled:NO];
 }
 
 -(void)initClassWithEventID:(NSString *)eventID
@@ -424,6 +449,9 @@
            [self loadData:eventID];
         }
     }
+    
+    [self.membersCount setText:@"Chat"];
+    [self.chatButton setEnabled:NO];
 }
 
 - (void)initClassModalWithEventID:(NSString *)eventID {
@@ -431,15 +459,18 @@
     self.isModal = YES;
 }
 
+#pragma mark - Navigation
 -(void)goBack
 {
     if (self.isModal) {
         [self dismissViewAnimated:YES completion:nil];
     } else {
         [[NSNotificationCenter defaultCenter]
-         postNotificationName:@"EVENTS_GO_HOME"
+         postNotificationName:@"EVENTS_GO_BACK"
          object:self];
     }
+    
+    [self.reference removeAllObservers];
 }
 
 - (void)showNavBar:(BOOL)isShow withAnimation:(BOOL)isAnimated {
@@ -608,7 +639,7 @@
         
         NSInteger likeCount = [self.likeCount.text integerValue];
         likeCount--;
-        [self.likeCount setText:[NSString stringWithFormat:@"%li", likeCount]];
+        [self.likeCount setText:[NSString stringWithFormat:@"%li", (long)likeCount]];
         
         [self postLikeEvent:NO];
         
@@ -618,11 +649,42 @@
 
         NSInteger likeCount = [self.likeCount.text integerValue];
         likeCount++;
-        [self.likeCount setText:[NSString stringWithFormat:@"%li", likeCount]];
+        [self.likeCount setText:[NSString stringWithFormat:@"%li", (long)likeCount]];
         
         [self postLikeEvent:YES];
         
         [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Like Event Details" withDict:self.sharedData.mixPanelCEventDict];
+    }
+}
+
+- (void)chatButtonDidTap:(id)sender {
+    if (self.isFromMessage) {
+        [self goBack];
+    } else {
+        AFHTTPRequestOperationManager *manager = [self.sharedData getOperationManager];
+        NSString *url = [NSString stringWithFormat:@"%@/group/firebase", PHBaseNewURL];
+        NSDictionary *parameters = @{@"fb_id" : self.sharedData.fb_id,
+                                     @"event_id" : self.event_id};
+        
+        [SVProgressHUD show];
+        [manager POST:url parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+            if (operation.response.statusCode == 200) {
+                NSDictionary *object = @{@"roomId" : self.groupRoomId,
+                                         @"members" : @{},
+                                         @"eventName" : self.eventName.text};
+                
+                if (self.isModal) {
+                    [self dismissViewAnimated:YES completion:nil];
+                }
+                
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"SHOW_MESSAGES"
+                                                                    object:object];
+            }
+            
+            [SVProgressHUD dismiss];
+        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+            [SVProgressHUD dismiss];
+        }];
     }
 }
 
@@ -764,6 +826,22 @@
     
     self.mainScroll.contentSize = CGSizeMake(self.sharedData.screenWidth, self.separator1.frame.origin.y + 30);
     
+}
+
+- (void)observeTotalMember:(NSString *)eventId {
+    self.reference = [[Room membersReference] child:eventId];
+    [self.reference observeEventType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
+        if (![snapshot.value isEqual:[NSNull null]]) {
+            NSUInteger totalMembers = [snapshot.value allKeys].count;
+            if (totalMembers > 99) {
+                [self.membersCount setText:@"Chat (99+)"];
+            } else {
+                [self.membersCount setText:[NSString stringWithFormat:@"Chat (%lu)", (unsigned long)totalMembers]];
+            }
+        } else {
+            [self.membersCount setText:@"Chat"];
+        }
+    }];
 }
 
 - (void)loadData:(NSString*)event_id {
@@ -953,6 +1031,18 @@
                          item.venue = [NSKeyedArchiver archivedDataWithRootObject:venue];
                      }
                      
+                     NSString *group_room_id = [eventDetail objectForKey:@"group_room_id"];
+                     if (group_room_id && ![group_room_id isEqual:[NSNull null]]) {
+                         item.groupRoomID = group_room_id;
+                         self.groupRoomId = group_room_id;
+                         
+                         [self observeTotalMember:group_room_id];
+                     } else {
+                         item.groupRoomID = @"";
+                         self.groupRoomId = @"";
+                     }
+
+                     
                      NSString *start_datetime = [eventDetail objectForKey:@"start_datetime"];
                      NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
                      [formatter setDateFormat:PHDateFormatServer];
@@ -968,6 +1058,8 @@
                      }
                      
                      item.modified = [NSDate date];
+                     
+                     [self.chatButton setEnabled:YES];
                      
                      NSError *error;
                      if (![self.managedObjectContext save:&error]) NSLog(@"Error: %@", [error localizedDescription]);
@@ -1003,7 +1095,7 @@
 
 -(void)populateData:(NSDictionary *)dict {
     [self.emptyView setMode:@"hide"];
-    
+    [self observeTotalMember:self.event_id];
     [self showTooltip];
     
     EventDetail *eventDetail = [[self fetchedResultsController] objectAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];

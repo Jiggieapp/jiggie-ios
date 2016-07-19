@@ -39,7 +39,8 @@ static UserManager *_sharedManager = nil;
         UserInfo = @{@"name":name,
                      @"email":sharedData.userDict[@"email"],
                      @"dial_code":@"",
-                     @"phone":@""};
+                     @"phone":@"",
+                     @"identity_id":@""};
         
     } else if ([UserInfo[@"name"] isEqualToString:@""] &&
                [UserInfo[@"email"] isEqualToString:@""]) {
@@ -47,7 +48,8 @@ static UserManager *_sharedManager = nil;
         UserInfo = @{@"name":name,
                      @"email":sharedData.userDict[@"email"],
                      @"dial_code":@"",
-                     @"phone":@""};
+                     @"phone":@"",
+                     @"identity_id":@""};
     }
     return UserInfo;
 }

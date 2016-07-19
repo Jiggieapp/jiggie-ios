@@ -29,5 +29,6 @@
 @dynamic likes;
 @dynamic isLiked;
 @dynamic lowestPrice;
+@dynamic groupRoomID;
 
 @end

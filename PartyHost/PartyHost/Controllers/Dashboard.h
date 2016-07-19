@@ -8,7 +8,6 @@
 
 #import <UIKit/UIKit.h>
 #import "Events.h"
-#import "Chats.h"
 #import "Messages.h"
 #import "More.h"
 #import "MemberProfile.h"
@@ -25,6 +24,7 @@
 #import "EventsSummaryModal.h"
 #import "FeedMatch.h"
 
+@class ChatView;
 @interface Dashboard : UIView
 
 @property(nonatomic,strong) SharedData      *sharedData;
@@ -36,7 +36,7 @@
 @property(nonatomic,strong) NSMutableArray  *pagesA;
 
 @property(nonatomic,strong) Events          *eventsPage;
-@property(nonatomic,strong) Chats            *chatPage;
+@property(nonatomic,strong) ChatView        *chatPage;
 @property(nonatomic,strong) Profile         *profilePage;
 @property(nonatomic,strong) More            *morePage;
 @property(nonatomic,strong) Hostings        *hostingsPage;
