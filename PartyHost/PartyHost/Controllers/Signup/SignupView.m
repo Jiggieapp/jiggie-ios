@@ -263,6 +263,10 @@
         if (!error) {
             [[NSNotificationCenter defaultCenter] postNotificationName:@"MEMBER_ROOMS"
                                                                 object:rooms];
+            
+            //This should be after settings are set!
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"HIDE_LOGIN"
+                                                                object:self];
         }
     }];
 }
@@ -558,11 +562,6 @@
                          [analyticManager setMixPanelUserProfile];
                          [analyticManager setMixPanelSuperProperties];
                          
-                         //This should be after settings are set!
-                         [[NSNotificationCenter defaultCenter]
-                          postNotificationName:@"HIDE_LOGIN"
-                          object:self];
-                         
                          SharedData *sharedData = [SharedData sharedInstance];
                          AFHTTPRequestOperationManager *manager = [sharedData getOperationManager];
                          NSString *url = [NSString stringWithFormat:@"%@/chat/firebase/%@", PHBaseNewURL, sharedData.fb_id];
@@ -573,6 +572,10 @@
                              if (operation.response.statusCode == 403) {
                                  [self retrieveMemberRooms];
                              }
+                             
+                             //This should be after settings are set!
+                             [[NSNotificationCenter defaultCenter] postNotificationName:@"HIDE_LOGIN"
+                                                                                 object:self];
                          }];
                          
                          [self updateLocation];
