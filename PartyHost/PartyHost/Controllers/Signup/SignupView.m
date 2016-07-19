@@ -133,6 +133,11 @@
                      [self.currentUser removeAllObjects];
                      [self.currentUser addEntriesFromDictionary:result];
                      self.sharedData.fb_id = result[@"id"];
+                     
+                     [[NSUserDefaults standardUserDefaults] setObject:self.sharedData.fb_id
+                                                               forKey:@"USER_FB_ID"];
+                     [[NSUserDefaults standardUserDefaults] synchronize];
+                     
                      [self doubleCheckPermissions];
                  }
                  else {

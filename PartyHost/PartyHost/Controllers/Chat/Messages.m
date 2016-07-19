@@ -240,6 +240,10 @@
         [self.messagesList setTableHeaderView:nil];
     }
     
+    if (!self.sharedData.fb_id) {
+        self.sharedData.fb_id = [[NSUserDefaults standardUserDefaults] objectForKey:@"USER_FB_ID"];
+    }
+    
     if ([self.roomId rangeOfString:@"_"].location != NSNotFound) {
         NSString *fbId = [RoomPrivateInfo getFriendFbIdFromIdentifier:self.roomId fbId:self.sharedData.fb_id];
 
