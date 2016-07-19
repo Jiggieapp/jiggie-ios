@@ -9,6 +9,7 @@
 #import "More.h"
 #import "AnalyticManager.h"
 #import "UserManager.h"
+#import "SVProgressHUD.h"
 
 #define SCREEN_LEVELS 3
 
@@ -661,14 +662,27 @@
         //Log Out
         else if(indexPath.row == 5)
         {
-            
-            [[UserManager sharedManager] clearAllUserData];
-            
-            [[NSNotificationCenter defaultCenter]
-             postNotificationName:@"SHOW_LOGIN"
-             object:self];
-            
             [tableView deselectRowAtIndexPath:[tableView indexPathForSelectedRow] animated:YES];
+            
+            AFHTTPRequestOperationManager *manager = [self.sharedData getOperationManager];
+            NSString *url = [NSString stringWithFormat:@"%@/logout/%@", PHBaseNewURL,
+                             self.sharedData.fb_id];
+            
+            [SVProgressHUD show];
+            [manager GET:url parameters:@{} success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                [[UserManager sharedManager] clearAllUserData];
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"SHOW_LOGIN"
+                                                                         object:self];
+                [SVProgressHUD dismiss];
+            } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:error.localizedDescription
+                                                                    message:nil
+                                                                   delegate:nil
+                                                          cancelButtonTitle:@"OK"
+                                                          otherButtonTitles:nil, nil];
+                [alertView show];
+                [SVProgressHUD dismiss];
+            }];
             
             return;
         }

@@ -16,6 +16,7 @@
 #import "RoomPrivateInfo.h"
 #import "RoomGroupInfo.h"
 #import "Message.h"
+#import "Friend.h"
 
 static NSString *const kChatsCellIdentifier = @"ChatsCellIdentifier";
 
@@ -271,11 +272,37 @@ static NSString *const kChatsCellIdentifier = @"ChatsCellIdentifier";
                         [self showAlertViewWithTitle:@"Exit Group"
                                           andMessage:@"Fail."];
                     }
+                    
+                    [SVProgressHUD dismiss];
                 } else {
                     if (self.isBlockedUser) {
-                        [self showAlertViewWithTitle:@"Blocked User"
-                                          andMessage:[NSString stringWithFormat:@"%@ has been blocked",
-                                                      self.roomName]];
+                        [Friend retrieveFacebookFriendsWithCompletionHandler:^(NSArray *friendIDs, NSError *error) {
+                            if (error) {
+                                dispatch_async(dispatch_get_main_queue(), ^{
+                                    [self showAlertViewWithTitle:@"Blocked User"
+                                                      andMessage:@"Fail."];
+                                    
+                                    [SVProgressHUD dismiss];
+                                });
+                            } else {
+                                [Friend generateSocialFriend:friendIDs WithCompletionHandler:^(NSArray *friends, NSInteger statusCode, NSError *error) {
+                                    dispatch_async(dispatch_get_main_queue(), ^{
+                                        if (error) {
+                                            [self showAlertViewWithTitle:@"Blocked User"
+                                                              andMessage:@"Fail."];
+                                        } else {
+                                            [Friend archiveObject:friends];
+                                            
+                                            [self showAlertViewWithTitle:@"Blocked User"
+                                                              andMessage:[NSString stringWithFormat:@"%@ has been blocked",
+                                                                          self.roomName]];
+                                        }
+                                        
+                                        [SVProgressHUD dismiss];
+                                    });
+                                }];
+                            }
+                        }];
                         
                         [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Block User"
                                                                       withDict:@{@"origin" : @"Chat"}];
@@ -286,10 +313,10 @@ static NSString *const kChatsCellIdentifier = @"ChatsCellIdentifier";
                         
                         [[AnalyticManager sharedManager] trackMixPanelWithDict:@"Exit Group"
                                                                       withDict:@{@"origin" : @"Chat"}];
+                        
+                        [SVProgressHUD dismiss];
                     }
                 }
-                
-                [SVProgressHUD dismiss];
             }];
         }
     }
