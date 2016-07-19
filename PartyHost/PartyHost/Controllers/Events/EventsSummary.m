@@ -1450,6 +1450,25 @@
         [self.tooltip showAllTooltips];
         
         [JGTooltipHelper setLastDateShowed:@"Tooltip_SocialTab_LastDateShowed"];
+    } else if ([JGTooltipHelper isGroupChatEventTooltipValid]) {
+        if (self.tooltip != nil) {
+            self.tooltip = nil;
+            self.tooltip = [[JDFSequentialTooltipManager alloc] initWithHostView:self];
+        }
+        
+        [self.tooltip addTooltipWithTargetView:self.chatButton
+                                      hostView:self
+                                   tooltipText:@"Chat with other guests interested in this event"
+                                arrowDirection:JDFTooltipViewArrowDirectionUp
+                                         width:self.sharedData.screenWidth - 20];
+        [self.tooltip setBackgroundColourForAllTooltips:[UIColor phBlueColor]];
+        [self.tooltip setFontForAllTooltips:[UIFont phBlond:14]];
+        self.tooltip.showsBackdropView = YES;
+        self.tooltip.backdropTapActionEnabled = YES;
+        [self.tooltip showNextTooltip];
+        
+        [JGTooltipHelper setLastDateShowed:@"Tooltip_GroupChatEvent_LastDateShowed"];
+        
     } else if ([JGTooltipHelper isShareEventTooltipValid]) {
         if (self.tooltip != nil) {
             self.tooltip = nil;

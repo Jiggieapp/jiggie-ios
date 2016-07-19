@@ -13,6 +13,7 @@
 + (BOOL)isLoadEventTooltipValid;
 + (BOOL)isSocialTabTooltipValidAfter:(NSString *)tooltipKey;
 + (BOOL)isLikeEventTooltipValid;
++ (BOOL)isGroupChatEventTooltipValid;
 + (BOOL)isShareEventTooltipValid;
 + (BOOL)isAcceptSuggestionTooltipValid;
 + (BOOL)isAcceptRequestTooltipValid;

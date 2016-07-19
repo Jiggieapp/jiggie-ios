@@ -50,6 +50,20 @@
     return NO;
 }
 
++ (BOOL)isGroupChatEventTooltipValid {
+    if (![self isAllTooltipValid]) {
+        return NO;
+    }
+    
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    if ([prefs boolForKey:@"Tooltip_LikeEvent_isShowed"] &&
+        ![prefs boolForKey:@"Tooltip_GroupChatEvent_isShowed"] &&
+        [self hasTooltipAlreadyPassADay:@"Tooltip_GroupChatEvent_LastDateShowed"]) {
+        return YES;
+    }
+    return NO;
+}
+
 + (BOOL)isShareEventTooltipValid {
     if (![self isAllTooltipValid]) {
         return NO;
@@ -58,6 +72,7 @@
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     if ([prefs boolForKey:@"Tooltip_SocialTab_isShowed"] &&
         [prefs boolForKey:@"Tooltip_LikeEvent_isShowed"] &&
+        [prefs boolForKey:@"Tooltip_GroupChatEvent_isShowed"] &&
         ![prefs boolForKey:@"Tooltip_ShareEvent_isShowed"] &&
         [self hasTooltipAlreadyPassADay:@"Tooltip_ShareEvent_LastDateShowed"]) {
         return YES;
@@ -153,6 +168,7 @@
     [prefs removeObjectForKey:@"Tooltip_LoadEvent_LastDateShowed"];
     [prefs removeObjectForKey:@"Tooltip_SocialTab_LastDateShowed"];
     [prefs removeObjectForKey:@"Tooltip_LikeEvent_LastDateShowed"];
+    [prefs removeObjectForKey:@"Tooltip_GroupChatEvent_LastDateShowed"];
     [prefs removeObjectForKey:@"Tooltip_ShareEvent_LastDateShowed"];
     [prefs removeObjectForKey:@"Tooltip_AcceptSuggestion_LastDateShowed"];
     [prefs removeObjectForKey:@"Tooltip_AcceptRequest_LastDateShowed"];
@@ -161,6 +177,7 @@
     [prefs setBool:NO forKey:@"Tooltip_LoadEvent_isShowed"];
     [prefs setBool:NO forKey:@"Tooltip_SocialTab_isShowed"];
     [prefs setBool:NO forKey:@"Tooltip_LikeEvent_isShowed"];
+    [prefs setBool:NO forKey:@"Tooltip_GroupChatEvent_isShowed"];
     [prefs setBool:NO forKey:@"Tooltip_ShareEvent_isShowed"];
     [prefs setBool:NO forKey:@"Tooltip_AcceptSuggestion_isShowed"];
     [prefs setBool:NO forKey:@"Tooltip_AcceptRequest_isShowed"];
