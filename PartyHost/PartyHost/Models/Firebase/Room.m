@@ -155,7 +155,9 @@
                                                       forKey:@"FIREBASE_ROOM_KEYS"];
             [[NSUserDefaults standardUserDefaults] synchronize];
             
-            completion(nil);
+            if (completion) {
+                completion(nil);
+            }
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         if (completion) {

@@ -134,10 +134,6 @@
                      [self.currentUser addEntriesFromDictionary:result];
                      self.sharedData.fb_id = result[@"id"];
                      
-                     [[NSUserDefaults standardUserDefaults] setObject:self.sharedData.fb_id
-                                                               forKey:@"USER_FB_ID"];
-                     [[NSUserDefaults standardUserDefaults] synchronize];
-                     
                      [self doubleCheckPermissions];
                  }
                  else {
@@ -268,10 +264,6 @@
         if (!error) {
             [[NSNotificationCenter defaultCenter] postNotificationName:@"MEMBER_ROOMS"
                                                                 object:rooms];
-            
-            //This should be after settings are set!
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"HIDE_LOGIN"
-                                                                object:self];
         }
     }];
 }
@@ -591,6 +583,10 @@
                                              
                                              [manager GET:url parameters:@{} success:^(AFHTTPRequestOperation *operation, id responseObject) {
                                                  [self retrieveMemberRooms];
+                                                 
+                                                 //This should be after settings are set!
+                                                 [[NSNotificationCenter defaultCenter] postNotificationName:@"HIDE_LOGIN"
+                                                                                                     object:self];
                                              } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
                                                  if (operation.response.statusCode == 403) {
                                                      [self retrieveMemberRooms];
