@@ -15,5 +15,6 @@
 + (ChatFriendListView *)instanceFromNib;
 
 - (void)initClass;
+- (void)loadFriendsFromArchive;
 
 @end

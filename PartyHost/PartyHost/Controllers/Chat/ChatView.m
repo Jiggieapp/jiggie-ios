@@ -77,6 +77,8 @@
 }
 
 - (IBAction)didTapFriendsButton:(id)sender {
+    [self.chatFriendListView loadFriendsFromArchive];
+    
     CGFloat xPos = CGRectGetWidth([UIScreen mainScreen].bounds);
     
     self.indicatorViewLeadingConstraint.constant = xPos / 2;

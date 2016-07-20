@@ -36,19 +36,15 @@ static NSString *const kFriendConvoCellIdentifier = @"FriendConvoCellIdentifier"
     [self.tableView registerNib:[ChatListTableViewCell nib] forCellReuseIdentifier:kFriendConvoCellIdentifier];
 }
 
-
 - (void)initClass {
-    NSArray *friends = [Friend unarchiveObject];
-    
-    if (friends) {
-        self.friends = friends;
-        
-        if (friends.count > 0) {
-            [self.tableView reloadData];
-        }
-    }
-    
+    [self loadFriendsFromArchive];
     [self loadFriends];
+}
+
+- (void)loadFriendsFromArchive {
+    NSArray *friends = [Friend unarchiveObject];
+    self.friends = friends;
+    [self.tableView reloadData];
 }
 
 #pragma mark - API
