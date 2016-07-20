@@ -56,7 +56,8 @@
     }
     
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-    if ([prefs boolForKey:@"Tooltip_LikeEvent_isShowed"] &&
+    if ([prefs boolForKey:@"Tooltip_SocialTab_isShowed"] &&
+        [prefs boolForKey:@"Tooltip_LikeEvent_isShowed"] &&
         ![prefs boolForKey:@"Tooltip_GroupChatEvent_isShowed"] &&
         [self hasTooltipAlreadyPassADay:@"Tooltip_GroupChatEvent_LastDateShowed"]) {
         return YES;
