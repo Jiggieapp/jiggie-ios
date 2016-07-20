@@ -64,6 +64,7 @@
 @property(nonatomic,copy) NSString            *fromMailId;
 @property(nonatomic,copy) NSString            *fromMailName;
 @property(nonatomic,copy) NSString            *conversationId;
+@property(nonatomic,copy) NSString            *roomId;
 
 @property(nonatomic,strong) UIButton            *morePageBtnBack;
 
