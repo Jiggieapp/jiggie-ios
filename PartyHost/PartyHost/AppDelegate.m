@@ -643,7 +643,10 @@ continueUserActivity:(NSUserActivity *)userActivity
             self.roomId = [userInfo objectForKey:@"room_id"];
             self.sharedData.fromMailId = [userInfo objectForKey:@"fromFBId"];
             self.sharedData.fromMailName = [userInfo objectForKey:@"fromName"];
-            [self goToMessagesWithRoomId:self.roomId];
+            
+            NSLog(@"didReceiveRemoteNotification: roomId: %@", self.roomId);
+            
+            [self goToMessagesWithRoomId:[userInfo objectForKey:@"room_id"]];
             
         } else if([[userInfo objectForKey:@"type"]  isEqualToString:@"message"])
         {
@@ -651,7 +654,7 @@ continueUserActivity:(NSUserActivity *)userActivity
             self.roomId = [userInfo objectForKey:@"room_id"];
             self.sharedData.fromMailId = [userInfo objectForKey:@"fromFBId"];
             self.sharedData.fromMailName = [userInfo objectForKey:@"fromName"];
-            [self goToMessagesWithRoomId:self.roomId];
+            [self goToMessagesWithRoomId:[userInfo objectForKey:@"room_id"]];
             
         } else if([[userInfo objectForKey:@"type"]  isEqualToString:@"social"])
         {
@@ -859,6 +862,8 @@ continueUserActivity:(NSUserActivity *)userActivity
     self.sharedData.messagesPage.toId = self.sharedData.fromMailId;
     self.sharedData.messagesPage.toLabel.text = [self.sharedData.fromMailName uppercaseString];
     self.sharedData.toImgURL = [self.sharedData profileImg:self.sharedData.fromMailId];
+    
+    NSLog(@"goToMessagesWithRoomId: roomId: %@", roomId);
     
     [[NSNotificationCenter defaultCenter] postNotificationName:@"SHOW_MESSAGES"
                                                         object:roomId];

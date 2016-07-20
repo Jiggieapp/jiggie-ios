@@ -88,7 +88,6 @@ static UserManager *_sharedManager = nil;
 - (void)clearAllUserData {
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     [prefs removeObjectForKey:@"INVITE_CREDIT"];
-    [prefs removeObjectForKey:@"USER_FB_ID"];
     [prefs removeObjectForKey:@"user.setting"];
     [prefs synchronize];
     

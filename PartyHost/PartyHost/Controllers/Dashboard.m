@@ -789,6 +789,8 @@
 }
 
 -(void)showMessages:(NSNotification *)notification {
+    NSLog(@"showMessages: roomId: %@", notification);
+    
     if (notification.object) {
         [self.messagesPage reset];
         [UIView animateWithDuration:0.25 animations:^() {
