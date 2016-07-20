@@ -134,10 +134,6 @@
                      [self.currentUser addEntriesFromDictionary:result];
                      self.sharedData.fb_id = result[@"id"];
                      
-                     [[NSUserDefaults standardUserDefaults] setObject:self.sharedData.fb_id
-                                                               forKey:@"USER_FB_ID"];
-                     [[NSUserDefaults standardUserDefaults] synchronize];
-                     
                      [self doubleCheckPermissions];
                  }
                  else {
@@ -268,10 +264,6 @@
         if (!error) {
             [[NSNotificationCenter defaultCenter] postNotificationName:@"MEMBER_ROOMS"
                                                                 object:rooms];
-            
-            //This should be after settings are set!
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"HIDE_LOGIN"
-                                                                object:self];
         }
     }];
 }
@@ -567,20 +559,54 @@
                          [analyticManager setMixPanelUserProfile];
                          [analyticManager setMixPanelSuperProperties];
                          
-                         SharedData *sharedData = [SharedData sharedInstance];
-                         AFHTTPRequestOperationManager *manager = [sharedData getOperationManager];
-                         NSString *url = [NSString stringWithFormat:@"%@/chat/firebase/%@", PHBaseNewURL, sharedData.fb_id];
+                         NSDictionary *params = @{ @"fb_id" : self.sharedData.fb_id };
+                         NSString *url = [Constants memberSettingsURL];
+                         AFHTTPRequestOperationManager *manager = [self.sharedData getOperationManager];
                          
-                         [manager GET:url parameters:@{} success:^(AFHTTPRequestOperation *operation, id responseObject) {
-                             [self retrieveMemberRooms];
-                         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-                             if (operation.response.statusCode == 403) {
-                                 [self retrieveMemberRooms];
-                             }
+                         [manager GET:url parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                             NSString *responseString = operation.responseString;
+                             NSError *error;
+                             NSDictionary *json = (NSDictionary *)[NSJSONSerialization
+                                                                   JSONObjectWithData:[responseString dataUsingEncoding:NSUTF8StringEncoding]
+                                                                   options:kNilOptions
+                                                                   error:&error];
+                             dispatch_async(dispatch_get_main_queue(), ^{
+                                 @try {
+                                     NSDictionary *data = [json objectForKey:@"data"];
+                                     if (data) {
+                                         NSDictionary *membersettings = [data objectForKey:@"membersettings"];
+                                         if (membersettings && membersettings != nil) {
+                                             [UserManager saveUserSetting:membersettings];
+                                             [UserManager updateLocalSetting];
+                                             
+                                             NSString *url = [NSString stringWithFormat:@"%@/chat/firebase/%@", PHBaseNewURL, self.sharedData.fb_id];
+                                             
+                                             [manager GET:url parameters:@{} success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                                                 [self retrieveMemberRooms];
+                                                 
+                                                 //This should be after settings are set!
+                                                 [[NSNotificationCenter defaultCenter] postNotificationName:@"HIDE_LOGIN"
+                                                                                                     object:self];
+                                             } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                                                 if (operation.response.statusCode == 403) {
+                                                     [self retrieveMemberRooms];
+                                                 }
+                                                 
+                                                 //This should be after settings are set!
+                                                 [[NSNotificationCenter defaultCenter] postNotificationName:@"HIDE_LOGIN"
+                                                                                                     object:self];
+                                             }];
+                                         }
+                                     }
+                                 }
+                                 @catch (NSException *exception) {
+                                 }
+                                 @finally {
+                                 }
+                             });
                              
-                             //This should be after settings are set!
-                             [[NSNotificationCenter defaultCenter] postNotificationName:@"HIDE_LOGIN"
-                                                                                 object:self];
+                         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                             [self apnUpdate];
                          }];
                          
                          [self updateLocation];

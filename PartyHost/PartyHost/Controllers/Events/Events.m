@@ -620,6 +620,37 @@
         
         [SVProgressHUD show];
         [manager POST:url parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+            NSDictionary *params = @{ @"fb_id" : self.sharedData.fb_id };
+            NSString *url = [Constants memberSettingsURL];
+            AFHTTPRequestOperationManager *manager = [self.sharedData getOperationManager];
+            
+            [manager GET:url parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                NSString *responseString = operation.responseString;
+                NSError *error;
+                NSDictionary *json = (NSDictionary *)[NSJSONSerialization
+                                                      JSONObjectWithData:[responseString dataUsingEncoding:NSUTF8StringEncoding]
+                                                      options:kNilOptions
+                                                      error:&error];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    @try {
+                        NSDictionary *data = [json objectForKey:@"data"];
+                        if (data) {
+                            NSDictionary *membersettings = [data objectForKey:@"membersettings"];
+                            if (membersettings && membersettings != nil) {
+                                [UserManager saveUserSetting:membersettings];
+                                [UserManager updateLocalSetting];
+                            }
+                        }
+                    }
+                    @catch (NSException *exception) {
+                    }
+                    @finally {
+                    }
+                });
+                
+            } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+            }];
+            
             [self loadDataWithCompletionHandler:^(NSError *error) {
                 [SVProgressHUD dismiss];
             }];

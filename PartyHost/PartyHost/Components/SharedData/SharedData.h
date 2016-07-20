@@ -42,6 +42,9 @@
 
 @property(nonatomic,strong) NSString *apnToken;
 
+@property(nonatomic,copy) NSString *area_event;
+@property(nonatomic,copy) NSString *latlng_location;
+
 @property(nonatomic,strong) NSMutableDictionary *userDict;
 @property(nonatomic,strong) NSMutableDictionary *photosDict;
 @property(nonatomic,strong) Messages            *messagesPage;
