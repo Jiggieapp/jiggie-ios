@@ -732,6 +732,8 @@ static SharedData *sharedInstance = nil;
         if(self.ccLast4==nil) self.ccLast4 = @"";
         
         self.has_phone = [dict[@"has_phone"] boolValue];
+        self.area_event = dict[@"area_event"];
+        self.latlng_location = dict[@"latlng_location"];
     }
     @catch (NSException *exception) {
         

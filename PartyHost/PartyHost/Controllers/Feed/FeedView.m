@@ -35,8 +35,6 @@
 @property (strong, nonatomic) UIView *transparentView;
 
 @property (assign, nonatomic) BOOL isSwipedOut;
-
-@property (assign, nonatomic) BOOL isLoadedUserSetting;
 @property (assign, nonatomic) BOOL isFilterChanges;
 
 @property (nonatomic,strong) JDFSequentialTooltipManager *tooltip;
@@ -75,46 +73,6 @@
         [self.swipeableView loadViewsIfNeeded];
     } else {
         [self loadDataAndShowHUD:NO withCompletionHandler:nil];
-    }
-    
-    // Load user setting
-    if (!self.isLoadedUserSetting) {
-        NSDictionary *params = @{ @"fb_id" : self.sharedData.fb_id };
-        NSString *url = [Constants memberSettingsURL];
-        AFHTTPRequestOperationManager *manager = [self.sharedData getOperationManager];
-        
-        [self.emptyView setMode:@"load"];
-        [manager GET:url parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
-            NSString *responseString = operation.responseString;
-            NSError *error;
-            NSDictionary *json = (NSDictionary *)[NSJSONSerialization
-                                                  JSONObjectWithData:[responseString dataUsingEncoding:NSUTF8StringEncoding]
-                                                  options:kNilOptions
-                                                  error:&error];
-            dispatch_async(dispatch_get_main_queue(), ^{
-                @try {
-                    NSDictionary *data = [json objectForKey:@"data"];
-                    if (data && data != nil) {
-                        NSDictionary *membersettings = [data objectForKey:@"membersettings"];
-                        if (membersettings && membersettings != nil) {
-                            [UserManager saveUserSetting:membersettings];
-                            [UserManager updateLocalSetting];
-                        }
-                    }
-                }
-                @catch (NSException *exception) {
-                }
-                @finally {
-                }
-                
-                [self.emptyView setMode:@"hide"];
-            });
-            
-        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-            [self.emptyView setMode:@"hide"];
-        }];
-        
-        self.isLoadedUserSetting = YES;
     }
 }
 

@@ -21,6 +21,7 @@
 #import "UserManager.h"
 #import "Room.h"
 #import "Firebase.h"
+#import "City.h"
 
 #define PROFILE_PICS 4 //If more than 4 then last is +MORE
 #define PROFILE_SIZE 40
@@ -522,6 +523,7 @@
         [self.sharedData.mixPanelCEventDict setObject:self.sharedData.eventDict[@"venue"][@"city"] forKey:@"Event Venue City"];
         [self.sharedData.mixPanelCEventDict setObject:self.sharedData.eventDict[@"venue"][@"description"] forKey:@"Event Venue Description"];
         [self.sharedData.mixPanelCEventDict setObject:self.sharedData.eventDict[@"venue"][@"zip"] forKey:@"Event Venue Zip"];
+        
         NSArray *mixpanelTags = self.sharedData.eventDict[@"tags"];
         if (mixpanelTags && mixpanelTags != nil) {
             [self.sharedData.mixPanelCEventDict setObject:mixpanelTags forKey:@"Event Tags"];
@@ -903,6 +905,9 @@
                      [self.sharedData.mixPanelCEventDict setObject:eventDetail[@"venue"][@"city"] forKey:@"Event Venue City"];
                      [self.sharedData.mixPanelCEventDict setObject:eventDetail[@"venue"][@"description"] forKey:@"Event Venue Description"];
                      [self.sharedData.mixPanelCEventDict setObject:eventDetail[@"venue"][@"zip"] forKey:@"Event Venue Zip"];
+                     [self.sharedData.mixPanelCEventDict setObject:self.sharedData.area_event forKey:@"Area Event"];
+                     [self.sharedData.mixPanelCEventDict setObject:self.sharedData.latlng_location forKey:@"Lat Lng"];
+                     
                      NSArray *mixpanelTags = [eventDetail objectForKey:@"tags"];
                      if (mixpanelTags && mixpanelTags != nil) {
                          [self.sharedData.mixPanelCEventDict setObject:mixpanelTags forKey:@"Event Tags"];
