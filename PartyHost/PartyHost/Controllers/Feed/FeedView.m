@@ -560,6 +560,10 @@
     if (self.isSwipedOut) {
         Feed *feed = [self getFeedFromCardView:view];
         
+        NSMutableArray *feeds = [NSMutableArray arrayWithArray:[Feed unarchiveObject]];
+        [feeds removeObject:feed];
+        [Feed archiveObject:feeds];
+        
         if (location.x > CGRectGetWidth(self.bounds) / 2) {
             [self approveFeed:YES withFeed:feed];
         } else {
@@ -622,6 +626,10 @@
         [self approveFeed:NO withFeed:feed];
         [view showSkipOverlayView];
     }
+    
+    NSMutableArray *feeds = [NSMutableArray arrayWithArray:[Feed unarchiveObject]];
+    [feeds removeObject:feed];
+    [Feed archiveObject:feeds];
     
     ShadowView *shadowView = (ShadowView*)self.swipeableView.topView;
     FeedCardView *cardView = (FeedCardView *)shadowView.subviews.lastObject;
