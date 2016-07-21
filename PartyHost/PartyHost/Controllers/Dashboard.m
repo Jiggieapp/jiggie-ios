@@ -563,7 +563,10 @@
             self.sharedData.messagesPage.toId = self.sharedData.fromMailId;
             self.sharedData.messagesPage.toLabel.text = [self.sharedData.fromMailName uppercaseString];
             self.sharedData.toImgURL = [self.sharedData profileImg:self.sharedData.fromMailId];
-            [self performSelector:@selector(showMessages:) withObject:self.sharedData.roomId afterDelay:2.0];
+            
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [self goToMessages:self.sharedData.roomId];
+            });
         }
         
     } else if (self.sharedData.hasFeedToLoad) {
@@ -774,6 +777,17 @@
     self.callInit = YES;
     
     [self updateTabState];
+}
+
+- (void)goToMessages:(NSString *)roomId {
+    if (roomId) {
+        [self.messagesPage reset];
+        [UIView animateWithDuration:0.25 animations:^() {
+            self.mainCon.frame = CGRectMake(-self.frame.size.width, 0, self.frame.size.width * 2, self.frame.size.height);
+        } completion:^(BOOL finished) {
+            [self.messagesPage initClassWithRoomId:roomId];
+        }];
+    }
 }
 
 - (void)showMessages:(NSNotification *)notification {

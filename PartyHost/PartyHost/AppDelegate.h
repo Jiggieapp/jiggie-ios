@@ -33,7 +33,6 @@
 @property (strong, nonatomic) NSString      *apnToken;
 @property (strong, nonatomic) id<GAITracker> tracker;
 @property (strong, nonatomic) UIButton      *btnNotify;
-@property (copy, nonatomic) NSString      *roomId;
 
 @property (assign, nonatomic) BOOL      inAskingAPNMode;
 @property (assign, nonatomic) BOOL      isShowNotification;
