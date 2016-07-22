@@ -9,6 +9,11 @@
 #import <Foundation/Foundation.h>
 #import "Mantle.h"
 
+@class RoomGroupInfo;
+
+typedef void (^RoomInfoCompletionHandler)(RoomGroupInfo *roomInfo,
+                                          NSError *error);
+
 @interface RoomGroupInfo : MTLModel <MTLJSONSerializing>
 
 @property(copy, nonatomic, readonly) NSString *event;
@@ -18,5 +23,8 @@
 @property(assign, nonatomic, readonly) NSTimeInterval updatedAt;
 @property(strong, nonatomic, readonly) NSDictionary *unreads;
 @property(strong, nonatomic, readonly) NSDictionary *members;
+
++ (void)retrieveRoomInfoWithId:(NSString *)roomId
+          andCompletionHandler:(RoomInfoCompletionHandler)completion;
 
 @end

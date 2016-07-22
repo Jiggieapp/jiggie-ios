@@ -12,6 +12,7 @@
 #import "Mantle.h"
 #import "User.h"
 #import "RoomPrivateInfo.h"
+#import "RoomGroupInfo.h"
 #import "Room.h"
 #import "Firebase.h"
 #import "SVProgressHUD.h"
@@ -67,7 +68,7 @@
     self.toLabel = [[UILabel alloc] initWithFrame:CGRectMake(40, 20, frame.size.width-85, 40)];
     self.toLabel.textColor = [UIColor whiteColor];
     self.toLabel.backgroundColor = [UIColor clearColor];
-    self.toLabel.font = [UIFont phBold:18];
+    self.toLabel.font = [UIFont phBlond:16];
     self.toLabel.textAlignment = NSTextAlignmentCenter;
     [self.tabBar addSubview:self.toLabel];
     
@@ -261,13 +262,29 @@
         }];
     } else {
         [self.btnInfo setEnabled:YES];
-        [self.toLabel setText:self.eventName];
-        self.messagesReference = [Message retrieveMessagesWithRoomId:self.roomId andCompletionHandler:^(NSArray *messages, NSError *error) {
-            self.messages = [NSMutableArray arrayWithArray:messages];
-            [self.loadingView setHidden:YES];
-            [self.messagesList reloadData];
-            [self scrollToBottom:YES];
-        }];
+        
+        if ([self.eventName length] > 0) {
+            [self.toLabel setText:self.eventName];
+            self.messagesReference = [Message retrieveMessagesWithRoomId:self.roomId andCompletionHandler:^(NSArray *messages, NSError *error) {
+                self.messages = [NSMutableArray arrayWithArray:messages];
+                [self.loadingView setHidden:YES];
+                [self.messagesList reloadData];
+                [self scrollToBottom:YES];
+            }];
+        } else {
+            [RoomGroupInfo retrieveRoomInfoWithId:self.roomId andCompletionHandler:^(RoomGroupInfo *roomInfo, NSError *error) {
+                if (roomInfo) {
+                    [self.toLabel setText:roomInfo.event];
+                    
+                    self.messagesReference = [Message retrieveMessagesWithRoomId:self.roomId andCompletionHandler:^(NSArray *messages, NSError *error) {
+                        self.messages = [NSMutableArray arrayWithArray:messages];
+                        [self.loadingView setHidden:YES];
+                        [self.messagesList reloadData];
+                        [self scrollToBottom:YES];
+                    }];
+                }
+            }];
+        }
     }
 }
 

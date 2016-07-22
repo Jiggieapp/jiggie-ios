@@ -7,6 +7,8 @@
 //
 
 #import "RoomGroupInfo.h"
+#import "Firebase.h"
+#import "Room.h"
 
 @implementation RoomGroupInfo
 
@@ -18,6 +20,28 @@
              @"updatedAt" : @"updated_at",
              @"unreads" : @"unread",
              @"members" : @"members"};
+}
+
++ (void)retrieveRoomInfoWithId:(NSString *)roomId andCompletionHandler:(RoomInfoCompletionHandler)completion {
+    FIRDatabaseReference *reference = [[Room reference] child:roomId];
+    
+    [reference observeSingleEventOfType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
+        if (![snapshot.value isEqual:[NSNull null]]) {
+            NSError *error;
+            RoomGroupInfo *roomInfo = [MTLJSONAdapter modelOfClass:[RoomGroupInfo class]
+                                                fromJSONDictionary:[snapshot.value objectForKey:@"info"]
+                                                             error:&error];
+            
+            if (completion) {
+                completion(roomInfo, error);
+            }
+        } else {
+            if (completion) {
+                completion(nil, nil);
+            }
+        }
+        
+    }];
 }
 
 @end
