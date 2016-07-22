@@ -663,6 +663,8 @@
     if (self.isFromMessage) {
         [self goBack];
     } else {
+        [JGTooltipHelper setShowed:@"Tooltip_GroupChatEvent_isShowed"];
+        
         AFHTTPRequestOperationManager *manager = [self.sharedData getOperationManager];
         NSString *url = [NSString stringWithFormat:@"%@/group/firebase", PHBaseNewURL];
         NSDictionary *parameters = @{@"fb_id" : self.sharedData.fb_id,
