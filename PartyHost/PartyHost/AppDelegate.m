@@ -80,7 +80,7 @@ static NSString *const kAllowTracking = @"allowTracking";
     [GAI sharedInstance].trackUncaughtExceptions = YES;
     //self.tracker = [[GAI sharedInstance] trackerWithName:@"PartyHostApp" trackingId:kTrackingId];
     
-    [[RFRateMe sharedInstance] showRateAlert];
+    [[RFRateMe sharedInstance] showRateAlertAfterTimesOpened:3];
     //[Appsee start:@"ba0b4c483e6c4a3ebf9266d0db03e794"];
     
     
