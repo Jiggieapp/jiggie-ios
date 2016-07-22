@@ -68,7 +68,7 @@
     self.toLabel = [[UILabel alloc] initWithFrame:CGRectMake(40, 20, frame.size.width-85, 40)];
     self.toLabel.textColor = [UIColor whiteColor];
     self.toLabel.backgroundColor = [UIColor clearColor];
-    self.toLabel.font = [UIFont phBold:18];
+    self.toLabel.font = [UIFont phBlond:16];
     self.toLabel.textAlignment = NSTextAlignmentCenter;
     [self.tabBar addSubview:self.toLabel];
     
