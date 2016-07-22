@@ -27,6 +27,8 @@
 		93042B941D12B645004A8B2F /* ChatView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 93042B921D12B645004A8B2F /* ChatView.xib */; };
 		93042B981D13CF25004A8B2F /* ChatFriendListView.m in Sources */ = {isa = PBXBuildFile; fileRef = 93042B961D13CF25004A8B2F /* ChatFriendListView.m */; };
 		93042B991D13CF25004A8B2F /* ChatFriendListView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 93042B971D13CF25004A8B2F /* ChatFriendListView.xib */; };
+		935480BD1D41FF690095D4B3 /* HCSStarRatingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 935480BB1D41FF690095D4B3 /* HCSStarRatingView.m */; };
+		935480BE1D41FF690095D4B3 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 935480BC1D41FF690095D4B3 /* Info.plist */; };
 		936673FC1CD7164A00AC94F3 /* UIActionSheet+Blocks.m in Sources */ = {isa = PBXBuildFile; fileRef = 936673FA1CD7164A00AC94F3 /* UIActionSheet+Blocks.m */; };
 		936674061CD718A800AC94F3 /* TPKeyboardAvoidingScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 936674031CD718A800AC94F3 /* TPKeyboardAvoidingScrollView.m */; };
 		936674071CD718A900AC94F3 /* UIScrollView+TPKeyboardAvoidingAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 936674051CD718A800AC94F3 /* UIScrollView+TPKeyboardAvoidingAdditions.m */; };
@@ -503,6 +505,9 @@
 		93042B951D13CF25004A8B2F /* ChatFriendListView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatFriendListView.h; sourceTree = "<group>"; };
 		93042B961D13CF25004A8B2F /* ChatFriendListView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatFriendListView.m; sourceTree = "<group>"; };
 		93042B971D13CF25004A8B2F /* ChatFriendListView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ChatFriendListView.xib; sourceTree = "<group>"; };
+		935480BA1D41FF690095D4B3 /* HCSStarRatingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCSStarRatingView.h; sourceTree = "<group>"; };
+		935480BB1D41FF690095D4B3 /* HCSStarRatingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCSStarRatingView.m; sourceTree = "<group>"; };
+		935480BC1D41FF690095D4B3 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		936673F91CD7164A00AC94F3 /* UIActionSheet+Blocks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIActionSheet+Blocks.h"; sourceTree = "<group>"; };
 		936673FA1CD7164A00AC94F3 /* UIActionSheet+Blocks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIActionSheet+Blocks.m"; sourceTree = "<group>"; };
 		936674021CD718A800AC94F3 /* TPKeyboardAvoidingScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TPKeyboardAvoidingScrollView.h; sourceTree = "<group>"; };
@@ -1431,6 +1436,16 @@
 			path = Firebase;
 			sourceTree = "<group>";
 		};
+		935480B91D41FF690095D4B3 /* HCSStarRatingView */ = {
+			isa = PBXGroup;
+			children = (
+				935480BA1D41FF690095D4B3 /* HCSStarRatingView.h */,
+				935480BB1D41FF690095D4B3 /* HCSStarRatingView.m */,
+				935480BC1D41FF690095D4B3 /* Info.plist */,
+			);
+			path = HCSStarRatingView;
+			sourceTree = "<group>";
+		};
 		936673F71CD7164A00AC94F3 /* UIActionSheet-Blocks */ = {
 			isa = PBXGroup;
 			children = (
@@ -2021,6 +2036,7 @@
 		DAABAFE81C1FC6F8004DDCFA /* ExtraLibraries */ = {
 			isa = PBXGroup;
 			children = (
+				935480B91D41FF690095D4B3 /* HCSStarRatingView */,
 				936674DB1CE30EB200AC94F3 /* APAddressBook */,
 				DA33068D1CDA61A500A4126D /* JDFTooltip */,
 				9366742F1CD7627500AC94F3 /* SDWebImage */,
@@ -3107,6 +3123,7 @@
 				93042B991D13CF25004A8B2F /* ChatFriendListView.xib in Resources */,
 				DAABB2971C1FF5AE004DDCFA /* MPCloseBtn@2x.png in Resources */,
 				9366742D1CD7621500AC94F3 /* OLPhotoViewController.xib in Resources */,
+				935480BE1D41FF690095D4B3 /* Info.plist in Resources */,
 				938CE8051CD3184300ADDD4C /* SocialMultiSliderTableViewCell.xib in Resources */,
 				DAABB0E91C1FD50E004DDCFA /* ChatPopup.xib in Resources */,
 				DAABB0EF1C1FD50E004DDCFA /* FeedPopup.xib in Resources */,
@@ -3192,6 +3209,7 @@
 				DAABB2A01C1FF5AE004DDCFA /* MPNSAttributedStringToNSDictionaryValueTransformer.m in Sources */,
 				DAABB2C51C1FF5AE004DDCFA /* NWURLConnection.m in Sources */,
 				DAABB25B1C1FF5AE004DDCFA /* AFURLResponseSerialization.m in Sources */,
+				935480BD1D41FF690095D4B3 /* HCSStarRatingView.m in Sources */,
 				DAABB0F71C1FD50E004DDCFA /* SetupGenderView.m in Sources */,
 				938CE7CA1CCF627D00ADDD4C /* MTLValueTransformer.m in Sources */,
 				DA5ED6181C92975100004C7E /* VTItemDetails.m in Sources */,

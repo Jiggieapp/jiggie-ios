@@ -10,9 +10,11 @@
 
 @interface RFRateMe : NSObject
 
-+(void)showRateAlert;
-+(void)showRateAlertAfterTimesOpened:(int)times;
-+(void)showRateAlertAfterDays:(int)days;
++ (RFRateMe *)sharedInstance;
+
+- (void)showRateAlert;
+- (void)showRateAlertAfterTimesOpened:(int)times;
+- (void)showRateAlertAfterDays:(int)days;
 
 
 @end

@@ -8,15 +8,32 @@
 
 #import "RFRateMe.h"
 #import "UIAlertView+NSCookbook.h"
+#import "HCSStarRatingView.h"
 
 #define kNumberOfDaysUntilShowAgain 3
 #define kAppStoreAddress @"https://itunes.apple.com/us/app/jiggie-social-event-discovery/id1047291489"
 #define kAppName @"Jiggie"
 
+@interface RFRateMe() <UITextViewDelegate>
+
+@property(strong, nonatomic) UIAlertView *rateAlertView;
+
+@end
+
 @implementation RFRateMe
 
-+(void)showRateAlert {
++ (RFRateMe *)sharedInstance {
+    static RFRateMe *_sharedInstance = nil;
     
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        _sharedInstance = [[self alloc] init];
+    });
+    
+    return _sharedInstance;
+}
+
+- (void)showRateAlert {
     //If rate was completed, we just return if True
     BOOL rateCompleted = [[NSUserDefaults standardUserDefaults] boolForKey:@"RFRateCompleted"];
     if (rateCompleted) return;
@@ -49,60 +66,25 @@
         
     }
     
-    
-    NSString *cancelStrg = [NSString stringWithFormat:@"No, I don't love %@",kAppName];
-    
-    
+    [self.rateAlertView dismissWithClickedButtonIndex:0 animated:NO];
     
     //Show rate alert
+    self.rateAlertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(kAppName, @"")
+                                                    message:[NSString stringWithFormat:@"How would you rate your %@ experience", kAppName]
+                                                   delegate:nil
+                                          cancelButtonTitle:@"Later"
+                                          otherButtonTitles:nil, nil];
     
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(kAppName, @"")
-                                                        message:[NSString stringWithFormat:@"If you enjoy %@, would you mind taking a moment to rate it? It won’t take more than a minute. Thanks for your support!",kAppName]
-                                                       delegate:nil
-                                              cancelButtonTitle:nil
-                                              otherButtonTitles:NSLocalizedString(@"Rate it now", @""),NSLocalizedString(cancelStrg, @""),NSLocalizedString(@"Remind me later",@""),nil];
+    HCSStarRatingView *rateView = [[HCSStarRatingView alloc] init];
+    [rateView setBackgroundColor:[UIColor clearColor]];
+    [rateView setMinimumValue:0];
+    [rateView setMaximumValue:5];
+    [rateView setValue:0];
     
-    [alertView showWithCompletion:^(UIAlertView *alertView, NSInteger buttonIndex) {
-        
-        switch (buttonIndex) {
-            case 1:
-                
-                NSLog(@"No, thanks");
-                [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"RFRateCompleted"];
-                [[NSUserDefaults standardUserDefaults] synchronize];
-                
-                break;
-            case 0:
-                
-                NSLog(@"Rate it now");
-                [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"RFRateCompleted"];
-                [[NSUserDefaults standardUserDefaults] synchronize];
-                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:kAppStoreAddress]];
-                
-                break;
-            case 2:
-                
-                NSLog(@"Remind me later");
-                
-                NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-                [defaults setInteger:0 forKey:@"timesOpened"];
-                [defaults synchronize];
-                
-                /*
-                NSDateFormatter *dateFormatter=[[NSDateFormatter alloc] init];
-                [dateFormatter setDateFormat:@"yyyy-MM-dd"];
-                NSDate *now = [NSDate date];
-                [[NSUserDefaults standardUserDefaults] setObject:[dateFormatter stringFromDate:now] forKey:@"RFStartDate"];
-                [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"RFRemindMeLater"];
-                [[NSUserDefaults standardUserDefaults] synchronize];
-                */
-                
-                break;
-        }
-    }];
+    [self showRateAlertView:rateView];
 }
 
-+(void)showRateAlertAfterTimesOpened:(int)times {
+- (void)showRateAlertAfterTimesOpened:(int)times {
     //Thanks @kylnew for feedback and idea!
     
     BOOL rateCompleted = [[NSUserDefaults standardUserDefaults] boolForKey:@"RFRateCompleted"];
@@ -114,14 +96,14 @@
     [defaults synchronize];
     NSLog(@"App has been opened %ld times", (long)[defaults integerForKey:@"timesOpened"]);
     if([defaults integerForKey:@"timesOpened"] >= times){
-        [RFRateMe showRateAlert];
+        [[RFRateMe sharedInstance] showRateAlert];
     }
 
 
 }
 
 
-+(void)showRateAlertAfterDays:(int)times {
+- (void)showRateAlertAfterDays:(int)times {
     
     BOOL rateCompleted = [[NSUserDefaults standardUserDefaults] boolForKey:@"RFRateCompleted"];
     if (rateCompleted) return;
@@ -160,6 +142,141 @@
     if ((long)[components day] <= times) return;
     
     
+}
+
+- (void)showRateAlertView:(HCSStarRatingView *)sender {
+    CGFloat kAlertViewWidth = 270;
+    CGFloat kRatingViewWidth = 170;
+    
+    HCSStarRatingView *rateView = [[HCSStarRatingView alloc]
+                                   initWithFrame:CGRectMake((kAlertViewWidth / 2) - (kRatingViewWidth / 2),
+                                                            0,
+                                                            kRatingViewWidth,
+                                                            30)];
+    [rateView setBackgroundColor:[UIColor clearColor]];
+    [rateView setMinimumValue:0];
+    [rateView setMaximumValue:5];
+    [rateView setValue:sender.value];
+    [rateView setSpacing:8];
+    [rateView setContinuous:NO];
+    [rateView setTintColor:[UIColor phPurpleColor]];
+    [rateView addTarget:self action:@selector(showRateAlertView:) forControlEvents:UIControlEventValueChanged];
+    
+    if (sender.value >= 4) {
+        if (self.rateAlertView.tag != 103) {
+            [rateView setUserInteractionEnabled:NO];
+            [self.rateAlertView dismissWithClickedButtonIndex:0 animated:NO];
+            self.rateAlertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(kAppName, @"")
+                                                            message:[NSString stringWithFormat:@"How would you rate your %@ experience", kAppName]
+                                                           delegate:nil
+                                                  cancelButtonTitle:@"Later"
+                                                  otherButtonTitles:@"Review", nil];
+            
+            UIView *accessoryView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kAlertViewWidth, 50)];
+            [accessoryView addSubview:rateView];
+            
+            [self.rateAlertView setTag:103];
+            [self.rateAlertView setValue:accessoryView forKey:@"accessoryView"];
+            [self.rateAlertView showWithCompletion:^(UIAlertView *alertView, NSInteger buttonIndex) {
+                switch (buttonIndex) {
+                    case 0: {
+                        // Later
+                        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+                        [defaults setInteger:0 forKey:@"timesOpened"];
+                        [defaults synchronize];
+                        
+                        break;
+                    }
+                    case 1: {
+                        // Review
+                        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"RFRateCompleted"];
+                        [[NSUserDefaults standardUserDefaults] synchronize];
+                        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:kAppStoreAddress]];
+                        
+                        break;
+                    }
+                }
+            }];
+        }
+    } else if (sender.value >= 1) {
+        if (self.rateAlertView.tag != 102) {
+            [rateView setUserInteractionEnabled:NO];
+            [self.rateAlertView dismissWithClickedButtonIndex:0 animated:NO];
+            
+            self.rateAlertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(kAppName, @"")
+                                                            message:[NSString stringWithFormat:@"How would you rate your %@ experience", kAppName]
+                                                           delegate:nil
+                                                  cancelButtonTitle:@"Later"
+                                                  otherButtonTitles:@"Send Feedback", nil];
+            
+            UITextView *textView = [[UITextView alloc] initWithFrame:CGRectMake(10, 40, 250, 70)];
+            textView.backgroundColor = [UIColor phLightSilverColor];
+            textView.text = @"Enter your feedback...";
+            textView.delegate = self;
+            textView.textColor = [UIColor darkGrayColor];
+            textView.font = [UIFont phBlond:15];
+            textView.layer.cornerRadius = 5;
+            textView.layer.borderColor = [UIColor phLightGrayColor].CGColor;
+            textView.layer.borderWidth = 1;
+            
+            UIView *accessoryView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kAlertViewWidth, 140)];
+            [accessoryView addSubview:rateView];
+            [accessoryView addSubview:textView];
+            
+            [self.rateAlertView setTag:102];
+            [self.rateAlertView setValue:accessoryView forKey:@"accessoryView"];
+            [self.rateAlertView showWithCompletion:^(UIAlertView *alertView, NSInteger buttonIndex) {
+                switch (buttonIndex) {
+                    case 0: {
+                        // Later
+                        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+                        [defaults setInteger:0 forKey:@"timesOpened"];
+                        [defaults synchronize];
+                        
+                        break;
+                    }
+                    case 1: {
+                        // Send Feedback
+                        NSLog(@"API Calls");
+                        
+                        break;
+                    }
+                }
+            }];
+        }
+    } else {
+        [self.rateAlertView dismissWithClickedButtonIndex:0 animated:NO];
+        
+        self.rateAlertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(kAppName, @"")
+                                                        message:[NSString stringWithFormat:@"How would you rate your %@ experience", kAppName]
+                                                       delegate:nil
+                                              cancelButtonTitle:@"Later"
+                                              otherButtonTitles:nil, nil];
+        
+        UIView *accessoryView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kAlertViewWidth, 50)];
+        [accessoryView addSubview:rateView];
+        
+        [self.rateAlertView setValue:accessoryView forKey:@"accessoryView"];
+        [self.rateAlertView showWithCompletion:^(UIAlertView *alertView, NSInteger buttonIndex) {
+            switch (buttonIndex) {
+                case 0: {
+                    // Later
+                    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+                    [defaults setInteger:0 forKey:@"timesOpened"];
+                    [defaults synchronize];
+                    
+                    break;
+                }
+            }
+        }];
+    }
+}
+
+#pragma mark - UITextViewDelegate
+- (void)textViewDidBeginEditing:(UITextView *)textView {
+    if ([textView.text isEqualToString:@"Enter your feedback..."]) {
+        textView.text = @"";
+    }
 }
 
 @end
