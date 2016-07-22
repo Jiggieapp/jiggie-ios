@@ -9,10 +9,12 @@
 #import "RFRateMe.h"
 #import "UIAlertView+NSCookbook.h"
 #import "HCSStarRatingView.h"
+#import <sys/utsname.h>
 
 #define kNumberOfDaysUntilShowAgain 3
 #define kAppStoreAddress @"https://itunes.apple.com/us/app/jiggie-social-event-discovery/id1047291489"
 #define kAppName @"Jiggie"
+#define kAlertViewWidth 270
 
 @interface RFRateMe() <UITextViewDelegate>
 
@@ -145,7 +147,6 @@
 }
 
 - (void)showRateAlertView:(HCSStarRatingView *)sender {
-    CGFloat kAlertViewWidth = 270;
     CGFloat kRatingViewWidth = 170;
     
     HCSStarRatingView *rateView = [[HCSStarRatingView alloc]
@@ -166,7 +167,7 @@
         if (self.rateAlertView.tag != 103) {
             [rateView setUserInteractionEnabled:NO];
             [self.rateAlertView dismissWithClickedButtonIndex:0 animated:NO];
-            self.rateAlertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(kAppName, @"")
+            self.rateAlertView = [[UIAlertView alloc] initWithTitle:@"Rate our App"
                                                             message:[NSString stringWithFormat:@"How would you rate your %@ experience", kAppName]
                                                            delegate:nil
                                                   cancelButtonTitle:@"Later"
@@ -203,7 +204,7 @@
             [rateView setUserInteractionEnabled:NO];
             [self.rateAlertView dismissWithClickedButtonIndex:0 animated:NO];
             
-            self.rateAlertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(kAppName, @"")
+            self.rateAlertView = [[UIAlertView alloc] initWithTitle:@"Rate our App"
                                                             message:[NSString stringWithFormat:@"How would you rate your %@ experience", kAppName]
                                                            delegate:nil
                                                   cancelButtonTitle:@"Later"
@@ -237,7 +238,32 @@
                     }
                     case 1: {
                         // Send Feedback
-                        NSLog(@"API Calls");
+                        struct utsname systemInfo;
+                        uname(&systemInfo);
+                        
+                        SharedData *sharedData = [SharedData sharedInstance];
+                        AFHTTPRequestOperationManager *manager = [sharedData getOperationManager];
+                        NSString *url = [NSString stringWithFormat:@"%@/review_rate", PHBaseNewURL];
+                        NSDictionary *parameters = @{@"fb_id" : sharedData.fb_id,
+                                                     @"rate" : [[NSNumber numberWithFloat:sender.value] stringValue],
+                                                     @"feed_back" : textView.text,
+                                                     @"device_type" : @"1",
+                                                     @"version" : [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"],
+                                                     @"model" : [NSString stringWithCString:systemInfo.machine
+                                                                                   encoding:NSUTF8StringEncoding]};
+                        
+                        [manager POST:url parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                            if (operation.response.statusCode == 200) {
+                                [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"RFRateCompleted"];
+                                [[NSUserDefaults standardUserDefaults] synchronize];
+                                
+                                [self showFeedbackSentAlertView];
+                                
+                                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                                    [self.rateAlertView dismissWithClickedButtonIndex:0 animated:YES];
+                                });
+                            }
+                        } failure:nil];
                         
                         break;
                     }
@@ -247,7 +273,7 @@
     } else {
         [self.rateAlertView dismissWithClickedButtonIndex:0 animated:NO];
         
-        self.rateAlertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(kAppName, @"")
+        self.rateAlertView = [[UIAlertView alloc] initWithTitle:@"Rate our App"
                                                         message:[NSString stringWithFormat:@"How would you rate your %@ experience", kAppName]
                                                        delegate:nil
                                               cancelButtonTitle:@"Later"
@@ -272,11 +298,31 @@
     }
 }
 
+- (void)showFeedbackSentAlertView {
+    self.rateAlertView = [[UIAlertView alloc] initWithTitle:@"Feedback Sent"
+                                                    message:@"Thank you. Your feedback is greatly appreciated."
+                                                   delegate:nil
+                                          cancelButtonTitle:nil
+                                          otherButtonTitles:nil, nil];
+    
+    CGFloat kImageViewWidth = 80;
+    
+    UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"icon_oval_checked"]];
+    imageView.frame = CGRectMake((kAlertViewWidth / 2) - (kImageViewWidth / 2), 0, kImageViewWidth, kImageViewWidth);
+    
+    UIView *accessoryView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kAlertViewWidth, kImageViewWidth+15)];
+    [accessoryView addSubview:imageView];
+    
+    [self.rateAlertView setValue:accessoryView forKey:@"accessoryView"];
+    [self.rateAlertView show];
+}
+
 #pragma mark - UITextViewDelegate
 - (void)textViewDidBeginEditing:(UITextView *)textView {
     if ([textView.text isEqualToString:@"Enter your feedback..."]) {
         textView.text = @"";
     }
 }
+
 
 @end
