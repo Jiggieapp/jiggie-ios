@@ -52,6 +52,11 @@
 @property (nonatomic, strong) UILabel *guestInterestedLabel;
 @property (nonatomic, strong) UILabel *hostNum;
 @property (nonatomic, strong) UIView *userContainer;
+
+@property (nonatomic, strong) UIView *soundcloudContainer;
+@property (nonatomic, strong) UILabel *soundcloudTitle;
+@property (nonatomic, strong) UILabel *soundcloudAlbumTitle;
+
 @property (nonatomic, strong) UIView *listingContainer;
 
 @property(nonatomic,strong) UIView *infoView;

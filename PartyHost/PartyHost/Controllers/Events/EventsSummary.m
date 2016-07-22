@@ -208,6 +208,12 @@
     self.separator1.backgroundColor = [UIColor phLightGrayColor];
     [self.mainScroll addSubview:self.separator1];
     
+    self.soundcloudContainer = [[UIView alloc] init];
+    [self.mainScroll addSubview:self.soundcloudContainer];
+    
+    
+    
+    
     self.listingContainer = [[UIView alloc] init];
     [self.mainScroll addSubview:self.listingContainer];
     UITapGestureRecognizer *seeAllTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(infoButtonClicked)];
