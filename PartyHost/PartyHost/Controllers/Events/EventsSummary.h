@@ -53,9 +53,14 @@
 @property (nonatomic, strong) UILabel *hostNum;
 @property (nonatomic, strong) UIView *userContainer;
 
+@property (nonatomic, strong) UIView *soundcloudSeparator;
 @property (nonatomic, strong) UIView *soundcloudContainer;
+@property (nonatomic, strong) UIImageView *soundcloudMusicIcon;
 @property (nonatomic, strong) UILabel *soundcloudTitle;
 @property (nonatomic, strong) UILabel *soundcloudAlbumTitle;
+@property (nonatomic, strong) UIButton *soundcloudPrevButton;
+@property (nonatomic, strong) UIButton *soundcloudPlayButton;
+@property (nonatomic, strong) UIButton *soundcloudNextButton;
 
 @property (nonatomic, strong) UIView *listingContainer;
 

@@ -204,15 +204,47 @@
     self.venueName.numberOfLines = 3;
     [self.mainScroll addSubview:self.venueName];
     
-    self.separator1 = [[UIView alloc] init];
-    self.separator1.backgroundColor = [UIColor phLightGrayColor];
-    [self.mainScroll addSubview:self.separator1];
+    self.soundcloudSeparator = [[UIView alloc] init];
+    self.soundcloudSeparator.backgroundColor = [UIColor phLightGrayColor];
+    [self.mainScroll addSubview:self.soundcloudSeparator];
     
     self.soundcloudContainer = [[UIView alloc] init];
     [self.mainScroll addSubview:self.soundcloudContainer];
     
+    self.soundcloudMusicIcon = [[UIImageView alloc] init];
+    [self.soundcloudMusicIcon setImage:[UIImage imageNamed:@"ic_Curated_Music"]];
+    [self.soundcloudContainer addSubview:self.soundcloudMusicIcon];
     
+    self.soundcloudTitle = [[UILabel alloc] init];
+    self.soundcloudTitle.textColor = [UIColor blackColor];
+    self.soundcloudTitle.font = [UIFont phBold:16];
+    [self.soundcloudContainer addSubview:self.soundcloudTitle];
     
+    self.soundcloudAlbumTitle = [[UILabel alloc] init];
+    self.soundcloudAlbumTitle.textColor = [UIColor darkGrayColor];
+    self.soundcloudAlbumTitle.font = [UIFont phBlond:13];
+    [self.soundcloudContainer addSubview:self.soundcloudAlbumTitle];
+    
+    self.soundcloudPrevButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.soundcloudPrevButton setImage:[UIImage imageNamed:@"ic_Previous_Track_Active"] forState:UIControlStateNormal];
+    [self.soundcloudPrevButton setImage:[UIImage imageNamed:@"ic_Previous_Track_Inactive"] forState:UIControlStateDisabled];
+    [self.soundcloudPrevButton addTarget:self action:@selector(prevButtonDidTap:) forControlEvents:UIControlEventTouchUpInside];
+    [self.soundcloudContainer addSubview:self.soundcloudPrevButton];
+    
+    self.soundcloudPlayButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.soundcloudPlayButton setImage:[UIImage imageNamed:@"btn_Play_Track"] forState:UIControlStateNormal];
+    [self.soundcloudPlayButton addTarget:self action:@selector(playButtonDidTap:) forControlEvents:UIControlEventTouchUpInside];
+    [self.soundcloudContainer addSubview:self.soundcloudPlayButton];
+    
+    self.soundcloudNextButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.soundcloudNextButton setImage:[UIImage imageNamed:@"ic_Next_Track_Active"] forState:UIControlStateNormal];
+    [self.soundcloudNextButton setImage:[UIImage imageNamed:@"ic_Next_Track_Inactive"] forState:UIControlStateDisabled];
+    [self.soundcloudNextButton addTarget:self action:@selector(nextButtonDidTap:) forControlEvents:UIControlEventTouchUpInside];
+    [self.soundcloudContainer addSubview:self.soundcloudNextButton];
+    
+    self.separator1 = [[UIView alloc] init];
+    self.separator1.backgroundColor = [UIColor phLightGrayColor];
+    [self.mainScroll addSubview:self.separator1];
     
     self.listingContainer = [[UIView alloc] init];
     [self.mainScroll addSubview:self.listingContainer];
@@ -696,6 +728,18 @@
             [SVProgressHUD dismiss];
         }];
     }
+}
+
+- (void)prevButtonDidTap:(id)sender {
+    
+}
+
+- (void)playButtonDidTap:(id)sender {
+    
+}
+
+- (void)nextButtonDidTap:(id)sender {
+    
 }
 
 #pragma mark - Fetch
@@ -1182,8 +1226,29 @@
     
     self.tagCollection.frame = CGRectMake(20, self.venueName.frame.size.height + self.venueName.frame.origin.y, self.sharedData.screenWidth - 40, 0);
     
+    //Separator
+    self.soundcloudSeparator.frame = CGRectMake(0,self.tagCollection.frame.size.height + self.tagCollection.frame.origin.y + 20, self.sharedData.screenWidth, 1);
+    self.soundcloudSeparator.hidden = NO;
+    
+    self.soundcloudContainer.frame = CGRectMake(0, self.soundcloudSeparator.frame.origin.y, self.sharedData.screenWidth, 40);
+    self.soundcloudContainer.hidden = NO;
+    
+    self.soundcloudMusicIcon.frame = CGRectMake(16, 18, 24, 24);
+    
+    self.soundcloudTitle.frame = CGRectMake(50, 10, 160, 20);
+    self.soundcloudTitle.text = @"MOVE D";
+    
+    self.soundcloudAlbumTitle.frame = CGRectMake(50, 30, 160, 20);
+    self.soundcloudAlbumTitle.text = @"Dance All Night";
+    
+    self.soundcloudPrevButton.frame = CGRectMake(self.sharedData.screenWidth - 110, 12, 32, 36);
+    
+    self.soundcloudPlayButton.frame = CGRectMake(self.sharedData.screenWidth - 110 + 32, 8, 44, 44);
+    
+    self.soundcloudNextButton.frame = CGRectMake(self.sharedData.screenWidth - 110 + 32 + 44, 12, 32, 36);
+    
     //Separator 1
-    self.separator1.frame = CGRectMake(0,self.tagCollection.frame.size.height + self.tagCollection.frame.origin.y + 20, self.sharedData.screenWidth, 1);
+    self.separator1.frame = CGRectMake(0,self.soundcloudContainer.frame.size.height + self.soundcloudContainer.frame.origin.y + 20, self.sharedData.screenWidth, 1);
     self.separator1.hidden = NO;
     
     long totalUsers = [userList count];
