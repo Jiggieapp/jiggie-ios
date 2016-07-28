@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import <MapKit/MapKit.h>
 #import <CoreLocation/CoreLocation.h>
+#import <AVFoundation/AVFoundation.h>
 #import "MKMapView+ZoomLevel.h"
 #import "SetupPickViewCell.h"
 #import "UICollectionViewLeftAlignedLayout.h"
@@ -16,7 +17,7 @@
 #import "EmptyView.h"
 #import "Event.h"
 
-@class JDFSequentialTooltipManager;
+@class JDFSequentialTooltipManager, SoundCloud;
 @interface EventsSummary : UIView<UIScrollViewDelegate,CLLocationManagerDelegate,MKMapViewDelegate,UICollectionViewDataSource,UICollectionViewDelegate,UICollectionViewDelegateFlowLayout,NSFetchedResultsControllerDelegate>
 {
     NSFetchedResultsController *fetchedResultsController;
@@ -95,6 +96,9 @@
 @property (nonatomic, retain) NSManagedObjectContext *managedObjectContext;
 
 @property (nonatomic,strong) JDFSequentialTooltipManager *tooltip;
+
+@property (nonatomic,strong) SoundCloud *soundCloud;
+@property (nonatomic, retain) AVAudioPlayer *audioPlayer;
 
 @property (assign, nonatomic) BOOL isModal;
 

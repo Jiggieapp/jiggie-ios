@@ -22,6 +22,8 @@
 #import "Room.h"
 #import "Firebase.h"
 #import "City.h"
+#import "SoundCloud.h"
+
 
 #define PROFILE_PICS 4 //If more than 4 then last is +MORE
 #define PROFILE_SIZE 40
@@ -207,6 +209,8 @@
     self.soundcloudSeparator = [[UIView alloc] init];
     self.soundcloudSeparator.backgroundColor = [UIColor phLightGrayColor];
     [self.mainScroll addSubview:self.soundcloudSeparator];
+    
+    self.soundCloud = [[SoundCloud alloc] init];
     
     self.soundcloudContainer = [[UIView alloc] init];
     [self.mainScroll addSubview:self.soundcloudContainer];
@@ -736,6 +740,10 @@
 
 - (void)playButtonDidTap:(id)sender {
     
+    NSData *data =[self.soundCloud downloadTrackData:@"http://api.soundcloud.com/tracks/257659076/stream?client_id=9147700913ab2472e144035ab0d72b5f"];
+    
+    self.audioPlayer = [[AVAudioPlayer alloc]initWithData:data error:nil];
+    [self.audioPlayer play];
 }
 
 - (void)nextButtonDidTap:(id)sender {
