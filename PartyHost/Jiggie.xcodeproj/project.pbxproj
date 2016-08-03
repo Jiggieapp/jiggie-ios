@@ -457,6 +457,8 @@
 		DAEE2C331CBEBF8600F1546F /* PaymentSelectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DAEE2C321CBEBF8600F1546F /* PaymentSelectionCell.m */; };
 		DAFCACB51D4A046C005AF434 /* SoundCloud.m in Sources */ = {isa = PBXBuildFile; fileRef = DAFCACB41D4A046C005AF434 /* SoundCloud.m */; };
 		DAFCACB81D4A0637005AF434 /* JSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = DAFCACB71D4A0637005AF434 /* JSONKit.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		DAFCACBC1D51D7C2005AF434 /* JoinTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DAFCACBA1D51D7C2005AF434 /* JoinTableViewController.m */; };
+		DAFCACBD1D51D7C2005AF434 /* JoinTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DAFCACBB1D51D7C2005AF434 /* JoinTableViewController.xib */; };
 		FA3702B81A8F9E9000B2BD6A /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA3702B71A8F9E9000B2BD6A /* MapKit.framework */; };
 		FA3702BA1A8F9EC300B2BD6A /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA3702B91A8F9EC300B2BD6A /* CoreLocation.framework */; };
 		FA4D2EF21A4D9A77006828E7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = FA4D2EF11A4D9A77006828E7 /* main.m */; };
@@ -1329,6 +1331,9 @@
 		DAFCACB41D4A046C005AF434 /* SoundCloud.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SoundCloud.m; sourceTree = "<group>"; };
 		DAFCACB61D4A0637005AF434 /* JSONKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSONKit.h; sourceTree = "<group>"; };
 		DAFCACB71D4A0637005AF434 /* JSONKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSONKit.m; sourceTree = "<group>"; };
+		DAFCACB91D51D7C2005AF434 /* JoinTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JoinTableViewController.h; sourceTree = "<group>"; };
+		DAFCACBA1D51D7C2005AF434 /* JoinTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JoinTableViewController.m; sourceTree = "<group>"; };
+		DAFCACBB1D51D7C2005AF434 /* JoinTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = JoinTableViewController.xib; sourceTree = "<group>"; };
 		FA3702B71A8F9E9000B2BD6A /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		FA3702B91A8F9EC300B2BD6A /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		FA4D2EEC1A4D9A77006828E7 /* Jiggie.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Jiggie.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -2280,6 +2285,9 @@
 				DAABB0691C1FD50E004DDCFA /* Privacy.m */,
 				DAABB0711C1FD50E004DDCFA /* Settings.h */,
 				DAABB0721C1FD50E004DDCFA /* Settings.m */,
+				DAFCACB91D51D7C2005AF434 /* JoinTableViewController.h */,
+				DAFCACBA1D51D7C2005AF434 /* JoinTableViewController.m */,
+				DAFCACBB1D51D7C2005AF434 /* JoinTableViewController.xib */,
 			);
 			path = More;
 			sourceTree = "<group>";
@@ -3142,6 +3150,7 @@
 				DAABB2971C1FF5AE004DDCFA /* MPCloseBtn@2x.png in Resources */,
 				9366742D1CD7621500AC94F3 /* OLPhotoViewController.xib in Resources */,
 				935480BE1D41FF690095D4B3 /* Info.plist in Resources */,
+				DAFCACBD1D51D7C2005AF434 /* JoinTableViewController.xib in Resources */,
 				938CE8051CD3184300ADDD4C /* SocialMultiSliderTableViewCell.xib in Resources */,
 				DAABB0E91C1FD50E004DDCFA /* ChatPopup.xib in Resources */,
 				DAABB0EF1C1FD50E004DDCFA /* FeedPopup.xib in Resources */,
@@ -3367,6 +3376,7 @@
 				9366744F1CD7627500AC94F3 /* SDWebImageCompat.m in Sources */,
 				936675281CE30EB200AC94F3 /* APJob.m in Sources */,
 				936675201CE30EB200AC94F3 /* APAddressBookBaseRoutine.m in Sources */,
+				DAFCACBC1D51D7C2005AF434 /* JoinTableViewController.m in Sources */,
 				DAABB2911C1FF5AE004DDCFA /* MPCGColorRefToNSStringValueTransformer.m in Sources */,
 				DAABB12A1C1FF13A004DDCFA /* EmptyView.m in Sources */,
 				DA5ED6241C96D10700004C7E /* TicketSuccessViewController.m in Sources */,

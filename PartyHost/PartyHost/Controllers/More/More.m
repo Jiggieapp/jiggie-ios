@@ -37,6 +37,14 @@
     title.font = [UIFont phBlond:16];
     [tabBar addSubview:title];
     
+    UIButton *joinTable = [[UIButton alloc] initWithFrame:CGRectMake(frame.size.width - 80, 20, 70, 40)];
+    [joinTable setBackgroundColor:[UIColor clearColor]];
+    [joinTable setTitle:@"Join Table" forState:UIControlStateNormal];
+    [joinTable setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    joinTable.titleLabel.font = [UIFont phBlond:14];
+    [joinTable addTarget:self action:@selector(goJoinTable) forControlEvents:UIControlEventTouchUpInside];
+    [tabBar addSubview:joinTable];
+    
     int OffSet = (self.sharedData.isIphone4)?18:0;
     int OffSetLargeDevice = 0;
     int OffsetFontLargeDevice = 0;
@@ -929,6 +937,12 @@
      {
          self.mainCon.frame = CGRectMake(-self.sharedData.screenWidth, 0, self.sharedData.screenWidth * 3, self.sharedData.screenHeight - PHTabHeight);
      }];
+}
+
+-(void)goJoinTable
+{
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"SHOW_JOIN_TABLE"
+                                                        object:nil];
 }
 
 @end

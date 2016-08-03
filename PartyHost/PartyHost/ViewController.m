@@ -21,6 +21,7 @@
 #import "PromotionsViewController.h"
 #import "InviteFriendsViewController.h"
 #import "CityListViewController.h"
+#import "JoinTableViewController.h"
 
 @interface ViewController ()
 
@@ -184,6 +185,12 @@
      addObserver:self
      selector:@selector(showPromotions:)
      name:@"SHOW_PROMOTIONS"
+     object:nil];
+    
+    [[NSNotificationCenter defaultCenter]
+     addObserver:self
+     selector:@selector(showJoinTable:)
+     name:@"SHOW_JOIN_TABLE"
      object:nil];
     
     [[NSNotificationCenter defaultCenter]
@@ -765,6 +772,12 @@
 - (void)showCityList:(NSNotification *)notification {
     UINavigationController *cityListNavigationController = [[UINavigationController alloc] initWithRootViewController:[CityListViewController new]];
     [self presentViewController:cityListNavigationController animated:YES completion:nil];
+}
+
+#pragma mark - Join Table
+- (void)showJoinTable:(NSNotification *)notification {
+    UINavigationController *joinTableNavigationController = [[UINavigationController alloc] initWithRootViewController:[JoinTableViewController new]];
+    [self presentViewController:joinTableNavigationController animated:YES completion:nil];
 }
 
 - (void)didReceiveMemoryWarning
