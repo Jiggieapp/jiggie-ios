@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10116" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10117" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
@@ -72,10 +72,6 @@
                         <exclude reference="wWX-na-mT9"/>
                     </mask>
                     <mask key="constraints">
-                        <exclude reference="4Te-F5-H1v"/>
-                        <exclude reference="8yl-RU-kVe"/>
-                        <exclude reference="KlI-ua-Hcz"/>
-                        <exclude reference="pG2-fo-FX2"/>
                         <exclude reference="4NI-8k-4pY"/>
                         <exclude reference="TL9-K1-DvC"/>
                         <exclude reference="tRg-Wx-OWE"/>
@@ -83,6 +79,10 @@
                         <exclude reference="daN-7L-6bA"/>
                         <exclude reference="eaJ-gK-r0b"/>
                         <exclude reference="kqs-lS-xhA"/>
+                        <exclude reference="4Te-F5-H1v"/>
+                        <exclude reference="8yl-RU-kVe"/>
+                        <exclude reference="KlI-ua-Hcz"/>
+                        <exclude reference="pG2-fo-FX2"/>
                     </mask>
                 </variation>
                 <variation key="heightClass=regular-widthClass=compact">
@@ -92,10 +92,6 @@
                         <include reference="wWX-na-mT9"/>
                     </mask>
                     <mask key="constraints">
-                        <include reference="4Te-F5-H1v"/>
-                        <include reference="8yl-RU-kVe"/>
-                        <include reference="KlI-ua-Hcz"/>
-                        <exclude reference="pG2-fo-FX2"/>
                         <include reference="4NI-8k-4pY"/>
                         <include reference="TL9-K1-DvC"/>
                         <include reference="tRg-Wx-OWE"/>
@@ -103,6 +99,10 @@
                         <include reference="daN-7L-6bA"/>
                         <include reference="eaJ-gK-r0b"/>
                         <include reference="kqs-lS-xhA"/>
+                        <include reference="4Te-F5-H1v"/>
+                        <include reference="8yl-RU-kVe"/>
+                        <include reference="KlI-ua-Hcz"/>
+                        <exclude reference="pG2-fo-FX2"/>
                     </mask>
                 </variation>
             </tableViewCellContentView>

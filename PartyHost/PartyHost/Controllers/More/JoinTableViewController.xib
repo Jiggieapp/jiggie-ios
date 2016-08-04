@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10117" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <mutableArray key="Lato-Bold.ttf">
+            <string>Lato-Bold</string>
+        </mutableArray>
+        <mutableArray key="Lato-Regular.ttf">
+            <string>Lato-Regular</string>
+        </mutableArray>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="JoinTableViewController">
+            <connections>
+                <outlet property="bottomConstraint" destination="yZY-4c-J6C" id="Emo-Yh-v86"/>
+                <outlet property="tableCodeTextField" destination="Pbx-42-8Z4" id="Q8Y-5e-1Gi"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="LmZ-ix-LW7">
+                    <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                    <subviews>
+                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Table code" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Pbx-42-8Z4">
+                            <rect key="frame" x="-25" y="-30" width="97" height="30"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                            <textInputTraits key="textInputTraits"/>
+                            <connections>
+                                <outlet property="delegate" destination="-1" id="eTG-31-uWj"/>
+                            </connections>
+                        </textField>
+                    </subviews>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="bottom" secondItem="Pbx-42-8Z4" secondAttribute="bottom" constant="7" id="2bB-ii-fdT">
+                            <variation key="heightClass=regular-widthClass=compact" constant="14"/>
+                        </constraint>
+                        <constraint firstItem="Pbx-42-8Z4" firstAttribute="top" secondItem="LmZ-ix-LW7" secondAttribute="top" constant="8" id="LWU-9p-5Qv">
+                            <variation key="heightClass=regular-widthClass=compact" constant="14"/>
+                        </constraint>
+                        <constraint firstAttribute="trailing" secondItem="Pbx-42-8Z4" secondAttribute="trailing" constant="18" id="Pw2-wL-pa3"/>
+                        <constraint firstItem="Pbx-42-8Z4" firstAttribute="leading" secondItem="LmZ-ix-LW7" secondAttribute="leading" constant="15" id="Szd-9n-56H"/>
+                    </constraints>
+                    <variation key="default">
+                        <mask key="subviews">
+                            <exclude reference="Pbx-42-8Z4"/>
+                        </mask>
+                        <mask key="constraints">
+                            <exclude reference="2bB-ii-fdT"/>
+                            <exclude reference="LWU-9p-5Qv"/>
+                            <exclude reference="Pw2-wL-pa3"/>
+                            <exclude reference="Szd-9n-56H"/>
+                        </mask>
+                    </variation>
+                    <variation key="heightClass=regular-widthClass=compact">
+                        <mask key="subviews">
+                            <include reference="Pbx-42-8Z4"/>
+                        </mask>
+                        <mask key="constraints">
+                            <include reference="2bB-ii-fdT"/>
+                            <include reference="LWU-9p-5Qv"/>
+                            <include reference="Pw2-wL-pa3"/>
+                            <include reference="Szd-9n-56H"/>
+                        </mask>
+                    </variation>
+                </view>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Please enter the table code you received" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VML-f2-fgM">
+                    <rect key="frame" x="-42" y="-21" width="42" height="21"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="21" id="a0a-rf-zGt"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="14"/>
+                    <color key="textColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    <nil key="highlightedColor"/>
+                    <variation key="default">
+                        <mask key="constraints">
+                            <exclude reference="a0a-rf-zGt"/>
+                        </mask>
+                    </variation>
+                    <variation key="heightClass=regular-widthClass=compact">
+                        <mask key="constraints">
+                            <include reference="a0a-rf-zGt"/>
+                        </mask>
+                    </variation>
+                </label>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="39R-Hi-aI8">
+                    <rect key="frame" x="-23" y="-15" width="46" height="30"/>
+                    <color key="backgroundColor" red="0.062745098039215685" green="0.73333333333333328" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="50" id="li5-Px-VD9"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" name="Lato-Bold" family="Lato" pointSize="15"/>
+                    <state key="normal" title="JOIN TABLE"/>
+                    <variation key="default">
+                        <mask key="constraints">
+                            <exclude reference="li5-Px-VD9"/>
+                        </mask>
+                    </variation>
+                    <variation key="heightClass=regular-widthClass=compact">
+                        <mask key="constraints">
+                            <include reference="li5-Px-VD9"/>
+                        </mask>
+                    </variation>
+                    <connections>
+                        <action selector="joinTableDidTap:" destination="-1" eventType="touchUpInside" id="69a-hY-2jx"/>
+                    </connections>
+                </button>
+            </subviews>
+            <color key="backgroundColor" red="0.94509803921568625" green="0.94509803921568625" blue="0.94509803921568625" alpha="1" colorSpace="calibratedRGB"/>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="39R-Hi-aI8" secondAttribute="trailing" id="FAH-fW-J1w"/>
+                <constraint firstItem="VML-f2-fgM" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="16" id="Lwx-Wm-Bk1"/>
+                <constraint firstAttribute="trailing" secondItem="VML-f2-fgM" secondAttribute="trailing" constant="17" id="Qq5-T9-aUE"/>
+                <constraint firstAttribute="trailing" secondItem="LmZ-ix-LW7" secondAttribute="trailing" id="Vj8-JT-Xvg"/>
+                <constraint firstItem="LmZ-ix-LW7" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="ebX-T0-Ubj"/>
+                <constraint firstItem="LmZ-ix-LW7" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="25" id="oHR-qX-AlH"/>
+                <constraint firstItem="39R-Hi-aI8" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="vMk-6r-dC6"/>
+                <constraint firstItem="VML-f2-fgM" firstAttribute="top" secondItem="LmZ-ix-LW7" secondAttribute="bottom" constant="22" id="xAg-59-NRc">
+                    <variation key="heightClass=regular-widthClass=compact" constant="23"/>
+                </constraint>
+                <constraint firstAttribute="bottom" secondItem="39R-Hi-aI8" secondAttribute="bottom" id="yZY-4c-J6C"/>
+            </constraints>
+            <variation key="default">
+                <mask key="subviews">
+                    <exclude reference="LmZ-ix-LW7"/>
+                    <exclude reference="VML-f2-fgM"/>
+                    <exclude reference="39R-Hi-aI8"/>
+                </mask>
+                <mask key="constraints">
+                    <exclude reference="Vj8-JT-Xvg"/>
+                    <exclude reference="ebX-T0-Ubj"/>
+                    <exclude reference="oHR-qX-AlH"/>
+                    <exclude reference="Lwx-Wm-Bk1"/>
+                    <exclude reference="Qq5-T9-aUE"/>
+                    <exclude reference="xAg-59-NRc"/>
+                    <exclude reference="FAH-fW-J1w"/>
+                    <exclude reference="vMk-6r-dC6"/>
+                    <exclude reference="yZY-4c-J6C"/>
+                </mask>
+            </variation>
+            <variation key="heightClass=regular-widthClass=compact">
+                <mask key="subviews">
+                    <include reference="LmZ-ix-LW7"/>
+                    <include reference="VML-f2-fgM"/>
+                    <include reference="39R-Hi-aI8"/>
+                </mask>
+                <mask key="constraints">
+                    <include reference="Vj8-JT-Xvg"/>
+                    <include reference="ebX-T0-Ubj"/>
+                    <include reference="oHR-qX-AlH"/>
+                    <include reference="Lwx-Wm-Bk1"/>
+                    <include reference="Qq5-T9-aUE"/>
+                    <include reference="xAg-59-NRc"/>
+                    <include reference="FAH-fW-J1w"/>
+                    <include reference="vMk-6r-dC6"/>
+                    <include reference="yZY-4c-J6C"/>
+                </mask>
+            </variation>
+        </view>
+    </objects>
+</document>
