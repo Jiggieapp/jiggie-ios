@@ -22,7 +22,6 @@
 #import "Room.h"
 #import "Firebase.h"
 #import "City.h"
-#import "SoundCloud.h"
 
 
 #define PROFILE_PICS 4 //If more than 4 then last is +MORE

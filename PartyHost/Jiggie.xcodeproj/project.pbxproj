@@ -455,8 +455,6 @@
 		DAD2708D1C31110D00546106 /* UserManager.m in Sources */ = {isa = PBXBuildFile; fileRef = DAD2708C1C31110D00546106 /* UserManager.m */; };
 		DAE02EA51C6C812200EBAAF0 /* TicketSummaryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DAE02EA41C6C812200EBAAF0 /* TicketSummaryViewController.m */; };
 		DAEE2C331CBEBF8600F1546F /* PaymentSelectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DAEE2C321CBEBF8600F1546F /* PaymentSelectionCell.m */; };
-		DAFCACB51D4A046C005AF434 /* SoundCloud.m in Sources */ = {isa = PBXBuildFile; fileRef = DAFCACB41D4A046C005AF434 /* SoundCloud.m */; };
-		DAFCACB81D4A0637005AF434 /* JSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = DAFCACB71D4A0637005AF434 /* JSONKit.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		FA3702B81A8F9E9000B2BD6A /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA3702B71A8F9E9000B2BD6A /* MapKit.framework */; };
 		FA3702BA1A8F9EC300B2BD6A /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA3702B91A8F9EC300B2BD6A /* CoreLocation.framework */; };
 		FA4D2EF21A4D9A77006828E7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = FA4D2EF11A4D9A77006828E7 /* main.m */; };
@@ -1325,10 +1323,6 @@
 		DAE02EA41C6C812200EBAAF0 /* TicketSummaryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TicketSummaryViewController.m; sourceTree = "<group>"; };
 		DAEE2C311CBEBF8600F1546F /* PaymentSelectionCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PaymentSelectionCell.h; sourceTree = "<group>"; };
 		DAEE2C321CBEBF8600F1546F /* PaymentSelectionCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PaymentSelectionCell.m; sourceTree = "<group>"; };
-		DAFCACB31D4A046C005AF434 /* SoundCloud.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SoundCloud.h; sourceTree = "<group>"; };
-		DAFCACB41D4A046C005AF434 /* SoundCloud.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SoundCloud.m; sourceTree = "<group>"; };
-		DAFCACB61D4A0637005AF434 /* JSONKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSONKit.h; sourceTree = "<group>"; };
-		DAFCACB71D4A0637005AF434 /* JSONKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSONKit.m; sourceTree = "<group>"; };
 		FA3702B71A8F9E9000B2BD6A /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		FA3702B91A8F9EC300B2BD6A /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		FA4D2EEC1A4D9A77006828E7 /* Jiggie.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Jiggie.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -2042,7 +2036,6 @@
 		DAABAFE81C1FC6F8004DDCFA /* ExtraLibraries */ = {
 			isa = PBXGroup;
 			children = (
-				DAFCACB21D4A046C005AF434 /* SoundCloud */,
 				935480B91D41FF690095D4B3 /* HCSStarRatingView */,
 				936674DB1CE30EB200AC94F3 /* APAddressBook */,
 				DA33068D1CDA61A500A4126D /* JDFTooltip */,
@@ -2923,17 +2916,6 @@
 			path = User;
 			sourceTree = "<group>";
 		};
-		DAFCACB21D4A046C005AF434 /* SoundCloud */ = {
-			isa = PBXGroup;
-			children = (
-				DAFCACB61D4A0637005AF434 /* JSONKit.h */,
-				DAFCACB71D4A0637005AF434 /* JSONKit.m */,
-				DAFCACB31D4A046C005AF434 /* SoundCloud.h */,
-				DAFCACB41D4A046C005AF434 /* SoundCloud.m */,
-			);
-			path = SoundCloud;
-			sourceTree = "<group>";
-		};
 		FA4D2EE31A4D9A77006828E7 = {
 			isa = PBXGroup;
 			children = (
@@ -3207,7 +3189,6 @@
 				DAABB0CA1C1FD50E004DDCFA /* EventsGuestList.m in Sources */,
 				9366751B1CE30EB200AC94F3 /* APImageExtractor.m in Sources */,
 				DA9B10A61CB4D7B7001FB798 /* NSString+XMLEntities.m in Sources */,
-				DAFCACB51D4A046C005AF434 /* SoundCloud.m in Sources */,
 				DAABB2671C1FF5AE004DDCFA /* UIBarButtonItem+FlatUI.m in Sources */,
 				938CE7D01CCF627D00ADDD4C /* NSObject+MTLComparisonAdditions.m in Sources */,
 				DA5ED61E1C92DD5B00004C7E /* NTMonthYearPicker.m in Sources */,
@@ -3415,7 +3396,6 @@
 				938CE7CB1CCF627D00ADDD4C /* NSArray+MTLManipulationAdditions.m in Sources */,
 				936675251CE30EB200AC94F3 /* APContact.m in Sources */,
 				DA5ED5E91C908F8D00004C7E /* PaymentSelectionViewController.m in Sources */,
-				DAFCACB81D4A0637005AF434 /* JSONKit.m in Sources */,
 				DAABB2AA1C1FF5AE004DDCFA /* MPSurvey.m in Sources */,
 				DAABB0B11C1FD50E004DDCFA /* BookTable.m in Sources */,
 				DAABB0D31C1FD50E004DDCFA /* HostVenueDetail.m in Sources */,
