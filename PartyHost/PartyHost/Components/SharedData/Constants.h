@@ -18,6 +18,8 @@
 #define VeritransClientKey [[[NSBundle mainBundle] infoDictionary] objectForKey:@"VTClient"]
 #define isVeritransInProducion [[[[NSBundle mainBundle] infoDictionary] objectForKey:@"VTEnableProd"] boolValue]
 
+#define SOUNDCLOUD_CLIENT_ID @"9147700913ab2472e144035ab0d72b5f"
+
 //API Completion Handler
 typedef void (^PartyFeedCompletionHandler)(NSArray *feeds,
                                            NSInteger statusCode,

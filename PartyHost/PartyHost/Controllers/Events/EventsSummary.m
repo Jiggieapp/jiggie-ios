@@ -32,6 +32,8 @@
 @interface EventsSummary ()
 
 @property (strong, nonatomic) FIRDatabaseReference *reference;
+@property (copy, nonatomic) NSString *soundcloudURL;
+@property (assign, nonatomic) BOOL didPlaySoundcloud;
 
 @end
 
@@ -210,8 +212,6 @@
     self.soundcloudSeparator.backgroundColor = [UIColor phLightGrayColor];
     [self.mainScroll addSubview:self.soundcloudSeparator];
     
-    self.soundCloud = [[SoundCloud alloc] init];
-    
     self.soundcloudContainer = [[UIView alloc] init];
     [self.mainScroll addSubview:self.soundcloudContainer];
     
@@ -233,7 +233,7 @@
     [self.soundcloudPrevButton setImage:[UIImage imageNamed:@"ic_Previous_Track_Active"] forState:UIControlStateNormal];
     [self.soundcloudPrevButton setImage:[UIImage imageNamed:@"ic_Previous_Track_Inactive"] forState:UIControlStateDisabled];
     [self.soundcloudPrevButton addTarget:self action:@selector(prevButtonDidTap:) forControlEvents:UIControlEventTouchUpInside];
-    [self.soundcloudContainer addSubview:self.soundcloudPrevButton];
+//    [self.soundcloudContainer addSubview:self.soundcloudPrevButton];
     
     self.soundcloudPlayButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.soundcloudPlayButton setImage:[UIImage imageNamed:@"btn_Play_Track"] forState:UIControlStateNormal];
@@ -244,7 +244,7 @@
     [self.soundcloudNextButton setImage:[UIImage imageNamed:@"ic_Next_Track_Active"] forState:UIControlStateNormal];
     [self.soundcloudNextButton setImage:[UIImage imageNamed:@"ic_Next_Track_Inactive"] forState:UIControlStateDisabled];
     [self.soundcloudNextButton addTarget:self action:@selector(nextButtonDidTap:) forControlEvents:UIControlEventTouchUpInside];
-    [self.soundcloudContainer addSubview:self.soundcloudNextButton];
+//    [self.soundcloudContainer addSubview:self.soundcloudNextButton];
     
     self.separator1 = [[UIView alloc] init];
     self.separator1.backgroundColor = [UIColor phLightGrayColor];
@@ -513,6 +513,9 @@
          object:self];
     }
     
+    self.soundcloudURL = nil;
+    self.audioPlayer = nil;
+    
     [self.reference removeAllObservers];
 }
 
@@ -739,15 +742,37 @@
 }
 
 - (void)playButtonDidTap:(id)sender {
-    
-    NSData *data =[self.soundCloud downloadTrackData:@"http://api.soundcloud.com/tracks/257659076/stream?client_id=9147700913ab2472e144035ab0d72b5f"];
-    
-    self.audioPlayer = [[AVAudioPlayer alloc]initWithData:data error:nil];
-    [self.audioPlayer play];
+    if (self.soundcloudURL) {
+        if (self.audioPlayer) {
+            [self playSoundCloud];
+        } else {
+            NSString *urlString = [NSString stringWithFormat:@"%@%@", self.soundcloudURL, SOUNDCLOUD_CLIENT_ID];
+            NSURLRequest* request = [[NSURLRequest alloc] initWithURL:[NSURL URLWithString:urlString]];
+            
+            [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse* response, NSData* data, NSError* error) {
+                if (!error) {
+                    self.audioPlayer = [[AVAudioPlayer alloc] initWithData:data error:nil];
+                    [self playSoundCloud];
+                }
+            }];
+        }
+    }
 }
 
 - (void)nextButtonDidTap:(id)sender {
     
+}
+
+- (void)playSoundCloud{
+    if (self.didPlaySoundcloud) {
+        [self.audioPlayer pause];
+        [self.soundcloudPlayButton setImage:[UIImage imageNamed:@"btn_Play_Track"] forState:UIControlStateNormal];
+    } else {
+        [self.audioPlayer play];
+        [self.soundcloudPlayButton setImage:[UIImage imageNamed:@"btn_Pause_Track"] forState:UIControlStateNormal];
+    }
+    
+    self.didPlaySoundcloud = !self.didPlaySoundcloud;
 }
 
 #pragma mark - Fetch
@@ -953,7 +978,13 @@
                      if (!eventDetail || eventDetail.count == 0) {
                          return;
                      }
+                     
+                     NSArray *soundcloudURLs = [eventDetail objectForKey:@"soundcloud"];
                     
+                     if (soundcloudURLs.count > 0) {
+                         self.soundcloudURL = soundcloudURLs[0];
+                     }
+                     
                      //Store this object for further pages
                      [self.sharedData.mixPanelCEventDict removeAllObjects];
                      [self.sharedData.mixPanelCEventDict setObject:eventDetail[@"title"] forKey:@"Event Name"];

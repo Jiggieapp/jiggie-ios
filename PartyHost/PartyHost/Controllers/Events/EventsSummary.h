@@ -96,8 +96,6 @@
 @property (nonatomic, retain) NSManagedObjectContext *managedObjectContext;
 
 @property (nonatomic,strong) JDFSequentialTooltipManager *tooltip;
-
-@property (nonatomic,strong) SoundCloud *soundCloud;
 @property (nonatomic, retain) AVAudioPlayer *audioPlayer;
 
 @property (assign, nonatomic) BOOL isModal;
