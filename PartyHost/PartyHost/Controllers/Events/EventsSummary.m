@@ -984,12 +984,36 @@
                      if (soundcloudURLs.count > 0) {
                          self.soundcloudURL = soundcloudURLs[0];
                          
-                         [self.mainScroll addSubview:self.soundcloudSeparator];
-                         [self.mainScroll addSubview:self.soundcloudContainer];
-                         [self.soundcloudContainer addSubview:self.soundcloudMusicIcon];
-                         [self.soundcloudContainer addSubview:self.soundcloudTitle];
-                         [self.soundcloudContainer addSubview:self.soundcloudAlbumTitle];
-                         [self.soundcloudContainer addSubview:self.soundcloudPlayButton];
+                         AFHTTPRequestOperationManager *manager = [self.sharedData getOperationManager];
+                         NSString *url = [self.soundcloudURL stringByReplacingOccurrencesOfString:@"/stream" withString:@""];
+                         url = [NSString stringWithFormat:@"%@%@", url, SOUNDCLOUD_CLIENT_ID];
+                         
+                         [manager GET:url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                             NSString *responseString = operation.responseString;
+                             NSError *error;
+                             
+                             NSDictionary *json = (NSDictionary *)[NSJSONSerialization
+                                                                   JSONObjectWithData:[responseString dataUsingEncoding:NSUTF8StringEncoding]
+                                                                   options:kNilOptions
+                                                                   error:&error];
+                             
+                             if (json) {
+                                 dispatch_async(dispatch_get_main_queue(), ^{
+                                     self.soundcloudTitle.text = [json objectForKey:@"title"];
+                                     self.soundcloudAlbumTitle.text = [json objectForKey:@"label_name"];
+                                     
+                                     [self.mainScroll addSubview:self.soundcloudSeparator];
+                                     [self.mainScroll addSubview:self.soundcloudContainer];
+                                     [self.soundcloudContainer addSubview:self.soundcloudMusicIcon];
+                                     [self.soundcloudContainer addSubview:self.soundcloudTitle];
+                                     [self.soundcloudContainer addSubview:self.soundcloudAlbumTitle];
+                                     [self.soundcloudContainer addSubview:self.soundcloudPlayButton];
+                                 });
+                             }
+                             
+                         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                             NSLog(@"%@", error);
+                         }];
                      }
                      
                      //Store this object for further pages
@@ -1281,17 +1305,17 @@
     
     self.soundcloudMusicIcon.frame = CGRectMake(16, 18, 24, 24);
     
-    self.soundcloudTitle.frame = CGRectMake(50, 10, 160, 20);
-    self.soundcloudTitle.text = @"MOVE D";
-    
-    self.soundcloudAlbumTitle.frame = CGRectMake(50, 30, 160, 20);
-    self.soundcloudAlbumTitle.text = @"Dance All Night";
-    
     self.soundcloudPrevButton.frame = CGRectMake(self.sharedData.screenWidth - 110, 12, 32, 36);
     
-    self.soundcloudPlayButton.frame = CGRectMake(self.sharedData.screenWidth - 110 + 32, 8, 44, 44);
+    self.soundcloudPlayButton.frame = CGRectMake(self.sharedData.screenWidth - 90 + 32, 8, 44, 44);
     
     self.soundcloudNextButton.frame = CGRectMake(self.sharedData.screenWidth - 110 + 32 + 44, 12, 32, 36);
+    
+    self.soundcloudTitle.frame = CGRectMake(50, 10, CGRectGetMinX(self.soundcloudPlayButton.frame) - 70, 20);
+    self.soundcloudTitle.text = @"MOVE D";
+    
+    self.soundcloudAlbumTitle.frame = CGRectMake(50, 30, CGRectGetMinX(self.soundcloudPlayButton.frame) - 70, 20);
+    self.soundcloudAlbumTitle.text = @"Dance All Night";
     
     //Separator 1
     self.separator1.frame = CGRectMake(0,self.soundcloudContainer.frame.size.height + self.soundcloudContainer.frame.origin.y + 20, self.sharedData.screenWidth, 1);
