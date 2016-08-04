@@ -209,24 +209,19 @@
     
     self.soundcloudSeparator = [[UIView alloc] init];
     self.soundcloudSeparator.backgroundColor = [UIColor phLightGrayColor];
-    [self.mainScroll addSubview:self.soundcloudSeparator];
     
     self.soundcloudContainer = [[UIView alloc] init];
-    [self.mainScroll addSubview:self.soundcloudContainer];
     
     self.soundcloudMusicIcon = [[UIImageView alloc] init];
     [self.soundcloudMusicIcon setImage:[UIImage imageNamed:@"ic_Curated_Music"]];
-    [self.soundcloudContainer addSubview:self.soundcloudMusicIcon];
     
     self.soundcloudTitle = [[UILabel alloc] init];
     self.soundcloudTitle.textColor = [UIColor blackColor];
     self.soundcloudTitle.font = [UIFont phBold:16];
-    [self.soundcloudContainer addSubview:self.soundcloudTitle];
     
     self.soundcloudAlbumTitle = [[UILabel alloc] init];
     self.soundcloudAlbumTitle.textColor = [UIColor darkGrayColor];
     self.soundcloudAlbumTitle.font = [UIFont phBlond:13];
-    [self.soundcloudContainer addSubview:self.soundcloudAlbumTitle];
     
     self.soundcloudPrevButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.soundcloudPrevButton setImage:[UIImage imageNamed:@"ic_Previous_Track_Active"] forState:UIControlStateNormal];
@@ -237,7 +232,6 @@
     self.soundcloudPlayButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.soundcloudPlayButton setImage:[UIImage imageNamed:@"btn_Play_Track"] forState:UIControlStateNormal];
     [self.soundcloudPlayButton addTarget:self action:@selector(playButtonDidTap:) forControlEvents:UIControlEventTouchUpInside];
-    [self.soundcloudContainer addSubview:self.soundcloudPlayButton];
     
     self.soundcloudNextButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.soundcloudNextButton setImage:[UIImage imageNamed:@"ic_Next_Track_Active"] forState:UIControlStateNormal];
@@ -514,6 +508,13 @@
     
     self.soundcloudURL = nil;
     self.audioPlayer = nil;
+    
+    [self.soundcloudSeparator removeFromSuperview];
+    [self.soundcloudContainer removeFromSuperview];
+    [self.soundcloudMusicIcon removeFromSuperview];
+    [self.soundcloudTitle removeFromSuperview];
+    [self.soundcloudAlbumTitle removeFromSuperview];
+    [self.soundcloudPlayButton removeFromSuperview];
     
     [self.reference removeAllObservers];
 }
@@ -982,6 +983,13 @@
                     
                      if (soundcloudURLs.count > 0) {
                          self.soundcloudURL = soundcloudURLs[0];
+                         
+                         [self.mainScroll addSubview:self.soundcloudSeparator];
+                         [self.mainScroll addSubview:self.soundcloudContainer];
+                         [self.soundcloudContainer addSubview:self.soundcloudMusicIcon];
+                         [self.soundcloudContainer addSubview:self.soundcloudTitle];
+                         [self.soundcloudContainer addSubview:self.soundcloudAlbumTitle];
+                         [self.soundcloudContainer addSubview:self.soundcloudPlayButton];
                      }
                      
                      //Store this object for further pages
